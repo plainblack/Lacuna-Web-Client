@@ -1,0 +1,84 @@
+html {
+	background: black url('http://localhost/lacuna/field.png');
+}
+body {
+	margin:40px 0;
+	padding:0;
+	text-align:left;
+	min-width: 1050px;
+	/*min-height: 768px;*/
+}
+#content {
+	text-align:center;
+}
+#nojavascript {
+	text-align:center;
+	color:white;
+}
+#header, #footer  {
+	color: red;
+	text-align:center;
+	height:46px;
+	position:fixed;
+	width: 100%;
+	min-width: 1050px;
+	background-color:#52acff;
+}
+#header {
+	top: 0;
+	z-index:1000;
+}
+#footer {
+	bottom: 0;
+	z-index:1000;
+}
+
+#users, #planets {
+	font-size:25px;
+	color:white;
+	text-decoration:none;
+}
+
+.hidden {
+	display:none;
+}
+.menuPlanetThumb {
+	width:35px;
+	height:35px;
+}
+.menuItem {
+	display:inline-block;
+	height:45px; /* 1 less than height of bar */
+	color:black;
+	min-width:100px;
+	margin-right:10px;
+}
+.menuItem  img {
+	float:left;
+}
+.menuItem  span {
+	float:left;
+	font-size:25px;
+	margin-left:5px;
+	margin-top:8px;
+}
+.inbox {
+	cursor:pointer;
+}
+.bookmark {
+	cursor:pointer;
+}
+#starmap {
+	margin: 0 auto;
+}
+.gridStar {
+	display:inline-block;
+	width:50px;
+	height:50px;
+}
+.gridStar .main {
+	z-index: 5;
+}
+.gridStar .alignment {
+	z-index: 10;
+}
