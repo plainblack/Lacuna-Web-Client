@@ -44,16 +44,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Start : function() {	
 			var session = Cookie.getSub("lacuna","session");
 			if(!session) {
-				Lacuna.Game.LoginDialog = new Lacuna.Login();
-				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs){
-					Lacuna.Game.Setup(oArgs.result);
-				});
-				Lacuna.Game.LoginDialog.show();
+				Lacuna.Game.DoLogin();
 			}
 			else {
 				//Run rest of UI since we're logged in
 				Lacuna.Game.Run();
 			}
+		},
+		DoLogin : function() {
+			document.getElementById("content").innerHTML = "";
+			if(!Lacuna.Game.LoginDialog) {
+				Lacuna.Game.LoginDialog = new Lacuna.Login();
+				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs){
+					Lacuna.Game.Setup(oArgs.result);
+				});
+			}
+			Lacuna.Game.LoginDialog.show();
+			Lacuna.Menu.hide();
 		},
 		Setup : function(result) {
 			var now = new Date();
@@ -72,6 +79,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.StarMap.subscribe("onMapLoaded", function(oArgs){
 				Lacuna.Game.ProcessStatus(oArgs.status);
 				Lacuna.Menu.create();
+			});
+			Lacuna.StarMap.subscribe("onMapLoadFailed", function(oArgs){
+				alert(oArgs.message);
+				if(oArgs.code == 1006) {
+					Lacuna.Game.DoLogin();
+				}
 			});
 			Lacuna.StarMap.Load();
 		},
@@ -102,11 +115,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					});
 					
 					document.getElementById("content").innerHTML = "";
-					if(!Lacuna.Game.LoginDialog) {
-						Lacuna.Game.LoginDialog = new Lacuna.Login();
-					}
-					Lacuna.Game.LoginDialog.show();
-					Lacuna.Menu.hide();
+					Lacuna.Game.DoLogin();
 				},
 				failure : function(o){
 					console.log("LOGOUT FAILED: ", o);

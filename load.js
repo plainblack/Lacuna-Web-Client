@@ -1,5 +1,5 @@
 (function(){
-	var t = 8;
+	var t = 26;
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
 		combine: false,
@@ -42,10 +42,16 @@
 		requires : ["container","game","menu"]
 	});
 	loader.addModule({
+		name: "mapiator",
+		varName : "Mapiator.iPhoneController",
+		type: "js",
+		fullpath: "http://localhost/lacuna/Mapiator.js?" + t
+	});
+	loader.addModule({
 		name: "starMap",
 		type: "js",
 		fullpath: "http://localhost/lacuna/starMap.js?" + t,
-		requires : ["game"]
+		requires : ["game","mapiator"]
 	});
 	loader.require("gameMenu","login","starMap");
 	loader.onSuccess = function(o) {
