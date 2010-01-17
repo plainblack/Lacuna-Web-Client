@@ -94,6 +94,11 @@ body {
 	top:55px;
 }
 /*
+.gridStar {
+	position:absolute;
+	width:100px;
+	height:100px;
+}
 #starmap {
 	margin: 0 auto;
 	position:relative;
@@ -129,11 +134,7 @@ body {
 	top:0;
 	z-index: 0; 
 }
-.gridStar {
-	position:absolute;
-	width:50px;
-	height:50px;
-}
+
 
 .x-5 { left:0px; }
 .x-4 { left:50px; }

@@ -12,13 +12,8 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 		Game = Lacuna.Game;
 		
 	var StarMap = function() {
-		
 		this.createEvent("onMapLoaded");
 		this.createEvent("onMapLoadFailed");
-		this.createEvent("onMapCallCacheProcess");
-		
-		this.subscribe("onMapLoaded", this.Mapiator, this, true);
-		this.subscribe("onMapCallCacheProcess", this.ProcessCallCache, this, true);
 	};
 	StarMap.prototype = {
 		/*
@@ -102,7 +97,7 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 			Dom.setStyle(this._elGrid, "display", "");
 		},
 		*/
-		
+		/*
 		_lastZoom : 0,
 		_callCache : {},
 		
@@ -125,13 +120,6 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 				
 				this._lastZoom = z;
 			}
-			
-			/*var region = Util.Region(data.y1, data.x2, data.y2, data.x1); //top, right, bottom, left
-			for(var cck in this._callCache) {
-				var ccRegion = this._callCache[cck];
-				if(region.intersect(ccRegion)) {
-				}
-			}*/
 			var cacheKey = [data.x1, data.x2, data.y1, data.y2, data.z].join(';');
 			if(!this._callCache[cacheKey]) {
 				console.log("ADD TO CACHE ", data, cacheKey);
@@ -158,27 +146,6 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 				cScope = callback.scope;
 			delete this._callCache[key];
 			console.log("GET STARS ", data, callback);
-			/*
-			Game.Services.Maps.get_stars(data,{
-				success : function(o){
-					console.log("GET_STARS ", o);
-					var callback = this._callCache[data],
-						cScope = callback.scope;
-					delete this._callCache[data];
-					this._addStarTiles(o.stars)
-					this._getTile(cScope.x, cScope.y, cScope.z, callback);
-					//fire again in case there are more we need
-					this.fireEvent("onMapCallCacheProcess");
-				},
-				failure : function(o){
-					console.log("GET_STARS FAILED ", o);
-					//leave in call cache to do later
-					//fire again in case there are more we need
-					this.fireEvent("onMapCallCacheProcess");
-				},
-				timeout:5000,
-				scope:this
-			});*/
 		},
 		_addStarTiles : function(aStars) {
 			var startZoomLevel = 0;
@@ -212,24 +179,18 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 				}
 			}
 		},
+		
+		*/
+		
 		Mapiator : function(oArgs) {
 			if(!this._gridCreated) {
 				var starmap = document.createElement("div");
 				starmap.id = "starmap";
 				this._elGrid = document.getElementById("content").appendChild(starmap);
-				
-				this.tiles = {};
-				var startZoomLevel = this._addStarTiles(oArgs.stars);
-					
-				var map = new Mapiator.Map("starmap");
-				map.setZoomLevel( startZoomLevel );
-				this._lastZoom = startZoomLevel;
-				map.setCenter(0, 0); // latitude, longitude
-
-				var scope = this;
-				var method = this._getTile;
-				map.getTileUrl = function(){ return method.apply(scope, arguments || []); };
-				map.setTileSizeInPx( 50 );
+								
+				var map = new Lacuna.Mapiator.Map("starmap");
+				map.setTileSizeInPx( 100 );
+				map.setZoomLevel(map.addStarData(oArgs.stars) || 0);
 				map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
@@ -258,6 +219,7 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 				MapServ.get_stars_near_body(data,{
 					success : function(o){
 						this.fireEvent("onMapLoaded", o.result);
+						this.Mapiator.call(this, o.result);
 					},
 					failure : function(o){
 						console.log("STARMAP FAILED: ", o);

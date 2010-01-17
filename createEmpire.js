@@ -8,8 +8,9 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game;
 
-	var CreateEmpire = function() {
+	var CreateEmpire = function(Login) {
 		this.id = "createEmpire";
+		this._login = Login;
 		
 		var container = document.createElement("div");
 		container.id = this.id;
@@ -42,7 +43,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			fixedcenter:true,
 			postmethod:"none",
 			visible:false,
-			buttons:[ { text:"Create", handler:{fn:this.handleCreate, scope:this}, isDefault:true } ],
+			buttons:[ { text:"Create", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
+				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this}}],
 			draggable:false,
 			close:false,
 			width:"300px",
@@ -100,6 +102,10 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				timeout:5000
 			});
 			
+		},
+		handleCancel : function() {
+			this.hide();
+			this._login.show();
 		},
 		setMessage : function(str) {
 			Dom.removeClass(this.elMessage, "hidden");

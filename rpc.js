@@ -140,7 +140,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 				var serialized = envelope.serialize(smd, method, params);
 				Lang.augmentObject(r, serialized, true);
 
-				YAHOO.rpc.Transport[r.transport].call(self, r ); 
+				return YAHOO.rpc.Transport[r.transport].call(self, r ); 
 			};
 
 			func.name = serviceName;

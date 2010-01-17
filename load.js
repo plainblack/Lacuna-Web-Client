@@ -1,5 +1,5 @@
 (function(){
-	var t = 26;
+	var t = "50";
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
 		combine: false,
@@ -43,7 +43,6 @@
 	});
 	loader.addModule({
 		name: "mapiator",
-		varName : "Mapiator.iPhoneController",
 		type: "js",
 		fullpath: "http://localhost/lacuna/Mapiator.js?" + t
 	});

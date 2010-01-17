@@ -96,7 +96,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Event.stopEvent(e); //stop href click
 			this.hide(); //hide login
 			if(!Game.EmpireCreator) {
-				Game.EmpireCreator = new Lacuna.CreateEmpire();
+				Game.EmpireCreator = new Lacuna.CreateEmpire(this);
 			}
 			Game.EmpireCreator.show();
 		}
