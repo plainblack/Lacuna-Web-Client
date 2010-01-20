@@ -10,6 +10,7 @@ body {
 }
 #content {
 	text-align:center;
+	padding-top:6px;
 }
 #nojavascript {
 	text-align:center;
@@ -71,8 +72,8 @@ body {
 #starmap {
 	margin: 0 auto;
 	position:relative;
-	height:600px;
-	width:600px;
+	height:700px;
+	width:700px;
 	border:0 none;
 	clear:both;
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
@@ -93,69 +94,6 @@ body {
 	background: url(http://localhost/lacuna/assets/ui/mapiator/zoomOut_blur.png);
 	top:55px;
 }
-/*
-.gridStar {
-	position:absolute;
-	width:100px;
-	height:100px;
+.tileContainer div {
+	color:white;
 }
-#starmap {
-	margin: 0 auto;
-	position:relative;
-	height:600px;
-	overflow:hidden;
-	border:0 none;
-	clear:both;
-}
-#viewer, #dd {
-	height:100%;
-	width:100%;
-	overflow:hidden;
-	position:absolute;
-	left:0;
-	top:0;
-}
-#viewer {
-	z-index:2;
-}
-#dd {
-	z-index:20;
-	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
-}
-#starLayer {
-	position:absolute;
-	left:0;
-	top:0;
-}
-
-#starLayerContainer {
-	position:absolute;
-	left:0;
-	top:0;
-	z-index: 0; 
-}
-
-
-.x-5 { left:0px; }
-.x-4 { left:50px; }
-.x-3 { left:100px; }
-.x-2 { left:150px; }
-.x-1 { left:200px; }
-.x0 { left:250px; }
-.x1 { left:300px; }
-.x2 { left:350px; }
-.x3 { left:400px; }
-.x4 { left:450px; }
-.x5 { left:500px; }
-.y-5 { top:0px; }
-.y-4 { top:50px; }
-.y-3 { top:100px; }
-.y-2 { top:150px; }
-.y-1 { top:200px; }
-.y0 { top:250px; }
-.y1 { top:300px; }
-.y2 { top:350px; }
-.y3 { top:400px; }
-.y4 { top:450px; }
-.y5 { top:500px; }
-*/

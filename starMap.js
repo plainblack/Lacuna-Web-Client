@@ -190,11 +190,13 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 								
 				var map = new Lacuna.Mapiator.Map("starmap");
 				map.setTileSizeInPx( 100 );
-				map.setZoomLevel(map.addStarData(oArgs.stars) || 0);
+				map.setZoomLevel(map.addStarData(oArgs.stars));
 				map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
 				map.redraw();
+				//move to current planet
+				map.setCenterToCurrentPlanet();
 				
 				this._map = map;
 				this._gridCreated = true;

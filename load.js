@@ -1,5 +1,6 @@
 (function(){
-	var t = "50";
+	var t = "108",
+		host = "http://localhost/lacuna/";
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
 		combine: false,
@@ -8,52 +9,53 @@
 	loader.addModule({
 		name: "smd",
 		type: "js",
-		fullpath: "http://localhost/lacuna/smd.js?" + t,
+		fullpath: host + "smd.js?" + t,
 		requires : ["yahoo"]
 	});
 	loader.addModule({
 		name: "rpc",
 		type: "js",
-		fullpath: "http://localhost/lacuna/rpc.js?" + t,
+		fullpath: host + "rpc.js?" + t,
 		requires : ["yahoo","dom","connection","get","json"]
 	});
 	loader.addModule({
 		name: "game",
 		type: "js",
-		fullpath: "http://localhost/lacuna/game.js?" + t,
+		fullpath: host + "game.js?" + t,
 		requires : ["event","cookie","rpc","smd"]
 	});
 	loader.addModule({
 		name: "createEmpire",
 		type: "js",
-		fullpath: "http://localhost/lacuna/createEmpire.js?" + t,
+		fullpath: host + "createEmpire.js?" + t,
 		requires : ["game"]
 	});
 	loader.addModule({
 		name: "login",
 		type: "js",
-		fullpath: "http://localhost/lacuna/login.js?" + t,
+		fullpath: host + "login.js?" + t,
 		requires : ["container","createEmpire","game"]
 	});
 	loader.addModule({
 		name: "gameMenu",
 		type: "js",
-		fullpath: "http://localhost/lacuna/menu.js?" + t,
+		fullpath: host + "menu.js?" + t,
 		requires : ["container","game","menu"]
 	});
 	loader.addModule({
 		name: "mapiator",
 		type: "js",
-		fullpath: "http://localhost/lacuna/Mapiator.js?" + t
+		fullpath: host + "Mapiator.js?" + t
 	});
 	loader.addModule({
 		name: "starMap",
 		type: "js",
-		fullpath: "http://localhost/lacuna/starMap.js?" + t,
+		fullpath: host + "starMap.js?" + t,
 		requires : ["game","mapiator"]
 	});
 	loader.require("gameMenu","login","starMap");
 	loader.onSuccess = function(o) {
+		console.log("version " + t);
 		YAHOO.lacuna.Game.Start();
 	};
 	loader.onFailure = function(o) {
