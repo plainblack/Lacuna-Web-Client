@@ -41,7 +41,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			for(var i=0; i<array.length; i++) {
 				fun(array[i], i);
 			}
-		},
+		}/*,
 		mapArray: function(array, fun) {
 			var res = [];
 			for(var i=0; i<array.length; i++) {
@@ -61,7 +61,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 				ss.insertRule(name+'{'+css+'}', 0);
 			}
 		}
-		/*gudermann: function(y) {
+		gudermann: function(y) {
 			return 2*Math.atan(Math.exp(y)) - 0.5*Math.PI;
 		},
 		inverseGudermann: function(rho) { // inverse of the Gudermannian function
@@ -166,6 +166,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		this.id = Mapiator.StdTile.idFor(x,y,z);
 		this.domElement = document.createElement('div');
 		this.domElement.id = this.id;
+		this.domElement.title = obj.star ? [obj.star.name, " (", x, ",", y, ",", z, ")"].join('') : "Uncharted Space";
 		var s = this.domElement.style;
 		s.position = 'absolute';
 		s.width = '' + map.tileSizeInPx + 'px';
@@ -174,6 +175,8 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		s.left = ''+ this.offsetX +'px';
 		s.top = ''+ this.offsetY +'px';
 		s.background = 'transparent url('+ this.url +') no-repeat scroll center';
+		
+		Dom.addClass(this.domElement, "tile");
 		
 		if(this.starData && this.starData.alignments) {
 			var alignment = this.domElement.appendChild(document.createElement('div'));
@@ -292,56 +295,47 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			this.move(0,0);
 		},
 		displayXCoords : function() {
-			var container = this.div.cloneNode(false);
-			Dom.addClass(container, "coordTop");
-			var s = container.style;
+			var anchor = this.div.cloneNode(false);
+			Dom.addClass(anchor, "coordTop");
+			var s = anchor.style;
 			s.position = 'absolute';
 			s.top = '0';
-			s.width = this.map.width + 'px';
+			s.width = '5px';
 			s.height = '30px';
 			s.background = 'red';
-			for(var x=-10; x<=10; x++) {
+			var size = this.map.tileSizeInPx + "px";
+			for(var x=-15; x<=15; x++) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = x;
-				Dom.setStyle(num, "text-align", "center");
-				Dom.setStyle(num, "vertical-align", "middle");
-				Dom.setStyle(num, "background", "blue");
-				Dom.setStyle(num, "color", "white");
-				Dom.setStyle(num, "border", "1px solid white");
-				Dom.setStyle(num, "width", this.map.tileSizeInPx + "px");
-				Dom.setStyle(num, "height", "30px");
-				Dom.setStyle(num, "position", "absolute");
-				Dom.setStyle(num, "top", "0");
+				Dom.addClass(num, "coordX");
+				Dom.setStyle(num, "width", size);
 				Dom.setStyle(num, "left", (x * 100) + "px");
-				container.appendChild(num);
+				anchor.appendChild(num);
 			}
-			this.xCoords = this.containerDiv.appendChild(container);
+			this.xCoords = this.containerDiv.appendChild(anchor);
 		},
 		displayYCoords : function() {
-			var container = this.div.cloneNode(false);
-			Dom.addClass(container, "coordLeft");
-			var s = container.style;
+			var anchor = this.div.cloneNode(false);
+			Dom.addClass(anchor, "coordLeft");
+			var s = anchor.style;
 			s.position = 'absolute';
 			s.left = '0';
 			s.width = '30px';
-			s.height = this.map.height + 'px';
+			s.height = '5px';
 			s.background = 'red';
-			for(var y=10; y>=-10; y--) {
+			var thrd = Math.ceil(this.map.tileSizeInPx / 3),
+				sizeLeft = (this.map.tileSizeInPx - thrd) + "px",
+				thrdTxt = thrd + "px";
+			for(var y=15; y>=-15; y--) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = y;
-				Dom.setStyle(num, "text-align", "center");
-				Dom.setStyle(num, "vertical-align", "middle");
-				Dom.setStyle(num, "background", "green");
-				Dom.setStyle(num, "color", "white");
-				Dom.setStyle(num, "border", "1px solid white");
-				Dom.setStyle(num, "width", "30px");
-				Dom.setStyle(num, "height", this.map.tileSizeInPx + "px");
-				Dom.setStyle(num, "position", "absolute");
+				Dom.addClass(num, "coordY");
+				Dom.setStyle(num, "padding-top", thrdTxt);
+				Dom.setStyle(num, "height", sizeLeft);
 				Dom.setStyle(num, "top", (y * -100) + "px");
-				Dom.setStyle(num, "left", "0");
-				container.appendChild(num);
+				anchor.appendChild(num);
 			}
-			this.yCoords = this.containerDiv.appendChild(container);
+			this.yCoords = this.containerDiv.appendChild(anchor);
 		}
 	};
 
@@ -378,6 +372,9 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		findTile : function(x,y,zoom){
 			return this.tileCache[this.TileConstructor.idFor(x,y,zoom)];
 		},
+		findTileById : function(id) {
+			return this.tileCache[id];
+		},
 		tileAtPosition : function(x,y){
 			var tileSizeInPx = this.map.tileSizeInPx;
 			return [Math.floor(x/tileSizeInPx), Math.floor(y/tileSizeInPx)];
@@ -400,6 +397,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 					success : function(o){
 						console.log("GET_STARS ", o);
 						this.currentRequest = undefined;
+						Game.ProcessStatus(o.result.status);
 						this.map.addStarData(o.result.stars);
 						this.showTiles();
 					},
@@ -460,7 +458,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 					tiles[tile.id] = tile;
 				}
 			}
-			this.removeAllTilesNotContainedIn( tiles );
+			//this.removeAllTilesNotContainedIn( tiles );
 		},
 		render : function() {
 			var bounds = this.visibleArea.coordBounds(),
@@ -496,6 +494,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		destroy : function() {
 			this.removeAllTilesNotContainedIn({});
 			//this.map.movableContainer.removeChild( this.tileContainer );
+			Event.purgeElement(this.tileContainer);
 			this.tileContainer.parentNode.removeChild(this.tileContainer);
 			delete this["tileCache"];
 		}
@@ -504,8 +503,8 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 	Mapiator.Map = function( divId ) {
 		var IE='\v'=='v'; // detect IE
 		this.IE = IE;
-		var ua = navigator.userAgent;
-		this.iPhone = ua.match(/iPhone/i) || ua.match(/iPod/i);
+		//var ua = navigator.userAgent;
+		//this.iPhone = ua.match(/iPhone/i) || ua.match(/iPod/i);
 		
 		this.mapDiv = Mapiator.util.byId( divId );
 		this.mapDiv.style.overflow = "hidden";
@@ -515,15 +514,12 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		
 		this.overlayLayer = new Mapiator.OverlayLayer(this);
 		this.coordLayer = new Mapiator.CoordLayer(this);
-		this.controller = this.iPhone ? new Mapiator.iPhoneController( this ) : new Mapiator.TraditionalController( this );
+		this.controller = new Mapiator.TraditionalController( this );
 	};
-	/*
-		YAHOO.lacuna.StarMap._map.redraw();
-	*/
 	Mapiator.Map.prototype = {
 		tileSizeInPx : undefined,
-		maxZoom : 10,
-		minZoom : -10,
+		maxZoom : 15,
+		minZoom : -15,
 		visibleArea : undefined,
 		centerX : 0,
 		centerY : 0,
@@ -695,16 +691,9 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			Event.preventDefault(e);
 			
 			Event.on(document, "mouseup", this.disableDrag, this, true);
-			//document.onmouseup = disableDrag;
 			Event.on(document, "mousemove", this.moveMap, this, true);
-			//document.onmousemove = moveMap;
 		}, this, true);
 		
-		// double click :
-		Event.on(map.mapDiv, "dblclick", function(e){
-			console.log(e);
-		}, this, true);
-
 		// add zoom buttons
 		var zoomInButton = document.createElement('div');
 		// zoomInButton.setAttribute('class', 'mapiator_zoom_in');
@@ -750,44 +739,6 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			return this.xmove;
 		}
 	}
-
-	Mapiator.iPhoneController = function(map) {
-		var currentX, currentY;
-		var mapDiv = map.mapDiv;
-		mapDiv.addEventListener( 'touchstart', function(e){
-			if(e.touches.length == 1){ // Only deal with one finger
-				var touch = e.touches[0]; // Get the information for finger #1
-				currentX = touch.pageX;
-				currentY = touch.pageY;
-			} 
-		});
-
-		mapDiv.addEventListener( 'touchmove', function(e){
-			e.preventDefault();
-			if(e.touches.length == 1){
-				var touch = e.touches[0];
-				diffX = touch.pageX - currentX;
-				diffY = touch.pageY - currentY;
-
-				map.moveByPx(diffX,diffY);
-
-				currentX = touch.pageX;
-				currentY = touch.pageY;
-			}
-		});
-
-		// zoom:
-		mapDiv.addEventListener( 'gestureend', function(e){
-			// note: this does not work if the default is prevented!
-			if( e.scale > 1) {
-				map.zoomIn();
-			}
-			if( e.scale < 1) {
-				map.zoomOut();
-			}
-		});
-		
-	};
 
 	YAHOO.lacuna.Mapiator = Mapiator;
 })();

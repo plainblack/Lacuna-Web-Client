@@ -69,7 +69,11 @@ body {
 .bookmark {
 	cursor:pointer;
 }
-#starmap {
+
+/*
+* Star Map
+*/
+#starMap {
 	margin: 0 auto;
 	position:relative;
 	height:700px;
@@ -97,3 +101,64 @@ body {
 .tileContainer div {
 	color:white;
 }
+.coordX {
+	text-align: center;
+	vertical-align: middle;
+	background: transparent;
+	color: white;
+	border: 1px solid white;
+	height: 25px;
+	padding-top: 5px;
+	position: absolute;
+	top: 0;
+}
+.coordY {
+	text-align: center;
+	vertical-align: middle;
+	background: transparent;
+	color: white;
+	border: 1px solid white;
+	width: 30px;
+	position: absolute;
+	left: 0;
+}
+
+/*
+* System Map
+*/
+#systemMap {
+	text-align:left;
+}
+.orbit {
+	vertical-align: middle;
+	position: absolute;
+	text-align: right;
+}
+.orbit span {
+	display: inline-block;
+	color: white;
+}
+.planet {
+	cursor: pointer;
+	position: relative;
+	display: inline;
+	vertical-align: middle;
+}
+#orbit0 { width: 250px; top: 80px; }
+#planet0 { width: 60px; }
+#orbit1 { width: 345px; top: 140px; }
+#planet1 { width: 75px; }
+#orbit2 { width: 450px; top: 210px; }
+#planet2 { width: 90px; }
+#orbit3 { width: 570px; top: 285px; }
+#planet3 { width: 105px; }
+#orbit4 { width: 700px; top: 370px; }
+#planet4 { width: 120px; }
+#orbit5 { width: 855px; top: 460px; }
+#planet5 { width: 135px; }
+#orbit6 { width: 1020px; top: 560px; }
+#planet6 { width: 150px; }
+#orbit7{ width: 1200px; top: 660px; }
+#planet7 { width: 165px; }
+#orbit8{ width: 1400px; top: 780px; }
+#planet8 { width: 180px; }

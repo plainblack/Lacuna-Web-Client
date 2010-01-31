@@ -76,17 +76,26 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Game.Run();
 		},
 		Run : function() {
-			Lacuna.StarMap.subscribe("onMapLoaded", function(oArgs){
-				Lacuna.Game.ProcessStatus(oArgs.status);
+			Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
+				Lacuna.Game.ProcessStatus(oResult.status);
 				Lacuna.Menu.create();
 			});
-			Lacuna.StarMap.subscribe("onMapLoadFailed", function(oArgs){
-				alert(oArgs.message);
-				if(oArgs.code == 1006) {
+			Lacuna.MapStar.subscribe("onMapLoadFailed", function(oError){
+				alert(oError.message);
+				if(oError.code == 1006) {
 					Lacuna.Game.DoLogin();
 				}
 			});
-			Lacuna.StarMap.Load();
+			Lacuna.MapStar.subscribe("onChangeToSystemView", function(starData) {
+				Lacuna.MapStar.MapStarVisble(false);
+				Lacuna.MapSystem.Load(starData.id);
+			});
+			Lacuna.MapStar.Load();
+			
+			Lacuna.MapSystem.subscribe("onStatusUpdate", function(oStatus){
+				Lacuna.Game.ProcessStatus(oStatus);
+				Lacuna.Menu.update();
+			});
 		},
 		ProcessStatus : function(status) {
 			if(status && status.empire) {

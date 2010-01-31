@@ -1,5 +1,5 @@
 (function(){
-	var t = "108",
+	var t = "112",
 		host = "http://localhost/lacuna/";
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
@@ -48,12 +48,18 @@
 		fullpath: host + "Mapiator.js?" + t
 	});
 	loader.addModule({
-		name: "starMap",
+		name: "mapStar",
 		type: "js",
-		fullpath: host + "starMap.js?" + t,
-		requires : ["game","mapiator"]
+		fullpath: host + "mapStar.js?" + t,
+		requires : ["event-delegate","game","mapiator","selector"]
 	});
-	loader.require("gameMenu","login","starMap");
+	loader.addModule({
+		name: "mapSystem",
+		type: "js",
+		fullpath: host + "mapSystem.js?" + t,
+		requires : ["game"]
+	});
+	loader.require("gameMenu","login","mapStar","mapSystem");
 	loader.onSuccess = function(o) {
 		console.log("version " + t);
 		YAHOO.lacuna.Game.Start();

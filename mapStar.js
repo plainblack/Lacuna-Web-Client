@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna");
 
-if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
+if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 	
 (function(){
 	var Lang = YAHOO.lang,
@@ -11,12 +11,12 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game;
 		
-	var StarMap = function() {
+	var MapStar = function() {
 		this.createEvent("onMapLoaded");
 		this.createEvent("onMapLoadFailed");
 		this.createEvent("onChangeToSystemView");
 	};
-	StarMap.prototype = {
+	MapStar.prototype = {
 		/*
 		_createGrid : function() {
 			if(!this._gridCreated) {
@@ -182,18 +182,18 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 		},
 		
 		*/
-		StarMapVisble : function(visible) {
+		MapStarVisble : function(visible) {
 			if(this._elGrid) {
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
 		},
 		Mapiator : function(oArgs) {
 			if(!this._gridCreated) {
-				var starmap = document.createElement("div");
-				starmap.id = "starmap";
-				this._elGrid = document.getElementById("content").appendChild(starmap);
+				var starMap = document.createElement("div");
+				starMap.id = "starMap";
+				this._elGrid = document.getElementById("content").appendChild(starMap);
 								
-				var map = new Lacuna.Mapiator.Map("starmap");
+				var map = new Lacuna.Mapiator.Map("starMap");
 				map.setTileSizeInPx( 100 );
 				map.setZoomLevel(map.addStarData(oArgs.stars));
 				map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
@@ -210,7 +210,7 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
 					if(tile) {
 						console.log(tile.id, tile.starData);
-						//this.fireEvent("onChangeToSystemView", tile.starData);
+						this.fireEvent("onChangeToSystemView", tile.starData);
 					}
 				}, "div.tile", this, true);
 			}
@@ -246,10 +246,10 @@ if (typeof YAHOO.lacuna.StarMap == "undefined" || !YAHOO.lacuna.StarMap) {
 			}
 		}
 	};
-	Lang.augmentProto(StarMap, Util.EventProvider);
+	Lang.augmentProto(MapStar, Util.EventProvider);
 	
-	Lacuna.StarMap = new StarMap();
+	Lacuna.MapStar = new MapStar();
 })();
-YAHOO.register("starMap", YAHOO.lacuna.StarMap, {version: "1", build: "0"}); 
+YAHOO.register("mapStar", YAHOO.lacuna.MapStar, {version: "1", build: "0"}); 
 
 }

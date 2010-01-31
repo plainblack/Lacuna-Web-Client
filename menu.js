@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		create : function() {
 			var userMenu = new YAHOO.widget.Menu(this.id, { zindex: 1001 });
 			userMenu.cfg.setProperty("context", [this.clickId, "tl", "bl"]);
-			userMenu.addItem({ text: "Details", id: "ud", onclick: { fn: function(){alert("details");} } });
+			//userMenu.addItem({ text: "Details", id: "ud", onclick: { fn: function(){alert("details");} } });
 			userMenu.addItem({ text: "Logout", id: "ul", onclick: { fn: Game.Logout } });
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
@@ -112,14 +112,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		create : function() {
 			var planetMenu = new YAHOO.widget.Menu(this.id, { zindex: 1001 });
 			planetMenu.cfg.setProperty("context", [this.clickId, "bl", "tl"]);
-			var planets = Game.EmpireData.planets,
-				count = 0;
-			if(Lang.isObject(planets)) {
-				for(var pKey in planets) {
-					var p = planets[pKey];
-					planetMenu.addItem({ text: p.name, id: "planet"+(count++), onclick: { fn: function(){alert(p.name);} } });
-				}
-			}
 			planetMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
 					this.align("bl","tl");
@@ -265,8 +257,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				this.PlanetMenu.create();
 			}
 			else {
-				this.UserMenu.update();
-				this.PlanetMenu.update();
+				this.UserMenu.updateData();
+				this.PlanetMenu.updateData();
 				this.show();
 			}
 		},
