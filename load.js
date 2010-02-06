@@ -25,10 +25,16 @@
 		requires : ["event","cookie","rpc","smd"]
 	});
 	loader.addModule({
+		name: "createSpecies",
+		type: "js",
+		fullpath: host + "createSpecies.js?" + t,
+		requires : ["dragdrop","game","slider"]
+	});
+	loader.addModule({
 		name: "createEmpire",
 		type: "js",
 		fullpath: host + "createEmpire.js?" + t,
-		requires : ["game"]
+		requires : ["createSpecies"]
 	});
 	loader.addModule({
 		name: "login",

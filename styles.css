@@ -71,6 +71,23 @@ body {
 }
 
 /*
+* Species creator
+*/
+#speciesHO_bg {
+	position: relative;
+	background: url(http://yui.yahooapis.com/2.8.0r4/build/slider/assets/bg-h.gif) 0 5px no-repeat;
+	height: 28px;
+	width: 210px;
+}
+
+#speciesHO_bg div {
+	position: absolute;
+	cursor: default;
+	top: 4px;
+}
+
+
+/*
 * Star Map
 */
 #starMap {

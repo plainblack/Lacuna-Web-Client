@@ -49,11 +49,11 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elPass = Dom.get("loginPass");
 			this.elCreate = Dom.get("loginCreate");
 		
+			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
 		
-		Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
 	};
 	Login.prototype = {
 		handleLogin : function() {

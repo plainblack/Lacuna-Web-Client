@@ -5,6 +5,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 (function(){
 	var Util = YAHOO.util,
 		Dom = Util.Dom,
+		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game;
 
@@ -31,6 +32,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'				</li>',
 		'			</ul>',
 		'			<div id="empireMessage" class="hidden"></div>',
+		'			<a id="speciesCreate" href="#">Create a Species</a>',
 		'		</form>',
 		'	</div>',
 		'	<div class="ft"></div>'
@@ -57,7 +59,9 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elSpecies = Dom.get("empireSpecies");
 			this.elMessage = Dom.get("empireMessage");
+			this.elSpeciesCreate = Dom.get("speciesCreate");
 			
+			Event.addListener(this.elSpeciesCreate, "click", this.createSpeciesClick, this, true);
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
@@ -121,6 +125,14 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elSpecies.selectedIndex = 0; //select human
 			Dom.addClass(this.elMessage, "hidden");
 			this.Dialog.hide();
+		},
+		createSpeciesClick : function(e) {
+			Event.stopEvent(e); //stop href click
+			this.hide(); //hide empire
+			if(!Game.SpeciesCreator) {
+				Game.SpeciesCreator = new Lacuna.CreateSpecies(this);
+			}
+			Game.SpeciesCreator.show();
 		}
 	};
 

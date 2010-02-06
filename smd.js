@@ -173,8 +173,47 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"name", "type":"string", "optional":false}
 					],
 					"returns":{"type":"number"}
-				},
+				}
+			}
+		},
+		Species : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
 
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/species",
+
+			"services": {
+
+				"is_name_available" : {
+					"description": "check if species name is available",
+					"parameters": [
+						{"name":"name", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				
+				"create" : {
+					"description": "create species",
+					"parameters": {
+						name:{"type":"string", "optional":false},
+						description:{"type":"string", "optional":false},
+						habitable_orbits:{"type":"number", "optional":false},
+						construction_affinity:{"type":"number", "optional":false},
+						deception_affinity:{"type":"number", "optional":false},
+						research_affinity:{"type":"number", "optional":false},
+						management_affinity:{"type":"number", "optional":false},
+						farming_affinity:{"type":"number", "optional":false},
+						mining_affinity:{"type":"number", "optional":false},
+						science_affinity:{"type":"number", "optional":false},
+						environmental_affinity:{"type":"number", "optional":false},
+						political_affinity:{"type":"number", "optional":false},
+						trade_affinity:{"type":"number", "optional":false},
+						growth_affinity:{"type":"number", "optional":false}
+					},
+					"returns":{"type":"string"}
+				}
 			}
 		}
 	};
