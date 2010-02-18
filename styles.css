@@ -73,14 +73,43 @@ body {
 /*
 * Species creator
 */
-#speciesHO_bg {
+.speciesSlider_bg {
+	display:inline-block;
 	position: relative;
-	background: url(http://yui.yahooapis.com/2.8.0r4/build/slider/assets/bg-h.gif) 0 5px no-repeat;
+	background: url(http://localhost/lacuna/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
 	height: 28px;
 	width: 210px;
 }
+.thumbDisplay {
+	left:0.275em;
+	position:absolute;
+	top:0.25em;
+}
 
-#speciesHO_bg div {
+#createSpecies li label {
+	display:inline-block;
+	width:100px;
+	text-align:right;
+	padding-right:5px;
+	vertical-align:top;
+}
+
+#speciesHO div {
+	position: absolute;
+	cursor: default;
+	top: 4px;
+}
+#speciesConst_thumb,
+#speciesDecep_thumb,
+#speciesResearch_thumb,
+#speciesManagement_thumb,
+#speciesFarming_thumb,
+#speciesMining_thumb,
+#speciesScience_thumb,
+#speciesEnviro_thumb,
+#speciesPolitical_thumb,
+#speciesTrade_thumb,
+#speciesGrowth_thumb  {
 	position: absolute;
 	cursor: default;
 	top: 4px;

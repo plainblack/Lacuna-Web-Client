@@ -57,6 +57,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 	};
 	Login.prototype = {
 		handleLogin : function() {
+			this.setMessage("");
 			console.log("name: ", this.elName.value, " - pass: ", this.elPass.value);			
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
