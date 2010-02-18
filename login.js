@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		},
 		hide : function() {
 			if(this.elMessage) {
-				Dom.addClass(this.elMessage, "hidden");
+				Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
 			}
 			this.Dialog.hide();
 		},
@@ -91,7 +91,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				this.elCreate.parentNode.insertBefore(d, this.elCreate);
 				this.elMessage = d;
 			}
-			Dom.removeClass(this.elMessage, "hidden");
+			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		createEmpireClick : function(e) {

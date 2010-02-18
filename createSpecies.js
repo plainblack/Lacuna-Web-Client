@@ -181,7 +181,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this._empire.show();
 		},
 		setMessage : function(str) {
-			Dom.removeClass(this.elMessage, "hidden");
+			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		show : function() {
@@ -194,7 +194,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		hide : function() {
 			this.elName.value = "";
 			this.elDesc.value = "";
-			Dom.addClass(this.elMessage, "hidden");
+			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
 		convertValue : function(val) {

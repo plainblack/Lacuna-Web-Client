@@ -43,6 +43,9 @@ body {
 .hidden {
 	display:none;
 }
+.alert {
+	color:red;
+}
 .menuPlanetThumb {
 	width:35px;
 	height:35px;

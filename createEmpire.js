@@ -114,7 +114,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this._login.show();
 		},
 		setMessage : function(str) {
-			Dom.removeClass(this.elMessage, "hidden");
+			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		show : function() {
@@ -125,7 +125,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elPass.value = "";
 			this.elPassConfirm.value = "";
 			this.elSpecies.selectedIndex = 0; //select human
-			Dom.addClass(this.elMessage, "hidden");
+			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
 		createSpeciesClick : function(e) {

@@ -22,11 +22,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			planets:{}
 		},
 		Styles : {
-			HIDDEN : "hidden"
+			HIDDEN : "hidden",
+			ALERT : "alert"
 		},
 		Services : {
 			Empire : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Empire),
-			Maps : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Map)
+			Maps : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Map),
+			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species)
 		},
 		ErrorCodes : {
 			1000 : "Name not available",
