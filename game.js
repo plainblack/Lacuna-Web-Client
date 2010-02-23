@@ -13,7 +13,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 	var Game = {
 		AssetUrl : "http://localhost/lacuna/assets/",
 		EmpireData : {
-			current_planet_id:null,
+			home_planet_id:null,
 			essentia:null,
 			happiness:null,
 			has_new_messages:null,
@@ -102,13 +102,20 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		ProcessStatus : function(status) {
 			if(status && status.empire) {
 				var now = new Date();
-				//remember current planet
-				Cookie.setSub("lacuna", "currentPlanetId", status.empire.current_planet_id, {
-					domain: "lacunaexpanse.com",
-					expires: now.setHours(now.getHours() + 1)
-				});
-			
-				Lacuna.Game.EmpireData = status.empire;
+				//full status
+				if(status.empire.home_planet_id) {
+					//remember current planet
+					Cookie.setSub("lacuna", "homePlanetId", status.empire.home_planet_id, {
+						domain: "lacunaexpanse.com",
+						expires: now.setHours(now.getHours() + 1)
+					});
+				
+					//Lacuna.Game.EmpireData = status.empire;
+				}
+				//else {
+					//or small status
+					Lang.augmentObject(Lacuna.Game.EmpireData, status.empire);
+				//}
 				Lacuna.Menu.update();
 			}
 		},

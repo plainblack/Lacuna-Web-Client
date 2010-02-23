@@ -200,7 +200,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		updateData : function() {
 			var ED = Game.EmpireData,
 				planets = ED.planets || {},
-				cpi = ED.current_planet_id,
+				cpi = ED.home_planet_id,
 				cp = planets[cpi],
 				count = 0;
 			

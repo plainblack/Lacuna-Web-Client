@@ -21,9 +21,9 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		'	<div class="bd">',
 		'		<form name="speciesForm">',
 		'			<ul>',
-		'				<li><label for="speciesName">User</label><input type="text" id="speciesName" maxlength="30" /></li>',
+		'				<li><label for="speciesName">Name</label><input type="text" id="speciesName" maxlength="30" /></li>',
 		'				<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
-		'				<li><label>Points</label><span id="speciesPointTotal">0</span>/??</li>',
+		'				<li><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
 		'				<li><label>Habitable Orbits</label>',
 		'					<div id="speciesHO" class="speciesSlider_bg" title="Habitable Orbits Selector">',
 		'						<div id="speciesHO_min_thumb"><span id="speciesHO_from" class="thumbDisplay">1</span><img src="http://yui.yahooapis.com/2.8.0r4/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
@@ -109,6 +109,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			//get el's after rendered
 			this.elName = Dom.get("speciesName");
 			this.elDesc = Dom.get("speciesDesc");
+			this.elMessage = Dom.get("speciesMessage");
 			
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
@@ -117,64 +118,76 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 	};
 	CreateSpecies.prototype = {
 		handleCreate : function() {
-			var speciesHO = this.values.speciesHO,
-				ho = [];
-			if(speciesHO.max - speciesHO.min == 0) {
-				ho.push(speciesHO.min);
+			if(this.totalValue > 45) {
+				this.setMessage("You can only have a maximum of 45 points.");
 			}
 			else {
-				for(var i=speciesHO.min; i<=speciesHO.max; i++) {
-					ho.push(i);
+				this.setMessage("");
+				var speciesHO = this.values.speciesHO,
+					ho = [];
+				if(speciesHO.max - speciesHO.min == 0) {
+					ho.push(speciesHO.min);
 				}
-			}
-			
-			var SC = Game.SpeciesCreator,
-				SpeciesServ = Game.Services.Species,
-				data = {
-					name: this.elName.value,
-					description: this.elDesc.value.substr(0,1024),
-					habitable_orbits: ho,
-					construction_affinity: this.values.speciesConst,
-					deception_affinity: this.values.speciesDecep,
-					research_affinity: this.values.speciesResearch,
-					management_affinity: this.values.speciesManagement,
-					farming_affinity: this.values.speciesFarming,
-					mining_affinity: this.values.speciesMining,
-					science_affinity: this.values.speciesScience,
-					environmental_affinity: this.values.speciesEnviro,
-					political_affinity: this.values.speciesPolitical,
-					trade_affinity: this.values.speciesTrade,
-					growth_affinity : this.values.speciesGrowth
-				};
+				else {
+					for(var i=speciesHO.min; i<=speciesHO.max; i++) {
+						ho.push(i);
+					}
+				}
 				
-			SpeciesServ.is_name_available({name:data.name}, {
-				success : function(o) {
-					console.log(o);
-					if(o.result == 1) {
-						SpeciesServ.create(data,{
-							success : function(o){
-								console.log(o);
-								SC.hide();
-								Game.LoginDialog.show();
-							},
-							failure : function(o){
-								console.log(o);
-								SC.setMessage(o.error.message);
-							},
-							timeout:5000
-						});
-					}
-					else {
-						SC.setMessage("Species name is unavailable.  Please choose another.");
-					}
-				},
-				failure : function(o) {
-					console.log(o);
-					SC.setMessage(o.error.message);
-				},
-				timeout:5000
-			});
-			
+				var SC = Game.SpeciesCreator,
+					SpeciesServ = Game.Services.Species,
+					data = {
+						name: this.elName.value,
+						description: this.elDesc.value.substr(0,1024),
+						habitable_orbits: ho,
+						construction_affinity: this.values.speciesConst,
+						deception_affinity: this.values.speciesDecep,
+						research_affinity: this.values.speciesResearch,
+						management_affinity: this.values.speciesManagement,
+						farming_affinity: this.values.speciesFarming,
+						mining_affinity: this.values.speciesMining,
+						science_affinity: this.values.speciesScience,
+						environmental_affinity: this.values.speciesEnviro,
+						political_affinity: this.values.speciesPolitical,
+						trade_affinity: this.values.speciesTrade,
+						growth_affinity : this.values.speciesGrowth
+					};
+					
+				SpeciesServ.is_name_available({name:data.name}, {
+					success : function(o) {
+						console.log(o);
+						if(o.result == 1) {
+							SpeciesServ.create(data,{
+								success : function(o){
+									console.log(o);
+									o.result;
+									SC.hide();
+									Game.EmpireCreator.addSpecies(o.result, data.name);
+									Game.EmpireCreator.show();
+								},
+								failure : function(o){
+									console.log(o);
+									if(o.error.code == 1007) {
+										SC.setMessage("You can only have a maximum of 45 points.");
+									}
+									else {
+										SC.setMessage(o.error.message);
+									}
+								},
+								timeout:5000
+							});
+						}
+						else {
+							SC.setMessage("Species name is unavailable.  Please choose another.");
+						}
+					},
+					failure : function(o) {
+						console.log(o);
+						SC.setMessage(o.error.message);
+					},
+					timeout:5000
+				});
+			}
 		},
 		handleCancel : function() {
 			this.hide();

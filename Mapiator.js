@@ -89,68 +89,70 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		Dom.addClass(div,"movableContainer");
 		div.style.position = 'absolute';
 		
-		this.move = function( x,y ) {
+		this._container = div;
+		
+		this.offsetX = 0;
+		this.offsetY = 0;
+		
+		this.reposition(0,0);
+		parentEl.appendChild( div );
+	};
+	Mapiator.MovableContainer.prototype = {
+		move : function( x,y ) {
 			this.offsetX += x;
 			this.offsetY += y;
-			div.style.left = ''+ this.offsetX +'px';
-			div.style.top  = ''+ this.offsetY +'px';
-		};
-		
-		this.reposition = function( mox, moy ) {
-			this.offsetX = 0;
-			this.offsetY = 0;
+			this._container.style.left = ''+ this.offsetX +'px';
+			this._container.style.top  = ''+ this.offsetY +'px';
+		},
+		reposition : function( mox, moy ) {
 			this.move(0,0);
 			
 			this.offsetToLeftMapBorder = mox;
 			this.offsetToTopMapBorder = moy;
-		};
-		
-		this.appendChild = function( c ) {
-			return div.appendChild( c );
-		};
-		
-		this.removeChild = function( c ) {
-			return div.removeChild( c );
-		};
-		
-		this.reposition();
-		parentEl.appendChild( div );
+		},
+		appendChild : function( c ) {
+			return this._container.appendChild( c );
+		},
+		removeChild : function( c ) {
+			return this._container.removeChild( c );
+		}
 	};
 	
 	Mapiator.VisibleArea = function(map) {
-		this.left = Math.round( (map.centerX * map.tileSizeInPx) - (0.5 * map.width) );
-		this.top = Math.round( (map.centerY * map.tileSizeInPx) - (0.5 * map.height) );
+		this.left = 0; //Math.round( (map.centerX * map.tileSizeInPx) - (0.5 * map.width) );
+		this.top = 0; //Math.round( (map.centerY * map.tileSizeInPx) - (0.5 * map.height) );
 		this.width = map.width;
 		this.height = map.height;
-		this.move = function(mx,my) {
+		this._map = map;
+		this.move(0,0);
+	};
+	Mapiator.VisibleArea.prototype = {
+		move : function(mx,my) {
 			this.left += mx;
 			this.top += my;
 			this.right = this.left + this.width;
 			this.bottom = this.top + this.height;
-		};
-		this.centerCoords = function() {
-			var hw = 0.5*map.width;
-			return [Math.floor((this.left + hw) / map.tileSizeInPx),
-			Math.floor(((this.top * -1) - hw) / map.tileSizeInPx)];
-			
-			/*return util.inverseProject(
-				(this.centerX()-0.5*mapExtendInPx)/mapExtendInPx,
-				(this.centerY()-0.5*mapExtendInPx)/mapExtendInPx
-			);*/
-		};
-		this.coordBounds = function() {
+		},
+		centerCoords : function() {
+			var hw = 0.5 * this._map.width;
+			var tileSize = this._map.tileSizeInPx;
+			return [Math.floor((this.left + hw) / tileSize),
+			Math.floor(((this.top * -1) - hw) / tileSize)];
+		},
+		coordBounds : function() {
+			var tileSize = this._map.tileSizeInPx;
 			return {
-				x1 : Math.floor(this.left / map.tileSizeInPx),
-				y1 : Math.floor((this.top * -1) / map.tileSizeInPx),
-				x2 : Math.floor(this.right / map.tileSizeInPx),
-				y2 : Math.floor((this.bottom * -1) / map.tileSizeInPx)
+				x1 : Math.floor(this.left / tileSize),
+				y1 : Math.floor((this.top * -1) / tileSize),
+				x2 : Math.floor(this.right / tileSize),
+				y2 : Math.floor((this.bottom * -1) / tileSize)
 			};
-		};
-		this.topLeftLoc = function() {
-			return [Math.floor(this.left / map.tileSizeInPx),
-			Math.floor(this.top / map.tileSizeInPx)];
-		};
-		this.move(0,0);
+		},
+		topLeftLoc : function() {
+			var tileSize = this._map.tileSizeInPx;
+			return [Math.floor(this.left / tileSize),
+			Math.floor(this.top / tileSize)];
+		}
 	};
 
 	Mapiator.StdTile = function(x, y, z, ox, oy, map) {
@@ -284,8 +286,8 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			s.top = '0';
 			s.zIndex = '30';
 
-			this.offsetCoordsX = Math.ceil( ((this.map.centerX * this.map.tileSizeInPx) + (0.5 * this.map.width)) / 100 ) * 100;
-			this.offsetCoordsY = Math.ceil( ((this.map.centerY * this.map.tileSizeInPx) + (0.5 * this.map.height)) / 100 ) * 100;
+			this.offsetCoordsX = Math.ceil( (this.map.visibleArea.left * this.map.tileSizeInPx) / 100 ) * 100; //Math.ceil( ((this.map.visibleArea.left * this.map.tileSizeInPx) + (0.5 * this.map.width)) / 100 ) * 100;
+			this.offsetCoordsY = Math.ceil( (this.map.visibleArea.top * this.map.tileSizeInPx) / 100 ) * 100; //Math.ceil( ((this.map.visibleArea.top * this.map.tileSizeInPx) + (0.5 * this.map.height)) / 100 ) * 100;
 		
 			this.displayXCoords();
 			this.displayYCoords();
@@ -355,8 +357,8 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 		Dom.addClass(tileContainer, "tileContainer");
 		var s = tileContainer.style;
 		s.position = 'absolute';
-		s.left = '-'+ offsetX + 'px';
-		s.top = '-'+ offsetY + 'px';
+		s.left = offsetX + 'px';
+		s.top = offsetY + 'px';
 		s.zIndex = '0';
 		// for debuging:
 		// s.width = ''+visibleArea.width+'px';
@@ -458,7 +460,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 					tiles[tile.id] = tile;
 				}
 			}
-			//this.removeAllTilesNotContainedIn( tiles );
+			this.removeAllTilesNotContainedIn( tiles );
 		},
 		render : function() {
 			var bounds = this.visibleArea.coordBounds(),
@@ -555,12 +557,23 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			this.centerY = y;
 		},
 		setCenterToCurrentPlanet : function() {
-			if(this.currentSystem) {
+			if(this.currentSystem && this.tileLayer) {
+				//this.setCenter(this.currentSystem.x,this.currentSystem.y);
 				//these are the offsets for the star
-				var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx,
-					oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx;
+				var otherWidth = this.centerX * this.tileSizeInPx,
+					otherHeight = this.centerY * this.tileSizeInPx;
+				var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
+					oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx + otherHeight;
 				//now we change them slightly to get where we're going
-				this.moveByPx(Math.floor(ox/2), Math.floor(oy/2) * -1);
+				/*ox = Math.floor(ox*-1);
+				oy = Math.floor(oy/2) * -1;
+				oy += oy/2;
+				
+				this.moveByPx(ox, oy);*/
+				
+				//this.moveByPx(Math.floor(ox/2), Math.floor(oy/2) * -1);
+				
+				this.moveByPx(ox * -1, oy * -1);
 			}
 		},
 		getStar : function(x, y, z){
@@ -660,13 +673,16 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			return startZoomLevel;
 		},
 		redraw : function() {			
-			// deprecated:
 			this.width = this.mapDiv.offsetWidth;
 			this.height= this.mapDiv.offsetHeight;
 			
 			this.visibleArea = new Mapiator.VisibleArea(this);
 			this.movableContainer.reposition( this.visibleArea.left, this.visibleArea.top );
-			this.coordLayer.redraw(this.visibleArea.left, this.visibleArea.top);
+			
+			var center = this.visibleArea.centerCoords();
+			this.setCenter(center[0],center[1]);
+			//redraw after setting center since it uses map's center location
+			this.coordLayer.redraw();
 			
 			if( this.tileLayer ) {
 				this.tileLayer.destroy();		

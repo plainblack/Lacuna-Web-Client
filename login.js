@@ -63,7 +63,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
 					console.log(o);
-					Game.ProcessStatus(o.result.status);
+					//Game.ProcessStatus(o.result.status);
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
 				},

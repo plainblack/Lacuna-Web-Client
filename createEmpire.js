@@ -128,6 +128,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
+		addSpecies : function(id, name) {
+			var opt = document.createElement("option");
+			opt.value = id;
+			opt.innerHTML = name;
+			opt = this.elSpecies.appendChild(opt);
+			opt.selected = true;
+		},
 		createSpeciesClick : function(e) {
 			Event.stopEvent(e); //stop href click
 			this.hide(); //hide empire
