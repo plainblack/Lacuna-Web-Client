@@ -52,8 +52,13 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			
 			this.planetDetails.render();
 		},
-		MapSystemVisble : function(visible) {
+		
+		IsVisible : function() {
+			return this._isVisible;
+		},
+		MapVisible : function(visible) {
 			if(this._el) {
+				this._isVisible = visible; 
 				Dom.setStyle(this._el, "display", visible ? "" : "none");
 			}
 		},
@@ -102,7 +107,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				}
 			}
 
-			this.MapSystemVisble(true);
+			this.MapVisible(true);
 
 		},
 		Load : function(starId) {
@@ -120,8 +125,9 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					},
 					failure : function(o){
 						console.log("SYSTEMMAP FAILED: ", o);
+						Lacuna.MapStar.MapVisible(true);
 					},
-					timeout:5000,
+					timeout:Game.Timeout,
 					scope:this
 				});
 			}

@@ -12,15 +12,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 	var Game = {
 		AssetUrl : "http://localhost/lacuna/assets/",
-		EmpireData : {
-			home_planet_id:null,
-			essentia:null,
-			happiness:null,
-			has_new_messages:null,
-			id:null,
-			name:null,
-			planets:{}
-		},
+		EmpireData : {},
 		Styles : {
 			HIDDEN : "hidden",
 			ALERT : "alert"
@@ -42,6 +34,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			1008 : "Underspend",
 			1009 : "Invalid range"
 		},
+		Timeout : 10000,
 		
 		Start : function() {	
 			var session = Cookie.getSub("lacuna","session");
@@ -50,7 +43,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			else {
 				//Run rest of UI since we're logged in
-				Lacuna.Game.Run();
+				Lacuna.Game.GetFullStatus({
+					success:Lacuna.Game.Run,
+					scope:this
+				});
 			}
 		},
 		DoLogin : function() {
@@ -78,6 +74,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Game.Run();
 		},
 		Run : function() {
+			//this will be called on the first load and create menu
 			Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
 				Lacuna.Game.ProcessStatus(oResult.status);
 				Lacuna.Menu.create();
@@ -89,7 +86,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			});
 			Lacuna.MapStar.subscribe("onChangeToSystemView", function(starData) {
-				Lacuna.MapStar.MapStarVisble(false);
+				Lacuna.MapStar.MapVisible(false);
+				Lacuna.Menu.SystemVisible();
 				Lacuna.MapSystem.Load(starData.id);
 			});
 			Lacuna.MapStar.Load();
@@ -98,26 +96,68 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Game.ProcessStatus(oStatus);
 				Lacuna.Menu.update();
 			});
+			Lacuna.MapSystem.subscribe("onChangeToPlanetView", function(starData) {
+				Lacuna.MapSystem.MapVisible(false);
+				Lacuna.Menu.PlanetVisible();
+				Lacuna.MapPlanet.Load(starData.id);
+			});
+			
+			Lacuna.Menu.subscribe("onBackClick", function() {
+				if(Lacuna.MapSystem.IsVisible()) {
+					Lacuna.MapSystem.MapVisible(false);
+					Lacuna.MapStar.MapVisible(true);
+					Lacuna.Menu.StarVisible(true);
+				}
+				/*else if(Lacuna.MapPlanet.IsVisible()) {
+					Lacuna.MapPlanet.MapVisible(false);
+					Lacuna.MapSystem.MapVisible(true);
+					Lacuna.Menu.SystemVisible(true);
+				}*/
+			});
 		},
 		ProcessStatus : function(status) {
 			if(status && status.empire) {
 				var now = new Date();
 				//full status
 				if(status.empire.home_planet_id) {
-					//remember current planet
+					//remember home planet
 					Cookie.setSub("lacuna", "homePlanetId", status.empire.home_planet_id, {
 						domain: "lacunaexpanse.com",
 						expires: now.setHours(now.getHours() + 1)
 					});
-				
-					//Lacuna.Game.EmpireData = status.empire;
 				}
-				//else {
-					//or small status
-					Lang.augmentObject(Lacuna.Game.EmpireData, status.empire);
-				//}
+				//add everything from status empire to game empire
+				Lang.augmentObject(Lacuna.Game.EmpireData, status.empire, true);
+
 				Lacuna.Menu.update();
+				
+				if(status.empire.full_status_update_required == 1) {
+					Lacuna.Game.GetFullStatus();
+				}
 			}
+		},
+		
+		GetFullStatus : function(callback) {
+			var EmpireServ = Game.Services.Empire,
+				session = Cookie.getSub("lacuna","session");
+			EmpireServ.get_full_status({session_id:session}, {
+				success : function(o) {
+					Lacuna.Game.ProcessStatus(o.result);
+					if(callback && callback.success) {
+						callback.success.call(this);
+					}
+				},
+				failure : function(o) {
+					if(callback && callback.failure) {
+						callback.failure.call(this);
+					}
+					else {
+						console.log(o);
+					}
+				},
+				timeout:Game.Timeout,
+				scope:(callback.scope || this)
+			});
 		},
 		
 		Logout : function() {
@@ -138,7 +178,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				failure : function(o){
 					console.log("LOGOUT FAILED: ", o);
 				},
-				timeout:5000
+				timeout:Game.Timeout
 			});
 		}
 	};

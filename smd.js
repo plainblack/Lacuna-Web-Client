@@ -48,6 +48,22 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						species_id:{"type":"string", "optional":false}
 					},
 					"returns":{"type":"object"}
+				},
+				
+				"get_status" : {
+					"description": "get quick empire status",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				
+				"get_full_status" : {
+					"description": "get full empire status",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
 
 			}

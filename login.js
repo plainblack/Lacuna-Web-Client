@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					console.log("LOGIN FAILED: ", o);
 					this.setMessage(o.error.message);
 				},
-				timeout:5000,
+				timeout:Game.Timeout,
 				scope:this
 			});
 		},

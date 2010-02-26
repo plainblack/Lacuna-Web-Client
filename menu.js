@@ -17,6 +17,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.elClick = Dom.get(this.clickId);
 		this.elLeft = Dom.get("usersLeft");
 		this.elRight = Dom.get("usersRight");
+		
+		this.createEvent("onBackClick");
 	};
 	UserMenu.prototype = {
 		create : function() {
@@ -44,11 +46,22 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.updateData();
 		},
 		createLeft : function() {
-			var inbox = document.createElement("span"),
+			var back = document.createElement("div"),
+				backImg = back.appendChild(document.createElement("img")),
+				inbox = document.createElement("span"),
 				inboxImg = inbox.appendChild(document.createElement("img")),
 				bookmark = document.createElement("span"),
 				bookmarkImg = bookmark.appendChild(document.createElement("img"));
-				
+
+			backImg.src = Game.AssetUrl + 'ui/arrow-left.png';
+			backImg.alt = "Back";
+			Event.on(backImg, "click", function() {
+				this.fireEvent("onBackClick");
+			}, this, true);
+			Dom.addClass(back, "back");
+			Dom.addClass(back, "menuItem");
+			this.backVisible(false);
+			
 			inboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/inbox-alert.png' : 'ui/inbox.png');
 			inboxImg.alt = "Inbox";
 			Dom.addClass(inbox, "inbox");
@@ -59,6 +72,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(bookmark, "bookmark");
 			Dom.addClass(bookmark, "menuItem");
 			
+			this.elBack = this.elLeft.appendChild(back);
+			this.elBackImg = backImg;
 			this.elInbox = this.elLeft.appendChild(inbox);
 			this.elInboxImg = inboxImg;
 			this.elBookmark = this.elLeft.appendChild(bookmark);
@@ -97,8 +112,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		hide : function() {
 			Dom.addClass(this.container, Game.Styles.HIDDEN);
+		},
+		backVisible : function(vis) {
+			Dom.setStyle(this.elBack, "display", vis ? "" : "none");
 		}
 	};
+	Lang.augmentProto(UserMenu, Util.EventProvider);
 	
 	var PlanetMenu = function() {
 		this.id = "planetMenu";
@@ -248,12 +267,19 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 	var Menu = function() {
 		this.UserMenu = new UserMenu();
 		this.PlanetMenu = new PlanetMenu();
+		
+		this.createEvent("onBackClick");
+		
+		this.UserMenu.subscribe("onBackClick", function() {
+			this.fireEvent("onBackClick");
+		}, this, true);
 	};
 	Menu.prototype = {
 		create : function() {
 			if(!this.created) {
 				this.created = true;
 				this.UserMenu.create();
+				this.UserMenu.backVisible(false);
 				this.PlanetMenu.create();
 			}
 			else {
@@ -275,8 +301,18 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		show : function() {
 			this.UserMenu.show();
 			this.PlanetMenu.show();
+		},
+		StarVisible : function() {
+			this.UserMenu.backVisible(false);
+		},
+		SystemVisible : function() {
+			this.UserMenu.backVisible(true);
+		},
+		PlanetVisible : function() {
+			this.UserMenu.backVisible(true);
 		}
 	};
+	Lang.augmentProto(Menu, Util.EventProvider);
 	
 	Lacuna.Menu = new Menu();
 	

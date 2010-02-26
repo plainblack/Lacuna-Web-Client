@@ -143,8 +143,8 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 			var tileSize = this._map.tileSizeInPx;
 			return {
 				x1 : Math.floor(this.left / tileSize),
-				y1 : Math.floor((this.top * -1) / tileSize),
-				x2 : Math.floor(this.right / tileSize),
+				y1 : Math.ceil((this.top * -1) / tileSize),
+				x2 : Math.ceil(this.right / tileSize),
 				y2 : Math.floor((this.bottom * -1) / tileSize)
 			};
 		},
@@ -408,7 +408,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 						this.currentRequest = undefined;
 						this.showTiles(); //show any tiles we do have
 					},
-					timeout:5000,
+					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -561,7 +561,7 @@ if (typeof YAHOO.lacuna.Mapiator == "undefined" || !YAHOO.lacuna.Mapiator) {
 				//this.setCenter(this.currentSystem.x,this.currentSystem.y);
 				//these are the offsets for the star
 				var otherWidth = this.centerX * this.tileSizeInPx,
-					otherHeight = this.centerY * this.tileSizeInPx;
+					otherHeight = this.centerY * this.tileSizeInPx + this.tileSizeInPx;
 				var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
 					oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx + otherHeight;
 				//now we change them slightly to get where we're going

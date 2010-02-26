@@ -17,173 +17,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		this.createEvent("onChangeToSystemView");
 	};
 	MapStar.prototype = {
-		/*
-		_createGrid : function() {
-			if(!this._gridCreated) {
-				var div = document.createElement("div"),
-					starmap = div.cloneNode(false),
-					viewer = starmap.appendChild(div.cloneNode(false)),
-					dd = viewer.appendChild(div.cloneNode(false)),
-					starLayer = dd.appendChild(div.cloneNode(false)),
-					//starLayerContainer = starLayer.appendChild(div.cloneNode(false)),
-					grid = {};
-					
-				starmap.id = "starmap";
-				Dom.setStyle(starmap, "display", "none");
-				
-				viewer.id = "viewer";
-				dd.id = "dd";
-				starLayer.id = "starLayer";
-				//starLayerContainer.id = "starLayerContainer";
-				
-				this.mapDD = new YAHOO.util.DD(dd);
-				
-				for(var x=-5; x<=5; x++) {
-					for(var y=-5; y<=5; y++) {
-						var tile = div.cloneNode(false);
-						Dom.addClass(tile, "gridStar");
-						Dom.addClass(tile, "x"+x);
-						Dom.addClass(tile, "y"+y);
-						tile.innerHTML = "&nbsp";
-						if(!grid[x]) {
-							grid[x] = {};
-						}
-						grid[x][y] = starLayer.appendChild(tile);
-					}
-				}
-				
-				this._elGrid = document.getElementById("content").appendChild(starmap);
-				
-				this._grid = grid;
-				this._gridCreated = true;
-			}
-			else {
-				//clear nodes
-				for(var x=-5; x<=5; x++) {
-					for(var y=-5; y<=5; y++) {
-						grid[x][y].innerHTML = "&nbsp";
-					}
-				}
-			}
+		IsVisible : function() {
+			return this._isVisible;
 		},
-		_fillNodes : function(aStars , xMod, yMod) {
-			for(var i=0; i<aStars.length; i++) {
-				var oStar = aStars[i],
-					tile = this._grid[oStar.x-xMod][oStar.y-yMod];
-				if(tile) {
-					tile.innerHTML = ['<img src="',Game.AssetUrl,'map/',oStar.color,'.png" class="main" alt="',oStar.name,'" title="',oStar.name,'" />'].join('');
-				}
-			}
-		},
-		Display : function(oArgs) {
-			this._createGrid();
-			
-			Dom.setStyle(this._elGrid, "display", "none");
-			
-			var x=0,y=0;
-			//loop so we can find the bounds
-			for(var i=0; i<oArgs.stars.length; i++) {
-				var star = oArgs.stars[i];
-				
-				if(x > star.x) {
-					x = star.x;
-				}
-				if(y > star.y) { 
-					y = star.y;
-				}
-			}
-			//fill all nodes with xy modifiers
-			this._fillNodes(oArgs.stars, x + 5, y + 5);
-			
-			Dom.setStyle(this._elGrid, "display", "");
-		},
-		*/
-		/*
-		_lastZoom : 0,
-		_callCache : {},
-		
-		_pullTiles : function(x, y, z, callback) {
-			var data = {
-					x1: x-2,
-					x2: x+2,
-					y1: y+2,
-					y2: y-2,
-					z: z
-				}
-				
-			if(this._lastZoom != z) {
-				//pull largest section we can if zoom level changed
-				data.x1 = x-5;
-				data.x2 = x+5;
-				data.y1 = y+5;
-				data.y2 = y-5;
-				data.z = z;
-				
-				this._lastZoom = z;
-			}
-			var cacheKey = [data.x1, data.x2, data.y1, data.y2, data.z].join(';');
-			if(!this._callCache[cacheKey]) {
-				console.log("ADD TO CACHE ", data, cacheKey);
-				//use callback later
-				this._callCache[cacheKey] = callback;
-				//for cache process so we go in order
-				this.fireEvent("onMapCallCacheProcess");
-			}
-		},
-		_getTile : function(x, y, z, callback) {
-			var ySet = this.tiles[x],
-				zSet = ySet ? ySet[y] : null,
-				tile = zSet ? zSet[z] : null;
-				
-			if(tile) {
-				callback.success.call(callback.scope, {url:[Game.AssetUrl,'map/',tile.color,'.png'].join('')});
-			}
-			else {
-				this._pullTiles(x, y, z, callback);
-			}
-		},
-		_getStars : function(data, key) {
-			var callback = this._callCache[key],
-				cScope = callback.scope;
-			delete this._callCache[key];
-			console.log("GET STARS ", data, callback);
-		},
-		_addStarTiles : function(aStars) {
-			var startZoomLevel = 0;
-			for(var i=0; i<aStars.length; i++) {
-				var star = aStars[i];
-				if(!this.tiles[star.x]) {
-					this.tiles[star.x] = {};
-				}
-				if(!this.tiles[star.x][star.y]) {
-					this.tiles[star.x][star.y] = {};
-				}
-				this.tiles[star.x][star.y][star.z] = star;
-				startZoomLevel = star.z;
-			}
-			return startZoomLevel;
-		},
-		ProcessCallCache : function() {
-			for(var key in this._callCache) {
-				if(!this._callCache[key].processing) {
-					this._callCache[key].processing = true;
-					var data = {
-						session_id: Cookie.getSub("lacuna","session") || ""
-					};
-					var vals = key.split(';');
-					data.x1 = vals[0];
-					data.x2 = vals[1];
-					data.y1 = vals[2];
-					data.y2 = vals[3];
-					data.z = vals[4];
-					this._getStars(data, key);
-				}
-			}
-		},
-		
-		*/
-		MapStarVisble : function(visible) {
+		MapVisible : function(visible) {
 			if(this._elGrid) {
+				this._isVisible = visible;
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
 		},
@@ -208,7 +47,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				
 				Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
-					if(tile) {
+					if(tile && tile.starData.alignments.indexOf("self") >= 0) {
 						console.log(tile.id, tile.starData);
 						this.fireEvent("onChangeToSystemView", tile.starData);
 					}
@@ -240,7 +79,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						console.log("STARMAP FAILED: ", o);
 						this.fireEvent("onMapLoadFailed", o.error);
 					},
-					timeout:5000,
+					timeout:Game.Timeout,
 					scope:this
 				});
 			}
