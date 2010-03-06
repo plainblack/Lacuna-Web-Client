@@ -26,15 +26,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
 		},
-		Mapiator : function(oArgs) {
+		Mapper : function(oArgs) {
 			if(!this._gridCreated) {
 				var starMap = document.createElement("div");
 				starMap.id = "starMap";
 				this._elGrid = document.getElementById("content").appendChild(starMap);
 								
-				var map = new Lacuna.Mapiator.Map("starMap");
-				map.setTileSizeInPx( 100 );
-				map.setZoomLevel(map.addStarData(oArgs.stars));
+				var map = new Lacuna.Mapper.StarMap("starMap");
+				map.setZoomLevel(map.addTileData(oArgs.stars));
 				map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
@@ -47,15 +46,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				
 				Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
-					if(tile && tile.starData.alignments.indexOf("self") >= 0) {
-						console.log(tile.id, tile.starData);
-						this.fireEvent("onChangeToSystemView", tile.starData);
+					if(tile && tile.data.alignments.indexOf("self") >= 0) {
+						console.log(tile.id, tile.data);
+						this.fireEvent("onChangeToSystemView", tile.data);
 					}
 				}, "div.tile", this, true);
 			}
 			
-			Dom.setStyle(this._elGrid, "display", "");
-
+			this.MapVisible(true);
 		},
 		Load : function() {
 			/*
@@ -63,6 +61,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.fireEvent("onMapLoaded", o.result);
 			*/
 			var homePlanetId = Cookie.getSub("lacuna", "homePlanetId");
+			this.locationId = homePlanetId;
 			if(homePlanetId) {
 				var MapServ = Game.Services.Maps,
 					data = {
@@ -73,7 +72,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				MapServ.get_stars_near_body(data,{
 					success : function(o){
 						this.fireEvent("onMapLoaded", o.result);
-						this.Mapiator.call(this, o.result);
+						this.Mapper.call(this, o.result);
 					},
 					failure : function(o){
 						console.log("STARMAP FAILED: ", o);

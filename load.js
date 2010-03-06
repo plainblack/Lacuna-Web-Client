@@ -49,15 +49,15 @@
 		requires : ["container","game","menu"]
 	});
 	loader.addModule({
-		name: "mapiator",
+		name: "mapper",
 		type: "js",
-		fullpath: host + "Mapiator.js?" + t
+		fullpath: host + "mapper.js?" + t
 	});
 	loader.addModule({
 		name: "mapStar",
 		type: "js",
 		fullpath: host + "mapStar.js?" + t,
-		requires : ["event-delegate","game","mapiator","selector"]
+		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
 		name: "mapSystem",
@@ -65,7 +65,13 @@
 		fullpath: host + "mapSystem.js?" + t,
 		requires : ["game"]
 	});
-	loader.require("gameMenu","logger","login","mapStar","mapSystem");
+	loader.addModule({
+		name: "mapPlanet",
+		type: "js",
+		fullpath: host + "mapPlanet.js?" + t,
+		requires : ["event-delegate","game","mapper","selector"]
+	});
+	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
 	loader.onSuccess = function(o) {
 		console.log("version " + t);
 		YAHOO.widget.Logger.enableBrowserConsole();

@@ -4,6 +4,45 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 (function(){
 	var smd = {
+		Body : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
+
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/body",
+
+			"services": {
+				"get_buildings" : {
+					"description": "Retrieves a list of the buildings on a planet.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"get_buildable" : {
+					"description": "Provides a list of all the building types that are available to be built on a given space on a planet.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false},
+						{"name":"x", "type":"string", "optional":false},
+						{"name":"y", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"rename_body" : {
+					"description": "Renames a body, provided the empire attached to the session owns the body. Returns a 1 on success.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false},
+						{"name":"name", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				}
+
+			}
+		},
 		Empire : {
 			"SMDVersion":"2.0",
 			"description": "SMD service demonstration",
