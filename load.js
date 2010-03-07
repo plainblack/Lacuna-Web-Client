@@ -73,12 +73,12 @@
 	});
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
 	loader.onSuccess = function(o) {
-		console.log("version " + t);
 		YAHOO.widget.Logger.enableBrowserConsole();
+		YAHOO.log("version " + t);
 		YAHOO.lacuna.Game.Start();
 	};
 	loader.onFailure = function(o) {
-		console.log(o);
+		YAHOO.log(o);
 	};
 
 	loader.insert();

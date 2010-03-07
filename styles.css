@@ -211,3 +211,10 @@ body {
 #planet7 { width: 165px; }
 #orbit8{ width: 1400px; top: 780px; }
 #planet8 { width: 180px; }
+
+#planetDetailsName {
+	font-weight:bold;
+}
+#planetDetails label {
+	font-weight:bold;
+}

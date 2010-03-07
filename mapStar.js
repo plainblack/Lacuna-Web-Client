@@ -47,7 +47,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
 					if(tile && tile.data.alignments.indexOf("self") >= 0) {
-						console.log(tile.id, tile.data);
+						YAHOO.log([tile.id, tile.data]);
 						this.fireEvent("onChangeToSystemView", tile.data);
 					}
 				}, "div.tile", this, true);
@@ -75,7 +75,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						this.Mapper.call(this, o.result);
 					},
 					failure : function(o){
-						console.log("STARMAP FAILED: ", o);
+						YAHOO.log(["STARMAP FAILED: ", o]);
 						this.fireEvent("onMapLoadFailed", o.error);
 					},
 					timeout:Game.Timeout,

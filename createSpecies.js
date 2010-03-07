@@ -155,18 +155,18 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					
 				SpeciesServ.is_name_available({name:data.name}, {
 					success : function(o) {
-						console.log(o);
+						YAHOO.log(o);
 						if(o.result == 1) {
 							SpeciesServ.create(data,{
 								success : function(o){
-									console.log(o);
+									YAHOO.log(o);
 									o.result;
 									SC.hide();
 									Game.EmpireCreator.addSpecies(o.result, data.name);
 									Game.EmpireCreator.show();
 								},
 								failure : function(o){
-									console.log(o);
+									YAHOO.log(o);
 									if(o.error.code == 1007) {
 										SC.setMessage("You can only have a maximum of 45 points.");
 									}
@@ -182,7 +182,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 						}
 					},
 					failure : function(o) {
-						console.log(o);
+						YAHOO.log(o);
 						SC.setMessage(o.error.message);
 					},
 					timeout:Game.Timeout

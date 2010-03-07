@@ -210,11 +210,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				},
 				failure : function(o) {
+					alert("failure");
 					if(callback && callback.failure) {
 						callback.failure.call(this);
 					}
 					else {
-						console.log(o);
+						YAHOO.log(o);
 					}
 				},
 				timeout:Game.Timeout,
@@ -228,7 +229,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
-					console.log(o);
+					YAHOO.log(o);
 			
 					Cookie.remove("lacuna",{
 						domain: "lacunaexpanse.com"
@@ -238,7 +239,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.DoLogin();
 				},
 				failure : function(o){
-					console.log("LOGOUT FAILED: ", o);
+					YAHOO.log(["LOGOUT FAILED: ", o]);
 				},
 				timeout:Game.Timeout
 			});

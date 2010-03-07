@@ -78,8 +78,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	Mapper.VisibleArea = function(map) {
 		this.left = 0; //Math.round( (map.centerX * map.tileSizeInPx) - (0.5 * map.width) );
 		this.top = 0; //Math.round( (map.centerY * map.tileSizeInPx) - (0.5 * map.height) );
-		this.width = map.width;
-		this.height = map.height;
+		//this.width = map.width;
+		//this.height = map.height;
 		this._map = map;
 		this.move(0,0);
 	};
@@ -87,8 +87,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		move : function(mx,my) {
 			this.left += mx;
 			this.top += my;
-			this.right = this.left + this.width;
-			this.bottom = this.top + this.height;
+			this.right = this.left + this._map.width;
+			this.bottom = this.top + this._map.height;
 		},
 		centerCoords : function() {
 			var hw = 0.5 * this._map.width;
@@ -108,7 +108,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		topLeftLoc : function() {
 			var tileSize = this._map.tileSizeInPx;
 			return [Math.floor(this.left / tileSize),
-			Math.floor(this.top / tileSize)];
+			Math.ceil(this.top / tileSize)];
+		},
+		bottomRightLoc : function() {
+			var tileSize = this._map.tileSizeInPx;
+			return [Math.ceil(this.right / tileSize),
+			Math.floor(this.bottom / tileSize)];
 		}
 	};
 
@@ -289,7 +294,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			s.top = '0';
 			s.width = '5px';
 			s.height = '30px';
-			s.background = 'red';
+			//s.background = 'red';
 			var pxSize = this.map.tileSizeInPx,
 				size = pxSize + "px";
 			for(var x=-15; x<=15; x++) {
@@ -310,7 +315,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			s.left = '0';
 			s.width = '30px';
 			s.height = '5px';
-			s.background = 'red';
+			//s.background = 'red';
 			var pxSize = this.map.tileSizeInPx,
 				negPxSize = pxSize * -1,
 				thrd = Math.ceil(pxSize / 3),
@@ -437,15 +442,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		render : function() {
 			var bounds = this.visibleArea.coordBounds(),
 				eb = this.map.getBounds();
-				
-			console.log([
+
+			YAHOO.log([
 				"vis-x1[",bounds.x1,"] >= exi-x1[",eb.x1Left,"] && ",
 				"vis-x2[",bounds.x2,"] <= exi-x2[",eb.x2Right,"] && ",
 				"vis-y1[",bounds.y1,"] <= exi-y1[",eb.y1Top,"] && ",
 				"vis-y2[",bounds.y2,"] >= exi-y2[",eb.y2Bottom,"] "
 				].join('')
 			);
-				
+
 			if(eb && (	bounds.x1 >= eb.x1Left   && 
 						bounds.x2 <= eb.x2Right  && 
 						bounds.y1 <= eb.y1Top    && 
@@ -534,18 +539,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			delete this._pathsAndPolygons[p.id];
 		},
 		moveByPx : function( x,y ) {
-			this.movableContainer.move( x,y );
 			this.visibleArea.move( -x,-y );
+			this.movableContainer.move( x,y );
 			this.coordLayer.move( -x,-y );
 			
 			this.diffX += x;
 			this.diffY += y;
 			var checkTileSize = Math.floor(this.tileSizeInPx * .75); //load the tiles a bit early
 			if( Math.abs(this.diffX) > checkTileSize || Math.abs(this.diffY) > checkTileSize) {
-				console.log(checkTileSize, this.diffX, this.diffY);
+				YAHOO.log([checkTileSize, this.diffX, this.diffY]);
 				//reset diff's
-				this.diffX = 0;
-				this.diffY = 0;
+				this.diffX = this.diffY = 0;
 				this.tileLayer.render();
 				
 				/*if(!this.IE) {
@@ -587,6 +591,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		init : function() {
 			this.maxZoom = 15;
 			this.minZoom = -15;
+			
+			this.maxBounds = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
 
 			this.setTileSizeInPx(100);
 			//all of these depend on tile size
@@ -636,18 +642,18 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					y2 : y2, 
 					z : this.zoom
 				};
-				console.log(data);
+				YAHOO.log(data);
 				//now call back for data
 				this.currentRequest = Game.Services.Maps.get_stars(data,{
 					success : function(o){
-						console.log("GET_STARS ", o);
+						YAHOO.log(["GET_STARS ", o]);
 						this.currentRequest = undefined;
 						Game.ProcessStatus(o.result.status);
 						this.addTileData(o.result.stars);
 						callback.success.call(callback.scope || this, callback.argument);
 					},
 					failure : function(o){
-						console.log("GET_STARS FAILED ", o.error.message, o);
+						YAHOO.log(["GET_STARS FAILED ", o.error.message, o]);
 						callback.success.call(callback.scope || this, callback.argument);
 						this.currentRequest = undefined;
 					},
@@ -739,6 +745,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			this.bounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
 
+			this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
+			
 			this.setTileSizeInPx(200);
 			//all of these depend on tile size
 			this.overlayLayer = new Mapper.OverlayLayer(this);
@@ -773,23 +781,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		getBounds : function() {
 			return this.bounds;
 		},
-		updateBounds : function(oTile) {
-			var bnds = this.bounds;
-			
-			if(bnds.x1Left > oTile.x) {
-				bnds.x1Left = oTile.x;
-			}
-			else if(bnds.x2Right < oTile.x) {
-				bnds.x2Right = oTile.x;
-			}
-			
-			if(bnds.y1Top < oTile.y) {
-				bnds.y1Top = oTile.y;
-			}
-			else if(bnds.y2Bottom > oTile.y) {
+		//don't update bounds on plant.  We have all data at start
+		/*updateBounds : function(oTile) {
 				bnds.y2Bottom = oTile.y;
 			}
-		},
+		},*/
 		addTileData : function(oTiles) {
 			var startZoomLevel = 0;
 			for(var tKey in oTiles) {

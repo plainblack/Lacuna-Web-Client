@@ -49,12 +49,12 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 				var envelope = YAHOO.rpc.Envelope[method.envelope || smd.envelope];
 				var callback = {
 					success: function(o) {
-						console.log("RPC SUCCESS: ", o);
+						YAHOO.log(["RPC SUCCESS: ", o]);
 						var results = envelope.deserialize(o);
 						opts.success.call(opts.scope || self, results);
 					},
 					failure: function(o) {
-						console.log("RPC FAILURE: ", o);
+						YAHOO.log(["RPC FAILURE: ", o]);
 						if(Lang.isFunction(opts.failure) ) {
 							var results;
 							try {
@@ -201,8 +201,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 							this.process(callback);
 						}
 						catch(ex) {
-							if(Lang.isObject(console) && Lang.isFunction(console.log))
-								console.log(ex);
+							YAHOO.log(ex);
 							if( Lang.isFunction(callback.failure) ) {
 								callback.failure.call(callback.scope || this, {error: ex});
 							}

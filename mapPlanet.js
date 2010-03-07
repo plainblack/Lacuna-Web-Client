@@ -16,6 +16,50 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		this.createEvent("onMapLoadFailed");
 	};
 	MapPlanet.prototype = {
+		_buildDetailsPanel : function() {
+			var panelId = "buildingDetails";
+			
+			var panel = document.createElement("div");
+			panel.id = panelId;
+			panel.innerHTML = ['<div class="hd">Details</div>',
+				'<div class="bd">',
+				'	<div class="yui-g">',
+				'		<div class="yui-u first">',
+				'			<img id="planetDetailImg" src="" alt="" />',
+				'		</div>',
+				'		<div class="yui-u">',
+				'			<ul>',
+				'				<li id="buildingDetailsName"></li>',
+				'				<li><label>Empire: </label><span id="buildingDetailsEmpire"></span></li>',
+				'				<li><label>Minerals: </label><span id="buildingDetailsMinerals"></li>',
+				'				<li><label>Water: </label><span id="buildingDetailsWater"></li>',
+				'			</ul>',
+				'		</div>',
+				'	</div>',
+				'</div>'].join('');
+			document.body.insertBefore(panel, document.body.firstChild);
+			
+			this.buildingDetails = new YAHOO.widget.Panel(panelId, {
+				constraintoviewport:true,
+				visible:false,
+				draggable:true,
+				fixedcenter:true,
+				close:true,
+				width:"500px",
+				zIndex:9995
+			});
+			
+			this.buildingDetails.renderEvent.subscribe(function(){
+				this.buildingDetails.img = Dom.get("planetDetailImg");
+				this.buildingDetails.name = Dom.get("buildingDetailsName");
+				this.buildingDetails.empire = Dom.get("buildingDetailsEmpire");
+				this.buildingDetails.minerals = Dom.get("buildingDetailsMinerals");
+				this.buildingDetails.water = Dom.get("buildingDetailsWater");
+			}, this, true);
+			
+			this.buildingDetails.render();
+		},
+		
 		IsVisible : function() {
 			return this._isVisible;
 		},
@@ -46,7 +90,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
 					if(tile) {
-						console.log(tile.id, tile.data);
+						YAHOO.log([tile.id, tile.data]);
 					}
 				}, "div.tile", this, true);
 			}
@@ -68,7 +112,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this.Mapper.call(this, o.result);
 					},
 					failure : function(o){
-						console.log("planetMap FAILED: ", o);
+						YAHOO.log(["planetMap FAILED: ", o]);
 						this.fireEvent("onMapLoadFailed", o.error);
 					},
 					timeout:Game.Timeout,

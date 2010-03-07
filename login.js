@@ -58,16 +58,16 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 	Login.prototype = {
 		handleLogin : function() {
 			this.setMessage("");
-			console.log("name: ", this.elName.value, " - pass: ", this.elPass.value);			
+			YAHOO.log(["name: ", this.elName.value, " - pass: ", this.elPass.value].join(''));			
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
-					console.log(o);
+					YAHOO.log(o);
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
 				},
 				failure : function(o){
-					console.log("LOGIN FAILED: ", o);
+					YAHOO.log(["LOGIN FAILED: ", o]);
 					this.setMessage(o.error.message);
 				},
 				timeout:Game.Timeout,

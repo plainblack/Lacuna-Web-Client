@@ -24,14 +24,20 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Details</div>',
 				'<div class="bd">',
-				'	<ul>',
-				'		<li id="planetDetailsName"></li>',
-				'		<li><label>Inhabitants</label><span id="planetDetailsEmpire"></span></li>',
-				'		<li><label>Minerals</label><span id="planetDetailsMinerals"></li>',
-				'		<li><label>Water</label><span id="planetDetailsWater"></li>',
-				'	</ul>',
-				'</div>',
-				'<div class="ft"></div>'].join('');
+				'	<div class="yui-g">',
+				'		<div class="yui-u first">',
+				'			<img id="planetDetailImg" src="" alt="" />',
+				'		</div>',
+				'		<div class="yui-u">',
+				'			<ul>',
+				'				<li id="planetDetailsName"></li>',
+				'				<li><label>Empire: </label><span id="planetDetailsEmpire"></span></li>',
+				'				<li><label>Minerals: </label><span id="planetDetailsMinerals"></li>',
+				'				<li><label>Water: </label><span id="planetDetailsWater"></li>',
+				'			</ul>',
+				'		</div>',
+				'	</div>',
+				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			
 			this.planetDetails = new YAHOO.widget.Panel(panelId, {
@@ -45,6 +51,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			});
 			
 			this.planetDetails.renderEvent.subscribe(function(){
+				this.planetDetails.img = Dom.get("planetDetailImg");
 				this.planetDetails.name = Dom.get("planetDetailsName");
 				this.planetDetails.empire = Dom.get("planetDetailsEmpire");
 				this.planetDetails.minerals = Dom.get("planetDetailsMinerals");
@@ -70,7 +77,14 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				this._el = document.getElementById("content").appendChild(systemMap);
 				
 				Event.delegate(this._el, "click", function(e, matchedEl, container) {
-					console.log(arguments);
+					var body = matchedEl.Body;
+					this.planetDetails.img.src = [Game.AssetUrl, "body/", body.image, ".png"].join('');
+					this.planetDetails.img.alt = body.name;
+					this.planetDetails.name.innerHTML = body.name;
+					this.planetDetails.empire.innerHTML = body.empire && body.empire.name ? body.empire.name : "Unknown";
+					this.planetDetails.minerals.innerHTML = body.ore ? "Has" : "0";
+					this.planetDetails.water.innerHTML = body.water;
+					this.planetDetails.show();
 				}, "img.planet", this, true);
 			}
 			else {
@@ -109,6 +123,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
 						Event.on(elImg, "dblclick", function(e) {
 							var img = Event.getTarget(e);
+							this.planetDetails.hide();
 							this.fireEvent("onChangeToPlanetView", img.Body.id);
 						}, this, true);
 					}
@@ -137,7 +152,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						this.Display.call(this, o.result);
 					},
 					failure : function(o){
-						console.log("SYSTEMMAP FAILED: ", o);
+						YAHOO.log(["SYSTEMMAP FAILED: ", o]);
 						Lacuna.MapStar.MapVisible(true);
 					},
 					timeout:Game.Timeout,

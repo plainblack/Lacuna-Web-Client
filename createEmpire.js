@@ -69,7 +69,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	CreateEmpire.prototype = {
 		handleCreate : function() {
 			this.setMessage("");
-			console.log("name: ", this.elName.value, " - pass: ", this.elPass.value);
+			YAHOO.log(["name: ", this.elName.value, " - pass: ", this.elPass.value].join(''));
 			var EmpireServ = Game.Services.Empire,
 				data = {
 					name: this.elName.value,
@@ -80,16 +80,16 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				
 			EmpireServ.is_name_available({name:data.name}, {
 				success : function(o) {
-					console.log(o);
+					YAHOO.log(o);
 					if(o.result == 1) {
 						EmpireServ.create(data,{
 							success : function(o){
-								console.log(o);
+								YAHOO.log(o);
 								Game.Setup(o.result);
 								this.hide();
 							},
 							failure : function(o){
-								console.log(o);
+								YAHOO.log(o);
 								this.setMessage(o.error.message);
 							},
 							timeout:Game.Timeout,
@@ -101,7 +101,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					}
 				},
 				failure : function(o) {
-					console.log(o);
+					YAHOO.log(o);
 					this.setMessage(o.error.message);
 				},
 				timeout:Game.Timeout,
