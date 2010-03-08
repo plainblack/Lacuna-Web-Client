@@ -82,6 +82,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					scope:this
 				});
 			}
+		},
+		Resize : function() {
+			this._map.redraw();
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);

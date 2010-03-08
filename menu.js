@@ -16,6 +16,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.clickId = "users";
 		this.elClick = Dom.get(this.clickId);
 		this.elLeft = Dom.get("usersLeft");
+		this.elCenter = Dom.get(this.id).parentNode;
+		Dom.addClass(this.elCenter, "usersCenter");
 		this.elRight = Dom.get("usersRight");
 		
 		this.createEvent("onBackClick");
@@ -105,7 +107,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elInboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/inbox-alert.png' : 'ui/inbox.png');
 			this.elClick.innerHTML = Game.EmpireData.name || "Empire";
 			this.elEssentiaText = Game.EmpireData.essentia || "-";
-			this.elHappyText = Game.EmpireData.happiness || "-";
+			this.elHappyText = Math.floor(Game.EmpireData.happiness) || "-";
 		},
 		show : function() {
 			Dom.removeClass(this.container, Game.Styles.HIDDEN);
@@ -125,6 +127,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.clickId = "planets";
 		this.elClick = Dom.get(this.clickId);
 		this.elLeft = Dom.get("planetsLeft");
+		this.elCenter = Dom.get(this.id).parentNode;
+		Dom.addClass(this.elCenter, "planetsCenter");
 		this.elRight = Dom.get("planetsRight");
 	};
 	PlanetMenu.prototype = {
@@ -236,13 +240,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(cp) {
 				this.elClick.innerHTML = ['<img src="', Game.AssetUrl, 'body/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				this.elFoodText.innerHTML = cp.food || "-";
-				this.elMineralText.innerHTML = cp.mineral || "-";
-				this.elWaterText.innerHTML = cp.water || "-";
+				this.elFoodText.innerHTML = Math.floor(cp.food_stored) || "-";
+				this.elMineralText.innerHTML = Math.floor(cp.ore_stored) || "-";
+				this.elWaterText.innerHTML = Math.floor(cp.water_stored) || "-";
 				
-				this.elEnergyText.innerHTML = cp.energy || "-";
-				this.elWasteText.innerHTML = cp.waste || "-";
-				this.elHappyText.innerHTML = cp.happiness || "-";
+				this.elEnergyText.innerHTML = Math.floor(cp.energy_stored) || "-";
+				this.elWasteText.innerHTML = Math.floor(cp.waste_stored) || "-";
+				this.elHappyText.innerHTML = Math.floor(cp.happiness) || "-";
 			}
 			else {
 				this.elClick.innerHTML = "Planet";

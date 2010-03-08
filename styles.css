@@ -40,6 +40,14 @@ body {
 	text-decoration:none;
 }
 
+.usersCenter {
+	position:relative;
+}
+.planetsCenter {
+	position:relative;
+	background: transparent url(http://localhost/lacuna/assets/ui/toolbar-menu-bottom.png) no-repeat scroll top center;
+}
+
 .hidden {
 	display:none;
 }

@@ -119,6 +119,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					scope:this
 				});
 			}
+		},
+		Resize : function() {
+			this._map.redraw();
 		}
 	};
 	Lang.augmentProto(MapPlanet, Util.EventProvider);

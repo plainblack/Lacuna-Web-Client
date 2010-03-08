@@ -1,5 +1,5 @@
 (function(){
-	var t = "114",
+	var t = "1",
 		host = "http://localhost/lacuna/";
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,

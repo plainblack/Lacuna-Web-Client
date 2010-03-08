@@ -44,10 +44,11 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				constraintoviewport:true,
 				visible:false,
 				draggable:true,
-				fixedcenter:true,
+				fixedcenter:false,
 				close:true,
 				width:"500px",
-				zIndex:9995
+				zIndex:9995,
+				context:["content","tr","tr", ["beforeShow", "windowResize"]]
 			});
 			
 			this.planetDetails.renderEvent.subscribe(function(){

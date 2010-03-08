@@ -41,6 +41,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			PLANET : "planet"
 		},
 		Timeout : 10000,
+		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		
 		Start : function() {	
 			var session = Cookie.getSub("lacuna","session");
@@ -79,7 +80,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		Run : function() {
 			//create menus (or update if already created)
-			Lacuna.Menu.create();			
+			Lacuna.Menu.create();
+			//set our interval going for resource calcs
+			Lacuna.Game.recTime = new Date();
+			Lacuna.Game.recInt = setInterval(Lacuna.Game.UpdateResources, 1000);
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
 				//this will be called on the first load and create menu
@@ -146,6 +150,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 				
 				Lacuna.Game._hasRun = true;
+				
+				Event.on(window, "resize", function (e) {
+					if (YAHOO.env.ua.ie) {
+						if (!window.resizeEnd) {
+							window.resizeEnd = -1;
+						}
+
+						clearTimeout(window.resizeEnd);
+
+						window.resizeEnd = setTimeout(function () {
+							Lacuna.Game.Resize(); 
+						}, 100);
+					} else {
+						Lacuna.Game.Resize(); 
+					}
+				});
 			}
 			//load the correct screen
 			var locationId = Cookie.getSub("lacuna","locationId"),
@@ -177,6 +197,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			}
 		},
+		
 		ProcessStatus : function(status) {
 			if(status && status.empire) {
 				var now = new Date();
@@ -197,8 +218,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.GetFullStatus();
 				}
 			}
-		},
-		
+		},	
 		GetFullStatus : function(callback) {
 			var EmpireServ = Game.Services.Empire,
 				session = Cookie.getSub("lacuna","session");
@@ -222,11 +242,74 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				scope:(callback.scope || this)
 			});
 		},
+		UpdateResources : function() {
+			var ED = Lacuna.Game.EmpireData,
+				dt = new Date(),
+				diff = dt - Lacuna.Game.recTime,
+				ratio = (diff / Lacuna.Game.HourMS),
+				updateMenu = true;
+				
+			Lacuna.Game.recTime = dt;
+			
+			ED.happiness += Math.floor(ED.happiness_hour * ratio);
+			
+			for(var pKey in ED.planets) {
+				if(ED.planets.hasOwnProperty(pKey)){
+					var planet = ED.planets[pKey];
+					planet.happiness += planet.happiness_hour * ratio;
+					//if(planet.energy_stored < planet.energy_capacity){
+						planet.energy_stored += planet.energy_hour * ratio;
+						//if(planet.energy_stored > planet.energy_capacity) {
+						//	planet.energy_stored = planet.energy_capacity;
+						//}
+					//}
+					//if(planet.food_stored < planet.food_capacity){
+						planet.food_stored += planet.food_hour * ratio;
+						//if(planet.food_stored > planet.food_capacity) {
+						//	planet.food_stored = planet.food_capacity;
+						//}
+					//}
+					//if(planet.ore_stored < planet.ore_capacity){
+						planet.ore_stored += planet.ore_hour * ratio
+						//if(planet.ore_stored > planet.ore_capacity) {
+						//	planet.ore_stored = planet.ore_capacity;
+						//}
+					//}
+					//if(planet.waste_stored < planet.waste_capacity){
+						planet.waste_stored += planet.waste_hour * ratio;
+						//if(planet.waste_stored > planet.waste_capacity) {
+						//	planet.waste_stored = planet.waste_capacity;
+						//}
+					//}
+					//if(planet.water_stored < planet.water_capacity){
+						planet.water_stored += planet.water_hour * ratio;
+						//if(planet.water_stored > planet.water_capacity) {
+						//	planet.water_stored = planet.water_capacity;
+						//}
+					//}
+				}
+			}
+			//YAHOO.log([diff, ratio]);
+			if(updateMenu) {
+				Lacuna.Menu.update();
+			}
+		},
+		
+		Resize : function() {
+			if(Lacuna.MapStar.IsVisible()) {
+				Lacuna.MapStar.Resize();
+			}
+			else if(Lacuna.MapPlanet.IsVisible()) {
+				Lacuna.MapPlanet.Resize();
+			}
+		},
 		
 		Logout : function() {
 			var EmpireServ = Lacuna.Game.Services.Empire,
 				session = Cookie.getSub("lacuna","session");
 				
+			clearTimeout(Lacuna.Game.recInt);
+			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
 					YAHOO.log(o);

@@ -126,11 +126,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.offsetY = oy;
 		this.map = map;
 		
-		this.refresh();
-		
 		this.id = Tiler.idFor(this.x,this.y,this.z);
 		this.domElement = document.createElement('div');
 		this.domElement.id = this.id;
+		
+		this.refresh();
 		
 		var s = this.domElement.style;
 		s.position = 'absolute';
@@ -157,10 +157,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.blank = obj.blank;
 			this.url = obj.url;
 			this.data = obj.data;
-			Dom.setStyle("background", 'transparent url('+ this.url +') no-repeat scroll center');
+			Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
 		},
-		
-		
+			
 		notInDom : function() {
 			return this._notInDom;
 		},
@@ -504,6 +503,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_projectedPoints : {},
 		tileCache : {},
 		bounds : {},
+		maxBounds : {},
 		//blank init that will always get called.  override in sub classes to change defaults
 		init : function() {
 		},
@@ -591,8 +591,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		init : function() {
 			this.maxZoom = 15;
 			this.minZoom = -15;
-			
 			this.maxBounds = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
+			this.requestQueue = [];
 
 			this.setTileSizeInPx(100);
 			//all of these depend on tile size
@@ -621,9 +621,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		getTile : function(x, y, z){
-			var ySet = this.tileCache[x],
-				zSet = ySet ? ySet[y] : null,
-				star = zSet ? zSet[z] : null;
+			var zSet = this.tileCache[z],
+				xSet = zSet ? zSet[x] : null,
+				star = xSet ? xSet[y] : null;
 			
 			if(star) {
 				return {data:star, url:[Game.AssetUrl,'map/',star.color,'.png'].join('')};
@@ -633,7 +633,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {
-			if(!Util.Connect.isCallInProgress(this.currentRequest)) {
+			if(Util.Connect.isCallInProgress(this.currentRequest)) {
+				this.requestQueue.push([callback, x1, x2, y1, y2]);
+			}
+			else {
 				var data = {
 					session_id : Cookie.getSub("lacuna","session") || "",
 					x1 : x1, 
@@ -647,10 +650,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.currentRequest = Game.Services.Maps.get_stars(data,{
 					success : function(o){
 						YAHOO.log(["GET_STARS ", o]);
-						this.currentRequest = undefined;
 						Game.ProcessStatus(o.result.status);
 						this.addTileData(o.result.stars);
 						callback.success.call(callback.scope || this, callback.argument);
+						
+						var qi = this.requestQueue.pop();
+						this.currentRequest = undefined;
+						if(qi) {
+							this.getTileData.apply(this, qi);
+						}
 					},
 					failure : function(o){
 						YAHOO.log(["GET_STARS FAILED ", o.error.message, o]);
@@ -692,13 +700,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			var startZoomLevel = 0;
 			for(var i=0; i<aStars.length; i++) {
 				var star = aStars[i];
-				if(!this.tileCache[star.x]) {
-					this.tileCache[star.x] = {};
+				if(!this.tileCache[star.z]) {
+					this.tileCache[star.z] = {};
 				}
-				if(!this.tileCache[star.x][star.y]) {
-					this.tileCache[star.x][star.y] = {};
+				if(!this.tileCache[star.z][star.x]) {
+					this.tileCache[star.z][star.x] = {};
 				}
-				this.tileCache[star.x][star.y][star.z] = star;
+				this.tileCache[star.z][star.x][star.y] = star;
 				startZoomLevel = star.z;
 				if(star.alignments == "self") {
 					this.currentSystem = star;
