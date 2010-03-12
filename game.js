@@ -21,7 +21,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Body : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Body),
 			Empire : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Empire),
 			Maps : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Map),
-			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species)
+			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species),
+			Buildings : {
+				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic)
+			}
 		},
 		ErrorCodes : {
 			1000 : "Name not available",
@@ -52,8 +55,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				//Run rest of UI since we're logged in
 				Lacuna.Game.GetFullStatus({
 					success:Lacuna.Game.Run,
+					failure:Lacuna.Game.Failure,
 					scope:this
 				});
+			}
+		},
+		Failure : function(o){
+			alert(o.error.message);
+			if(o.error.code == 1006) {
+				Lacuna.Game.DoLogin();
 			}
 		},
 		DoLogin : function() {
@@ -90,16 +100,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
 					Lacuna.Game.ProcessStatus(oResult.status);
 				});
-				Lacuna.MapStar.subscribe("onMapLoadFailed", function(oError){
-					alert(oError.message);
-					if(oError.code == 1006) {
-						Lacuna.Game.DoLogin();
-					}
-				});
+				Lacuna.MapStar.subscribe("onMapLoadFailed", Lacuna.Game.Failure);
 				Lacuna.MapStar.subscribe("onChangeToSystemView", function(starData) {
 					Lacuna.MapStar.MapVisible(false);
 					Lacuna.Menu.SystemVisible();
 					Lacuna.MapSystem.Load(starData.id);
+					YAHOO.log(starData, "info", "onChangeToSystemView");
 					Cookie.setSub("lacuna","locationId", starData.id,{
 						domain: "lacunaexpanse.com"
 					});
@@ -116,42 +122,46 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.MapSystem.MapVisible(false);
 					Lacuna.Menu.PlanetVisible();
 					Lacuna.MapPlanet.Load(planetId);
-					Cookie.setSub("lacuna","locationId", planetId,{
-						domain: "lacunaexpanse.com"
-					});
-					Cookie.setSub("lacuna","locationView", Game.View.PLANET,{
-						domain: "lacunaexpanse.com"
-					});
+					YAHOO.log(planetId, "info", "onChangeToPlanetView");
+					Game.SetLocation(planetId, Game.View.PLANET);
 				});
+				
+				
+				Lacuna.MapPlanet.subscribe("onMapRpc", function(oResult){
+					Lacuna.Game.ProcessStatus(oResult.status);
+				});
+				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Menu.subscribe("onBackClick", function() {
 					if(Lacuna.MapSystem.IsVisible()) {
 						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
 						Lacuna.Menu.StarVisible(true);
-						Cookie.setSub("lacuna","locationId", "home",{
-							domain: "lacunaexpanse.com"
-						});
-						Cookie.setSub("lacuna","locationView", Game.View.STAR,{
-							domain: "lacunaexpanse.com"
-						});
+						if(Lacuna.MapStar.locationId) {
+							Game.SetLocation("home", Game.View.STAR);
+						}
+						else {
+							Lacuna.MapStar.Load();
+						}
 					}
 					else if(Lacuna.MapPlanet.IsVisible()) {
 						Lacuna.MapPlanet.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(true);
 						Lacuna.Menu.SystemVisible(true);
-						Cookie.setSub("lacuna","locationId", Lacuna.MapSystem.locationId,{
-							domain: "lacunaexpanse.com"
-						});
-						Cookie.setSub("lacuna","locationView", Game.View.SYSTEM,{
-							domain: "lacunaexpanse.com"
-						});
+						if(Lacuna.MapSystem.locationId) {
+							Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
+						}
+						else {
+							//load system with planet body id if system hasn't been init'd yet
+							Lacuna.MapSystem.Load(Lacuna.MapPlanet.locationId, true);
+						}
 					}
 				});
 				
 				Lacuna.Game._hasRun = true;
 				
 				Event.on(window, "resize", function (e) {
+					//taken from YUI Overlay
 					if (YAHOO.env.ua.ie) {
 						if (!window.resizeEnd) {
 							window.resizeEnd = -1;
@@ -209,6 +219,32 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						expires: now.setHours(now.getHours() + 1)
 					});
 				}
+				//convert to numbers
+				status.empire.happiness *= 1;
+				status.empire.happiness_hour *= 1;
+				status.empire.has_new_messages *= 1;
+				for(var pKey in status.empire.planets) {
+					if(status.empire.planets.hasOwnProperty(pKey)){
+						var planet = status.empire.planets[pKey];
+						planet.energy_capacity *= 1;
+						planet.energy_hour *= 1;
+						planet.energy_stored *= 1;
+						planet.food_capacity *= 1;
+						planet.food_hour *= 1;
+						planet.food_stored *= 1;
+						planet.happiness *= 1;
+						planet.happiness_hour *= 1;
+						planet.ore_capacity *= 1;
+						planet.ore_hour *= 1;
+						planet.ore_stored *= 1;
+						planet.waste_capacity *= 1;
+						planet.waste_hour *= 1;
+						planet.waste_stored *= 1;
+						planet.water_capacity *= 1;
+						planet.water_hour *= 1;
+						planet.water_stored *= 1;
+					}
+				}
 				//add everything from status empire to game empire
 				Lang.augmentObject(Lacuna.Game.EmpireData, status.empire, true);
 
@@ -230,9 +266,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				},
 				failure : function(o) {
-					alert("failure");
 					if(callback && callback.failure) {
-						callback.failure.call(this);
+						callback.failure.call(this, o);
 					}
 					else {
 						YAHOO.log(o);
@@ -257,36 +292,36 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(ED.planets.hasOwnProperty(pKey)){
 					var planet = ED.planets[pKey];
 					planet.happiness += planet.happiness_hour * ratio;
-					//if(planet.energy_stored < planet.energy_capacity){
+					if(planet.energy_stored < planet.energy_capacity){
 						planet.energy_stored += planet.energy_hour * ratio;
-						//if(planet.energy_stored > planet.energy_capacity) {
-						//	planet.energy_stored = planet.energy_capacity;
-						//}
-					//}
-					//if(planet.food_stored < planet.food_capacity){
+						if(planet.energy_stored > planet.energy_capacity) {
+							planet.energy_stored = planet.energy_capacity;
+						}
+					}
+					if(planet.food_stored < planet.food_capacity){
 						planet.food_stored += planet.food_hour * ratio;
-						//if(planet.food_stored > planet.food_capacity) {
-						//	planet.food_stored = planet.food_capacity;
-						//}
-					//}
-					//if(planet.ore_stored < planet.ore_capacity){
-						planet.ore_stored += planet.ore_hour * ratio
-						//if(planet.ore_stored > planet.ore_capacity) {
-						//	planet.ore_stored = planet.ore_capacity;
-						//}
-					//}
-					//if(planet.waste_stored < planet.waste_capacity){
+						if(planet.food_stored > planet.food_capacity) {
+							planet.food_stored = planet.food_capacity;
+						}
+					}
+					if(planet.ore_stored < planet.ore_capacity){
+						planet.ore_stored += planet.ore_hour * ratio;
+						if(planet.ore_stored > planet.ore_capacity) {
+							planet.ore_stored = planet.ore_capacity;
+						}
+					}
+					if(planet.waste_stored < planet.waste_capacity){
 						planet.waste_stored += planet.waste_hour * ratio;
-						//if(planet.waste_stored > planet.waste_capacity) {
-						//	planet.waste_stored = planet.waste_capacity;
-						//}
-					//}
-					//if(planet.water_stored < planet.water_capacity){
+						if(planet.waste_stored > planet.waste_capacity) {
+							planet.waste_stored = planet.waste_capacity;
+						}
+					}
+					if(planet.water_stored < planet.water_capacity){
 						planet.water_stored += planet.water_hour * ratio;
-						//if(planet.water_stored > planet.water_capacity) {
-						//	planet.water_stored = planet.water_capacity;
-						//}
-					//}
+						if(planet.water_stored > planet.water_capacity) {
+							planet.water_stored = planet.water_capacity;
+						}
+					}
 				}
 			}
 			//YAHOO.log([diff, ratio]);
@@ -294,7 +329,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.update();
 			}
 		},
-		
+		GetSize : function() {
+			var content = document.getElementById("content"),
+				width = content.offsetWidth,
+				height = document.documentElement.clientHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight;
+			return {w:width,h:height};
+		},
 		Resize : function() {
 			if(Lacuna.MapStar.IsVisible()) {
 				Lacuna.MapStar.Resize();
@@ -325,6 +365,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					YAHOO.log(["LOGOUT FAILED: ", o]);
 				},
 				timeout:Game.Timeout
+			});
+		},
+		
+		//Cookie functions
+		SetLocation : function(id, view) {
+			Cookie.setSub("lacuna","locationId", id,{
+				domain: "lacunaexpanse.com"
+			});
+			Cookie.setSub("lacuna","locationView", view,{
+				domain: "lacunaexpanse.com"
 			});
 		}
 	};

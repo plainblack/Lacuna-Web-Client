@@ -31,6 +31,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var starMap = document.createElement("div");
 				starMap.id = "starMap";
 				this._elGrid = document.getElementById("content").appendChild(starMap);
+				this.SetSize();
 								
 				var map = new Lacuna.Mapper.StarMap("starMap");
 				map.setZoomLevel(map.addTileData(oArgs.stars));
@@ -76,15 +77,21 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					},
 					failure : function(o){
 						YAHOO.log(["STARMAP FAILED: ", o]);
-						this.fireEvent("onMapLoadFailed", o.error);
+						this.fireEvent("onMapLoadFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this
 				});
 			}
 		},
+		SetSize : function() {
+			var size = Game.GetSize();
+			Dom.setStyle(this._elGrid, "width", size.w+"px");
+			Dom.setStyle(this._elGrid, "height", size.h+"px");
+		},
 		Resize : function() {
-			this._map.redraw();
+			this.SetSize();
+			this._map.resize();
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);

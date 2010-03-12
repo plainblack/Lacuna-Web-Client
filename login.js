@@ -98,6 +98,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.hide(); //hide login
 			if(!Game.EmpireCreator) {
 				Game.EmpireCreator = new Lacuna.CreateEmpire(this);
+				Game.EmpireCreator.subscribe("onCreateSuccessful",function(oArgs) {
+					this.fireEvent("onLoginSuccessful",oArgs);
+				}, this, true);
 			}
 			Game.EmpireCreator.show();
 		}

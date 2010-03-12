@@ -12,6 +12,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	var CreateEmpire = function(Login) {
 		this.id = "createEmpire";
 		this._login = Login;
+		this.createEvent("onCreateSuccessful");
 		
 		var container = document.createElement("div");
 		container.id = this.id;
@@ -85,7 +86,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 						EmpireServ.create(data,{
 							success : function(o){
 								YAHOO.log(o);
-								Game.Setup(o.result);
+								this.fireEvent("onCreateSuccessful", o);
 								this.hide();
 							},
 							failure : function(o){
@@ -144,6 +145,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			Game.SpeciesCreator.show();
 		}
 	};
+	YAHOO.lang.augmentProto(CreateEmpire, Util.EventProvider);
 
 	Lacuna.CreateEmpire = CreateEmpire;
 })();

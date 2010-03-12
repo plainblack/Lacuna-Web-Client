@@ -43,6 +43,45 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 			}
 		},
+		Buildings : {
+			Generic : {
+				"description": "SMD service demonstration",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				//Target will be passed in "target":"/buildings",
+
+				"services": {
+					"build" : {
+						"description": "Adds this building to the planet's build queue.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"planet_id", "type":"string", "optional":false},
+							{"name":"x", "type":"string", "optional":false},
+							{"name":"y", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view" : {
+						"description": "Retrieves the properties of the building.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"upgrade" : {
+						"description": "Adds the requested upgrade to the build queue. On success returns the view() method.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+
+				}
+			}
+		},
 		Empire : {
 			"SMDVersion":"2.0",
 			"description": "SMD service demonstration",

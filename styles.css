@@ -133,11 +133,14 @@ body {
 #starMap, #planetMap {
 	margin: 0 auto;
 	position:relative;
-	height:700px;
-	width:700px;
+	/*height:700px;
+	width:700px;*/
 	border:0 none;
 	clear:both;
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
+}
+#planetMap {
+	background: black url('http://localhost/lacuna/assets/tile/ground.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 

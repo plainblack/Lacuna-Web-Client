@@ -104,7 +104,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elHappyText = happyTxt;
 		},
 		updateData : function() {
-			this.elInboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/inbox-alert.png' : 'ui/inbox.png');
+			this.elInboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/inbox-alert.png' : 'ui/inbox.png');
 			this.elClick.innerHTML = Game.EmpireData.name || "Empire";
 			this.elEssentiaText = Game.EmpireData.essentia || "-";
 			this.elHappyText = Math.floor(Game.EmpireData.happiness) || "-";

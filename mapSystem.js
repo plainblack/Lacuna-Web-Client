@@ -104,61 +104,71 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				
 			for(var bKey in bodies) {
 				if(bodies.hasOwnProperty(bKey)) {
-					var body = bodies[bKey],
-						elOrbit = div.cloneNode(false),
-						elName = elOrbit.appendChild(span.cloneNode(false)),
-						elImg = elOrbit.appendChild(img.cloneNode(false));
-
-					body.id = bKey;
+					var body = bodies[bKey];
 						
-					elOrbit.id = "orbit" + body.orbit;
-					Dom.addClass(elOrbit, "orbit");
-					
-					elName.innerHTML = body.name;
-					
-					elImg.src = [Game.AssetUrl, "body/", body.image, ".png"].join('');
-					elImg.id = "planet" + body.orbit;
-					elImg.alt = body.name;
-					elImg.Body = body;
-					
-					if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
-						Event.on(elImg, "dblclick", function(e) {
-							var img = Event.getTarget(e);
-							this.planetDetails.hide();
-							this.fireEvent("onChangeToPlanetView", img.Body.id);
-						}, this, true);
+					if(body.name && body.image) {
+						var elOrbit = div.cloneNode(false),
+							elName = elOrbit.appendChild(span.cloneNode(false)),
+							elImg = elOrbit.appendChild(img.cloneNode(false));
+							
+						body.id = bKey;
+							
+						elOrbit.id = "orbit" + body.orbit;
+						Dom.addClass(elOrbit, "orbit");
+						
+						elName.innerHTML = body.name;
+						
+						elImg.src = [Game.AssetUrl, "body/", body.image, ".png"].join('');
+						elImg.id = "planet" + body.orbit;
+						elImg.alt = body.name;
+						elImg.Body = body;
+						
+						if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
+							Event.on(elImg, "dblclick", function(e) {
+								var img = Event.getTarget(e);
+								this.planetDetails.hide();
+								this.fireEvent("onChangeToPlanetView", img.Body.id);
+							}, this, true);
+						}
+						
+						Dom.addClass(elImg, "planet");
+							
+						systemMap.appendChild(elOrbit);
 					}
-					
-					Dom.addClass(elImg, "planet");
-						
-					systemMap.appendChild(elOrbit);
 				}
 			}
 
 			this.MapVisible(true);
 
 		},
-		Load : function(starId) {
+		Load : function(starId, isBody) {
 			this.locationId = starId;
 			if(starId) {
 				var MapServ = Game.Services.Maps,
 					data = {
-						session_id: Cookie.getSub("lacuna","session") || "",
-						star_id: starId
+						session_id: Cookie.getSub("lacuna","session") || ""
+					},
+					callback = {
+						success : function(o){
+							this.fireEvent("onStatusUpdate", o.result.status);
+							this.Display.call(this, o.result);
+						},
+						failure : function(o){
+							YAHOO.log(["SYSTEMMAP FAILED: ", o]);
+							Lacuna.MapStar.MapVisible(true);
+						},
+						timeout:Game.Timeout,
+						scope:this
 					};
 				
-				MapServ.get_star_system(data,{
-					success : function(o){
-						this.fireEvent("onStatusUpdate", o.result.status);
-						this.Display.call(this, o.result);
-					},
-					failure : function(o){
-						YAHOO.log(["SYSTEMMAP FAILED: ", o]);
-						Lacuna.MapStar.MapVisible(true);
-					},
-					timeout:Game.Timeout,
-					scope:this
-				});
+				if(isBody) {
+					data.body_id = starId;
+					MapServ.get_star_system_by_body(data,callback);
+				}
+				else {
+					data.star_id = starId;
+					MapServ.get_star_system(data,callback);
+				}
 			}
 		}
 	};
