@@ -25,21 +25,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'				<li><label for="empireName">User</label><input type="text" id="empireName" /></li>',
 		'				<li><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
 		'				<li><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
-		'				<li>',
-		'					<label for="empireSpecies">Species</label>',
-		'					<select id="empireSpecies">',
-		'						<option value="human_species">Human</option>',
-		'					</select>',
-		'				</li>',
 		'			</ul>',
 		'			<div id="empireMessage" class="hidden"></div>',
-		'			<a id="speciesCreate" href="#">Create a Species</a>',
 		'		</form>',
 		'	</div>',
 		'	<div class="ft"></div>'
 		].join('');
 		document.body.insertBefore(container, document.body.firstChild);
-		
 		
 		this.Dialog = new YAHOO.widget.Dialog(this.id, {
 			constraintoviewport:true,
@@ -58,14 +50,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elName = Dom.get("empireName");
 			this.elPass = Dom.get("empirePass");
 			this.elPassConfirm = Dom.get("empirePassConfirm");
-			this.elSpecies = Dom.get("empireSpecies");
 			this.elMessage = Dom.get("empireMessage");
-			this.elSpeciesCreate = Dom.get("speciesCreate");
 			
-			Event.addListener(this.elSpeciesCreate, "click", this.createSpeciesClick, this, true);
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
+		
+		this.initSpecies();
 	};
 	CreateEmpire.prototype = {
 		handleCreate : function() {
@@ -75,8 +66,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				data = {
 					name: this.elName.value,
 					password: this.elPass.value,
-					password1: this.elPassConfirm.value,
-					species_id: this.elSpecies.value
+					password1: this.elPassConfirm.value
 				};
 				
 			EmpireServ.is_name_available({name:data.name}, {
@@ -85,12 +75,12 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					if(o.result == 1) {
 						EmpireServ.create(data,{
 							success : function(o){
-								YAHOO.log(o);
-								this.fireEvent("onCreateSuccessful", o);
-								this.hide();
+								YAHOO.log(o, "info", "CreateEmpire");
+								Game.SpeciesCreator.show(o.result);
+								this.hide(); //hide empire
 							},
 							failure : function(o){
-								YAHOO.log(o);
+								YAHOO.log(o, "error", "CreateEmpireFailure");
 								this.setMessage(o.error.message);
 							},
 							timeout:Game.Timeout,
@@ -125,11 +115,18 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elName.value = "";
 			this.elPass.value = "";
 			this.elPassConfirm.value = "";
-			this.elSpecies.selectedIndex = 0; //select human
 			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
-		addSpecies : function(id, name) {
+		initSpecies : function() {
+			if(!Game.SpeciesCreator) {
+				Game.SpeciesCreator = new Lacuna.CreateSpecies(this);
+				Game.SpeciesCreator.subscribe("onCreateSuccessful",function(oArgs) {
+					this.fireEvent("onCreateSuccessful",oArgs);
+				}, this, true);
+			}
+		}
+		/*addSpecies : function(id, name) {
 			var opt = document.createElement("option");
 			opt.value = id;
 			opt.innerHTML = name;
@@ -138,12 +135,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		},
 		createSpeciesClick : function(e) {
 			Event.stopEvent(e); //stop href click
-			this.hide(); //hide empire
-			if(!Game.SpeciesCreator) {
-				Game.SpeciesCreator = new Lacuna.CreateSpecies(this);
-			}
-			Game.SpeciesCreator.show();
-		}
+		}*/
 	};
 	YAHOO.lang.augmentProto(CreateEmpire, Util.EventProvider);
 

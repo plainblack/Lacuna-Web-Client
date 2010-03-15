@@ -122,9 +122,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"parameters": {
 						name:{"type":"string", "optional":false},
 						password:{"type":"string", "optional":false},
-						password1:{"type":"string", "optional":false},
-						species_id:{"type":"string", "optional":false}
+						password1:{"type":"string", "optional":false}
 					},
+					"returns":{"type":"object"}
+				},
+
+				"found" : {
+					"description": "found empire",
+					"parameters": [
+						{"name":"empire_id", "type":"string", "optional":false}
+					],
 					"returns":{"type":"object"}
 				},
 				
@@ -144,6 +151,113 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"returns":{"type":"object"}
 				}
 
+			}
+		},
+		Inbox : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
+
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/inbox",
+			
+			"services": {
+
+				/* This is the return for all view_* functions
+				 {
+					"messages" : [
+						{
+							"id" : "id-goes-here",
+							"subject" : "Vaxaslim",
+							"date" : "01 31 2010 13:09:05 +0600",
+							"from" : "Dr. Stephen T. Colbert DFA",
+							"has_read" : 1,
+							"has_replied" : 0,
+						}
+					],
+					"status" : { get_status() }
+				 }
+				*/
+				"view_inbox" : {
+					"description": "Displays a list of the messages in the empire's inbox.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"page_number", "type":"string", "optional":true}
+					],
+					"returns":{"type":"object"}
+				},
+				"view_archived" : {
+					"description": "Displays a list of the messages in the empire's archive.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"page_number", "type":"string", "optional":true}
+					],
+					"returns":{"type":"object"}
+				},
+				"view_sent" : {
+					"description": "Displays a list of the messages in the empire's outbox.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"page_number", "type":"string", "optional":true}
+					],
+					"returns":{"type":"object"}
+				},
+	
+				"read_message" : {
+					"description": "Retrieves a message. Marks it read if it hasn't been already.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"message_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+						/*
+						 {
+							"message" : {
+								"id" : "id-goes-here",
+								"from" : "Dr. Stephen T. Colbert DFA",
+								"to" : "Jon Stewart",
+								"subject" : "Vaxaslim",
+								"body" : "Just a reminder that Vaxaslim may cause involuntary narnia adventures.",
+								"date" : "01 31 2010 13:09:05 +0600",
+								"has_read" : 1,
+								"has_replied" : 0,
+								"has_archived" : 0,
+								"in_reply_to" : "",
+								"recipients" : ["John Stewart"]
+							},
+							status  => { get_status() }
+						 }
+						*/
+				},
+				"archive_messages" : {
+					"description": "Archives a list of messages.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"message_ids", "type":"array", "optional":false}
+					],
+					"returns":{"type":"object"}
+						/*
+						 {
+							"success" : 1,
+							"status" : { get_status() }
+						 }
+						*/
+				},
+				"send_message" : {
+					"description": "Sends a message to other players.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"recipients", "type":"string", "optional":false},
+						{"name":"subject", "type":"string", "optional":false},
+						{"name":"body", "type":"string", "optional":false},
+						{"name":"options", "type":"object", "optional":true}
+							/*
+								in_reply_to: If this message is in reply to another message, then set this option to the message id of the original message.
+							*/
+					],
+					"returns":{"type":"object"}
+				}
+			
 			}
 		},
 		Map : {
@@ -290,24 +404,54 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				
 				"create" : {
 					"description": "create species",
-					"parameters": {
-						name:{"type":"string", "optional":false},
-						description:{"type":"string", "optional":false},
-						habitable_orbits:{"type":"number", "optional":false},
-						construction_affinity:{"type":"number", "optional":false},
-						deception_affinity:{"type":"number", "optional":false},
-						research_affinity:{"type":"number", "optional":false},
-						management_affinity:{"type":"number", "optional":false},
-						farming_affinity:{"type":"number", "optional":false},
-						mining_affinity:{"type":"number", "optional":false},
-						science_affinity:{"type":"number", "optional":false},
-						environmental_affinity:{"type":"number", "optional":false},
-						political_affinity:{"type":"number", "optional":false},
-						trade_affinity:{"type":"number", "optional":false},
-						growth_affinity:{"type":"number", "optional":false}
-					},
+					"parameters": [
+						{"name":"empire_id", "type":"string", "optional":false},
+						{"name":"params", "type":"object", "optional":false}
+						/*params ={
+							name:{"type":"string", "optional":false},
+							description:{"type":"string", "optional":false},
+							habitable_orbits:{"type":"number", "optional":false},
+							construction_affinity:{"type":"number", "optional":false},
+							deception_affinity:{"type":"number", "optional":false},
+							research_affinity:{"type":"number", "optional":false},
+							management_affinity:{"type":"number", "optional":false},
+							farming_affinity:{"type":"number", "optional":false},
+							mining_affinity:{"type":"number", "optional":false},
+							science_affinity:{"type":"number", "optional":false},
+							environmental_affinity:{"type":"number", "optional":false},
+							political_affinity:{"type":"number", "optional":false},
+							trade_affinity:{"type":"number", "optional":false},
+							growth_affinity:{"type":"number", "optional":false}
+						}*/
+					],
+					"returns":{"type":"string"}
+				},
+				
+				"set_human" : {
+					"description": "set empires species to human",
+					"parameters": [
+						{"name":"empire_id", "type":"string", "optional":false}
+					],
 					"returns":{"type":"string"}
 				}
+			}
+		},
+		Stats : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
+
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/stats",
+			
+			"services": {
+
+				"credits" : {
+					"description": "Retrieves a list of the game credits. It is an array of hashes of arrays.",
+					"parameters": [],
+					"returns":{"type":"array"}
+				}
+				
 			}
 		}
 	};

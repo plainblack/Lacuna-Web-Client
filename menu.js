@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		create : function() {
 			var userMenu = new YAHOO.widget.Menu(this.id, { zindex: 1001 });
 			userMenu.cfg.setProperty("context", [this.clickId, "tl", "bl"]);
-			//userMenu.addItem({ text: "Details", id: "ud", onclick: { fn: function(){alert("details");} } });
+			userMenu.addItem({ text: "About", id: "uc", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } });
 			userMenu.addItem({ text: "Logout", id: "ul", onclick: { fn: Game.Logout } });
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
@@ -89,12 +89,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				happyTxt = happy.appendChild(document.createElement("span"));
 				
 			essentiaImg.src = Game.AssetUrl + 'ui/essentia.png';
-			essentiaImg.alt = "Essentia";
+			essentiaImg.alt = essentiaImg.title = "Essentia";
 			Dom.addClass(essentia, "essentia");
 			Dom.addClass(essentia, "menuItem");
 			
 			happyImg.src = Game.AssetUrl + 'ui/happiness.png';
-			happyImg.alt = "Happiness";
+			happyImg.alt = happyImg.title = "Happiness";
 			Dom.addClass(happy, "happiness");
 			Dom.addClass(happy, "menuItem");
 			
@@ -106,8 +106,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		updateData : function() {
 			this.elInboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/inbox-alert.png' : 'ui/inbox.png');
 			this.elClick.innerHTML = Game.EmpireData.name || "Empire";
-			this.elEssentiaText = Game.EmpireData.essentia || "-";
-			this.elHappyText = Math.floor(Game.EmpireData.happiness) || "-";
+			this.elEssentiaText.innerHTML = Game.EmpireData.essentia || "-";
+			this.elHappyText.innerHTML = Math.floor(Game.EmpireData.happiness) || "-";
 		},
 		show : function() {
 			Dom.removeClass(this.container, Game.Styles.HIDDEN);
@@ -117,6 +117,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		backVisible : function(vis) {
 			Dom.setStyle(this.elBack, "display", vis ? "" : "none");
+		},
+		showAbout : function() {
+			Lacuna.About.show();
 		}
 	};
 	Lang.augmentProto(UserMenu, Util.EventProvider);
@@ -166,17 +169,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				waterTxt = water.appendChild(document.createElement("span"));
 			
 			foodImg.src = Game.AssetUrl + 'ui/food.png';
-			foodImg.alt = "Food";
+			foodImg.alt = foodImg.title = "Food";
 			Dom.addClass(food, "food");
 			Dom.addClass(food, "menuItem");
 			
 			mineralImg.src = Game.AssetUrl + 'ui/mineral.png';
-			mineralImg.alt = "Mineral";
+			mineralImg.alt = mineralImg.title = "Mineral";
 			Dom.addClass(mineral, "mineral");
 			Dom.addClass(mineral, "menuItem");
 			
 			waterImg.src = Game.AssetUrl + 'ui/water.png';
-			waterImg.alt = "Water";
+			waterImg.alt = waterImg.title = "Water";
 			Dom.addClass(water, "water");
 			Dom.addClass(water, "menuItem");
 			
@@ -199,23 +202,23 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				happyTxt = happy.appendChild(document.createElement("span"));
 				
 			energyImg.src = Game.AssetUrl + 'ui/energy.png';
-			energyImg.alt = "Energy";
+			energyImg.alt = energyImg.title = "Energy";
 			Dom.addClass(energy, "energy");
 			Dom.addClass(energy, "menuItem");
 			
 			wasteImg.src = Game.AssetUrl + 'ui/waste.png';
-			wasteImg.alt = "Waste";
+			wasteImg.alt = wasteImg.title = "Waste";
 			Dom.addClass(waste, "waste");
 			Dom.addClass(waste, "menuItem");
 			
 			happyImg.src = Game.AssetUrl + 'ui/happiness.png';
-			happyImg.alt = "Happiness";
+			happyImg.alt = happyImg.title = "Happiness";
 			Dom.addClass(happy, "happiness");
 			Dom.addClass(happy, "menuItem");
 			
 			this.elenergy = this.elRight.appendChild(energy);
 			this.elEnergyText = energyTxt;
-			this.elWaste= this.elRight.appendChild(happy);
+			this.elWaste = this.elRight.appendChild(waste);
 			this.elWasteText = wasteTxt;
 			this.elHappy = this.elRight.appendChild(happy);
 			this.elHappyText = happyTxt;

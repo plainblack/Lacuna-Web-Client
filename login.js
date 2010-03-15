@@ -67,8 +67,15 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					this.hide();
 				},
 				failure : function(o){
-					YAHOO.log(["LOGIN FAILED: ", o]);
-					this.setMessage(o.error.message);
+					YAHOO.log(o, "error", "LoginFailed");
+					if(o.error.code == 1010) {
+						//haven't founded empire yet so take them to species
+						this.initEmpire();
+						Game.EmpireSpecies.show();
+					}
+					else {
+						this.setMessage(o.error.message);
+					}
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -93,15 +100,18 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		createEmpireClick : function(e) {
-			Event.stopEvent(e); //stop href click
-			this.hide(); //hide login
+		initEmpire : function() {
 			if(!Game.EmpireCreator) {
 				Game.EmpireCreator = new Lacuna.CreateEmpire(this);
 				Game.EmpireCreator.subscribe("onCreateSuccessful",function(oArgs) {
 					this.fireEvent("onLoginSuccessful",oArgs);
 				}, this, true);
 			}
+		},
+		createEmpireClick : function(e) {
+			Event.stopEvent(e); //stop href click
+			this.hide(); //hide login
+			this.initEmpire();
 			Game.EmpireCreator.show();
 		}
 	};

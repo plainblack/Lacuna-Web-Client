@@ -25,6 +25,12 @@
 		requires : ["event","cookie","rpc","smd"]
 	});
 	loader.addModule({
+		name: "about",
+		type: "js",
+		fullpath: host + "about.js?" + t,
+		requires : ["container","event","game"]
+	});
+	loader.addModule({
 		name: "createSpecies",
 		type: "js",
 		fullpath: host + "createSpecies.js?" + t,
@@ -46,7 +52,7 @@
 		name: "gameMenu",
 		type: "js",
 		fullpath: host + "menu.js?" + t,
-		requires : ["container","game","menu"]
+		requires : ["about","menu"]
 	});
 	loader.addModule({
 		name: "mapper",
@@ -74,7 +80,6 @@
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
-		YAHOO.log("version " + t);
 		YAHOO.lacuna.Game.Start();
 	};
 	loader.onFailure = function(o) {

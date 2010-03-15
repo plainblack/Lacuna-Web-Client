@@ -184,15 +184,23 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				Dom.setStyle(alignment, "z-index", '2');
 				Dom.setStyle(alignment, "background", ['transparent url(',Game.AssetUrl,'map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
 			}
+		},
+		refresh : function() {
+			Mapper.StarTile.superclass.refresh.call(this);
+			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ",", this.z, ")"].join('') : "Uncharted Space";
 		}
 	});
 	
 	Mapper.PlanetTile = function(x, y, z, ox, oy, map) {
-		Mapper.StarTile.superclass.constructor.call(this, x, y, z, ox, oy, map);
+		Mapper.PlanetTile.superclass.constructor.call(this, x, y, z, ox, oy, map);
 	};
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
 			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ")"].join('') : "Ground";
+		},
+		refresh : function() {
+			Mapper.PlanetTile.superclass.refresh.call(this);
+			this.init();
 		}
 	});
 	
@@ -747,7 +755,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				return {data:building, url:[Game.AssetUrl,'tile/',building.image,building.level,'.png'].join('')};
+				return {data:building, url:[Game.AssetUrl,'tile/',building.image,'.png'].join('')};
 			}
 			else {
 				return {blank:true, url:Game.AssetUrl + 'tile/ground.png'};
@@ -783,8 +791,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						this.tileCache[tile.x][tile.y] = {};
 					}
 					this.tileCache[tile.x][tile.y] = tile;
-
-					this.updateBounds(tile);
 				}
 			}
 			return startZoomLevel;

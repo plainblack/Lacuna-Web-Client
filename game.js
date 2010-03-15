@@ -20,8 +20,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Services : {
 			Body : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Body),
 			Empire : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Empire),
+			Inbox : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Inbox),
 			Maps : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Map),
 			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species),
+			Stats : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Stats),
 			Buildings : {
 				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic)
 			}
@@ -274,7 +276,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				},
 				timeout:Game.Timeout,
-				scope:(callback.scope || this)
+				scope:callback && callback.scope || this
 			});
 		},
 		UpdateResources : function() {
@@ -286,7 +288,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				
 			Lacuna.Game.recTime = dt;
 			
-			ED.happiness += Math.floor(ED.happiness_hour * ratio);
+			ED.happiness += ED.happiness_hour * ratio;
 			
 			for(var pKey in ED.planets) {
 				if(ED.planets.hasOwnProperty(pKey)){
