@@ -178,7 +178,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			EmpireServ.found({empire_id: this.empireId}, {
 				success : function(o) {
 					YAHOO.log(o, "info", "FoundEmpire");
-					this.fireEvent("onCreateSuccessful", o.result);
+					this.fireEvent("onCreateSuccessful", o);
 					this.hide(); //hide species
 				},
 				failure : function(o) {

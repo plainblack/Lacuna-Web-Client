@@ -15,6 +15,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
 		this.createEvent("onMapRpcFailed");
+		this.queue = {};
 		this._buildDetailsPanel();
 		this._buildBuilderPanel();
 	};
@@ -132,7 +133,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		Mapper : function(oArgs) {
-			YAHOO.log(oArgs.buildings, "debug", "AddBuildings");
+			YAHOO.log(oArgs.buildings, "debug", "Mapper");
 			if(!this._gridCreated) {
 				var planetMap = document.createElement("div");
 				planetMap.id = "planetMap";
@@ -154,16 +155,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
 					var tile = this._map.tileLayer.findTileById(matchedEl.id);
 					if(tile && tile.data) {
-						YAHOO.log(tile.data, "info", "MapPlanet.Mapper");
 						this.DetailsView(tile.data);
 					}
 					else {
-						YAHOO.log(tile, "info", "MapPlanet.Mapper");
 						this.BuilderView(tile);
 					}
 				}, "div.tile", this, true);
 			}
 			else {
+				if(!this._elGrid.parentNode) {
+					document.getElementById("content").appendChild(this._elGrid);
+				}
 				this._map.addTileData(oArgs.buildings)
 				this._map.refresh();
 			}
@@ -194,7 +196,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this.Mapper(o.result);
 					},
 					failure : function(o){
-						YAHOO.log(["planetMap FAILED: ", o]);
+						YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
 						this.fireEvent("onMapRpcFailed", o);
 					},
 					timeout:Game.Timeout,
@@ -238,6 +240,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			});
 		},
 		DetailsView : function(tileData) {
+			YAHOO.log(tileData, "info", "DetailsView");
 			this.ViewData(tileData.id, tileData.url, {
 				success:this.DetailsProcess
 			});
@@ -301,6 +304,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		
 		BuilderView : function(tile) {
+			YAHOO.log(tile, "info", "BuilderView");
 			var BodyServ = Game.Services.Body,
 				data = {
 					session_id: Cookie.getSub("lacuna","session") || "",
@@ -375,10 +379,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						}
 						else {
 							nLi.innerHTML = ['<div class="yui-gf" style="margin-bottom:2px;">',
-							'	<div class="yui-u first">',
+							'	<div class="yui-u first" style="width:20%;">',
 							'		<img src="',Game.AssetUrl,'tile/',bd.image,'.png" style="width:100px;height:100px;" />',
 							'	</div>',
-							'	<div class="yui-u">',
+							'	<div class="yui-u" style="width:78%;">',
 							'		<span style="font-weight:bold;">',name,'</span>: ',
 							'		<span><label>Reason:</label>',bd.build.reason[1], ' - ', (Lang.isArray(bd.build.reason[2]) ? bd.build.reason[2].join('::Level') : 'Level:' + bd.build.reason[2]), '</span>',
 							'		<div><label style="font-weight:bold;">Cost:</label>',
@@ -428,6 +432,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(o, "info", "BuildSuccess");
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
+					this.CheckCompleteReload(o.result.building);
 					this.DetailsProcess(o.result);
 					this.ReLoad();
 				},
@@ -452,6 +457,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				success : function(o){
 					YAHOO.log(o, "info", "UpgradeSuccess");
 					this.fireEvent("onMapRpc", o.result);
+					this.buildingBuilder.hide();
 					this.CheckCompleteReload(o.result.building);
 					this.DetailsProcess(o.result);
 					this.ReLoad();
@@ -467,18 +473,24 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		CheckCompleteReload : function(building) {
 			//YAHOO.log(building, "debug", "CheckCompleteReload");
-			if(building.level == "0") {
-				this.ViewData(building.id, building.url, {
-					success:function(result) {
-						if(result.building.pending_build) {
-							var ms = result.building.pending_build.seconds_remaining * 1000;
-							YAHOO.log("Reloading in " + ms, "info", "CheckCompleteReload");
-							setTimeout(function() {
-								YAHOO.lacuna.MapPlanet.ReLoad();
-							}, ms);
-						}
+			if(building.pending_build) {
+				this.queue[building.id] = building;
+				var ms = (building.pending_build.seconds_remaining * 1000) + 1000;
+				YAHOO.log("Reloading in " + ms, "info", "CheckCompleteReload");
+				setTimeout(function() {
+					if(YAHOO.lacuna.MapPlanet.IsVisible()) {
+						delete YAHOO.lacuna.MapPlanet.queue[building.id];
+						YAHOO.lacuna.MapPlanet.ReLoad();
 					}
-				});
+				}, ms);
+			}
+			else if(building.level == "0" && !this.queue[building.id]) {
+				YAHOO.log("Reloading Default in 10000", "info", "CheckCompleteReload");
+				setTimeout(function() {
+					if(YAHOO.lacuna.MapPlanet.IsVisible()) {
+						YAHOO.lacuna.MapPlanet.ReLoad();
+					}
+				}, 10000);
 			}
 		}
 	};

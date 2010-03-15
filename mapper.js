@@ -297,6 +297,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 
 	Mapper.TileLayer = function(map, visibleArea, TileConstructor){
+		this.tileCache = {};
 		// tile layer expects map.movableContainer to be at the upper left corner of
 		// the visibleArea on creation		
 		this.map = map;
@@ -325,7 +326,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 	};
 	Mapper.TileLayer.prototype = {
-		tileCache : {},
 		findTile : function(x,y,zoom){
 			return this.tileCache[Tile.idFor(x,y,zoom)];
 		},
@@ -447,6 +447,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		var IE='\v'=='v'; // detect IE
 		this.IE = IE;
 		
+		//this.tileSizeInPx = undefined;
+		this.maxZoom = 15;
+		this.minZoom = -15;
+		//this.visibleArea = undefined;
+		this.centerX = 0;
+		this.centerY = 0;
+		this.diffX = 0;
+		this.diffY = 0;
+		this._pathsAndPolygons = {};
+		this._projectedPoints = {};
+		this.tileCache = {};
+		this.bounds = {};
+		this.maxBounds = {};
+		
 		this.mapDiv = document.getElementById( divId );
 		this.mapDiv.style.overflow = "hidden";
 		this.movableContainer = new Mapper.MovableContainer( this.mapDiv );
@@ -457,19 +471,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.controller = new Mapper.TraditionalController( this );
 	};
 	Map.prototype = {
-		tileSizeInPx : undefined,
-		maxZoom : 15,
-		minZoom : -15,
-		visibleArea : undefined,
-		centerX : 0,
-		centerY : 0,
-		diffX : 0,
-		diffY : 0,
-		_pathsAndPolygons : {},
-		_projectedPoints : {},
-		tileCache : {},
-		bounds : {},
-		maxBounds : {},
 		//blank init that will always get called.  override in sub classes to change defaults
 		init : function() {
 		},
@@ -755,7 +756,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				return {data:building, url:[Game.AssetUrl,'tile/',building.image,'.png'].join('')};
+				return {blank:building.level == 0, data:building, url:[Game.AssetUrl,'tile/',building.image,'.png'].join('')};
 			}
 			else {
 				return {blank:true, url:Game.AssetUrl + 'tile/ground.png'};
