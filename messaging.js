@@ -13,8 +13,94 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		Game = Lacuna.Game;
 		
 	var Messaging = function() {
+		this.createEvent("onRpc");
+		this.createEvent("onRpcFailed");
+		this._buildPanel();
 	};
 	Messaging.prototype = {
+		_buildPanel : function() {
+			var panelId = "messagingPanel";
+			
+			var panel = document.createElement("div");
+			panel.id = panelId;
+			panel.innerHTML = ['<div class="hd">Messaging</div>',
+				'<div class="bd">',
+				'	<div id="messagingTabs"><ul>',
+				'		<li id="messagingInbox">Inbox</li>',
+				'		<li id="messagingSent">Sent</li>',
+				'		<li id="messagingArchive">Archive</li>',
+				'	</ul></div>',
+				'	<div class="yui-gd">',
+				'		<div class="yui-u first">',
+				'			<ul id="messagingList"></ul>',
+				'		</div>',
+				'		<div class="yui-u">',
+				'			<div id="messagingTimestamp"></div>',
+				'			<div id="messagingFrom"></div>',
+				'			<div id="messagingSubject"></div>',
+				'			<div id="messagingDisplay"></div>',
+				'		</div>',
+				'	</div>',
+				'</div>'].join('');
+			document.body.insertBefore(panel, document.body.firstChild);
+			
+			this.messagingPanel = new YAHOO.widget.Panel(panelId, {
+				constraintoviewport:true,
+				visible:false,
+				draggable:true,
+				fixedcenter:true,
+				close:true,
+				width:"700px",
+				zIndex:9999
+			});
+			
+			this.messagingPanel.renderEvent.subscribe(function(){
+				this.inbox = Dom.get("messagingInbox");
+				this.sent = Dom.get("messagingSent");
+				this.archive = Dom.get("messagingArchive");
+				this.list = Dom.get("messagingList");
+				this.timestamp = Dom.get("messagingTimestamp");
+				this.from = Dom.get("messagingFrom");
+				this.subject = Dom.get("messagingSubject");
+				this.display = Dom.get("messagingDisplay");
+			});
+			
+			this.messagingPanel.render();
+		},
+		
+		loadMessages : function() {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Cookie.getSub("lacuna","session") || "",
+					page_number: 1
+				};
+			InboxServ.view_inbox(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Messaging.loadMessages");
+					this.fireEvent("onRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		processMessages : function(msgs) {
+			YAHOO.log(msgs, "info", "Messaging.processMessages");
+		},
+		
+		isVisible : function() {
+			return this.messagingPanel.cfg.getProperty("visible");
+		},
+		show : function() {
+			this.messagingPanel.show();
+			this.loadMessages();
+		},
+		hide : function() {
+			this.messagingPanel.hide();
+		}
 	};
 	Lang.augmentProto(Messaging, Util.EventProvider);
 			

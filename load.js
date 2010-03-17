@@ -49,12 +49,6 @@
 		requires : ["container","createEmpire","game"]
 	});
 	loader.addModule({
-		name: "gameMenu",
-		type: "js",
-		fullpath: host + "menu.js?" + t,
-		requires : ["about","menu"]
-	});
-	loader.addModule({
 		name: "mapper",
 		type: "js",
 		fullpath: host + "mapper.js?" + t
@@ -76,6 +70,19 @@
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
 		requires : ["event-delegate","game","mapper","selector"]
+	});
+	loader.addModule({
+		name: "messaging",
+		type: "js",
+		fullpath: host + "messaging.js?" + t,
+		requires : ["game"]
+	});
+	/*add after requirements*/
+	loader.addModule({
+		name: "gameMenu",
+		type: "js",
+		fullpath: host + "menu.js?" + t,
+		requires : ["about","messaging","menu"]
 	});
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
 	loader.onSuccess = function(o) {

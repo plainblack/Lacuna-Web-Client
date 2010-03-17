@@ -438,6 +438,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			Event.purgeElement(this.tileContainer);
 			this.tileContainer.parentNode.removeChild(this.tileContainer);
 			delete this["tileCache"];
+		},
+		reset : function() {
+			this.removeAllTilesNotContainedIn({});
 		}
 	};
 
@@ -560,7 +563,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			this.tileLayer.showTiles();
 		},
-		
+
 		// override these for specific tile handling
 		getTile  : function(x, y, z){
 		},
@@ -723,6 +726,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.updateBounds(star);
 			}
 			return startZoomLevel;
+		},
+		reset : function() {
+			this.tileCache = {};
+			this.bounds = {};
+			this.tileLayer.reset();
 		}
 	});
 	
@@ -796,10 +804,28 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			return startZoomLevel;
 		},
+		addSingleTileData : function(oBuilding) {
+			if(oBuilding.url == "/planetarycommand") {
+				this.command = oBuilding;
+				this.command.x *= 1;
+				this.command.y *= 1;
+			}
+			if(!this.tileCache[oBuilding.x]) {
+				this.tileCache[oBuilding.x] = {};
+			}
+			if(!this.tileCache[oBuilding.x][oBuilding.y]) {
+				this.tileCache[oBuilding.x][oBuilding.y] = {};
+			}
+			this.tileCache[oBuilding.x][oBuilding.y] = oBuilding;
+		},
 		refresh : function() {
 			if(this.tileLayer) {
 				this.tileLayer.showTiles();
 			}
+		},
+		reset : function() {
+			this.tileCache = {};
+			this.tileLayer.reset();
 		}
 	});
 

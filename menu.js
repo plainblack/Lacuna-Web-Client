@@ -62,10 +62,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}, this, true);
 			Dom.addClass(back, "back");
 			Dom.addClass(back, "menuItem");
-			this.backVisible(false);
 			
 			inboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/inbox-alert.png' : 'ui/inbox.png');
 			inboxImg.alt = "Inbox";
+			Event.on(inboxImg, "click", function() {
+				this.fireEvent("onInboxClick");
+			}, this, true);
 			Dom.addClass(inbox, "inbox");
 			Dom.addClass(inbox, "menuItem");
 			
@@ -286,7 +288,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(!this.created) {
 				this.created = true;
 				this.UserMenu.create();
-				this.UserMenu.backVisible(false);
 				this.PlanetMenu.create();
 			}
 			else {

@@ -340,7 +340,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 							ho.push(i);
 						}
 					}
-					
+
 					var SpeciesServ = Game.Services.Species,
 						data = {
 							empire_id:this.empireId,
@@ -348,7 +348,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 								name: this.elName.value,
 								description: this.elDesc.value.substr(0,1024),
 								habitable_orbits: ho,
-								construction_affinity: this.values.speciesConst,
+								construction_affinity: this.values.speciesConst, //manufacturing_affinity
 								deception_affinity: this.values.speciesDecep,
 								research_affinity: this.values.speciesResearch,
 								management_affinity: this.values.speciesManagement,

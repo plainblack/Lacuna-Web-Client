@@ -53,6 +53,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					}
 				}, "div.tile", this, true);
 			}
+			else {
+				this._map.setZoomLevel(map.addTileData(oArgs.stars));
+				//move to current planet
+				map.setCenterToCurrentPlanet();
+			}
 			
 			this.MapVisible(true);
 		},
@@ -92,6 +97,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		Resize : function() {
 			this.SetSize();
 			this._map.resize();
+		},
+		Reset : function() {
+			this._map.reset();
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);

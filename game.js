@@ -47,6 +47,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		Timeout : 10000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
+		QueueTypes : {
+			PLANET : "planet",
+			STAR : "star",
+			SYSTEM : "system"
+		},
 		
 		Start : function() {	
 			var session = Cookie.getSub("lacuna","session");
@@ -95,7 +100,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Menu.create();
 			//set our interval going for resource calcs
 			Lacuna.Game.recTime = new Date();
-			Lacuna.Game.recInt = setInterval(Lacuna.Game.UpdateResources, 1000);
+			Lacuna.Game.recInt = setInterval(Lacuna.Game.Tick, 1000);
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
 				//this will be called on the first load and create menu
@@ -159,6 +164,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						}
 					}
 				});
+				Lacuna.Menu.subscribe("onInboxClick", function() {
+					Lacuna.Messaging.show();
+				});
+				
+				Lacuna.Messaging.subscribe("onRpc", function(oResult){
+					Lacuna.Game.ProcessStatus(oResult.status);
+				});
+				Lacuna.Messaging.subscribe("onRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Game._hasRun = true;
 				
@@ -183,7 +196,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			var locationId = Cookie.getSub("lacuna","locationId"),
 				locationView = Cookie.getSub("lacuna","locationView");
 			if(!locationId) {
-				Lacuna.MapStar.Load();
+				Lacuna.MapPlanet.Load(Game.EmpireData.home_planet_id);
 			}
 			else {
 				switch(locationView) {
@@ -279,7 +292,60 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				scope:callback && callback.scope || this
 			});
 		},
-		UpdateResources : function() {
+		GetSize : function() {
+			var content = document.getElementById("content"),
+				width = content.offsetWidth,
+				height = document.documentElement.clientHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight;
+			return {w:width,h:height};
+		},
+		Resize : function() {
+			if(Lacuna.MapStar.IsVisible()) {
+				Lacuna.MapStar.Resize();
+			}
+			else if(Lacuna.MapPlanet.IsVisible()) {
+				Lacuna.MapPlanet.Resize();
+			}
+		},
+		
+		Logout : function() {
+			var EmpireServ = Lacuna.Game.Services.Empire,
+				session = Cookie.getSub("lacuna","session");
+				
+			clearTimeout(Lacuna.Game.recInt);
+			
+			EmpireServ.logout({session_id:session},{
+				success : function(o){
+					YAHOO.log(o);
+			
+					Cookie.remove("lacuna",{
+						domain: "lacunaexpanse.com"
+					});
+					
+					Lacuna.MapStar.Reset();
+					Lacuna.MapSystem.Reset();
+					Lacuna.MapPlanet.Reset();
+					//document.getElementById("content").innerHTML = "";
+					Lacuna.Game.DoLogin();
+				},
+				failure : function(o){
+					YAHOO.log(["LOGOUT FAILED: ", o]);
+				},
+				timeout:Game.Timeout
+			});
+		},
+		
+		//Cookie helpers functions
+		SetLocation : function(id, view) {
+			Cookie.setSub("lacuna","locationId", id,{
+				domain: "lacunaexpanse.com"
+			});
+			Cookie.setSub("lacuna","locationView", view,{
+				domain: "lacunaexpanse.com"
+			});
+		},
+		
+		//Tick related
+		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,
 				dt = new Date(),
 				diff = dt - Lacuna.Game.recTime,
@@ -330,54 +396,88 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(updateMenu) {
 				Lacuna.Menu.update();
 			}
-		},
-		GetSize : function() {
-			var content = document.getElementById("content"),
-				width = content.offsetWidth,
-				height = document.documentElement.clientHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight;
-			return {w:width,h:height};
-		},
-		Resize : function() {
-			if(Lacuna.MapStar.IsVisible()) {
-				Lacuna.MapStar.Resize();
-			}
-			else if(Lacuna.MapPlanet.IsVisible()) {
-				Lacuna.MapPlanet.Resize();
-			}
-		},
-		
-		Logout : function() {
-			var EmpireServ = Lacuna.Game.Services.Empire,
-				session = Cookie.getSub("lacuna","session");
-				
-			clearTimeout(Lacuna.Game.recInt);
 			
-			EmpireServ.logout({session_id:session},{
-				success : function(o){
-					YAHOO.log(o);
-			
-					Cookie.remove("lacuna",{
-						domain: "lacunaexpanse.com"
-					});
-					
-					document.getElementById("content").innerHTML = "";
-					Lacuna.Game.DoLogin();
-				},
-				failure : function(o){
-					YAHOO.log(["LOGOUT FAILED: ", o]);
-				},
-				timeout:Game.Timeout
-			});
+			Lacuna.Game.QueueProcess(diff);
 		},
-		
-		//Cookie functions
-		SetLocation : function(id, view) {
-			Cookie.setSub("lacuna","locationId", id,{
-				domain: "lacunaexpanse.com"
+		QueueAdd : function(id, type, ms) {
+			if(!id || !type || !ms) {
+				return;
+			}
+			
+			var t = Cookie.getSub("lacuna","queue"),
+				queue = {};
+			if(t) {
+				queue = Lang.JSON.parse(t);
+			}
+			if(!queue[type]) {
+				queue[type] = {};
+			}
+			queue[type][id] = ms;
+			
+			var now = new Date();
+			Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
+				domain: "lacunaexpanse.com",
+				expires: now.setHours(now.getHours() + 3)
 			});
-			Cookie.setSub("lacuna","locationView", view,{
-				domain: "lacunaexpanse.com"
+			
+		},
+		QueueProcess : function(tickMS) {
+			var t = Cookie.getSub("lacuna","queue"),
+				queue = {};
+			if(t) {
+				queue = Lang.JSON.parse(t);
+			}
+			var toFire = {};
+			for(var type in queue) {
+				if(queue.hasOwnProperty(type)) {
+					var qt = queue[type];
+					for(var id in qt) {
+						if(qt.hasOwnProperty(id)) {
+							var ms = qt[id] - tickMS;
+							if(ms <= 0) {
+								toFire[id] = type;
+							}
+							else {
+								qt[id] = ms;
+							}
+						}
+					}
+				}
+			}
+			
+			var fId;
+			for(fId in toFire) {
+				if(toFire.hasOwnProperty(fId)) {
+					delete queue[toFire[fId]][fId];
+				}
+			}
+			
+			var now = new Date();
+			Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
+				domain: "lacunaexpanse.com",
+				expires: now.setHours(now.getHours() + 3)
 			});
+			//seems silly to go through twice, but we need to make sure the cookie is updated with the latest queue so we don't process multiple times
+			for(fId in toFire) {
+				if(toFire.hasOwnProperty(fId)) {
+					Lacuna.Game.QueueFire(toFire[fId], fId);
+				}
+			}
+			
+			
+		},
+		QueueFire : function(type, id) {
+			switch(type) {
+				case Lacuna.Game.QueueTypes.PLANET:
+					Lacuna.MapPlanet.ReLoadTile(id);
+					break;
+				case Lacuna.Game.QueueTypes.STAR:
+					break;
+				case Lacuna.Game.QueueTypes.SYSTEM:
+					break;
+				default:
+					break;
+			}
 		}
 	};
 	

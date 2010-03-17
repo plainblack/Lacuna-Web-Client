@@ -170,6 +170,8 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					MapServ.get_star_system(data,callback);
 				}
 			}
+		},
+		Reset : function() {
 		}
 	};
 	Lang.augmentProto(MapSystem, Util.EventProvider);
