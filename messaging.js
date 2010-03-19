@@ -24,8 +24,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
-				'<div class="bd">',
-				'	<div id="messagingTabs" class="clearafter"><ul>',
+				'<div class="bd" style="overflow-y:scroll;">',
+				'	<div id="messagingTabs"><ul class="clearafter">',
 				'		<li id="messagingInbox">Inbox</li>',
 				'		<li id="messagingSent">Sent</li>',
 				'		<li id="messagingArchive">Archive</li>',
@@ -51,6 +51,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				fixedcenter:true,
 				close:true,
 				width:"700px",
+				height:"400px",
 				zIndex:9999
 			});
 			

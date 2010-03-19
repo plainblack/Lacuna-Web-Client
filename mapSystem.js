@@ -92,12 +92,15 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				//if it exists clear it and refill
 				this._el.innerHTML = "";
 			}
-				
+			
 			var star = oResult.star,
 				bodies = oResult.bodies,
 				div = document.createElement("div"),
 				span = document.createElement("span"),
 				img = document.createElement("img");
+				
+			this.locationId = star.id;
+			Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
 				
 			var starImg = systemMap.appendChild(img.cloneNode(false));
 			starImg.src = [Game.AssetUrl, "star/", star.color, ".png"].join('');
@@ -142,7 +145,6 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 
 		},
 		Load : function(starId, isBody) {
-			this.locationId = starId;
 			if(starId) {
 				var MapServ = Game.Services.Maps,
 					data = {
@@ -151,7 +153,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					callback = {
 						success : function(o){
 							this.fireEvent("onStatusUpdate", o.result.status);
-							this.Display.call(this, o.result);
+							this.Display(o.result);
 						},
 						failure : function(o){
 							YAHOO.log(["SYSTEMMAP FAILED: ", o]);

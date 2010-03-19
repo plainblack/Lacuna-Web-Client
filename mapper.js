@@ -485,14 +485,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				return;
 			}
 			this.setZoomLevel( this.zoom + 1 );
-			this.redraw();
+			this.refresh();
 		},
 		zoomOut : function() {
 			if( this.zoom <= this.minZoom ) {
 				return;
 			}
 			this.setZoomLevel( this.zoom - 1 );
-			this.redraw();
+			this.refresh();
 		},
 		setTileSizeInPx : function( size ) {
 			this.tileSizeInPx = size;
@@ -530,13 +530,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		setZoomLevel : function( level ) {
-			if( this.visibleArea ){
+			/*if( this.visibleArea ){
 				// we are changing the zoom level but the map may have been panned around
 				// but the current center is only stored in pixel coordinates which are different
 				// for every zoom level. Therefor we recalculate the centerLat and centerLng:
 				this.visibleArea = null;
-			}
-			this.zoom = level;
+			}*/
+			this.zoom = level*1;
 			//this.mapExtendInPx = this.tileSizeInPx * (1<<this.zoom);
 		},
 		redraw : function() {
@@ -554,6 +554,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.tileLayer.destroy();		
 			}
 			this.tileLayer = new Mapper.TileLayer(this, Mapper.util.clone(this.visibleArea), this.Tile);
+		},
+		refresh : function() {
+			this.tileLayer.render();
 		},
 		resize : function() {
 			this.width = this.mapDiv.offsetWidth;

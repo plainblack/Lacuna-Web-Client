@@ -201,17 +201,19 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		ReLoadTile : function(id) {
-			var building = this.buildings[id];
-			if(building) {
-				YAHOO.log(building, "info", "MapPlanet.ReLoadTile");
-				this.ViewData(building.id, building.url, {
-					success:function(oResult) {
-						YAHOO.log(oResult, "info", "MapPlanet.ReLoadTile.ViewData.success");
-						this.buildings[oResult.building.id] = oResult.building;
-						this._map.addSingleTileData(oResult.building);
-						this._map.refresh();
-					}
-				});
+			if(this._isVisible) {
+				var building = this.buildings[id];
+				if(building) {
+					YAHOO.log(building, "info", "MapPlanet.ReLoadTile");
+					this.ViewData(building.id, building.url, {
+						success:function(oResult) {
+							YAHOO.log(oResult, "info", "MapPlanet.ReLoadTile.ViewData.success");
+							this.buildings[oResult.building.id] = oResult.building;
+							this._map.addSingleTileData(oResult.building);
+							this._map.refresh();
+						}
+					});
+				}
 			}
 		},
 		SetSize : function() {
@@ -285,10 +287,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 			
 			Event.purgeElement(panel.upgradeUl);
-			if(building.upgrade.can) {
+			if(building.upgrade) {
 				var up = building.upgrade;
 				panel.upgradeUl.innerHTML = [
-					'<li>Upgrade Available</li>',
+					'<li>Upgrade</li>',
 					'<li><ul>',
 					'	<li>Cost</li>',
 					'	<li><label>Energy: </label>',up.cost.energy,'</li>',
@@ -307,10 +309,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<li><label>Waste: </label>',up.production.waste_hour,'</li>',
 					'	<li><label>Water: </label>',up.production.water_hour,'</li>',
 					'</ul></li>',
-					'<li><button type="button">Upgrade</button></li>'].join('');
-				Event.on(Sel.query("button", panel.upgradeUl, true), "click", function(e){
-					this.Upgrade(this.currentBuilding);
-				}, this, true)
+					'<li><button type="button" ', up.can ? '' : 'disabled=disabled', '>Upgrade</button></li>'
+				].join('');
+				
+				if(up.can) {
+					Event.on(Sel.query("button", panel.upgradeUl, true), "click", function(e){
+						this.Upgrade(this.currentBuilding);
+					}, this, true);
+				}
 			}
 			else {
 				panel.upgradeUl.innerHTML = "";
@@ -449,7 +455,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
 					this.QueueReload(o.result.building);
-					this.DetailsProcess(o.result);
+					//this.DetailsProcess(o.result);
 					this.ReLoad();
 				},
 				failure : function(o){
@@ -475,7 +481,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
 					this.QueueReload(o.result.building);
-					this.DetailsProcess(o.result);
+					//this.DetailsProcess(o.result);
 					this.ReLoad();
 				},
 				failure : function(o){

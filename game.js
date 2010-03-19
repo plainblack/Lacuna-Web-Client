@@ -177,6 +177,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
 						Lacuna.Menu.StarVisible(true);
+						//if map was already loaded locationId should exist so don't call load again
 						if(Lacuna.MapStar.locationId) {
 							Game.SetLocation("home", Game.View.STAR);
 						}
@@ -188,6 +189,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Lacuna.MapPlanet.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(true);
 						Lacuna.Menu.SystemVisible(true);
+						//if map was already loaded locationId should exist so don't call load again
 						if(Lacuna.MapSystem.locationId) {
 							Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
 						}
@@ -354,16 +356,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				dt = new Date(),
 				diff = dt - Lacuna.Game.recTime,
 				ratio = (diff / Lacuna.Game.HourMS),
-				updateMenu = true;
+				updateMenu = true,
+				totalWasteOverage = 0;
 				
 			Lacuna.Game.recTime = dt;
 			
-			ED.happiness += ED.happiness_hour * ratio;
-			
+		
 			for(var pKey in ED.planets) {
 				if(ED.planets.hasOwnProperty(pKey)){
 					var planet = ED.planets[pKey];
-					planet.happiness += planet.happiness_hour * ratio;
 					if(planet.energy_stored < planet.energy_capacity){
 						planet.energy_stored += planet.energy_hour * ratio;
 						if(planet.energy_stored > planet.energy_capacity) {
@@ -382,20 +383,39 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							planet.ore_stored = planet.ore_capacity;
 						}
 					}
-					if(planet.waste_stored < planet.waste_capacity){
-						planet.waste_stored += planet.waste_hour * ratio;
-						if(planet.waste_stored > planet.waste_capacity) {
-							planet.waste_stored = planet.waste_capacity;
-						}
-					}
 					if(planet.water_stored < planet.water_capacity){
 						planet.water_stored += planet.water_hour * ratio;
 						if(planet.water_stored > planet.water_capacity) {
 							planet.water_stored = planet.water_capacity;
 						}
 					}
+					
+					var wasteOverage = 0;
+					if(planet.waste_stored < planet.waste_capacity){
+						planet.waste_stored += planet.waste_hour * ratio;
+						if(planet.waste_stored > planet.waste_capacity) {
+							planet.waste_stored = planet.waste_capacity;
+							wasteOverage = (planet.waste_stored - planet.waste_capacity) * ratio;
+						}
+					}
+					else {
+						wasteOverage = planet.waste_hour * ratio;
+					}
+					
+					planet.happiness += (planet.happiness_hour * ratio) - wasteOverage;
+					if(planet.happiness < 0) {
+						planet.happiness = 0;
+					}
+					
+					totalWasteOverage += wasteOverage;
 				}
 			}
+			
+			ED.happiness += (ED.happiness_hour * ratio) - totalWasteOverage;
+			if(ED.happiness < 0) {
+				ED.happiness = 0;
+			}
+			
 			//YAHOO.log([diff, ratio]);
 			if(updateMenu) {
 				Lacuna.Menu.update();
@@ -427,48 +447,51 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		QueueProcess : function(tickMS) {
 			var t = Cookie.getSub("lacuna","queue"),
-				queue = {};
-			if(t) {
+				queue;
+			//only do anything if the queue actually has data
+			if(t && t.length > 2) {
 				queue = Lang.JSON.parse(t);
-			}
-			var toFire = {};
-			for(var type in queue) {
-				if(queue.hasOwnProperty(type)) {
-					var qt = queue[type];
-					for(var id in qt) {
-						if(qt.hasOwnProperty(id)) {
-							var ms = qt[id] - tickMS;
-							if(ms <= 0) {
-								toFire[id] = type;
-							}
-							else {
-								qt[id] = ms;
+				
+				var toFire = {},
+					queueCount = 0;
+				for(var type in queue) {
+					if(queue.hasOwnProperty(type)) {
+						var qt = queue[type];
+						for(var id in qt) {
+							if(qt.hasOwnProperty(id)) {
+								queueCount++;
+								var ms = qt[id] - tickMS;
+								if(ms <= 0) {
+									toFire[id] = type;
+								}
+								else {
+									qt[id] = ms;
+								}
 							}
 						}
 					}
 				}
-			}
-			
-			var fId;
-			for(fId in toFire) {
-				if(toFire.hasOwnProperty(fId)) {
-					delete queue[toFire[fId]][fId];
+				
+				var fId;
+				for(fId in toFire) {
+					if(toFire.hasOwnProperty(fId)) {
+						delete queue[toFire[fId]][fId];
+					}
 				}
-			}
-			
-			var now = new Date();
-			Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
-				domain: "lacunaexpanse.com",
-				expires: now.setHours(now.getHours() + 3)
-			});
-			//seems silly to go through twice, but we need to make sure the cookie is updated with the latest queue so we don't process multiple times
-			for(fId in toFire) {
-				if(toFire.hasOwnProperty(fId)) {
-					Lacuna.Game.QueueFire(toFire[fId], fId);
+				
+				var now = new Date();
+				Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
+					domain: "lacunaexpanse.com",
+					expires: now.setHours(now.getHours() + 3)
+				});
+				//seems silly to go through twice, but we need to make sure the cookie is updated with the latest queue so we don't process multiple times
+				for(fId in toFire) {
+					if(toFire.hasOwnProperty(fId)) {
+						Lacuna.Game.QueueFire(toFire[fId], fId);
+					}
 				}
+			
 			}
-			
-			
 		},
 		QueueFire : function(type, id) {
 			switch(type) {
