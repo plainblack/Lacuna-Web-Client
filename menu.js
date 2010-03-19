@@ -21,6 +21,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.elRight = Dom.get("usersRight");
 		
 		this.createEvent("onBackClick");
+		this.createEvent("onInboxClick");
 	};
 	UserMenu.prototype = {
 		create : function() {
@@ -278,9 +279,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.PlanetMenu = new PlanetMenu();
 		
 		this.createEvent("onBackClick");
+		this.createEvent("onInboxClick");
 		
 		this.UserMenu.subscribe("onBackClick", function() {
 			this.fireEvent("onBackClick");
+		}, this, true);
+		this.UserMenu.subscribe("onInboxClick", function() {
+			this.fireEvent("onInboxClick");
 		}, this, true);
 	};
 	Menu.prototype = {

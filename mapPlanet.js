@@ -224,7 +224,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this._map.resize();
 		},
 		Reset : function() {
-			this._map.reset();
+			if(this._map) {
+				this._map.reset();
+			}
 		},
 		
 		ViewData : function(id, url, callback) {

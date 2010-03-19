@@ -45,7 +45,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			SYSTEM : "system",
 			PLANET : "planet"
 		},
-		Timeout : 10000,
+		Timeout : 20000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		QueueTypes : {
 			PLANET : "planet",
@@ -101,6 +101,39 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//set our interval going for resource calcs
 			Lacuna.Game.recTime = new Date();
 			Lacuna.Game.recInt = setInterval(Lacuna.Game.Tick, 1000);
+			//init event subscribtions if we need to
+			Lacuna.Game.InitEvents();
+			//load the correct screen
+			var locationId = Cookie.getSub("lacuna","locationId"),
+				locationView = Cookie.getSub("lacuna","locationView");
+			if(!locationId) {
+				Lacuna.MapPlanet.Load(Game.EmpireData.home_planet_id);
+			}
+			else {
+				switch(locationView) {
+					case "system":
+						Lacuna.MapStar.MapVisible(false);
+						Lacuna.MapPlanet.MapVisible(false);
+						Lacuna.Menu.SystemVisible();
+						Lacuna.MapSystem.Load(locationId);
+						break;
+					case "planet":
+						Lacuna.MapStar.MapVisible(false);
+						Lacuna.MapSystem.MapVisible(false);
+						Lacuna.Menu.PlanetVisible();
+						Lacuna.MapPlanet.Load(locationId);
+						break;
+					default:
+						Lacuna.MapPlanet.MapVisible(false);
+						Lacuna.MapSystem.MapVisible(false);
+						Lacuna.MapStar.MapVisible(true);
+						Lacuna.Menu.StarVisible(true);
+						Lacuna.MapStar.Load();
+						break;
+				}
+			}
+		},
+		InitEvents : function() {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
 				//this will be called on the first load and create menu
@@ -191,35 +224,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Lacuna.Game.Resize(); 
 					}
 				});
-			}
-			//load the correct screen
-			var locationId = Cookie.getSub("lacuna","locationId"),
-				locationView = Cookie.getSub("lacuna","locationView");
-			if(!locationId) {
-				Lacuna.MapPlanet.Load(Game.EmpireData.home_planet_id);
-			}
-			else {
-				switch(locationView) {
-					case "system":
-						Lacuna.MapStar.MapVisible(false);
-						Lacuna.MapPlanet.MapVisible(false);
-						Lacuna.Menu.SystemVisible();
-						Lacuna.MapSystem.Load(locationId);
-						break;
-					case "planet":
-						Lacuna.MapStar.MapVisible(false);
-						Lacuna.MapSystem.MapVisible(false);
-						Lacuna.Menu.PlanetVisible();
-						Lacuna.MapPlanet.Load(locationId);
-						break;
-					default:
-						Lacuna.MapPlanet.MapVisible(false);
-						Lacuna.MapSystem.MapVisible(false);
-						Lacuna.MapStar.MapVisible(true);
-						Lacuna.Menu.StarVisible(true);
-						Lacuna.MapStar.Load();
-						break;
-				}
 			}
 		},
 		

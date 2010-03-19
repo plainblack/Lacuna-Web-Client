@@ -369,10 +369,10 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 							success : function(o) {
 								YAHOO.log(o);
 								if(o.result == 1) {
-									this.oldSpecies = data.params;
 									SpeciesServ.create(data,{
 										success : function(o){
 											YAHOO.log(o, "info", "SpeciesCreate");
+											this.oldSpecies = data.params;
 											//set true in case there are errors in creating empire so when they click save again we set species correctly
 											this.createdSpeciesOnce = true;
 											this._found();

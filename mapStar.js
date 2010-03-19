@@ -99,7 +99,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this._map.resize();
 		},
 		Reset : function() {
-			this._map.reset();
+			if(this._map) {
+				this._map.reset();
+			}
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);
