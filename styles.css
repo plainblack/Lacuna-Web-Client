@@ -8,6 +8,10 @@ body {
 	min-width: 1050px;
 	/*min-height: 768px;*/
 }
+
+.clearafter { height:100%; }
+.clearafter:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+
 #content {
 	text-align:center;
 	padding-top:6px;
@@ -79,6 +83,13 @@ body {
 }
 .bookmark {
 	cursor:pointer;
+}
+
+/*
+* Messaging
+*/
+#messagingTabs li {
+	float:left;
 }
 
 /*

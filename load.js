@@ -75,7 +75,7 @@
 		name: "messaging",
 		type: "js",
 		fullpath: host + "messaging.js?" + t,
-		requires : ["game"]
+		requires : ["datasource","game"]
 	});
 	/*add after requirements*/
 	loader.addModule({

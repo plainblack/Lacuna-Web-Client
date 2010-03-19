@@ -25,7 +25,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
 				'<div class="bd">',
-				'	<div id="messagingTabs"><ul>',
+				'	<div id="messagingTabs" class="clearafter"><ul>',
 				'		<li id="messagingInbox">Inbox</li>',
 				'		<li id="messagingSent">Sent</li>',
 				'		<li id="messagingArchive">Archive</li>',
@@ -87,8 +87,32 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				scope:this
 			});
 		},
-		processMessages : function(msgs) {
-			YAHOO.log(msgs, "info", "Messaging.processMessages");
+		processMessages : function(results) {
+			YAHOO.log(results, "info", "Messaging.processMessages");
+			var list = this.messagingPanel.list,
+				messages = results.messages,
+				li = document.createElement("li");
+			
+			Event.purgeElement(list, true);
+			list.innerHTML = "";
+			
+			for(var i=0; i<messages.length; i++) {
+				var msg = messages[i],
+					nLi = li.cloneNode(false),
+					dt = new Date(msg.date);
+				nLi.Message = msg;
+				nLi.innerHTML = [
+					'	<div style="padding-left:25px;">',
+					'		<div class="clearafter">',
+					'			<div class="messageDate">',Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en"),'</div>',
+					'			<div class="messageFrom">',msg.from,'</div>',
+					'		</div>',
+					'		<div class="messageSubject">',msg.subject,'</div>',
+					'		<div class="messageExcerpt">',msg.subject,'</div>',
+					'	</div>',
+					].join('');
+				list.appendChild(nLi);
+			}
 		},
 		
 		isVisible : function() {
