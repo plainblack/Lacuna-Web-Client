@@ -99,7 +99,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-
 				"logout" : {
 					"description": "logout empire",
 					"parameters": [
@@ -107,7 +106,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-
 				"login" : {
 					"description": "login empire",
 					"parameters": [
@@ -116,7 +114,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-
 				"create" : {
 					"description": "create empire",
 					"parameters": {
@@ -126,7 +123,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					},
 					"returns":{"type":"object"}
 				},
-
 				"found" : {
 					"description": "found empire",
 					"parameters": [
@@ -134,7 +130,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				
 				"get_status" : {
 					"description": "get quick empire status",
 					"parameters": [
@@ -142,15 +137,103 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				
 				"get_full_status" : {
 					"description": "get full empire status",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
+				},
+				"view_profile" : {
+					"description": "Provides a list of the editable properties of the current empire's profile. See also the edit_profile and view_public_profile  methods.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"profile" : {
+						   "description" : "description goes here",
+						   "status_message" : "status message goes here",
+						   "medals" : {
+							   "building1" : {
+								   "name" : "Built Level 1 Building",
+								   "image" : "building1",
+								   "note" : "note about how this was achieved, if any, goes here",
+								   "date" : "01 31 2010 13:09:05 +0600",
+								   "public" : 1
+							   },
+							   ...
+						   }
+						},
+						"status" : { get_status() }
+					 }
+					*/
+				},
+				"edit_profile" : {
+					"description": "Edits properties of an empire. Returns the view_profile method. See also the view_profile and view_public_profile  methods.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"profile", "type":"object", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"view_public_profile" : {
+					"description": "Provides a list of the data that's publicly known about this empire.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"empire_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					{
+						"profile" : {
+							"id" : "empire-id-goes-here",
+							"name" : "Lacuna Expanse Corp",
+							"planet_count" : 1,
+							"status_message" : "Looking for Essentia."
+							"description" : "We are the original inhabitants of the Lacuna Expanse.",
+							"medals" : {
+								"building1" : {
+									"name" : "Built Level 1 Building",
+									"image" : "building1",
+									"date" : "01 31 2010 13:09:05 +0600",
+									"note" : null
+								},
+								...
+							},
+							"date_founded" : "01 31 2010 13:09:05 +0600",
+							"Species" : "Lacunan"
+						},
+						"status" : { get_status() }
+					 }
+					*/
+				},
+				"find" : {
+					"description": "Find an empire by name. Returns a hash reference containing empire ids and empire names.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"name", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/* 
+					 {
+						"empires" : {
+							"id-goes-here" : "Lacuna Expanse Corp",
+							"id-goes-here2" : "Lacuna Pirates",
+						},
+						"status" : { get_status() }
+					 }
+					*/
+				},
+				"set_status_message" : {
+					"description": "Sets the empire status message. Similar to what you might put on your Facebook wall, or in a tweet, but about your empire.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"message", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
-
 			}
 		},
 		Inbox : {
@@ -202,7 +285,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-	
 				"read_message" : {
 					"description": "Retrieves a message. Marks it read if it hasn't been already.",
 					"parameters": [
@@ -256,6 +338,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							*/
 					],
 					"returns":{"type":"object"}
+					/*
+						{
+							"message": {
+								"sent":[],
+								"unknown":[]
+							},
+							"status" : { get_status() }
+						}
+					*/
 				}
 			
 			}

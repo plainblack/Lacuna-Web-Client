@@ -297,7 +297,12 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 			* deserialize
 			*/
 			deserialize: function(results) {
-				return Lang.JSON.parse(results.responseText);
+				if(results.getResponseHeader && (results.getResponseHeader["Content-Type"] == "application/json-rpc" || results.getResponseHeader["Content-Type"] == "application/json")) {
+					return Lang.JSON.parse(results.responseText);
+				}
+				else {
+					return {"error":{"message":"Response Content-Type is not JSON"}};
+				}
 			}
 		}
 	   

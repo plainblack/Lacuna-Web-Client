@@ -39,6 +39,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			visible:false,
 			buttons:[ { text:"Login", handler:{fn:this.handleLogin, scope:this}, isDefault:true } ],
 			draggable:false,
+			modal:true,
 			close:false,
 			width:"300px",
 			zIndex:9999

@@ -441,6 +441,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		reset : function() {
 			this.removeAllTilesNotContainedIn({});
+			this.tileCache = {};
 		}
 	};
 

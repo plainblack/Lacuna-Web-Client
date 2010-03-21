@@ -72,10 +72,16 @@
 		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
+		name: "textboxList",
+		type: "js",
+		fullpath: host + "textboxList.js?" + t,
+		requires : ["autocomplete"]
+	});
+	loader.addModule({
 		name: "messaging",
 		type: "js",
 		fullpath: host + "messaging.js?" + t,
-		requires : ["datasource","game"]
+		requires : ["datasource","event-delegate","game","textboxList"]
 	});
 	/*add after requirements*/
 	loader.addModule({

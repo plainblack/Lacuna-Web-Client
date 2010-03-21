@@ -287,7 +287,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			return hoDiff
 				|| os.name != ns.name
 				|| os.description != ns.description
-				|| os.construction_affinity != ns.construction_affinity
+				|| os.manufacturing_affinity != ns.manufacturing_affinity
 				|| os.deception_affinity != ns.deception_affinity
 				|| os.research_affinity != ns.research_affinity
 				|| os.management_affinity != ns.management_affinity
@@ -348,7 +348,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 								name: this.elName.value,
 								description: this.elDesc.value.substr(0,1024),
 								habitable_orbits: ho,
-								construction_affinity: this.values.speciesConst, //manufacturing_affinity
+								manufacturing_affinity: this.values.speciesConst,
 								deception_affinity: this.values.speciesDecep,
 								research_affinity: this.values.speciesResearch,
 								management_affinity: this.values.speciesManagement,
