@@ -283,7 +283,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					Dom.addClass(nLi, "unread");
 				}
 				nLi.innerHTML = [
-					is.archive ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
+					!is.archive ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
 					'	<div class="messageContainer">',
 					'		<div class="messageDate">',this._formatMessageDate(msg.date),'</div>',
 					'		<div class="messageFrom">',msg.from,'</div>',

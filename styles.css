@@ -38,6 +38,32 @@ body {
 	z-index:1000;
 }
 
+.hidden {
+	display:none;
+}
+.alert {
+	color:red;
+}
+
+/*
+dialogs
+*/
+#login label, #createEmpire label, #createSpecies label {
+	display:inline-block;
+}
+#login label {
+	width:75px;
+}
+#createEmpire label{
+	width:110px;
+}
+#createSpecies label {
+	width:140px
+}
+
+/*
+menu
+*/
 #users, #planets {
 	font-size:25px;
 	color:white;
@@ -52,12 +78,6 @@ body {
 	background: transparent url(http://localhost/lacuna/assets/ui/toolbar-menu-bottom.png) no-repeat scroll top center;
 }
 
-.hidden {
-	display:none;
-}
-.alert {
-	color:red;
-}
 .menuPlanetThumb {
 	width:35px;
 	height:35px;
