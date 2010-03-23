@@ -58,6 +58,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
 			
 			this.buildingDetails = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
@@ -66,6 +67,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				fixedcenter:true,
 				close:true,
 				width:"500px",
+				underlay:false,
 				zIndex:9995
 			});
 			
@@ -103,6 +105,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'	</ul>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
 			
 			this.buildingBuilder = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
@@ -110,6 +113,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				draggable:true,
 				fixedcenter:true,
 				close:true,
+				underlay:false,
 				width:"600px",
 				height:"500px",
 				zIndex:9995
@@ -202,7 +206,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		ReLoadTile : function(id) {
 			if(this._isVisible) {
-				var building = this.buildings[id];
+				this.ReLoad();
+				/*var building = this.buildings[id];
 				if(building) {
 					YAHOO.log(building, "info", "MapPlanet.ReLoadTile");
 					this.ViewData(building.id, building.url, {
@@ -213,7 +218,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this._map.refresh();
 						}
 					});
-				}
+				}*/
 			}
 		},
 		SetSize : function() {
@@ -244,7 +249,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpc", o.result);
 					
 					if(callback && callback.success) {
-						callback.success.call(this, o.result);
+						callback.success.call(this, o.result, callback.url);
 					}
 				},
 				failure : function(o){
@@ -259,17 +264,19 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		DetailsView : function(tileData) {
 			YAHOO.log(tileData, "info", "DetailsView");
 			this.ViewData(tileData.id, tileData.url, {
-				success:this.DetailsProcess
+				success:this.DetailsProcess,
+				url:tileData.url
 			});
 		},
-		DetailsProcess : function(oResults) {
+		DetailsProcess : function(oResults, url) {
 			var building = oResults.building,
 				panel = this.buildingDetails;
 				
 			this.currentBuilding = building;
+			this.currentBuilding.url = url;
 			
 			panel.name.innerHTML = building.name;
-			panel.img.src = [Game.AssetUrl, "tile/", building.image, ".png"].join('');
+			panel.img.src = [Game.AssetUrl, "planet_side/", building.image, ".png"].join('');
 			panel.level.innerHTML = building.level;
 			panel.curEnergy.innerHTML = building.energy_hour;
 			panel.curFood.innerHTML = building.food_hour;
@@ -371,10 +378,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							costs = bd.build.cost,
 							prod = bd.production;
 							
+						bd.name = name;
+						
 						if(bd.build.can) {
 							nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
 							'	<div class="yui-u first" style="width:20%">',
-							'		<img src="',Game.AssetUrl,'tile/',bd.image,'.png" style="width:100px;height:100px;" />',
+							'		<img src="',Game.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
 							'	</div>',
 							'	<div class="yui-u" style="width:65%">',
 							'		<span style="font-weight:bold;">',name,'</span>: ',
@@ -404,7 +413,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						else {
 							nLi.innerHTML = ['<div class="yui-gf" style="margin-bottom:2px;">',
 							'	<div class="yui-u first" style="width:20%;">',
-							'		<img src="',Game.AssetUrl,'tile/',bd.image,'.png" style="width:100px;height:100px;" />',
+							'		<img src="',Game.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
 							'	</div>',
 							'	<div class="yui-u" style="width:78%;">',
 							'		<span style="font-weight:bold;">',name,'</span>: ',
@@ -424,7 +433,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							'		<span><label>Water:</label>',prod.water_hour,'</span></div>',
 							'	</div>',
 							'</div>'].join('');
-							nLi.building = bd
 							
 							unavailFrag.appendChild(nLi);
 						}
@@ -451,15 +459,22 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			BuildingServ.build(data,{
 				success : function(o){
-					YAHOO.log(o, "info", "BuildSuccess");
+					YAHOO.log(o, "info", "MapPlanet.Build.success");
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
 					this.QueueReload(o.result.building);
 					//this.DetailsProcess(o.result);
-					this.ReLoad();
+					//this.ReLoad();
+					var b = building; //originally passed in building data from BuildProcess
+					b.id = oResult.building.id;
+					b.level = oResult.building.level;
+					b.pending_build = oResult.building.pending_build;
+					this.buildings[b.id] = b;
+					this._map.addSingleTileData(b);
+					this._map.refresh();
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "BuildFailed");
+					YAHOO.log(o, "error", "MapPlanet.Build.failure");
 					this.fireEvent("onMapRpcFailed", o);
 					this.buildingBuilder.hide();
 				},
@@ -479,7 +494,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				success : function(o){
 					YAHOO.log(o, "info", "UpgradeSuccess");
 					this.fireEvent("onMapRpc", o.result);
-					this.buildingBuilder.hide();
+					this.buildingDetails.hide();
 					this.QueueReload(o.result.building);
 					//this.DetailsProcess(o.result);
 					this.ReLoad();

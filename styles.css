@@ -1,5 +1,5 @@
 html {
-	background: black url('http://localhost/lacuna/assets/star/field.png');
+	background: black url('http://webclient.lacunaexpanse.com/assets/star_system/field.png');
 }
 body {
 	margin:40px 0;
@@ -14,7 +14,7 @@ body {
 
 #content {
 	text-align:center;
-	padding-top:6px;
+	padding-top:15px;
 }
 #nojavascript {
 	text-align:center;
@@ -23,7 +23,7 @@ body {
 #header, #footer  {
 	color: red;
 	text-align:center;
-	height:46px;
+	height:55px;
 	position:fixed;
 	width: 100%;
 	min-width: 1050px;
@@ -46,13 +46,61 @@ body {
 }
 
 /*
+YUI dialog skin
+*/
+body.yui-skin-sam .yui-panel {
+	border-width:0;
+}
+body.yui-skin-sam .yui-panel .hd {
+	width:250px;
+	background:url("http://webclient.lacunaexpanse.com/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
+	border-width:0;
+	margin-left:10px;
+}
+
+.yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/bkg.png");
+}
+body.yui-skin-sam .yui-panel .bd {
+	-moz-border-radius:10px 10px 0 0;
+	-webkit-border-radius:10px 10px 0 0;
+	border-width: 5px 5px 0;
+	border-style:solid;
+	border-color:#52ACFF;
+}
+body.yui-skin-sam .yui-panel .ft {
+	-moz-border-radius:0 0 10px 10px;
+	-webkit-border-radius:0 0 10px 10px;
+	border-width: 0 5px 5px;
+	border-style:solid;
+	border-color:#52ACFF;
+}
+body.yui-skin-sam .nofooter .bd {
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-width: 5px;
+	border-style:solid;
+	border-color:#52ACFF;
+} 
+body.yui-skin-sam .container-close {
+	background:url("http://webclient.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll 0 0 transparent;
+	cursor:pointer;
+	height:23px;
+	position:absolute;
+	right:1px;
+	top:5px;
+	width:23px;
+}
+
+
+/*
 dialogs
 */
 #login label, #createEmpire label, #createSpecies label {
 	display:inline-block;
 }
 #login label {
-	width:75px;
+	width:100px;
 }
 #createEmpire label{
 	width:110px;
@@ -64,18 +112,29 @@ dialogs
 /*
 menu
 */
+#userMenu, #planetMenu {
+	width:322px;
+}
 #users, #planets {
 	font-size:25px;
 	color:white;
 	text-decoration:none;
 }
-
-.usersCenter {
-	position:relative;
+#users {
+	display:block;
+	height:74px;
+	padding-top:15px;
 }
-.planetsCenter {
-	position:relative;
-	background: transparent url(http://localhost/lacuna/assets/ui/toolbar-menu-bottom.png) no-repeat scroll top center;
+#planets {
+	display:block;
+	height:74px;
+	padding-left:20px;
+	padding-top:25px;
+	text-align:left;
+}
+#planets img {
+	float:left;
+	margin-right:10px;
 }
 
 .menuPlanetThumb {
@@ -84,12 +143,13 @@ menu
 }
 .menuItem {
 	display:inline-block;
-	height:45px; /* 1 less than height of bar */
+	height:54px; /* 1 less than height of bar */
 	color:black;
 	min-width:100px;
-	margin-right:10px;
+	position:absolute;
+	width:120px;
 }
-.menuItem  img {
+.food  img, .ore  img, .water  img, .essentia  img, .energy  img, .happiness  img, .waste  img {
 	float:left;
 }
 .menuItem  span {
@@ -98,11 +158,89 @@ menu
 	margin-left:5px;
 	margin-top:8px;
 }
-.inbox {
+
+/*
+SHINEY
+*/
+
+#headerShine,#footerShine {
+	height:55px;
+	left:0;
+	position:absolute;
+	width:100%;
+	z-index:1001;
+}
+#headerShine {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/bar_top_shine.png");
+	top:0;
+}
+#footerShine {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/bar_bottom_shine.png");
+	bottom:0;
+}
+
+#planetsCenter, #usersCenter, #userCenterShine, #planetsCenterShine, #userClick, #planetsClick {
+	height:74px;
+	left:50%;
+	margin-left:-167px;
+	position:absolute;
+	text-align:center;
+	width:334px;
+}
+#usersCenter {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_top.png");
+	top:0;
+	z-index:1003;
+}
+#planetsCenter {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_bottom.png");
+	bottom:0;
+	z-index:1003;
+}
+#userCenterShine {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_top_shine.png");
+	top:0;
+	z-index:1004;
+}
+#planetsCenterShine {
+	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_bottom_shine.png");
+	bottom:0;
+	z-index:1004;
+}
+#userClick {
+	top:0;
+	z-index:1005;
 	cursor:pointer;
 }
-.bookmark {
+#planetsClick {
+	bottom:0;
+	z-index:1005;
 	cursor:pointer;
+}
+
+
+.back, .food { left:10px; }
+.inbox, .ore { left:130px; }
+.bookmark, .water { left:250px; }
+.essentia, .energy { right:250px; }
+#header .happiness, .waste { right:130px; }
+.forward, #footer .happiness { right:10px; }
+#header .click, #footer .click { z-index:1003; cursor:pointer; }
+
+/*
+about
+*/
+#aboutCredits {
+	padding-left:20px
+}
+#aboutCredits ul {
+	padding-left:20px
+}
+#aboutCredits li {
+	list-style: none inside;
+}
+#aboutCredits ul li {
+	list-style: disc inside;
 }
 
 /*
@@ -197,7 +335,7 @@ menu
 .speciesSlider_bg {
 	display:inline-block;
 	position: relative;
-	background: url(http://localhost/lacuna/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
+	background: url(http://webclient.lacunaexpanse.com/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
 	height: 28px;
 	width: 210px;
 }
@@ -250,7 +388,7 @@ menu
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
 #planetMap {
-	background: black url('http://localhost/lacuna/assets/tile/ground.png');
+	background: black url('http://webclient.lacunaexpanse.com/assets/tile/ground.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 
@@ -261,11 +399,11 @@ menu
 	cursor:pointer;
 }
 #mapiator_zoom_in {
-	background: url(http://localhost/lacuna/assets/ui/mapiator/zoomIn_blur.png);
+	background: url(http://webclient.lacunaexpanse.com/assets/ui/mapiator/zoomIn_blur.png);
 	top:15px;
 }
 #mapiator_zoom_out {
-	background: url(http://localhost/lacuna/assets/ui/mapiator/zoomOut_blur.png);
+	background: url(http://webclient.lacunaexpanse.com/assets/ui/mapiator/zoomOut_blur.png);
 	top:55px;
 }
 .tileContainer div {
@@ -330,8 +468,6 @@ menu
 #planet6 { width: 150px; }
 #orbit7{ width: 1200px; top: 660px; }
 #planet7 { width: 165px; }
-#orbit8{ width: 1400px; top: 780px; }
-#planet8 { width: 180px; }
 
 #planetDetailsName {
 	font-weight:bold;

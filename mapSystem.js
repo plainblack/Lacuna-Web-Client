@@ -46,6 +46,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				draggable:true,
 				fixedcenter:false,
 				close:true,
+				underlay:false,
 				width:"500px",
 				zIndex:9995,
 				context:["content","tr","tr", ["beforeShow", "windowResize"]]
@@ -79,7 +80,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				
 				Event.delegate(this._el, "click", function(e, matchedEl, container) {
 					var body = matchedEl.Body;
-					this.planetDetails.img.src = [Game.AssetUrl, "body/", body.image, ".png"].join('');
+					this.planetDetails.img.src = [Game.AssetUrl, "star_system/", body.image, ".png"].join('');
 					this.planetDetails.img.alt = body.name;
 					this.planetDetails.name.innerHTML = body.name;
 					this.planetDetails.empire.innerHTML = body.empire && body.empire.name ? body.empire.name : "Unknown";
@@ -103,7 +104,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
 				
 			var starImg = systemMap.appendChild(img.cloneNode(false));
-			starImg.src = [Game.AssetUrl, "star/", star.color, ".png"].join('');
+			starImg.src = [Game.AssetUrl, "star_system/", star.color, ".png"].join('');
 				
 			for(var bKey in bodies) {
 				if(bodies.hasOwnProperty(bKey)) {
@@ -121,7 +122,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						
 						elName.innerHTML = body.name;
 						
-						elImg.src = [Game.AssetUrl, "body/", body.image, ".png"].join('');
+						elImg.src = [Game.AssetUrl, "star_system/", body.image, ".png"].join('');
 						elImg.id = "planet" + body.orbit;
 						elImg.alt = body.name;
 						elImg.Body = body;

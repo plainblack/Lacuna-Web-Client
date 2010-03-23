@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'	<div class="bd">',
 		'		<form name="loginForm">',
 		'			<ul>',
-		'				<li><label for="loginName">Name</label><input type="text" id="loginName" /></li>',
+		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
 		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass" /></li>',
 		'			</ul>',
 		'			<a id="loginCreate" href="#">Create an Empire</a>',

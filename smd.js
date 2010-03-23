@@ -31,7 +31,28 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				"rename_body" : {
+				"get_build_queue" : {
+					"description": "Returns a list of the buildings being constructed or upgraded",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+						 {
+							"build_queue" : {
+								"building-id-goes-here" : {
+									"seconds_remaining" : 60,
+									"start" : "01 31 2010 11:08:03 +0600",
+									"end" : "01 31 2010 13:09:05 +0600",
+								},
+								...
+							},
+							"status" : "get_status",
+						 }
+					*/
+				},
+				"rename" : {
 					"description": "Renames a body, provided the empire attached to the session owns the body. Returns a 1 on success.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},

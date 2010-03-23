@@ -27,6 +27,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			postmethod:"none",
 			visible:false,
 			draggable:true,
+			underlay:false,
 			close:true,
 			width:"450px",
 			zIndex:9999
@@ -57,7 +58,6 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 				Game.Services.Stats.credits({},{
 					success : function(o){
 						YAHOO.log(o, "info", "Stats");
-						this.hasCredits = true;
 						this.populateCredits(o.result);
 					},
 					failure : function(o){
@@ -75,7 +75,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		
 		populateCredits : function(results) {
 			if(!this.hasCredits) {
-				var list = this.Dialog.elCreditsList,
+				var list = this.elCreditsList,
 					li = document.createElement("li");
 				for(var i=0; i<results.length; i++) {
 					var obj = results[i];
@@ -94,6 +94,8 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 						list.appendChild(nLi);
 					}
 				}
+				this.hasCredits = true;
+				this.Dialog.center();
 			}
 		}
 		

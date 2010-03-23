@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'	<div class="bd">',
 		'		<form name="empireForm">',
 		'			<ul>',
-		'				<li><label for="empireName">User</label><input type="text" id="empireName" /></li>',
+		'				<li><label for="empireName">Empire Name</label><input type="text" id="empireName" /></li>',
 		'				<li><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
 		'				<li><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
 		'			</ul>',

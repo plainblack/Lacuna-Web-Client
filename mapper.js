@@ -82,18 +82,45 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Mapper.VisibleArea.prototype = {
 		move : function(mx,my) {
+			var mb = this._map.maxBounds; // = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
+			if(mb) {
+				var cb = this.calcCoordBounds(this.left + mx, this.top + my, this.left + mx + this._map.width, this.top + my + this._map.height),
+					tileSize = this._map.tileSizeInPx,
+					error = false, tx, ty;
+				//if out of bounds, only move to max
+				//x axis
+				if(mx < 0 && cb.x1 < mb.x1Left) { //if moving left
+					mx = (mb.x1Left * tileSize) - this.left;
+				}
+				else if(mx > 0 && cb.x2 > (mb.x2Right+1)) { //if moving right
+					mx = ((mb.x2Right+1) * tileSize) - (this.left + this._map.width);
+				}
+				//y axis
+				if(my < 0 && cb.y1 > mb.y1Top){ //if moving up 
+					my = (mb.y1Top * tileSize) + this.top;
+				}
+				else if(my > 0 && cb.y2 < (mb.y2Bottom-1)) { //if moving down
+					my = ((mb.y2Bottom-1) * tileSize) + (this.top + this._map.height);
+				}
+			}
+			//modify with new values now
 			this.left += mx;
 			this.top += my;
 			this.right = this.left + this._map.width;
 			this.bottom = this.top + this._map.height;
+			
+			return {x:mx,y:my};
 		},
 		coordBounds : function() {
+			return this.calcCoordBounds(this.left, this.top, this.right, this.bottom);
+		},
+		calcCoordBounds : function(x1, y1, x2, y2) {
 			var tileSize = this._map.tileSizeInPx;
 			return {
-				x1 : Math.floor(this.left / tileSize),
-				y1 : Math.ceil((this.top * -1) / tileSize),
-				x2 : Math.ceil(this.right / tileSize),
-				y2 : Math.floor((this.bottom * -1) / tileSize)
+				x1 : Math.floor(x1 / tileSize),
+				y1 : Math.ceil((y1 * -1) / tileSize),
+				x2 : Math.ceil(x2 / tileSize),
+				y2 : Math.floor((y2 * -1) / tileSize)
 			};
 		},
 		topLeftLoc : function() {
@@ -178,16 +205,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ",", this.z, ")"].join('') : "Uncharted Space";
 			
 			if(this.data && this.data.alignments) {
+				this.domElement.innerHTML = "";
 				var alignment = this.domElement.appendChild(document.createElement('div'));
 				Dom.setStyle(alignment, "width", this.map.tileSizeInPx + 'px');
 				Dom.setStyle(alignment, "height", this.map.tileSizeInPx + 'px');
 				Dom.setStyle(alignment, "z-index", '2');
-				Dom.setStyle(alignment, "background", ['transparent url(',Game.AssetUrl,'map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
+				Dom.setStyle(alignment, "background", ['transparent url(',Game.AssetUrl,'star_map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
 			}
 		},
 		refresh : function() {
 			Mapper.StarTile.superclass.refresh.call(this);
-			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ",", this.z, ")"].join('') : "Uncharted Space";
+			this.init();
 		}
 	});
 	
@@ -510,9 +538,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			delete this._pathsAndPolygons[p.id];
 		},
 		moveByPx : function( x,y ) {
-			this.visibleArea.move( -x,-y );
+			var n = this.visibleArea.move( x*-1,y*-1 );
+			//move values back to positive for us to user
+			x = n.x*-1;
+			y = n.y*-1;
+
 			this.movableContainer.move( x,y );
-			this.coordLayer.move( -x,-y );
+			this.coordLayer.move( x*-1,y*-1 );
 			
 			this.diffX += x;
 			this.diffY += y;
@@ -593,14 +625,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
 			this.setTileSizeInPx(100);
 		},
-		setCenterToCurrentPlanet : function() {
-			if(this.currentSystem && this.tileLayer) {
+		setCenterTo : function(locX, locY) {
+			if(locX && locY && this.tileLayer) {
 				//this.setCenter(this.currentSystem.x,this.currentSystem.y);
 				//these are the offsets for the star
 				var otherWidth = this.centerX,
 					otherHeight = this.centerY;
-				var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
-					oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx - otherHeight;
+				var ox = (locX - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
+					oy = ((locY * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx - otherHeight;
+				//var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
+				//	oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx - otherHeight;
 				//now we change them slightly to get where we're going
 				/*ox = Math.floor(ox*-1);
 				oy = Math.floor(oy/2) * -1;
@@ -619,7 +653,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				star = xSet ? xSet[y] : null;
 			
 			if(star) {
-				return {data:star, url:[Game.AssetUrl,'map/',star.color,'.png'].join('')};
+				return {data:star, url:[Game.AssetUrl,'star_map/',star.color,'.png'].join('')};
 			}
 			else {
 				return {blank:true, url:Game.AssetUrl + 'ui/blankstar.png'};
@@ -711,7 +745,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		addTileData : function(aStars) {
-			var startZoomLevel = 0;
+			//var startZoomLevel = 0;
 			for(var i=0; i<aStars.length; i++) {
 				var star = aStars[i];
 				if(!this.tileCache[star.z]) {
@@ -721,15 +755,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.tileCache[star.z][star.x] = {};
 				}
 				this.tileCache[star.z][star.x][star.y] = star;
-				startZoomLevel = star.z;
+				/*startZoomLevel = star.z;
 				if(star.alignments == "self") {
 					this.currentSystem = star;
 					this.currentSystem.x *= 1;
 					this.currentSystem.y *= 1;
-				}
+				}*/
 				this.updateBounds(star);
 			}
-			return startZoomLevel;
+			//return startZoomLevel;
 		},
 		reset : function() {
 			this.tileCache = {};
@@ -768,10 +802,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				return {blank:building.level == 0, data:building, url:[Game.AssetUrl,'tile/',building.image,'.png'].join('')};
+				return {blank:building.level == 0, data:building, url:[Game.AssetUrl,'planet_side/',building.image,'.png'].join('')};
 			}
 			else {
-				return {blank:true, url:Game.AssetUrl + 'tile/ground.png'};
+				return {blank:true, url:Game.AssetUrl + 'planet_side/ground.png'};
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {

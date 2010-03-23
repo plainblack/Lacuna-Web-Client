@@ -31,7 +31,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingSent" class="tab">Sent</li>',
 				'		<li id="messagingArchive" class="tab">Archive</li>',
 				'	</ul></div>',
-				'	<div id="messagingCreator">',
+				'	<div id="messagingCreator" style="display:none">',
 				'		<div><button id="messagingCreateSend" type="button">Send</button></div>',
 				'		<div><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
 				'		<div><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
@@ -47,7 +47,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<ul id="messagingList"></ul>',
 				'		</div>',
 				'		<div id="messagingDisplay" class="yui-u">',
-				'			<div id="messagingReplyC"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></div>',
+				'			<div id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></div>',
 				'			<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
 				'			<div><label>From:</label><span id="messagingFrom"></span></div>',
 				'			<div><label>To:</label><span id="messagingTo"></span></div>',
@@ -57,6 +57,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
 			
 			this.messagingPanel = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
@@ -64,6 +65,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				draggable:true,
 				fixedcenter:true,
 				close:true,
+				underlay:false,
 				width:"700px",
 				zIndex:9999
 			});
@@ -94,9 +96,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.createText = Dom.get("messagingCreateText");
 				Event.on("messagingCreateSend", "click", this.sendMessage, this, true);
 				//set start display
-				Dom.setStyle(this.archiver, "display", "none");
 				Dom.setStyle(this.display, "visibility", "hidden");
-				Dom.setStyle("messagingReplyC", "display", "none");
 				Event.delegate("messagingTabs", "click", this.tabClick, "li.tab", this, true);
 			}, this, true);
 			
@@ -130,8 +130,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			
 			this.createTo = oTextboxList;*/
 		},
-		_formatMessageDate : function(strDate) {	
-			var dt = new Date(strDate);
+		_formatMessageDate : function(strDate) {
+			var pieces = strDate.split(' '),
+				time = pieces[3].split(':');
+			var dt = new Date(pieces[2],pieces[1],pieces[0],time[0],time[1],time[2],0);
+			//year, month, day, hours, minutes, seconds
+			//"23 03 2010 01:20:11 +0000"
 			return Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en");
 		},
 		_setTab : function(el) {
@@ -215,7 +219,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.processMessages(o.result);
+					this.processMessages(o.result,{inbox:1});
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadInboxMessages");
@@ -257,7 +261,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_archived(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.processMessages(o.result, {archive:1});
+					this.processMessages(o.result,{archive:1});
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadArchiveMessages");
@@ -283,13 +287,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					Dom.addClass(nLi, "unread");
 				}
 				nLi.innerHTML = [
-					!is.archive ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
+					is.inbox ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
 					'	<div class="messageContainer">',
 					'		<div class="messageDate">',this._formatMessageDate(msg.date),'</div>',
-					'		<div class="messageFrom">',msg.from,'</div>',
-					//is.sent ? msg.to : msg.from,
+					'		<div class="messageFrom">',
+					is.sent ? msg.to : msg.from,
+					'		</div>',
 					'		<div class="messageSubject">',msg.subject,'</div>',
-					'		<div class="messageExcerpt">',msg.subject,'</div>',
+					'		<div class="messageExcerpt">',msg.body_preview,'</div>',
 					'	</div>'
 					].join('');
 				list.appendChild(nLi);
@@ -325,7 +330,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
-						Dom.removeClass(matchedEl, "unread");
+						Dom.removeClass(matchedEl.parentNode, "unread");
 						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
 					},
@@ -432,7 +437,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
 						this.fireEvent("onRpc", o.result);
-						this.loadTab();
+						this.archiveProcess(o.result);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
@@ -442,6 +447,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					scope:this
 				});
 			}
+		},
+		archiveProcess : function(results) {
+			Dom.batch(Sel.query("li.message", this.list), function(el){
+				if(results.success.indexOf(el.Message.id) >= 0) {
+					delete this.toArchive[el.Message.id];
+					this.toArchiveCount--;
+					Event.purgeElement(el);
+					el.parentNode.removeChild(el);
+				}
+			}, this, true);
+			
 		},
 		
 		isVisible : function() {

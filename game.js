@@ -1,4 +1,25 @@
 YAHOO.namespace("lacuna");
+/*
+indexOf is a recent addition to the ECMA-262 standard; as such it may not be present in all browsers. You can work around this by inserting the 
+following code at the beginning of your scripts, allowing use of indexOf in implementations which do not natively support it. This algorithm is 
+exactly the one used in Firefox and SpiderMonkey.
+*/
+if (!Array.prototype.indexOf) {  
+	Array.prototype.indexOf = function(elt /*, from*/) {  
+		var len = this.length >>> 0;  
+
+		var from = Number(arguments[1]) || 0;  
+		from = (from < 0) ? Math.ceil(from) : Math.floor(from);  
+		if (from < 0)  
+			from += len;  
+
+		for (; from < len; from++) {  
+			if (from in this && this[from] === elt)  
+				return from;  
+		}  
+		return -1;  
+	};  
+} 
 
 if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 	
@@ -11,7 +32,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Lacuna = YAHOO.lacuna;
 		
 	var Game = {
-		AssetUrl : "http://localhost/lacuna/assets/",
+		AssetUrl : "http://webclient.lacunaexpanse.com/assets/",
 		EmpireData : {},
 		Styles : {
 			HIDDEN : "hidden",
@@ -103,16 +124,20 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Game.recInt = setInterval(Lacuna.Game.Tick, 1000);
 			//init event subscribtions if we need to
 			Lacuna.Game.InitEvents();
+			//init queue for refreshing data
+			Lacuna.Game.InitQueue();
 			//load the correct screen
 			var locationId = Cookie.getSub("lacuna","locationId"),
 				locationView = Cookie.getSub("lacuna","locationView");
 			if(!locationId) {
+				Lacuna.Menu.PlanetVisible();
 				Lacuna.MapPlanet.Load(Game.EmpireData.home_planet_id);
 			}
 			else {
 				switch(locationView) {
 					case "system":
 						Lacuna.MapStar.MapVisible(false);
+						Lacuna.MapSystem.MapVisible(true);
 						Lacuna.MapPlanet.MapVisible(false);
 						Lacuna.Menu.SystemVisible();
 						Lacuna.MapSystem.Load(locationId);
@@ -120,14 +145,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					case "planet":
 						Lacuna.MapStar.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(false);
+						Lacuna.MapPlanet.MapVisible(true);
 						Lacuna.Menu.PlanetVisible();
 						Lacuna.MapPlanet.Load(locationId);
 						break;
 					default:
-						Lacuna.MapPlanet.MapVisible(false);
-						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
-						Lacuna.Menu.StarVisible(true);
+						Lacuna.MapSystem.MapVisible(false);
+						Lacuna.MapPlanet.MapVisible(false);
+						Lacuna.Menu.StarVisible();
 						Lacuna.MapStar.Load();
 						break;
 				}
@@ -146,17 +172,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Menu.SystemVisible();
 					Lacuna.MapSystem.Load(starData.id);
 					YAHOO.log(starData, "info", "onChangeToSystemView");
-					Cookie.setSub("lacuna","locationId", starData.id,{
-						domain: "lacunaexpanse.com"
-					});
-					Cookie.setSub("lacuna","locationView", Game.View.SYSTEM,{
-						domain: "lacunaexpanse.com"
-					});
+					Game.SetLocation(starData.id, Game.View.SYSTEM);
 				});
 				
 				Lacuna.MapSystem.subscribe("onStatusUpdate", function(oStatus){
 					Lacuna.Game.ProcessStatus(oStatus);
-					Lacuna.Menu.update();
+					Lacuna.Menu.updateTick();
 				});
 				Lacuna.MapSystem.subscribe("onChangeToPlanetView", function(planetId) {
 					Lacuna.MapSystem.MapVisible(false);
@@ -173,15 +194,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Menu.subscribe("onBackClick", function() {
-					if(Lacuna.MapSystem.IsVisible()) {
+					if(Lacuna.MapStar.IsVisible()) {
+						Lacuna.MapStar.MapVisible(false);
+						Lacuna.MapPlanet.MapVisible(true);
+						Lacuna.Menu.PlanetVisible(true);
+						//load planet with currently selected or home
+						var ED = Lacuna.Game.EmpireData,
+							planetId = ED.current_planet_id || ED.home_planet_id;
+						Game.SetLocation(planetId, Game.View.PLANET);
+						Lacuna.MapPlanet.Load(planetId);
+					}
+					else if(Lacuna.MapSystem.IsVisible()) {
 						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
 						Lacuna.Menu.StarVisible(true);
 						//if map was already loaded locationId should exist so don't call load again
-						if(Lacuna.MapStar.locationId) {
-							Game.SetLocation("home", Game.View.STAR);
-						}
-						else {
+						Game.SetLocation("home", Game.View.STAR);
+						if(!Lacuna.MapStar.locationId) {
 							Lacuna.MapStar.Load();
 						}
 					}
@@ -196,6 +225,41 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						else {
 							//load system with planet body id if system hasn't been init'd yet
 							Lacuna.MapSystem.Load(Lacuna.MapPlanet.locationId, true);
+						}
+					}
+				});
+				Lacuna.Menu.subscribe("onForwardClick", function() {
+					if(Lacuna.MapStar.IsVisible()) {
+						Lacuna.MapStar.MapVisible(false);
+						Lacuna.MapSystem.MapVisible(true);
+						Lacuna.Menu.SystemVisible(true);
+						//if map was already loaded locationId should exist so don't call load again
+						if(Lacuna.MapSystem.locationId) {
+							Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
+						}
+						else {
+							//load system with planet body id if system hasn't been init'd yet
+							Lacuna.MapSystem.Load(Lacuna.MapStar.locationId, true);
+						}
+					}
+					else if(Lacuna.MapSystem.IsVisible()) {
+						Lacuna.MapSystem.MapVisible(false);
+						Lacuna.MapPlanet.MapVisible(true);
+						Lacuna.Menu.PlanetVisible(true);
+						//load planet with currently selected or home
+						var ED = Lacuna.Game.EmpireData,
+							planetId = ED.current_planet_id || ED.home_planet_id;
+						Game.SetLocation(planetId, Game.View.PLANET);
+						Lacuna.MapPlanet.Load(planetId);
+					}
+					else if(Lacuna.MapPlanet.IsVisible()) {
+						Lacuna.MapPlanet.MapVisible(false);
+						Lacuna.MapStar.MapVisible(true);
+						Lacuna.Menu.StarVisible(true);
+						//if map was already loaded locationId should exist so don't call load again
+						Game.SetLocation("home", Game.View.STAR);
+						if(!Lacuna.MapStar.locationId) {
+							Lacuna.MapStar.Load();
 						}
 					}
 				});
@@ -228,18 +292,35 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 			}
 		},
+		InitQueue : function() {
+			var BodyServ = Game.Services.Body,
+				data = {
+					session_id: Cookie.getSub("lacuna","session") || "",
+					body_id: Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id
+				};
+			
+			BodyServ.get_build_queue(data,{
+				success : function(o){
+					YAHOO.log(o, "info", "Game.InitQueue.success");
+					Game.ProcessStatus(o.result);
+					var q = o.result.build_queue;
+					for(var bId in q) {
+						if(q.hasOwnProperty(bId)) {
+							Game.QueueAdd(bId, Game.QueueTypes.PLANET, (q[bId].seconds_remaining * 1000));
+						}
+					}
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Game.InitQueue.failure");
+					Game.Failure(o);
+				},
+				timeout:Game.Timeout
+			});
+		},
 		
 		ProcessStatus : function(status) {
 			if(status && status.empire) {
 				var now = new Date();
-				//full status
-				if(status.empire.home_planet_id) {
-					//remember home planet
-					Cookie.setSub("lacuna", "homePlanetId", status.empire.home_planet_id, {
-						domain: "lacunaexpanse.com",
-						expires: now.setHours(now.getHours() + 1)
-					});
-				}
 				//convert to numbers
 				status.empire.happiness *= 1;
 				status.empire.happiness_hour *= 1;
@@ -269,7 +350,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				//add everything from status empire to game empire
 				Lang.augmentObject(Lacuna.Game.EmpireData, status.empire, true);
 
-				Lacuna.Menu.update();
+				if(status.empire.planets) {
+					Lacuna.Menu.update();
+				}
+				else {
+					Lacuna.Menu.updateTick();
+				}
 				
 				if(status.empire.full_status_update_required == 1) {
 					Lacuna.Game.GetFullStatus();
@@ -418,7 +504,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			//YAHOO.log([diff, ratio]);
 			if(updateMenu) {
-				Lacuna.Menu.update();
+				Lacuna.Menu.updateTick();
 			}
 			
 			Lacuna.Game.QueueProcess(diff);
@@ -428,35 +514,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				return;
 			}
 			
-			var t = Cookie.getSub("lacuna","queue"),
-				queue = {};
-			if(t) {
-				queue = Lang.JSON.parse(t);
+			if(!Game.queue) {
+				Game.queue = {};
 			}
-			if(!queue[type]) {
-				queue[type] = {};
+			if(!Game.queue[type]) {
+				Game.queue[type] = {};
 			}
-			queue[type][id] = ms;
-			
-			var now = new Date();
-			Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
-				domain: "lacunaexpanse.com",
-				expires: now.setHours(now.getHours() + 3)
-			});
-			
+			Game.queue[type][id] = ms;
 		},
 		QueueProcess : function(tickMS) {
-			var t = Cookie.getSub("lacuna","queue"),
-				queue;
 			//only do anything if the queue actually has data
-			if(t && t.length > 2) {
-				queue = Lang.JSON.parse(t);
-				
+			if(Game.queue) {
 				var toFire = {},
 					queueCount = 0;
-				for(var type in queue) {
-					if(queue.hasOwnProperty(type)) {
-						var qt = queue[type];
+				for(var type in Game.queue) {
+					if(Game.queue.hasOwnProperty(type)) {
+						var qt = Game.queue[type];
 						for(var id in qt) {
 							if(qt.hasOwnProperty(id)) {
 								queueCount++;
@@ -475,19 +548,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				var fId;
 				for(fId in toFire) {
 					if(toFire.hasOwnProperty(fId)) {
-						delete queue[toFire[fId]][fId];
-					}
-				}
-				
-				var now = new Date();
-				Cookie.setSub("lacuna","queue",Lang.JSON.stringify(queue), {
-					domain: "lacunaexpanse.com",
-					expires: now.setHours(now.getHours() + 3)
-				});
-				//seems silly to go through twice, but we need to make sure the cookie is updated with the latest queue so we don't process multiple times
-				for(fId in toFire) {
-					if(toFire.hasOwnProperty(fId)) {
-						Lacuna.Game.QueueFire(toFire[fId], fId);
+						delete Game.queue[toFire[fId]][fId];
+						Game.QueueFire(toFire[fId], fId);
 					}
 				}
 			

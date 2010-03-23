@@ -1,6 +1,6 @@
 (function(){
 	var t = "1",
-		host = "http://localhost/lacuna/";
+		host = "http://webclient.lacunaexpanse.com/";
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
 		combine: false,
