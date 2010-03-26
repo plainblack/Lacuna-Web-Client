@@ -53,6 +53,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
+		
+		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("loginPass", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } )); 
 		this.Dialog.render();
 		
 	};

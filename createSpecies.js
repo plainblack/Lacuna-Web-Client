@@ -30,6 +30,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			buttons:[ { text:"Found Empire", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this} } ],
 			draggable:true,
+			modal:true,
 			close:false,
 			width:"450px",
 			zIndex:9999
@@ -59,6 +60,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			Dom.setStyle(this.elCreate, "display", "none");
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
+		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("speciesSelect", { keys:13 }, { fn:this.handleCreate, scope:this, correctScope:true } )); 
 		this.Dialog.render();
 	};
 	CreateSpecies.prototype = {

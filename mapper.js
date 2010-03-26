@@ -224,7 +224,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
-			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ")"].join('') : "Ground";
+			this.domElement.title = this.data ? [this.data.name, " ", this.data.level, " (", this.x, ",", this.y, ")"].join('') : "Ground";
 		},
 		refresh : function() {
 			Mapper.PlanetTile.superclass.refresh.call(this);
@@ -427,7 +427,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					tiles[tile.id] = tile;
 				}
 			}
-			this.removeAllTilesNotContainedIn( tiles );
+			if(!this.map.keepTilesOutOfBounds) {
+				this.removeAllTilesNotContainedIn( tiles );
+			}
 		},
 		render : function() {
 			var bounds = this.visibleArea.coordBounds(),
@@ -552,7 +554,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.centerY += y;
 			var checkTileSize = this.tileSizeInPx; //Math.floor(this.tileSizeInPx * .75); //load the tiles a bit early
 			if( Math.abs(this.diffX) > checkTileSize || Math.abs(this.diffY) > checkTileSize) {
-				YAHOO.log([checkTileSize, this.diffX, this.diffY]);
+				YAHOO.log([checkTileSize, this.diffX, this.diffY], "info", "Map.moveByPx");
 				//reset diff's
 				this.diffX = this.diffY = 0;
 				this.tileLayer.render();
@@ -784,6 +786,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
 		
 			this.Tile = Mapper.PlanetTile;
+			this.keepTilesOutOfBounds = true;
 			
 			this.setTileSizeInPx(200);
 		},

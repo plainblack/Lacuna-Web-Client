@@ -71,6 +71,9 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				this._isVisible = visible; 
 				Dom.setStyle(this._el, "display", visible ? "" : "none");
 			}
+			if(!visible) {
+				this.planetDetails.hide();
+			}
 		},
 		Display : function(oResult) {
 			if(!this._gridCreated) {

@@ -32,7 +32,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingArchive" class="tab">Archive</li>',
 				'	</ul></div>',
 				'	<div id="messagingCreator" style="display:none">',
-				'		<div><button id="messagingCreateSend" type="button">Send</button></div>',
+				'		<div><button id="messagingCreateSend" type="button">Send</button><span id="messagingCreateResponse"></span></div>',
 				'		<div><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
 				'		<div><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
 				'		<div id="messagingCreateBody">',
@@ -64,6 +64,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				visible:false,
 				draggable:true,
 				fixedcenter:true,
+				modal:true,
 				close:true,
 				underlay:false,
 				width:"700px",
@@ -94,6 +95,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.createTo = Dom.get("messagingCreateTo");
 				this.createSubject = Dom.get("messagingCreateSubject");
 				this.createText = Dom.get("messagingCreateText");
+				this.createResponse = Dom.get("messagingCreateResponse");
 				Event.on("messagingCreateSend", "click", this.sendMessage, this, true);
 				//set start display
 				Dom.setStyle(this.display, "visibility", "hidden");
@@ -214,7 +216,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Cookie.getSub("lacuna","session") || "",
-					page_number: 1
+					options:{page_number: 1}
 				};
 			InboxServ.view_inbox(data, {
 				success : function(o){
@@ -235,7 +237,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Cookie.getSub("lacuna","session") || "",
-					page_number: 1
+					options:{page_number: 1}
 				};
 			InboxServ.view_sent(data, {
 				success : function(o){
@@ -256,7 +258,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Cookie.getSub("lacuna","session") || "",
-					page_number: 1
+					options:{page_number: 1}
 				};
 			InboxServ.view_archived(data, {
 				success : function(o){
@@ -281,6 +283,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			for(var i=0; i<messages.length; i++) {
 				var msg = messages[i],
 					nLi = li.cloneNode(false);
+				msg.is = is;
 				nLi.Message = msg;
 				Dom.addClass(nLi, "message");
 				if(msg.has_read == "") {
@@ -330,8 +333,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
-						Dom.removeClass(matchedEl.parentNode, "unread");
-						this.fireEvent("onRpc", o.result);
+						if(msg.is.inbox && msg.has_read == "") {
+							Game.EmpireData.has_new_messages--;
+							Dom.removeClass(matchedEl.parentNode, "unread");
+						}
+						else {
+							//only allow status update if it wasn't a new message.  this makes sure we don't screw up the message count
+							this.fireEvent("onRpc", o.result);
+						}
 						this.displayMessage(o.result.message);
 					},
 					failure : function(o){
@@ -399,10 +408,16 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				success : function(o){
 					YAHOO.log(o, "info", "Messaging.sendMessage.success");
 					this.fireEvent("onRpc", o.result);
-					this.createTo.value = "";
-					this.createSubject.value = "";
-					this.createText.value = "";
-					this.loadInboxMessages();
+					var u = o.result.message.unknown;
+					if(u && u.length > 0) {
+						this.createResponse.innerHTML = "Unable to send to: " + u.join(', ');						
+					}
+					else {
+						this.createTo.value = "";
+						this.createSubject.value = "";
+						this.createText.value = "";
+						this.loadInboxMessages();
+					}
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.sendMessage.failure");

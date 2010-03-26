@@ -1,5 +1,5 @@
 html {
-	background: black url('http://webclient.lacunaexpanse.com/assets/star_system/field.png');
+	background: black url('http://localhost/lacuna/assets/star_system/field.png');
 }
 body {
 	margin:40px 0;
@@ -21,7 +21,6 @@ body {
 	color:white;
 }
 #header, #footer  {
-	color: red;
 	text-align:center;
 	height:55px;
 	position:fixed;
@@ -53,13 +52,13 @@ body.yui-skin-sam .yui-panel {
 }
 body.yui-skin-sam .yui-panel .hd {
 	width:250px;
-	background:url("http://webclient.lacunaexpanse.com/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
+	background:url("http://localhost/lacuna/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
 	border-width:0;
 	margin-left:10px;
 }
 
 .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/bkg.png");
+	background-image:url("http://localhost/lacuna/assets/ui/bkg.png");
 }
 body.yui-skin-sam .yui-panel .bd {
 	-moz-border-radius:10px 10px 0 0;
@@ -83,7 +82,7 @@ body.yui-skin-sam .nofooter .bd {
 	border-color:#52ACFF;
 } 
 body.yui-skin-sam .container-close {
-	background:url("http://webclient.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll 0 0 transparent;
+	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll 0 0 transparent;
 	cursor:pointer;
 	height:23px;
 	position:absolute;
@@ -117,7 +116,6 @@ menu
 }
 #users, #planets {
 	font-size:25px;
-	color:white;
 	text-decoration:none;
 }
 #users {
@@ -148,6 +146,7 @@ menu
 	min-width:100px;
 	position:absolute;
 	width:120px;
+	padding-top:5px;
 }
 .food  img, .ore  img, .water  img, .essentia  img, .energy  img, .happiness  img, .waste  img {
 	float:left;
@@ -171,11 +170,11 @@ SHINEY
 	z-index:1001;
 }
 #headerShine {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/bar_top_shine.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_shine.png");
 	top:0;
 }
 #footerShine {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/bar_bottom_shine.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_shine.png");
 	bottom:0;
 }
 
@@ -188,22 +187,22 @@ SHINEY
 	width:334px;
 }
 #usersCenter {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_top.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/selector_top.png");
 	top:0;
 	z-index:1003;
 }
 #planetsCenter {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_bottom.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom.png");
 	bottom:0;
 	z-index:1003;
 }
 #userCenterShine {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_top_shine.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/selector_top_shine.png");
 	top:0;
 	z-index:1004;
 }
 #planetsCenterShine {
-	background-image:url("http://webclient.lacunaexpanse.com/assets/ui/web/selector_bottom_shine.png");
+	background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom_shine.png");
 	bottom:0;
 	z-index:1004;
 }
@@ -335,7 +334,7 @@ about
 .speciesSlider_bg {
 	display:inline-block;
 	position: relative;
-	background: url(http://webclient.lacunaexpanse.com/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
+	background: url(http://localhost/lacuna/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
 	height: 28px;
 	width: 210px;
 }
@@ -388,23 +387,23 @@ about
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
 #planetMap {
-	background: black url('http://webclient.lacunaexpanse.com/assets/tile/ground.png');
+	background: black url('http://localhost/lacuna/assets/tile/ground.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 
 	z-index:30; 
-	width:48px; 
-	height:37px; 
-	left:0;
+	width:39px; 
+	height:20px; 
+	left:40px;
 	cursor:pointer;
 }
 #mapiator_zoom_in {
-	background: url(http://webclient.lacunaexpanse.com/assets/ui/mapiator/zoomIn_blur.png);
-	top:15px;
+	background: url(http://localhost/lacuna/assets/ui/in.png);
+	top:35px;
 }
 #mapiator_zoom_out {
-	background: url(http://webclient.lacunaexpanse.com/assets/ui/mapiator/zoomOut_blur.png);
-	top:55px;
+	background: url(http://localhost/lacuna/assets/ui/out.png);
+	top:65px;
 }
 .tileContainer div {
 	color:white;

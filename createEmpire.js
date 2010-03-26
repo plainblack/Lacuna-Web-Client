@@ -41,6 +41,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			buttons:[ { text:"Create", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this}}],
 			draggable:false,
+			modal:true,
 			close:false,
 			width:"300px",
 			zIndex:9999
@@ -54,6 +55,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			
 			Dom.removeClass(this.id, Game.Styles.HIDDEN);
 		}, this, true);
+		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("empirePassConfirm", { keys:13 }, { fn:this.handleCreate, scope:this, correctScope:true } )); 
 		this.Dialog.render();
 		
 		this.initSpecies();

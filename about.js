@@ -28,6 +28,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			visible:false,
 			draggable:true,
 			underlay:false,
+			modal:true,
 			close:true,
 			width:"450px",
 			zIndex:9999
@@ -45,7 +46,9 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			'	<div class="hd">About</div>',
 			'	<div class="bd">',
 			'		<form name="aboutForm">',
-			'			<label>Credits:</label>',
+			'			<label>The Lacuna Expanse</label>',
+			'			<ul><li>Colonized 2010 by Lacuna Expanse Corp</li></ul><br/>',
+			'			<label>Credits</label>',
 			'			<ul id="aboutCredits">',
 			'			</ul>',
 			'		</form>',

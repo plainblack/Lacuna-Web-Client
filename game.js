@@ -32,7 +32,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Lacuna = YAHOO.lacuna;
 		
 	var Game = {
-		AssetUrl : "http://webclient.lacunaexpanse.com/assets/",
+		AssetUrl : "http://localhost/lacuna/assets/",
 		EmpireData : {},
 		Styles : {
 			HIDDEN : "hidden",
@@ -509,8 +509,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			Lacuna.Game.QueueProcess(diff);
 		},
-		QueueAdd : function(id, type, ms) {
-			if(!id || !type || !ms) {
+		QueueAdd : function(id, type, callback) {
+			if(!id || !type || !callback) {
 				return;
 			}
 			
@@ -525,20 +525,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		QueueProcess : function(tickMS) {
 			//only do anything if the queue actually has data
 			if(Game.queue) {
-				var toFire = {},
-					queueCount = 0;
+				var toFire = {};
 				for(var type in Game.queue) {
 					if(Game.queue.hasOwnProperty(type)) {
 						var qt = Game.queue[type];
 						for(var id in qt) {
 							if(qt.hasOwnProperty(id)) {
-								queueCount++;
 								var ms = qt[id] - tickMS;
 								if(ms <= 0) {
 									toFire[id] = type;
 								}
 								else {
 									qt[id] = ms;
+									Game.QueueTick(type, id, ms);
 								}
 							}
 						}
@@ -553,6 +552,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				}
 			
+			}
+		},
+		QueueTick : function(type, id, ms) {
+			switch(type) {
+				case Lacuna.Game.QueueTypes.PLANET:
+					Lacuna.MapPlanet.Tick(id, ms);
+					break;
+				case Lacuna.Game.QueueTypes.STAR:
+					break;
+				case Lacuna.Game.QueueTypes.SYSTEM:
+					break;
+				default:
+					break;
 			}
 		},
 		QueueFire : function(type, id) {

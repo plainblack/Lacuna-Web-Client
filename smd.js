@@ -286,7 +286,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Displays a list of the messages in the empire's inbox.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"page_number", "type":"string", "optional":true}
+						{"name":"options", "type":"object", "optional":true}
 					],
 					"returns":{"type":"object"}
 				},
@@ -294,7 +294,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Displays a list of the messages in the empire's archive.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"page_number", "type":"string", "optional":true}
+						{"name":"options", "type":"object", "optional":true}
 					],
 					"returns":{"type":"object"}
 				},
@@ -302,7 +302,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Displays a list of the messages in the empire's outbox.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"page_number", "type":"string", "optional":true}
+						{"name":"options", "type":"object", "optional":true}
 					],
 					"returns":{"type":"object"}
 				},
