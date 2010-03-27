@@ -39,6 +39,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
 			
 			this.planetDetails = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
@@ -49,7 +50,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				underlay:false,
 				width:"500px",
 				zIndex:9995,
-				context:["content","tr","tr", ["beforeShow", "windowResize"]]
+				context:["content","tr","tr", ["beforeShow", "windowResize"], [0,20]]
 			});
 			
 			this.planetDetails.renderEvent.subscribe(function(){

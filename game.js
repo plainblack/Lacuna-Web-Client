@@ -69,10 +69,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Timeout : 20000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		QueueTypes : {
-			PLANET : "planet",
-			STAR : "star",
-			SYSTEM : "system"
+			PLANET : "1",
+			STAR : "2",
+			SYSTEM : "3"
 		},
+		onTick : new Util.CustomEvent("onTick"),
 		
 		Start : function() {	
 			var session = Cookie.getSub("lacuna","session");
@@ -120,12 +121,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//create menus (or update if already created)
 			Lacuna.Menu.create();
 			//set our interval going for resource calcs
-			Lacuna.Game.recTime = new Date();
-			Lacuna.Game.recInt = setInterval(Lacuna.Game.Tick, 1000);
+			Game.recTime = new Date();
+			Game.recInt = setInterval(Game.Tick, 1000);
 			//init event subscribtions if we need to
-			Lacuna.Game.InitEvents();
+			Game.InitEvents();
 			//init queue for refreshing data
-			Lacuna.Game.InitQueue();
+			Game.InitQueue();
+			Game.onTick.subscribe(Game.QueueProcess);
 			//load the correct screen
 			var locationId = Cookie.getSub("lacuna","locationId"),
 				locationView = Cookie.getSub("lacuna","locationView");
@@ -507,10 +509,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.updateTick();
 			}
 			
-			Lacuna.Game.QueueProcess(diff);
+			Game.onTick.fire(diff);
+			//Lacuna.Game.QueueProcess(diff);
 		},
-		QueueAdd : function(id, type, callback) {
-			if(!id || !type || !callback) {
+		QueueAdd : function(id, type, ms) {
+			if(!id || !type || !ms) {
 				return;
 			}
 			
@@ -522,10 +525,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Game.queue[type][id] = ms;
 		},
-		QueueProcess : function(tickMS) {
+		QueueProcess : function(e, oArgs) {
 			//only do anything if the queue actually has data
 			if(Game.queue) {
-				var toFire = {};
+				var toFire = {},
+					tickMS = oArgs[0];
 				for(var type in Game.queue) {
 					if(Game.queue.hasOwnProperty(type)) {
 						var qt = Game.queue[type];
@@ -557,7 +561,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		QueueTick : function(type, id, ms) {
 			switch(type) {
 				case Lacuna.Game.QueueTypes.PLANET:
-					Lacuna.MapPlanet.Tick(id, ms);
+					Lacuna.MapPlanet.QueueTick(id, ms);
 					break;
 				case Lacuna.Game.QueueTypes.STAR:
 					break;

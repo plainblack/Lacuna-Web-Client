@@ -41,6 +41,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'	</div>',
 				'	<div id="messagingArchiver" style="display:none;">',
 				'		<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'		<button id="messagingArchiveAll" type="button">Archive All</button>',
 				'	</div>',
 				'	<div id="messagingReader" class="yui-gd">',
 				'		<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;" >',

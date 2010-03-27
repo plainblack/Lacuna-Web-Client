@@ -468,11 +468,33 @@ about
 #orbit7{ width: 1200px; top: 660px; }
 #planet7 { width: 165px; }
 
+/*
+planet details
+*/
 #planetDetailsName {
 	font-weight:bold;
 }
 #planetDetails label {
 	font-weight:bold;
+}
+.smallImg {
+	display:inline-block;
+	width:30px;
+}
+.buildQueue li {
+	float:left;
+}
+.buildQueue .buildQueueName {
+	width:200px;
+}
+.buildQueue .buildQueueLevel {
+	width:50px;
+}
+.buildQueue .buildQueueTime {
+	width:100px;
+}
+#buildingDetailsExtra, #buildingDetailsProduction {
+	border-top: 2px solid #52acff;
 }
 
 

@@ -225,10 +225,41 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
 			this.domElement.title = this.data ? [this.data.name, " ", this.data.level, " (", this.x, ",", this.y, ")"].join('') : "Ground";
+			
+			if(this.data && this.data.pending_build) {
+				this._createCounter();
+				this.counter.innerHTML = Math.floor(this.data.pending_build.seconds_remaining);
+			}
+			else if(this.counter) {
+				this.counter.parentNode.removeChild(this.counter);
+				delete this.counter;
+			}
 		},
 		refresh : function() {
 			Mapper.PlanetTile.superclass.refresh.call(this);
 			this.init();
+		},
+		refreshCounter : function() {
+			var obj = this.map.getTile(this.x,this.y,this.z);
+			this.blank = obj.blank;
+			this.url = obj.url;
+			this.data = obj.data;
+			if(this.data && this.data.pending_build) {
+				this._createCounter();
+				this.counter.innerHTML = Math.floor(this.data.pending_build.seconds_remaining);
+			}
+		},
+		_createCounter : function() {
+			if(!this.counter) {
+				var counter = this.domElement.appendChild(document.createElement('div'));
+				Dom.setStyle(counter, "width", this.map.tileSizeInPx + 'px');
+				Dom.setStyle(counter, "height", this.map.tileSizeInPx + 'px');
+				Dom.setStyle(counter, "z-index", '2');
+				Dom.setStyle(counter, "text-align", 'right');
+				Dom.setStyle(counter, "font-size", '140%');
+				Dom.setStyle(counter, "font-weight", 'bold');
+				this.counter = counter;
+			}
 		}
 	});
 	
@@ -397,7 +428,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				}
 			}
 		},
-		showTiles : function() {
+		showTiles : function(refresh) {
 			var bounds = this.visibleArea.coordBounds();
 			
 			var tiles = {};
@@ -415,6 +446,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						if( tile.domElement ) {
 							this.tileContainer.appendChild( tile.domElement );
 						}
+					}
+					else if(refresh) {
+						tile.refresh();
 					}
 					else {
 						if(tile.blank) {
@@ -861,7 +895,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		refresh : function() {
 			if(this.tileLayer) {
-				this.tileLayer.showTiles();
+				this.tileLayer.showTiles(true);
+			}
+		},
+		refreshTileCounter : function(building) {
+			if(this.tileLayer) {
+				this.addSingleTileData(building);
+				var tile = this.tileLayer.findTile(building.x,building.y,this.zoom);
+				if(tile) {
+					tile.refreshCounter();
+				}
 			}
 		},
 		reset : function() {

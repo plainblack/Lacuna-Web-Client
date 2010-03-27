@@ -15,11 +15,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
 		this.createEvent("onMapRpcFailed");
-		this.createEvent("onBuild");
+		this.createEvent("onBuildStart");
+		this.createEvent("onBuildComplete");
 		
 		this._buildDetailsPanel();
 		this._buildBuilderPanel();
-		this._buildStatusPanel();
+		//this._buildStatusPanel();
 		
 		this.subscribe("onBuildStart", this.onBuildStartEvent);
 		this.subscribe("onBuildComplete", this.onBuildCompleteEvent);
@@ -44,24 +45,28 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			</ul>',
 				'		</div>',
 				'	</div>',
-				'	<div class="yui-g">',
+				'	<div id="buildingDetailsExtra">',
+				'	</div>',
+				'	<div id="buildingDetailsProduction" class="yui-gb">',
 				'		<div class="yui-u first">',
 				'			<ul>',
 				'				<li>Current Production</li>',
-				'				<li><label>Food: </label><span id="buildingDetailsFood"></span></li>',
-				'				<li><label>Ore: </label><span id="buildingDetailsOre"></span></li>',
-				'				<li><label>Water: </label><span id="buildingDetailsWater"></span></li>',
-				'				<li><label>Energy: </label><span id="buildingDetailsEnergy"></span></li>',
-				'				<li><label>Waste: </label><span id="buildingDetailsWaste"></span></li>',
-				'				<li><label>Happiness: </label><span id="buildingDetailsHappiness"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFood"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOre"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWater"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste"></span></li>',
+				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness"></span></li>',
 				'			</ul>',
 				'		</div>',
 				'		<div class="yui-u">',
-				'			<ul id="buildingDetailsUpgrade">',
+				'			<ul id="buildingDetailsUpgradeProduction">',
 				'			</ul>',
 				'		</div>',
-				'	</div>',
-				'	<div>',
+				'		<div class="yui-u">',
+				'			<ul id="buildingDetailsUpgradeCost">',
+				'			</ul>',
+				'		</div>',
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -78,9 +83,40 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				zIndex:9995
 			});
 			
+			this.buildingDetails.addQueue = function(seconds, queueFn, elm, sc) {
+				this.queue = this.queue || [];
+				if(this.queue.length == 0) {
+					Game.onTick.subscribe(this.processQueue, this, true);
+				}
+				this.queue.push({secondsRemaining:seconds, el:elm, fn:queueFn, scope:sc});
+			};
+			this.buildingDetails.processQueue = function() {
+				if(this.queue.length > 0) {
+					var queue = this.queue,
+						dt = new Date(),
+						diff = (dt - this.recTime) / 1000,
+						newq = [];
+					this.recTime = dt;
+					while(queue.length > 0) {
+						var callback = queue.pop();
+						callback.secondsRemaining -= diff;
+						if(callback.secondsRemaining > 0) {
+							newq.push(callback);
+						}
+						callback.fn.call(callback.scope || this, callback.secondsRemaining, callback.el);
+					}
+					this.queue = newq;
+				}
+				else {
+					Game.onTick.unsubscribe(this.processQueue);
+				}
+			};
+			
 			this.buildingDetails.renderEvent.subscribe(function(){
 				this.img = Dom.get("buildingDetailsImg");
-				this.upgradeUl = Dom.get("buildingDetailsUpgrade");
+				this.upgradeUl = Dom.get("buildingDetailsUpgradeCost");
+				this.upgradeProdUl = Dom.get("buildingDetailsUpgradeProduction");
+				this.extraEl = Dom.get("buildingDetailsExtra");
 				this.timeLeftLi = Dom.get("buildingDetailsTimeLeft");
 				this.name = Dom.get("buildingDetailsName");
 				this.level = Dom.get("buildingDetailsLevel");
@@ -92,10 +128,176 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.curWater = Dom.get("buildingDetailsWater");
 			});
 			this.buildingDetails.hideEvent.subscribe(function(){
+				Game.onTick.unsubscribe(this.buildingDetails.processQueue);
+				this.buildingDetails.interval = undefined;
+				this.buildingDetails.queue = [];
 				this.currentBuilding = undefined;
 			}, this, true);
 			this.buildingDetails.showEvent.subscribe(function() {
 				this.buildingBuilder.hide();
+				var panel = this.buildingDetails,
+					results = this.currentBuilding,
+					building = results.building;
+				panel.name.innerHTML = building.name;
+				panel.img.src = [Game.AssetUrl, "planet_side/", building.image, ".png"].join('');
+				panel.level.innerHTML = building.level;
+				panel.curEnergy.innerHTML = building.energy_hour;
+				panel.curFood.innerHTML = building.food_hour;
+				panel.curHappiness.innerHTML = building.happiness_hour;
+				panel.curOre.innerHTML = building.ore_hour;
+				panel.curWaste.innerHTML = building.waste_hour;
+				panel.curWater.innerHTML = building.water_hour;
+				
+				if(building.pending_build) {
+					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + building.pending_build.seconds_remaining;
+					if(building.pending_build.seconds_remaining > 0) {
+						panel.addQueue(building.pending_build.seconds_remaining,
+							function(remaining){
+								var rf = Math.floor(remaining);
+								if(rf <= 0) {
+									this.buildingDetails.timeLeftLi.innerHTML = "";
+									this.DetailsView({data:{id:building.id,url:building.url},x:building.x,y:building.y});
+								}
+								else {
+									this.buildingDetails.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + rf;
+								}
+							},
+							null,
+							this
+						);
+					}
+				}
+				else {
+					panel.timeLeftLi.innerHTML = "";
+				}
+				
+				Event.purgeElement(panel.upgradeUl);
+				Event.purgeElement(panel.upgradeProdUl);
+				if(building.upgrade) {
+					var up = building.upgrade;
+					
+					panel.upgradeUl.innerHTML = [
+						'	<li>Upgrade Cost</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span>',up.cost.food,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span>',up.cost.ore,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span>',up.cost.water,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span>',up.cost.energy,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span>',up.cost.waste,'</li>',
+						'	<li><span class="smallImg">T:</span>',up.cost.time,'</li>',
+					].join('');
+
+					if(up.can) {
+						panel.upgradeProdUl.innerHTML = ['<li><ul><li>Upgrade Production</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span>',up.production.food_hour,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span>',up.production.ore_hour,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span>',up.production.water_hour,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span>',up.production.energy_hour,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span>',up.production.waste_hour,'</li>',
+						'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span>',up.production.happiness_hour,'</li>',
+						'	</ul></li><li><button type="button">Upgrade</button></li>'].join('');
+						
+						Event.on(Sel.query("button", panel.upgradeProdUl, true), "click", function(e){
+							this.Upgrade(this.currentBuilding.building);
+						}, this, true);
+					}
+					else {
+						panel.upgradeProdUl.innerHTML = ['<li style="color:red;">Unable to Upgrade:</li><li style="color:red;">',up.reason[1],'</li>'].join('');
+					}
+				}
+				else {
+					panel.upgradeUl.innerHTML = "";
+				}
+				
+				panel.extraEl.innerHTML = "";
+				
+				if(results.planet) { //if it's the planetary command
+					var planet = results.planet,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span>',
+							'				<span id="">',planet.food_stored, '</span>/', planet.food_capacity, ' : ', planet.food_hour,'/hr</li>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span>',
+							'				<span id="">',planet.ore_stored, '</span>/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr</li>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span>',
+							'				<span id="">',planet.water_stored, '</span>/', planet.water_capacity, ' : ', planet.water_hour,'/hr</li>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span>',
+							'				<span id="">',planet.energy_stored, '</span>/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr</li>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span>',
+							'				<span id="">',planet.waste_stored, '</span>/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr</li>',
+							'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span>',
+							'				<span id="">',planet.happiness, ' : ', planet.happiness_hour,'/hr</li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u first">',
+							'	</div>',
+							'</div>'
+						];
+					panel.extraEl.innerHTML = output.join('');
+					Dom.setStyle(panel.extraEl, "display", "");
+				}
+				else if(results.build_queue && results.build_queue.length > 0) { //if it's the development ministry
+					var bq = results.build_queue,
+						ul = document.createElement("ul"),
+						li = document.createElement("li");
+						
+					panel.extraEl.innerHTML = ['<div><ul class="buildQueue clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li></ul>'];
+						
+					for(var i=0; i<bq.length; i++) {
+						var bqo = bq[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+						Dom.addClass(nUl, "buildQueue");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"buildQueueName");
+						nLi.innerHTML = bqo.name;
+						nUl.appendChild(nLi);
+						nLi = li.cloneNode(false);
+
+						Dom.addClass(nLi,"buildQueueLevel");
+						nLi.innerHTML = bqo.to_level;
+						nUl.appendChild(nLi);
+						nLi = li.cloneNode(false);
+
+						Dom.addClass(nLi,"buildQueueTime");
+						nLi.innerHTML = bqo.seconds_remaining;
+						nUl.appendChild(nLi);
+
+						panel.extraEl.appendChild(nUl);
+						
+						panel.addQueue(bqo.seconds_remaining, function(remaining, el){
+							if(remaining <= 0) {
+								var ul = el.parentNode,
+									c = ul.parentNode;
+								c.removeChild(ul);
+							}
+							else {
+								el.innerHTML = Math.floor(remaining);
+							}
+						}, nLi);
+					}
+					Dom.setStyle(panel.extraEl, "display", "");
+				}
+				/*else if(results.docked_ships) { //if it's the space port
+					colony_ship
+					gas_giant_settlement_platform_ship
+					mining_platform_ship
+					probe
+					smuggler_ship
+					space_station
+					spy_pod
+					terraforming_platform_ship
+				}*/
+				else if(results.party && results.party.can_throw) {
+					Dom.setStyle(panel.extraEl, "display", "none");
+				}
+				else {
+					Dom.setStyle(panel.extraEl, "display", "none");
+				}
+				
+				panel.center();
 			}, this, true);
 			
 			this.buildingDetails.render();
@@ -110,7 +312,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'	<label>Buildable</label>',
 				'	<ul id="buildingBuilderList">',
 				'	</ul>',
-				'	<label>Unavailable</label>',
+				'	<label id="buildingBuilderUnavailableToggle">Unavailable</label>',
 				'	<ul id="buildingBuilderUnavailable">',
 				'	</ul>',
 				'</div>'].join('');
@@ -126,39 +328,44 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				underlay:false,
 				width:"600px",
 				height:"500px",
-				zIndex:9995
+				zIndex:9996
 			});
 			
 			this.buildingBuilder.renderEvent.subscribe(function(){
 				this.list = Dom.get("buildingBuilderList");
 				this.unavailable = Dom.get("buildingBuilderUnavailable");
+				Event.on("buildingBuilderUnavailableToggle","click",function(){
+					Dom.setStyle(this, "display", (Dom.getStyle(this, "display") == "none" ? "" : "none"));
+				}, this.unavailable, true);
 			});
 			
 			this.buildingBuilder.showEvent.subscribe(function() {
 				this.buildingDetails.hide();
+				Dom.setStyle(this.buildingBuilder.unavailable, "display", "none");
 			}, this, true);
 			
 			this.buildingBuilder.render();
 		},
-		_buildStatusPanel : function() {
+		/*_buildStatusPanel : function() {
 			var panelId = "planetStatus";
 			
 			var panel = document.createElement("div");
 			panel.id = panelId;
-			panel.innerHTML = [
+			panel.innerHTML = ['<div class="hd">Status</div>',
 				'<div class="bd">',
 				'	<ul class="planetStatusList">',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/food.png" /><span id="planetStatusFood"></span></li>',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/ore.png" /><span id="planetStatusOre"></span></li>',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/water.png" /><span id="planetStatusWater"></span></li>',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/energy.png" /><span id="planetStatusEnergy"></span></li>',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/waste.png" /><span id="planetStatusWaste"></span></li>',
-				'		<li><img src="',Game.AssetUrl,'/ui/s/happiness.png" /><span id="planetStatusHappiness"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/food.png" /><span id="planetStatusFood"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/ore.png" /><span id="planetStatusOre"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/water.png" /><span id="planetStatusWater"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/energy.png" /><span id="planetStatusEnergy"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/waste.png" /><span id="planetStatusWaste"></span></li>',
+				'		<li><img src="',Game.AssetUrl,'ui/s/happiness.png" /><span id="planetStatusHappiness"></span></li>',
 				'	</ul>',
 				'	<ul id="planetStatusQueue">',
 				'	</ul>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
 			
 			this.planetStatus = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
@@ -167,7 +374,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				fixedcenter:false,
 				close:true,
 				underlay:false,
-				width:"500px",
+				width:"300px",
 				zIndex:900,
 				context:["footer","tr","br", ["beforeShow", "windowResize"]]
 			});
@@ -181,12 +388,28 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.happiness = Dom.get("planetStatusHappiness");
 				this.queue = Dom.get("planetStatusQueue");
 			});
-			
-			this.planetStatus.render();
-		},
-		
-		onBuildStartEvent : function(building) {
-			if(building) {
+			this.planetStatus.showEvent.subscribe(function(){
+				var q = Game.queue[Game.QueueTypes.PLANET];
+				this.queue.innerHTML = "";
+				for(var id in q) {
+					if(q.hasOwnProperty(id)) {
+						var b = this.buildings[id];
+						if(b && b.pending_build) {
+							this.add(b);
+						}
+					}
+				}
+			});
+			this.planetStatus.update = function(id, ms){
+				var el = this.buildingQueueMap[id];
+				if(el) {
+					var sp = Sel.query('span',el,true);
+					if(sp) {
+						sp.innerHTML = Math.floor(ms/1000);
+					}
+				}
+			};
+			this.planetStatus.add = function(building) {
 				var el = document.createElement("li");
 				el.innerHTML = [building.name, 
 					' [', 
@@ -195,18 +418,31 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					building.pending_build.seconds_remaining,
 					'</span>'
 				].join('');
-				this.queue[building.id] = el;
+				this.queue.appendChild(el);
+				this.buildingQueueMap[building.id] = el;
+			};
+			this.planetStatus.remove = function(id) {
+				var el = this.buildingQueueMap[id];
+				if(el) {
+					el.parentNode.removeChild(el);
+				}
+				delete this.buildingQueueMap[id];
+			};
+			
+			this.planetStatus.render();
+		},*/
+		
+		onBuildStartEvent : function(building) {
+			if(building) {
 				this.buildings[building.id] = building;
+				//this.planetStatus.add(building);
 				this._map.addSingleTileData(building);
 				this._map.refresh();
 			}
 		},
 		onBuildCompleteEvent : function(building) {
 			if(building) {
-				var el = this.queue[building.id];
-				if(el) {
-					el.parentNode.removeChild(el);
-				}
+				//this.planetStatus.remove(building.id);
 				/*YAHOO.log(building, "info", "MapPlanet.onBuildCompleteEvent");
 				this.ViewData(building.id, building.url, {
 					success:function(oResult) {
@@ -374,73 +610,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			building.url = url;
 			building.x = x;
 			building.y = y;
-			this.currentBuilding = building;
-			
-			panel.name.innerHTML = building.name;
-			panel.img.src = [Game.AssetUrl, "planet_side/", building.image, ".png"].join('');
-			panel.level.innerHTML = building.level;
-			panel.curEnergy.innerHTML = building.energy_hour;
-			panel.curFood.innerHTML = building.food_hour;
-			panel.curHappiness.innerHTML = building.happiness_hour;
-			panel.curOre.innerHTML = building.ore_hour;
-			panel.curWaste.innerHTML = building.waste_hour;
-			panel.curWater.innerHTML = building.water_hour;
-			
-			if(building.pending_build) {
-				panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + building.pending_build.seconds_remaining;
-				//this.QueueReload(building);
-			}
-			else {
-				panel.timeLeftLi.innerHTML = "";
-			}
-			
-			Event.purgeElement(panel.upgradeUl);
-			if(building.upgrade) {
-				var up = building.upgrade,
-					output = [
-						'<li>Upgrade</li>',
-						'<li><ul>',
-						'	<li>Cost</li>',
-						'	<li><label>Food: </label>',up.cost.food,'</li>',
-						'	<li><label>Ore: </label>',up.cost.ore,'</li>',
-						'	<li><label>Water: </label>',up.cost.water,'</li>',
-						'	<li><label>Energy: </label>',up.cost.energy,'</li>',
-						'	<li><label>Waste: </label>',up.cost.waste,'</li>',
-						'	<li><label>Time: </label>',up.cost.time,'</li>',
-						'</ul></li>'];
-				if(up.can) {
-					output.push('<li><ul><li>New Production</li>');
-					output.push('<li><label>Food: </label>');
-					output.push(up.production.food_hour);
-					output.push('</li><li><label>Ore: </label>');
-					output.push(up.production.ore_hour);
-					output.push('</li><li><label>Water: </label>');
-					output.push(up.production.water_hour);
-					output.push('</li><li><label>Energy: </label>');
-					output.push(up.production.energy_hour);
-					output.push('</li><li><label>Waste: </label>');
-					output.push(up.production.waste_hour);
-					output.push('</li><li><label>Happiness: </label>');
-					output.push(up.production.happiness_hour);
-					output.push('</li></ul></li><li><button type="button">Upgrade</button></li>');
-				}
-				else {
-					output.push('<li style="color:red;">Unable to Upgrade:</li>');
-					output.push('<li style="color:red;">');
-					output.push(up.reason[1]);
-					output.push('</li>');
-				}
-				panel.upgradeUl.innerHTML = output.join('');
-				
-				if(up.can) {
-					Event.on(Sel.query("button", panel.upgradeUl, true), "click", function(e){
-						this.Upgrade(this.currentBuilding);
-					}, this, true);
-				}
-			}
-			else {
-				panel.upgradeUl.innerHTML = "";
-			}				
+			oResults.building = building;
+			this.currentBuilding = oResults;
 			
 			panel.show();
 		},
@@ -454,6 +625,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					x:tile.x,
 					y:tile.y
 				};
+			
+			Event.purgeElement(this.buildingBuilder.list);
+			this.buildingBuilder.list.innerHTML = "";
+			Event.purgeElement(this.buildingBuilder.unavailable);
+			this.buildingBuilder.unavailable.innerHTML = "";
+			
+			this.buildingBuilder.show();
 			
 			BodyServ.get_buildable(data,{
 				success : function(o){
@@ -472,14 +650,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		BuilderProcess : function(oResults, request) {
 			var b = oResults.buildable;
-			if(b) {
-				Event.purgeElement(this.buildingBuilder.list);
-				this.buildingBuilder.list.innerHTML = "";
-				Event.purgeElement(this.buildingBuilder.unavailable);
-				this.buildingBuilder.unavailable.innerHTML = "";
-				
-				this.buildingBuilder.show();
-			
+			if(b) {			
 				var frag = document.createDocumentFragment(),
 					unavailFrag = document.createDocumentFragment(),
 					li = document.createElement("li");
@@ -575,14 +746,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(o, "info", "MapPlanet.Build.success");
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
-					//this.DetailsProcess(o.result);
-					//this.ReLoad();
+
 					var b = building; //originally passed in building data from BuildProcess
 					b.id = o.result.building.id;
 					b.level = o.result.building.level;
 					b.pending_build = o.result.building.pending_build;
 					b.x = x;
 					b.y = y;
+					this.RemoveCost(b.build.cost);
 					this.QueueReload(b);
 				},
 				failure : function(o){
@@ -607,18 +778,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(o, "info", "UpgradeSuccess");
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingDetails.hide();
-					this.QueueReload(o.result.building);
-					//this.DetailsProcess(o.result);
-					//this.ReLoad();
 					
 					var b = building; //originally passed in building data from BuildProcess
 					b.id = o.result.building.id;
 					b.level = o.result.building.level;
 					b.pending_build = o.result.building.pending_build;
-					this.buildings[b.id] = b;
 					this.RemoveCost(b.upgrade.cost);
-					this._map.addSingleTileData(b);
-					this._map.refresh();
+					this.QueueReload(b);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "UpgradeFailed");
@@ -632,11 +798,26 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		RemoveCost : function(cost) {
 			var planet = Game.EmpireData.planets[this.locationId];
 			if(planet) {
-				planet.energy_stored -= cost.energy;
-				planet.food_stored -= cost.food;
-				planet.ore_stored -= cost.ore;
-				planet.waste_stored -= cost.waste;
-				planet.water_stored -= cost.water;
+				planet.energy_stored -= cost.energy*1;
+				if(planet.energy_stored > planet.energy_capacity) {
+					planet.energy_stored = planet.energy_capacity;
+				}
+				planet.food_stored -= cost.food*1;
+				if(planet.food_stored > planet.food_capacity) {
+					planet.food_stored = planet.food_capacity;
+				}
+				planet.ore_stored -= cost.ore*1;
+				if(planet.ore_stored > planet.ore_capacity) {
+					planet.ore_stored = planet.ore_capacity;
+				}
+				planet.waste_stored += cost.waste*1;
+				if(planet.waste_stored > planet.waste_capacity) {
+					planet.waste_stored = planet.waste_capacity;
+				}
+				planet.water_stored -= cost.water*1;
+				if(planet.water_stored > planet.water_capacity) {
+					planet.water_stored = planet.water_capacity;
+				}
 				Lacuna.Menu.updateTick();
 			}
 		},
@@ -648,11 +829,19 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		QueueTick : function(id, ms) {
-			var el = this.queue[id];
-			if(el) {
-				Sel.query('span', el, true).innerHTML = Math.floor(ms/1000);
+			if(this.buildings) {
+				var building = this.buildings[id];
+				if(building) {
+					if(building.pending_build) {
+						building.pending_build.seconds_remaining = (ms / 1000);
+					}
+					else {
+						building.pending_build = {seconds_remaining : (ms / 1000)};
+					}
+					this._map.refreshTileCounter(building);
+				}
 			}
-		}		
+		}
 	};
 	Lang.augmentProto(MapPlanet, Util.EventProvider);
 	
