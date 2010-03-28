@@ -119,6 +119,12 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				}
 				
 				oSelf.elTotal.innerHTML = oSelf.totalValue;
+				if(oSelf.totalValue > 45) {
+					Dom.replaceClass("speciesPointTotalLine", "speciesPointsValid", "speciesPointsInvalid");
+				}
+				else {
+					Dom.replaceClass("speciesPointTotalLine", "speciesPointsInvalid", "speciesPointsValid");
+				}
 			};
 			
 			this.speciesHO.subscribe('change', updateTotal, this);
@@ -204,7 +210,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			'			<ul id="speciesCreate" style="margin-top:5px; padding-top:5px; border-top:1px solid blue;">',
 			'				<li><label for="speciesName">Name</label><input type="text" id="speciesName" maxlength="30" /></li>',
 			'				<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
-			'				<li><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
+			'				<li id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
 			'				<li><label>Habitable Orbits</label>',
 			'					<div id="speciesHO" class="speciesSlider_bg" title="Habitable Orbits Selector">',
 			'						<div id="speciesHO_min_thumb"><span id="speciesHO_from" class="thumbDisplay">1</span><img src="http://yui.yahooapis.com/2.8.0r4/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',

@@ -23,13 +23,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 	};
 	UserMenu.prototype = {
 		create : function() {
-			var userMenu = new YAHOO.widget.Menu(this.id, { zindex: 1006 });
-			userMenu.cfg.setProperty("context", [this.clickId, "tl", "bl"]);
+			var userMenu = new YAHOO.widget.Menu(this.id, { 
+				zindex: 1006, 
+				shadow:false, 
+				//effect:{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.5},
+				context:[this.clickId, "tl", "bl",[9, -15]]
+			});
 			userMenu.addItem({ text: "About", id: "uc", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } });
 			userMenu.addItem({ text: "Logout", id: "ul", onclick: { fn: Game.Logout } });
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
-					this.align("tl","bl",[6, -10]);
+					this.align("tl","bl",[9, -15]);
 				}
 			});
 			userMenu.render();
@@ -174,11 +178,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 	};
 	PlanetMenu.prototype = {
 		create : function() {
-			var planetMenu = new YAHOO.widget.Menu(this.id, { zindex: 1006 });
-			planetMenu.cfg.setProperty("context", [this.clickId, "bl", "tl"]);
+			var planetMenu = new YAHOO.widget.Menu(this.id, { 
+				zindex: 1006, 
+				shadow:false, 
+				//effect:{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.5},
+				context:[this.clickId, "bl", "tl",[9, 15]]
+			});
 			planetMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
-					this.align("bl","tl",[6, 10]);
+					this.align("bl","tl",[9, 15]);
 				}
 			});
 			planetMenu.render();
@@ -354,8 +362,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				this.PlanetMenu.create();
 			}
 			else {
-				this.UserMenu.updateData();
-				this.PlanetMenu.updateData();
+				this.UserMenu.update();
+				this.PlanetMenu.update();
 				this.show();
 			}
 		},

@@ -25,26 +25,26 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
 				'<div class="bd">',
-				'	<div id="messagingTabs"><ul class="clearafter">',
+				'	<div id="messagingTabs" class="panelTabs"><ul class="clearafter">',
 				'		<li id="messagingCreate" class="tab">Create</li>',
 				'		<li id="messagingInbox" class="tab">Inbox</li>',
 				'		<li id="messagingSent" class="tab">Sent</li>',
 				'		<li id="messagingArchive" class="tab">Archive</li>',
 				'	</ul></div>',
-				'	<div id="messagingCreator" style="display:none">',
-				'		<div><button id="messagingCreateSend" type="button">Send</button><span id="messagingCreateResponse"></span></div>',
+				'	<div id="messagingCreator" class="panelTabContainer" style="display:none">',
+				'		<div><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
 				'		<div><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
 				'		<div><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
 				'		<div id="messagingCreateBody">',
 				'			<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
 				'		</div>',
 				'	</div>',
-				'	<div id="messagingArchiver" style="display:none;">',
-				'		<button id="messagingArchiveSelected" type="button">Archive</button>',
-				'		<button id="messagingArchiveAll" type="button">Archive All</button>',
-				'	</div>',
-				'	<div id="messagingReader" class="yui-gd">',
+				'	<div id="messagingReader" class="panelTabContainer yui-gd">',
 				'		<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;" >',
+				'			<div id="messagingArchiver">',
+				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'				<button id="messagingSelectAll" type="button">Select All</button>',
+				'			</div>',
 				'			<ul id="messagingList"></ul>',
 				'		</div>',
 				'		<div id="messagingDisplay" class="yui-u">',
@@ -91,6 +91,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//archiving setup
 				this.archiver = Dom.get("messagingArchiver");
 				Event.on("messagingArchiveSelected", "click", this.archiveMessages, this, true);
+				this.select = Dom.get("messagingSelectAll");
+				Event.on(this.select, "click", this.selectAllMessages, this, true);
 				//create
 				//this._createToSelect();
 				this.createTo = Dom.get("messagingCreateTo");
@@ -145,8 +147,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.sent,this.archive], "messagingTabSelected");
-			Dom.addClass(el, "messagingTabSelected");
+			Dom.removeClass([this.create,this.inbox,this.sent,this.archive], "panelTabSelected");
+			Dom.addClass(el, "panelTabSelected");
 			if(el.id == this.create.id) {
 				Dom.setStyle("messagingCreator", "display", "");
 				Dom.setStyle("messagingReader", "display", "none");
@@ -156,7 +158,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Dom.setStyle("messagingCreator", "display", "none");
 				Dom.setStyle("messagingReader", "display", "");
 			}
-			Dom.setStyle(this.archiver, "display", "none");
 			Dom.setStyle(this.display, "visibility", "hidden");
 			this.toArchive = {};
 			this.toArchiveCount = 0;
@@ -171,16 +172,20 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		loadTab : function() {
 			switch(this.currentTab) {
-				case "messagingCreate":
+				case this.create.id:
+					Dom.setStyle(this.archiver,"display","none");
 					this.loadCreate();
 					break;
-				case "messagingSent":
+				case this.sent.id:
+					Dom.setStyle(this.archiver,"display","none");
 					this.loadSentMessages();
 					break;
-				case "messagingArchive":
+				case this.archive.id:
+					Dom.setStyle(this.archiver,"display","none");
 					this.loadArchiveMessages();
 					break;
 				default:
+					Dom.setStyle(this.archiver,"display","");
 					this.loadInboxMessages();
 					break;
 			}
@@ -320,7 +325,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.toArchiveCount--;
 				}
 			}
-			Dom.setStyle(this.archiver, "display", (this.toArchiveCount > 0 ? "" : "none"));
 			
 		},
 		loadMessage : function(e, matchedEl, container) {
@@ -417,13 +421,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.createTo.value = "";
 						this.createSubject.value = "";
 						this.createText.value = "";
+						this.currentTab = this.inbox.id;
 						this.loadInboxMessages();
 					}
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.sendMessage.failure");
-					this.fireEvent("onRpcFailed", o);
 					if(o.error.code == 1005) {
+						this.createResponse.innerHTML = o.error.message;
+					}
+					else {
+						this.fireEvent("onRpcFailed", o);
 					}
 				},
 				timeout:Game.Timeout,
@@ -474,6 +482,24 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				}
 			}, this, true);
 			
+			Dom.setStyle(this.display, "visibility", "hidden");
+			delete this.selectedAll;
+			this.select.innerHTML = "Select All";
+		},
+		selectAllMessages : function() {
+			var els = Sel.query("input[type=checkbox]",this.list);
+			Dom.batch(els, function(el) {
+				el.checked = !this.selectedAll;
+				this.checkSelect(null,el);
+			}, this, true);
+			if(this.selectedAll) {
+				delete this.selectedAll;
+				this.select.innerHTML = "Select All";
+			}
+			else {
+				this.selectedAll = 1;
+				this.select.innerHTML = "Select None";
+			}
 		},
 		
 		isVisible : function() {

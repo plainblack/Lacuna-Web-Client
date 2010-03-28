@@ -257,7 +257,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				Dom.setStyle(counter, "z-index", '2');
 				Dom.setStyle(counter, "text-align", 'right');
 				Dom.setStyle(counter, "font-size", '140%');
-				Dom.setStyle(counter, "font-weight", 'bold');
+				Dom.setStyle(counter, "font-family", 'impact, san-serif');
 				this.counter = counter;
 			}
 		}

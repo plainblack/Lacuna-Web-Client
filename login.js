@@ -73,8 +73,10 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					YAHOO.log(o, "error", "LoginFailed");
 					if(o.error.code == 1010) {
 						//haven't founded empire yet so take them to species
+						this.hide();
 						this.initEmpire();
-						Game.EmpireSpecies.show();
+						Game.EmpireCreator.initSpecies();
+						Game.SpeciesCreator.show();
 					}
 					else {
 						this.setMessage(o.error.message);

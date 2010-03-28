@@ -27,6 +27,7 @@ body {
 	width: 100%;
 	min-width: 1050px;
 	background-color:#52acff;
+	font-family:impact, sans-serif;
 }
 #header {
 	top: 0;
@@ -44,6 +45,25 @@ body {
 	color:red;
 }
 
+.panelTabs {
+}
+.panelTabs li {
+	background-color:#d2d2d2;
+	border-right:2px solid #F2F2F2;
+	float:left;
+	height:20px;
+	text-align:center;
+	width:100px;
+	cursor:pointer;
+}
+.panelTabs li.panelTabSelected {
+	background-color:gray;
+}
+.panelTabContainer  {
+	border:1px solid gray;
+	border-top-width:5px;
+}
+
 /*
 YUI dialog skin
 */
@@ -55,6 +75,10 @@ body.yui-skin-sam .yui-panel .hd {
 	background:url("http://localhost/lacuna/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
 	border-width:0;
 	margin-left:10px;
+	font-family:impact, sans-serif;
+	font-size:110%;
+	font-weight:normal;
+	line-height:1.75;
 }
 
 .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft {
@@ -63,6 +87,7 @@ body.yui-skin-sam .yui-panel .hd {
 body.yui-skin-sam .yui-panel .bd {
 	-moz-border-radius:10px 10px 0 0;
 	-webkit-border-radius:10px 10px 0 0;
+	border-radius:10px 10px 0 0;
 	border-width: 5px 5px 0;
 	border-style:solid;
 	border-color:#52ACFF;
@@ -70,6 +95,7 @@ body.yui-skin-sam .yui-panel .bd {
 body.yui-skin-sam .yui-panel .ft {
 	-moz-border-radius:0 0 10px 10px;
 	-webkit-border-radius:0 0 10px 10px;
+	border-radius:0 0 10px 10px;
 	border-width: 0 5px 5px;
 	border-style:solid;
 	border-color:#52ACFF;
@@ -77,6 +103,7 @@ body.yui-skin-sam .yui-panel .ft {
 body.yui-skin-sam .nofooter .bd {
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
+	border-radius:10px;
 	border-width: 5px;
 	border-style:solid;
 	border-color:#52ACFF;
@@ -112,7 +139,7 @@ dialogs
 menu
 */
 #userMenu, #planetMenu {
-	width:322px;
+	width:315px;
 }
 #users, #planets {
 	font-size:25px;
@@ -133,6 +160,21 @@ menu
 #planets img {
 	float:left;
 	margin-right:10px;
+}
+
+body.yui-skin-sam  #planetsCenter .yuimenu .bd {
+	-moz-border-radius:10px 10px 0 0;
+	-webkit-border-radius:10px 10px 0 0;
+	border-radius:10px 10px 0 0;
+	background-color:#52acff;
+	border:5px solid #52ACFF;
+}
+body.yui-skin-sam #usersCenter .yuimenu .bd {
+	-moz-border-radius: 0 0 10px 10px;
+	-webkit-border-radius: 0 0 10px 10px;
+	border-radius: 0 0 10px 10px;
+	background-color:#52acff;
+	border:5px solid #52ACFF;
 }
 
 .menuPlanetThumb {
@@ -245,22 +287,8 @@ about
 /*
 * Messaging
 */
-#messagingTabs {
-}
-#messagingTabs li {
-	background-color:#d2d2d2;
-	border-right:2px solid #F2F2F2;
-	float:left;
-	height:20px;
-	text-align:center;
-	width:100px;
-	cursor:pointer;
-}
 #messagingTabs #messagingCreate {
 	background-color:#52ACFF;
-}
-#messagingTabs li.messagingTabSelected {
-	background-color:gray;
 }
 .message {
 	border:1px solid #B2B2B2;
@@ -279,10 +307,7 @@ about
 .unread .messageDate, .unread .messageFrom, .unread .messageSubject {
 	font-weight:bold;
 }
-#messagingCreator, #messagingReader  {
-	border:1px solid gray;
-	border-top-width:5px;
-}
+
 #messagingCreator {
 	border-top-color:#52ACFF;
 }
@@ -299,6 +324,9 @@ about
 	width:100%;
 	height:100%;
 	border:0;
+}
+#messagingCreateResponse {
+	color:red;
 }
 #messagingArchiver {
 	background-color:gray;
@@ -373,6 +401,13 @@ about
 	top: 4px;
 }
 
+.speciesPointTotal {
+	padding: 10px 0pt; 
+	font-size: 150%;
+}
+.speciesPointsValid { color:green; }
+.speciesPointsInvalid { color:red; }
+
 
 /*
 * Star Map
@@ -387,7 +422,7 @@ about
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
 #planetMap {
-	background: black url('http://localhost/lacuna/assets/tile/ground.png');
+	background: black url('http://localhost/lacuna/assets/planet_side/ground.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 
@@ -493,8 +528,20 @@ planet details
 .buildQueue .buildQueueTime {
 	width:100px;
 }
+.buildQueueHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
+}
 #buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
+}
+#buildingDetailsExtra label {
+	display:inline-block;
+	width:75px;
+}
+#buildingDetailsExtra .buildingDetailsPC li label{
+	display:inline-block;
+	width:125px;
 }
 
 

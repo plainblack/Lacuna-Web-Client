@@ -59,7 +59,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			1006 : "Authorization denied",
 			1007 : "Overspend",
 			1008 : "Underspend",
-			1009 : "Invalid range"
+			1009 : "Invalid range",
+			1010 : "Insufficient privileges",
+			1011 : "Not enough resources in storage",
+			1012 : "Not enough resources in production",
+			1013 : "Missing prerequisites" 
 		},
 		View : {
 			STAR : "star",
@@ -324,8 +328,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(status && status.empire) {
 				var now = new Date();
 				//convert to numbers
-				status.empire.happiness *= 1;
-				status.empire.happiness_hour *= 1;
+				if(status.empire.happiness) {
+					status.empire.happiness *= 1;
+					status.empire.happiness_hour *= 1;
+				}
 				status.empire.has_new_messages *= 1;
 				for(var pKey in status.empire.planets) {
 					if(status.empire.planets.hasOwnProperty(pKey)){
