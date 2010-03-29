@@ -10,11 +10,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		Event = Util.Event,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var Messaging = function() {
 		this.createEvent("onRpc");
 		this.createEvent("onRpcFailed");
+		this.createEvent("onShow");
 		this._buildPanel();
 	};
 	Messaging.prototype = {
@@ -32,10 +34,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingArchive" class="tab">Archive</li>',
 				'	</ul></div>',
 				'	<div id="messagingCreator" class="panelTabContainer" style="display:none">',
-				'		<div><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
-				'		<div><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
-				'		<div><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
-				'		<div id="messagingCreateBody">',
+				'		<div class="messagingCreatorC"><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
+				'		<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
+				'		<div class="messagingCreatorC"><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
+				'		<div class="messagingCreatorC" id="messagingCreateBody">',
 				'			<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
 				'		</div>',
 				'	</div>',
@@ -94,8 +96,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.select = Dom.get("messagingSelectAll");
 				Event.on(this.select, "click", this.selectAllMessages, this, true);
 				//create
-				//this._createToSelect();
-				this.createTo = Dom.get("messagingCreateTo");
+				this._createToSelect();
+				//this.createTo = Dom.get("messagingCreateTo");
 				this.createSubject = Dom.get("messagingCreateSubject");
 				this.createText = Dom.get("messagingCreateText");
 				this.createResponse = Dom.get("messagingCreateResponse");
@@ -108,32 +110,37 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			this.messagingPanel.render();
 		},
 		_createToSelect : function() {
-			/*var dataSource = new Util.XHRDataSource("Data.ashx");
+			var dataSource = new Util.XHRDataSource("/empire");
+			dataSource.connMethodPost = "POST";
 			dataSource.maxCacheEntries = 2;
 			dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
 			dataSource.responseSchema = {
-				resultsList : "empires",
-				fields : ["Name","Id"],
-				metaFields: {
-					Error: "Error" // Access to value in the server response
-				}
+				resultsList : "result.empires",
+				fields : ["name","id"]
 			};
-			dataSource.subscribe("dataErrorEvent", Lib.dataErrorEvent);
 			
-			var oTextboxList = new YAHOO.site.TextboxList("agencySelect", dataSource, { //config options
+			var oTextboxList = new YAHOO.lacuna.TextboxList("messagingCreateTo", dataSource, { //config options
 				maxResultsDisplayed: 10,
-				minQueryLength:0,
+				minQueryLength:3,
 				multiSelect:true,
 				forceSelection:true,
-				formatResultLabelKey:"Name",
-				formatResultColumnKeys:["Name"],
+				formatResultLabelKey:"name",
+				formatResultColumnKeys:["name"],
 				useIndicator:true
 			});
 			oTextboxList.generateRequest = function(sQuery){				
-				return "?query=agencies&ac=" + sQuery;
+				return Lang.JSON.stringify({
+						"id": YAHOO.rpc.Service._requestId++,
+						"method": "find",
+						"jsonrpc": "2.0",
+						"params": [
+							Cookie.getSub("lacuna","session") || "",
+							sQuery
+						]
+					})
 			};
 			
-			this.createTo = oTextboxList;*/
+			this.createTo = oTextboxList;
 		},
 		_formatMessageDate : function(strDate) {
 			var pieces = strDate.split(' '),
@@ -192,25 +199,26 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		
 		loadCreate : function(isAll) {
+			this.createResponse.innerHTML = "";
 			if(this.viewingMessage) {
 				if(isAll) {
 					var to = [this.viewingMessage.from];
 					for(var i=0; i<this.viewingMessage.recipients.length; i++) {
 						var nm = this.viewingMessage.recipients[i];
 						if(nm != Game.EmpireData.name) {
-							to.push(nm);
+							to.push({name:nm});
 						}
 					}
-					this.createTo.value = to.join(',');
+					this.createTo.SelectItems(to);
 				}
 				else {
-					this.createTo.value = this.viewingMessage.from;
+					this.createTo.SelectItems({name:this.viewingMessage.from});
 				}
 				this.createSubject.value = "Re: " + this.viewingMessage.subject;
 				this.createText.value = "\n\n***************\n" + this.viewingMessage.body;
 			}
 			else {
-				this.createTo.value = "";
+				this.createTo.ResetSelections();
 				this.createSubject.value = "";
 				this.createText.value = "";
 			}
@@ -395,48 +403,55 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		sendMessage : function() {
-			var InboxServ = Game.Services.Inbox,
-				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
-					recipients: this.createTo.value,
-					subject: this.createSubject.value,
-					body: this.createText.value
-				};
-			
-			if(this.viewingMessage) {
-				data.options = {
-					in_reply_to:this.viewingMessage.id
-				};
+			var to = this.createTo.Selections();
+			if(to.length == 0) {
+				this.createResponse.innerHTML = "Must send a message To someone.";
 			}
-			
-			InboxServ.send_message(data, {
-				success : function(o){
-					YAHOO.log(o, "info", "Messaging.sendMessage.success");
-					this.fireEvent("onRpc", o.result);
-					var u = o.result.message.unknown;
-					if(u && u.length > 0) {
-						this.createResponse.innerHTML = "Unable to send to: " + u.join(', ');						
-					}
-					else {
-						this.createTo.value = "";
-						this.createSubject.value = "";
-						this.createText.value = "";
-						this.currentTab = this.inbox.id;
-						this.loadInboxMessages();
-					}
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.sendMessage.failure");
-					if(o.error.code == 1005) {
-						this.createResponse.innerHTML = o.error.message;
-					}
-					else {
-						this.fireEvent("onRpcFailed", o);
-					}
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
+			else {
+				var InboxServ = Game.Services.Inbox,
+					data = {
+						session_id: Cookie.getSub("lacuna","session") || "",
+						recipients: to.join(','),
+						subject: this.createSubject.value,
+						body: this.createText.value
+					};
+				
+				if(this.viewingMessage) {
+					data.options = {
+						in_reply_to:this.viewingMessage.id
+					};
+				}
+				
+				InboxServ.send_message(data, {
+					success : function(o){
+						YAHOO.log(o, "info", "Messaging.sendMessage.success");
+						this.fireEvent("onRpc", o.result);
+						var u = o.result.message.unknown;
+						if(u && u.length > 0) {
+							this.createResponse.innerHTML = "Unable to send to: " + u.join(', ');						
+						}
+						else {
+							this.createResponse.innerHTML = "";	
+							this.createTo.ResetSelections();
+							this.createSubject.value = "";
+							this.createText.value = "";
+							this.currentTab = this.inbox.id;
+							this.loadTab();
+						}
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "Messaging.sendMessage.failure");
+						if(o.error.code == 1005) {
+							this.createResponse.innerHTML = o.error.message;
+						}
+						else {
+							this.fireEvent("onRpcFailed", o);
+						}
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		replyMessage : function(e) {
 			this.loadCreate();
@@ -506,8 +521,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			return this.messagingPanel.cfg.getProperty("visible");
 		},
 		show : function() {
+			Game.OverlayManager.hideAll();
 			this.messagingPanel.show();
-			this.loadInboxMessages();
+			this.currentTab = this.inbox.id;
+			this.loadTab();
+			this.fireEvent("onShow");
 		},
 		hide : function() {
 			this.messagingPanel.hide();

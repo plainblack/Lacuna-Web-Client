@@ -9,6 +9,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		Lang = YAHOO.lang,
+		Lib = YAHOO.lacuna.Library,
 		CSS_PREFIX = "TextboxList";
 		
 	var TBL = function(elInput, oDataSource, oConfigs) {
@@ -79,7 +80,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		if(oConfigs.useIndicator) {
 			//create indicator span for image next to input control
 			tblIndicator = document.createElement("span");
-			tblIndicator.innerHTML = '<img src="images/indicator.gif" alt="Loading..." />';
+			tblIndicator.innerHTML = ['<img src="',Lib.AssetUrl,'ui/indicator.gif" alt="Loading..." />'].join('');
 			Dom.setStyle(tblIndicator,"display","none");
 			Dom.addClass(tblIndicator, CSS_PREFIX + "Indicator");
 			if(oConfigs.multiSelect) {
@@ -183,7 +184,18 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		* For single select will return single data item
 		*/
 		Selections : function() {
-			return this.multiSelect ? this._oTblSelections : this._oTblSingleSelection;
+			if(this.multiSelect) {
+				var arr = [];
+				for(var key in this._oTblSelections){
+					if(this._oTblSelections.hasOwnProperty(key)){
+						arr.push(this._oTblSelections[key]._value);
+					}
+				}
+				return arr;
+			}
+			else {
+				return this._oTblSingleSelection.Value;
+			}
 		},
 		/**
 		* items should be an array of objects with the same schema as the datasource.  
@@ -554,7 +566,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 						this._updateDirty();
 						this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
 					}
-					//this._toggleContainer(false);
+					this._toggleContainer(false);
 				}
 				else {
 					var oData = this._createDataObject(elListItem._oResultData);

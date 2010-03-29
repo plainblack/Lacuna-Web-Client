@@ -7,8 +7,9 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
-		Slider = YAHOO.widget.Slider;
+		Game = Lacuna.Game,
+		Slider = YAHOO.widget.Slider,
+		Lib = Lacuna.Library;
 
 	var CreateSpecies = function(Empire) {
 		this.id = "createSpecies";
@@ -18,7 +19,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		
 		var container = document.createElement("div");
 		container.id = this.id;
-		Dom.addClass(container, Game.Styles.HIDDEN);
+		Dom.addClass(container, Lib.Styles.HIDDEN);
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
 		
@@ -58,10 +59,11 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			}, this);
 			
 			Dom.setStyle(this.elCreate, "display", "none");
-			Dom.removeClass(this.id, Game.Styles.HIDDEN);
+			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("speciesSelect", { keys:13 }, { fn:this.handleCreate, scope:this, correctScope:true } )); 
 		this.Dialog.render();
+		Game.OverlayManager.register(this.Dialog);
 	};
 	CreateSpecies.prototype = {
 		_createSliders : function() {
@@ -444,11 +446,12 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this._empire.show();
 		},
 		setMessage : function(str) {
-			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
+			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		show : function(empire) {
 			this.empireId = empire;
+			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 			if(!this._slidersCreated && Dom.getStyle(this.elCreate, "display") != "none") {
 				this._createSliders();
@@ -460,7 +463,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.elSelect.selectedIndex = 0;
 			this.elName.value = "";
 			this.elDesc.value = "";
-			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
+			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
 		convertValue : function(val) {

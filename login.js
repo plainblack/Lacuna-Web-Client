@@ -8,7 +8,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 
 	var Login = function() {
 		this.id = "login";
@@ -42,6 +43,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			modal:true,
 			close:false,
 			width:"300px",
+			underlay:false,
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
@@ -51,12 +53,12 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elCreate = Dom.get("loginCreate");
 		
 			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
-			Dom.removeClass(this.id, Game.Styles.HIDDEN);
+			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		
 		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("loginPass", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } )); 
 		this.Dialog.render();
-		
+		Game.OverlayManager.register(this.Dialog);
 	};
 	Login.prototype = {
 		handleLogin : function() {
@@ -76,6 +78,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 						this.hide();
 						this.initEmpire();
 						Game.EmpireCreator.initSpecies();
+						Game.OverlayManager.hideAll();
 						Game.SpeciesCreator.show();
 					}
 					else {
@@ -87,11 +90,12 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			});
 		},
 		show : function() {
+			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 		},
 		hide : function() {
 			if(this.elMessage) {
-				Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
+				Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			}
 			this.Dialog.hide();
 		},
@@ -102,7 +106,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				this.elCreate.parentNode.insertBefore(d, this.elCreate);
 				this.elMessage = d;
 			}
-			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
+			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		initEmpire : function() {
@@ -117,6 +121,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Event.stopEvent(e); //stop href click
 			this.hide(); //hide login
 			this.initEmpire();
+			Game.OverlayManager.hideAll();
 			Game.EmpireCreator.show();
 		}
 	};

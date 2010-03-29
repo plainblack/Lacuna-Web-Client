@@ -8,7 +8,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var UserMenu = function() {
 		this.id = "userMenu";
@@ -37,7 +38,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				}
 			});
 			userMenu.render();
-			Dom.removeClass(this.container, Game.Styles.HIDDEN);
+			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
 
 			Event.addListener(this.elClick, "click", function(ev){
 				//this.align("tl","bl");
@@ -46,6 +47,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}, userMenu, true);
 			
 			this.Menu = userMenu;
+			
+			var arrow = document.createElement("div");
+			arrow.id = "usersArrow";
+			var uc = Dom.get("usersCenter");
+			uc.insertBefore(arrow, uc.firstChild);
+			
 			this.createLeft();
 			this.createRight();
 			this.update();
@@ -61,7 +68,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				//bookmarkClick = bookmark.cloneNode(false),
 				//bookmarkImg = bookmark.appendChild(document.createElement("img"));
 
-			backImg.src = Game.AssetUrl + 'ui/l/star_system.png';
+			backImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
 			backImg.alt = "Back";
 			Event.on(backClick, "click", function() {
 				this.fireEvent("onBackClick");
@@ -70,7 +77,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([back,backClick], "menuItem");
 			Dom.addClass(backClick, "click");
 			
-			inboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
+			inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			inboxImg.alt = "Inbox";
 			Event.on(inboxClick, "click", function() {
 				this.fireEvent("onInboxClick");
@@ -79,7 +86,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([inbox,inboxClick], "menuItem");
 			Dom.addClass(inboxClick, "click");
 			
-			/*bookmarkImg.src = Game.AssetUrl + 'ui/l/bookmarks.png';
+			/*bookmarkImg.src = Lib.AssetUrl + 'ui/l/bookmarks.png';
 			bookmarkImg.alt = "Bookmark";
 			Event.on(bookmarkClick, "click", function() {
 				this.fireEvent("onBookmarkClick");
@@ -109,17 +116,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				forwardImg = forward.appendChild(document.createElement("img")),
 				forwardTxt = forward.appendChild(document.createElement("span"));
 				
-			essentiaImg.src = Game.AssetUrl + 'ui/l/essentia.png';
+			essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
 			essentiaImg.alt = essentiaImg.title = "Essentia";
 			Dom.addClass(essentia, "essentia");
 			Dom.addClass(essentia, "menuItem");
 			
-			happyImg.src = Game.AssetUrl + 'ui/l/happiness.png';
+			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
 			Dom.addClass(happy, "happiness");
 			Dom.addClass(happy, "menuItem");
 
-			forwardImg.src = Game.AssetUrl + 'ui/l/planet_side.png';
+			forwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
 			forwardImg.alt = "Forward";
 			Event.on(forwardClick, "click", function() {
 				this.fireEvent("onForwardClick");
@@ -141,29 +148,30 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.updateTick();
 		},
 		updateTick : function() {
-			this.elInboxImg.src = Game.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
+			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			this.elEssentiaText.innerHTML = Game.EmpireData.essentia || "-";
-			this.elHappyText.innerHTML = Math.floor(Game.EmpireData.happiness) || "-";
+			this.elHappyText.innerHTML = Math.round(Game.EmpireData.happiness) || "-";
 		},
 		show : function() {
-			Dom.removeClass(this.container, Game.Styles.HIDDEN);
+			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
 		},
 		hide : function() {
-			Dom.addClass(this.container, Game.Styles.HIDDEN);
+			Dom.addClass(this.container, Lib.Styles.HIDDEN);
 		},
 		starVisible : function(vis) {
-			this.elBackImg.src = Game.AssetUrl + 'ui/l/planet_side.png';
-			this.elForwardImg.src = Game.AssetUrl + 'ui/l/star_system.png';
+			this.elBackImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
+			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
 		},
 		systemVisible : function(vis) {
-			this.elBackImg.src = Game.AssetUrl + 'ui/l/star_map.png';
-			this.elForwardImg.src = Game.AssetUrl + 'ui/l/planet_side.png';
+			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
+			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
 		},
 		planetVisible : function(vis) {
-			this.elBackImg.src = Game.AssetUrl + 'ui/l/star_system.png';
-			this.elForwardImg.src = Game.AssetUrl + 'ui/l/star_map.png';
+			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
+			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 		},
 		showAbout : function() {
+			Game.OverlayManager.hideAll();
 			Lacuna.About.show();
 		}
 	};
@@ -190,7 +198,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				}
 			});
 			planetMenu.render();
-			Dom.removeClass(this.container, Game.Styles.HIDDEN);
+			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
 
 			Event.addListener(this.elClick, "click", function(ev){
 				//this.align("bl","tl");
@@ -199,6 +207,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}, planetMenu, true);
 			
 			this.Menu = planetMenu;
+			
+			var arrow = document.createElement("div");
+			arrow.id = "planetsArrow";
+			var pc = Dom.get("planetsCenter");
+			pc.insertBefore(arrow, pc.firstChild);
+			
 			this.createLeft();
 			this.createRight();
 			this.update();
@@ -214,17 +228,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				waterImg = water.appendChild(document.createElement("img")),
 				waterTxt = water.appendChild(document.createElement("span"));
 			
-			foodImg.src = Game.AssetUrl + 'ui/l/food.png';
+			foodImg.src = Lib.AssetUrl + 'ui/l/food.png';
 			foodImg.alt = foodImg.title = "Food";
 			Dom.addClass(food, "food");
 			Dom.addClass(food, "menuItem");
 			
-			oreImg.src = Game.AssetUrl + 'ui/l/ore.png';
+			oreImg.src = Lib.AssetUrl + 'ui/l/ore.png';
 			oreImg.alt = oreImg.title = "Ore";
 			Dom.addClass(ore, "ore");
 			Dom.addClass(ore, "menuItem");
 			
-			waterImg.src = Game.AssetUrl + 'ui/l/water.png';
+			waterImg.src = Lib.AssetUrl + 'ui/l/water.png';
 			waterImg.alt = waterImg.title = "Water";
 			Dom.addClass(water, "water");
 			Dom.addClass(water, "menuItem");
@@ -247,17 +261,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				happyImg = happy.appendChild(document.createElement("img")),
 				happyTxt = happy.appendChild(document.createElement("span"));
 				
-			energyImg.src = Game.AssetUrl + 'ui/l/energy.png';
+			energyImg.src = Lib.AssetUrl + 'ui/l/energy.png';
 			energyImg.alt = energyImg.title = "Energy";
 			Dom.addClass(energy, "energy");
 			Dom.addClass(energy, "menuItem");
 			
-			wasteImg.src = Game.AssetUrl + 'ui/l/waste.png';
+			wasteImg.src = Lib.AssetUrl + 'ui/l/waste.png';
 			wasteImg.alt = wasteImg.title = "Waste";
 			Dom.addClass(waste, "waste");
 			Dom.addClass(waste, "menuItem");
 			
-			happyImg.src = Game.AssetUrl + 'ui/l/happiness.png';
+			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
 			Dom.addClass(happy, "happiness");
 			Dom.addClass(happy, "menuItem");
@@ -285,7 +299,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 						fn: function(p_sType, p_aArgs, planet){
 							YAHOO.log(planet, "info", "PlanetMenu.planetMenuItem.click");
 							Game.EmpireData.current_planet_id = planet.id;
-							Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Game.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
+							Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
 						},
 						obj:p
 					} 
@@ -294,7 +308,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.Menu.addItems(items);
 			this.Menu.render();
 			
-			this.elText.innerHTML = ['<img src="', Game.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
+			this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
 			this.updateTick();
 		},
@@ -306,15 +320,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				count = 0;
 			
 			if(cp) {
-				//this.elText.innerHTML = ['<img src="', Game.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
+				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				this.elFoodText.innerHTML = Math.floor(cp.food_stored) || "-";
-				this.elOreText.innerHTML = Math.floor(cp.ore_stored) || "-";
-				this.elWaterText.innerHTML = Math.floor(cp.water_stored) || "-";
+				this.elFoodText.innerHTML = Math.round(cp.food_stored) || "-";
+				this.elOreText.innerHTML = Math.round(cp.ore_stored) || "-";
+				this.elWaterText.innerHTML = Math.round(cp.water_stored) || "-";
 				
-				this.elEnergyText.innerHTML = Math.floor(cp.energy_stored) || "-";
-				this.elWasteText.innerHTML = Math.floor(cp.waste_stored) || "-";
-				this.elHappyText.innerHTML = Math.floor(cp.happiness) || "-";
+				this.elEnergyText.innerHTML = Math.round(cp.energy_stored) || "-";
+				this.elWasteText.innerHTML = Math.round(cp.waste_stored) || "-";
+				this.elHappyText.innerHTML = Math.round(cp.happiness) || "-";
 			}
 			else {
 				this.elText.innerHTML = "Planet";
@@ -329,10 +343,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 		},
 		show : function() {
-			Dom.removeClass(this.container, Game.Styles.HIDDEN);
+			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
 		},
 		hide : function() {
-			Dom.addClass(this.container, Game.Styles.HIDDEN);
+			Dom.addClass(this.container, Lib.Styles.HIDDEN);
 		}
 	};
 

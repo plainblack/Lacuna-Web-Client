@@ -9,7 +9,8 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var MapSystem = function() {
 		this.createEvent("onStatusUpdate");
@@ -23,8 +24,8 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Details</div>',
-				'<div class="bd">',
-				'	<div class="yui-g">',
+				'<div class="bd" id="planetDetailsInfo">',
+				/*'	<div class="yui-g">',
 				'		<div class="yui-u first">',
 				'			<img id="planetDetailImg" src="" alt="" />',
 				'		</div>',
@@ -36,7 +37,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'				<li><label>Water: </label><span id="planetDetailsWater"></li>',
 				'			</ul>',
 				'		</div>',
-				'	</div>',
+				'	</div>',*/
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
@@ -54,14 +55,11 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			});
 			
 			this.planetDetails.renderEvent.subscribe(function(){
-				this.planetDetails.img = Dom.get("planetDetailImg");
-				this.planetDetails.name = Dom.get("planetDetailsName");
-				this.planetDetails.empire = Dom.get("planetDetailsEmpire");
-				this.planetDetails.minerals = Dom.get("planetDetailsMinerals");
-				this.planetDetails.water = Dom.get("planetDetailsWater");
-			}, this, true);
+				this.info = Dom.get("planetDetailsInfo");
+			});
 			
 			this.planetDetails.render();
+			Game.OverlayManager.register(this.planetDetails);
 		},
 		
 		IsVisible : function() {
@@ -83,13 +81,59 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				this._el = document.getElementById("content").appendChild(systemMap);
 				
 				Event.delegate(this._el, "click", function(e, matchedEl, container) {
-					var body = matchedEl.Body;
-					this.planetDetails.img.src = [Game.AssetUrl, "star_system/", body.image, ".png"].join('');
-					this.planetDetails.img.alt = body.name;
-					this.planetDetails.name.innerHTML = body.name;
-					this.planetDetails.empire.innerHTML = body.empire && body.empire.name ? body.empire.name : "Unknown";
-					this.planetDetails.minerals.innerHTML = body.ore ? "Has" : "0";
-					this.planetDetails.water.innerHTML = body.water;
+					var body = matchedEl.Body,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:100px;height:100px;" />',
+							'	</div>',
+							'	<div class="yui-u">',
+							'		<ul>',
+							'			<li id="planetDetailsName">',body.name,'</li>',
+							'			<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "Unknown"),'</li>',
+							'			<li><label>Water: </label>',body.water,'</li>',
+							'			<li><label>Planet Size:</label>',body.size,'</li>',
+							'			<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y : ',body.z,'z</li>',
+							'			<li><label>Star:</label>',body.star_name,'</li>',
+							'			<li><label>Orbit:</label>',body.orbit,'</li>',
+							'		</ul>',
+							'	</div>',
+							'</div>',
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Anthracite</label><span class="buildingDetailsNum">',body.ore.anthracite,'</span></li>',
+							'			<li><label>Bauxite</label><span class="buildingDetailsNum">',body.ore.bauxite,'</span></li>',
+							'			<li><label>Beryl</label><span class="buildingDetailsNum">',body.ore.beryl,'</span></li>',
+							'			<li><label>Chalcopyrite</label><span class="buildingDetailsNum">',body.ore.chalcopyrite,'</span></li>',
+							'			<li><label>Chromite</label><span class="buildingDetailsNum">',body.ore.chromite,'</span></li>',
+							'			<li><label>Fluorite</label><span class="buildingDetailsNum">',body.ore.fluorite,'</span></li>',
+							'			<li><label>Galena</label><span class="buildingDetailsNum">',body.ore.galena,'</span></li>',
+							'			<li><label>Goethite</label><span class="buildingDetailsNum">',body.ore.goethite,'</span></li>',
+							'			<li><label>Gold</label><span class="buildingDetailsNum">',body.ore.gold,'</span></li>',
+							'			<li><label>Gypsum</label><span class="buildingDetailsNum">',body.ore.gypsum,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Halite</label><span class="buildingDetailsNum">',body.ore.halite,'</span></li>',
+							'			<li><label>Kerogen</label><span class="buildingDetailsNum">',body.ore.kerogen,'</span></li>',
+							'			<li><label>Magnetite</label><span class="buildingDetailsNum">',body.ore.magnetite,'</span></li>',
+							'			<li><label>Methane</label><span class="buildingDetailsNum">',body.ore.methane,'</span></li>',
+							'			<li><label>Monazite</label><span class="buildingDetailsNum">',body.ore.monazite,'</span></li>',
+							'			<li><label>Rutile</label><span class="buildingDetailsNum">',body.ore.rutile,'</span></li>',
+							'			<li><label>Sulfur</label><span class="buildingDetailsNum">',body.ore.sulfur,'</span></li>',
+							'			<li><label>Trona</label><span class="buildingDetailsNum">',body.ore.trona,'</span></li>',
+							'			<li><label>Uraninite</label><span class="buildingDetailsNum">',body.ore.uraninite,'</span></li>',
+							'			<li><label>Zircon</label><span class="buildingDetailsNum">',body.ore.zircon,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'</div>'
+						];
+						
+					this.planetDetails.info.innerHTML = output.join('');
+					
+					Game.OverlayManager.hideAll();
 					this.planetDetails.show();
 				}, "img.planet", this, true);
 			}
@@ -105,10 +149,10 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				img = document.createElement("img");
 				
 			this.locationId = star.id;
-			Game.SetLocation(Lacuna.MapSystem.locationId, Game.View.SYSTEM);
+			Game.SetLocation(Lacuna.MapSystem.locationId, Lib.View.SYSTEM);
 				
 			var starImg = systemMap.appendChild(img.cloneNode(false));
-			starImg.src = [Game.AssetUrl, "star_system/", star.color, ".png"].join('');
+			starImg.src = [Lib.AssetUrl, "star_system/", star.color, ".png"].join('');
 				
 			for(var bKey in bodies) {
 				if(bodies.hasOwnProperty(bKey)) {
@@ -126,7 +170,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						
 						elName.innerHTML = body.name;
 						
-						elImg.src = [Game.AssetUrl, "star_system/", body.image, ".png"].join('');
+						elImg.src = [Lib.AssetUrl, "star_system/", body.image, ".png"].join('');
 						elImg.id = "planet" + body.orbit;
 						elImg.alt = body.name;
 						elImg.Body = body;
@@ -158,10 +202,11 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					callback = {
 						success : function(o){
 							this.fireEvent("onStatusUpdate", o.result.status);
+							YAHOO.log(o, "info", "MapSystem.Load.success");
 							this.Display(o.result);
 						},
 						failure : function(o){
-							YAHOO.log(["SYSTEMMAP FAILED: ", o]);
+							YAHOO.log(o, "info", "MapSystem.Load.failure");
 							Lacuna.MapStar.MapVisible(true);
 						},
 						timeout:Game.Timeout,

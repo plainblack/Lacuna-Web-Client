@@ -19,10 +19,16 @@
 		requires : ["yahoo","dom","connection","get","json"]
 	});
 	loader.addModule({
+		name: "library",
+		type: "js",
+		fullpath: host + "library.js?" + t,
+		requires : ["yahoo","dom"]
+	});
+	loader.addModule({
 		name: "game",
 		type: "js",
 		fullpath: host + "game.js?" + t,
-		requires : ["event","cookie","rpc","smd"]
+		requires : ["event","cookie","library","rpc","smd"]
 	});
 	loader.addModule({
 		name: "about",
@@ -75,7 +81,7 @@
 		name: "textboxList",
 		type: "js",
 		fullpath: host + "textboxList.js?" + t,
-		requires : ["autocomplete"]
+		requires : ["autocomplete","library"]
 	});
 	loader.addModule({
 		name: "messaging",

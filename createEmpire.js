@@ -7,7 +7,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 
 	var CreateEmpire = function(Login) {
 		this.id = "createEmpire";
@@ -53,10 +54,11 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elMessage = Dom.get("empireMessage");
 			
-			Dom.removeClass(this.id, Game.Styles.HIDDEN);
+			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("empirePassConfirm", { keys:13 }, { fn:this.handleCreate, scope:this, correctScope:true } )); 
 		this.Dialog.render();
+		Game.OverlayManager.register(this.Dialog);
 		
 		this.initSpecies();
 	};
@@ -107,17 +109,18 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this._login.show();
 		},
 		setMessage : function(str) {
-			Dom.replaceClass(this.elMessage, Game.Styles.HIDDEN, Game.Styles.ALERT);
+			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
 		show : function() {
+			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 		},
 		hide : function() {
 			this.elName.value = "";
 			this.elPass.value = "";
 			this.elPassConfirm.value = "";
-			Dom.replaceClass(this.elMessage, Game.Styles.ALERT, Game.Styles.HIDDEN);
+			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
 		},
 		initSpecies : function() {

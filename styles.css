@@ -86,7 +86,8 @@ body.yui-skin-sam .yui-panel .hd {
 }
 body.yui-skin-sam .yui-panel .bd {
 	-moz-border-radius:10px 10px 0 0;
-	-webkit-border-radius:10px 10px 0 0;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-top-left-radius: 10px;
 	border-radius:10px 10px 0 0;
 	border-width: 5px 5px 0;
 	border-style:solid;
@@ -94,7 +95,8 @@ body.yui-skin-sam .yui-panel .bd {
 }
 body.yui-skin-sam .yui-panel .ft {
 	-moz-border-radius:0 0 10px 10px;
-	-webkit-border-radius:0 0 10px 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
 	border-radius:0 0 10px 10px;
 	border-width: 0 5px 5px;
 	border-style:solid;
@@ -258,6 +260,22 @@ SHINEY
 	z-index:1005;
 	cursor:pointer;
 }
+#usersArrow {
+	width: 100%; 
+	height: 100%; 
+	background: url("http://localhost/lacuna/assets/ui/down.png") no-repeat scroll center 55px transparent;
+	position:absolute;
+	top:0;
+	left:0;
+}
+#planetsArrow {
+	width: 100%; 
+	height: 100%; 
+	background: url("http://localhost/lacuna/assets/ui/up.png") no-repeat scroll center 10px transparent;
+	position:absolute;
+	top:0;
+	left:0;
+}
 
 
 .back, .food { left:10px; }
@@ -311,11 +329,17 @@ about
 #messagingCreator {
 	border-top-color:#52ACFF;
 }
-#messagingCreator div {
+#messagingCreator div.messagingCreatorC {
 	background-color:#D2D2D2;
 }
-#messagingCreateTo, #messagingCreateSubject {
+#messagingCreateToTbl {
+	background-color:#fff;
+}
+#messagingCreateToTbl, #messagingCreateSubject {
 	width:450px;
+}
+#messagingCreateTo {
+	width:100px;
 }
 #messagingCreateBody {
 	height: 260px;
@@ -341,7 +365,7 @@ about
 	font-weight:bold;
 	width:75px;
 }
-#messagingDisplay div, #messagingCreator div {
+#messagingDisplay div, #messagingCreator div.messagingCreatorC {
 	border-width:1px 1px 0;
 	border-style:solid;
 	border-color:#D2D2D2;
@@ -584,14 +608,14 @@ TextboxList
 	min-width:5px; /* override any other min-width settings */
 }
 .TextboxList .TextboxListBitBox { 
-    background:#42AF9C none repeat scroll 0 0; 
+    background:#52acff none repeat scroll 0 0; 
     border:1px solid #CAD8F3;
     position:relative;
     font-size:85%;
     padding:0 15px 0 2px;
 }
 .TextboxList .TextboxListBitBoxDelete {
-    background:transparent url(../images/crosssmall.gif) repeat scroll 0 0;
+    background:transparent url(http://localhost/lacuna/assets/ui/crosssmall.gif) repeat scroll 0 0;
     display:block;
     font-size:1px;
     height:7px;
@@ -620,7 +644,7 @@ TextboxList
     top:1px;
     #top:2px;
     position:absolute;
-    background:transparent url(../images/dropdown.gif) repeat scroll 0 0;
+    background:transparent url(http://localhost/lacuna/assets/ui/dropdown.gif) repeat scroll 0 0;
     z-index:2;
     display:-moz-inline-stack; /*mozilla 2.0*/
     display:inline-block; /*mozilla 3.0, ie 8*/

@@ -9,7 +9,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var MapStar = function() {
 		this.createEvent("onMapLoaded");
@@ -48,7 +49,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 										
 						var map = new Lacuna.Mapper.StarMap("starMap");
 						map.setZoomLevel(loc.z);
-						map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
+						map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 						
 						//draw what we got
 						map.redraw();

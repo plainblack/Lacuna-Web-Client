@@ -9,7 +9,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var Mapper = {};
 	Mapper.util = {
@@ -210,7 +211,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				Dom.setStyle(alignment, "width", this.map.tileSizeInPx + 'px');
 				Dom.setStyle(alignment, "height", this.map.tileSizeInPx + 'px');
 				Dom.setStyle(alignment, "z-index", '2');
-				Dom.setStyle(alignment, "background", ['transparent url(',Game.AssetUrl,'star_map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
+				Dom.setStyle(alignment, "background", ['transparent url(',Lib.AssetUrl,'star_map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
 			}
 		},
 		refresh : function() {
@@ -228,7 +229,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			if(this.data && this.data.pending_build) {
 				this._createCounter();
-				this.counter.innerHTML = Math.floor(this.data.pending_build.seconds_remaining);
+				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
 			}
 			else if(this.counter) {
 				this.counter.parentNode.removeChild(this.counter);
@@ -246,7 +247,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.data = obj.data;
 			if(this.data && this.data.pending_build) {
 				this._createCounter();
-				this.counter.innerHTML = Math.floor(this.data.pending_build.seconds_remaining);
+				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
 			}
 		},
 		_createCounter : function() {
@@ -689,10 +690,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				star = xSet ? xSet[y] : null;
 			
 			if(star) {
-				return {data:star, url:[Game.AssetUrl,'star_map/',star.color,'.png'].join('')};
+				return {data:star, url:[Lib.AssetUrl,'star_map/',star.color,'.png'].join('')};
 			}
 			else {
-				return {blank:true, url:Game.AssetUrl + 'ui/blankstar.png'};
+				return {blank:true, url:Lib.AssetUrl + 'ui/blankstar.png'};
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {
@@ -839,10 +840,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				return {blank:building.level == 0, data:building, url:[Game.AssetUrl,'planet_side/',building.image,'.png'].join('')};
+				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',building.image,'.png'].join('')};
 			}
 			else {
-				return {blank:true, url:Game.AssetUrl + 'planet_side/ground.png'};
+				return {blank:true, url:Lib.AssetUrl + 'planet_side/ground.png'};
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {
@@ -896,6 +897,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		refresh : function() {
 			if(this.tileLayer) {
 				this.tileLayer.showTiles(true);
+			}
+		},
+		refreshTile : function(building) {
+			if(this.tileLayer) {
+				this.addSingleTileData(building);
+				var tile = this.tileLayer.findTile(building.x,building.y,this.zoom);
+				if(tile) {
+					tile.refresh();
+				}
 			}
 		},
 		refreshTileCounter : function(building) {

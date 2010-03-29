@@ -10,7 +10,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Event = Util.Event,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
@@ -20,7 +21,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		
 		this._buildDetailsPanel();
 		this._buildBuilderPanel();
-		//this._buildStatusPanel();
 		
 		this.subscribe("onBuildStart", this.onBuildStartEvent);
 		this.subscribe("onBuildComplete", this.onBuildCompleteEvent);
@@ -51,12 +51,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'		<div class="yui-u first">',
 				'			<ul>',
 				'				<li>Current Production</li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFood" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOre" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWater" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFood" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOre" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWater" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum"></span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum"></span></li>',
 				'			</ul>',
 				'		</div>',
 				'		<div class="yui-u">',
@@ -135,14 +135,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingDetails.showEvent.subscribe(this._buildDetailsShow, this, true);
 			
 			this.buildingDetails.render();
+			Game.OverlayManager.register(this.buildingDetails);
 		},
 		_buildDetailsShow : function() {
-			this.buildingBuilder.hide();
 			var panel = this.buildingDetails,
 				results = this.currentBuilding,
 				building = results.building;
 			panel.name.innerHTML = building.name;
-			panel.img.src = [Game.AssetUrl, "planet_side/", building.image, ".png"].join('');
+			panel.img.src = [Lib.AssetUrl, "planet_side/", building.image, ".png"].join('');
 			panel.level.innerHTML = building.level;
 			panel.curEnergy.innerHTML = building.energy_hour;
 			panel.curFood.innerHTML = building.food_hour;
@@ -152,18 +152,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.curWater.innerHTML = building.water_hour;
 			
 			if(building.pending_build) {
-				panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + building.pending_build.seconds_remaining;
+				panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
 				if(building.pending_build.seconds_remaining > 0) {
 					panel.addQueue(building.pending_build.seconds_remaining,
 						function(remaining){
-							var rf = Math.floor(remaining);
+							var rf = Math.round(remaining);
 							if(rf <= 0) {
 								this.buildingDetails.timeLeftLi.innerHTML = "";
 								YAHOO.log("Complete","info","buildingDetails.showEvent.BuildTimeRemaining");
 								this.DetailsView({data:{id:building.id,url:building.url},x:building.x,y:building.y});
 							}
 							else {
-								this.buildingDetails.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + rf;
+								this.buildingDetails.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
 							}
 						},
 						null,
@@ -182,22 +182,22 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				panel.upgradeUl.innerHTML = [
 					'	<li>Upgrade Cost</li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.cost.food,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',up.cost.ore,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.cost.water,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.cost.energy,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
-					'	<li><span class="smallImg">T:</span>',up.cost.time,'</li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.cost.food,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',up.cost.ore,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.cost.water,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.cost.energy,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',up.cost.time,'</li>',
 				].join('');
 
 				if(up.can) {
 					panel.upgradeProdUl.innerHTML = ['<li><ul><li>Upgrade Production</li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.production.food_hour,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',up.production.ore_hour,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.production.water_hour,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.production.energy_hour,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.production.waste_hour,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span><span class="buildingDetailsNum">',up.production.happiness_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.production.food_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',up.production.ore_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.production.water_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.production.energy_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.production.waste_hour,'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span class="buildingDetailsNum">',up.production.happiness_hour,'</span></li>',
 					'	</ul></li><li><button type="button">Upgrade</button></li>'].join('');
 					
 					Event.on(Sel.query("button", panel.upgradeProdUl, true), "click", function(e){
@@ -220,17 +220,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'<div class="yui-g">',
 						'	<div class="yui-u first">',
 						'		<ul>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/food.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.food_stored, '/', planet.food_capacity, ' : ', planet.food_hour,'/hr</span></li>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/ore.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.ore_stored, '/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr</span></li>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/water.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.water_stored, '/', planet.water_capacity, ' : ', planet.water_hour,'/hr</span></li>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/energy.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.energy_stored, '/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr</span></li>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/waste.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.waste_stored, '/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr</span></li>',
-						'			<li><span class="smallImg"><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span>',
+						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
 						'				<span class="buildingDetailsNum">',planet.happiness, ' : ', planet.happiness_hour,'/hr</span></li>',
 						'		</ul>',
 						'	</div>',
@@ -274,7 +274,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					nLi = li.cloneNode(false);
 
 					Dom.addClass(nLi,"buildQueueTime");
-					nLi.innerHTML = bqo.seconds_remaining;
+					nLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
 					nUl.appendChild(nLi);
 
 					panel.extraEl.appendChild(nUl);
@@ -286,7 +286,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							c.removeChild(ul);
 						}
 						else {
-							el.innerHTML = Math.floor(remaining);
+							el.innerHTML = Lib.formatTime(Math.round(remaining));
 						}
 					}, nLi);
 				}
@@ -437,7 +437,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			});
 			
 			this.buildingBuilder.showEvent.subscribe(function() {
-				this.buildingDetails.hide();
 				Dom.addClass("builderBuildable", "panelTabSelected");
 				Dom.removeClass("builderUnavailable", "panelTabSelected");
 				Dom.setStyle(this.buildingBuilder.list, "display", "");
@@ -445,6 +444,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}, this, true);
 			
 			this.buildingBuilder.render();
+			Game.OverlayManager.register(this.buildingBuilder);
 		},
 				
 		onBuildStartEvent : function(building) {
@@ -496,7 +496,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 								
 				var map = new Lacuna.Mapper.PlanetMap("planetMap");
 				map.setZoomLevel(map.addTileData(oArgs.buildings));
-				map.imgUrlLoc = Game.AssetUrl + 'ui/mapiator/';
+				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
 				map.redraw();
@@ -585,13 +585,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				success : function(o){
 					YAHOO.log(o, "info", "MapPlanet.ViewData.success");
 					this.fireEvent("onMapRpc", o.result);
-					var newB = o.result.building,
-						oldB = this.buildings[o.result.building.id];
-					if(!oldB || newB.level != oldB.level) {
-						this.buildings[newB.id] = newB;
-						this._map.addSingleTileData(newB);
-						this._map.refresh();
-					}
+					var newB = o.result.building;
+					this.buildings[newB.id] = newB;
+					this._map.refreshTile(newB);
+
 					if(callback && callback.success) {
 						callback.success.call(this, o.result, callback.url, x, y);
 					}
@@ -629,6 +626,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			panel.hide(); //hide panel which removes the currentBuilding			
 			this.currentBuilding = oResults; //assign new building
+			Game.OverlayManager.hideAll();
 			panel.show(); //and show again
 		},
 		
@@ -647,6 +645,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			Event.purgeElement(this.buildingBuilder.unavailable);
 			this.buildingBuilder.unavailable.innerHTML = "";
 			
+			Game.OverlayManager.hideAll();
 			this.buildingBuilder.show();
 			
 			BodyServ.get_buildable(data,{
@@ -691,17 +690,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					if(bd.build.can) {
 						nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
 						'	<div class="yui-u first" style="width:20%">',
-						'		<img src="',Game.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
+						'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
 						'	</div>',
 						'	<div class="yui-u" style="width:65%">',
 						'		<span style="font-weight:bold;">',bd.name,'</span>: ',
 						'		<div><label style="font-weight:bold;">Cost:</label>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-						'			<span><span>T:</span>',costs.time,'</span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',costs.time,'</span>',
 						/*'			<span><label>Energy:</label>',costs.energy,'</span>, ',
 						'			<span><label>Food:</label>',costs.food,'</span>, ',
 						'			<span><label>Ore:</label>',costs.ore,'</span>, ',
@@ -709,12 +708,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><label>Water:</label>',costs.water,'</span>',*/
 						'		</div>',
 						'		<div><label style="font-weight:bold;">Prod:</label>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
 						/*'			<span><label>Happiness:</label>',prod.happiness_hour,'</span>, ',
 						'			<span><label>Energy:</label>',prod.energy_hour,'</span>, ',
 						'			<span><label>Food:</label>',prod.food_hour,'</span>, ',
@@ -757,18 +756,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						}
 						nLi.innerHTML = ['<div class="yui-gf" style="margin-bottom:2px;">',
 						'	<div class="yui-u first" style="width:20%;">',
-						'		<img src="',Game.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
+						'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
 						'	</div>',
 						'	<div class="yui-u" style="width:78%;">',
 						'		<span style="font-weight:bold;">',bd.name,'</span>: ',
 						'		<span>',reason,'</span>',
 						'		<div><label style="font-weight:bold;">Cost:</label>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-						'			<span><span>T:</span>',costs.time,'</span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',costs.time,'</span>',
 						/*'		<span><label>Energy:</label>',costs.energy,'</span>, ',
 						'		<span><label>Food:</label>',costs.food,'</span>, ',
 						'		<span><label>Ore:</label>',costs.ore,'</span>, ',
@@ -777,12 +776,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'		</div>',
 						
 						'		<div><label style="font-weight:bold;">Prod:</label>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
-						'			<span><span><img src="',Game.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
 						/*'		<span><label>Happiness:</label>',prod.happiness_hour,'</span>, ',
 						'		<span><label>Energy:</label>',prod.energy_hour,'</span>, ',
 						'		<span><label>Food:</label>',prod.food_hour,'</span>, ',
@@ -899,7 +898,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			if(building.pending_build) {
 				this.fireEvent("onBuildStart", building);
 				var ms = (building.pending_build.seconds_remaining * 1000);
-				Game.QueueAdd(building.id, Game.QueueTypes.PLANET, ms);
+				Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
 			}
 		},
 		QueueTick : function(id, ms) {

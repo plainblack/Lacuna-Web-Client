@@ -10,14 +10,16 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		Event = Util.Event,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game;
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
 		
 	var About = function() {
 		this.id = "about";
+		this.createEvent("onShow");
 		
 		var container = document.createElement("div");
 		container.id = this.id;
-		Dom.addClass(container, Game.Styles.HIDDEN);
+		Dom.addClass(container, Lib.Styles.HIDDEN);
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
 		
@@ -36,9 +38,10 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		this.Dialog.renderEvent.subscribe(function(){
 			this.elCreditsList = Dom.get("aboutCredits");
 			
-			Dom.removeClass(this.id, Game.Styles.HIDDEN);
+			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
+		Game.OverlayManager.register(this.Dialog);
 	};
 	About.prototype = {
 		_getHtml : function() {
@@ -70,6 +73,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 					scope:this
 				});
 			}
+			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 		},
 		hide : function() {
