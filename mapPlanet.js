@@ -187,7 +187,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.cost.water,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.cost.energy,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',up.cost.time,'</li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>',
 				].join('');
 
 				if(up.can) {
@@ -221,17 +221,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'	<div class="yui-u first">',
 						'		<ul>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.food_stored, '/', planet.food_capacity, ' : ', planet.food_hour,'/hr</span></li>',
+						'				<span>',planet.food_stored, '/', planet.food_capacity, ' : ', planet.food_hour,'/hr</span></li>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.ore_stored, '/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr</span></li>',
+						'				<span>',planet.ore_stored, '/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr</span></li>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.water_stored, '/', planet.water_capacity, ' : ', planet.water_hour,'/hr</span></li>',
+						'				<span>',planet.water_stored, '/', planet.water_capacity, ' : ', planet.water_hour,'/hr</span></li>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.energy_stored, '/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr</span></li>',
+						'				<span>',planet.energy_stored, '/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr</span></li>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.waste_stored, '/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr</span></li>',
+						'				<span>',planet.waste_stored, '/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr</span></li>',
 						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
-						'				<span class="buildingDetailsNum">',planet.happiness, ' : ', planet.happiness_hour,'/hr</span></li>',
+						'				<span>',planet.happiness, ' : ', planet.happiness_hour,'/hr</span></li>',
 						'		</ul>',
 						'	</div>',
 						'	<div class="yui-u first">',
@@ -482,8 +482,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._isVisible = visible;
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
-			this.buildingDetails.hide();
-			this.buildingBuilder.hide();
+			if(!visible) {
+				this.buildingDetails.hide();
+				this.buildingBuilder.hide();
+			}
 		},
 		Mapper : function(oArgs) {
 			YAHOO.log(oArgs.buildings, "debug", "Mapper");
@@ -534,7 +536,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			if(this.locationId) {
 				var BodyServ = Game.Services.Body,
 					data = {
-						session_id: Cookie.getSub("lacuna","session") || "",
+						session_id: Game.GetSession(""),
 						body_id: this.locationId
 					};
 				
@@ -577,7 +579,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		ViewData : function(id, url, callback, x, y) {
 			var BuildingServ = Game.Services.Buildings.Generic,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					building_id: id
 				};
 			
@@ -634,7 +636,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			YAHOO.log(tile, "info", "BuilderView");
 			var BodyServ = Game.Services.Body,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					body_id: this.locationId,
 					x:tile.x,
 					y:tile.y
@@ -700,7 +702,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',costs.time,'</span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
 						/*'			<span><label>Energy:</label>',costs.energy,'</span>, ',
 						'			<span><label>Food:</label>',costs.food,'</span>, ',
 						'			<span><label>Ore:</label>',costs.ore,'</span>, ',
@@ -767,7 +769,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',costs.time,'</span>',
+						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
 						/*'		<span><label>Energy:</label>',costs.energy,'</span>, ',
 						'		<span><label>Food:</label>',costs.food,'</span>, ',
 						'		<span><label>Ore:</label>',costs.ore,'</span>, ',
@@ -808,7 +810,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Build : function(building, x, y) {
 			var BuildingServ = Game.Services.Buildings.Generic,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					planet_id: this.locationId,
 					x:x,
 					y:y
@@ -842,7 +844,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Upgrade : function(building) {
 			var BuildingServ = Game.Services.Buildings.Generic,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					building_id: building.id
 				};
 			

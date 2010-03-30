@@ -21,7 +21,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		container.innerHTML = [
 		'	<div class="hd">Login</div>',
 		'	<div class="bd">',
-		'		<form name="loginForm">',
+		'		<form id="loginForm" name="loginForms">',
 		'			<ul>',
 		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
 		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass" /></li>',
@@ -63,16 +63,17 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 	Login.prototype = {
 		handleLogin : function() {
 			this.setMessage("");
-			YAHOO.log(["name: ", this.elName.value, " - pass: ", this.elPass.value].join(''));			
+			YAHOO.log(["name: ", this.elName.value, " - pass: ", this.elPass.value].join(''), "info", "Login.handleLogin");			
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
-					YAHOO.log(o);
+					YAHOO.log(o, "info", "Login.handleLogin.success");
+					Dom.get("loginForm").reset();
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "LoginFailed");
+					YAHOO.log(o, "error", "Login.handleLogin.failure");
 					if(o.error.code == 1010) {
 						//haven't founded empire yet so take them to species
 						this.hide();

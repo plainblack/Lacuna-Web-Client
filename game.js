@@ -51,7 +51,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 		
 		Start : function() {
-			var session = Cookie.getSub("lacuna","session");
+			var session = Game.GetSession();
 			if(!session) {
 				Lacuna.Game.DoLogin();
 			}
@@ -97,7 +97,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//create menus (or update if already created)
 			Lacuna.Menu.create();
 			//set our interval going for resource calcs
-			Game.recTime = new Date();
+			Game.recTime = (new Date()).getTime();
 			Game.recInt = setInterval(Game.Tick, 1000);
 			//init event subscribtions if we need to
 			Game.InitEvents();
@@ -274,7 +274,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		InitQueue : function() {
 			var BodyServ = Game.Services.Body,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					body_id: Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id
 				};
 			
@@ -348,7 +348,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},	
 		GetFullStatus : function(callback) {
 			var EmpireServ = Game.Services.Empire,
-				session = Cookie.getSub("lacuna","session");
+				session = Game.GetSession();
 			EmpireServ.get_full_status({session_id:session}, {
 				success : function(o) {
 					Lacuna.Game.ProcessStatus(o.result);
@@ -368,6 +368,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				scope:callback && callback.scope || this
 			});
 		},
+		GetSession : function(replace) {
+			return Cookie.getSub("lacuna","session") || replace;
+		},
 		GetSize : function() {
 			var content = document.getElementById("content"),
 				width = content.offsetWidth,
@@ -385,7 +388,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 		Logout : function() {
 			var EmpireServ = Lacuna.Game.Services.Empire,
-				session = Cookie.getSub("lacuna","session");
+				session = Game.GetSession();
 				
 			clearTimeout(Lacuna.Game.recInt);
 			
@@ -423,7 +426,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		//Tick related
 		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,
-				dt = new Date(),
+				dt = (new Date()).getTime(),
 				diff = dt - Lacuna.Game.recTime,
 				ratio = (diff / Lacuna.Game.HourMS),
 				updateMenu = true,

@@ -166,14 +166,16 @@ menu
 
 body.yui-skin-sam  #planetsCenter .yuimenu .bd {
 	-moz-border-radius:10px 10px 0 0;
-	-webkit-border-radius:10px 10px 0 0;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
 	border-radius:10px 10px 0 0;
 	background-color:#52acff;
 	border:5px solid #52ACFF;
 }
 body.yui-skin-sam #usersCenter .yuimenu .bd {
 	-moz-border-radius: 0 0 10px 10px;
-	-webkit-border-radius: 0 0 10px 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
 	border-radius: 0 0 10px 10px;
 	background-color:#52acff;
 	border:5px solid #52ACFF;
@@ -510,31 +512,32 @@ about
 	display: inline;
 	vertical-align: middle;
 }
-#orbit0 { width: 250px; top: 80px; }
-#planet0 { width: 60px; }
-#orbit1 { width: 345px; top: 140px; }
-#planet1 { width: 75px; }
-#orbit2 { width: 450px; top: 210px; }
-#planet2 { width: 90px; }
-#orbit3 { width: 570px; top: 285px; }
-#planet3 { width: 105px; }
-#orbit4 { width: 700px; top: 370px; }
-#planet4 { width: 120px; }
-#orbit5 { width: 855px; top: 460px; }
-#planet5 { width: 135px; }
-#orbit6 { width: 1020px; top: 560px; }
-#planet6 { width: 150px; }
-#orbit7{ width: 1200px; top: 660px; }
-#planet7 { width: 165px; }
+#orbit1 { width: 250px; top: 80px; }
+#planet1 { width: 60px; }
+#orbit2 { width: 345px; top: 140px; }
+#planet2 { width: 75px; }
+#orbit3 { width: 450px; top: 210px; }
+#planet3 { width: 90px; }
+#orbit4 { width: 570px; top: 285px; }
+#planet4 { width: 105px; }
+#orbit5 { width: 700px; top: 370px; }
+#planet5 { width: 120px; }
+#orbit6 { width: 855px; top: 460px; }
+#planet6 { width: 135px; }
+#orbit7 { width: 1020px; top: 560px; }
+#planet7 { width: 150px; }
 
 /*
 planet details
 */
 #planetDetailsName {
-	font-weight:bold;
+	font-family:impact;
+	font-size:120%;	
 }
 #planetDetails label {
 	font-weight:bold;
+	display:inline-block;
+	width:100px;
 }
 .smallImg {
 	display:inline-block;
@@ -556,6 +559,11 @@ planet details
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
+.buildingDetailsNum { 
+	display:inline-block;
+	text-align:right;
+	width:70px;
+}
 #buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
 }
@@ -567,7 +575,36 @@ planet details
 	display:inline-block;
 	width:125px;
 }
+body.yui-skin-sam .yui-tt .bd {
+	background-color:#52acff;
+	border-color:#429cef #328cdf #328cdf;
+}
 
+/*
+PROFILE
+*/
+#profileDetails label {
+	display:inline-block;
+	width:75px;
+}
+.medalContainer {
+	overflow: auto;
+	zoom:1;
+}
+.medal {
+	margin:3px 3px 0;
+	padding:2px 2px 0;
+	position:relative;
+}
+.medal .medalPublic {
+	cursor:pointer;
+	position:absolute;
+	right:1px;
+}
+.medal .medalImg {
+	float:left;
+	margin-right:10px;
+}
 
 /*
 TextboxList

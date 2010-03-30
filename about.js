@@ -50,7 +50,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			'	<div class="bd">',
 			'		<form name="aboutForm">',
 			'			<label>The Lacuna Expanse</label>',
-			'			<ul><li>Colonized 2010 by Lacuna Expanse Corp</li></ul><br/>',
+			'			<ul><li>&copy; 2010 by Lacuna Expanse Corp</li></ul><br/>',
 			'			<label>Credits</label>',
 			'			<ul id="aboutCredits">',
 			'			</ul>',

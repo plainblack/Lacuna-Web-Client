@@ -25,19 +25,6 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Details</div>',
 				'<div class="bd" id="planetDetailsInfo">',
-				/*'	<div class="yui-g">',
-				'		<div class="yui-u first">',
-				'			<img id="planetDetailImg" src="" alt="" />',
-				'		</div>',
-				'		<div class="yui-u">',
-				'			<ul>',
-				'				<li id="planetDetailsName"></li>',
-				'				<li><label>Empire: </label><span id="planetDetailsEmpire"></span></li>',
-				'				<li><label>Minerals: </label><span id="planetDetailsMinerals"></li>',
-				'				<li><label>Water: </label><span id="planetDetailsWater"></li>',
-				'			</ul>',
-				'		</div>',
-				'	</div>',*/
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
@@ -90,6 +77,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 							'	<div class="yui-u">',
 							'		<ul>',
 							'			<li id="planetDetailsName">',body.name,'</li>',
+							'			<li><label>Type: </label>',body.type,'</li>',
 							'			<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "Unknown"),'</li>',
 							'			<li><label>Water: </label>',body.water,'</li>',
 							'			<li><label>Planet Size:</label>',body.size,'</li>',
@@ -99,7 +87,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 							'		</ul>',
 							'	</div>',
 							'</div>',
-							'<div class="yui-g">',
+							'<div class="yui-g" style="margin-top:5px;padding-top:5px;border-top:1px solid #52acff;">',
 							'	<div class="yui-u first">',
 							'		<ul>',
 							'			<li><label>Anthracite</label><span class="buildingDetailsNum">',body.ore.anthracite,'</span></li>',
@@ -197,7 +185,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			if(starId) {
 				var MapServ = Game.Services.Maps,
 					data = {
-						session_id: Cookie.getSub("lacuna","session") || ""
+						session_id: Game.GetSession("")
 					},
 					callback = {
 						success : function(o){

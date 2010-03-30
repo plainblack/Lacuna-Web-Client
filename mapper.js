@@ -718,7 +718,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			else {
 				var data = {
-					session_id : Cookie.getSub("lacuna","session") || "",
+					session_id : Game.GetSession(""),
 					x1 : x1, 
 					x2 : x2, 
 					y1 : y1, 

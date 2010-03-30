@@ -134,21 +134,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						"method": "find",
 						"jsonrpc": "2.0",
 						"params": [
-							Cookie.getSub("lacuna","session") || "",
+							Game.GetSession(""),
 							sQuery
 						]
 					})
 			};
 			
 			this.createTo = oTextboxList;
-		},
-		_formatMessageDate : function(strDate) {
-			var pieces = strDate.split(' '),
-				time = pieces[3].split(':');
-			var dt = new Date(pieces[2],pieces[1],pieces[0],time[0],time[1],time[2],0);
-			//year, month, day, hours, minutes, seconds
-			//"23 03 2010 01:20:11 +0000"
-			return Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en");
 		},
 		_setTab : function(el) {
 			var list = this.list;
@@ -229,7 +221,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		
 			var InboxServ = Game.Services.Inbox,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					options:{page_number: 1}
 				};
 			InboxServ.view_inbox(data, {
@@ -250,7 +242,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			
 			var InboxServ = Game.Services.Inbox,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					options:{page_number: 1}
 				};
 			InboxServ.view_sent(data, {
@@ -271,7 +263,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			
 			var InboxServ = Game.Services.Inbox,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					options:{page_number: 1}
 				};
 			InboxServ.view_archived(data, {
@@ -306,7 +298,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				nLi.innerHTML = [
 					is.inbox ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
 					'	<div class="messageContainer">',
-					'		<div class="messageDate">',this._formatMessageDate(msg.date),'</div>',
+					'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
 					'		<div class="messageFrom">',
 					is.sent ? msg.to : msg.from,
 					'		</div>',
@@ -340,7 +332,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			if(msg && msg.id) {
 				var InboxServ = Game.Services.Inbox,
 					data = {
-						session_id: Cookie.getSub("lacuna","session") || "",
+						session_id: Game.GetSession(""),
 						message_id: msg.id
 					};
 				InboxServ.read_message(data, {
@@ -395,7 +387,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				}
 
 				this.viewingMessage = msg;
-				this.timestamp.innerHTML = this._formatMessageDate(msg.date);
+				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
 				this.from.innerHTML = msg.from;
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
@@ -410,7 +402,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			else {
 				var InboxServ = Game.Services.Inbox,
 					data = {
-						session_id: Cookie.getSub("lacuna","session") || "",
+						session_id: Game.GetSession(""),
 						recipients: to.join(','),
 						subject: this.createSubject.value,
 						body: this.createText.value
@@ -469,7 +461,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				}
 				var InboxServ = Game.Services.Inbox,
 				data = {
-					session_id: Cookie.getSub("lacuna","session") || "",
+					session_id: Game.GetSession(""),
 					message_ids: mIds
 				};
 				InboxServ.archive_messages(data, {

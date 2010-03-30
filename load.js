@@ -89,6 +89,12 @@
 		fullpath: host + "messaging.js?" + t,
 		requires : ["datasource","event-delegate","game","textboxList"]
 	});
+	loader.addModule({
+		name: "profile",
+		type: "js",
+		fullpath: host + "profile.js?" + t,
+		requires : ["container","game"]
+	});
 	/*add after requirements*/
 	loader.addModule({
 		name: "gameMenu",
@@ -96,7 +102,7 @@
 		fullpath: host + "menu.js?" + t,
 		requires : ["about","messaging","menu"]
 	});
-	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
+	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem","profile");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
 		YAHOO.lacuna.Game.Start();

@@ -27,14 +27,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var userMenu = new YAHOO.widget.Menu(this.id, { 
 				zindex: 1006, 
 				shadow:false, 
-				//effect:{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.5},
-				context:[this.clickId, "tl", "bl",[9, -15]]
+				context:[this.clickId, "tl", "bl",[9, -10]]
 			});
-			userMenu.addItem({ text: "About", id: "uc", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } });
+			userMenu.addItem({ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } });
+			userMenu.addItem({ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } });
 			userMenu.addItem({ text: "Logout", id: "ul", onclick: { fn: Game.Logout } });
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
-					this.align("tl","bl",[9, -15]);
+					this.align("tl","bl",[9, -10]);
 				}
 			});
 			userMenu.render();
@@ -55,6 +55,20 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.createLeft();
 			this.createRight();
+
+			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
+				zIndex:1010,
+				xyoffset:[0,10],
+				context:[this.elHappyOver]
+			});
+			// Set the text for the tooltip just before we display it.
+			userMenuTT.contextTriggerEvent.subscribe(function(type, args) {
+				var context = args[0];
+				this.cfg.setProperty("text", Lacuna.Menu.UserMenu.getTextFor(context.id));
+			});
+			
+			this.userMenuTT = userMenuTT;
+			
 			this.update();
 		},
 		createLeft : function() {
@@ -109,6 +123,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				essentiaImg = essentia.appendChild(document.createElement("img")),
 				essentiaTxt = essentia.appendChild(document.createElement("span")),
 				happy = document.createElement("div"),
+				happyOver = happy.cloneNode(false),
 				happyImg = happy.appendChild(document.createElement("img")),
 				happyTxt = happy.appendChild(document.createElement("span")),
 				forward = document.createElement("div"),
@@ -123,8 +138,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
-			Dom.addClass(happy, "happiness");
-			Dom.addClass(happy, "menuItem");
+			happyOver.id = "userMenuHappiness";
+			Dom.addClass([happy,happyOver], "happiness");
+			Dom.addClass([happy,happyOver], "menuItem");
+			Dom.addClass(happyOver, "click");
 
 			forwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
 			forwardImg.alt = "Forward";
@@ -138,6 +155,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elEssentia = this.container.appendChild(essentia);
 			this.elEssentiaText = essentiaTxt;
 			this.elHappy = this.container.appendChild(happy);
+			this.elHappyOver = this.container.appendChild(happyOver);
 			this.elHappyText = happyTxt;
 			this.elForward = this.container.appendChild(forward);
 			this.elForwardClick = this.container.appendChild(forwardClick);
@@ -173,6 +191,20 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		showAbout : function() {
 			Game.OverlayManager.hideAll();
 			Lacuna.About.show();
+		},
+		
+		getTextFor : function(id) {
+			var ED = Game.EmpireData,
+				output;
+			switch(id){
+				case "userMenuHappiness":
+					output = [Math.round(ED.happiness), ' : ', ED.happiness_hour, '/hr'];
+					break;
+				default:
+					output = [];
+					break;
+			}
+			return output.join('');
 		}
 	};
 	Lang.augmentProto(UserMenu, Util.EventProvider);
@@ -190,11 +222,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				zindex: 1006, 
 				shadow:false, 
 				//effect:{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.5},
-				context:[this.clickId, "bl", "tl",[9, 15]]
+				context:[this.clickId, "bl", "tl",[9, 10]]
 			});
 			planetMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
-					this.align("bl","tl",[9, 15]);
+					this.align("bl","tl",[9, 10]);
 				}
 			});
 			planetMenu.render();
@@ -215,72 +247,111 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.createLeft();
 			this.createRight();
+
+			var planetMenuTT = new YAHOO.widget.Tooltip("planetMenuTT", {
+				zIndex:1010,
+				xyoffset:[0,-10],
+				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver]
+			});
+			// Set the text for the tooltip just before we display it.
+			planetMenuTT.contextTriggerEvent.subscribe(function(type, args) {
+				var context = args[0];
+				this.cfg.setProperty("text", Lacuna.Menu.PlanetMenu.getTextFor(context.id));
+			});
+			
+			this.planetMenuTT = planetMenuTT;
+
+			
 			this.update();
 		},
 		createLeft : function() {
 			var food = document.createElement("div"),
+				foodOver = food.cloneNode(false),
 				foodImg = food.appendChild(document.createElement("img")),
 				foodTxt = food.appendChild(document.createElement("span")),
 				ore = document.createElement("div"),
+				oreOver = ore.cloneNode(false),
 				oreImg = ore.appendChild(document.createElement("img")),
 				oreTxt = ore.appendChild(document.createElement("span")),
 				water = document.createElement("div"),
+				waterOver = water.cloneNode(false),
 				waterImg = water.appendChild(document.createElement("img")),
 				waterTxt = water.appendChild(document.createElement("span"));
 			
 			foodImg.src = Lib.AssetUrl + 'ui/l/food.png';
 			foodImg.alt = foodImg.title = "Food";
-			Dom.addClass(food, "food");
-			Dom.addClass(food, "menuItem");
+			foodOver.id = "planetMenuFood";
+			Dom.addClass([food,foodOver], "food");
+			Dom.addClass([food,foodOver], "menuItem");
+			Dom.addClass(foodOver, "click");
 			
 			oreImg.src = Lib.AssetUrl + 'ui/l/ore.png';
 			oreImg.alt = oreImg.title = "Ore";
-			Dom.addClass(ore, "ore");
-			Dom.addClass(ore, "menuItem");
+			oreOver.id = "planetMenuOre";
+			Dom.addClass([ore,oreOver], "ore");
+			Dom.addClass([ore,oreOver], "menuItem");
+			Dom.addClass(oreOver, "click");
 			
 			waterImg.src = Lib.AssetUrl + 'ui/l/water.png';
 			waterImg.alt = waterImg.title = "Water";
-			Dom.addClass(water, "water");
-			Dom.addClass(water, "menuItem");
+			waterOver.id = "planetMenuWater";
+			Dom.addClass([water,waterOver], "water");
+			Dom.addClass([water,waterOver], "menuItem");
+			Dom.addClass(waterOver, "click");
 			
 			this.elFood = this.container.appendChild(food);
+			this.elFoodOver = this.container.appendChild(foodOver);
 			this.elFoodText = foodTxt;
 			this.elOre = this.container.appendChild(ore);
+			this.elOreOver = this.container.appendChild(oreOver);
 			this.elOreText = oreTxt;
 			this.elWater = this.container.appendChild(water);
+			this.elWaterOver = this.container.appendChild(waterOver);
 			this.elWaterText = waterTxt;
 		},
 		createRight : function() {
 			var energy = document.createElement("div"),
+				energyOver = energy.cloneNode(false),
 				energyImg = energy.appendChild(document.createElement("img")),
 				energyTxt = energy.appendChild(document.createElement("span")),
 				waste = document.createElement("div"),
+				wasteOver = waste.cloneNode(false),
 				wasteImg = waste.appendChild(document.createElement("img")),
 				wasteTxt = waste.appendChild(document.createElement("span")),
 				happy = document.createElement("div"),
+				happyOver = happy.cloneNode(false),
 				happyImg = happy.appendChild(document.createElement("img")),
 				happyTxt = happy.appendChild(document.createElement("span"));
 				
 			energyImg.src = Lib.AssetUrl + 'ui/l/energy.png';
 			energyImg.alt = energyImg.title = "Energy";
-			Dom.addClass(energy, "energy");
-			Dom.addClass(energy, "menuItem");
+			energyOver.id = "planetMenuEnergy";
+			Dom.addClass([energy,energyOver], "energy");
+			Dom.addClass([energy,energyOver], "menuItem");
+			Dom.addClass(energyOver, "click");
 			
 			wasteImg.src = Lib.AssetUrl + 'ui/l/waste.png';
 			wasteImg.alt = wasteImg.title = "Waste";
-			Dom.addClass(waste, "waste");
-			Dom.addClass(waste, "menuItem");
+			wasteOver.id = "planetMenuWaste";
+			Dom.addClass([waste,wasteOver], "waste");
+			Dom.addClass([waste,wasteOver], "menuItem");
+			Dom.addClass(wasteOver, "click");
 			
 			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
-			Dom.addClass(happy, "happiness");
-			Dom.addClass(happy, "menuItem");
+			happyOver.id = "planetMenuHappiness";
+			Dom.addClass([happy,happyOver], "happiness");
+			Dom.addClass([happy,happyOver], "menuItem");
+			Dom.addClass(happyOver, "click");
 			
-			this.elenergy = this.container.appendChild(energy);
+			this.elEnergy = this.container.appendChild(energy);
+			this.elEnergyOver = this.container.appendChild(energyOver);
 			this.elEnergyText = energyTxt;
 			this.elWaste = this.container.appendChild(waste);
+			this.elWasteOver = this.container.appendChild(wasteOver);
 			this.elWasteText = wasteTxt;
 			this.elHappy = this.container.appendChild(happy);
+			this.elHappyOver = this.container.appendChild(happyOver);
 			this.elHappyText = happyTxt;
 		},
 		update : function() {
@@ -347,6 +418,36 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		hide : function() {
 			Dom.addClass(this.container, Lib.Styles.HIDDEN);
+		},
+		
+		getTextFor : function(id) {
+			var ED = Game.EmpireData,
+				planet = ED.planets[ED.current_planet_id || ED.home_planet_id],
+				output;
+			switch(id){
+				case "planetMenuFood":
+					output = [Math.round(planet.food_stored), '/', planet.food_capacity, ' : ', planet.food_hour,'/hr'];
+					break;
+				case "planetMenuOre":
+					output = [Math.round(planet.ore_stored), '/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr'];
+					break;
+				case "planetMenuWater":
+					output = [Math.round(planet.water_stored), '/', planet.water_capacity, ' : ', planet.water_hour,'/hr'];
+					break;
+				case "planetMenuEnergy":
+					output = [Math.round(planet.energy_stored), '/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr'];
+					break;
+				case "planetMenuWaste":
+					output = [Math.round(planet.waste_stored), '/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr'];
+					break;
+				case "planetMenuHappiness":
+					output = [Math.round(planet.happiness), ' : ', planet.happiness_hour,'/hr'];
+					break;
+				default:
+					output = [];
+					break;
+			}
+			return output.join('');
 		}
 	};
 
