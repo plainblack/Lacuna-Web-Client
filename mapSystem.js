@@ -38,7 +38,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				underlay:false,
 				width:"500px",
 				zIndex:9995,
-				context:["content","tr","tr", ["beforeShow", "windowResize"], [0,20]]
+				context:["header","tr","br", ["beforeShow", "windowResize"], [0,20]]
 			});
 			
 			this.planetDetails.renderEvent.subscribe(function(){
@@ -57,7 +57,10 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				this._isVisible = visible; 
 				Dom.setStyle(this._el, "display", visible ? "" : "none");
 			}
-			if(!visible) {
+			if(visible) {
+				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+			}
+			else {
 				this.planetDetails.hide();
 			}
 		},
@@ -102,7 +105,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 							'			<li><label>Gypsum</label><span class="buildingDetailsNum">',body.ore.gypsum,'</span></li>',
 							'		</ul>',
 							'	</div>',
-							'	<div class="yui-u first">',
+							'	<div class="yui-u">',
 							'		<ul>',
 							'			<li><label>Halite</label><span class="buildingDetailsNum">',body.ore.halite,'</span></li>',
 							'			<li><label>Kerogen</label><span class="buildingDetailsNum">',body.ore.kerogen,'</span></li>',
@@ -149,7 +152,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 					if(body.name && body.image) {
 						var elOrbit = div.cloneNode(false),
 							elName = elOrbit.appendChild(span.cloneNode(false)),
-							elImg = elOrbit.appendChild(img.cloneNode(false));
+							elImg = img.cloneNode(false);
 							
 						body.id = bKey;
 							
@@ -162,6 +165,17 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						elImg.id = "planet" + body.orbit;
 						elImg.alt = body.name;
 						elImg.Body = body;
+						
+						if(body.alignment != "none") {
+							var elAlign = elOrbit.appendChild(img.cloneNode(false));
+							elAlign.src = [Lib.AssetUrl, "star_system/", body.alignment, ".png"].join('');
+							elAlign.id = "planetAlignment" + body.orbit;
+							elAlign = elOrbit.appendChild(elAlign);
+							elImg = elOrbit.appendChild(elImg);
+						}
+						else {
+							elImg = elOrbit.appendChild(elImg);
+						}
 						
 						if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
 							Event.on(elImg, "dblclick", function(e) {

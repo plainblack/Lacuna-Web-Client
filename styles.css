@@ -2,11 +2,15 @@ html {
 	background: black url('http://localhost/lacuna/assets/star_system/field.png');
 }
 body {
+	font-family:verdana;
 	margin:40px 0;
 	padding:0;
 	text-align:left;
 	min-width: 1050px;
 	/*min-height: 768px;*/
+}
+select, input, button, textarea, button {
+	font-family:verdana;
 }
 
 .clearafter { height:100%; }
@@ -128,10 +132,10 @@ dialogs
 	display:inline-block;
 }
 #login label {
-	width:100px;
+	width:105px;
 }
-#createEmpire label{
-	width:110px;
+#createEmpire label {
+	width:120px;
 }
 #createSpecies label {
 	width:140px
@@ -448,7 +452,31 @@ about
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
 #planetMap {
-	background: black url('http://localhost/lacuna/assets/planet_side/ground.png');
+	background: brown url('http://localhost/lacuna/assets/planet_side/ground.png');
+}
+.planetMapTileCounter {
+	z-index: 2;
+	text-align: right;
+	font-size: 140%;
+	font-family: impact, san-serif;
+	position: absolute;
+}
+.planetMapTileActionContainer {
+	z-index: 3;
+	text-align: left;
+	font-size: 140%;
+	font-family: impact, san-serif;
+	visibility: hidden;
+	position:absolute;
+}
+.planetMapTileActionButton {
+	background: transparent url('http://localhost/lacuna/assets/ui/l/build.png');
+	width:58px; /*19px;*/
+	height:45px; /*22px;*/
+	border:0;
+	cursor:pointer;
+	margin:77px 71px;
+	/*margin:89px 90px;*/
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 
@@ -513,19 +541,25 @@ about
 	vertical-align: middle;
 }
 #orbit1 { width: 250px; top: 80px; }
-#planet1 { width: 60px; }
+#planet1, #planetAlignment1 { width: 60px; }
 #orbit2 { width: 345px; top: 140px; }
-#planet2 { width: 75px; }
+#planet2, #planetAlignment2 { width: 75px; }
 #orbit3 { width: 450px; top: 210px; }
-#planet3 { width: 90px; }
+#planet3, #planetAlignment3 { width: 90px; }
 #orbit4 { width: 570px; top: 285px; }
-#planet4 { width: 105px; }
+#planet4, #planetAlignment4 { width: 105px; }
 #orbit5 { width: 700px; top: 370px; }
-#planet5 { width: 120px; }
+#planet5, #planetAlignment5 { width: 120px; }
 #orbit6 { width: 855px; top: 460px; }
-#planet6 { width: 135px; }
+#planet6, #planetAlignment6 { width: 135px; }
 #orbit7 { width: 1020px; top: 560px; }
-#planet7 { width: 150px; }
+#planet7, #planetAlignment7 { width: 150px; }
+
+#planetAlignment1, #planetAlignment2, #planetAlignment3, #planetAlignment4, #planetAlignment5, #planetAlignment6, #planetAlignment7  {
+	position:absolute;
+	right:0px;
+	top:0px;
+}
 
 /*
 planet details
@@ -551,9 +585,14 @@ planet details
 }
 .buildQueue .buildQueueLevel {
 	width:50px;
+	text-align:right;
 }
-.buildQueue .buildQueueTime {
+.buildQueue .buildQueueTime  {
 	width:100px;
+	text-align:right;
+}
+.buildQueueHeader .buildQueueLevel , .buildQueueHeader .buildQueueTime  {
+	text-align:center;
 }
 .buildQueueHeader {
 	font-weight:bold;
@@ -562,7 +601,13 @@ planet details
 .buildingDetailsNum { 
 	display:inline-block;
 	text-align:right;
-	width:70px;
+	width:80px;
+}
+#buildingDetailsExtra {
+	padding: 5px 0;
+}
+#buildingDetailsProduction {
+	padding-top:5px;
 }
 #buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
@@ -575,6 +620,19 @@ planet details
 	display:inline-block;
 	width:125px;
 }
+.pcStored, .pcCapacity, .pcPerHour  {
+	display:inline-block;
+	text-align:right;
+}
+.pcStored { width:60px; }
+.pcCapacity { width:65px; }
+.pcPerHour { width:40px; }
+.pcSlash {
+	display:inline-block;
+	text-align:center;
+	width:15px;
+}
+
 body.yui-skin-sam .yui-tt .bd {
 	background-color:#52acff;
 	border-color:#429cef #328cdf #328cdf;
@@ -595,6 +653,7 @@ PROFILE
 	margin:3px 3px 0;
 	padding:2px 2px 0;
 	position:relative;
+	float:left;
 }
 .medal .medalPublic {
 	cursor:pointer;

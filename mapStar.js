@@ -26,6 +26,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				this._isVisible = visible;
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
+			if(visible) {
+				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+			}
 		},
 		Mapper : function() {
 		},

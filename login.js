@@ -51,6 +51,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elName = Dom.get("loginName");
 			this.elPass = Dom.get("loginPass");
 			this.elCreate = Dom.get("loginCreate");
+			this.elForm = Dom.get("loginForm");
 		
 			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
@@ -68,23 +69,23 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
 					YAHOO.log(o, "info", "Login.handleLogin.success");
-					Dom.get("loginForm").reset();
+					this.elForm.reset();
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Login.handleLogin.failure");
-					if(o.error.code == 1010) {
+					this.setMessage(o.error.message);
+					/*if(o.error.code == 1010) {
 						//haven't founded empire yet so take them to species
 						this.hide();
 						this.initEmpire();
-						Game.EmpireCreator.initSpecies();
 						Game.OverlayManager.hideAll();
 						Game.SpeciesCreator.show();
 					}
 					else {
 						this.setMessage(o.error.message);
-					}
+					}*/
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -92,6 +93,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		},
 		show : function() {
 			Game.OverlayManager.hideAll();
+			this.elForm.reset();
 			this.Dialog.show();
 		},
 		hide : function() {

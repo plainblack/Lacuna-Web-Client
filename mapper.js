@@ -226,7 +226,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
 			this.domElement.title = this.data ? [this.data.name, " ", this.data.level, " (", this.x, ",", this.y, ")"].join('') : "Ground";
-			
+			this._createActionIcon();
 			if(this.data && this.data.pending_build) {
 				this._createCounter();
 				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
@@ -253,13 +253,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_createCounter : function() {
 			if(!this.counter) {
 				var counter = this.domElement.appendChild(document.createElement('div'));
+				Dom.addClass(counter, "planetMapTileCounter");
 				Dom.setStyle(counter, "width", this.map.tileSizeInPx + 'px');
 				Dom.setStyle(counter, "height", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(counter, "z-index", '2');
-				Dom.setStyle(counter, "text-align", 'right');
-				Dom.setStyle(counter, "font-size", '140%');
-				Dom.setStyle(counter, "font-family", 'impact, san-serif');
 				this.counter = counter;
+			}
+		},
+		_createActionIcon : function() {
+			if(!this.actionIcon) {
+				var div = this.domElement.appendChild(document.createElement('div'));
+				Dom.addClass(div, "planetMapTileActionContainer");
+				Dom.setStyle(div, "width", this.map.tileSizeInPx + 'px');
+				Dom.setStyle(div, "height", this.map.tileSizeInPx + 'px');
+				div.innerHTML = '<button type="button" class="planetMapTileActionButton"></button>';
+				this.actionIcon = div;
 			}
 		}
 	});
@@ -537,7 +544,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.init();
 
 		this.coordLayer = new Mapper.CoordLayer(this);
-		this.controller = new Mapper.TraditionalController( this );
+		
+		var ua = navigator.userAgent;
+		if(ua.match(/iPhone/i) || ua.match(/iPod/i)) {
+			this.controller = new Mapper.iPhoneController( this );
+		}
+		else {
+			this.controller = new Mapper.TraditionalController( this );
+		}
 	};
 	Map.prototype = {
 		//blank init that will always get called.  override in sub classes to change defaults
@@ -855,8 +869,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		//don't update bounds on plant.  We have all data at start
 		/*updateBounds : function(oTile) {
-				bnds.y2Bottom = oTile.y;
-			}
 		},*/
 		addTileData : function(oTiles) {
 			var startZoomLevel = 0;
@@ -983,6 +995,56 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	};
 
+	Mapper.iPhoneController = function(map) {
+		this.map = map;
+		this.currentX = 0;
+		this.currentY = 0;
+		
+		Event.on(map.mapDiv, 'touchstart', this.touchStart, this, true);
+		Event.on(map.mapDiv, 'touchend', this.touchEnd, this, true);
+		Event.on(map.mapDiv, 'touchmove', this.touchMove, this, true);
+		
+		if((map.maxZoom - map.minZoom) != 0) {
+			Event.on(map.mapDiv, 'gestureend', this.gestureEnd, this, true);
+		}
+	};
+	Mapper.iPhoneController.prototype = {
+		touchStart : function(e){
+			if(e.touches.length == 1){ // Only deal with one finger
+				var touch = e.touches[0]; // Get the information for finger #1
+				this.currentX = touch.pageX;
+				this.currentY = touch.pageY;
+			} 
+		},
+		touchEnd : function(e){
+			if(e.touches.length == 1){ // Only deal with one finger
+				this.currentX = 0;
+				this.currentY = 0;
+			} 
+		},
+		touchMove : function(e){
+			if(e.touches.length == 1){
+				e.preventDefault();
+				var touch = e.touches[0];
+				diffX = touch.pageX - this.currentX;
+				diffY = touch.pageY - this.currentY;
+
+				this.map.moveByPx(diffX,diffY);
+
+				this.currentX = touch.pageX;
+				this.currentY = touch.pageY;
+			}
+		},
+		gestureEnd : function(e){
+			// note: this does not work if the default is prevented!
+			if( e.scale > 1) this.map.zoomIn();
+			if( e.scale < 1) this.map.zoomOut();
+		},
+		isDragging : function() {
+			return false;
+		}
+	};
+	
 	YAHOO.lacuna.Mapper = Mapper;
 })();
 YAHOO.register("mapper", YAHOO.lacuna.Mapper, {version: "1", build: "0"}); 

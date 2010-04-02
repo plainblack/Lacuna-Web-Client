@@ -44,7 +44,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"300px",
+			width:"315px",
+			underlay:false,
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
@@ -131,16 +132,6 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				}, this, true);
 			}
 		}
-		/*addSpecies : function(id, name) {
-			var opt = document.createElement("option");
-			opt.value = id;
-			opt.innerHTML = name;
-			opt = this.elSpecies.appendChild(opt);
-			opt.selected = true;
-		},
-		createSpeciesClick : function(e) {
-			Event.stopEvent(e); //stop href click
-		}*/
 	};
 	YAHOO.lang.augmentProto(CreateEmpire, Util.EventProvider);
 

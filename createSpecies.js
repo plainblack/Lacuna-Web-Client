@@ -34,6 +34,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			modal:true,
 			close:false,
 			width:"450px",
+			underlay:false,
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
@@ -45,6 +46,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.elCreate = Dom.get("speciesCreate");
 			
 			Event.on(this.elSelect, "change", function(e, oSelf) {
+				oSelf.setMessage("");
 				if(this.selectedIndex == 1) {
 					Dom.setStyle(oSelf.elCreate, "display", "block");
 					oSelf.Dialog.center();
@@ -66,6 +68,23 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		Game.OverlayManager.register(this.Dialog);
 	};
 	CreateSpecies.prototype = {
+		_clearSliders : function() {
+			if(this._slidersCreated) {
+				this.speciesHO.setMinValue(0,true);
+				this.speciesHO.setMaxValue(100,true);
+				this.speciesConst.setValue(0,true);
+				this.speciesDecep.setValue(0,true);
+				this.speciesResearch.setValue(0,true);
+				this.speciesManagement.setValue(0,true);
+				this.speciesFarming.setValue(0,true);
+				this.speciesMining.setValue(0,true);
+				this.speciesScience.setValue(0,true);
+				this.speciesEnviro.setValue(0,true);
+				this.speciesPolitical.setValue(0,true);
+				this.speciesTrade.setValue(0,true);
+				this.speciesGrowth.setValue(0,true);
+			}
+		},
 		_createSliders : function() {
 			this.speciesHO = this._createHabitableOrbits();
 			this.speciesConst = this._createHorizSingle("speciesConst", "speciesConst_thumb", "speciesConst_num");
@@ -458,9 +477,11 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			}
 		},
 		hide : function() {
+			this._clearSliders();
 			this.createdSpeciesOnce = false; //set this back to nothing since if they cancel they have to create an empire again before we get back to this screen
 			this.oldSpecies = {};
 			this.elSelect.selectedIndex = 0;
+			Dom.setStyle(this.elCreate, "display", "none");
 			this.elName.value = "";
 			this.elDesc.value = "";
 			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);

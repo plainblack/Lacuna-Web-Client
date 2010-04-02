@@ -366,15 +366,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var items = [];
 			for(var pKey in planets) {
 				var p = planets[pKey];
-				items.push({ text: p.name, id: "planetMenuItem"+(count++), onclick: { 
-						fn: function(p_sType, p_aArgs, planet){
-							YAHOO.log(planet, "info", "PlanetMenu.planetMenuItem.click");
-							Game.EmpireData.current_planet_id = planet.id;
-							Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
-						},
-						obj:p
-					} 
-				});
+				items.push({ text: p.name, id: "planetMenuItem"+(count++), onclick: { fn: this.menuClick, obj:p } });
 			}
 			this.Menu.addItems(items);
 			this.Menu.render();
@@ -393,13 +385,43 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				this.elFoodText.innerHTML = Math.round(cp.food_stored) || "-";
-				this.elOreText.innerHTML = Math.round(cp.ore_stored) || "-";
-				this.elWaterText.innerHTML = Math.round(cp.water_stored) || "-";
+				if(cp.food_stored > 100000) {
+					this.elFoodText.innerHTML = Math.floor(cp.food_stored/1000) + 'k';
+				}
+				else {
+					this.elFoodText.innerHTML = Math.round(cp.food_stored) || "-";
+				}
+				if(cp.ore_stored > 100000) {
+					this.elOreText.innerHTML = Math.floor(cp.ore_stored/1000) + 'k';
+				}
+				else {
+					this.elOreText.innerHTML = Math.round(cp.ore_stored) || "-";
+				}
+				if(cp.water_stored > 100000) {
+					this.elWaterText.innerHTML = Math.floor(cp.water_stored/1000) + 'k';
+				}
+				else {
+					this.elWaterText.innerHTML = Math.round(cp.water_stored) || "-";
+				}
 				
-				this.elEnergyText.innerHTML = Math.round(cp.energy_stored) || "-";
-				this.elWasteText.innerHTML = Math.round(cp.waste_stored) || "-";
-				this.elHappyText.innerHTML = Math.round(cp.happiness) || "-";
+				if(cp.energy_stored > 100000) {
+					this.elEnergyText.innerHTML = Math.floor(cp.energy_stored/1000) + 'k';
+				}
+				else {
+					this.elEnergyText.innerHTML = Math.round(cp.energy_stored) || "-";
+				}
+				if(cp.waste_stored > 100000) {
+					this.elWasteText.innerHTML = Math.floor(cp.waste_stored/1000) + 'k';
+				}
+				else {
+					this.elWasteText.innerHTML = Math.round(cp.waste_stored) || "-";
+				}
+				if(cp.happiness > 100000) {
+					this.elHappyText.innerHTML = Math.floor(cp.happiness/1000) + 'k';
+				}
+				else {
+					this.elHappyText.innerHTML = Math.round(cp.happiness) || "-";
+				}
 			}
 			else {
 				this.elText.innerHTML = "Planet";
@@ -413,6 +435,18 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				this.elHappyText.innerHTML = "-";
 			}
 		},
+		menuClick : function(p_sType, p_aArgs, planet){
+			YAHOO.log(planet, "info", "PlanetMenu.planetMenuItem.click");
+			Game.EmpireData.current_planet_id = planet.id;
+			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
+			
+			Lacuna.MapStar.MapVisible(false);
+			Lacuna.MapSystem.MapVisible(false);
+			Lacuna.MapPlanet.MapVisible(true);
+			Lacuna.Menu.PlanetVisible();
+			Lacuna.MapPlanet.Load(planet.id);
+		},
+		
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
 		},

@@ -37,6 +37,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		});
 		this.Dialog.renderEvent.subscribe(function(){
 			this.elCreditsList = Dom.get("aboutCredits");
+			this.elVersion = Dom.get("aboutVersion");
 			
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
@@ -50,7 +51,10 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			'	<div class="bd">',
 			'		<form name="aboutForm">',
 			'			<label>The Lacuna Expanse</label>',
-			'			<ul><li>&copy; 2010 by Lacuna Expanse Corp</li></ul><br/>',
+			'			<ul>',
+			'				<li>&copy; 2010 by Lacuna Expanse Corp</li>',
+			'				<li>Server Version: <span id="aboutVersion"></span></li>',
+			'			</ul><br/>',
 			'			<label>Credits</label>',
 			'			<ul id="aboutCredits">',
 			'			</ul>',
@@ -73,6 +77,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 					scope:this
 				});
 			}
+			this.elVersion.innerHTML = Game.ServerData.version;
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 		},

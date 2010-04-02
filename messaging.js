@@ -108,6 +108,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}, this, true);
 			
 			this.messagingPanel.render();
+			Game.OverlayManager.register(this.messagingPanel);
 		},
 		_createToSelect : function() {
 			var dataSource = new Util.XHRDataSource("/empire");
@@ -165,15 +166,16 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		tabClick : function(e, matchedEl, container) {
 			var id = matchedEl.id;
 			if(this.currentTab != id) {
+				this.viewingMessage = null;
 				this.currentTab = id;
 				this.loadTab();
 			}
 		},
-		loadTab : function() {
+		loadTab : function(isAll) {
 			switch(this.currentTab) {
 				case this.create.id:
 					Dom.setStyle(this.archiver,"display","none");
-					this.loadCreate();
+					this.loadCreate(isAll);
 					break;
 				case this.sent.id:
 					Dom.setStyle(this.archiver,"display","none");
@@ -204,7 +206,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.createTo.SelectItems(to);
 				}
 				else {
-					this.createTo.SelectItems({name:this.viewingMessage.from});
+					this.createTo.SelectItems([{name:this.viewingMessage.from}]);
 				}
 				this.createSubject.value = "Re: " + this.viewingMessage.subject;
 				this.createText.value = "\n\n***************\n" + this.viewingMessage.body;
@@ -391,7 +393,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.from.innerHTML = msg.from;
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
-				this.body.innerHTML = msg.body;
+				this.body.innerHTML = msg.body.replace(/\n/gi,'<br>')
 			}
 		},
 		sendMessage : function() {
@@ -446,10 +448,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		replyMessage : function(e) {
-			this.loadCreate();
+			this.currentTab = this.create.id;
+			this.loadTab();
 		},
 		replyAllMessage : function(e) {
-			this.loadCreate(true);
+			this.currentTab = this.create.id;
+			this.loadTab(true);
 		},
 		archiveMessages : function() {
 			if(this.toArchiveCount > 0) {
@@ -460,14 +464,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					}
 				}
 				var InboxServ = Game.Services.Inbox,
-				data = {
-					session_id: Game.GetSession(""),
-					message_ids: mIds
-				};
+					data = {
+						session_id: Game.GetSession(""),
+						message_ids: mIds
+					}
 				InboxServ.archive_messages(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
-						this.fireEvent("onRpc", o.result);
+						//this.fireEvent("onRpc", o.result); //don't do this or it will update our message count again.  Eventual Consistency
 						this.archiveProcess(o.result);
 					},
 					failure : function(o){
@@ -483,6 +487,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			Dom.batch(Sel.query("li.message", this.list), function(el){
 				if(results.success.indexOf(el.Message.id) >= 0) {
 					delete this.toArchive[el.Message.id];
+					Game.EmpireData.has_new_messages--;
 					this.toArchiveCount--;
 					Event.purgeElement(el);
 					el.parentNode.removeChild(el);

@@ -1,26 +1,4 @@
 YAHOO.namespace("lacuna");
-/*
-indexOf is a recent addition to the ECMA-262 standard; as such it may not be present in all browsers. You can work around this by inserting the 
-following code at the beginning of your scripts, allowing use of indexOf in implementations which do not natively support it. This algorithm is 
-exactly the one used in Firefox and SpiderMonkey.
-*/
-if (!Array.prototype.indexOf) {  
-	Array.prototype.indexOf = function(elt /*, from*/) {  
-		var len = this.length >>> 0;  
-
-		var from = Number(arguments[1]) || 0;  
-		from = (from < 0) ? Math.ceil(from) : Math.floor(from);  
-		if (from < 0)  
-			from += len;  
-
-		for (; from < len; from++) {  
-			if (from in this && this[from] === elt)  
-				return from;  
-		}  
-		return -1;  
-	};  
-} 
-
 if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 	
 (function(){
@@ -34,6 +12,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 	var Game = {
 		EmpireData : {},
+		ServerData : {},
 		Services : {
 			Body : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Body),
 			Empire : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Empire),
@@ -72,6 +51,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		DoLogin : function() {
 			document.getElementById("content").innerHTML = "";
+			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
@@ -83,6 +63,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						expires: now.setHours(now.getHours() + 1)
 					});
 
+					Cookie.removeSub("lacuna","locationId");
+					Cookie.removeSub("lacuna","locationView");
 					//store empire data
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
@@ -298,51 +280,59 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		
 		ProcessStatus : function(status) {
-			if(status && status.empire) {
-				var now = new Date();
-				//convert to numbers
-				status.empire.has_new_messages *= 1;
-				
-				if(status.empire.happiness) {
-					status.empire.happiness *= 1;
-					status.empire.happiness_hour *= 1;
+			if(status) {
+				if(status.server) {
+					//add everything from status empire to game empire
+					Lang.augmentObject(Game.ServerData, status.server, true);
+					//calc time offset
+					//var sDt = Lib.
 				}
-				
-				for(var pKey in status.empire.planets) {
-					if(status.empire.planets.hasOwnProperty(pKey)){
-						var planet = status.empire.planets[pKey];
-						planet.energy_capacity *= 1;
-						planet.energy_hour *= 1;
-						planet.energy_stored *= 1;
-						planet.food_capacity *= 1;
-						planet.food_hour *= 1;
-						planet.food_stored *= 1;
-						planet.happiness *= 1;
-						planet.happiness_hour *= 1;
-						planet.ore_capacity *= 1;
-						planet.ore_hour *= 1;
-						planet.ore_stored *= 1;
-						planet.waste_capacity *= 1;
-						planet.waste_hour *= 1;
-						planet.waste_stored *= 1;
-						planet.water_capacity *= 1;
-						planet.water_hour *= 1;
-						planet.water_stored *= 1;
+				if(status.empire) {
+					var now = new Date();
+					//convert to numbers
+					status.empire.has_new_messages *= 1;
+					
+					if(status.empire.happiness) {
+						status.empire.happiness *= 1;
+						status.empire.happiness_hour *= 1;
 					}
-				}
-				
-				//add everything from status empire to game empire
-				Lang.augmentObject(Lacuna.Game.EmpireData, status.empire, true);
+					
+					for(var pKey in status.empire.planets) {
+						if(status.empire.planets.hasOwnProperty(pKey)){
+							var planet = status.empire.planets[pKey];
+							planet.energy_capacity *= 1;
+							planet.energy_hour *= 1;
+							planet.energy_stored *= 1;
+							planet.food_capacity *= 1;
+							planet.food_hour *= 1;
+							planet.food_stored *= 1;
+							planet.happiness *= 1;
+							planet.happiness_hour *= 1;
+							planet.ore_capacity *= 1;
+							planet.ore_hour *= 1;
+							planet.ore_stored *= 1;
+							planet.waste_capacity *= 1;
+							planet.waste_hour *= 1;
+							planet.waste_stored *= 1;
+							planet.water_capacity *= 1;
+							planet.water_hour *= 1;
+							planet.water_stored *= 1;
+						}
+					}
+					
+					//add everything from status empire to game empire
+					Lang.augmentObject(Lacuna.Game.EmpireData, status.empire, true);
 
-				if(status.empire.planets) {
-					Lacuna.Menu.update();
-				}
-				else {
-					Lacuna.Menu.updateTick();
-				}
-				
-				if(status.empire.full_status_update_required == 1) {
-					Lacuna.Game.GetFullStatus();
+					if(status.empire.planets) {
+						Lacuna.Menu.update();
+					}
+					else {
+						Lacuna.Menu.updateTick();
+					}
+					
+					if(status.empire.full_status_update_required == 1) {
+						Lacuna.Game.GetFullStatus();
+					}
 				}
 			}
 		},	
@@ -467,8 +457,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					if(planet.waste_stored < planet.waste_capacity){
 						planet.waste_stored += planet.waste_hour * ratio;
 						if(planet.waste_stored > planet.waste_capacity) {
+							wasteOverage = planet.waste_stored - planet.waste_capacity;
 							planet.waste_stored = planet.waste_capacity;
-							wasteOverage = (planet.waste_stored - planet.waste_capacity) * ratio;
 						}
 					}
 					else {
