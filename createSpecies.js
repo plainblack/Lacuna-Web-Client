@@ -24,8 +24,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		document.body.insertBefore(container, document.body.firstChild);
 		
 		this.Dialog = new YAHOO.widget.Dialog(this.id, {
-			constraintoviewport:true,
-			fixedcenter:true,
+			constraintoviewport:false,
+			fixedcenter:false,
 			postmethod:"none",
 			visible:false,
 			buttons:[ { text:"Found Empire", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
@@ -472,6 +472,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.empireId = empire;
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
+			this.Dialog.center();
 			if(!this._slidersCreated && Dom.getStyle(this.elCreate, "display") != "none") {
 				this._createSliders();
 			}

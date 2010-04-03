@@ -35,32 +35,65 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'		<div class="yui-u">',
 				'			<ul>',
 				'				<li id="buildingDetailsName"></li>',
-				'				<li><label>Level: </label><span id="buildingDetailsLevel"></span></li>',
 				'				<li id="buildingDetailsTimeLeft"></li>',
 				'			</ul>',
 				'		</div>',
 				'	</div>',
-				'	<div id="buildingDetailsExtra">',
-				'	</div>',
-				'	<div id="buildingDetailsProduction" class="yui-gb">',
-				'		<div class="yui-u first">',
-				'			<ul>',
-				'				<li>Current Production</li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFood" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOre" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWater" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum"></span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum"></span></li>',
-				'			</ul>',
-				'		</div>',
-				'		<div class="yui-u">',
-				'			<ul id="buildingDetailsUpgradeProduction">',
-				'			</ul>',
-				'		</div>',
-				'		<div class="yui-u">',
-				'			<ul id="buildingDetailsUpgradeCost">',
-				'			</ul>',
+				'	<div id="buildingDetailTabs" class="yui-navset">',
+				'		<ul class="yui-nav">',
+				'			<li><a href="#detailsExtra"><em>Special</em></a></li>',
+				'			<li><a href="#detailsProduction"><em>Production</em></a></li>',
+				'			<li><a href="#detailsStorage"><em>Storage</em></a></li>',
+				'		</ul>',
+				'		<div class="yui-content">',
+				'			<div id="detailsExtra"><div id="buildingDetailsExtra"></div></div>',
+				'			<div id="detailsProduction">',
+				'				<div id="buildingDetailsProduction" class="yui-gb">',
+				'					<div class="yui-u first">',
+				'						<ul>',
+				'							<li>Current Production</li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFood" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOre" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWater" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum"></span></li>',
+				'						</ul>',
+				'					</div>',
+				'					<div class="yui-u">',
+				'						<ul id="buildingDetailsUpgradeProduction">',
+				'						</ul>',
+				'					</div>',
+				'					<div class="yui-u">',
+				'						<ul id="buildingDetailsUpgradeCost">',
+				'						</ul>',
+				'					</div>',
+				'				</div>',
+				'			</div>',
+				'			<div id="detailsStorage">',
+				'				<div class="yui-g">',
+				'					<div class="yui-u first">',
+				'						<ul>',
+				'							<li>Current Storage</li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFoodStorage" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOreStorage" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWaterStorage" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergyStorage" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWasteStorage" class="buildingDetailsNum"></span></li>',
+				'						</ul>',
+				'					</div>',
+				'					<div class="yui-u">',
+				'						<ul id="buildingDetailsUpgradeStorage">',
+				'							<li>Current Storage</li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFoodStorageUpgrade" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOreStorageUpgrade" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWaterStorageUpgrade" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergyStorageUpgrade" class="buildingDetailsNum"></span></li>',
+				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWasteStorageUpgrade" class="buildingDetailsNum"></span></li>',
+				'						</ul>',
+				'					</div>',
+				'				</div>',
+				'			</div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -75,7 +108,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				close:true,
 				width:"600px",
 				underlay:false,
-				zIndex:9995
+				zIndex:9995,
+				context:["header","tl","bl"]
 			});
 			
 			this.buildingDetails.addQueue = function(seconds, queueFn, elm, sc) {
@@ -108,12 +142,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			this.buildingDetails.renderEvent.subscribe(function(){
 				this.img = Dom.get("buildingDetailsImg");
+				this.name = Dom.get("buildingDetailsName");
+				
+				this.tabView = new YAHOO.widget.TabView("buildingDetailTabs");
 				this.upgradeUl = Dom.get("buildingDetailsUpgradeCost");
 				this.upgradeProdUl = Dom.get("buildingDetailsUpgradeProduction");
 				this.extraEl = Dom.get("buildingDetailsExtra");
 				this.timeLeftLi = Dom.get("buildingDetailsTimeLeft");
-				this.name = Dom.get("buildingDetailsName");
-				this.level = Dom.get("buildingDetailsLevel");
 				this.curEnergy = Dom.get("buildingDetailsEnergy");
 				this.curFood = Dom.get("buildingDetailsFood");
 				this.curHappiness = Dom.get("buildingDetailsHappiness");
@@ -121,7 +156,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.curWaste = Dom.get("buildingDetailsWaste");
 				this.curWater = Dom.get("buildingDetailsWater");
 				
-				this.center();
+				this.storage = {
+					curFood : Dom.get("buildingDetailsFoodStorage"),
+					curOre : Dom.get("buildingDetailsOreStorage"),
+					curWater : Dom.get("buildingDetailsWaterStorage"),
+					curEnergy : Dom.get("buildingDetailsEnergyStorage"),
+					curWaste : Dom.get("buildingDetailsWasteStorage"),
+					newFood : Dom.get("buildingDetailsFoodStorageUpgrade"),
+					newOre : Dom.get("buildingDetailsOreStorageUpgrade"),
+					newWater : Dom.get("buildingDetailsWaterStorageUpgrade"),
+					newEnergy : Dom.get("buildingDetailsEnergyStorageUpgrade"),
+					newWaste : Dom.get("buildingDetailsWasteStorageUpgrade"),
+				}
 			});
 			this.buildingDetails.hideEvent.subscribe(function(){
 				Game.onTick.unsubscribe(this.buildingDetails.processQueue);
@@ -129,7 +175,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.buildingDetails.queue = [];
 				this.currentBuilding = undefined;
 			}, this, true);
-			//this.buildingDetails.showEvent.subscribe(this._buildDetailsShow, this, true);
 			
 			this.buildingDetails.render();
 			Game.OverlayManager.register(this.buildingDetails);
@@ -140,16 +185,16 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Builder</div>',
-				'<div class="bd" style="overflow:auto;">',
-				'	<div id="builderTabs" class="panelTabs"><ul class="clearafter">',
-				'		<li id="builderBuildable" class="tab">Buildable</li>',
-				'		<li id="builderUnavailable" class="tab">Unavailable</li>',
-				'	</ul></div>',
-				'	<div class="panelTabContainer">',
-				'		<ul id="buildingBuilderList">',
+				'<div class="bd">',
+				'	<div id="builderTabs" class="yui-navset">',
+				'		<ul class="yui-nav">',
+				'			<li><a href="#builderBuildable"><em>Buildable</em></a></li>',
+				'			<li><a href="#builderUnavailable"><em>Unavailable</em></a></li>',
 				'		</ul>',
-				'		<ul id="buildingBuilderUnavailable">',
-				'		</ul>',
+				'		<div class="yui-content" style="overflow:auto;height:450px;">',
+				'			<div id="builderBuildable"><ul id="buildingBuilderList"></ul></div>',
+				'			<div id="builderUnavailable"><ul id="buildingBuilderUnavailable"></ul></div>',
+				'		</div>',
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -163,35 +208,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				close:true,
 				underlay:false,
 				width:"600px",
-				height:"500px",
-				zIndex:9996
+				zIndex:9996,
+				context:["header","tr","br"]
 			});
 			
 			this.buildingBuilder.renderEvent.subscribe(function(){
+				this.tabView = new YAHOO.widget.TabView('builderTabs');
 				this.list = Dom.get("buildingBuilderList");
 				this.unavailable = Dom.get("buildingBuilderUnavailable");
-				Event.delegate("builderTabs", "click", function(e, matchedEl, container) {
-					if(matchedEl.id == "builderUnavailable") {
-						Dom.removeClass("builderBuildable", "panelTabSelected");
-						Dom.setStyle(this.list, "display", "none");
-						Dom.setStyle(this.unavailable, "display", "");
-					}
-					else {
-						Dom.removeClass("builderUnavailable", "panelTabSelected");
-						Dom.setStyle(this.list, "display", "");
-						Dom.setStyle(this.unavailable, "display", "none");
-					}
-					Dom.addClass(matchedEl, "panelTabSelected");
-				}, "li.tab", this, true);
-				
-				this.center();
 			});
 			
 			this.buildingBuilder.showEvent.subscribe(function() {
-				Dom.addClass("builderBuildable", "panelTabSelected");
-				Dom.removeClass("builderUnavailable", "panelTabSelected");
-				Dom.setStyle(this.list, "display", "");
-				Dom.setStyle(this.unavailable, "display", "none");
+				this.tabView.set('activeIndex', 0);
 			});
 			
 			this.buildingBuilder.render();
@@ -299,12 +327,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(building, "info", "MapPlanet.ReLoadTile");
 					
 					this.ViewData(id, building.url, {
-						success:function(oResults, url, x, y) {
-							//this.UpdateProduction(building.productionComplete);
-						},
-						failure:function(oResults, url, x, y) {
-							//this.UpdateProduction(building.productionComplete);
-						},
 						url:building.url
 					}, building.x, building.y);
 				}
@@ -372,7 +394,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			//clear values
 			panel.name.innerHTML = "Loading";
 			panel.img.src = [Lib.AssetUrl, "planet_side/ground.png"].join('');
-			panel.level.innerHTML = "";
 			panel.curEnergy.innerHTML = "";
 			panel.curFood.innerHTML = "";
 			panel.curHappiness.innerHTML = "";
@@ -403,15 +424,26 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 			this.currentBuilding = oResults; //assign new building			
 
-			panel.name.innerHTML = building.name;
+			panel.name.innerHTML = [building.name, ' ', building.level].join('');
 			panel.img.src = [Lib.AssetUrl, "planet_side/", building.image, ".png"].join('');
-			panel.level.innerHTML = building.level;
 			panel.curEnergy.innerHTML = building.energy_hour;
 			panel.curFood.innerHTML = building.food_hour;
 			panel.curHappiness.innerHTML = building.happiness_hour;
 			panel.curOre.innerHTML = building.ore_hour;
 			panel.curWaste.innerHTML = building.waste_hour;
 			panel.curWater.innerHTML = building.water_hour;
+			
+			panel.storage.curFood.innerHTML = building.food_capacity;
+			panel.storage.curOre.innerHTML = building.ore_capacity;
+			panel.storage.curWater.innerHTML = building.water_capacity;
+			panel.storage.curEnergy.innerHTML = building.energy_capacity;
+			panel.storage.curWaste.innerHTML = building.waste_capacity;
+			var p = building.upgrade.production || {};
+			panel.storage.newFood.innerHTML = p.food_capacity || 0;
+			panel.storage.newOre.innerHTML = p.ore_capacity || 0;
+			panel.storage.newWater.innerHTML = p.water_capacity || 0;
+			panel.storage.newEnergy.innerHTML = p.energy_capacity || 0;
+			panel.storage.newWaste.innerHTML = p.waste_capacity || 0;
 			
 			if(building.pending_build) {
 				panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
@@ -452,22 +484,22 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>',
 				].join('');
 
-				if(up.can) {
-					panel.upgradeProdUl.innerHTML = ['<li><ul><li>Upgrade Production</li>',
+
+				panel.upgradeProdUl.innerHTML = ['<li><ul><li>Upgrade Production</li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.production.food_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',up.production.ore_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.production.water_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.production.energy_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.production.waste_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span class="buildingDetailsNum">',up.production.happiness_hour,'</span></li>',
-					'	</ul></li><li><button type="button">Upgrade</button></li>'].join('');
-					
+					'	</ul></li>',
+					up.can ? '<li><button type="button">Upgrade</button></li>' : '<li style="color:red;">Unable to Upgrade:</li><li style="color:red;">',up.reason[1],'</li>'
+					].join('');
+				
+				if(up.can) {
 					Event.on(Sel.query("button", panel.upgradeProdUl, true), "click", function(e){
 						this.Upgrade();
 					}, this, true);
-				}
-				else {
-					panel.upgradeProdUl.innerHTML = ['<li style="color:red;">Unable to Upgrade:</li><li style="color:red;">',up.reason[1],'</li>'].join('');
 				}
 			}
 			else {
@@ -509,7 +541,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'</div>'
 					];
 				panel.extraEl.innerHTML = output.join('');
-				Dom.setStyle(panel.extraEl, "display", "");
+				panel.tabView.getTab(0).set('disabled',false);
+				panel.tabView.set('activeIndex',0);
 			}
 			else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
 				var bq = oResults.build_queue,
@@ -552,7 +585,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						}
 					}, nLi);
 				}
-				Dom.setStyle(panel.extraEl, "display", "");
+
+				panel.tabView.getTab(0).set('disabled',false);
+				panel.tabView.set('activeIndex',0);
 			}
 			/*else if(oResults.docked_ships) { //if it's the space port
 				colony_ship
@@ -602,7 +637,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'</div>'
 					];
 				panel.extraEl.innerHTML = output.join('');
-				Dom.setStyle(panel.extraEl, "display", "");
+				panel.tabView.getTab(0).set('disabled',false);
+				panel.tabView.set('activeIndex',0);
 			}
 			else if(oResults.ore_stored) {
 				var stored = oResults.ore_stored,
@@ -639,10 +675,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'</div>'
 					];
 				panel.extraEl.innerHTML = output.join('');
-				Dom.setStyle(panel.extraEl, "display", "");
+				panel.tabView.getTab(0).set('disabled',false);
+				panel.tabView.set('activeIndex',0);
 			}
 			else {
-				Dom.setStyle(panel.extraEl, "display", "none");
+				panel.tabView.getTab(0).set('disabled',true);
+				panel.tabView.set('activeIndex',1);
 			}
 
 		},
@@ -754,7 +792,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 								reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
 								break;
 							case 1012:
-								reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								if(br[2]) {
+									reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								}
+								else {
+									reason = br[1];
+								}
 								break;
 							case 1013:
 								if(br.length == 2) {
@@ -785,13 +828,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
-						/*'		<span><label>Energy:</label>',costs.energy,'</span>, ',
-						'		<span><label>Food:</label>',costs.food,'</span>, ',
-						'		<span><label>Ore:</label>',costs.ore,'</span>, ',
-						'		<span><label>Waste:</label>',costs.waste,'</span>, ',
-						'		<span><label>Water:</label>',costs.water,'</span>',*/
 						'		</div>',
-						
 						'		<div><label style="font-weight:bold;">Prod:</label>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
@@ -799,12 +836,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
-						/*'		<span><label>Happiness:</label>',prod.happiness_hour,'</span>, ',
-						'		<span><label>Energy:</label>',prod.energy_hour,'</span>, ',
-						'		<span><label>Food:</label>',prod.food_hour,'</span>, ',
-						'		<span><label>Ore:</label>',prod.ore_hour,'</span>, ',
-						'		<span><label>Waste:</label>',prod.waste_hour,'</span>, ',
-						'		<span><label>Water:</label>',prod.water_hour,'</span>',*/
 						'		</div>',
 						'	</div>',
 						'</div>'].join('');
@@ -843,7 +874,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					b.pending_build = o.result.building.pending_build;
 					b.x = x;
 					b.y = y;
-					b.productionComplete = b.build.production;
 					YAHOO.log(b, "info", "MapPlanet.Build.success.building");
 					this.UpdateCost(b.build.cost);
 					
@@ -877,7 +907,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					b.id = o.result.building.id;
 					b.level = o.result.building.level;
 					b.pending_build = o.result.building.pending_build;
-					b.productionComplete = b.upgrade.production;
 					YAHOO.log(b, "info", "MapPlanet.Upgrade.success.building");
 					this.UpdateCost(b.upgrade.cost);
 					
@@ -939,17 +968,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 			
 				Lacuna.Menu.updateTick();
-			}
-		},
-		UpdateProduction : function(production) {
-			var planet = Game.EmpireData.planets[this.locationId];
-			if(planet && production) {
-				planet.energy_hour += production.energy_hour;
-				planet.food_hour += production.food_hour;
-				planet.happiness_hour += production.happiness_hour;
-				planet.ore_hour += production.ore_hour;
-				planet.waste_hour += production.waste_hour;
-				planet.water_hour += production.water_hour;
 			}
 		},
 		QueueReload : function(building) {

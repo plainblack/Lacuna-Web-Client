@@ -75,7 +75,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["event-delegate","event-mouseenter","game","mapper","selector"]
+		requires : ["event-delegate","event-mouseenter","game","mapper","selector","tabview"]
 	});
 	loader.addModule({
 		name: "textboxList",

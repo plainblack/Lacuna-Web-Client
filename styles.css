@@ -603,15 +603,15 @@ planet details
 	text-align:right;
 	width:80px;
 }
-#buildingDetailsExtra {
+/*#buildingDetailsExtra {
 	padding: 5px 0;
 }
 #buildingDetailsProduction {
 	padding-top:5px;
-}
-#buildingDetailsExtra, #buildingDetailsProduction {
+}*/
+/*#buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
-}
+}*/
 #buildingDetailsExtra label {
 	display:inline-block;
 	width:75px;
