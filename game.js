@@ -63,7 +63,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						expires: now.setHours(now.getHours() + 1)
 					});
 					//remember empire name
-					Cookie.setSub("lacuna", "empireName", result.oArgs.empire_name, {
+					Cookie.setSub("lacuna", "empireName", oArgs.empire_name, {
 						domain: "lacunaexpanse.com"
 					});
 
@@ -345,17 +345,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				session = Game.GetSession();
 			EmpireServ.get_full_status({session_id:session}, {
 				success : function(o) {
+					YAHOO.log(o, "info", "Game.GetFullStatus.success");
 					Lacuna.Game.ProcessStatus(o.result);
 					if(callback && callback.success) {
 						callback.success.call(this);
 					}
 				},
 				failure : function(o) {
+					YAHOO.log(o, "error", "Game.GetFullStatus.failure");
 					if(callback && callback.failure) {
 						callback.failure.call(this, o);
-					}
-					else {
-						YAHOO.log(o, "error", "Game.GetFullStatus.failure");
 					}
 				},
 				timeout:Game.Timeout,

@@ -27,12 +27,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
 				'<div class="bd">',
-				'	<div id="messagingTabs" class="panelTabs"><ul class="clearafter">',
-				'		<li id="messagingCreate" class="tab">Create</li>',
-				'		<li id="messagingInbox" class="tab">Inbox</li>',
-				'		<li id="messagingSent" class="tab">Sent</li>',
-				'		<li id="messagingArchive" class="tab">Archive</li>',
-				'	</ul></div>',
+				'	<div id="messagingTabs" class="yui-navset"><ul class="yui-nav">',
+				'		<li id="messagingCreate" class="tab"><a href="#"><em>Create</em></a></li>',
+				'		<li id="messagingInbox" class="tab"><a href="#"><em>Inbox</em></a></li>',
+				'		<li id="messagingSent" class="tab"><a href="#"><em>Sent</em></a></li>',
+				'		<li id="messagingArchive" class="tab"><a href="#"><em>Archive</em></a></li>',
+				'	</ul>',
+				'	<div class="yui-content">',
 				'	<div id="messagingCreator" class="panelTabContainer" style="display:none">',
 				'		<div class="messagingCreatorC"><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
 				'		<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
@@ -57,6 +58,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<div><label>Subject:</label><span id="messagingSubject"></span></div>',
 				'			<div id="messagingBody"></div>',
 				'		</div>',
+				'	</div>',
+				'	</div>',
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -147,8 +150,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.sent,this.archive], "panelTabSelected");
-			Dom.addClass(el, "panelTabSelected");
+			Dom.removeClass([this.create,this.inbox,this.sent,this.archive], "selected");
+			Dom.addClass(el, "selected");
 			if(el.id == this.create.id) {
 				Dom.setStyle("messagingCreator", "display", "");
 				Dom.setStyle("messagingReader", "display", "none");

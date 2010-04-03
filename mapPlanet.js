@@ -41,7 +41,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'	</div>',
 				'	<div id="buildingDetailTabs" class="yui-navset">',
 				'		<ul class="yui-nav">',
-				'			<li><a href="#detailsExtra"><em>Special</em></a></li>',
+				'			<li><a href="#detailsExtra"><em>Main</em></a></li>',
 				'			<li><a href="#detailsProduction"><em>Production</em></a></li>',
 				'			<li><a href="#detailsStorage"><em>Storage</em></a></li>',
 				'		</ul>',
@@ -145,6 +145,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.name = Dom.get("buildingDetailsName");
 				
 				this.tabView = new YAHOO.widget.TabView("buildingDetailTabs");
+				this.tabView.set('activeIndex',0);
+				
 				this.upgradeUl = Dom.get("buildingDetailsUpgradeCost");
 				this.upgradeProdUl = Dom.get("buildingDetailsUpgradeProduction");
 				this.extraEl = Dom.get("buildingDetailsExtra");
@@ -508,180 +510,179 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			panel.extraEl.innerHTML = "";
 			
-			if(oResults.planet) { //if it's the planetary command
-				var planet = oResults.planet,
-					output = [
-						'<div class="yui-g">',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
-						'				<span class="pcStored">',planet.food_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.food_capacity, '</span> @ <span class="pcPerHour">', planet.food_hour,'</span>/hr</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
-						'				<span class="pcStored">',planet.ore_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.ore_capacity, '</span> @ <span class="pcPerHour">', planet.ore_hour,'</span>/hr</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
-						'				<span class="pcStored">',planet.water_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.water_capacity, '</span> @ <span class="pcPerHour">', planet.water_hour,'</span>/hr</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
-						'				<span class="pcStored">',planet.energy_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.energy_capacity, '</span> @ <span class="pcPerHour">', planet.energy_hour,'</span>/hr</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
-						'				<span class="pcStored">',planet.waste_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.waste_capacity, '</span> @ <span class="pcPerHour">', planet.waste_hour,'</span>/hr</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
-						'				<span class="pcStored">',planet.happiness, '</span><span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span> @ <span class="pcPerHour">', planet.happiness_hour,'</span>/hr</li>',
-						'		</ul>',
-						'	</div>',
-						'	<div class="yui-u first">',
-						'		<ul class="buildingDetailsPC">',
-						'			<li><label>Buildings:</label>',planet.building_count,'</li>',
-						'			<li><label>Planet Size:</label>',planet.size,'</li>',
-						'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
-						'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y : ',planet.z,'z</li>',
-						'			<li><label>Star:</label>',planet.star_name,'</li>',
-						'			<li><label>Orbit:</label>',planet.orbit,'</li>',
-						'		</ul>',
-						'	</div>',
-						'</div>'
-					];
-				panel.extraEl.innerHTML = output.join('');
-				panel.tabView.getTab(0).set('disabled',false);
-				panel.tabView.set('activeIndex',0);
-			}
-			else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
-				var bq = oResults.build_queue,
-					ul = document.createElement("ul"),
-					li = document.createElement("li");
-					
-				panel.extraEl.innerHTML = ['<div><ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li></ul>'];
-					
-				for(var i=0; i<bq.length; i++) {
-					var bqo = bq[i],
-						nUl = ul.cloneNode(false),
-						nLi = li.cloneNode(false);
-					Dom.addClass(nUl, "buildQueue");
-					Dom.addClass(nUl, "clearafter");
-
-					Dom.addClass(nLi,"buildQueueName");
-					nLi.innerHTML = bqo.name;
-					nUl.appendChild(nLi);
-					nLi = li.cloneNode(false);
-
-					Dom.addClass(nLi,"buildQueueLevel");
-					nLi.innerHTML = bqo.to_level;
-					nUl.appendChild(nLi);
-					nLi = li.cloneNode(false);
-
-					Dom.addClass(nLi,"buildQueueTime");
-					nLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
-					nUl.appendChild(nLi);
-
-					panel.extraEl.appendChild(nUl);
-					
-					panel.addQueue(bqo.seconds_remaining, function(remaining, el){
-						if(remaining <= 0) {
-							var ul = el.parentNode,
-								c = ul.parentNode;
-							c.removeChild(ul);
-						}
-						else {
-							el.innerHTML = Lib.formatTime(Math.round(remaining));
-						}
-					}, nLi);
+			if(oResults.planet || (oResults.build_queue && oResults.build_queue.length > 0) || oResults.food_stored || oResults.ore_stored) {
+				if(panel.extraTab) {
+					panel.tabView.addTab(panel.extraTab, 0);
+					panel.extraTab = undefined;
 				}
 
-				panel.tabView.getTab(0).set('disabled',false);
-				panel.tabView.set('activeIndex',0);
-			}
-			/*else if(oResults.docked_ships) { //if it's the space port
-				colony_ship
-				gas_giant_settlement_platform_ship
-				mining_platform_ship
-				probe
-				smuggler_ship
-				space_station
-				spy_pod
-				terraforming_platform_ship
-			}
-			else if(oResults.party && oResults.party.can_throw) {
-				Dom.setStyle(panel.extraEl, "display", "none");
-			}*/
-			else if(oResults.food_stored) {
-				var stored = oResults.food_stored,
-					output = [
-						'<div class="yui-g">',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
-						'			<li><label>Apple</label><span class="buildingDetailsNum">',stored.apple,'</span></li>',
-						'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
-						'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
-						'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
-						'			<li><label>Chip</label><span class="buildingDetailsNum">',stored.chip,'</span></li>',
-						'			<li><label>Cider</label><span class="buildingDetailsNum">',stored.cider,'</span></li>',
-						'			<li><label>Corn</label><span class="buildingDetailsNum">',stored.corn,'</span></li>',
-						'			<li><label>Fungus</label><span class="buildingDetailsNum">',stored.fungus,'</span></li>',
-						'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li><label>Meal</label><span class="buildingDetailsNum">',stored.meal,'</span></li>',
-						'			<li><label>Milk</label><span class="buildingDetailsNum">',stored.milk,'</span></li>',
-						'			<li><label>Pancake</label><span class="buildingDetailsNum">',stored.pancake,'</span></li>',
-						'			<li><label>Pie</label><span class="buildingDetailsNum">',stored.pie,'</span></li>',
-						'			<li><label>Potato</label><span class="buildingDetailsNum">',stored.potato,'</span></li>',
-						'			<li><label>Root</label><span class="buildingDetailsNum">',stored.root,'</span></li>',
-						'			<li><label>Shake</label><span class="buildingDetailsNum">',stored.shake,'</span></li>',
-						'			<li><label>Soup</label><span class="buildingDetailsNum">',stored.soup,'</span></li>',
-						'			<li><label>Syrup</label><span class="buildingDetailsNum">',stored.syrup,'</span></li>',
-						'			<li><label>Wheat</label><span class="buildingDetailsNum">',stored.wheat,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'</div>'
-					];
-				panel.extraEl.innerHTML = output.join('');
-				panel.tabView.getTab(0).set('disabled',false);
-				panel.tabView.set('activeIndex',0);
-			}
-			else if(oResults.ore_stored) {
-				var stored = oResults.ore_stored,
-					output = [
-						'<div class="yui-g">',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li><label>Anthracite</label><span class="buildingDetailsNum">',stored.anthracite,'</span></li>',
-						'			<li><label>Bauxite</label><span class="buildingDetailsNum">',stored.bauxite,'</span></li>',
-						'			<li><label>Beryl</label><span class="buildingDetailsNum">',stored.beryl,'</span></li>',
-						'			<li><label>Chalcopyrite</label><span class="buildingDetailsNum">',stored.chalcopyrite,'</span></li>',
-						'			<li><label>Chromite</label><span class="buildingDetailsNum">',stored.chromite,'</span></li>',
-						'			<li><label>Fluorite</label><span class="buildingDetailsNum">',stored.fluorite,'</span></li>',
-						'			<li><label>Galena</label><span class="buildingDetailsNum">',stored.galena,'</span></li>',
-						'			<li><label>Goethite</label><span class="buildingDetailsNum">',stored.goethite,'</span></li>',
-						'			<li><label>Gold</label><span class="buildingDetailsNum">',stored.gold,'</span></li>',
-						'			<li><label>Gypsum</label><span class="buildingDetailsNum">',stored.gypsum,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li><label>Halite</label><span class="buildingDetailsNum">',stored.halite,'</span></li>',
-						'			<li><label>Kerogen</label><span class="buildingDetailsNum">',stored.kerogen,'</span></li>',
-						'			<li><label>Magnetite</label><span class="buildingDetailsNum">',stored.magnetite,'</span></li>',
-						'			<li><label>Methane</label><span class="buildingDetailsNum">',stored.methane,'</span></li>',
-						'			<li><label>Monazite</label><span class="buildingDetailsNum">',stored.monazite,'</span></li>',
-						'			<li><label>Rutile</label><span class="buildingDetailsNum">',stored.rutile,'</span></li>',
-						'			<li><label>Sulfur</label><span class="buildingDetailsNum">',stored.sulfur,'</span></li>',
-						'			<li><label>Trona</label><span class="buildingDetailsNum">',stored.trona,'</span></li>',
-						'			<li><label>Uraninite</label><span class="buildingDetailsNum">',stored.uraninite,'</span></li>',
-						'			<li><label>Zircon</label><span class="buildingDetailsNum">',stored.zircon,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'</div>'
-					];
-				panel.extraEl.innerHTML = output.join('');
-				panel.tabView.getTab(0).set('disabled',false);
-				panel.tabView.set('activeIndex',0);
-			}
+				if(oResults.planet) { //if it's the planetary command
+					var planet = oResults.planet,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
+							'				<span class="pcStored">',planet.food_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.food_capacity, '</span> @ <span class="pcPerHour">', planet.food_hour,'</span>/hr</li>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
+							'				<span class="pcStored">',planet.ore_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.ore_capacity, '</span> @ <span class="pcPerHour">', planet.ore_hour,'</span>/hr</li>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
+							'				<span class="pcStored">',planet.water_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.water_capacity, '</span> @ <span class="pcPerHour">', planet.water_hour,'</span>/hr</li>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
+							'				<span class="pcStored">',planet.energy_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.energy_capacity, '</span> @ <span class="pcPerHour">', planet.energy_hour,'</span>/hr</li>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
+							'				<span class="pcStored">',planet.waste_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.waste_capacity, '</span> @ <span class="pcPerHour">', planet.waste_hour,'</span>/hr</li>',
+							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
+							'				<span class="pcStored">',planet.happiness, '</span><span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span> @ <span class="pcPerHour">', planet.happiness_hour,'</span>/hr</li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u first">',
+							'		<ul class="buildingDetailsPC">',
+							'			<li><label>Buildings:</label>',planet.building_count,'</li>',
+							'			<li><label>Planet Size:</label>',planet.size,'</li>',
+							'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
+							'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y : ',planet.z,'z</li>',
+							'			<li><label>Star:</label>',planet.star_name,'</li>',
+							'			<li><label>Orbit:</label>',planet.orbit,'</li>',
+							'		</ul>',
+							'	</div>',
+							'</div>'
+						];
+					panel.extraEl.innerHTML = output.join('');
+				}
+				else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
+					var bq = oResults.build_queue,
+						ul = document.createElement("ul"),
+						li = document.createElement("li");
+						
+					panel.extraEl.innerHTML = ['<div><ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li></ul>'];
+						
+					for(var i=0; i<bq.length; i++) {
+						var bqo = bq[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+						Dom.addClass(nUl, "buildQueue");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"buildQueueName");
+						nLi.innerHTML = bqo.name;
+						nUl.appendChild(nLi);
+						nLi = li.cloneNode(false);
+
+						Dom.addClass(nLi,"buildQueueLevel");
+						nLi.innerHTML = bqo.to_level;
+						nUl.appendChild(nLi);
+						nLi = li.cloneNode(false);
+
+						Dom.addClass(nLi,"buildQueueTime");
+						nLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
+						nUl.appendChild(nLi);
+
+						panel.extraEl.appendChild(nUl);
+						
+						panel.addQueue(bqo.seconds_remaining, function(remaining, el){
+							if(remaining <= 0) {
+								var ul = el.parentNode,
+									c = ul.parentNode;
+								c.removeChild(ul);
+							}
+							else {
+								el.innerHTML = Lib.formatTime(Math.round(remaining));
+							}
+						}, nLi);
+					}
+				}
+				/*else if(oResults.docked_ships) { //if it's the space port
+					colony_ship
+					gas_giant_settlement_platform_ship
+					mining_platform_ship
+					probe
+					smuggler_ship
+					space_station
+					spy_pod
+					terraforming_platform_ship
+				}
+				else if(oResults.party && oResults.party.can_throw) {
+					Dom.setStyle(panel.extraEl, "display", "none");
+				}*/
+				else if(oResults.food_stored) {
+					var stored = oResults.food_stored,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
+							'			<li><label>Apple</label><span class="buildingDetailsNum">',stored.apple,'</span></li>',
+							'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
+							'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
+							'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
+							'			<li><label>Chip</label><span class="buildingDetailsNum">',stored.chip,'</span></li>',
+							'			<li><label>Cider</label><span class="buildingDetailsNum">',stored.cider,'</span></li>',
+							'			<li><label>Corn</label><span class="buildingDetailsNum">',stored.corn,'</span></li>',
+							'			<li><label>Fungus</label><span class="buildingDetailsNum">',stored.fungus,'</span></li>',
+							'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Meal</label><span class="buildingDetailsNum">',stored.meal,'</span></li>',
+							'			<li><label>Milk</label><span class="buildingDetailsNum">',stored.milk,'</span></li>',
+							'			<li><label>Pancake</label><span class="buildingDetailsNum">',stored.pancake,'</span></li>',
+							'			<li><label>Pie</label><span class="buildingDetailsNum">',stored.pie,'</span></li>',
+							'			<li><label>Potato</label><span class="buildingDetailsNum">',stored.potato,'</span></li>',
+							'			<li><label>Root</label><span class="buildingDetailsNum">',stored.root,'</span></li>',
+							'			<li><label>Shake</label><span class="buildingDetailsNum">',stored.shake,'</span></li>',
+							'			<li><label>Soup</label><span class="buildingDetailsNum">',stored.soup,'</span></li>',
+							'			<li><label>Syrup</label><span class="buildingDetailsNum">',stored.syrup,'</span></li>',
+							'			<li><label>Wheat</label><span class="buildingDetailsNum">',stored.wheat,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'</div>'
+						];
+					panel.extraEl.innerHTML = output.join('');
+				}
+				else if(oResults.ore_stored) {
+					var stored = oResults.ore_stored,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Anthracite</label><span class="buildingDetailsNum">',stored.anthracite,'</span></li>',
+							'			<li><label>Bauxite</label><span class="buildingDetailsNum">',stored.bauxite,'</span></li>',
+							'			<li><label>Beryl</label><span class="buildingDetailsNum">',stored.beryl,'</span></li>',
+							'			<li><label>Chalcopyrite</label><span class="buildingDetailsNum">',stored.chalcopyrite,'</span></li>',
+							'			<li><label>Chromite</label><span class="buildingDetailsNum">',stored.chromite,'</span></li>',
+							'			<li><label>Fluorite</label><span class="buildingDetailsNum">',stored.fluorite,'</span></li>',
+							'			<li><label>Galena</label><span class="buildingDetailsNum">',stored.galena,'</span></li>',
+							'			<li><label>Goethite</label><span class="buildingDetailsNum">',stored.goethite,'</span></li>',
+							'			<li><label>Gold</label><span class="buildingDetailsNum">',stored.gold,'</span></li>',
+							'			<li><label>Gypsum</label><span class="buildingDetailsNum">',stored.gypsum,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u first">',
+							'		<ul>',
+							'			<li><label>Halite</label><span class="buildingDetailsNum">',stored.halite,'</span></li>',
+							'			<li><label>Kerogen</label><span class="buildingDetailsNum">',stored.kerogen,'</span></li>',
+							'			<li><label>Magnetite</label><span class="buildingDetailsNum">',stored.magnetite,'</span></li>',
+							'			<li><label>Methane</label><span class="buildingDetailsNum">',stored.methane,'</span></li>',
+							'			<li><label>Monazite</label><span class="buildingDetailsNum">',stored.monazite,'</span></li>',
+							'			<li><label>Rutile</label><span class="buildingDetailsNum">',stored.rutile,'</span></li>',
+							'			<li><label>Sulfur</label><span class="buildingDetailsNum">',stored.sulfur,'</span></li>',
+							'			<li><label>Trona</label><span class="buildingDetailsNum">',stored.trona,'</span></li>',
+							'			<li><label>Uraninite</label><span class="buildingDetailsNum">',stored.uraninite,'</span></li>',
+							'			<li><label>Zircon</label><span class="buildingDetailsNum">',stored.zircon,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'</div>'
+						];
+					panel.extraEl.innerHTML = output.join('');
+				}
+			}	
 			else {
-				panel.tabView.getTab(0).set('disabled',true);
-				panel.tabView.set('activeIndex',1);
+				panel.extraTab = panel.tabView.getTab(0);
+				panel.tabView.removeTab(panel.extraTab);
 			}
+			panel.tabView.selectTab(0);
 
 		},
 		

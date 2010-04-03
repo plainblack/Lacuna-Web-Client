@@ -106,6 +106,7 @@
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
 		YAHOO.lacuna.Game.Start();
+		//YAHOO.util.Event.throwErrors = true;
 	};
 	loader.onFailure = function(o) {
 		YAHOO.log(o);

@@ -49,6 +49,7 @@ select, input, button, textarea, button {
 	color:red;
 }
 
+/*
 .panelTabs {
 }
 .panelTabs li {
@@ -67,7 +68,7 @@ select, input, button, textarea, button {
 	border:1px solid gray;
 	border-top-width:5px;
 }
-
+*/
 /*
 YUI dialog skin
 */
@@ -332,6 +333,10 @@ about
 	font-weight:bold;
 }
 
+#messagingTabs .yui-content {
+	padding:0;
+}
+
 #messagingCreator {
 	border-top-color:#52ACFF;
 }
@@ -359,7 +364,7 @@ about
 	color:red;
 }
 #messagingArchiver {
-	background-color:gray;
+	background-color:#52ACFF;
 }
 #messagingDisplay {
 	padding-top:5px;
@@ -517,6 +522,35 @@ about
 	width: 30px;
 	position: absolute;
 	left: 0;
+}
+
+body.yui-skin-sam .yui-navset .yui-nav,
+body.yui-skin-sam .yui-navset .yui-navset-top .yui-nav {
+	border-color:#52acff;
+}
+body.yui-skin-sam .yui-navset .yui-content,
+body.yui-skin-sam .yui-navset .yui-navset-top .yui-content {
+	border-color:#52acff;
+}
+body.yui-skin-sam .yui-navset .yui-content {
+	background-color:transparent;
+}
+body.yui-skin-sam .yui-navset .yui-nav .selected a, 
+body.yui-skin-sam .yui-navset .yui-nav .selected a em {
+	border-color:#52acff;
+}
+body.yui-skin-sam .yui-navset .yui-nav a, 
+body.yui-skin-sam .yui-navset .yui-navset-top .yui-nav a {
+	background:none repeat scroll 0 0 #D8D8D8;
+}
+body.yui-skin-sam .yui-navset .yui-nav a:focus,
+body.yui-skin-sam .yui-navset .yui-nav a:hover {
+	background:none repeat scroll 0 0 #BFDAFF;
+}
+body.yui-skin-sam .yui-navset .yui-nav .selected a, 
+body.yui-skin-sam .yui-navset .yui-nav .selected a:focus, 
+body.yui-skin-sam .yui-navset .yui-nav .selected a:hover {
+	background:none repeat scroll 0 0 #52acff;
 }
 
 /*
