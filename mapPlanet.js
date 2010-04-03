@@ -678,7 +678,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.extraEl.innerHTML = output.join('');
 				}
 			}	
-			else {
+			else if(panel.tabView.get("tabs").length == 3){
 				panel.extraTab = panel.tabView.getTab(0);
 				panel.tabView.removeTab(panel.extraTab);
 			}

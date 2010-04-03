@@ -5,6 +5,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 (function(){
 	var Lang = YAHOO.lang,
 		Util = YAHOO.util,
+		Cookie = Util.Cookie,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
@@ -95,6 +96,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Game.OverlayManager.hideAll();
 			this.elForm.reset();
 			this.Dialog.show();
+			this.elName.value = Cookie.getSub("lacuna","empireName") || "";
 		},
 		hide : function() {
 			if(this.elMessage) {
