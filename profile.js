@@ -148,6 +148,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 	Lacuna.Profile = new Profile();
 })();
-YAHOO.register("Profile", YAHOO.lacuna.Profile, {version: "1", build: "0"}); 
+YAHOO.register("profile", YAHOO.lacuna.Profile, {version: "1", build: "0"}); 
 
 }

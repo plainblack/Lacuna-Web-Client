@@ -30,6 +30,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 		
 		Start : function() {
+			/*Lacuna.Pulser = new Lacuna.Pulse();
+			Lacuna.Pulser.Show();
+			Game.OverlayManager.register(Lacuna.Pulser._bar);*/
+			
 			var session = Game.GetSession();
 			if(!session) {
 				Lacuna.Game.DoLogin();
@@ -118,6 +122,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						break;
 				}
 			}
+			//Lacuna.Pulser.Hide();
 		},
 		InitEvents : function() {
 			//make sure we only subscribe once

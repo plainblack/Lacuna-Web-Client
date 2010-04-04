@@ -33,7 +33,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			draggable:true,
 			modal:true,
 			close:false,
-			width:"450px",
+			width:"480px",
 			underlay:false,
 			zIndex:9999
 		});
@@ -173,6 +173,26 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			var slider = Slider.getHorizDualSlider("speciesHO",
 				"speciesHO_min_thumb", "speciesHO_max_thumb",
 				range, tickSize, [0,195]);
+				
+			// Decorate the DualSlider instance with some new properties and
+			// methods to maintain the highlight element
+			YAHOO.lang.augmentObject(slider, {
+				// The highlight element
+				_highlight : Dom.get("speciesHO_highlight"),
+				// A method to update the status and update the highlight
+				updateHighlight : function () {
+					var delta = this.maxVal - this.minVal;
+					if (this.activeSlider === this.minSlider) {
+						// If the min thumb moved, move the highlight's left edge
+						Dom.setStyle(this._highlight,'left', (this.minVal + 12) + 'px');
+					}
+					// Adjust the width of the highlight to match inner boundary
+					Dom.setStyle(this._highlight,'width', Math.max(delta - 12,0) + 'px');
+				}
+			},true);
+			// Attach the highlight method to the slider's change event
+			slider.subscribe('change',slider.updateHighlight,slider,true);
+
 
 			var updateUI = function () {
 				from.innerHTML = this.convertValue(slider.minVal);
@@ -206,12 +226,12 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.found({empire_id: this.empireId}, {
 				success : function(o) {
-					YAHOO.log(o, "info", "FoundEmpire");
-					this.fireEvent("onCreateSuccessful", o);
+					YAHOO.log(o, "info", "CreateSpecies._found.success");
 					this.hide(); //hide species
+					this.fireEvent("onCreateSuccessful", o);
 				},
 				failure : function(o) {
-					YAHOO.log(o, "info", "FoundEmpireFailure");
+					YAHOO.log(o, "info", "CreateSpecies._found.failure");
 					this.setMessage(o.error.message);
 				},
 				timeout:Game.Timeout,
@@ -229,11 +249,12 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			'				<option value="create">Create your own</option>',
 			'			</select>',
 			'			<ul id="speciesCreate" style="margin-top:5px; padding-top:5px; border-top:1px solid blue;">',
-			'				<li><label for="speciesName">Name</label><input type="text" id="speciesName" maxlength="30" /></li>',
+			'				<li style="margin-bottom:3px;"><label for="speciesName">Name</label><input type="text" id="speciesName" maxlength="30" size="30" /></li>',
 			'				<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
 			'				<li id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
 			'				<li><label>Habitable Orbits</label>',
 			'					<div id="speciesHO" class="speciesSlider_bg" title="Habitable Orbits Selector">',
+			'						<span id="speciesHO_highlight"></span>',
 			'						<div id="speciesHO_min_thumb"><span id="speciesHO_from" class="thumbDisplay">1</span><img src="http://yui.yahooapis.com/2.8.0r4/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
 			'						<div id="speciesHO_max_thumb"><span id="speciesHO_to" class="thumbDisplay">1</span><img src="http://yui.yahooapis.com/2.8.0r4/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
 			'					</div>',

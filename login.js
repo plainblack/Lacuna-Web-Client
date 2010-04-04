@@ -25,8 +25,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'		<form id="loginForm" name="loginForms">',
 		'			<ul>',
 		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
-		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass" /></li>',
-		'				<li><label>&nbsp;</label><input type="checkbox" id="loginRemember" /> Remember Empire?</li>',
+		'				<li><label>Password</label><input type="password" id="loginPass"  /></li>',
+		'				<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /></li>',
 		'			</ul>',
 		'			<a id="loginCreate" href="#">Create an Empire</a>',
 		'		</form>',
@@ -44,7 +44,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"300px",
+			width:"400px",
 			underlay:false,
 			zIndex:9999
 		});
@@ -60,7 +60,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		
-		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("loginPass", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } )); 
+		this.Dialog.cfg.queueProperty("keylisteners", [new YAHOO.util.KeyListener("loginPass", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } ), 
+			new YAHOO.util.KeyListener("loginRemember", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } )
+		]); 
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 	};

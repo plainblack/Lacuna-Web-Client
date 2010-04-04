@@ -28,7 +28,7 @@
 		name: "game",
 		type: "js",
 		fullpath: host + "game.js?" + t,
-		requires : ["event","cookie","library","rpc","smd"]
+		requires : ["event","cookie","library","pulse","rpc","smd"]
 	});
 	loader.addModule({
 		name: "about",
@@ -95,6 +95,12 @@
 		fullpath: host + "profile.js?" + t,
 		requires : ["container","game"]
 	});
+	loader.addModule({
+		name: "pulse",
+		type: "js",
+		fullpath: host + "pulse.js?" + t,
+		requires : ["container","event"]
+	});
 	/*add after requirements*/
 	loader.addModule({
 		name: "gameMenu",
@@ -105,6 +111,7 @@
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem","profile");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
+		
 		YAHOO.lacuna.Game.Start();
 		//YAHOO.util.Event.throwErrors = true;
 	};

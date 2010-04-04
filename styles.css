@@ -98,6 +98,11 @@ body.yui-skin-sam .yui-panel .bd {
 	border-style:solid;
 	border-color:#52ACFF;
 }
+#pulsing.yui-panel .bd {
+	background-image:none;
+	background-color:transparent;
+	border-width:0px;
+}
 body.yui-skin-sam .yui-panel .ft {
 	-moz-border-radius:0 0 10px 10px;
 	-webkit-border-bottom-right-radius: 10px;
@@ -133,13 +138,26 @@ dialogs
 	display:inline-block;
 }
 #login label {
-	width:105px;
+	width:130px;
 }
+#login input[type="text"],#login input[type="password"] { width:220px; }
+#login li { margin-bottom:3px; }
+
 #createEmpire label {
-	width:120px;
+	width:130px;
 }
+#createEmpire input[type="text"],#createEmpire input[type="password"] { width:220px; }
+#createEmpire li { margin-bottom:3px; }
+
 #createSpecies label {
 	width:140px
+}
+#createSpecies li label {
+	display:inline-block;
+	width:120px;
+	text-align:right;
+	padding-right:5px;
+	vertical-align:top;
 }
 
 /*
@@ -407,19 +425,20 @@ about
 	top:0.25em;
 }
 
-#createSpecies li label {
-	display:inline-block;
-	width:100px;
-	text-align:right;
-	padding-right:5px;
-	vertical-align:top;
-}
-
 #speciesHO div {
 	position: absolute;
 	cursor: default;
 	top: 4px;
 }
+#speciesHO_highlight { 
+	position: absolute; 
+	background: green; 
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	top: 10px; 
+	left: 12px; 
+	height: 13px; 
+	width: 188px; 
+} 
 #speciesConst_thumb,
 #speciesDecep_thumb,
 #speciesResearch_thumb,

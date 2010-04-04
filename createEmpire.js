@@ -44,7 +44,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"315px",
+			width:"400px",
 			underlay:false,
 			zIndex:9999
 		});
