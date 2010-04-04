@@ -26,6 +26,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'			<ul>',
 		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
 		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass" /></li>',
+		'				<li><label>&nbsp;</label><input type="checkbox" id="loginRemember" /> Remember Empire?</li>',
 		'			</ul>',
 		'			<a id="loginCreate" href="#">Create an Empire</a>',
 		'		</form>',
@@ -52,6 +53,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elName = Dom.get("loginName");
 			this.elPass = Dom.get("loginPass");
 			this.elCreate = Dom.get("loginCreate");
+			this.elRemember = Dom.get("loginRemember");
 			this.elForm = Dom.get("loginForm");
 		
 			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
@@ -69,7 +71,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
 					YAHOO.log(o, "info", "Login.handleLogin.success");
-					o.empire_name = this.elName.value;
+					if(this.elRemember.checked) {
+						Cookie.set("lacunaEmpireName", this.elName.value);
+					}
 					this.elForm.reset();
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
@@ -96,7 +100,11 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Game.OverlayManager.hideAll();
 			this.elForm.reset();
 			this.Dialog.show();
-			this.elName.value = Cookie.getSub("lacuna","empireName") || "";
+			var str = Cookie.get("lacunaEmpireName");
+			if(str) {
+				this.elName.value = str;
+				this.elRemember.checked = true;
+			}
 		},
 		hide : function() {
 			if(this.elMessage) {

@@ -84,7 +84,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'					</div>',
 				'					<div class="yui-u">',
 				'						<ul id="buildingDetailsUpgradeStorage">',
-				'							<li>Current Storage</li>',
+				'							<li>Upgrade Storage</li>',
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span id="buildingDetailsFoodStorageUpgrade" class="buildingDetailsNum"></span></li>',
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span id="buildingDetailsOreStorageUpgrade" class="buildingDetailsNum"></span></li>',
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span id="buildingDetailsWaterStorageUpgrade" class="buildingDetailsNum"></span></li>',
@@ -725,12 +725,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var frag = document.createDocumentFragment(),
 					unavailFrag = document.createDocumentFragment(),
 					li = document.createElement("li"),
-					names = [],
+					names = [], //tags={},
 					reason, br;
 				
 				for(var name in b) {
 					if(b.hasOwnProperty(name)) {
 						names.push(name);
+						/*var bd = b[name];
+						for(var i=0; i<bd.build.tags.length; i++){
+							var tagBuildings = tags[bd.build.tags[i]] || {};
+							tagBuildings[name] = bd;
+							tags[bd.build.tags[i]] = tagBuildings;
+						}*/
 					}
 				}
 				names.sort();
@@ -757,11 +763,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
-						/*'			<span><label>Energy:</label>',costs.energy,'</span>, ',
-						'			<span><label>Food:</label>',costs.food,'</span>, ',
-						'			<span><label>Ore:</label>',costs.ore,'</span>, ',
-						'			<span><label>Waste:</label>',costs.waste,'</span>, ',
-						'			<span><label>Water:</label>',costs.water,'</span>',*/
 						'		</div>',
 						'		<div><label style="font-weight:bold;">Prod:</label>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
@@ -770,12 +771,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
 						'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
-						/*'			<span><label>Happiness:</label>',prod.happiness_hour,'</span>, ',
-						'			<span><label>Energy:</label>',prod.energy_hour,'</span>, ',
-						'			<span><label>Food:</label>',prod.food_hour,'</span>, ',
-						'			<span><label>Ore:</label>',prod.ore_hour,'</span>, ',
-						'			<span><label>Waste:</label>',prod.waste_hour,'</span>, ',
-						'			<span><label>Water:</label>',prod.water_hour,'</span>',*/
 						'		</div>',
 						'	</div>',
 						'	<div class="yui-u" style="width:10%">',

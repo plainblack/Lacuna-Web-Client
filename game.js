@@ -62,10 +62,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						domain: "lacunaexpanse.com",
 						expires: now.setHours(now.getHours() + 1)
 					});
-					//remember empire name
-					Cookie.setSub("lacuna", "empireName", oArgs.empire_name, {
-						domain: "lacunaexpanse.com"
-					});
 
 					Cookie.removeSub("lacuna","locationId");
 					Cookie.removeSub("lacuna","locationView");

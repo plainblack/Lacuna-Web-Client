@@ -69,7 +69,7 @@
 		name: "mapSystem",
 		type: "js",
 		fullpath: host + "mapSystem.js?" + t,
-		requires : ["game"]
+		requires : ["game","selector","tabview"]
 	});
 	loader.addModule({
 		name: "mapPlanet",

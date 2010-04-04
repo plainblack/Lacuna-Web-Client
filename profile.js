@@ -63,12 +63,20 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			].join('');
 		},
 		handleUpdate : function() {
+			var pmc = Sel.query("li", "profileMedalsList"),
+				publicMedals = [];
+			for(var i=0; i<pmc.length; i++){
+				if(Sel.query('input[type="checkbox"]', pmc[i], true).checked) {
+					publicMedals.push(pmc[i].MedalId);
+				}
+			}
+			
 			Game.Services.Empire.edit_profile({
 					session_id:Game.GetSession(""),
 					profile:{
 						description:this.description.value,
 						status_message:this.status.value,
-						public_medals:[]
+						public_medals:publicMedals
 					}
 				},{
 				success : function(o){
@@ -111,14 +119,15 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 	
 			var frag = document.createDocumentFragment(),
 				li = document.createElement('li');
-			for(var type in p.medals) {
-				if(p.medals.hasOwnProperty(type)) {	
-					var medal = p.medals[type],
+			for(var id in p.medals) {
+				if(p.medals.hasOwnProperty(id)) {	
+					var medal = p.medals[id],
 						nLi = li.cloneNode(false);
 					
 					Dom.addClass(nLi, "medal");
+					nLi.MedalId = id;
 					nLi.innerHTML = [
-					'	<div class="medalPublic"><input type="checkbox"', (medal["public"] ? ' checked' : ''), ' disabled /></div>',
+					'	<div class="medalPublic"><input type="checkbox"', (medal["public"] ? ' checked' : ''), ' /></div>',
 					'	<div class="medalContainer">',
 					'		<img src="',Lib.AssetUrl,'medal/',medal.image,'.png" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
 					'	</div>'

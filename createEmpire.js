@@ -66,44 +66,50 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	CreateEmpire.prototype = {
 		handleCreate : function() {
 			this.setMessage("");
-			YAHOO.log(["name: ", this.elName.value, " - pass: ", this.elPass.value].join(''));
-			var EmpireServ = Game.Services.Empire,
-				data = {
-					name: this.elName.value,
-					password: this.elPass.value,
-					password1: this.elPassConfirm.value
-				};
-				
-			EmpireServ.is_name_available({name:data.name}, {
-				success : function(o) {
-					YAHOO.log(o);
-					if(o.result == 1) {
-						EmpireServ.create(data,{
-							success : function(o){
-								YAHOO.log(o, "info", "CreateEmpire");
-								Game.SpeciesCreator.show(o.result);
-								this.hide(); //hide empire
-							},
-							failure : function(o){
-								YAHOO.log(o, "error", "CreateEmpireFailure");
-								this.setMessage(o.error.message);
-							},
-							timeout:Game.Timeout,
-							scope:this
-						});
-					}
-					else {
-						this.setMessage("Empire name is unavailable.  Please choose another.");
-					}
-				},
-				failure : function(o) {
-					YAHOO.log(o);
-					this.setMessage(o.error.message);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
-			
+			if(this.savedEmpire && this.savedEmpire.name == this.elName.value) {
+				Game.SpeciesCreator.show(this.savedEmpire.id);
+				this.hide(); //hide empire
+			}
+			else {
+				var EmpireServ = Game.Services.Empire,
+					data = {
+						name: this.elName.value,
+						password: this.elPass.value,
+						password1: this.elPassConfirm.value
+					};
+					
+				EmpireServ.is_name_available({name:data.name}, {
+					success : function(o) {
+						YAHOO.log(o);
+						if(o.result == 1) {
+							EmpireServ.create(data,{
+								success : function(o){
+									YAHOO.log(o, "info", "CreateEmpire");
+									this.savedEmpire = data;
+									this.savedEmpire.id = o.result;
+									Game.SpeciesCreator.show(o.result);
+									this.hide(); //hide empire
+								},
+								failure : function(o){
+									YAHOO.log(o, "error", "CreateEmpireFailure");
+									this.setMessage(o.error.message);
+								},
+								timeout:Game.Timeout,
+								scope:this
+							});
+						}
+						else {
+							this.setMessage("Empire name is unavailable.  Please choose another.");
+						}
+					},
+					failure : function(o) {
+						YAHOO.log(o);
+						this.setMessage(o.error.message);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		handleCancel : function() {
 			this.hide();
@@ -113,14 +119,17 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		show : function() {
+		show : function(doNotClear) {
 			Game.OverlayManager.hideAll();
+			if(!doNotClear) {
+				this.savedEmpire = undefined;
+				this.elName.value = "";
+				this.elPass.value = "";
+				this.elPassConfirm.value = "";
+			}
 			this.Dialog.show();
 		},
 		hide : function() {
-			this.elName.value = "";
-			this.elPass.value = "";
-			this.elPassConfirm.value = "";
 			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
 		},

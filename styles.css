@@ -607,6 +607,9 @@ planet details
 	display:inline-block;
 	width:100px;
 }
+#planetDetailRename label {
+	width:150px;
+}
 .smallImg {
 	display:inline-block;
 	width:30px;

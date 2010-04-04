@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		_clearSliders : function() {
 			if(this._slidersCreated) {
 				this.speciesHO.setMinValue(0,true);
-				this.speciesHO.setMaxValue(100,true);
+				this.speciesHO.setMaxValue(200,true);
 				this.speciesConst.setValue(0,true);
 				this.speciesDecep.setValue(0,true);
 				this.speciesResearch.setValue(0,true);
@@ -462,7 +462,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		},
 		handleCancel : function() {
 			this.hide();
-			this._empire.show();
+			this._empire.show(true);
 		},
 		setMessage : function(str) {
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
