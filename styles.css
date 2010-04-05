@@ -98,11 +98,6 @@ body.yui-skin-sam .yui-panel .bd {
 	border-style:solid;
 	border-color:#52ACFF;
 }
-#pulsing.yui-panel .bd {
-	background-image:none;
-	background-color:transparent;
-	border-width:0px;
-}
 body.yui-skin-sam .yui-panel .ft {
 	-moz-border-radius:0 0 10px 10px;
 	-webkit-border-bottom-right-radius: 10px;
@@ -130,6 +125,13 @@ body.yui-skin-sam .container-close {
 	width:23px;
 }
 
+#pulsing_c { 
+	width:99%;
+}
+#pulsing .bd {
+	border-width:0px;
+	text-align:center;
+}
 
 /*
 dialogs
@@ -475,9 +477,9 @@ about
 	clear:both;
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
-#planetMap {
+/*#planetMap {
 	background: brown url('http://localhost/lacuna/assets/planet_side/ground.png');
-}
+}*/
 .planetMapTileCounter {
 	z-index: 2;
 	text-align: right;
@@ -668,13 +670,17 @@ planet details
 /*#buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
 }*/
-#buildingDetailsExtra label {
+.buildingDetailsExtra label {
 	display:inline-block;
 	width:75px;
 }
-#buildingDetailsExtra .buildingDetailsPC li label{
+.buildingDetailsExtra .buildingDetailsPC li label{
 	display:inline-block;
 	width:125px;
+}
+.buildingDetailsDockedShips label {
+	display:inline-block;
+	width:185px;
 }
 .pcStored, .pcCapacity, .pcPerHour  {
 	display:inline-block;

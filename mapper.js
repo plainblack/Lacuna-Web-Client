@@ -160,10 +160,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		s.position = 'absolute';
 		s.width = '' + this.map.tileSizeInPx + 'px';
 		s.height = '' + this.map.tileSizeInPx + 'px';
-		s.zIndex = '1';
+		s.zIndex = '5';
 		s.left = ''+ this.offsetX +'px';
 		s.top = ''+ this.offsetY +'px';
-		s.background = 'transparent url('+ this.url +') no-repeat scroll center';
+		if(this.url) {
+			s.background = 'transparent url('+ this.url +') no-repeat scroll center';
+		}
 		
 		Dom.addClass(this.domElement, "tile");
 		
@@ -181,7 +183,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.blank = obj.blank;
 			this.url = obj.url;
 			this.data = obj.data;
-			Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
+			if(this.url) {
+				Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
+			}
 		},
 			
 		notInDom : function() {
@@ -272,6 +276,31 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	});
 	
 	
+	Mapper.UnderLayer = function(map) {
+		this.map = map;
+		this.div = document.createElement('div'); //so we can clone it a lot
+	};
+	Mapper.UnderLayer.prototype = {
+		redraw : function() {
+			if( this.containerDiv ) {
+				this.map.movableContainer.removeChild( this.containerDiv );
+			}
+			this.containerDiv = this.div.cloneNode(false);
+			Dom.addClass(this.containerDiv, "underlayContainer");
+			Dom.setStyle(this.containerDiv, "background", ['transparent url("',this.map._surfaceUrl,'") repeat scroll 0 0'].join(''));
+			var s = this.containerDiv.style;
+			s.position = 'absolute';
+			var bounds = this.map.maxBounds,
+				ts = this.map.tileSizeInPx;
+			s.left = (bounds.x1Left * ts) + 'px';
+			s.top = ((bounds.y1Top*-1) * ts) + 'px';
+			s.width = ((bounds.x2Right - bounds.x1Left) * ts) + ts + 'px'; //have to add an extra tile to account for 0 coords
+			s.height = ((bounds.y1Top - bounds.y2Bottom) * ts) + ts + 'px';
+			s.zIndex = '0';
+			
+			this.map.movableContainer.appendChild( this.containerDiv );
+		}
+	};
 
 	Mapper.CoordLayer = function(map) {
 		this.map = map;
@@ -382,7 +411,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		s.position = 'absolute';
 		s.left = offsetX + 'px';
 		s.top = offsetY + 'px';
-		s.zIndex = '0';
+		s.zIndex = '10';
 		// for debuging:
 		// s.width = ''+visibleArea.width+'px';
 		// s.height = ''+visibleArea.height+'px';
@@ -612,6 +641,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.canvasTileLayer.showTiles();
 				}*/
 			}
+			return {"x":x,"y":y};
 		},
 		setZoomLevel : function( level ) {
 			/*if( this.visibleArea ){
@@ -727,9 +757,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.getTileData(callback, x1, x2, y2+half, y2);
 				}
 			}
-			else if(Util.Connect.isCallInProgress(this.currentRequest)) {
+			/*else if(Util.Connect.isCallInProgress(this.currentRequest)) {
 				this.requestQueue.push([callback, x1, x2, y1, y2]);
-			}
+			}*/
 			else {
 				var data = {
 					session_id : Game.GetSession(""),
@@ -748,11 +778,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						this.addTileData(o.result.stars);
 						callback.success.call(callback.scope || this, callback.argument);
 						
-						var qi = this.requestQueue.pop();
 						this.currentRequest = undefined;
+						/*var qi = this.requestQueue.pop();
 						if(qi) {
 							this.getTileData.apply(this, qi);
-						}
+						}*/
 					},
 					failure : function(o){
 						YAHOO.log(["GET_STARS FAILED ", o.error.message, o]);
@@ -823,8 +853,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	});
 	
-	Mapper.PlanetMap = function( divId ) {
+	Mapper.PlanetMap = function( divId, surfaceUrl ) {
 		Mapper.PlanetMap.superclass.constructor.call(this, divId);
+		this._surfaceUrl = surfaceUrl;
 	};
 	Lang.extend(Mapper.PlanetMap, Map, {
 		init : function() {
@@ -837,7 +868,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.Tile = Mapper.PlanetTile;
 			this.keepTilesOutOfBounds = true;
 			
+			this.underLayer = new Mapper.UnderLayer(this);
+			
 			this.setTileSizeInPx(200);
+		},
+		redraw : function() {
+			Mapper.PlanetMap.superclass.redraw.call(this);
+			this.underLayer.redraw(this._surfaceUrl);
 		},
 		setCenterToCommand : function() {
 			if(this.command && this.tileLayer) {
@@ -857,7 +894,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',building.image,'.png'].join('')};
 			}
 			else {
-				return {blank:true, url:Lib.AssetUrl + 'planet_side/ground.png'};
+				return {blank:true};
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {
@@ -942,7 +979,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 		Event.on(map.mapDiv, "mousedown", function(e){
 			Event.preventDefault(e);
-			
+			YAHOO.log("Dragging", "info", "Mapper.TraditionalController.mousedown");
 			Event.on(document, "mouseup", this.disableDrag, this, true);
 			Event.on(document, "mousemove", this.moveMap, this, true);
 		}, this, true);
@@ -986,6 +1023,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		disableDrag : function (e){
 			Event.preventDefault(e);
+			YAHOO.log("Disable drag", "info", "Mapper.TraditionalController.disableDrag");
 			Event.removeListener(document, "mousemove", this.moveMap);
 			Event.removeListener(document, "mouseup", this.disableDrag);
 			this.xmove = undefined;

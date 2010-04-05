@@ -30,9 +30,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 		
 		Start : function() {
-			/*Lacuna.Pulser = new Lacuna.Pulse();
+			Lacuna.Pulser = new Lacuna.Pulse();
 			Lacuna.Pulser.Show();
-			Game.OverlayManager.register(Lacuna.Pulser._bar);*/
 			
 			var session = Game.GetSession();
 			if(!session) {
@@ -59,6 +58,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
+					Lacuna.Pulser.Show();
 					var now = new Date(),
 						result = oArgs.result;
 					//remember session
@@ -78,18 +78,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.OverlayManager.hideAll();
 			Lacuna.Game.LoginDialog.show();
 			Lacuna.Menu.hide();
+			Lacuna.Pulser.Hide();
 		},
 		Run : function() {
 			//create menus (or update if already created)
 			Lacuna.Menu.create();
-			//set our interval going for resource calcs
-			Game.recTime = (new Date()).getTime();
-			Game.recInt = setInterval(Game.Tick, 1000);
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//init queue for refreshing data
 			Game.InitQueue();
-			Game.onTick.subscribe(Game.QueueProcess);
 			//load the correct screen
 			var locationId = Cookie.getSub("lacuna","locationId"),
 				locationView = Cookie.getSub("lacuna","locationView");
@@ -122,11 +119,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						break;
 				}
 			}
-			//Lacuna.Pulser.Hide();
+			Lacuna.Pulser.Hide();
 		},
 		InitEvents : function() {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
+				//set our interval going for resource calcs
+				Game.recTime = (new Date()).getTime();
+				Game.recInt = setInterval(Game.Tick, 1000);
+				Game.onTick.subscribe(Game.QueueProcess);
 				//this will be called on the first load and create menu
 				Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
 					Lacuna.Game.ProcessStatus(oResult.status);
@@ -421,13 +422,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,
 				dt = (new Date()).getTime(),
-				diff = dt - Lacuna.Game.recTime,
-				ratio = (diff / Lacuna.Game.HourMS),
+				diff = dt - Lacuna.Game.recTime;
+			Lacuna.Game.recTime = dt;
+			var ratio = (diff / Lacuna.Game.HourMS),
 				updateMenu = true,
 				totalWasteOverage = 0;
-				
-			Lacuna.Game.recTime = dt;
-			
 		
 			for(var pKey in ED.planets) {
 				if(ED.planets.hasOwnProperty(pKey)){
@@ -489,7 +488,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			
 			Game.onTick.fire(diff);
-			//Lacuna.Game.QueueProcess(diff);
 		},
 		QueueAdd : function(id, type, ms) {
 			if(!id || !type || !ms) {

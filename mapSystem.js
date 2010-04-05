@@ -200,9 +200,11 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 
 			this.MapVisible(true);
 
+			Lacuna.Pulser.Hide();
 		},
 		Load : function(starId, isBody) {
 			if(starId) {
+				Lacuna.Pulser.Show();
 				var MapServ = Game.Services.Maps,
 					data = {
 						session_id: Game.GetSession("")
@@ -215,7 +217,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						},
 						failure : function(o){
 							YAHOO.log(o, "info", "MapSystem.Load.failure");
-							Lacuna.MapStar.MapVisible(true);
+							Lacuna.Pulser.Hide();
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -268,7 +270,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'<ul>',
 				'	<li id="planetDetailsName">',body.name,'</li>',
 				'	<li><label>Type: </label>',body.type,'</li>',
-				'	<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "Unknown"),'</li>',
+				'	<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "None"),'</li>',
 				'	<li><label>Water: </label>',body.water,'</li>',
 				'	<li><label>Planet Size:</label>',body.size,'</li>',
 				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y : ',body.z,'z</li>',

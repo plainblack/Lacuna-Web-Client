@@ -48,10 +48,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.Menu = userMenu;
 			
-			var arrow = document.createElement("div");
+			/*var arrow = document.createElement("div");
 			arrow.id = "usersArrow";
 			var uc = Dom.get("usersCenter");
-			uc.insertBefore(arrow, uc.firstChild);
+			uc.insertBefore(arrow, uc.firstChild);*/
 			
 			this.createLeft();
 			this.createRight();
@@ -240,10 +240,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.Menu = planetMenu;
 			
-			var arrow = document.createElement("div");
+			/*var arrow = document.createElement("div");
 			arrow.id = "planetsArrow";
 			var pc = Dom.get("planetsCenter");
-			pc.insertBefore(arrow, pc.firstChild);
+			pc.insertBefore(arrow, pc.firstChild);*/
 			
 			this.createLeft();
 			this.createRight();

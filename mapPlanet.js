@@ -41,12 +41,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'	</div>',
 				'	<div id="buildingDetailTabs" class="yui-navset">',
 				'		<ul class="yui-nav">',
-				'			<li><a href="#detailsExtra"><em>Main</em></a></li>',
 				'			<li><a href="#detailsProduction"><em>Production</em></a></li>',
 				'			<li><a href="#detailsStorage"><em>Storage</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content">',
-				'			<div id="detailsExtra"><div id="buildingDetailsExtra"></div></div>',
 				'			<div id="detailsProduction">',
 				'				<div id="buildingDetailsProduction" class="yui-gb">',
 				'					<div class="yui-u first">',
@@ -149,7 +147,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				this.upgradeUl = Dom.get("buildingDetailsUpgradeCost");
 				this.upgradeProdUl = Dom.get("buildingDetailsUpgradeProduction");
-				this.extraEl = Dom.get("buildingDetailsExtra");
 				this.timeLeftLi = Dom.get("buildingDetailsTimeLeft");
 				this.curEnergy = Dom.get("buildingDetailsEnergy");
 				this.curFood = Dom.get("buildingDetailsFood");
@@ -193,9 +190,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			<li><a href="#builderBuildable"><em>Buildable</em></a></li>',
 				'			<li><a href="#builderUnavailable"><em>Unavailable</em></a></li>',
 				'		</ul>',
-				'		<div class="yui-content" style="overflow:auto;height:450px;">',
-				'			<div id="builderBuildable"><ul id="buildingBuilderList"></ul></div>',
-				'			<div id="builderUnavailable"><ul id="buildingBuilderUnavailable"></ul></div>',
+				'		<div class="yui-content" style="padding:0 0 0 0.5em;">',
+				'			<div id="builderBuildable" style="overflow:auto;height:450px;"><ul id="buildingBuilderList"></ul></div>',
+				'			<div id="builderUnavailable" style="overflow:auto;height:450px;"><ul id="buildingBuilderUnavailable"></ul></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -237,7 +234,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 			}
 			if(visible) {
-				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'planet_side/ground.png") repeat scroll 0 0 black');
+				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'planet_side/surface-a.jpg") repeat scroll 0 0 black');
 			}
 			else {
 				this.buildingDetails.hide();
@@ -252,8 +249,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				planetMap.id = "planetMap";
 				this._elGrid = document.getElementById("content").appendChild(planetMap);
 				this.SetSize();
-								
-				var map = new Lacuna.Mapper.PlanetMap("planetMap");
+				
+				var surfaceUrl = Lib.AssetUrl + 'planet_side/surface-b.jpg';
+				
+				var map = new Lacuna.Mapper.PlanetMap("planetMap", surfaceUrl);
 				map.setZoomLevel(map.addTileData(oArgs.buildings));
 				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
@@ -294,8 +293,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 			
 			this.MapVisible(true);
+			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+surfaceUrl+'") repeat scroll 0 0 black');
+			Lacuna.Pulser.Hide();
 		},
 		Load : function(planetId) {
+			Lacuna.Pulser.Show();
 			this.locationId = planetId;
 			this.ReLoad();
 		},
@@ -315,6 +317,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
+						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpcFailed", o);
 					},
 					timeout:Game.Timeout,
@@ -406,7 +409,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.upgradeUl.innerHTML = "";
 			Event.purgeElement(panel.upgradeProdUl);
 			panel.upgradeProdUl.innerHTML = "";
-			panel.extraEl.innerHTML = "";
+			
+			Dom.setStyle("buildingDetailTabs", "display", "none");
 			
 			this.buildingDetails.show(); //show before we get data so it looks like we're doing something
 			
@@ -508,18 +512,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				panel.upgradeUl.innerHTML = "";
 			}
 			
-			panel.extraEl.innerHTML = "";
+			while(panel.tabView.get("tabs").length > 2){
+				panel.tabView.removeTab(panel.tabView.getTab(0));
+			}
 			
-			if(oResults.planet || (oResults.build_queue && oResults.build_queue.length > 0) || oResults.food_stored || oResults.ore_stored) {
-				if(panel.extraTab) {
-					panel.tabView.addTab(panel.extraTab, 0);
-					panel.extraTab = undefined;
-				}
-
+			if(oResults.planet || (oResults.build_queue && oResults.build_queue.length > 0) || oResults.docked_ships || oResults.party || oResults.food_stored || oResults.ore_stored) {
 				if(oResults.planet) { //if it's the planetary command
 					var planet = oResults.planet,
 						output = [
-							'<div class="yui-g">',
+							'<div class="yui-g buildingDetailsExtra">',
 							'	<div class="yui-u first">',
 							'		<ul>',
 							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
@@ -548,14 +549,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							'	</div>',
 							'</div>'
 						];
-					panel.extraEl.innerHTML = output.join('');
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Planet", content: output.join('')}), 0);
 				}
 				else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
 					var bq = oResults.build_queue,
 						ul = document.createElement("ul"),
-						li = document.createElement("li");
+						li = document.createElement("li"),
+						div = document.createElement("div"),
+						hUl = ul.cloneNode(false);
 						
-					panel.extraEl.innerHTML = ['<div><ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li></ul>'];
+					Dom.addClass(div, "buildingDetailsExtra");
+					hUl.innerHTML = '<ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li></ul>';
+					div.appendChild(hUl);
 						
 					for(var i=0; i<bq.length; i++) {
 						var bqo = bq[i],
@@ -578,7 +583,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						nLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
 						nUl.appendChild(nLi);
 
-						panel.extraEl.appendChild(nUl);
+						div.appendChild(nUl);
 						
 						panel.addQueue(bqo.seconds_remaining, function(remaining, el){
 							if(remaining <= 0) {
@@ -591,24 +596,45 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							}
 						}, nLi);
 					}
+					
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Planet", contentEl: div}), 0);
 				}
-				/*else if(oResults.docked_ships) { //if it's the space port
-					colony_ship
-					gas_giant_settlement_platform_ship
-					mining_platform_ship
-					probe
-					smuggler_ship
-					space_station
-					spy_pod
-					terraforming_platform_ship
+				else if(oResults.docked_ships) { //if it's the space port
+					var ships = oResults.docked_ships,
+						output = [
+							'<div class="yui-g">',
+							'	<div class="yui-u first">',
+							'		<ul class="buildingDetailsDockedShips">',
+							'			<li><label>Probe</label><span class="buildingDetailsNum">',ships.probe,'</span></li>',
+							'			<li><label>Spy Pod</label><span class="buildingDetailsNum">',ships.spy_pod,'</span></li>',
+							'			<li><label>Smuggler Ship</label><span class="buildingDetailsNum">',ships.smuggler_ship,'</span></li>',
+							'			<li><label>Mining Platform Ship</label><span class="buildingDetailsNum">',ships.mining_platform_ship,'</span></li>',
+							'			<li><label>Terraforming Platform Ship</label><span class="buildingDetailsNum">',ships.terraforming_platform_ship,'</span></li>',
+							'			<li><label>Gas Giant Settlement Platform Ship</label><span class="buildingDetailsNum">',ships.gas_giant_settlement_platform_ship,'</span></li>',
+							'			<li><label>Space Station</label><span class="buildingDetailsNum">',ships.space_station,'</span></li>',
+							'			<li><label>Colony Ship</label><span class="buildingDetailsNum">',ships.colony_ship,'</span></li>',
+							'		</ul>',
+							'	</div>',
+							'	<div class="yui-u">',
+							'	</div>',
+							'</div>'
+						];
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Docked Ships", content: output.join('')}), 0);
 				}
-				else if(oResults.party && oResults.party.can_throw) {
-					Dom.setStyle(panel.extraEl, "display", "none");
-				}*/
+				else if(oResults.party) { //if it's a park
+					var output;
+					if(oResults.party.can_throw) {
+						output = '<p>Throw a party!  Get John to put this in.</p>';
+					}
+					else {
+						output = '<p>Not enough resources to throw a party right now.</p>';
+					}
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", content: output}), 0);
+				}
 				else if(oResults.food_stored) {
 					var stored = oResults.food_stored,
 						output = [
-							'<div class="yui-g">',
+							'<div class="yui-g buildingDetailsExtra">',
 							'	<div class="yui-u first">',
 							'		<ul>',
 							'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
@@ -639,12 +665,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							'	</div>',
 							'</div>'
 						];
-					panel.extraEl.innerHTML = output.join('');
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Food", content: output.join('')}), 0);
 				}
 				else if(oResults.ore_stored) {
 					var stored = oResults.ore_stored,
 						output = [
-							'<div class="yui-g">',
+							'<div class="yui-g buildingDetailsExtra">',
 							'	<div class="yui-u first">',
 							'		<ul>',
 							'			<li><label>Anthracite</label><span class="buildingDetailsNum">',stored.anthracite,'</span></li>',
@@ -675,15 +701,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							'	</div>',
 							'</div>'
 						];
-					panel.extraEl.innerHTML = output.join('');
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Ore", content: output.join('')}), 0);
 				}
 			}	
-			else if(panel.tabView.get("tabs").length == 3){
-				panel.extraTab = panel.tabView.getTab(0);
-				panel.tabView.removeTab(panel.extraTab);
-			}
-			panel.tabView.selectTab(0);
 
+			Dom.setStyle("buildingDetailTabs", "display", "");
+			panel.tabView.selectTab(0);
 		},
 		
 		BuilderView : function(tile) {

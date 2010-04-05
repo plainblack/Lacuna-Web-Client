@@ -4,14 +4,13 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 
 (function(){
 	var Pulse = function() {
-		var pulse = document.createElement("div");
+		/*var pulse = document.createElement("div");
 		pulse.id = "pulsing";
-		pulse.innerHTML = ['<div class="bd" style="background-color:black;"><img src="',YAHOO.lacuna.Library.AssetUrl,'ui/pulse-indicator.gif" alt="Pulse Indicator" /></div>'].join('');
+		pulse.innerHTML = ['<div class="bd"><img src="',YAHOO.lacuna.Library.AssetUrl,'ui/pulse-indicator.gif" alt="Pulse Indicator" /></div>'].join('');
 		document.body.insertBefore(pulse, document.body.firstChild);
-		YAHOO.util.Dom.addClass(pulse, "nofooter");
+		YAHOO.util.Dom.addClass(pulse, "nofooter");*/
 		
-		var panel = new YAHOO.widget.Panel(pulse, {
-			//constraintoviewport: true,
+		var panel = new YAHOO.widget.Panel("pulsing", {
 			fixedcenter:true,
 			close:false,
 			underlay:"none",
