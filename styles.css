@@ -83,6 +83,7 @@ body.yui-skin-sam .yui-panel .hd {
 	font-family:impact, sans-serif;
 	font-size:110%;
 	font-weight:normal;
+	color:#fff;
 	line-height:1.75;
 }
 
@@ -125,12 +126,15 @@ body.yui-skin-sam .container-close {
 	width:23px;
 }
 
-#pulsing_c { 
+/*#pulsing_c { 
 	width:99%;
-}
+}*/
 #pulsing .bd {
 	border-width:0px;
 	text-align:center;
+}
+.yui-skin-sam #pulsing .bd, .yui-skin-sam #pulsing.ft {
+	background:transparent;
 }
 
 /*
@@ -494,6 +498,8 @@ about
 	font-family: impact, san-serif;
 	visibility: hidden;
 	position:absolute;
+	left:0;
+	top:0;
 }
 .planetMapTileActionButton {
 	background: transparent url('http://localhost/lacuna/assets/ui/l/build.png');
@@ -595,6 +601,9 @@ body.yui-skin-sam .yui-navset .yui-nav .selected a:hover {
 	display: inline;
 	vertical-align: middle;
 }
+.planetName {
+	cursor: pointer;
+}
 #orbit1 { width: 250px; top: 80px; }
 #planet1, #planetAlignment1 { width: 60px; }
 #orbit2 { width: 345px; top: 140px; }
@@ -646,6 +655,10 @@ planet details
 	text-align:right;
 }
 .buildQueue .buildQueueTime  {
+	width:100px;
+	text-align:right;
+}
+.buildQueue .buildQueueCoords  {
 	width:100px;
 	text-align:right;
 }
@@ -710,6 +723,8 @@ PROFILE
 .medalContainer {
 	overflow: auto;
 	zoom:1;
+	height:50px;
+	width:50px;
 }
 .medal {
 	margin:3px 3px 0;

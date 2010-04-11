@@ -29,9 +29,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				shadow:false, 
 				context:[this.clickId, "tl", "bl",[9, -10]]
 			});
-			userMenu.addItem({ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } });
-			userMenu.addItem({ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } });
-			userMenu.addItem({ text: "Logout", id: "ul", onclick: { fn: Game.Logout } });
+			//userMenu.addItems([{ text: "Essentia", id: "ess", onclick: { fn: Lacuna.Essentia.show } }
+			//]);
+			userMenu.addItems([{ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } },
+				{ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } },
+				{ text: "Logout", id: "ul", onclick: { fn: Game.Logout } }
+			]);
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
 					this.align("tl","bl",[9, -10]);
@@ -177,15 +180,21 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(this.container, Lib.Styles.HIDDEN);
 		},
 		starVisible : function(vis) {
+			this.elBackClick.title = "To your Planet";
 			this.elBackImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
+			this.elForwardClick.title = "To your planet's Star System";
 			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
 		},
 		systemVisible : function(vis) {
+			this.elBackClick.title = "To the Universe";
 			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
+			this.elForwardClick.title = "To your Planet";
 			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
 		},
 		planetVisible : function(vis) {
+			this.elBackClick.title = "To your planet's Star System";
 			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
+			this.elForwardClick.title = "To the Universe";
 			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 		},
 		showAbout : function() {

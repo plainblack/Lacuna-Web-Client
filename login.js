@@ -68,6 +68,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 	};
 	Login.prototype = {
 		handleLogin : function() {
+			Lacuna.Pulser.Show();
 			this.setMessage("");	
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
@@ -83,6 +84,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				failure : function(o){
 					YAHOO.log(o, "error", "Login.handleLogin.failure");
 					this.setMessage(o.error.message);
+					Lacuna.Pulser.Hide();
 					/*if(o.error.code == 1010) {
 						//haven't founded empire yet so take them to species
 						this.hide();

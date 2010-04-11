@@ -58,7 +58,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
-					Lacuna.Pulser.Show();
 					var now = new Date(),
 						result = oArgs.result;
 					//remember session
@@ -83,6 +82,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Run : function() {
 			//create menus (or update if already created)
 			Lacuna.Menu.create();
+			//set our interval going for resource calcs since Logout clears it
+			Game.recTime = (new Date()).getTime();
+			Game.recInt = setInterval(Game.Tick, 1000);
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//init queue for refreshing data
@@ -124,9 +126,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		InitEvents : function() {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
-				//set our interval going for resource calcs
-				Game.recTime = (new Date()).getTime();
-				Game.recInt = setInterval(Game.Tick, 1000);
+				//only subscribe once.
 				Game.onTick.subscribe(Game.QueueProcess);
 				//this will be called on the first load and create menu
 				Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
@@ -134,10 +134,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 				Lacuna.MapStar.subscribe("onMapLoadFailed", Lacuna.Game.Failure);
 				Lacuna.MapStar.subscribe("onChangeToSystemView", function(starData) {
+					YAHOO.log(starData, "info", "onChangeToSystemView");
 					Lacuna.MapStar.MapVisible(false);
 					Lacuna.Menu.SystemVisible();
 					Lacuna.MapSystem.Load(starData.id);
-					YAHOO.log(starData, "info", "onChangeToSystemView");
 					Game.SetLocation(starData.id, Lib.View.SYSTEM);
 				});
 				

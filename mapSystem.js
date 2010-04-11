@@ -72,7 +72,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'			</div>',
 				'			<div id="planetDetailRename"><ul>',
 				'				<li><label>New Planet Name: </label><input type="text" id="planetDetailNewName" maxlength="100" /></li>',
-				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button.</li>',
+				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button></li>',
 				'			</ul></div>',
 				'		</div>',
 				'	</div>',
@@ -133,6 +133,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				this._el = document.getElementById("content").appendChild(systemMap);
 				
 				Event.delegate(this._el, "click", this.ShowPlanet, "img.planet", this, true);
+				Event.delegate(this._el, "click", this.ShowPlanet, "span.planetName", this, true);
 			}
 			else {
 				//if it exists clear it and refill
@@ -163,14 +164,15 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						body.id = bKey;
 							
 						elOrbit.id = "orbit" + body.orbit;
+						elOrbit.Body = body;
 						Dom.addClass(elOrbit, "orbit");
 						
 						elName.innerHTML = body.name;
+						Dom.addClass(elName, "planetName");
 						
 						elImg.src = [Lib.AssetUrl, "star_system/", body.image, ".png"].join('');
 						elImg.id = "planet" + body.orbit;
 						elImg.alt = body.name;
-						elImg.Body = body;
 						
 						if(body.alignment != "none") {
 							var elAlign = elOrbit.appendChild(img.cloneNode(false));
@@ -184,10 +186,10 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						}
 						
 						if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
-							Event.on(elImg, "dblclick", function(e) {
-								var img = Event.getTarget(e);
+							Event.on([elImg,elName], "dblclick", function(e) {
+								var t = Event.getTarget(e);
 								this.planetDetails.hide();
-								this.fireEvent("onChangeToPlanetView", img.Body.id);
+								this.fireEvent("onChangeToPlanetView", t.parentNode.Body.id);
 							}, this, true);
 						}
 						
@@ -263,7 +265,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 		Reset : function() {
 		},
 		ShowPlanet : function(e, matchedEl, container) {
-			var body = matchedEl.Body,
+			var body = matchedEl.parentNode.Body,
 				panel = this.planetDetails;
 			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:100px;height:100px;" />'].join('');
 			Dom.get("planetDetailsInfo").innerHTML = [

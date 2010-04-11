@@ -100,21 +100,21 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.speciesGrowth = this._createHorizSingle("speciesGrowth", "speciesGrowth_thumb", "speciesGrowth_num");
 			
 			this.elTotal = Dom.get("speciesPointTotal");
-			this.elTotal.innerHTML = 12;
-			this.totalValue = 12;
+			this.elTotal.innerHTML = 45;
+			this.totalValue = 45;
 			this.values = {
-				speciesHO: {min:1,max:1},
-				speciesConst : 1,
-				speciesDecep : 1,
-				speciesResearch : 1,
-				speciesManagement : 1,
-				speciesFarming : 1,
-				speciesMining : 1,
-				speciesScience : 1,
-				speciesEnviro : 1,
-				speciesPolitical : 1,
-				speciesTrade : 1,
-				speciesGrowth : 1
+				speciesHO: {min:4,max:4},
+				speciesConst : 4,
+				speciesDecep : 4,
+				speciesResearch : 4,
+				speciesManagement : 4,
+				speciesFarming : 4,
+				speciesMining : 4,
+				speciesScience : 4,
+				speciesEnviro : 4,
+				speciesPolitical : 4,
+				speciesTrade : 4,
+				speciesGrowth : 4
 			};
 			
 			var updateTotal = function(ignore, oSelf) {
@@ -172,7 +172,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			// Create the DualSlider
 			var slider = Slider.getHorizDualSlider("speciesHO",
 				"speciesHO_min_thumb", "speciesHO_max_thumb",
-				range, tickSize, [0,195]);
+				range, tickSize, [90,105]);
 				
 			// Decorate the DualSlider instance with some new properties and
 			// methods to maintain the highlight element
@@ -192,7 +192,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			},true);
 			// Attach the highlight method to the slider's change event
 			slider.subscribe('change',slider.updateHighlight,slider,true);
-
+			slider.updateHighlight();
 
 			var updateUI = function () {
 				from.innerHTML = this.convertValue(slider.minVal);
@@ -211,7 +211,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			// Create the Slider
 			var slider = Slider.getHorizSlider(container,
 				thumb, 0, range, tickSize);
-			slider.setValue(0);
+			slider.setValue(100);
 			slider.key = container;
 
 			var updateUI = function () {
@@ -222,16 +222,19 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 
 			return slider;
 		},
-		_found : function() {			
+		_found : function() {
+			Lacuna.Pulser.Show();
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.found({empire_id: this.empireId}, {
 				success : function(o) {
 					YAHOO.log(o, "info", "CreateSpecies._found.success");
+					Lacuna.Pulser.Hide();
 					this.hide(); //hide species
 					this.fireEvent("onCreateSuccessful", o);
 				},
 				failure : function(o) {
 					YAHOO.log(o, "info", "CreateSpecies._found.failure");
+					Lacuna.Pulser.Hide();
 					this.setMessage(o.error.message);
 				},
 				timeout:Game.Timeout,
@@ -369,6 +372,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			//if the select human go directly to founding the empire
 			if(this.elSelect.selectedIndex == 0) {
 				if(this.createdSpeciesOnce) {
+					Lacuna.Pulser.Show();
 					var SpeciesServ = Game.Services.Species;
 					SpeciesServ.set_human({empire_id: this.empireId}, {
 						success : function(o) {
@@ -379,6 +383,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 						},
 						failure : function(o) {
 							YAHOO.log(o, "info", "SetHumanFailure");
+							Lacuna.Pulser.Hide();
 							this.setMessage(o.error.message);
 						},
 						timeout:Game.Timeout,
@@ -427,70 +432,93 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 						},
 						isDiff = this._diffSpecies(data.params);
 					
-					if(isDiff && this.oldSpecies.name != data.params.name) {
-						//if there is a difference and the names aren't the same make sure the name is available then create
-						SpeciesServ.is_name_available({name:data.params.name}, {
-							success : function(o) {
-								YAHOO.log(o);
-								if(o.result == 1) {
-									SpeciesServ.create(data,{
-										success : function(o){
-											YAHOO.log(o, "info", "SpeciesCreate");
-											this.oldSpecies = data.params;
-											//set true in case there are errors in creating empire so when they click save again we set species correctly
-											this.createdSpeciesOnce = true;
-											this._found();
-										},
-										failure : function(o){
-											YAHOO.log(o, "info", "SpeciesCreateFailure");
-											if(o.error.code == 1007) {
-												this.setMessage("You can only have a maximum of 45 points.");
-											}
-											else {
-												this.setMessage(o.error.message);
-											}
-										},
-										timeout:Game.Timeout,
-										scope:this
-									});
-								}
-								else {
-									this.setMessage("Species name is unavailable.  Please choose another.");
-								}
-							},
-							failure : function(o) {
-								YAHOO.log(o);
-								this.setMessage(o.error.message);
-							},
-							timeout:Game.Timeout,
-							scope:this
-						});
+					var go = true;
+					if(isDiff && (data.params.manufacturing_affinity == 1
+						|| data.params.deception_affinity == 1
+						|| data.params.research_affinity == 1
+						|| data.params.management_affinity == 1
+						|| data.params.farming_affinity == 1
+						|| data.params.mining_affinity == 1
+						|| data.params.science_affinity == 1
+						|| data.params.environmental_affinity == 1
+						|| data.params.political_affinity == 1
+						|| data.params.trade_affinity == 1
+						|| data.params.growth_affinity == 1
+					)) {
+						go = confirm("Setting an affinity to 1 is an expert setting, and is not recommended unless you're absolutely sure you know what you're doing.  Are you sure you want to continue?");
 					}
-					else if(isDiff){
-						//if there is a difference and the names are the same create
-						SpeciesServ.create(data,{
-							success : function(o){
-								YAHOO.log(o, "info", "SpeciesCreate");
-								//set true in case there are errors in creating empire so when they click save again we set species correctly
-								this.createdSpeciesOnce = true;
-								this._found();
-							},
-							failure : function(o){
-								YAHOO.log(o, "info", "SpeciesCreateFailure");
-								if(o.error.code == 1007) {
-									this.setMessage("You can only have a maximum of 45 points.");
-								}
-								else {
+					
+					if(go) {
+						if(isDiff && this.oldSpecies.name != data.params.name) {
+							Lacuna.Pulser.Show();
+							//if there is a difference and the names aren't the same make sure the name is available then create
+							SpeciesServ.is_name_available({name:data.params.name}, {
+								success : function(o) {
+									YAHOO.log(o);
+									if(o.result == 1) {
+										SpeciesServ.create(data,{
+											success : function(o){
+												YAHOO.log(o, "info", "SpeciesCreate");
+												this.oldSpecies = data.params;
+												//set true in case there are errors in creating empire so when they click save again we set species correctly
+												this.createdSpeciesOnce = true;
+												this._found();
+											},
+											failure : function(o){
+												YAHOO.log(o, "info", "SpeciesCreateFailure");
+												Lacuna.Pulser.Hide();
+												if(o.error.code == 1007) {
+													this.setMessage("You can only have a maximum of 45 points.");
+												}
+												else {
+													this.setMessage(o.error.message);
+												}
+											},
+											timeout:Game.Timeout,
+											scope:this
+										});
+									}
+									else {
+										this.setMessage("Species name is unavailable.  Please choose another.");
+									}
+								},
+								failure : function(o) {
+									YAHOO.log(o);
+									Lacuna.Pulser.Hide();
 									this.setMessage(o.error.message);
-								}
-							},
-							timeout:Game.Timeout,
-							scope:this
-						});
-					}
-					else {
-						//otherwise everything is the same so just try to found it again
-						this._found();
+								},
+								timeout:Game.Timeout,
+								scope:this
+							});
+						}
+						else if(isDiff){
+							Lacuna.Pulser.Show();
+							//if there is a difference and the names are the same create
+							SpeciesServ.create(data,{
+								success : function(o){
+									YAHOO.log(o, "info", "SpeciesCreate");
+									//set true in case there are errors in creating empire so when they click save again we set species correctly
+									this.createdSpeciesOnce = true;
+									this._found();
+								},
+								failure : function(o){
+									YAHOO.log(o, "info", "SpeciesCreateFailure");
+									Lacuna.Pulser.Hide();
+									if(o.error.code == 1007) {
+										this.setMessage("You can only have a maximum of 45 points.");
+									}
+									else {
+										this.setMessage(o.error.message);
+									}
+								},
+								timeout:Game.Timeout,
+								scope:this
+							});
+						}
+						else {
+							//otherwise everything is the same so just try to found it again
+							this._found();
+						}
 					}
 				}
 			}

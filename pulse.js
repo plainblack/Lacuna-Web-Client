@@ -17,7 +17,7 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 			draggable:false, 
 			modal:true,
 			visible:false,
-			width:"100%"
+			width:"100px"
 		});
 		panel.render();
 		this._bar = panel;

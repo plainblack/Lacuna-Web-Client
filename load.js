@@ -1,6 +1,6 @@
 (function(){
 	var t = "1",
-		host = "http://localhost/lacuna/";
+		host = "http://localhost/lacuna/"; //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
 	var loader = new YAHOO.util.YUILoader({
 		allowRollup: false,
 		combine: false,
@@ -57,7 +57,8 @@
 	loader.addModule({
 		name: "mapper",
 		type: "js",
-		fullpath: host + "mapper.js?" + t
+		fullpath: host + "mapper.js?" + t,
+		requires : ["animation","dom","dragdrop","event"]
 	});
 	loader.addModule({
 		name: "mapStar",

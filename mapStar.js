@@ -16,6 +16,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		this.createEvent("onMapLoaded");
 		this.createEvent("onMapLoadFailed");
 		this.createEvent("onChangeToSystemView");
+		
+		this._buildDetailsPanel();
 	};
 	MapStar.prototype = {
 		_buildDetailsPanel : function() {
@@ -26,53 +28,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			panel.innerHTML = ['<div class="hd">Details</div>',
 				'<div class="bd">',
 				'	<div class="yui-g">',
-				'		<div class="yui-u first" id="starDetailsImg">',
+				'		<div class="yui-u first" id="starDetailsImg" class="background:black:width:100px;">',
 				'		</div>',
 				'		<div class="yui-u" id="starDetailsInfo">',
-				'		</div>',
-				'	</div>',
-				'	<div id="starDetailTabs" class="yui-navset">',
-				'		<ul class="yui-nav">',
-				'			<li><a href="#starDetailOre"><em>Ore</em></a></li>',
-				'			<li><a href="#starDetailRename"><em>Rename</em></a></li>',
-				'		</ul>',
-				'		<div class="yui-content">',
-				'			<div id="starDetailOre">',
-				'				<div class="yui-g">',
-				'					<div class="yui-u first">',
-				'						<ul>',
-				'							<li><label>Anthracite</label><span class="buildingDetailsNum" id="starDetailsAnthracite"></span></li>',
-				'							<li><label>Bauxite</label><span class="buildingDetailsNum" id="starDetailsBauxite"></span></li>',
-				'							<li><label>Beryl</label><span class="buildingDetailsNum" id="starDetailsBeryl"></span></li>',
-				'							<li><label>Chalcopyrite</label><span class="buildingDetailsNum" id="starDetailsChalcopyrite"></span></li>',
-				'							<li><label>Chromite</label><span class="buildingDetailsNum" id="starDetailsChromite"></span></li>',
-				'							<li><label>Fluorite</label><span class="buildingDetailsNum" id="starDetailsFluorite"></span></li>',
-				'							<li><label>Galena</label><span class="buildingDetailsNum" id="starDetailsGalena"></span></li>',
-				'							<li><label>Goethite</label><span class="buildingDetailsNum" id="starDetailsGoethite"></span></li>',
-				'							<li><label>Gold</label><span class="buildingDetailsNum" id="starDetailsGold"></span></li>',
-				'							<li><label>Gypsum</label><span class="buildingDetailsNum" id="starDetailsGypsum"></span></li>',
-				'						</ul>',
-				'					</div>',
-				'					<div class="yui-u">',
-				'						<ul>',
-				'							<li><label>Halite</label><span class="buildingDetailsNum" id="starDetailsHalite"></span></li>',
-				'							<li><label>Kerogen</label><span class="buildingDetailsNum" id="starDetailsKerogen"></span></li>',
-				'							<li><label>Magnetite</label><span class="buildingDetailsNum" id="starDetailsMagnetite"></span></li>',
-				'							<li><label>Methane</label><span class="buildingDetailsNum" id="starDetailsMethane"></span></li>',
-				'							<li><label>Monazite</label><span class="buildingDetailsNum" id="starDetailsMonazite"></span></li>',
-				'							<li><label>Rutile</label><span class="buildingDetailsNum" id="starDetailsRutile"></span></li>',
-				'							<li><label>Sulfur</label><span class="buildingDetailsNum" id="starDetailsSulfur"></span></li>',
-				'							<li><label>Trona</label><span class="buildingDetailsNum" id="starDetailsTrona"></span></li>',
-				'							<li><label>Uraninite</label><span class="buildingDetailsNum" id="starDetailsUraninite"></span></li>',
-				'							<li><label>Zircon</label><span class="buildingDetailsNum" id="starDetailsZircon"></span></li>',
-				'						</ul>',
-				'					</div>',
-				'				</div>',
-				'			</div>',
-				'			<div id="starDetailRename"><ul>',
-				'				<li><label>New Planet Name: </label><input type="text" id="starDetailNewName" maxlength="100" /></li>',
-				'				<li><button type="button" id="starDetailRenameSubmit">Rename</button.</li>',
-				'			</ul></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -93,17 +51,20 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			this.starDetails.renderEvent.subscribe(function(){
 				this.starDetails.tabView = new YAHOO.widget.TabView("starDetailTabs");
-				Event.on("starDetailRenameSubmit", "click", this.Rename, this, true);
 				Event.delegate("starDetailsInfo", "click", function(e, matchedEl, container){
-					if(this.selectedBody) {
-						var id = this.selectedBody.id;
-						this.starDetails.hide();
-						this.fireEvent("onChangeToPlanetView", id);
+					var data = this.selectedStar;
+					if(data) {
+						if(matchedEl.innerHTML == "View") {
+							this.starDetails.hide();
+							this.fireEvent("onChangeToSystemView", data);
+						}
+						else if(matchedEl.innerHTML == "Send Probe") {
+						}
 					}
 				}, "button", this, true);
 			}, this, true);
 			this.starDetails.hideEvent.subscribe(function(){
-				this.selectedBody = undefined;
+				this.selectedStar = undefined;
 			}, this, true);
 			
 			this.starDetails.render();
@@ -155,11 +116,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						this._map = map;
 						this._gridCreated = true;
 						
-						Event.delegate(this._map.mapDiv, "mouseup", function(e, matchedEl, container) {
+						Event.delegate(this._map.mapDiv, "click", function(e, matchedEl, container) {
 							if(!this._map.controller.isDragging()) {
 								var tile = this._map.tileLayer.findTileById(matchedEl.id);
 								if(tile && tile.data) {
-									YAHOO.log([tile.id, tile.data]);
+									this.ShowStar(tile);
 								}
 							}
 						}, "div.tile", this, true);
@@ -195,6 +156,33 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			if(this._map) {
 				this._map.reset();
 			}
+		},
+	
+		ShowStar : function(tile) {
+			var data = tile.data,
+				panel = this.starDetails;
+			Dom.get("starDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',data.color,'.png" alt="',data.name,'" style="width:100px;height:100px;" />'].join('');
+			var output = [
+				'<ul>',
+				'	<li id="starDetailsName">',data.name,'</li>',
+				'	<li><label>X: </label>',data.x,'</li>',
+				'	<li><label>Y: </label>',data.y,'</li>',
+				'	<li><label>Z: </label>',data.z,'</li>'
+			];
+			
+			if(data.alignments == "self" || data.alignments == "probed") {
+				output.push('<button type="button">View</button>');
+			}
+			/*else if(data.alignments == "unprobed") {
+				output.push('<button type="button">Send Probe</button>');
+			}*/
+			
+			output.push('</ul>');
+			Dom.get("starDetailsInfo").innerHTML = output.join('');
+			
+			Game.OverlayManager.hideAll();
+			this.selectedStar = data;
+			panel.show();
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);

@@ -6,8 +6,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 	var smd = {
 		Body : {
 			"SMDVersion":"2.0",
-			"description": "SMD service demonstration",
-
+			"description": "Body",
 			"envelope":"JSON-RPC-2.0",
 			"transport":"POST",
 			"target":"/body",
@@ -66,8 +65,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 		},
 		Buildings : {
 			Generic : {
-				"description": "SMD service demonstration",
-
+				"SMDVersion":"2.0",
+				"description": "Buildings",
 				"envelope":"JSON-RPC-2.0",
 				"transport":"POST",
 				//Target will be passed in "target":"/buildings",
@@ -100,6 +99,100 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"returns":{"type":"object"}
 					}
 
+				}
+			},
+			Shipyard : {
+				"SMDVersion":"2.0",
+				"description": "Shipyard",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/shipyard",
+
+				"services": {
+					"get_buildable" : {
+						"description": "Returns a list of buildable ships and their costs, and if they're not buildable, gives a reason why not in the form of an exception.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+							 {
+								"buildable" : {
+									"probe" : {
+										"can" : 1,             # can it be built or not
+										"reason" : null,       # if it can't an array ref will be here with the exception for why not
+										"cost" : {
+											"seconds" : 900,
+											"food" : 1100,
+											"water" : 1000,
+											"energy" : 1200,
+											"ore" : 1200,
+											"waste" : 100,
+										},
+										attributes : {
+											"speed" : 1000,    # 100 roughly equals 1 star in 1 hour
+										}
+									},
+									...
+								},
+								"docks_available" : 7,         # you can only build ships up to the number of docks you have available
+								"status" : { get_status() },
+							 }
+						*/
+					},
+					"build_ship" : {
+						"description": "Adds a ship to the build queue.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false}, //'probe','colony_ship','spy_pod','cargo_ship','space_station','smuggler_ship','mining_platform_ship','terraforming_platform_ship', or 'gas_giant_settlement_ship'
+							{"name":"quantity", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+							 {
+								"ship_build_queue" : {
+									"next_completed" : "01 31 2010 13:09:05 +0600",
+									"queue" : [
+										{
+										   "type" : "probe",
+										   "seconds_each" : 120,
+										   "quantity" : 12
+										},
+										...
+									]
+								},
+								"status" : { get_status() }
+							 }
+						*/
+					},
+				}				
+			},
+			SpacePort : {
+				"SMDVersion":"2.0",
+				"description": "SpacePort",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/spaceport",
+
+				"services": {
+					"send_probe" : {
+						"description": "Dispatches a probe from one of the space ports on a planet to a star. It will automatically detect which space ports on the planet have probes, if any, and pick one of them to dispatch the probe.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_star", "type":"object", "optional":false}
+							/* to_star = 
+								 { "star_name" : "Sol" }
+								or
+								 { "star_id" : "id-goes-here" }
+								or
+								 { "x" : 4, "y" : -3, "z" : 5 }
+							*/
+						],
+						"returns":{"type":"object"}
+					}
 				}
 			}
 		},
