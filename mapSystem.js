@@ -149,7 +149,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			this.locationId = star.id;
 			Game.SetLocation(Lacuna.MapSystem.locationId, Lib.View.SYSTEM);
 				
-			var starImg = systemMap.appendChild(img.cloneNode(false));
+			var starImg = this._el.appendChild(img.cloneNode(false));
 			starImg.src = [Lib.AssetUrl, "star_system/", star.color, ".png"].join('');
 				
 			for(var bKey in bodies) {
@@ -186,16 +186,12 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 						}
 						
 						if(Game.EmpireData.planets && Game.EmpireData.planets[bKey]){
-							Event.on([elImg,elName], "dblclick", function(e) {
-								var t = Event.getTarget(e);
-								this.planetDetails.hide();
-								this.fireEvent("onChangeToPlanetView", t.parentNode.Body.id);
-							}, this, true);
+							Event.on([elImg,elName], "dblclick", this.onPlanetClick, this, true);
 						}
 						
 						Dom.addClass(elImg, "planet");
 							
-						systemMap.appendChild(elOrbit);
+						this._el.appendChild(elOrbit);
 					}
 				}
 			}
@@ -203,6 +199,11 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			this.MapVisible(true);
 
 			Lacuna.Pulser.Hide();
+		},
+		onPlanetClick : function(e) {
+			var t = Event.getTarget(e);
+			this.planetDetails.hide();
+			this.fireEvent("onChangeToPlanetView", t.parentNode.Body.id);
 		},
 		Load : function(starId, isBody) {
 			if(starId) {

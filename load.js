@@ -91,6 +91,12 @@
 		requires : ["datasource","event-delegate","game","textboxList"]
 	});
 	loader.addModule({
+		name: "essentia",
+		type: "js",
+		fullpath: host + "essentia.js?" + t,
+		requires : ["container","game"]
+	});
+	loader.addModule({
 		name: "profile",
 		type: "js",
 		fullpath: host + "profile.js?" + t,
@@ -107,9 +113,9 @@
 		name: "gameMenu",
 		type: "js",
 		fullpath: host + "menu.js?" + t,
-		requires : ["about","messaging","menu"]
+		requires : ["about","essentia","messaging","menu","profile"]
 	});
-	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem","profile");
+	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
 		

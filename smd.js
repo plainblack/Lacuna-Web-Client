@@ -101,6 +101,164 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			Intelligence : {
+				"SMDVersion":"2.0",
+				"description": "Intelligence",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/intelligence",
+
+				"services": {
+					"train_spy" : {
+						"description": "Allows you to train more spies",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"quantity", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
+						 }
+						*/
+					},
+					"view_spies" : {
+						"description": "Returns the list of spies you have on your roster.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"spies" : {
+								"id-goes-here" : {
+									"assignment" : "Idle",
+									"assigned_to" : {
+										"body_id" : "id-goes-here",
+										"name" : "Earth",
+									},
+									"is_available" : 1, # can be reassigned
+									"available_on" : "01 31 2010 13:09:05 +0600" # if can't be reassigned, this is when will be available
+								},
+								...
+							}
+						 }
+						*/
+					},
+					"burn_spy" : {
+						"description": "Allows you to eliminate one of your spies from your payroll.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+						 }
+						*/
+					},
+					"assign_spy" : {
+						"description": "Set a spy on a new task.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false},
+							{"name":"assignment", "type":"string", "optional":false} // "Idle", "Counter Intelligence", "Sting"
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
+			Network19 : {
+				"SMDVersion":"2.0",
+				"description": "Network19",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/network19",
+
+				"services": {
+					"restrict_coverage" : {
+						"description": "You can enact or disband a policy to restrict what Network 19 covers about your planet. Restricting coverage does make your citizens unhappy.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"onoff", "type":"number", "optional":false} // 0 or 1
+						],
+						"returns":{"type":"object"}
+					},
+					"view_news" : {
+						"description": "Get the top 100 headlines from your region of space. It also returns a list of RSS feeds that can be used outside the game to see the same news in a given region.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"news" : [
+								{
+									"headline" : "HCorp founded a new colony on Rigel 4.",
+									"date" : "01 31 2010 13:09:05 +0600"
+								},
+								...
+							],
+							"feeds" : [
+								'http://feeds.game.lacunaexpanse.com/78d5e7b2-b8d7-317c-b244-3f774264be57.rss'
+							],
+							"status" : { get_status() }
+						 }
+						*/
+					}
+				}
+			},
+			Observatory : {
+				"SMDVersion":"2.0",
+				"description": "Observatory",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/observatory",
+
+				"services": {
+					"abandon_probe" : {
+						"description": "The probe is deactivated, and allowed to burn up in the star.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"} // status
+					},
+					"get_probed_stars" : {
+						"description": "Returns a list of the stars that have been probed by this planet.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+							 {
+									"status" : { get_status() },
+									"stars" : [
+											"color" : "yellow",
+											"name" : "Sol",
+											"x" : 17,
+											"y" : 4,
+											"z" : -3,
+											"alignments" : "self-hostile"
+									]       
+							 }
+						*/
+					}
+				}
+			},
 			Shipyard : {
 				"SMDVersion":"2.0",
 				"description": "Shipyard",
@@ -166,7 +324,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 								"status" : { get_status() }
 							 }
 						*/
-					},
+					}
 				}				
 			},
 			SpacePort : {
@@ -347,6 +505,90 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"message", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
+				},
+				"view_boosts" : {
+					"description": "Shows the dates at which boosts have expired or will expire. Boosts are subsidies applied to various resources using essentia.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"boosts" : {
+							"food" : "01 31 2010 13:09:05 +0600",
+							"ore" : "01 31 2010 13:09:05 +0600",
+							"energy" : "01 31 2010 13:09:05 +0600",
+							"happiness" : "01 31 2010 13:09:05 +0600",
+							"water" : "01 31 2010 13:09:05 +0600",
+						}
+					 }
+					*/
+				},
+				"boost_food" : {
+					"description": "Spends 5 essentia, and boosts food production on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"food_boost" : "01 31 2010 13:09:05 +0600"
+					 }
+					*/
+				},
+				"boost_water" : {
+					"description": "Spends 5 essentia, and boosts water production on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"water_boost" : "01 31 2010 13:09:05 +0600"
+					 }
+					*/
+				},
+				"boost_energy" : {
+					"description": "Spends 5 essentia, and boosts energy production on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"energy_boost" : "01 31 2010 13:09:05 +0600"
+					 }
+					*/
+				},
+				"boost_ore" : {
+					"description": "Spends 5 essentia, and boosts ore production on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"ore_boost" : "01 31 2010 13:09:05 +0600"
+					 }
+					*/
+				},
+				"boost_happiness" : {
+					"description": "Spends 5 essentia, and boosts happiness production on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { get_status() },
+						"happiness_boost" : "01 31 2010 13:09:05 +0600"
+					 }
+					*/
 				}
 			}
 		},

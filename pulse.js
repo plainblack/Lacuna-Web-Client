@@ -3,32 +3,27 @@ YAHOO.namespace("lacuna");
 if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 
 (function(){
-	var Pulse = function() {
-		/*var pulse = document.createElement("div");
-		pulse.id = "pulsing";
-		pulse.innerHTML = ['<div class="bd"><img src="',YAHOO.lacuna.Library.AssetUrl,'ui/pulse-indicator.gif" alt="Pulse Indicator" /></div>'].join('');
-		document.body.insertBefore(pulse, document.body.firstChild);
-		YAHOO.util.Dom.addClass(pulse, "nofooter");*/
-		
+	var Pulse = function() {		
 		var panel = new YAHOO.widget.Panel("pulsing", {
 			fixedcenter:true,
 			close:false,
 			underlay:"none",
 			draggable:false, 
-			modal:true,
+			modal:false,
 			visible:false,
 			width:"100px"
 		});
 		panel.render();
-		this._bar = panel;
+		this._panel = panel;
 	};
 	Pulse.prototype = {
 		Show : function() {
-			this._bar.show();
+			this._panel.bringToTop();
+			this._panel.show();
 		},
 		
 		Hide : function() {
-			this._bar.hide();
+			this._panel.hide();
 		}
 	};
 	YAHOO.lacuna.Pulse = Pulse;

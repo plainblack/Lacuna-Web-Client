@@ -1097,8 +1097,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		gestureEnd : function(e){
 			// note: this does not work if the default is prevented!
-			if( e.scale > 1) this.map.zoomIn();
-			if( e.scale < 1) this.map.zoomOut();
+			if( e.scale > 1) { this.map.zoomIn(); }
+			if( e.scale < 1) { this.map.zoomOut(); }
 		},
 		isDragging : function() {
 			return false;

@@ -29,8 +29,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				shadow:false, 
 				context:[this.clickId, "tl", "bl",[9, -10]]
 			});
-			//userMenu.addItems([{ text: "Essentia", id: "ess", onclick: { fn: Lacuna.Essentia.show } }
-			//]);
+			userMenu.addItems([{ text: "Essentia", id: "ess", onclick: { fn: Lacuna.Essentia.show } }
+			]);
 			userMenu.addItems([{ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } },
 				{ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } },
 				{ text: "Logout", id: "ul", onclick: { fn: Game.Logout } }
@@ -123,6 +123,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		createRight : function() {
 			var essentia = document.createElement("div"),
+				essentiaClick = essentia.cloneNode(false),
 				essentiaImg = essentia.appendChild(document.createElement("img")),
 				essentiaTxt = essentia.appendChild(document.createElement("span")),
 				happy = document.createElement("div"),
@@ -136,8 +137,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				
 			essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
 			essentiaImg.alt = essentiaImg.title = "Essentia";
-			Dom.addClass(essentia, "essentia");
-			Dom.addClass(essentia, "menuItem");
+			Event.on(essentiaClick, "click", Lacuna.Essentia.show);
+			Dom.addClass([essentia,essentiaClick], "essentia");
+			Dom.addClass([essentia,essentiaClick], "menuItem");
+			Dom.addClass(essentiaClick, "click");
 			
 			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
@@ -156,6 +159,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(forwardClick, "click");
 			
 			this.elEssentia = this.container.appendChild(essentia);
+			this.elEssentiaClick = this.container.appendChild(essentiaClick);
 			this.elEssentiaText = essentiaTxt;
 			this.elHappy = this.container.appendChild(happy);
 			this.elHappyOver = this.container.appendChild(happyOver);
@@ -374,8 +378,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 
 			var items = [];
 			for(var pKey in planets) {
-				var p = planets[pKey];
-				items.push({ text: p.name, id: "planetMenuItem"+(count++), onclick: { fn: this.menuClick, obj:p } });
+				if(planets.hasOwnProperty(pKey)) {
+					var p = planets[pKey];
+					items.push({ text: p.name, id: "planetMenuItem"+(count++), onclick: { fn: this.menuClick, obj:p } });
+				}
 			}
 			this.Menu.addItems(items);
 			this.Menu.render();

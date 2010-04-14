@@ -101,9 +101,9 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 								html.push("</li");
 							}
 							html.push("</ul>");
+							nLi.innerHTML = html.join('');
+							list.appendChild(nLi);
 						}
-						nLi.innerHTML = html.join('');
-						list.appendChild(nLi);
 					}
 				}
 				this.hasCredits = true;

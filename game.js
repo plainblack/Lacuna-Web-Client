@@ -21,7 +21,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species),
 			Stats : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Stats),
 			Buildings : {
-				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic)
+				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic),
+				Intelligence : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Intelligence),
+				Network19 : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Network19),
+				Observatory : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Observatory),
+				Shipyard : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Shipyard),
+				SpacePort : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.SpacePort)
 			}
 		},
 		Timeout : 20000,
@@ -41,18 +46,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				//Run rest of UI since we're logged in
 				Lacuna.Game.GetFullStatus({
 					success:Lacuna.Game.Run,
-					failure:Lacuna.Game.Failure,
-					scope:this
+					failure:Lacuna.Game.Failure
 				});
 			}
 		},
 		Failure : function(o){
-			alert(o.error.message);
 			if(o.error.code == 1006) {
-				Lacuna.Game.DoLogin();
+				Lacuna.Game.DoLogin(true);
+			}
+			else if(o.error.message != "Internal error.") {
+				alert(o.error.message);
 			}
 		},
-		DoLogin : function() {
+		DoLogin : function(sessionExpired) {
 			document.getElementById("content").innerHTML = "";
 			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
 			if(!Lacuna.Game.LoginDialog) {
@@ -75,7 +81,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 			}
 			Game.OverlayManager.hideAll();
-			Lacuna.Game.LoginDialog.show();
+			Lacuna.Game.LoginDialog.show(sessionExpired);
 			Lacuna.Menu.hide();
 			Lacuna.Pulser.Hide();
 		},
@@ -152,14 +158,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					YAHOO.log(planetId, "info", "onChangeToPlanetView");
 					Game.SetLocation(planetId, Lib.View.PLANET);
 				});
-				
-				
+								
 				Lacuna.MapPlanet.subscribe("onMapRpc", function(oResult){
 					Lacuna.Game.ProcessStatus(oResult.status);
 				});
 				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Menu.subscribe("onBackClick", function() {
+					Game.OverlayManager.hideAll();
 					if(Lacuna.MapStar.IsVisible()) {
 						Lacuna.MapStar.MapVisible(false);
 						Lacuna.MapPlanet.MapVisible(true);
@@ -195,6 +201,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				});
 				Lacuna.Menu.subscribe("onForwardClick", function() {
+					Game.OverlayManager.hideAll();
 					if(Lacuna.MapStar.IsVisible()) {
 						Lacuna.MapStar.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(true);
@@ -260,6 +267,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		InitQueue : function() {
+			//set queue to blank
+			Game.queue = {};
+					
 			var BodyServ = Game.Services.Body,
 				data = {
 					session_id: Game.GetSession(""),
@@ -294,7 +304,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					//var sDt = Lib.
 				}
 				if(status.empire) {
-					var now = new Date();
 					//convert to numbers
 					status.empire.has_new_messages *= 1;
 					
@@ -382,27 +391,29 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		
 		Logout : function() {
-			var EmpireServ = Lacuna.Game.Services.Empire,
+			Lacuna.Pulser.Show();
+			
+			var EmpireServ = Game.Services.Empire,
 				session = Game.GetSession();
 				
-			clearTimeout(Lacuna.Game.recInt);
+			clearInterval(Game.recInt);
 			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
 					YAHOO.log(o);
 			
-					Cookie.remove("lacuna",{
-						domain: "lacunaexpanse.com"
-					});
+					Cookie.remove("lacuna");
 					
 					Lacuna.MapStar.Reset();
 					Lacuna.MapSystem.Reset();
 					Lacuna.MapPlanet.Reset();
 					//document.getElementById("content").innerHTML = "";
 					Lacuna.Game.DoLogin();
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(["LOGOUT FAILED: ", o]);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout
 			});

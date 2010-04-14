@@ -79,7 +79,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				draggable:true,
 				fixedcenter:false,
 				close:true,
-				width:"600px",
+				width:"700px",
 				underlay:false,
 				zIndex:9995,
 				context:["header","tl","bl"]
@@ -129,11 +129,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.curOre = Dom.get("buildingDetailsOre");
 				this.curWaste = Dom.get("buildingDetailsWaste");
 				this.curWater = Dom.get("buildingDetailsWater");
+			
+				this.queue = [];
+				this.dataStore = {};
 			});
 			this.buildingDetails.hideEvent.subscribe(function(){
 				Game.onTick.unsubscribe(this.buildingDetails.processQueue);
 				this.buildingDetails.interval = undefined;
 				this.buildingDetails.queue = [];
+				this.buildingDetails.dataStore = {};
 				this.currentBuilding = undefined;
 			}, this, true);
 			
@@ -376,7 +380,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.upgradeProdUl.innerHTML = "";
 			
 			while(panel.tabView.get("tabs").length > 1){
-				panel.tabView.removeTab(panel.tabView.getTab(0));
+				var tab = panel.tabView.getTab(0);
+				Event.purgeElement(tab.get("contentEl"));
+				panel.tabView.removeTab(tab);
 			}
 			
 			this.buildingDetails.show(); //show before we get data so it looks like we're doing something
@@ -405,7 +411,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.curOre.innerHTML = building.ore_hour;
 			panel.curWaste.innerHTML = building.waste_hour;
 			panel.curWater.innerHTML = building.water_hour;
-			
 			
 			if(building.pending_build) {
 				panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
@@ -443,7 +448,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',up.cost.water,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',up.cost.energy,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
-					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>',
+					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 				].join('');
 
 
@@ -468,233 +473,443 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				panel.upgradeUl.innerHTML = "";
 			}
 			
-			while(panel.tabView.get("tabs").length > 1){
-				panel.tabView.removeTab(panel.tabView.getTab(0));
-			}
+			var output, stored;
 			
 			if(building.upgrade.production && ((building.food_capacity*1 + building.ore_capacity*1 + building.water_capacity*1 + building.energy_capacity*1 + building.waste_capacity*1) > 0)) {
-				var p = building.upgrade.production,
-					output = [
-						'<div class="yui-g">',
-						'	<div class="yui-u first">',
-						'		<ul>',
-						'			<li>Current Storage</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'	<div class="yui-u">',
-						'		<ul id="buildingDetailsUpgradeStorage">',
-						'			<li>Upgrade Storage</li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-						'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-						'		</ul>',
-						'	</div>',
-						'</div>'];
+				var p = building.upgrade.production;
+				output = [
+					'<div class="yui-g">',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li>Current Storage</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',building.food_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',building.ore_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',building.water_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',building.energy_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',building.waste_capacity,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u">',
+					'		<ul id="buildingDetailsUpgradeStorage">',
+					'			<li>Upgrade Storage</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',p.ore_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',p.water_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',p.energy_capacity,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',p.waste_capacity,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'];
 				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Storage", content: output.join('')}), 0);
 			}
 			
-			if(oResults.planet || (oResults.build_queue && oResults.build_queue.length > 0) || oResults.docked_ships || oResults.party || oResults.food_stored || oResults.ore_stored) {
-				if(oResults.planet) { //if it's the planetary command
-					var planet = oResults.planet,
-						output = [
-							'<div class="yui-g buildingDetailsExtra">',
-							'	<div class="yui-u first">',
-							'		<ul>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
-							'				<span class="pcStored">',planet.food_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.food_capacity, '</span> @ <span class="pcPerHour">', planet.food_hour,'</span>/hr</li>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
-							'				<span class="pcStored">',planet.ore_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.ore_capacity, '</span> @ <span class="pcPerHour">', planet.ore_hour,'</span>/hr</li>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
-							'				<span class="pcStored">',planet.water_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.water_capacity, '</span> @ <span class="pcPerHour">', planet.water_hour,'</span>/hr</li>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
-							'				<span class="pcStored">',planet.energy_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.energy_capacity, '</span> @ <span class="pcPerHour">', planet.energy_hour,'</span>/hr</li>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
-							'				<span class="pcStored">',planet.waste_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.waste_capacity, '</span> @ <span class="pcPerHour">', planet.waste_hour,'</span>/hr</li>',
-							'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
-							'				<span class="pcStored">',planet.happiness, '</span><span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span> @ <span class="pcPerHour">', planet.happiness_hour,'</span>/hr</li>',
-							'		</ul>',
-							'	</div>',
-							'	<div class="yui-u first">',
-							'		<ul class="buildingDetailsPC">',
-							'			<li><label>Buildings:</label>',planet.building_count,'</li>',
-							'			<li><label>Planet Size:</label>',planet.size,'</li>',
-							'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
-							'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y : ',planet.z,'z</li>',
-							'			<li><label>Star:</label>',planet.star_name,'</li>',
-							'			<li><label>Orbit:</label>',planet.orbit,'</li>',
-							'		</ul>',
-							'	</div>',
-							'</div>'
-						];
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Planet", content: output.join('')}), 0);
+			if(oResults.planet) { //if it's the planetary command
+				var planet = oResults.planet;
+				output = [
+					'<div class="yui-g buildingDetailsExtra">',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span>',
+					'				<span class="pcStored">',planet.food_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.food_capacity, '</span> @ <span class="pcPerHour">', planet.food_hour,'</span>/hr</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',
+					'				<span class="pcStored">',planet.ore_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.ore_capacity, '</span> @ <span class="pcPerHour">', planet.ore_hour,'</span>/hr</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',
+					'				<span class="pcStored">',planet.water_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.water_capacity, '</span> @ <span class="pcPerHour">', planet.water_hour,'</span>/hr</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',
+					'				<span class="pcStored">',planet.energy_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.energy_capacity, '</span> @ <span class="pcPerHour">', planet.energy_hour,'</span>/hr</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span>',
+					'				<span class="pcStored">',planet.waste_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.waste_capacity, '</span> @ <span class="pcPerHour">', planet.waste_hour,'</span>/hr</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span>',
+					'				<span class="pcStored">',planet.happiness, '</span><span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span> @ <span class="pcPerHour">', planet.happiness_hour,'</span>/hr</li>',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u first">',
+					'		<ul class="buildingDetailsPC">',
+					'			<li><label>Buildings:</label>',planet.building_count,'</li>',
+					'			<li><label>Planet Size:</label>',planet.size,'</li>',
+					'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
+					'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y : ',planet.z,'z</li>',
+					'			<li><label>Star:</label>',planet.star_name,'</li>',
+					'			<li><label>Orbit:</label>',planet.orbit,'</li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Planet", content: output.join('')}), 0);
+			}
+			else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
+				var bq = oResults.build_queue,
+					ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					div = document.createElement("div"),
+					hUl = ul.cloneNode(false);
+					
+				Dom.addClass(div, "buildingDetailsExtra");
+				hUl.innerHTML = '<ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li></ul>';
+				div.appendChild(hUl);
+					
+				for(var i=0; i<bq.length; i++) {
+					var bqo = bq[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+					Dom.addClass(nUl, "buildQueue");
+					Dom.addClass(nUl, "clearafter");
+
+					Dom.addClass(nLi,"buildQueueName");
+					nLi.innerHTML = bqo.name;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"buildQueueLevel");
+					nLi.innerHTML = bqo.to_level;
+					nUl.appendChild(nLi);
+					
+					var tLi = li.cloneNode(false);
+					Dom.addClass(tLi,"buildQueueTime");
+					tLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
+					nUl.appendChild(tLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"buildQueueCoords");
+					nLi.innerHTML = [bqo.x,',',bqo.y].join('');
+					nUl.appendChild(nLi);
+
+					div.appendChild(nUl);
+					
+					panel.addQueue(bqo.seconds_remaining, this.DevMinistryQueue, tLi);
 				}
-				else if(oResults.build_queue && oResults.build_queue.length > 0) { //if it's the development ministry
-					var bq = oResults.build_queue,
-						ul = document.createElement("ul"),
+				
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Build Queue", contentEl: div}), 0);
+			}
+			else if(oResults.ship_build_queue) { //if it's the shipyard 
+				var bq = oResults.ship_build_queue,
+					tabIndex = 0;
+				
+				if(bq.queue && bq.queue.length > 0) {
+					var ul = document.createElement("ul"),
 						li = document.createElement("li"),
 						div = document.createElement("div"),
 						hUl = ul.cloneNode(false);
 						
-					Dom.addClass(div, "buildingDetailsExtra");
-					hUl.innerHTML = '<ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li></ul>';
+					hUl.innerHTML = '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Level</li><li class="shipQueueQuantity">Time</li></ul>';
 					div.appendChild(hUl);
 						
-					for(var i=0; i<bq.length; i++) {
-						var bqo = bq[i],
+					for(var i=0; i<bq.queue.length; i++) {
+						var bqo = bq.queue[i],
 							nUl = ul.cloneNode(false),
 							nLi = li.cloneNode(false);
-						Dom.addClass(nUl, "buildQueue");
+						Dom.addClass(nUl, "shipQueue");
 						Dom.addClass(nUl, "clearafter");
 
-						Dom.addClass(nLi,"buildQueueName");
-						nLi.innerHTML = bqo.name;
+						Dom.addClass(nLi,"shipQueueType");
+						nLi.innerHTML = bqo.type;
 						nUl.appendChild(nLi);
 						
 						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"buildQueueLevel");
-						nLi.innerHTML = bqo.to_level;
+						Dom.addClass(nLi,"shipQueueEach");
+						nLi.innerHTML = bqo.seconds_each;
 						nUl.appendChild(nLi);
-						
-						var tLi = li.cloneNode(false);
-						Dom.addClass(tLi,"buildQueueTime");
-						tLi.innerHTML = Lib.formatTime(bqo.seconds_remaining);
-						nUl.appendChild(tLi);
 
 						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"buildQueueCoords");
-						nLi.innerHTML = [bqo.x,',',bqo.y].join('');
+						Dom.addClass(nLi,"shipQueueQuantity");
+						nLi.innerHTML = bqo.quantity;
 						nUl.appendChild(nLi);
 
 						div.appendChild(nUl);
-						
-						panel.addQueue(bqo.seconds_remaining, function(remaining, el){
-							if(remaining <= 0) {
-								var ul = el.parentNode,
-									c = ul.parentNode;
-								c.removeChild(ul);
-							}
-							else {
-								el.innerHTML = Lib.formatTime(Math.round(remaining));
-							}
-						}, tLi);
 					}
 					
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Build Queue", contentEl: div}), 0);
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Build Queue", contentEl: div}), tabIndex);
+					tabIndex++;
 				}
-				else if(oResults.docked_ships) { //if it's the space port
-					var ships = oResults.docked_ships,
-						output = [
-							'<div class="yui-g">',
-							'	<div class="yui-u first">',
-							'		<ul class="buildingDetailsDockedShips">',
-							'			<li><label>Probe</label><span class="buildingDetailsNum">',ships.probe,'</span></li>',
-							'			<li><label>Spy Pod</label><span class="buildingDetailsNum">',ships.spy_pod,'</span></li>',
-							'			<li><label>Smuggler Ship</label><span class="buildingDetailsNum">',ships.smuggler_ship,'</span></li>',
-							'			<li><label>Mining Platform Ship</label><span class="buildingDetailsNum">',ships.mining_platform_ship,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'	<div class="yui-u">',
-							'		<ul class="buildingDetailsDockedShips">',
-							'			<li><label>Terraforming Platform Ship</label><span class="buildingDetailsNum">',ships.terraforming_platform_ship,'</span></li>',
-							'			<li><label>Gas Giant Settlement Platform Ship</label><span class="buildingDetailsNum">',ships.gas_giant_settlement_platform_ship,'</span></li>',
-							'			<li><label>Space Station</label><span class="buildingDetailsNum">',ships.space_station,'</span></li>',
-							'			<li><label>Colony Ship</label><span class="buildingDetailsNum">',ships.colony_ship,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'</div>'
-						];
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Docked Ships", content: output.join('')}), 0);
-				}
-				else if(oResults.party) { //if it's a park
-					var output;
-					if(oResults.party.can_throw) {
-						output = '<p>Throw a party!  Get John to put this in.</p>';
+										
+				var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
+					'<div>',
+					'	<div class="shipHeader">There are <span id="shipDocksAvailable"></span> docks available for new ships.</div>',
+					'	<ul class="shipHeader shipInfo clearafter">',
+					'		<li class="shipType">Type</li>',
+					'		<li class="shipCost">Cost</li>',
+					'		<li class="shipAttributes">Attributes</li>',
+					'		<li class="shipBuild">Build</li>',
+					'	</ul>',
+					'	<div id="shipDetails">',
+					'	</div>',
+					'</div>'
+				].join('')});
+				buildTab.subscribe("activeChange", function(e) {
+					if(e.newValue) {
+						if(!panel.dataStore.ships) {
+							Lacuna.Pulser.Show();
+							Game.Services.Buildings.Shipyard.get_buildable({session_id:Game.GetSession(),building_id:oResults.building.id}, {
+								success : function(o){
+									YAHOO.log(o, "info", "MapPlanet.Shipyard.get_buildable.success");
+									Lacuna.Pulser.Hide();
+									this.fireEvent("onMapRpc", o.result);
+									Dom.get("shipDocksAvailable").innerHTML = o.result.docks_available;
+									panel.dataStore.ships = {
+										buildable: o.result.buildable,
+										docks_available: o.result.docks_available
+									}
+									this.ShipPopulate();
+								},
+								failure : function(o){
+									YAHOO.log(o, "error", "MapPlanet.Shipyard.get_buildable.failure");
+									Lacuna.Pulser.Hide();
+									this.fireEvent("onMapRpcFailed", o);
+								},
+								timeout:Game.Timeout,
+								scope:this
+							});
+						}
+						else {
+							this.ShipPopulate();
+						}
 					}
-					else {
-						output = '<p>Not enough resources to throw a party right now.</p>';
+				}, this, true);
+				panel.tabView.addTab(buildTab, tabIndex);
+			}
+			else if(oResults.docked_ships) { //if it's the space port
+				var ships = oResults.docked_ships;
+				output = [
+					'<div class="yui-g">',
+					'	<div class="yui-u first">',
+					'		<ul class="buildingDetailsDockedShips">',
+					'			<li><label>Probe</label><span class="buildingDetailsNum">',ships.probe,'</span></li>',
+					'			<li><label>Spy Pod</label><span class="buildingDetailsNum">',ships.spy_pod,'</span></li>',
+					'			<li><label>Smuggler Ship</label><span class="buildingDetailsNum">',ships.smuggler_ship,'</span></li>',
+					'			<li><label>Mining Platform Ship</label><span class="buildingDetailsNum">',ships.mining_platform_ship,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u">',
+					'		<ul class="buildingDetailsDockedShips">',
+					'			<li><label>Terraforming Platform Ship</label><span class="buildingDetailsNum">',ships.terraforming_platform_ship,'</span></li>',
+					'			<li><label>Gas Giant Settlement Platform Ship</label><span class="buildingDetailsNum">',ships.gas_giant_settlement_platform_ship,'</span></li>',
+					'			<li><label>Space Station</label><span class="buildingDetailsNum">',ships.space_station,'</span></li>',
+					'			<li><label>Colony Ship</label><span class="buildingDetailsNum">',ships.colony_ship,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Docked Ships", content: output.join('')}), 0);
+			}
+			else if(oResults.party) { //if it's a park
+				if(oResults.party.can_throw) {
+					output = '<p>Throw a party!  Get John to put this in.</p>';
+				}
+				else {
+					output = '<p>Not enough resources to throw a party right now.</p>';
+				}
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", content: output}), 0);
+			}
+			else if(oResults.food_stored) {
+				stored = oResults.food_stored;
+				output = [
+					'<div class="yui-g buildingDetailsExtra">',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
+					'			<li><label>Apple</label><span class="buildingDetailsNum">',stored.apple,'</span></li>',
+					'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
+					'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
+					'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
+					'			<li><label>Chip</label><span class="buildingDetailsNum">',stored.chip,'</span></li>',
+					'			<li><label>Cider</label><span class="buildingDetailsNum">',stored.cider,'</span></li>',
+					'			<li><label>Corn</label><span class="buildingDetailsNum">',stored.corn,'</span></li>',
+					'			<li><label>Fungus</label><span class="buildingDetailsNum">',stored.fungus,'</span></li>',
+					'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><label>Meal</label><span class="buildingDetailsNum">',stored.meal,'</span></li>',
+					'			<li><label>Milk</label><span class="buildingDetailsNum">',stored.milk,'</span></li>',
+					'			<li><label>Pancake</label><span class="buildingDetailsNum">',stored.pancake,'</span></li>',
+					'			<li><label>Pie</label><span class="buildingDetailsNum">',stored.pie,'</span></li>',
+					'			<li><label>Potato</label><span class="buildingDetailsNum">',stored.potato,'</span></li>',
+					'			<li><label>Root</label><span class="buildingDetailsNum">',stored.root,'</span></li>',
+					'			<li><label>Shake</label><span class="buildingDetailsNum">',stored.shake,'</span></li>',
+					'			<li><label>Soup</label><span class="buildingDetailsNum">',stored.soup,'</span></li>',
+					'			<li><label>Syrup</label><span class="buildingDetailsNum">',stored.syrup,'</span></li>',
+					'			<li><label>Wheat</label><span class="buildingDetailsNum">',stored.wheat,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Food", content: output.join('')}), 0);
+			}
+			else if(oResults.ore_stored) {
+				stored = oResults.ore_stored;
+				output = [
+					'<div class="yui-g buildingDetailsExtra">',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><label>Anthracite</label><span class="buildingDetailsNum">',stored.anthracite,'</span></li>',
+					'			<li><label>Bauxite</label><span class="buildingDetailsNum">',stored.bauxite,'</span></li>',
+					'			<li><label>Beryl</label><span class="buildingDetailsNum">',stored.beryl,'</span></li>',
+					'			<li><label>Chalcopyrite</label><span class="buildingDetailsNum">',stored.chalcopyrite,'</span></li>',
+					'			<li><label>Chromite</label><span class="buildingDetailsNum">',stored.chromite,'</span></li>',
+					'			<li><label>Fluorite</label><span class="buildingDetailsNum">',stored.fluorite,'</span></li>',
+					'			<li><label>Galena</label><span class="buildingDetailsNum">',stored.galena,'</span></li>',
+					'			<li><label>Goethite</label><span class="buildingDetailsNum">',stored.goethite,'</span></li>',
+					'			<li><label>Gold</label><span class="buildingDetailsNum">',stored.gold,'</span></li>',
+					'			<li><label>Gypsum</label><span class="buildingDetailsNum">',stored.gypsum,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><label>Halite</label><span class="buildingDetailsNum">',stored.halite,'</span></li>',
+					'			<li><label>Kerogen</label><span class="buildingDetailsNum">',stored.kerogen,'</span></li>',
+					'			<li><label>Magnetite</label><span class="buildingDetailsNum">',stored.magnetite,'</span></li>',
+					'			<li><label>Methane</label><span class="buildingDetailsNum">',stored.methane,'</span></li>',
+					'			<li><label>Monazite</label><span class="buildingDetailsNum">',stored.monazite,'</span></li>',
+					'			<li><label>Rutile</label><span class="buildingDetailsNum">',stored.rutile,'</span></li>',
+					'			<li><label>Sulfur</label><span class="buildingDetailsNum">',stored.sulfur,'</span></li>',
+					'			<li><label>Trona</label><span class="buildingDetailsNum">',stored.trona,'</span></li>',
+					'			<li><label>Uraninite</label><span class="buildingDetailsNum">',stored.uraninite,'</span></li>',
+					'			<li><label>Zircon</label><span class="buildingDetailsNum">',stored.zircon,'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Ore", content: output.join('')}), 0);
+			}
+			else if(oResults.hasOwnProperty("restrict_coverage")) { //network19
+				output = [
+					'<div id="newsCoverageContainer">',
+					'	<span id="newsCoverageText">',oResults.restrict_coverage == "1" ? 'Coverage is current restricted' : 'News is flowing freely', '</span>',
+					'	: <button id="newsCoverage" type="button">',(oResults.restrict_coverage == "1" ? 'Open Coverage' : 'Restrict Coverage'),'</button>',
+					'</div>',
+					'<div class="newsFeedContainer">',
+					'	<ul id="newsFeed">',
+					'	</ul>',
+					'</div>',
+					'<div class="newsRssLinksContainer">',
+					'	<ul id="newsRssLinks" class="clearafter">',
+					'	</ul>',
+					'</div>'
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Coverage", content: output.join('')}), 0);
+				
+				Event.on("newsCoverage", "click", function(e) {
+					var target = Event.getTarget(e),
+						isRestrict = 1;
+					target.disabled = true;
+					if(target.innerHTML == "Open Coverage") {
+						isRestrict = 0;
 					}
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", content: output}), 0);
+
+					Lacuna.Pulser.Show();
+					Game.Services.Buildings.Network19.restrict_coverage({session_id:Game.GetSession(),building_id:oResults.building.id,onoff:isRestrict}, {
+						success : function(o){
+							YAHOO.log(o, "info", "MapPlanet.Network19.restrict_coverage.success");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpc", o.result);
+							
+							Dom.get("newsCoverageText").innerHTML = isRestrict ? 'Coverage is currently restricted' : 'News is flowing freely';
+							target.innerHTML = isRestrict ? 'Open Coverage' : 'Restrict Coverage';
+							target.disabled = false;
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "MapPlanet.Network19.restrict_coverage.failure");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpcFailed", o);
+							target.disabled = false;
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
+				}, this, true);
+				
+				this.GetNews(oResults.building.id);
+			}
+			else if(oResults.spies) {
+				var spies = oResults.spies;
+				output = [
+					'<div class="yui-g">',
+					'	<div class="yui-u first">',
+					'		<ul>',
+					'			<li><span style="font-weight:bold;">Spies:</span> <span id="spiesCurrent">',spies.current,'</span> of ',spies.maximum,'</li>',
+					spies.current < spies.maximum ? '<li><span style="font-weight:bold;">Train:</span> <select id="spiesTrainNumber"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select> new spies. <button type="button" id="spiesTrain">Train</button></li>' : '',
+					'		</ul>',
+					'	</div>',
+					'	<div class="yui-u">',
+					'		<ul>',
+					'			<li>Training Costs</li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',spies.training_costs.food,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span class="buildingDetailsNum">',spies.training_costs.ore,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span class="buildingDetailsNum">',spies.training_costs.water,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span class="buildingDetailsNum">',spies.training_costs.energy,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',spies.training_costs.waste,'</span></li>',
+					'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(spies.training_costs.time),'</span></li>',
+					'		</ul>',
+					'	</div>',
+					'</div>'
+				];
+				var train = new YAHOO.widget.Tab({ label: "Build Spies", content: output.join('')});
+				if(spies.current < spies.maximum) {
+					var btn = Sel.query("button", train.get("contentEl"), true);
+					if(btn) {
+						Event.on(btn, "click", this.SpyTrain, this, true);
+					}
 				}
-				else if(oResults.food_stored) {
-					var stored = oResults.food_stored,
-						output = [
-							'<div class="yui-g buildingDetailsExtra">',
-							'	<div class="yui-u first">',
-							'		<ul>',
-							'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
-							'			<li><label>Apple</label><span class="buildingDetailsNum">',stored.apple,'</span></li>',
-							'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
-							'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
-							'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
-							'			<li><label>Chip</label><span class="buildingDetailsNum">',stored.chip,'</span></li>',
-							'			<li><label>Cider</label><span class="buildingDetailsNum">',stored.cider,'</span></li>',
-							'			<li><label>Corn</label><span class="buildingDetailsNum">',stored.corn,'</span></li>',
-							'			<li><label>Fungus</label><span class="buildingDetailsNum">',stored.fungus,'</span></li>',
-							'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'	<div class="yui-u first">',
-							'		<ul>',
-							'			<li><label>Meal</label><span class="buildingDetailsNum">',stored.meal,'</span></li>',
-							'			<li><label>Milk</label><span class="buildingDetailsNum">',stored.milk,'</span></li>',
-							'			<li><label>Pancake</label><span class="buildingDetailsNum">',stored.pancake,'</span></li>',
-							'			<li><label>Pie</label><span class="buildingDetailsNum">',stored.pie,'</span></li>',
-							'			<li><label>Potato</label><span class="buildingDetailsNum">',stored.potato,'</span></li>',
-							'			<li><label>Root</label><span class="buildingDetailsNum">',stored.root,'</span></li>',
-							'			<li><label>Shake</label><span class="buildingDetailsNum">',stored.shake,'</span></li>',
-							'			<li><label>Soup</label><span class="buildingDetailsNum">',stored.soup,'</span></li>',
-							'			<li><label>Syrup</label><span class="buildingDetailsNum">',stored.syrup,'</span></li>',
-							'			<li><label>Wheat</label><span class="buildingDetailsNum">',stored.wheat,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'</div>'
-						];
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Food", content: output.join('')}), 0);
-				}
-				else if(oResults.ore_stored) {
-					var stored = oResults.ore_stored,
-						output = [
-							'<div class="yui-g buildingDetailsExtra">',
-							'	<div class="yui-u first">',
-							'		<ul>',
-							'			<li><label>Anthracite</label><span class="buildingDetailsNum">',stored.anthracite,'</span></li>',
-							'			<li><label>Bauxite</label><span class="buildingDetailsNum">',stored.bauxite,'</span></li>',
-							'			<li><label>Beryl</label><span class="buildingDetailsNum">',stored.beryl,'</span></li>',
-							'			<li><label>Chalcopyrite</label><span class="buildingDetailsNum">',stored.chalcopyrite,'</span></li>',
-							'			<li><label>Chromite</label><span class="buildingDetailsNum">',stored.chromite,'</span></li>',
-							'			<li><label>Fluorite</label><span class="buildingDetailsNum">',stored.fluorite,'</span></li>',
-							'			<li><label>Galena</label><span class="buildingDetailsNum">',stored.galena,'</span></li>',
-							'			<li><label>Goethite</label><span class="buildingDetailsNum">',stored.goethite,'</span></li>',
-							'			<li><label>Gold</label><span class="buildingDetailsNum">',stored.gold,'</span></li>',
-							'			<li><label>Gypsum</label><span class="buildingDetailsNum">',stored.gypsum,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'	<div class="yui-u first">',
-							'		<ul>',
-							'			<li><label>Halite</label><span class="buildingDetailsNum">',stored.halite,'</span></li>',
-							'			<li><label>Kerogen</label><span class="buildingDetailsNum">',stored.kerogen,'</span></li>',
-							'			<li><label>Magnetite</label><span class="buildingDetailsNum">',stored.magnetite,'</span></li>',
-							'			<li><label>Methane</label><span class="buildingDetailsNum">',stored.methane,'</span></li>',
-							'			<li><label>Monazite</label><span class="buildingDetailsNum">',stored.monazite,'</span></li>',
-							'			<li><label>Rutile</label><span class="buildingDetailsNum">',stored.rutile,'</span></li>',
-							'			<li><label>Sulfur</label><span class="buildingDetailsNum">',stored.sulfur,'</span></li>',
-							'			<li><label>Trona</label><span class="buildingDetailsNum">',stored.trona,'</span></li>',
-							'			<li><label>Uraninite</label><span class="buildingDetailsNum">',stored.uraninite,'</span></li>',
-							'			<li><label>Zircon</label><span class="buildingDetailsNum">',stored.zircon,'</span></li>',
-							'		</ul>',
-							'	</div>',
-							'</div>'
-						];
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Ore", content: output.join('')}), 0);
-				}
-			}	
+				panel.tabView.addTab(train, 0);
+				
+				panel.dataStore.maxSpies = spies.maximum;
+				
+				var spiesTab = new YAHOO.widget.Tab({ label: "Spies", content: [
+					'<div>',
+					'	<ul class="spiesHeader spyInfo clearafter">',
+					'		<li class="spyAssignedTo">Assigned To</li>',
+					'		<li class="spyAvailableWhen">Available When</li>',
+					'		<li class="spyAssignment">Assignment</li>',
+					'		<li class="spyBurn">Burn</li>',
+					'	</ul>',
+					'	<div id="spiesDetails">',
+					'	</div>',
+					'</div>'
+				].join('')});
+				spiesTab.subscribe("activeChange", function(e) {
+					if(e.newValue) {
+						if(!panel.dataStore.spies) {
+							Lacuna.Pulser.Show();
+							Game.Services.Buildings.Intelligence.view_spies({session_id:Game.GetSession(),building_id:oResults.building.id}, {
+								success : function(o){
+									YAHOO.log(o, "info", "MapPlanet.Intelligence.view_spies.success");
+									Lacuna.Pulser.Hide();
+									this.fireEvent("onMapRpc", o.result);
+									panel.dataStore.spies = o.result.spies;
+									this.SpyPopulate();
+								},
+								failure : function(o){
+									YAHOO.log(o, "error", "MapPlanet.Intelligence.view_spies.failure");
+									Lacuna.Pulser.Hide();
+									this.fireEvent("onMapRpcFailed", o);
+								},
+								timeout:Game.Timeout,
+								scope:this
+							});
+						}
+						else {
+							this.SpyPopulate();
+						}
+					}
+				}, this, true);
+				panel.tabView.addTab(spiesTab, 1);
+			}
+			else if(oResults.building.url == "/observatory") {
+				output = [
+					'<div class="probeContainer">',
+					'	<ul class="probeInfo probeHeader clearafter">',,
+					'		<li class="probePlanet">Planet</li>',
+					'		<li class="probeCoords">Coordinates</li>',
+					'	</ul>',
+					'	<div id="probeDetails">',
+					'	</div>',
+					'</div>',
+				];
+				panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Probes", content: output.join('')}), 0);
+				
+				this.GetProbes(oResults.building.id);
+			}
 
 			Dom.setStyle("buildingDetailTabs", "display", "");
 			panel.tabView.selectTab(0);
@@ -905,6 +1120,362 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				scope:this,
 				target:building.url
 			});
+		},
+		DevMinistryQueue : function(remaining, el){
+			if(remaining <= 0) {
+				var ul = el.parentNode,
+					c = ul.parentNode;
+				c.removeChild(ul);
+			}
+			else {
+				el.innerHTML = Lib.formatTime(Math.round(remaining));
+			}
+		},
+		GetNews : function(id) {
+			Lacuna.Pulser.Show();
+			Game.Services.Buildings.Network19.view_news({session_id:Game.GetSession(),building_id:id}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.Network19.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					
+					var news = o.result.news,
+						newsFeed = Dom.get("newsFeed"),
+						feedFrag = document.createDocumentFragment(),
+						rss = o.result.feeds,
+						newsRssLinks = Dom.get("newsRssLinks"),
+						rssFrag = document.createDocumentFragment(),
+						li = document.createElement("li");
+						
+					for(var i=0; i<news.length; i++) {
+						var ni = news[i],
+							nLi = li.cloneNode(false);
+						Dom.addClass(nLi, "newsHeadline");
+						nLi.innerHTML = [Lib.formatServerDateShort(ni.date), ": ", ni.headline].join('');
+						feedFrag.appendChild(nLi);
+					}
+					newsFeed.appendChild(feedFrag);
+					
+					for(var key in rss) {
+						if(rss.hasOwnProperty(key)){
+							var link = rss[key],
+								rssLi = li.cloneNode(false);
+							Dom.addClass(rssLi, "newsRssLink");
+							rssLi.innerHTML = [key, '<a href="', link, '" target="_blank"><img src="', Lib.AssetUrl, 'ui/rss.png" alt="rss" style="margin-left:1px" /></a>'].join('');
+							rssFrag.appendChild(rssLi);
+						}
+					}
+					newsRssLinks.appendChild(rssFrag);
+							
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.Network19.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		GetProbes : function(id) {
+			Lacuna.Pulser.Show();
+			Game.Services.Buildings.Observatory.get_probed_stars({session_id:Game.GetSession(),building_id:id,page_number:1}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.GetProbes.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					
+					var stars = o.result.stars,
+						probeDetails = Dom.get("probeDetails"),
+						ul = document.createElement("ul"),
+						li = document.createElement("li");
+						
+					for(var i=0; i<stars.length; i++) {
+						var st = stars[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+							
+						nUl.Star = st;
+						Dom.addClass(nUl, "probeInfo");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"probePlanet");
+						nLi.innerHTML = st.name;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"probeCoords");
+						nLi.innerHTML = [st.x, st.y, st.z].join(', ');
+						nUl.appendChild(nLi);
+						
+						probeDetails.appendChild(nUl);
+					}
+							
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.GetProbes.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		ShipPopulate : function() {
+			var details = Dom.get("shipDetails");
+			
+			if(details) {
+				var panel = this.buildingDetails,
+					ships = panel.dataStore.ships.buildable,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				
+				var convert = {
+					gas_giant_settlement_platform_ship:"Gas Giant Platform",
+					terraforming_platform_ship:"Terraforming Platform",
+					cargo_ship:"Cargo Ship",
+					probe:"Probe",
+					space_station:"Space Station",
+					mining_platform_ship:"Mining Platform",
+					spy_pod:"Spy Pod",
+					smuggler_ship:"Smuggler Ship",
+					colony_ship:"Colony Ship"
+				};
+						
+				for(var shipType in ships) {
+					if(ships.hasOwnProperty(shipType)) {
+						var ship = ships[shipType],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+							
+						nUl.Ship = ship;
+						Dom.addClass(nUl, "shipInfo");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"shipType");
+						nLi.innerHTML = convert[shipType];
+						nUl.appendChild(nLi);
+
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"shipCost");
+						nLi.innerHTML = [
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',ship.cost.food,'</span></span>',
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',ship.cost.ore,'</span></span>',
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',ship.cost.water,'</span></span>',
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',ship.cost.energy,'</span></span>',
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',ship.cost.waste,'</span></span>',
+							'<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(ship.cost.seconds),'</span>'
+						].join('');
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"shipAttributes");
+						nLi.innerHTML = "Speed: " + ship.attributes.speed;
+						nUl.appendChild(nLi);
+
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"shipBuild");
+						if(ship.can) {
+							var bbtn = document.createElement("button");
+							bbtn.type = "button";
+							bbtn.innerHTML = "Build";
+							bbtn = nLi.appendChild(bbtn);
+							Event.on(bbtn, "click", this.ShipBuild, {Self:this,Type:shipType,Ship:ship}, true);
+						}
+						nUl.appendChild(nLi);
+
+						details.appendChild(nUl);
+						
+					}
+				}
+			}
+		},
+		ShipBuild : function() {
+			Lacuna.Pulser.Show();
+			var cb = this.Self.currentBuilding;
+			
+			Game.Services.Buildings.Shipyard.build_ship({
+				session_id:Game.GetSession(),
+				building_id:cb.building.id,
+				type:this.Type,
+				quantity:1
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.ShipBuild.success");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.UpdateCost(this.Ship.cost);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.ShipBuild.failure");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		SpyPopulate : function() {
+			var details = Dom.get("spiesDetails");
+			
+			if(details) {
+				var panel = this.buildingDetails,
+					spies = panel.dataStore.spies,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+						
+				for(var spyId in spies) {
+					if(spies.hasOwnProperty(spyId)) {
+						var spy = spies[spyId],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+							
+						nUl.Spy = spy;
+						Dom.addClass(nUl, "spyInfo");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"spyAssignedTo");
+						nLi.innerHTML = spy.assigned_to.name;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"spyAvailableWhen");
+						nLi.innerHTML = spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on);
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"spyAssignment");
+						if(spy.is_available) {
+							var sel = document.createElement("select"),
+								opt1 = document.createElement("option"),
+								opt2 = opt1.cloneNode(false),
+								opt3 = opt1.cloneNode(false),
+								btn = document.createElement("button");
+							opt1.value = opt1.innerHTML = "Idle";
+							if(spy.assignment == "Idle") { opt1.selected = true; sel.defaultIndex = 0; }
+							sel.appendChild(opt1);
+							opt2.value = "Counter Intelligence";
+							opt2.innerHTML = "Counter Intel";
+							if(spy.assignment == "Counter Intelligence") { opt2.selected = true; sel.defaultIndex = 1; }
+							sel.appendChild(opt2);
+							opt3.value = opt3.innerHTML = "Sting";
+							if(spy.assignment == "Sting") { opt3.selected = true; sel.defaultIndex = 2;}
+							sel.defaultValue = spy.assignment;
+							sel.appendChild(opt3);
+							
+							nLi.appendChild(sel);
+							
+							btn.type = "button";
+							btn.innerHTML = "Assign";
+							Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spyId}, true);
+							nLi.appendChild(btn);
+						}
+						else {
+							nLi.innerHTML = spy.assignment;
+						}
+						nUl.appendChild(nLi);
+
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"spyBurn");
+						var bbtn = document.createElement("button");
+						bbtn.type = "button";
+						bbtn.innerHTML = "Burn";
+						bbtn = nLi.appendChild(bbtn);
+						nUl.appendChild(nLi);
+
+						details.appendChild(nUl);
+						
+						Event.on(bbtn, "click", this.SpyBurn, {Self:this,Id:spyId,Line:nUl}, true);
+					}
+				}
+			}
+		},
+		SpyAssign : function() {
+			Lacuna.Pulser.Show();
+			var assign = this.Assign[this.Assign.selectedIndex].value,
+				cb = this.Self.currentBuilding;
+			
+			Game.Services.Buildings.Intelligence.assign_spy({
+				session_id:Game.GetSession(),
+				building_id:cb.building.id,
+				spy_id:this.Id,
+				assignment:assign
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.SpyAssign.success");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.buildingDetails.dataStore.spies = undefined;
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.SpyAssign.failure");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Assign.selectedIndex = this.Assign.defaultIndex;
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		SpyBurn : function() {
+			Lacuna.Pulser.Show();
+			var cb = this.Self.currentBuilding;
+			
+			Game.Services.Buildings.Intelligence.burn_spy({
+				session_id:Game.GetSession(),
+				building_id:cb.building.id,
+				spy_id:this.Id
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.SpyBurn.success");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpc", o.result);
+					delete this.Self.buildingDetails.dataStore.spies[this.Id];
+					this.Line.parentNode.removeChild(this.Line);
+					cb.spies.current = (cb.spies.current*1) - 1;
+					Dom.get("spiesCurrent").innerHTML = cb.spies.current;
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.SpyBurn.failure");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		SpyTrain : function() {
+			var select = Dom.get("spiesTrainNumber"),
+				num = select[select.selectedIndex].value*1,
+				cb = this.currentBuilding;
+				
+			if(Lang.isNumber(num) && num < cb.spies.maximum) {
+				Lacuna.Pulser.Show();
+				Game.Services.Buildings.Intelligence.train_spy({session_id:Game.GetSession(),building_id:cb.building.id,quantity:num}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapPlanet.SpyTrain.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
+						this.buildingDetails.dataStore.spies = undefined;
+						cb.spies.current = (cb.spies.current*1) + (o.result.trained*1);
+						Dom.get("spiesCurrent").innerHTML = cb.spies.current;
+						this.UpdateCost(cb.spies.training_costs);
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "MapPlanet.SpyTrain.failure");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		Upgrade : function() {
 			Lacuna.Pulser.Show();

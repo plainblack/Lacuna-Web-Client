@@ -369,11 +369,11 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 	
 		handleCreate : function() {
 			this.setMessage("");
+			var SpeciesServ = Game.Services.Species;
 			//if the select human go directly to founding the empire
 			if(this.elSelect.selectedIndex == 0) {
 				if(this.createdSpeciesOnce) {
 					Lacuna.Pulser.Show();
-					var SpeciesServ = Game.Services.Species;
 					SpeciesServ.set_human({empire_id: this.empireId}, {
 						success : function(o) {
 							YAHOO.log(o, "info", "SetHuman");
@@ -410,8 +410,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 						}
 					}
 
-					var SpeciesServ = Game.Services.Species,
-						data = {
+					var data = {
 							empire_id:this.empireId,
 							params: {
 								name: this.elName.value,

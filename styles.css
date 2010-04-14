@@ -173,7 +173,7 @@ menu
 	width:315px;
 }
 #users, #planets {
-	font-size:25px;
+	font-size:16pt;
 	text-decoration:none;
 }
 #users {
@@ -643,6 +643,7 @@ planet details
 .smallImg {
 	display:inline-block;
 	width:30px;
+	vertical-align:middle;
 }
 .buildQueue li {
 	float:left;
@@ -708,6 +709,77 @@ planet details
 	width:15px;
 }
 
+.spiesHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
+}
+.spyInfo li {
+	float:left;
+}
+.spyInfo .spyAssignedTo {
+	width:200px;
+}
+.spyInfo .spyAvailableWhen {
+	width:170px;
+}
+.spyInfo .spyAssignment {
+	width:200px;
+}
+.spyInfo .spyBurn {
+	width:60px;
+}
+
+.newsFeedContainer {
+	height:200px;
+	overflow-y:auto;
+	font-size:90%;
+	margin:5px 0;
+	padding:1px;
+	border: 1px solid #52acff;
+}
+.newsRssLinksContainer {
+}
+.newsRssLinks li {
+	float:left;
+}
+.newsRssLink a {
+	vertical-align:middle;
+}
+
+.probeHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
+}
+.probeInfo li {
+	float:left;
+}
+.probeInfo .probePlanet {
+	width:200px;
+}
+.probeInfo .probeCoords {
+	width:100px;
+}
+
+.shipHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
+}
+.shipInfo li {
+	float:left;
+}
+.shipInfo .shipType {
+	width:180px;
+}
+.shipInfo .shipCost {
+	width:310px;
+}
+.shipInfo .shipAttributes {
+	width:100px;
+}
+.shipInfo .shipBuild {
+	width:60px;
+}
+
 body.yui-skin-sam .yui-tt .bd {
 	background-color:#52acff;
 	border-color:#429cef #328cdf #328cdf;
@@ -740,6 +812,38 @@ PROFILE
 .medal .medalImg {
 	float:left;
 	margin-right:10px;
+}
+
+/*
+Essentia Dialog
+*/
+.essentiaBoosts li {
+	float:left;
+}
+.essentiaBoosts img {
+	vertical-align:middle;
+}
+.essentiaBoosts .essentiaDetailsImg {
+	width:30px;
+}
+.essentiaBoosts .essentiaDetailsTime {
+	width:200px;
+	text-align:right;
+}
+.essentiaBoosts .essentiaDetailsCost  {
+	width:100px;
+	text-align:right;
+}
+.essentiaBoosts .essentiaDetailsBoost  {
+	width:100px;
+	text-align:right;
+}
+.essentiaHeader .essentiaDetailsTime, .essentiaHeader .essentiaDetailsCost, .essentiaHeader .essentiaDetailsBoost {
+	text-align:center;
+}
+.essentiaHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
 }
 
 /*

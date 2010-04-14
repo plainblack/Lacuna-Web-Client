@@ -43,7 +43,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		</div>',
 				'	</div>',
 				'	<div id="messagingReader" class="panelTabContainer yui-gd">',
-				'		<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;" >',
+				'		<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'			<div id="messagingArchiver">',
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
@@ -141,7 +141,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 							Game.GetSession(""),
 							sQuery
 						]
-					})
+					});
 			};
 			
 			this.createTo = oTextboxList;
@@ -289,23 +289,23 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list,
 				messages = results.messages,
 				li = document.createElement("li"),
-				is = is || {};
+				isTab = is || {};
 			
 			for(var i=0; i<messages.length; i++) {
 				var msg = messages[i],
 					nLi = li.cloneNode(false);
-				msg.is = is;
+				msg.is = isTab;
 				nLi.Message = msg;
 				Dom.addClass(nLi, "message");
 				if(msg.has_read == "") {
 					Dom.addClass(nLi, "unread");
 				}
 				nLi.innerHTML = [
-					is.inbox ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
+					isTab.inbox ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
 					'	<div class="messageContainer">',
 					'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
 					'		<div class="messageFrom">',
-					is.sent ? msg.to : msg.from,
+					isTab.sent ? msg.to : msg.from,
 					'		</div>',
 					'		<div class="messageSubject">',msg.subject,'</div>',
 					'		<div class="messageExcerpt">',msg.body_preview,'</div>',
@@ -396,7 +396,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.from.innerHTML = msg.from;
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
-				this.body.innerHTML = msg.body.replace(/\n/gi,'<br>')
+				this.body.innerHTML = msg.body.replace(/\n/gi,'<br>');
 			}
 		},
 		sendMessage : function() {
@@ -470,7 +470,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					data = {
 						session_id: Game.GetSession(""),
 						message_ids: mIds
-					}
+					};
 				InboxServ.archive_messages(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.archiveMessages.success");

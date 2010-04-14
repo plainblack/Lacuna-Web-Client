@@ -73,15 +73,23 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			SYSTEM : "3"
 		},
 		
-
+		formatMillisecondTime : function(totalMs) {
+			return Library.formatTime(totalMs / 1000);
+		},
 		formatTime : function(totalSeconds) {
-			var secondsInHour = 60 * 60,
-				hour = Math.floor(totalSeconds / secondsInHour),
-				sleft = totalSeconds % secondsInHour,
+			var secondsInDay = 60 * 60 * 24,
+				secondsInHour = 60 * 60,
+				day = Math.floor(totalSeconds / secondsInDay),
+				hleft = totalSeconds % secondsInDay,
+				hour = Math.floor(hleft / secondsInHour),
+				sleft = hleft % secondsInHour,
 				min = Math.floor(sleft / 60),
-				seconds = sleft % 60;
+				seconds = Math.floor(sleft % 60);
 			
-			if(hour > 0) {
+			if(day > 0) {
+				return [day,xPad(hour,'0'),xPad(min,'0'),xPad(seconds,'0')].join(':');
+			}
+			else if(hour > 0) {
 				return [hour,xPad(min,'0'),xPad(seconds,'0')].join(':');
 			}
 			else if(min > 0) {
@@ -95,12 +103,21 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var pieces = strDate.split(' '), //[day, month, year, hr:min:sec, timez]
 				time = pieces[3].split(':');
 			//year, month, day, hours, minutes, seconds
-			var dt = new Date(pieces[2]*1,(pieces[1]*1)-1,pieces[0]*1,time[0]*1,time[1]*1,time[2]*1,0);
-			return dt;
+			var dt = new Date(pieces[2]*1,(pieces[1]*1)-1,pieces[0]*1,time[0]*1,time[1]*1,time[2]*1,0), //construct date
+				time = dt.getTime(), //get dt in milliseconds
+				offset = dt.getTimezoneOffset() * 60000, //get locale offset in milliseconds
+				correctTime = time - offset, //subtract from UTC server time
+				cd = new Date(correctTime);
+			return cd;
 			//"23 03 2010 01:20:11 +0000"
 		},
-		formatServerDate : function(strDate) {
-			return Util.Date.format(Library.parseServerDate(strDate), {format:"%m/%d/%Y %r"}, "en");
+		formatServerDate : function(oDate) {
+			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
+			return Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en");
+		},
+		formatServerDateShort : function(oDate) {
+			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
+			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		}
 	};
 	

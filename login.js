@@ -100,7 +100,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				scope:this
 			});
 		},
-		show : function() {
+		show : function(sessionExpired) {
 			Game.OverlayManager.hideAll();
 			this.elForm.reset();
 			this.Dialog.show();
@@ -108,6 +108,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			if(str) {
 				this.elName.value = str;
 				this.elRemember.checked = true;
+			}
+			if(sessionExpired) {
+				this.setMessage("Your session has expired. Please login again.");
 			}
 		},
 		hide : function() {
