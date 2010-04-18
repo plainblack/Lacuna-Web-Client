@@ -74,8 +74,15 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
 				success : function(o){
 					YAHOO.log(o, "info", "Login.handleLogin.success");
+					//clear the session just in case
+					Game.RemoveCookie("session");
+					
 					if(this.elRemember.checked) {
-						Cookie.set("lacunaEmpireName", this.elName.value);
+						var now = new Date();
+						Cookie.set("lacunaEmpireName", this.elName.value, {
+							domain: "lacunaexpanse.com",
+							expires: new Date(now.setFullYear(now.getFullYear() + 1))
+						});
 					}
 					this.elForm.reset();
 					this.fireEvent("onLoginSuccessful",o);

@@ -675,6 +675,27 @@ planet details
 	text-align:right;
 	width:80px;
 }
+#buildingDetailsName, .buildingName {
+	font-weight:bold;
+}
+.buildingName {
+	cursor:pointer;
+	text-decoration:underline;
+}
+#buildingDetailsDesc{
+	border-top:1px solid #52acff;
+	font-size:85%;
+}
+.buildingDesc  {
+	border-bottom:1px solid #52acff;
+	font-size:85%;
+}
+.buildingReason  {
+	font-size:85%;
+}
+#buildingBuilderUnavailable .buildingDesc  {
+	border-top:1px solid #52acff;
+}
 /*#buildingDetailsExtra {
 	padding: 5px 0;
 }
@@ -779,6 +800,24 @@ planet details
 .shipInfo .shipBuild {
 	width:60px;
 }
+
+.shipQueueHeader {
+	font-weight:bold;
+	border-bottom:1px solid #52acff;
+}
+.shipQueue li {
+	float:left;
+}
+.shipQueue .shipQueueType {
+	width:180px;
+}
+.shipQueue .shipQueueEach {
+	width:100px;
+}
+.shipQueue .shipQueueQuantity {
+	width:100px;
+}
+
 
 body.yui-skin-sam .yui-tt .bd {
 	background-color:#52acff;

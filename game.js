@@ -64,16 +64,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
-					var now = new Date(),
-						result = oArgs.result;
+					var result = oArgs.result;
 					//remember session
-					Cookie.setSub("lacuna", "session", result.session_id, {
-						domain: "lacunaexpanse.com",
-						expires: now.setHours(now.getHours() + 1)
-					});
+					Game.SetCookie("session", result.session_id);
 
-					Cookie.removeSub("lacuna","locationId");
-					Cookie.removeSub("lacuna","locationView");
+					Game.RemoveCookie("locationId");
+					Game.RemoveCookie("locationView");
 					//store empire data
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
@@ -402,7 +398,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				success : function(o){
 					YAHOO.log(o);
 			
-					Cookie.remove("lacuna");
+					Cookie.remove("lacuna",{
+						domain: "lacunaexpanse.com"
+					});
 					
 					Lacuna.MapStar.Reset();
 					Lacuna.MapSystem.Reset();
@@ -420,13 +418,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		
 		//Cookie helpers functions
+		SetCookie : function(key, value, expiresDate) {
+			var opts = { domain: "lacunaexpanse.com" }
+			if(expiresDate) {
+				opts.expires = expiresDate;
+			}
+			Cookie.setSub("lacuna", key, value, opts);
+		},
+		RemoveCookie : function(key) {
+			Cookie.removeSub("lacuna", key, { domain: "lacunaexpanse.com" });
+		},
+		RemoveAllCookies : function() {
+			Cookie.remove("lacuna", { domain: "lacunaexpanse.com" });
+		},
 		SetLocation : function(id, view) {
-			Cookie.setSub("lacuna","locationId", id,{
-				domain: "lacunaexpanse.com"
-			});
-			Cookie.setSub("lacuna","locationView", view,{
-				domain: "lacunaexpanse.com"
-			});
+			Game.SetCookie("locationId", id);
+			Game.SetCookie("locationView", view);
 		},
 		
 		//Tick related

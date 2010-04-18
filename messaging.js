@@ -5,7 +5,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 (function(){
 	var Lang = YAHOO.lang,
 		Util = YAHOO.util,
-		Cookie = Util.Cookie,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
@@ -308,7 +307,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					isTab.sent ? msg.to : msg.from,
 					'		</div>',
 					'		<div class="messageSubject">',msg.subject,'</div>',
-					'		<div class="messageExcerpt">',msg.body_preview,'</div>',
+					//'		<div class="messageExcerpt">',msg.body_preview,'</div>',
 					'	</div>'
 					].join('');
 				list.appendChild(nLi);

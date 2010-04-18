@@ -5,7 +5,6 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 (function(){
 	var Lang = YAHOO.lang,
 		Util = YAHOO.util,
-		Cookie = Util.Cookie,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
