@@ -75,12 +75,15 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			return this._isVisible;
 		},
 		MapVisible : function(visible) {
-			if(this._elGrid) {
-				this._isVisible = visible;
-				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
-			}
-			if(visible) {
-				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+			if(this._isVisible != visible) {
+				if(this._elGrid) {
+					this._isVisible = visible;
+					YAHOO.log(visible, "info", "MapStar.MapVisible");
+					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+				}
+				if(visible) {
+					Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+				}
 			}
 		},
 
@@ -127,6 +130,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							var tile = this._map.tileLayer.findTileById(matchedEl.id);
 							if(tile && tile.data.alignments.indexOf("self") >= 0) {
 								YAHOO.log([tile.id, tile.data]);
+								Game.OverlayManager.hideAll();
 								this.fireEvent("onChangeToSystemView", tile.data);
 							}
 						}, "div.tile", this, true);
@@ -177,6 +181,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					YAHOO.log(o, "error", "MapStar.SendProbe.failure");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpcFailed", o);
+					var send = Dom.get("sendProbe"),
+						par = send.parentNode;
+					par.appendChild(document.createTextNode(o.error.message));
+					par.removeChild(send);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -194,11 +202,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li><label>Z: </label>',data.z,'</li>'
 			];
 			
-			if(data.alignments == "self" || data.alignments == "probed") {
-				output.push('<button id="viewSystem" type="button">View</button>');
-			}
-			else if(data.alignments == "unprobed") {
+			if(data.alignments == "unprobed") {
 				output.push('<button id="sendProbe" type="button">Send Probe</button>');
+			} 
+			else {
+				output.push('<button id="viewSystem" type="button">View</button>');
 			}
 			
 			output.push('</ul>');

@@ -114,15 +114,18 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			return this._isVisible;
 		},
 		MapVisible : function(visible) {
-			if(this._el) {
-				this._isVisible = visible; 
-				Dom.setStyle(this._el, "display", visible ? "" : "none");
-			}
-			if(visible) {
-				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
-			}
-			else {
-				this.planetDetails.hide();
+			if(this._isVisible != visible) {
+				if(this._el) {
+					this._isVisible = visible; 
+					YAHOO.log(visible, "info", "MapSystem.MapVisible");
+					Dom.setStyle(this._el, "display", visible ? "" : "none");
+				}
+				if(visible) {
+					Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+				}
+				else {
+					this.planetDetails.hide();
+				}
 			}
 		},
 		Display : function(oResult) {

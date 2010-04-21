@@ -884,7 +884,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			this.underLayer = new Mapper.UnderLayer(this);
 			
-			this.setTileSizeInPx(200);
+			this.setTileSizeInPx(250);
 		},
 		redraw : function() {
 			Mapper.PlanetMap.superclass.redraw.call(this);

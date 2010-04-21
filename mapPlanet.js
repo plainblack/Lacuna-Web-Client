@@ -200,22 +200,25 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			return this._isVisible;
 		},
 		MapVisible : function(visible) {
-			if(this._elGrid) {
-				this._isVisible = visible;
-				Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
-			}
-			if(visible) {
-				Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'planet_side/surface-a.jpg") repeat scroll 0 0 black');
-			}
-			else {
-				this.buildingDetails.hide();
-				this.buildingBuilder.hide();
+			if(this._isVisible != visible) {
+				if(this._elGrid) {
+					this._isVisible = visible;
+					YAHOO.log(visible, "info", "MapPlanet.MapVisible");
+					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+				}
+				if(visible) {
+					Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'planet_side/surface-a.jpg") repeat scroll 0 0 black');
+				}
+				else {
+					this.buildingDetails.hide();
+					this.buildingBuilder.hide();
+				}
 			}
 		},
 		Mapper : function(oArgs) {
 			YAHOO.log(oArgs.buildings, "debug", "Mapper");
 			this.buildings = oArgs.buildings;
-			var surfaceUrl = Lib.AssetUrl + 'planet_side/surface-b.jpg';
+			var surfaceUrl = [Lib.AssetUrl,'planet_side/',oArgs.body.surface_image,'.jpg'].join('');
 			if(!this._gridCreated) {
 				var planetMap = document.createElement("div");
 				planetMap.id = "planetMap";
@@ -549,12 +552,23 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						ul = document.createElement("ul"),
 						li = document.createElement("li"),
 						div = document.createElement("div"),
+						subDiv = div.cloneNode(false),
 						hUl = ul.cloneNode(false);
 						
 					Dom.addClass(div, "buildingDetailsExtra");
-					hUl.innerHTML = '<ul class="buildQueue buildQueueHeader clearafter"><li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li></ul>';
+					
+					subDiv.appendChild(document.createTextNode('You can subsidize the build queue for '+oResults.subsidy_cost+' Essentia to finish immediately.'));
+					var btn = document.createElement("button");
+					btn.type = "button";
+					btn.innerHTML = "Subsidize";
+					btn = subDiv.appendChild(btn);
+					Event.on(btn, "click", this.DevSubsidize, this, true);
+					div.appendChild(subDiv);
+
+					Dom.addClass(hUl, "buildQueue buildQueueHeader clearafter");
+					hUl.innerHTML = '<li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li>';
 					div.appendChild(hUl);
-						
+					
 					for(var i=0; i<bq.length; i++) {
 						var bqo = bq[i],
 							nUl = ul.cloneNode(false),
@@ -595,11 +609,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					if(bq.queue && bq.queue.length > 0) {
 						var ul = document.createElement("ul"),
 							li = document.createElement("li"),
-							div = document.createElement("div"),
-							hUl = ul.cloneNode(false);
+							div = document.createElement("div");
 							
-						hUl.innerHTML = '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time For Next</li><li class="shipQueueQuantity">Quantity</li></ul>';
-						div.appendChild(hUl);
+						div.innerHTML = '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time For Next</li><li class="shipQueueQuantity">Quantity</li></ul>';
 							
 						for(var i=0; i<bq.queue.length; i++) {
 							var bqo = bq.queue[i],
@@ -658,7 +670,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 										YAHOO.log(o, "info", "MapPlanet.Shipyard.get_buildable.success");
 										Lacuna.Pulser.Hide();
 										this.fireEvent("onMapRpc", o.result);
-										Dom.get("shipDocksAvailable").innerHTML = o.result.docks_available;
+										var sda = Dom.get("shipDocksAvailable");
+										if(sda) {
+											sda.innerHTML = o.result.docks_available;
+										}
 										panel.dataStore.ships = {
 											buildable: o.result.buildable,
 											docks_available: o.result.docks_available
@@ -709,7 +724,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						output = '<p>Throw a party!  Get John to put this in.</p>';
 					}
 					else {
-						output = '<p>Not enough resources to throw a party right now.</p>';
+						output = '<p>You need at least 10,000 food to throw a party.</p>';
 					}
 					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", content: output}), 0);
 				}
@@ -922,6 +937,96 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Probes", content: output.join('')}), 0);
 					
 					this.GetProbes(oResults.building.id);
+				}
+				else if(oResults.recycle) { //waste recycling center
+					if(oResults.recycle.can) {
+						var planet = Game.GetCurrentPlanet(),
+							ul = document.createElement("ul"),
+							li = document.createElement("li"),
+							nLi = li.cloneNode(false),
+							input;
+						
+						nLi.innerHTML = '<label>Recycle into:</label>';
+						ul.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/ore.png" /></span>';
+						input = document.createElement("input");
+						input.type = "text";
+						input.originalValue = 0;
+						input.value = 0;
+						input = nLi.appendChild(input);
+						Event.on(input, "change", this.RecycleValueChange, panel, true);
+						panel.dataStore.recycleOreEl = input;
+						ul.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/water.png" /></span>';
+						input = document.createElement("input");
+						input.type = "text";
+						input.originalValue = 0;
+						input.value = 0;
+						input = nLi.appendChild(input);
+						Event.on(input, "change", this.RecycleValueChange, panel, true);
+						panel.dataStore.recycleWaterEl = input;
+						ul.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/energy.png" /></span>';
+						input = document.createElement("input");
+						input.type = "text";
+						input.originalValue = 0;
+						input.value = 0;
+						input = nLi.appendChild(input);
+						Event.on(input, "change", this.RecycleValueChange, panel, true);
+						panel.dataStore.recycleEnergyEl = input;
+						ul.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						nLi.innerHTML = '<label>Total:</label>';
+						var span = nLi.appendChild(document.createElement("span"));
+						span.innerHTML = 0;
+						ul.appendChild(nLi);
+						
+						panel.dataStore.totalWasteToRecycle = 0;
+						panel.dataStore.totalWasteToRecycleEl = span;
+						
+						if(Game.EmpireData.essentia != "") {
+							nLi = li.cloneNode(false);
+							nLi.innerHTML = '<label>Spend 2 Essentia to recycle immediately?</label>';
+							var select = document.createElement("select"),
+								optA = select.appendChild(document.createElement("option")),
+								optB = select.appendChild(document.createElement("option"));
+							optA.value = "0";
+							optA.innerHTML = "No";
+							optB.value = "1";
+							optB.innerHTML = "Yes";
+							select = nLi.appendChild(select);
+							panel.dataStore.recycleUseEssentiaEl = select;
+							ul.appendChild(nLi);
+						}
+						
+						nLi = li.cloneNode(false);
+						panel.dataStore.recycleMessageEl = nLi;
+						ul.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						var btn = document.createElement("button");
+						btn.type = "button";
+						btn.innerHTML = "Recycle";
+						btn = nLi.appendChild(btn);
+						Event.on(btn, "click", this.Recycle, this, true);
+						ul.appendChild(nLi);
+						
+						var div = document.createElement("div");
+						div.appendChild(ul);
+						panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Recycle", contentEl: div}), 0);
+					}
+					else if(oResults.recycle.seconds_remaining) {
+						output = ['<p>Time remaining on current recycling job:<span id="recycleTime">',Lib.formatTime(oResults.recycle.seconds_remaining),'</span></p>'].join('');
+						panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Recycle", content: output}), 0);
+						panel.addQueue(oResults.recycle.seconds_remaining, this.RecycleQueue, "recycleTime");
+					}
 				}
 
 				Dom.setStyle("buildingDetailTabs", "display", "");
@@ -1153,6 +1258,107 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 			else {
 				el.innerHTML = Lib.formatTime(Math.round(remaining));
+			}
+		},
+		DevSubsidize : function(e) {
+			Lacuna.Pulser.Show();
+			
+			Game.Services.Buildings.Development.subsidize_build_queue({
+				session_id:Game.GetSession(),
+				building_id:this.currentBuilding.building.id
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.DevSubsidize.success");
+					Lacuna.Pulser.Hide();
+					var e = Game.EmpireData.essentia*1;
+					Game.EmpireData.essentia = e - o.result.essentia_spent*1;
+					this.fireEvent("onMapRpc", o.result);
+					
+					var tab = this.buildingDetails.tabView.getTab(0);
+					Event.purgeElement(tab.get("contentEl"));
+					this.buildingDetails.tabView.removeTab(tab);
+					
+					//remove all tile timers
+					Game.QueueResetPlanet();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.DevSubsidize.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});		
+		},
+		Recycle : function(e) {
+			var panel = this.buildingDetails,
+				dataStore = panel.dataStore,
+				planet = Game.GetCurrentPlanet();
+			if(planet) {
+				var ore = dataStore.recycleOreEl.value*1,
+					water = dataStore.recycleWaterEl.value*1,
+					energy = dataStore.recycleEnergyEl.value*1,
+					total = ore + water + energy;
+				if(total > planet.waste_stored) {
+					dataStore.recycleMessageEl.innerHTML = "Can only recycle waste you have stored.";
+				}
+				else {
+					Lacuna.Pulser.Show();
+					
+					Game.Services.Buildings.Recycler.recycle({
+						session_id:Game.GetSession(),
+						building_id:this.currentBuilding.building.id,
+						water:water,
+						ore:ore,
+						energy:energy,
+						use_essentia:0
+					}, {
+						success : function(o){
+							YAHOO.log(o, "info", "MapPlanet.Recycle.success");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpc", o.result);
+							
+							var output = ['<p>Time remaining on current recycling job:<span id="recycleTime">',Lib.formatTime(o.result.seconds_remaining),'</span></p>'].join('');
+							var tab = panel.tabView.getTab(0),
+								ce = tab.get("contentEl");
+							Event.purgeElement(ce);
+							ce.removeChild(ce.firstChild);
+							ce.innerHTML = output;
+							panel.addQueue(o.result.seconds_remaining, this.RecycleQueue, "recycleTime");
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "MapPlanet.Recycle.failure");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpcFailed", o);
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
+				}
+			}
+		},
+		RecycleQueue : function(remaining, el){
+			if(remaining <= 0) {
+				var span = Dom.get(el),
+					p = span.parentNode;
+				p.removeChild(span);
+				p.innerHTML = "No recycling jobs running.";
+			}
+			else {
+				Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
+			}
+		},
+		RecycleValueChange : function(e){
+			var input = Event.getTarget(e),
+				val = input.value*1,
+				ds = this.dataStore;
+			if(Lang.isNumber(val)){
+				ds.totalWasteToRecycle = ds.totalWasteToRecycle - input.originalValue + val;
+				ds.totalWasteToRecycleEl.innerHTML = ds.totalWasteToRecycle;
+				input.originalValue = val;
+			}
+			else {
+				input.value = input.originalValue;
 			}
 		},
 		ShipyardQueue : function(remaining, elLine){

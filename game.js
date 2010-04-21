@@ -22,9 +22,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Stats : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Stats),
 			Buildings : {
 				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic),
+				Development : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Development),
 				Intelligence : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Intelligence),
 				Network19 : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Network19),
 				Observatory : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Observatory),
+				Recycler : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Recycler),
 				Shipyard : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Shipyard),
 				SpacePort : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.SpacePort)
 			}
@@ -52,7 +54,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		Failure : function(o){
 			if(o.error.code == 1006) {
-				Lacuna.Game.DoLogin(true);
+				Game.Reset();
+				Game.DoLogin(true);
 			}
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
@@ -96,7 +99,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				locationView = Cookie.getSub("lacuna","locationView");
 			if(!locationId) {
 				Lacuna.Menu.PlanetVisible();
-				Lacuna.MapPlanet.Load(Game.EmpireData.home_planet_id);
+				Lacuna.MapPlanet.Load(Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id);
 			}
 			else {
 				switch(locationView) {
@@ -137,10 +140,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapStar.subscribe("onMapLoadFailed", Lacuna.Game.Failure);
 				Lacuna.MapStar.subscribe("onChangeToSystemView", function(starData) {
 					YAHOO.log(starData, "info", "onChangeToSystemView");
+					Game.SetLocation(starData.id, Lib.View.SYSTEM);
 					Lacuna.MapStar.MapVisible(false);
 					Lacuna.Menu.SystemVisible();
 					Lacuna.MapSystem.Load(starData.id);
-					Game.SetLocation(starData.id, Lib.View.SYSTEM);
 				});
 				
 				Lacuna.MapSystem.subscribe("onStatusUpdate", function(oStatus){
@@ -148,11 +151,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Menu.updateTick();
 				});
 				Lacuna.MapSystem.subscribe("onChangeToPlanetView", function(planetId) {
+					Game.SetLocation(planetId, Lib.View.PLANET);
 					Lacuna.MapSystem.MapVisible(false);
 					Lacuna.Menu.PlanetVisible();
 					Lacuna.MapPlanet.Load(planetId);
 					YAHOO.log(planetId, "info", "onChangeToPlanetView");
-					Game.SetLocation(planetId, Lib.View.PLANET);
 				});
 								
 				Lacuna.MapPlanet.subscribe("onMapRpc", function(oResult){
@@ -161,8 +164,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Menu.subscribe("onBackClick", function() {
+					YAHOO.log("onBackClick", "debug", "Game");
 					Game.OverlayManager.hideAll();
-					if(Lacuna.MapStar.IsVisible()) {
+					if(Lacuna.MapStar.IsVisible() || Lacuna.Menu.IsStarVisible()) {
 						Lacuna.MapStar.MapVisible(false);
 						Lacuna.MapPlanet.MapVisible(true);
 						Lacuna.Menu.PlanetVisible(true);
@@ -172,7 +176,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Game.SetLocation(planetId, Lib.View.PLANET);
 						Lacuna.MapPlanet.Load(planetId);
 					}
-					else if(Lacuna.MapSystem.IsVisible()) {
+					else if(Lacuna.MapSystem.IsVisible() || Lacuna.Menu.IsSystemVisible()) {
 						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
 						Lacuna.Menu.StarVisible(true);
@@ -182,7 +186,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							Lacuna.MapStar.Load();
 						}
 					}
-					else if(Lacuna.MapPlanet.IsVisible()) {
+					else if(Lacuna.MapPlanet.IsVisible() || Lacuna.Menu.IsPlanetVisible()) {
 						Lacuna.MapPlanet.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(true);
 						Lacuna.Menu.SystemVisible(true);
@@ -197,8 +201,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				});
 				Lacuna.Menu.subscribe("onForwardClick", function() {
+					YAHOO.log("onForwardClick", "debug", "Game");
 					Game.OverlayManager.hideAll();
-					if(Lacuna.MapStar.IsVisible()) {
+					if(Lacuna.MapStar.IsVisible() || Lacuna.Menu.IsStarVisible()) {
 						Lacuna.MapStar.MapVisible(false);
 						Lacuna.MapSystem.MapVisible(true);
 						Lacuna.Menu.SystemVisible(true);
@@ -211,7 +216,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							Lacuna.MapSystem.Load(Lacuna.MapStar.locationId, true);
 						}
 					}
-					else if(Lacuna.MapSystem.IsVisible()) {
+					else if(Lacuna.MapSystem.IsVisible() || Lacuna.Menu.IsSystemVisible()) {
 						Lacuna.MapSystem.MapVisible(false);
 						Lacuna.MapPlanet.MapVisible(true);
 						Lacuna.Menu.PlanetVisible(true);
@@ -221,7 +226,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Game.SetLocation(planetId, Lib.View.PLANET);
 						Lacuna.MapPlanet.Load(planetId);
 					}
-					else if(Lacuna.MapPlanet.IsVisible()) {
+					else if(Lacuna.MapPlanet.IsVisible() || Lacuna.Menu.IsPlanetVisible()) {
 						Lacuna.MapPlanet.MapVisible(false);
 						Lacuna.MapStar.MapVisible(true);
 						Lacuna.Menu.StarVisible(true);
@@ -371,6 +376,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		GetSession : function(replace) {
 			return Cookie.getSub("lacuna","session") || replace;
 		},
+		GetCurrentPlanet : function() {
+			var ED = Game.EmpireData,
+				id = ED.current_planet_id || ED.home_planet_id;
+			return ED.planets[id];
+		},
 		GetSize : function() {
 			var content = document.getElementById("content"),
 				width = content.offsetWidth,
@@ -391,22 +401,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			var EmpireServ = Game.Services.Empire,
 				session = Game.GetSession();
-				
-			clearInterval(Game.recInt);
 			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
 					YAHOO.log(o);
-			
-					Cookie.remove("lacuna",{
-						domain: "lacunaexpanse.com"
-					});
-					
-					Lacuna.MapStar.Reset();
-					Lacuna.MapSystem.Reset();
-					Lacuna.MapPlanet.Reset();
-					//document.getElementById("content").innerHTML = "";
-					Lacuna.Game.DoLogin();
+					Game.Reset();
+					Game.DoLogin();
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
@@ -415,6 +415,18 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				},
 				timeout:Game.Timeout
 			});
+		},
+		Reset : function() {
+			clearInterval(Game.recInt);
+	
+			Cookie.remove("lacuna",{
+				domain: "lacunaexpanse.com"
+			});
+			
+			Lacuna.MapStar.Reset();
+			Lacuna.MapSystem.Reset();
+			Lacuna.MapPlanet.Reset();
+			//document.getElementById("content").innerHTML = "";
 		},
 		
 		//Cookie helpers functions
@@ -577,6 +589,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					break;
 				default:
 					break;
+			}
+		},
+		QueueResetPlanet : function() {
+			if(Game.queue && Game.queue[Lib.QueueTypes.PLANET]) {
+				var queue = Game.queue[Lib.QueueTypes.PLANET];
+				for(var id in queue) {
+					if(queue.hasOwnProperty(id)) {
+						queue[id] = 0;
+					}
+				}
 			}
 		}
 	};

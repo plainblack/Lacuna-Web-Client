@@ -507,8 +507,11 @@ about
 	height:45px; /*22px;*/
 	border:0;
 	cursor:pointer;
+	margin:97px 91px;
+	/*
 	margin:77px 71px;
-	/*margin:89px 90px;*/
+	margin:89px 90px;
+	*/
 }
 #mapiator_zoom_in, #mapiator_zoom_out {
 	position:absolute; 

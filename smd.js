@@ -101,6 +101,30 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			Development : {
+				"SMDVersion":"2.0",
+				"description": "Development Ministry",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/development",
+				
+				"services": {
+					"subsidize_build_queue" : {
+						"description": "Allows a player to instantly finish any buildings in their build queue. The cost is returned by the view method.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+					/*
+					{
+						"status" : { get_status() },
+						"essentia_spent" : 8
+					 }
+					*/
+				}
+			},
 			Intelligence : {
 				"SMDVersion":"2.0",
 				"description": "Intelligence",
@@ -348,6 +372,28 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 								or
 								 { "x" : 4, "y" : -3, "z" : 5 }
 							*/
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
+			Recycler : {
+				"SMDVersion":"2.0",
+				"description": "Waste Recycler",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/wasterecycling",
+				
+				"services": {
+					"recycle" : {
+						"description": "Converts waste into water, ore, and energy. You can choose which amounts of each you want, so long as their total does not go over the amount of waste you have on hand. For each unit of waste converted, the recycling center will take 1 second to complete the recycling process. However, the amount of time is reduced a bit by the level of the Recycling Center.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"water", "type":"number", "optional":false},
+							{"name":"ore", "type":"number", "optional":false},
+							{"name":"energy", "type":"number", "optional":false},
+							{"name":"use_essentia", "type":"number", "optional":false}
 						],
 						"returns":{"type":"object"}
 					}

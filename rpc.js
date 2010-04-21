@@ -308,6 +308,9 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 	   
 	};
 
+	//set connects post header to json
+	Util.Connect.setDefaultPostHeader("application/json");
+	Util.Connect.setDefaultPostHeader(true);
 	//assign to global
 	YAHOO.rpc.Service = Service;
 	

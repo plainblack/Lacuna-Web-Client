@@ -552,13 +552,31 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.PlanetMenu.show();
 		},
 		StarVisible : function() {
+			this._starVisible = true;
+			this._systemVisible = false;
+			this._planetVisible = false;
 			this.UserMenu.starVisible();
 		},
 		SystemVisible : function() {
+			this._starVisible = false;
+			this._systemVisible = true;
+			this._planetVisible = false;
 			this.UserMenu.systemVisible();
 		},
 		PlanetVisible : function() {
+			this._starVisible = false;
+			this._systemVisible = false;
+			this._planetVisible = true;
 			this.UserMenu.planetVisible();
+		},
+		IsStarVisible : function() {
+			return this._starVisible;
+		},
+		IsSystemVisible : function() {
+			return this._systemVisible;
+		},
+		IsPlanetVisible : function() {
+			return this._planetVisible;
 		}
 	};
 	Lang.augmentProto(Menu, Util.EventProvider);
