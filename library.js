@@ -173,7 +173,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			"/transporter" : "Through the use of Essentia, the Subspace Transporter allows the instant transport of resources to a destination.  The transporter also allows conversion of resources through trading with the Lacunans.  The higher the building level the more goods can be transported.",
 			"/university" : "The University is a place of higher learning and knowledge for your people and is the key to growth for your empire.  Other buildings can not be upgraded higher than the university building level plus 1.  Your university's level is empire wide where construction level of buildings on other planets is concerned.  Many of the more powerful buildings that can be constructed require a very high level University.  The University is also a source of happiness for empire. ",
 			"/wasteenergy" : "The Waste Energy Plant produces energy by burning your empire's waste.  Producing energy this way is far less efficient than other types of energy production, but the benefit is that waste is reduced.  The higher the building level the more energy is produced and waste consumed.",
-			"/wasterecycling" : "The Waste Recycling Center allows you to manually convert large batches of waste into energy and ore.  The higher the building level the larger the batch is converted. ",
+			"/wasterecycling" : "The Waste Recycling Center allows you to manually convert large batches of waste into energy, ore and water.  The more waste you convert, the longer it will take to make the resources you want.  The higher the level of the building the faster the conversion will take place.  You can also spend a small amount of Essentia to convert the waste instantly.",
 			"/wastesequestration" : "The Waste Sequestration Well is a place for your empire to store it's waste.  Waste that is not stored turns into pollution and lowers your empire's happiness.  The higher the building level the more waste can be stored.",
 			"/wastetreatment" : "The Waste Treatment Center allows you to convert batches of waste in to ore.  The higher the building level the large the batch can be converted.",
 			"/waterproduction" : "The Water Production Plant converts energy and ore into water.  This is especially useful on planets with low concentrations of water.  A higher building level means more  resources are converted.",
@@ -181,6 +181,17 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			"/waterreclamation" : "The Water Reclamation Plant converts waste into water.  A higher building level means more  resources are converted.",
 			"/waterstorage" : "The Water Storage Tank stores the water you've collected.  A higher building level allows more water to be stored.",
 			"/wheat" : "The Wheat Farm allows you to grow wheat on your planet.  You can only grow wheat on planets that are in orbits 2, 3 or 4 (the goldilox zone).  The Farm will produce more  wheat for each level it is increased."
+		},
+		Ships :  {
+			gas_giant_settlement_platform_ship:"Gas Giant Platform",
+			terraforming_platform_ship:"Terraforming Platform",
+			cargo_ship:"Cargo Ship",
+			probe:"Probe",
+			space_station:"Space Station",
+			mining_platform_ship:"Mining Platform",
+			spy_pod:"Spy Pod",
+			smuggler_ship:"Smuggler Ship",
+			colony_ship:"Colony Ship"
 		}
 	};
 	

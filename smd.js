@@ -374,6 +374,75 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							*/
 						],
 						"returns":{"type":"object"}
+						/*
+						 {
+							"probe" : {
+								"date_arrives" : "01 31 2010 13:09:05 +0600"
+							},
+							"status" : { get_status() }
+						}
+						*/
+					},
+					"send_spy_pod" : {
+						"description": "Dispatches a spy pod from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have spy pods, if any, and pick one of them to dispatch the spy pod. In order to send a spy pod you must also have an idle spy available.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"object", "optional":false}
+							/* to_body = 
+								 { "body_name" : "Earth" }
+								 or
+								 { "body_id" : "id-goes-here" }
+								 or
+								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
+							*/
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"spy_pod" : {
+								"date_arrives" : "01 31 2010 13:09:05 +0600",
+								"carrying_spy" : {
+								   "id" : "id-goes-here",
+								   "name" : "Jason Bourne",
+								}
+							},
+							"status" : { get_status() }
+						 }
+						 */
+					},
+					"view_ships_travelling" : {
+						"description": "Returns a list of the ships that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"number_of_ships_travelling" : 30,
+							"ships_travelling" : [
+							   {
+								   "id" : "id-goes-here",
+								   "ship_type" : "probe",
+								   "date_arrives" : "01 31 2010 13:09:05 +0600",
+								   "from" : {
+									   "id" : "id-goes-here",
+									   "type" : "body",
+									   "name" : "Earth",
+								   },
+								   "to" : {
+									   "id" : "id-goes-here",
+									   "type" : "star",
+									   "name" : "Sol",
+								   }
+							   },
+							   ...
+							]
+						 }
+						*/
 					}
 				}
 			},
@@ -926,6 +995,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"empire_id", "type":"string", "optional":false}
 					],
 					"returns":{"type":"string"}
+				},
+				
+				"view_stats" : {
+					"description": "Returns a list of the stats associated with an empire's species as it was originally created. An empire can only view it's own species stats throught his method.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"string"}
+					/*
+					 {
+						"name" : "Human",
+						"description" : "The descendants of Earth.",
+						"habitable_orbits" : [3],
+						"manufacturing_affinity" : 4,
+						"deception_affinity" : 4,
+						"research_affinity" : 4,
+						"management_affinity" : 4,
+						"farming_affinity" : 4,
+						"mining_affinity" : 4,
+						"science_affinity" : 4,
+						"environmental_affinity" : 4,
+						"political_affinity" : 4,
+						"trade_affinity" : 4,
+						"growth_affinity" : 4
+					 }
+					*/
 				}
 			}
 		},

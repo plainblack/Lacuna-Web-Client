@@ -37,6 +37,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.description = Dom.get("profileDescription");
 			this.status = Dom.get("profileStatus");
 			this.medals = Dom.get("profileMedalsList");
+			this.species = Dom.get("profileSpecies");
+			this.tabView = new YAHOO.widget.TabView("profileTabs");
+			this.tabView.set('activeIndex',0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
@@ -51,11 +54,23 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'			<ul id="profileDetails">',
 			'				<li><label style="vertical-align:top;">Description:</label><textarea id="profileDescription" cols="47"></textarea></li>',
 			'				<li><label>Status:</label><input id="profileStatus" maxlength="100" size="50" /></li>',
-			'				<li><label>Medals:</label>',
-			'					<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
-			'					</ul>',
-			'				</li>',
-			'			</ul>',
+			'			</ul>',				
+			'			<div id="profileTabs" class="yui-navset">',
+			'				<ul class="yui-nav">',
+			'					<li><a href="#detailsMedals"><em>Medals</em></a></li>',
+			'					<li><a href="#detailsSpecies"><em>Species</em></a></li>',
+			'				</ul>',
+			'				<div class="yui-content" style="padding:0;">',
+			'					<div id="detailsMedals">',
+			'						<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
+			'						</ul>',
+			'					</div>',
+			'					<div id="detailsSpecies">',
+			'						<ul id="profileSpecies">',
+			'						</ul>',
+			'					</div>',
+			'				</div>',
+			'			</div>',
 			'		</form>',
 			'	</div>',
 			'	<div class="ft"></div>'
@@ -94,11 +109,22 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			//this is called out of scope so make sure to pass the correct scope in
 			Game.Services.Empire.view_profile({session_id:Game.GetSession("")},{
 				success : function(o){
-					YAHOO.log(o, "info", "Profile.show.success");
-					this.populate(o.result);
+					YAHOO.log(o, "info", "Profile.show.view_profile.success");
+					this.populateProfile(o.result);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Profile.show.failure");
+					YAHOO.log(o, "error", "Profile.show.view_profile.failure");
+				},
+				timeout:Game.Timeout,
+				scope:Lacuna.Profile
+			});
+			Game.Services.Species.view_stats({session_id:Game.GetSession("")},{
+				success : function(o){
+					YAHOO.log(o, "info", "Profile.show.view_stats.success");
+					this.populateSpecies(o.result);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Profile.show.view_stats.failure");
 				},
 				timeout:Game.Timeout,
 				scope:Lacuna.Profile
@@ -111,7 +137,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.Dialog.hide();
 		},
 		
-		populate : function(results) {
+		populateProfile : function(results) {
 			var p = results.profile;
 			this.description.value = p.description;
 			this.status.value = p.status_message;
@@ -140,6 +166,113 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.medals.appendChild(frag);
 			
 			this.Dialog.center();
+		},
+		populateSpecies : function(results) {
+			var stat = results.species,
+				frag = document.createDocumentFragment(),
+				li = document.createElement('li');
+			 
+			
+			var nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Name</label>',
+				'<span>', stat["name"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Description</label>',
+				'<span>', stat["description"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Habitable Orbits</label>',
+				'<span>', stat["habitable_orbits"].join(','), '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Manufacturing</label>',
+				'<span>', stat["manufacturing_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Deception</label>',
+				'<span>', stat["deception_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Research</label>',
+				'<span>', stat["research_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Management</label>',
+				'<span>', stat["management_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Farming</label>',
+				'<span>', stat["farming_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Mining</label>',
+				'<span>', stat["mining_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Science</label>',
+				'<span>', stat["science_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Environmental</label>',
+				'<span>', stat["environmental_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Political</label>',
+				'<span>', stat["political_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Trade</label>',
+				'<span>', stat["trade_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			nLi.innerHTML = [
+				'<label>Growth</label>',
+				'<span>', stat["growth_affinity"], '</span>'
+			].join('');
+			frag.appendChild(nLi);
+			
+			this.species.innerHTML = "";
+			this.species.appendChild(frag);
 		}
 		
 	};

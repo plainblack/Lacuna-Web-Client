@@ -174,8 +174,19 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		updateTick : function() {
 			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
-			this.elEssentiaText.innerHTML = Game.EmpireData.essentia || "-";
-			this.elHappyText.innerHTML = Math.round(Game.EmpireData.happiness) || "-";
+			
+			if(Game.EmpireData.essentia > 100000) {
+				this.elEssentiaText.innerHTML = Math.floor(Game.EmpireData.essentia/1000) + 'k';
+			}
+			else {
+				this.elEssentiaText.innerHTML = Game.EmpireData.essentia || "-";
+			}
+			if(Game.EmpireData.happiness > 100000) {
+				this.elHappyText.innerHTML = Math.floor(Game.EmpireData.happiness/1000) + 'k';
+			}
+			else {
+				this.elHappyText.innerHTML = Math.round(Game.EmpireData.happiness) || "-";
+			}
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
@@ -546,6 +557,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		hide : function() {
 			this.UserMenu.hide();
 			this.PlanetMenu.hide();
+			this._starVisible = false;
+			this._systemVisible = false;
+			this._planetVisible = false;
 		},
 		show : function() {
 			this.UserMenu.show();

@@ -261,6 +261,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				if(!this._elGrid.parentNode) {
 					document.getElementById("content").appendChild(this._elGrid);
 				}
+				this._map.setSurfaceUrl(surfaceUrl);
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
@@ -320,9 +321,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this._map.resize();
 		},
 		Reset : function() {
+			delete this.locationId;
 			if(this._map) {
 				this._map.reset();
 			}
+			this.MapVisible(false);
 		},
 		
 		ViewData : function(id, url, callback, x, y) {
@@ -606,45 +609,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					var bq = oResults.ship_build_queue,
 						tabIndex = 0;
 					
-					if(bq.queue && bq.queue.length > 0) {
-						var ul = document.createElement("ul"),
-							li = document.createElement("li"),
-							div = document.createElement("div");
-							
-						div.innerHTML = '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time For Next</li><li class="shipQueueQuantity">Quantity</li></ul>';
-							
-						for(var i=0; i<bq.queue.length; i++) {
-							var bqo = bq.queue[i],
-								nUl = ul.cloneNode(false),
-								nLi = li.cloneNode(false);
-								
-							nUl.Build = bqo;
-							
-							Dom.addClass(nUl, "shipQueue");
-							Dom.addClass(nUl, "clearafter");
-
-							Dom.addClass(nLi,"shipQueueType");
-							nLi.innerHTML = bqo.type;
-							nUl.appendChild(nLi);
-							
-							nLi = li.cloneNode(false);
-							Dom.addClass(nLi,"shipQueueEach");
-							nLi.innerHTML = Lib.formatTime(bqo.seconds_each);
-							nUl.appendChild(nLi);
-
-							nLi = li.cloneNode(false);
-							Dom.addClass(nLi,"shipQueueQuantity");
-							nLi.innerHTML = bqo.quantity;
-							nUl.appendChild(nLi);
-
-							div.appendChild(nUl);
-							
-							panel.addQueue(bqo.seconds_each, this.ShipyardQueue, nUl, this);
-						}
+					var ul = document.createElement("ul"),
+						li = document.createElement("li"),
+						div = document.createElement("div");
 						
-						panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Build Queue", contentEl: div}), tabIndex);
-						tabIndex++;
-					}
+					div.innerHTML = '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul><div id="shipsBuilding"></div>';
+	
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Build Queue", contentEl: div}), 0);
+					
+					this.ShipyardDisplay(bq);
 											
 					var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
 						'<div>',
@@ -659,7 +632,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'	</div>',
 						'</div>'
 					].join('')});
-					panel.tabView.addTab(buildTab, tabIndex);
+					panel.tabView.addTab(buildTab, 1);
 					//subscribe after adding so active doesn't fire
 					buildTab.subscribe("activeChange", function(e) {
 						if(e.newValue) {
@@ -718,6 +691,50 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'</div>'
 					];
 					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Docked Ships", content: output.join('')}), 0);
+					
+					var travelTab = new YAHOO.widget.Tab({ label: "Traveling Ships", content: [
+						'<div>',
+						'	<ul class="shipHeader shipInfo clearafter">',
+						'		<li class="shipType">Type</li>',
+						'		<li class="shipArrives">Arrives</li>',
+						'		<li class="shipFrom">From</li>',
+						'		<li class="shipTo">To</li>',
+						'	</ul>',
+						'	<div id="shipDetails">',
+						'	</div>',
+						'</div>'
+					].join('')});
+					panel.tabView.addTab(travelTab, 1);
+					//subscribe after adding so active doesn't fire
+					travelTab.subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							if(!panel.dataStore.shipsTraveling) {
+								Lacuna.Pulser.Show();
+								Game.Services.Buildings.SpacePort.view_ships_travelling({session_id:Game.GetSession(),building_id:oResults.building.id,page_number:1}, {
+									success : function(o){
+										YAHOO.log(o, "info", "MapPlanet.SpacePort.view_ships_travelling.success");
+										Lacuna.Pulser.Hide();
+										this.fireEvent("onMapRpc", o.result);
+										panel.dataStore.shipsTraveling = {
+											number_of_ships_travelling: o.result.number_of_ships_travelling,
+											ships_travelling: o.result.ships_travelling
+										}
+										this.SpacePortPopulate();
+									},
+									failure : function(o){
+										YAHOO.log(o, "error", "MapPlanet.SpacePort.view_ships_travelling.failure");
+										Lacuna.Pulser.Hide();
+										this.fireEvent("onMapRpcFailed", o);
+									},
+									timeout:Game.Timeout,
+									scope:this
+								});
+							}
+							else {
+								this.SpacePortPopulate();
+							}
+						}
+					}, this, true);
 				}
 				else if(oResults.party) { //if it's a park
 					if(oResults.party.can_throw) {
@@ -847,7 +864,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						});
 					}, this, true);
 					
-					this.GetNews(oResults.building.id);
+					this.NewsGet(oResults.building.id);
 				}
 				else if(oResults.spies) {
 					var spies = oResults.spies;
@@ -904,7 +921,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 										YAHOO.log(o, "info", "MapPlanet.Intelligence.view_spies.success");
 										Lacuna.Pulser.Hide();
 										this.fireEvent("onMapRpc", o.result);
-										panel.dataStore.spies = o.result.spies;
+										panel.dataStore.spies = o.result;
 										this.SpyPopulate();
 									},
 									failure : function(o){
@@ -926,17 +943,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				else if(oResults.building.url == "/observatory") {
 					output = [
 						'<div class="probeContainer">',
-						'	<ul class="probeInfo probeHeader clearafter">',,
-						'		<li class="probePlanet">Planet</li>',
-						'		<li class="probeCoords">Coordinates</li>',
+						'	<ul id="probeDetails" class="probeInfo">',
 						'	</ul>',
-						'	<div id="probeDetails">',
-						'	</div>',
 						'</div>',
 					];
 					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Probes", content: output.join('')}), 0);
 					
-					this.GetProbes(oResults.building.id);
+					this.ProbesGet(oResults.building.id);
 				}
 				else if(oResults.recycle) { //waste recycling center
 					if(oResults.recycle.can) {
@@ -1290,6 +1303,114 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				scope:this
 			});		
 		},
+		NewsGet : function(id) {
+			Lacuna.Pulser.Show();
+			Game.Services.Buildings.Network19.view_news({session_id:Game.GetSession(),building_id:id}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.Network19.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					
+					var news = o.result.news,
+						newsFeed = Dom.get("newsFeed"),
+						feedFrag = document.createDocumentFragment(),
+						rss = o.result.feeds,
+						newsRssLinks = Dom.get("newsRssLinks"),
+						rssFrag = document.createDocumentFragment(),
+						li = document.createElement("li");
+						
+					for(var i=0; i<news.length; i++) {
+						var ni = news[i],
+							nLi = li.cloneNode(false);
+						Dom.addClass(nLi, "newsHeadline");
+						nLi.innerHTML = [Lib.formatServerDateShort(ni.date), ": ", ni.headline].join('');
+						feedFrag.appendChild(nLi);
+					}
+					newsFeed.appendChild(feedFrag);
+					
+					for(var key in rss) {
+						if(rss.hasOwnProperty(key)){
+							var link = rss[key],
+								rssLi = li.cloneNode(false);
+							Dom.addClass(rssLi, "newsRssLink");
+							rssLi.innerHTML = [key, '<a href="', link, '" target="_blank"><img src="', Lib.AssetUrl, 'ui/rss.png" alt="rss" style="margin-left:1px" /></a>'].join('');
+							rssFrag.appendChild(rssLi);
+						}
+					}
+					newsRssLinks.appendChild(rssFrag);
+							
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.Network19.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		ProbesGet : function(id) {
+			Lacuna.Pulser.Show();
+			Game.Services.Buildings.Observatory.get_probed_stars({session_id:Game.GetSession(),building_id:id,page_number:1}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.ProbesGet.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					
+					var stars = o.result.stars,
+						probeDetails = Dom.get("probeDetails");
+						
+					if(probeDetails) {
+						var li = document.createElement("li");
+						
+						for(var i=0; i<stars.length; i++) {
+							var st = stars[i],
+								nLi = li.cloneNode(false);
+								
+							nLi.Star = st;
+							Dom.addClass(nLi,"probeStar");
+							
+							nLi.innerHTML = [
+								'<div class="probeStarContainer yui-gf">',
+								'	<div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_map/',st.color,'.png',') no-repeat scroll left center;">',
+								'		<img src="',Lib.AssetUrl,'star_map/',st.alignments,'.png" alt="',st.name,'"/>',
+								'	</div>',
+								'	<div class="yui-u">',
+								'		<img class="probeDelete" />',
+								'		<ul>',
+								'			<li>',st.name,'</li>',
+								'			<li>',st.x,' : ',st.y,' : ',st.z,'</li>',
+								'		</ul>',
+								'	</div>',
+								'</div>'
+							].join('');
+							
+							nLi = probeDetails.appendChild(nLi);
+							Event.on(nLi, "click", this.ProbeAction);
+						}
+					}
+							
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.ProbesGet.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		ProbeAction : function(e) {
+			if(this.Star) {
+				var t = Event.getTarget(e);
+				if(Dom.hasClass(t, "probeDelete")) {
+					this.parentNode.removeChild(this);
+				}
+				else {
+					Game.StarJump(this.Star);
+				}
+			}
+		},
 		Recycle : function(e) {
 			var panel = this.buildingDetails,
 				dataStore = panel.dataStore,
@@ -1298,7 +1419,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var ore = dataStore.recycleOreEl.value*1,
 					water = dataStore.recycleWaterEl.value*1,
 					energy = dataStore.recycleEnergyEl.value*1,
-					total = ore + water + energy;
+					total = ore + water + energy,
+					useE = dataStore.recycleUseEssentiaEl ? dataStore.recycleUseEssentiaEl.selectedIndex || 0 : 0;
 				if(total > planet.waste_stored) {
 					dataStore.recycleMessageEl.innerHTML = "Can only recycle waste you have stored.";
 				}
@@ -1311,7 +1433,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						water:water,
 						ore:ore,
 						energy:energy,
-						use_essentia:0
+						use_essentia:useE
 					}, {
 						success : function(o){
 							YAHOO.log(o, "info", "MapPlanet.Recycle.success");
@@ -1361,110 +1483,52 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				input.value = input.originalValue;
 			}
 		},
+		ShipyardDisplay : function(bq) {
+			if(bq.queue && bq.queue.length > 0) {
+				var panel = this.buildingDetails,
+					div = Dom.get("shipsBuilding"),
+					ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					now = new Date(),
+					ncs = (Lib.parseServerDate(bq.next_completed).getTime() - now.getTime()) / 1000;
+				div.innerHTML = "";
+				for(var i=0; i<bq.queue.length; i++) {
+					var bqo = bq.queue[i];
+					
+					for(var q=0; q<bqo.quantity; q++) {
+						var nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+						
+						nUl.Build = bqo;
+						
+						Dom.addClass(nUl, "shipQueue");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"shipQueueType");
+						nLi.innerHTML = Lib.Ships[bqo.type];
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"shipQueueEach");
+						nLi.innerHTML = Lib.formatTime(ncs);
+						nUl.appendChild(nLi);
+
+						div.appendChild(nUl);
+						
+						panel.addQueue(ncs, this.ShipyardQueue, nUl, this);
+						
+						ncs += bqo.seconds_each*1;
+					}
+				}
+			}
+		},
 		ShipyardQueue : function(remaining, elLine){
 			if(remaining <= 0) {
-				elLine.Build.quantity--;
-				if(elLine.Build.quantity > 0) {
-					Sel.query("li.shipQueueQuantity",elLine,true).innerHTML = elLine.Build.quantity;
-					this.buildingDetails.addQueue(elLine.Build.seconds_each, this.ShipyardQueue, elLine, this);
-				}
-				else {
-					elLine.parentNode.removeChild(elLine);
-				}
+				elLine.parentNode.removeChild(elLine);
 			}
 			else {
 				Sel.query("li.shipQueueEach",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
 			}
-		},
-		GetNews : function(id) {
-			Lacuna.Pulser.Show();
-			Game.Services.Buildings.Network19.view_news({session_id:Game.GetSession(),building_id:id}, {
-				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.Network19.success");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
-					
-					var news = o.result.news,
-						newsFeed = Dom.get("newsFeed"),
-						feedFrag = document.createDocumentFragment(),
-						rss = o.result.feeds,
-						newsRssLinks = Dom.get("newsRssLinks"),
-						rssFrag = document.createDocumentFragment(),
-						li = document.createElement("li");
-						
-					for(var i=0; i<news.length; i++) {
-						var ni = news[i],
-							nLi = li.cloneNode(false);
-						Dom.addClass(nLi, "newsHeadline");
-						nLi.innerHTML = [Lib.formatServerDateShort(ni.date), ": ", ni.headline].join('');
-						feedFrag.appendChild(nLi);
-					}
-					newsFeed.appendChild(feedFrag);
-					
-					for(var key in rss) {
-						if(rss.hasOwnProperty(key)){
-							var link = rss[key],
-								rssLi = li.cloneNode(false);
-							Dom.addClass(rssLi, "newsRssLink");
-							rssLi.innerHTML = [key, '<a href="', link, '" target="_blank"><img src="', Lib.AssetUrl, 'ui/rss.png" alt="rss" style="margin-left:1px" /></a>'].join('');
-							rssFrag.appendChild(rssLi);
-						}
-					}
-					newsRssLinks.appendChild(rssFrag);
-							
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.Network19.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
-		},
-		GetProbes : function(id) {
-			Lacuna.Pulser.Show();
-			Game.Services.Buildings.Observatory.get_probed_stars({session_id:Game.GetSession(),building_id:id,page_number:1}, {
-				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.GetProbes.success");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
-					
-					var stars = o.result.stars,
-						probeDetails = Dom.get("probeDetails"),
-						ul = document.createElement("ul"),
-						li = document.createElement("li");
-						
-					for(var i=0; i<stars.length; i++) {
-						var st = stars[i],
-							nUl = ul.cloneNode(false),
-							nLi = li.cloneNode(false);
-							
-						nUl.Star = st;
-						Dom.addClass(nUl, "probeInfo");
-						Dom.addClass(nUl, "clearafter");
-
-						Dom.addClass(nLi,"probePlanet");
-						nLi.innerHTML = st.name;
-						nUl.appendChild(nLi);
-						
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"probeCoords");
-						nLi.innerHTML = [st.x, st.y, st.z].join(', ');
-						nUl.appendChild(nLi);
-						
-						probeDetails.appendChild(nUl);
-					}
-							
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.GetProbes.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
 		},
 		ShipPopulate : function() {
 			var details = Dom.get("shipDetails");
@@ -1473,68 +1537,63 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var panel = this.buildingDetails,
 					ships = panel.dataStore.ships.buildable,
 					ul = document.createElement("ul"),
-					li = document.createElement("li");
+					li = document.createElement("li"),
+					shipNames = [];
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
-				
-				var convert = {
-					gas_giant_settlement_platform_ship:"Gas Giant Platform",
-					terraforming_platform_ship:"Terraforming Platform",
-					cargo_ship:"Cargo Ship",
-					probe:"Probe",
-					space_station:"Space Station",
-					mining_platform_ship:"Mining Platform",
-					spy_pod:"Spy Pod",
-					smuggler_ship:"Smuggler Ship",
-					colony_ship:"Colony Ship"
-				};
 						
 				for(var shipType in ships) {
 					if(ships.hasOwnProperty(shipType)) {
-						var ship = ships[shipType],
-							nUl = ul.cloneNode(false),
-							nLi = li.cloneNode(false);
-							
-						nUl.Ship = ship;
-						Dom.addClass(nUl, "shipInfo");
-						Dom.addClass(nUl, "clearafter");
-
-						Dom.addClass(nLi,"shipType");
-						nLi.innerHTML = convert[shipType];
-						nUl.appendChild(nLi);
-
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"shipCost");
-						nLi.innerHTML = [
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',ship.cost.food,'</span></span>',
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',ship.cost.ore,'</span></span>',
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',ship.cost.water,'</span></span>',
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',ship.cost.energy,'</span></span>',
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',ship.cost.waste,'</span></span>',
-							'<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(ship.cost.seconds),'</span>'
-						].join('');
-						nUl.appendChild(nLi);
-						
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"shipAttributes");
-						nLi.innerHTML = "Speed: " + ship.attributes.speed;
-						nUl.appendChild(nLi);
-
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"shipBuild");
-						if(ship.can) {
-							var bbtn = document.createElement("button");
-							bbtn.type = "button";
-							bbtn.innerHTML = "Build";
-							bbtn = nLi.appendChild(bbtn);
-							Event.on(bbtn, "click", this.ShipBuild, {Self:this,Type:shipType,Ship:ship}, true);
-						}
-						nUl.appendChild(nLi);
-
-						details.appendChild(nUl);
-						
+						shipNames.push(shipType);
 					}
+				}
+				shipNames.sort();
+				
+				for(var i=0; i<shipNames.length; i++) {
+					var shipName = shipNames[i],
+						ship = ships[shipName],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					Dom.addClass(nLi,"shipType");
+					nLi.innerHTML = Lib.Ships[shipName];
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipCost");
+					nLi.innerHTML = [
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',ship.cost.food,'</span></span>',
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',ship.cost.ore,'</span></span>',
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',ship.cost.water,'</span></span>',
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',ship.cost.energy,'</span></span>',
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',ship.cost.waste,'</span></span>',
+						'<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(ship.cost.seconds),'</span>'
+					].join('');
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipAttributes");
+					nLi.innerHTML = "Speed: " + ship.attributes.speed;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipBuild");
+					if(ship.can) {
+						var bbtn = document.createElement("button");
+						bbtn.type = "button";
+						bbtn.innerHTML = "Build";
+						bbtn = nLi.appendChild(bbtn);
+						Event.on(bbtn, "click", this.ShipBuild, {Self:this,Type:shipName,Ship:ship}, true);
+					}
+					nUl.appendChild(nLi);
+
+					details.appendChild(nUl);
+					
 				}
 			}
 		},
@@ -1553,6 +1612,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Lacuna.Pulser.Hide();
 					this.Self.fireEvent("onMapRpc", o.result);
 					this.Self.UpdateCost(this.Ship.cost);
+					this.Self.ShipyardDisplay(o.result.ship_build_queue);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.ShipBuild.failure");
@@ -1563,89 +1623,139 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				scope:this
 			});
 		},
+		SpacePortPopulate : function() {
+			var details = Dom.get("shipDetails");
+			
+			if(details) {
+				var panel = this.buildingDetails,
+					ships = panel.dataStore.shipsTraveling.ships_travelling,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				
+				var now = new Date();
+				
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false),
+						sec = (Lib.parseServerDate(ship.date_arrives).getTime() - now.getTime()) / 1000;
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					Dom.addClass(nLi,"shipType");
+					nLi.innerHTML = Lib.Ships[ship.ship_type];
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipArrives");
+					nLi.innerHTML = Lib.formatTime(sec);
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipFrom");
+					nLi.innerHTML = ship.from.name
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipTo");
+					nLi.innerHTML = ship.to.name;
+					nUl.appendChild(nLi);
+
+					panel.addQueue(sec, this.SpacePortQueue, nUl, this);
+								
+					details.appendChild(nUl);
+					
+				}
+			}
+		},
+		SpacePortQueue : function(remaining, elLine){
+			if(remaining <= 0) {
+				elLine.parentNode.removeChild(elLine);
+			}
+			else {
+				Sel.query("li.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+			}
+		},
 		SpyPopulate : function() {
 			var details = Dom.get("spiesDetails");
 			
 			if(details) {
 				var panel = this.buildingDetails,
-					spies = panel.dataStore.spies,
+					spies = panel.dataStore.spies.spies,
+					assign = panel.dataStore.spies.possible_assignments,
 					ul = document.createElement("ul"),
 					li = document.createElement("li");
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
 						
-				for(var spyId in spies) {
-					if(spies.hasOwnProperty(spyId)) {
-						var spy = spies[spyId],
-							nUl = ul.cloneNode(false),
-							nLi = li.cloneNode(false);
-							
-						nUl.Spy = spy;
-						Dom.addClass(nUl, "spyInfo");
-						Dom.addClass(nUl, "clearafter");
+				for(var i=0; i<spies.length; i++) {
+					var spy = spies[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					nUl.Spy = spy;
+					Dom.addClass(nUl, "spyInfo");
+					Dom.addClass(nUl, "clearafter");
 
-						Dom.addClass(nLi,"spyAssignedTo");
-						nLi.innerHTML = spy.assigned_to.name;
-						nUl.appendChild(nLi);
-						
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"spyAvailableWhen");
-						nLi.innerHTML = spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on);
-						nUl.appendChild(nLi);
-						
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"spyAssignment");
-						if(spy.is_available) {
-							var sel = document.createElement("select"),
-								opt1 = document.createElement("option"),
-								opt2 = opt1.cloneNode(false),
-								opt3 = opt1.cloneNode(false),
-								btn = document.createElement("button");
-							opt1.value = opt1.innerHTML = "Idle";
-							if(spy.assignment == "Idle") { opt1.selected = true; sel.defaultIndex = 0; }
-							sel.appendChild(opt1);
-							opt2.value = "Counter Intelligence";
-							opt2.innerHTML = "Counter Intel";
-							if(spy.assignment == "Counter Intelligence") { opt2.selected = true; sel.defaultIndex = 1; }
-							sel.appendChild(opt2);
-							opt3.value = opt3.innerHTML = "Sting";
-							if(spy.assignment == "Sting") { opt3.selected = true; sel.defaultIndex = 2;}
-							sel.defaultValue = spy.assignment;
-							sel.appendChild(opt3);
-							Event.on(sel, "change", this.SpyAssignChange);
-							
-							nLi.appendChild(sel);
-							
-							btn.type = "button";
-							btn.innerHTML = "Assign";
-							Dom.setStyle(btn,"display","none");
-							Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spyId}, true);
-							sel.Button = nLi.appendChild(btn);
+					Dom.addClass(nLi,"spyAssignedTo");
+					nLi.innerHTML = spy.assigned_to.name;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyAvailableWhen");
+					nLi.innerHTML = spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on);
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyAssignment");
+					if(spy.is_available) {
+						var sel = document.createElement("select"),
+							opt = document.createElement("option"),
+							btn = document.createElement("button");
+						for(var a=0; a<assign.length; a++) {
+							nOpt = opt.cloneNode(false);
+							nOpt.value = nOpt.innerHTML = assign[a];
+							if(spy.assignment == nOpt.value) { nOpt.selected = true; sel.currentAssign = nOpt.value; }
+							sel.appendChild(nOpt);
 						}
-						else {
-							nLi.innerHTML = spy.assignment;
-						}
-						nUl.appendChild(nLi);
-
-						nLi = li.cloneNode(false);
-						Dom.addClass(nLi,"spyBurn");
-						var bbtn = document.createElement("button");
-						bbtn.type = "button";
-						bbtn.innerHTML = "Burn";
-						bbtn = nLi.appendChild(bbtn);
-						nUl.appendChild(nLi);
-
-						details.appendChild(nUl);
+						Event.on(sel, "change", this.SpyAssignChange);
 						
-						Event.on(bbtn, "click", this.SpyBurn, {Self:this,Id:spyId,Line:nUl}, true);
+						nLi.appendChild(sel);
+						
+						btn.type = "button";
+						btn.innerHTML = "Assign";
+						Dom.setStyle(btn,"display","none");
+						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id}, true);
+						sel.Button = nLi.appendChild(btn);
 					}
+					else {
+						nLi.innerHTML = spy.assignment;
+					}
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyBurn");
+					var bbtn = document.createElement("button");
+					bbtn.type = "button";
+					bbtn.innerHTML = "Burn";
+					bbtn = nLi.appendChild(bbtn);
+					nUl.appendChild(nLi);
+
+					details.appendChild(nUl);
+					
+					Event.on(bbtn, "click", this.SpyBurn, {Self:this,Id:spy.id,Line:nUl}, true);
 				}
 			}
 		},
 		SpyAssignChange : function() {
 			var btn = this.Button,
-				defVal = this.defaultValue,
+				defVal = this.currentAssign,
 				selVal = this[this.selectedIndex].value;
 			if(btn) {
 				Dom.setStyle(btn, "display", defVal != selVal ? "" : "none");
@@ -1667,6 +1777,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Lacuna.Pulser.Hide();
 					this.Self.fireEvent("onMapRpc", o.result);
 					this.Self.buildingDetails.dataStore.spies = undefined;
+					this.Assign.currentAssign = assign;
+					this.Self.SpyAssignChange.call(this.Assign);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.SpyAssign.failure");
@@ -1691,7 +1803,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(o, "info", "MapPlanet.SpyBurn.success");
 					Lacuna.Pulser.Hide();
 					this.Self.fireEvent("onMapRpc", o.result);
-					delete this.Self.buildingDetails.dataStore.spies[this.Id];
+					var spies = this.Self.buildingDetails.dataStore.spies.spies;
+					for(var i=0; i<spies.length; i++) {
+						if(spies[i].id == this.Id) {
+							spies.splice(i,1);
+							break;
+						}
+					}
 					this.Line.parentNode.removeChild(this.Line);
 					cb.spies.current = (cb.spies.current*1) - 1;
 					Dom.get("spiesCurrent").innerHTML = cb.spies.current;
@@ -1717,10 +1835,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						YAHOO.log(o, "info", "MapPlanet.SpyTrain.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
-						this.buildingDetails.dataStore.spies = undefined;
-						cb.spies.current = (cb.spies.current*1) + (o.result.trained*1);
-						Dom.get("spiesCurrent").innerHTML = cb.spies.current;
-						this.UpdateCost(cb.spies.training_costs);
+						var trained = o.result.trained*1;
+						if(trained > 0) {
+							this.buildingDetails.dataStore.spies = undefined;
+							cb.spies.current = (cb.spies.current*1) + (o.result.trained*1);
+							Dom.get("spiesCurrent").innerHTML = cb.spies.current;
+							this.UpdateCost(cb.spies.training_costs * trained);
+						}
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "MapPlanet.SpyTrain.failure");

@@ -513,7 +513,7 @@ about
 	margin:89px 90px;
 	*/
 }
-#mapiator_zoom_in, #mapiator_zoom_out {
+#mapiator_zoom_in, #mapiator_zoom_out, #mapiator_zoom_display {
 	position:absolute; 
 	z-index:30; 
 	width:39px; 
@@ -525,9 +525,15 @@ about
 	background: url(http://localhost/lacuna/assets/ui/in.png);
 	top:35px;
 }
+#mapiator_zoom_display {
+	top:65px;
+	color:#aaa;
+	font-weight:bold;
+	font-size:120%;	
+}
 #mapiator_zoom_out {
 	background: url(http://localhost/lacuna/assets/ui/out.png);
-	top:65px;
+	top:95px;
 }
 .tileContainer div {
 	color:white;
@@ -777,11 +783,9 @@ planet details
 .probeInfo li {
 	float:left;
 }
-.probeInfo .probePlanet {
+.probeInfo .probeStar {
 	width:200px;
-}
-.probeInfo .probeCoords {
-	width:100px;
+	cursor:pointer;
 }
 
 .shipHeader {
@@ -803,6 +807,15 @@ planet details
 .shipInfo .shipBuild {
 	width:60px;
 }
+.shipInfo .shipArrives {
+	width:180px;
+}
+.shipInfo .shipFrom {
+	width:140px;
+}
+.shipInfo .shipTo {
+	width:140px;
+}
 
 .shipQueueHeader {
 	font-weight:bold;
@@ -815,10 +828,7 @@ planet details
 	width:180px;
 }
 .shipQueue .shipQueueEach {
-	width:100px;
-}
-.shipQueue .shipQueueQuantity {
-	width:100px;
+	width:150px;
 }
 
 
@@ -830,6 +840,9 @@ body.yui-skin-sam .yui-tt .bd {
 /*
 PROFILE
 */
+#profileDetails {
+	margin-bottom:5px;
+}
 #profileDetails label {
 	display:inline-block;
 	width:75px;
@@ -854,6 +867,17 @@ PROFILE
 .medal .medalImg {
 	float:left;
 	margin-right:10px;
+}
+
+#profileSpecies label {
+	display:inline-block;
+	width:125px;
+	vertical-align:top;
+	font-weight:bold;
+}
+#profileSpecies span {
+	display:inline-block;
+	width:250px;
 }
 
 /*

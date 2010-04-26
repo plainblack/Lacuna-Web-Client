@@ -554,6 +554,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileContainer.parentNode.removeChild(this.tileContainer);
 			delete this["tileCache"];
 		},
+		clear : function() {
+			this.removeAllTilesNotContainedIn({});
+		},
 		reset : function() {
 			this.removeAllTilesNotContainedIn({});
 			this.tileCache = {};
@@ -621,10 +624,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileSizeInPx = size;
 			//this.mapExtendInPx = this.tileSizeInPx * (1<<this.zoom);
 		},
-		setCenter : function(x,y){
+		/*setCenter : function(x,y){
 			this.centerX = x;
 			this.centerY = y;
-		},
+		},*/
 		addElement : function( p ) {
 			this._pathsAndPolygons[p.id] = p;
 		},
@@ -633,7 +636,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		moveByPx : function( x,y ) {
 			var n = this.visibleArea.move( x*-1,y*-1 );
-			//move values back to positive for us to user
+			//move values back to positive for us to use
 			x = n.x*-1;
 			y = n.y*-1;
 
@@ -642,7 +645,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			this.diffX += x;
 			this.diffY += y;
-			this.centerX += x;
+			this.centerX -= x;
 			this.centerY += y;
 			var checkTileSize = this.tileSizeInPx; //Math.floor(this.tileSizeInPx * .75); //load the tiles a bit early
 			if( Math.abs(this.diffX) > checkTileSize || Math.abs(this.diffY) > checkTileSize) {
@@ -658,14 +661,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			return {"x":x,"y":y};
 		},
 		setZoomLevel : function( level ) {
-			/*if( this.visibleArea ){
-				// we are changing the zoom level but the map may have been panned around
-				// but the current center is only stored in pixel coordinates which are different
-				// for every zoom level. Therefor we recalculate the centerLat and centerLng:
-				this.visibleArea = null;
-			}*/
 			this.zoom = level*1;
-			//this.mapExtendInPx = this.tileSizeInPx * (1<<this.zoom);
+			this.controller.setZoomDisplay(this.zoom);
+			if(this.tileLayer) {
+				this.tileLayer.clear();
+			}
 		},
 		redraw : function() {
 			this.width = this.mapDiv.offsetWidth;
@@ -721,23 +721,19 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.setTileSizeInPx(100);
 		},
 		setCenterTo : function(locX, locY) {
-			if(locX && locY && this.tileLayer) {
-				//this.setCenter(this.currentSystem.x,this.currentSystem.y);
+			if(Lang.isNumber(locX) && Lang.isNumber(locY) && this.tileLayer) {
 				//these are the offsets for the star
 				var otherWidth = this.centerX,
-					otherHeight = this.centerY;
-				var ox = (locX - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
-					oy = ((locY * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx - otherHeight;
-				//var ox = (this.currentSystem.x - this.tileLayer.baseTileLoc[0]) * this.tileSizeInPx - otherWidth,
-				//	oy = ((this.currentSystem.y * -1) - this.tileLayer.baseTileLoc[1]) * this.tileSizeInPx - otherHeight;
-				//now we change them slightly to get where we're going
-				/*ox = Math.floor(ox*-1);
-				oy = Math.floor(oy/2) * -1;
-				oy += oy/2;
-				
-				this.moveByPx(ox, oy);*/
-				
-				//this.moveByPx(Math.floor(ox/2), Math.floor(oy/2) * -1);
+					otherHeight = this.centerY,
+					baseTile = this.tileLayer.baseTileLoc;
+				var locXm = (locX - baseTile[0]),
+					locYm = ((locY * -1) - baseTile[1]);
+					
+				var locXmPx = locXm * this.tileSizeInPx,
+					locYmPx = locYm * this.tileSizeInPx;
+					
+				var ox = locXmPx - otherWidth,
+					oy = locYmPx - otherHeight;
 				
 				this.moveByPx(ox * -1, oy * -1);
 			}
@@ -918,6 +914,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		getBounds : function() {
 			return this.bounds;
 		},
+		setSurfaceUrl : function(surfaceUrl) {
+			this._surfaceUrl = surfaceUrl;
+			if(this.underLayer) {
+				this.underLayer.redraw();
+			}
+		},
 		//don't update bounds on plant.  We have all data at start
 		/*updateBounds : function(oTile) {
 		},*/
@@ -1004,6 +1006,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			map.mapDiv.appendChild( zoomInButton );
 			zoomInButton.onmouseup = function(){map.zoomIn();};
 
+			this.zoomDisplay = document.createElement('div');
+			this.zoomDisplay.id = 'mapiator_zoom_display';
+			map.mapDiv.appendChild( this.zoomDisplay );
+
 			var zoomOutButton = document.createElement('div');
 			zoomOutButton.id = 'mapiator_zoom_out';
 
@@ -1023,6 +1029,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	};
 	Mapper.TraditionalController.prototype = {
+		setZoomDisplay : function(zoom) {
+			if(this.zoomDisplay) {
+				this.zoomDisplay.innerHTML = zoom;
+			}
+		},
 		startDrag : function(e){
 			clearTimeout(this._timeout);
 			this.xmove = this.ymove = undefined;

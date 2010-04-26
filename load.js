@@ -100,7 +100,7 @@
 		name: "profile",
 		type: "js",
 		fullpath: host + "profile.js?" + t,
-		requires : ["container","game"]
+		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
 		name: "pulse",
