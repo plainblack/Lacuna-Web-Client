@@ -866,7 +866,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					this.NewsGet(oResults.building.id);
 				}
-				else if(oResults.spies) {
+				else if(oResults.spies) { //intelligence
 					var spies = oResults.spies;
 					output = [
 						'<div class="yui-g">',
@@ -903,6 +903,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					var spiesTab = new YAHOO.widget.Tab({ label: "Spies", content: [
 						'<div>',
 						'	<ul class="spiesHeader spyInfo clearafter">',
+						'		<li class="spyName">Name</li>',
 						'		<li class="spyAssignedTo">Assigned To</li>',
 						'		<li class="spyAvailableWhen">Available When</li>',
 						'		<li class="spyAssignment">Assignment</li>',
@@ -1372,21 +1373,20 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							
 							nLi.innerHTML = [
 								'<div class="probeStarContainer yui-gf">',
-								'	<div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_map/',st.color,'.png',') no-repeat scroll left center;">',
+								'	<div class="yui-u first probeAction" style="background:black url(',Lib.AssetUrl,'star_map/',st.color,'.png',') no-repeat scroll left center;">',
 								'		<img src="',Lib.AssetUrl,'star_map/',st.alignments,'.png" alt="',st.name,'"/>',
 								'	</div>',
 								'	<div class="yui-u">',
-								'		<img class="probeDelete" />',
-								'		<ul>',
-								'			<li>',st.name,'</li>',
-								'			<li>',st.x,' : ',st.y,' : ',st.z,'</li>',
-								'		</ul>',
+								'		<div class="probeDelete"></div>',
+								'		<div>',st.name,'</div>',
+								'		<div>',st.x,' : ',st.y,' : ',st.z,'</div>',
 								'	</div>',
 								'</div>'
 							].join('');
 							
 							nLi = probeDetails.appendChild(nLi);
-							Event.on(nLi, "click", this.ProbeAction);
+							Event.delegate(nLi, "click", this.ProbeJump, "div.probeAction", this, true);
+							Event.delegate(nLi, "click", this.ProbeAbandon, "div.probeDelete", this, true);
 						}
 					}
 							
@@ -1400,15 +1400,36 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				scope:this
 			});
 		},
-		ProbeAction : function(e) {
-			if(this.Star) {
-				var t = Event.getTarget(e);
-				if(Dom.hasClass(t, "probeDelete")) {
-					this.parentNode.removeChild(this);
+		ProbeAbandon : function(e, matchedEl, container) {
+			if(container.Star) {
+				if(confirm(["Are you sure you want to abandon the probe at ",container.Star.name,"?"].join(''))) {
+					Lacuna.Pulser.Show();
+					Game.Services.Buildings.Observatory.abandon_probe({
+							session_id:Game.GetSession(),
+							building_id:this.currentBuilding.building.id,
+							star_id:container.Star.id
+						}, {
+						success : function(o){
+							YAHOO.log(o, "info", "MapPlanet.ProbeAction.abandon_probe.success");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpc", o.result);
+							Event.purgeElement(container);
+							container.parentNode.removeChild(container);
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "MapPlanet.ProbeAction.abandon_probe.failure");
+							Lacuna.Pulser.Hide();
+							this.fireEvent("onMapRpcFailed", o);
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
 				}
-				else {
-					Game.StarJump(this.Star);
-				}
+			}
+		},
+		ProbeJump : function(e, matchedEl, container) {
+			if(container.Star) {
+				Game.StarJump(container.Star);
 			}
 		},
 		Recycle : function(e) {
@@ -1703,6 +1724,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Dom.addClass(nUl, "spyInfo");
 					Dom.addClass(nUl, "clearafter");
 
+					Dom.addClass(nLi,"spyName");
+					nLi.innerHTML = spy.name;
+					nUl.appendChild(nLi);
+					Event.on(nLi, "click", this.SpyName, {Self:this,Spy:spy,el:nLi}, true);
+
+					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"spyAssignedTo");
 					nLi.innerHTML = spy.assigned_to.name;
 					nUl.appendChild(nLi);
@@ -1822,6 +1849,67 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				timeout:Game.Timeout,
 				scope:this
 			});
+		},
+		SpyName : function() {
+			//{Self:this,Spy:spy,el:nLi}
+			this.el.innerHTML = "";
+			
+			var inp = document.createElement("input"),
+				bSave = document.createElement("button"),
+				bCancel = bSave.cloneNode(false);
+			inp.type = "text";
+			inp.value = this.Spy.name;
+			this.Input = inp;
+			bSave.type = "button";
+			bSave.innerHTML = "S";
+			Event.on(bSave,"click",this.Self.SpyNameSave,this,true);
+			bCancel.type = "button";
+			bCancel.innerHTML = "X";
+			Event.on(bCancel,"click",this.Self.SpyNameClear,this,true);
+						
+			Event.removeListener(this.el, "click");		
+				
+			this.el.appendChild(inp);
+			this.el.appendChild(bSave);
+			this.el.appendChild(bCancel);
+		},
+		SpyNameSave : function(e) {
+			Event.stopEvent(e);
+			Lacuna.Pulser.Show();
+			var newName = this.Input.value,
+				cb = this.Self.currentBuilding;
+			
+			Game.Services.Buildings.Intelligence.name_spy({
+				session_id:Game.GetSession(),
+				building_id:cb.building.id,
+				spy_id:this.Spy.id,
+				name:newName
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.SpyNameSave.success");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.buildingDetails.dataStore.spies = undefined;
+					this.Spy.name = newName;
+					this.Input.value = newName;
+					this.Self.SpyNameClear.call(this);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.SpyNameSave.failure");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Input.value = this.Spy.name;
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		SpyNameClear : function(e) {
+			if(e) { Event.stopEvent(e); }
+			Event.purgeElement(this.el);
+			this.el.innerHTML = this.Spy.name;
+			delete this.Input;
+			Event.on(this.el, "click", this.Self.SpyName, this, true);
 		},
 		SpyTrain : function() {
 			var select = Dom.get("spiesTrainNumber"),

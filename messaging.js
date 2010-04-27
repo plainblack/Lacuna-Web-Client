@@ -33,32 +33,31 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingArchive" class="tab"><a href="#"><em>Archive</em></a></li>',
 				'	</ul>',
 				'	<div class="yui-content">',
-				'	<div id="messagingCreator" class="panelTabContainer" style="display:none">',
-				'		<div class="messagingCreatorC"><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
-				'		<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
-				'		<div class="messagingCreatorC"><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
-				'		<div class="messagingCreatorC" id="messagingCreateBody">',
-				'			<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
-				'		</div>',
-				'	</div>',
-				'	<div id="messagingReader" class="panelTabContainer yui-gd">',
-				'		<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
-				'			<div id="messagingArchiver">',
-				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
-				'				<button id="messagingSelectAll" type="button">Select All</button>',
+				'		<div id="messagingCreator" class="panelTabContainer" style="display:none">',
+				'			<div class="messagingCreatorC"><label><button id="messagingCreateSend" type="button">Send</button></label><span id="messagingCreateResponse"></span></div>',
+				'			<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
+				'			<div class="messagingCreatorC"><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
+				'			<div class="messagingCreatorC" id="messagingCreateBody">',
+				'				<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
 				'			</div>',
-				'			<ul id="messagingList"></ul>',
 				'		</div>',
-				'		<div id="messagingDisplay" class="yui-u">',
-				'			<div id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></div>',
-				'			<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
-				'			<div><label>From:</label><span id="messagingFrom"></span></div>',
-				'			<div><label>To:</label><span id="messagingTo"></span></div>',
-				'			<div><label>Subject:</label><span id="messagingSubject"></span></div>',
-				'			<div id="messagingBody"></div>',
+				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
+				'			<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
+				'				<div id="messagingArchiver">',
+				'					<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'					<button id="messagingSelectAll" type="button">Select All</button>',
+				'				</div>',
+				'				<ul id="messagingList"></ul>',
+				'			</div>',
+				'			<div id="messagingDisplay" class="yui-u">',
+				'				<div id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></div>',
+				'				<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
+				'				<div><label>From:</label><span id="messagingFrom"></span></div>',
+				'				<div><label>To:</label><span id="messagingTo"></span></div>',
+				'				<div><label>Subject:</label><span id="messagingSubject"></span></div>',
+				'				<div id="messagingBody"></div>',
+				'			</div>',
 				'		</div>',
-				'	</div>',
-				'	</div>',
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -108,9 +107,109 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Dom.setStyle(this.display, "visibility", "hidden");
 				Event.delegate("messagingTabs", "click", this.tabClick, "li.tab", this, true);
 			}, this, true);
+			this.messagingPanel.hideEvent.subscribe(function(){
+				this.attachmentPanel.hide();
+			}, this, true);
 			
 			this.messagingPanel.render();
 			Game.OverlayManager.register(this.messagingPanel);
+		},
+		_buildAttachmentPanel : function() {
+			var panelId = "attachmentPanel";
+			
+			var panel = document.createElement("div");
+			panel.id = panelId;
+			panel.innerHTML = ['<div class="hd">Attachment</div>',
+				'<div class="bd">',
+				'	<div id="attachmentImage"></div>',
+				'	<div id="attachmentLink"></div>',
+				'	<div id="attachmentTable"></div>',
+				'	<div id="attachmentMap"></div>',
+				'</div>'].join('');
+			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
+			
+			this.attachmentPanel = new YAHOO.widget.Panel(panelId, {
+				constraintoviewport:true,
+				visible:false,
+				draggable:true,
+				fixedcenter:true,
+				modal:false,
+				close:true,
+				underlay:false,
+				width:"700px",
+				zIndex:10000
+			});
+			this.attachmentPanel.renderEvent.subscribe(function(){
+				this.image = Dom.get("attachmentImage");
+				this.link = Dom.get("attachmentLink");
+				this.table = Dom.get("attachmentTable");
+				this.map = Dom.get("attachmentMap");
+			});
+			
+			this.attachmentPanel.load = function(attachment) {
+				this.image.innerHTML = "";
+				this.link.innerHTML = "";
+				this.table.innerHTML = "";
+				this.map.innerHTML = "";
+				
+				this.show();
+				
+				if(attachment.image) {
+					var img = attachment.image;
+					if(img.link) {
+						this.image.innerHTML = [
+							'<a href="',img.link,'" title="',img.title,'"><img src="',img.url,'" alt="',img.title,'" title="',img.title,'" /></a>'
+						].join('');
+					}
+					else {
+						this.image.innerHTML = [
+							'<img src="',img.url,'" alt="',img.title,'" title="',img.title,'" />'
+						].join('');
+					}
+				}
+				if(attachment.link) {
+					var lnk = attachment.link;
+					this.link.innerHTML = [
+						'<a href="',lnk.url,'" title="',lnk.label,'">',lnk.label,'</a>'
+					].join('');
+				}
+				if(attachment.table) {
+					var tbl = attachment.table,
+						tblOut = ["<table>"],
+						hdRow = tbl[0];
+					//first row always headers
+					tblOut.push("<thead><tr>");
+					for(var c=0; c<hdRow.length; c++) {
+						tblOut.push("<td>");
+						tblOut.push(hdRow[c]);
+						tblOut.push("</td>");
+					}
+					tblOut.push("</tr></thead><tbody>");
+					
+					for(var i=1; i<tbl.length; i++) {
+						var row = tbl[i];
+						tblOut.push("<tr>");
+						for(var c=0; c<row.length; c++) {
+							tblOut.push("<td>");
+							tblOut.push(row[c]);
+							tblOut.push("</td>");
+						}
+						tblOut.push("</tr>");
+					}
+					tblOut.push("</tbody></table>");
+						
+					this.table.innerHTML = tblOut.join('');
+				}
+				if(attachment.map) {
+					var mp = attachment.map;
+					
+				}
+			};
+			
+			this.attachmentPanel.render();
+			Game.OverlayManager.register(this.attachmentPanel);
+			
 		},
 		_createToSelect : function() {
 			var dataSource = new Util.XHRDataSource("/empire");

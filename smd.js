@@ -197,6 +197,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"assignment", "type":"string", "optional":false} // "Idle", "Counter Intelligence", "Sting"
 						],
 						"returns":{"type":"object"}
+					},
+					"name_spy" : {
+						"description": "Set the name of the spy",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},

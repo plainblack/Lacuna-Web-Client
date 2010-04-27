@@ -745,9 +745,18 @@ planet details
 }
 .spyInfo li {
 	float:left;
+	font-size:90%;
+}
+.spyInfo .spyName {
+	width:100px;
+	cursor:url(http://localhost/lacuna/assets/ui/web/pen_m.cur), text;
+}
+.spyInfo .spyName input {
+	width:95px;
+	font-size:90%;
 }
 .spyInfo .spyAssignedTo {
-	width:200px;
+	width:100px;
 }
 .spyInfo .spyAvailableWhen {
 	width:170px;
@@ -785,6 +794,20 @@ planet details
 }
 .probeInfo .probeStar {
 	width:200px;
+	border:1px solid black;
+	background-color:#52ACFF;
+	margin:2px;
+	position:relative;
+}
+.probeStar .probeAction {
+	cursor:pointer;
+}
+.probeStar .probeDelete {
+	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll center center transparent;
+	height:11px;
+	width:11px;
+	position: absolute;
+	right: 0pt;
 	cursor:pointer;
 }
 
