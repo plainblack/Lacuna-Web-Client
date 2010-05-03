@@ -58,7 +58,7 @@
 		name: "mapper",
 		type: "js",
 		fullpath: host + "mapper.js?" + t,
-		requires : ["animation","dom","dragdrop","event"]
+		requires : ["animation","dom","dragdrop","event","selector"]
 	});
 	loader.addModule({
 		name: "mapStar",
@@ -88,7 +88,7 @@
 		name: "messaging",
 		type: "js",
 		fullpath: host + "messaging.js?" + t,
-		requires : ["datasource","event-delegate","game","textboxList"]
+		requires : ["datasource","event-delegate","game","paginator","textboxList"]
 	});
 	loader.addModule({
 		name: "essentia",

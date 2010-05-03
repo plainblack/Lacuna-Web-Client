@@ -397,13 +397,25 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.Resize();
 			}
 		},
-		StarJump : function(loc) {
+		StarJump : function(star) {
+			YAHOO.log(star, "debug", "StarJump");
 			Game.OverlayManager.hideAll();
 			Lacuna.MapPlanet.MapVisible(false);
 			Lacuna.MapStar.MapVisible(true);
+			Lacuna.MapSystem.MapVisible(false);
 			Lacuna.Menu.StarVisible(true);
 			Game.SetLocation("home", Lib.View.STAR);
-			Lacuna.MapStar.Jump(loc.x*1, loc.y*1, loc.z*1);
+			Lacuna.MapStar.Jump(star.x*1, star.y*1, star.z*1);
+		},
+		SystemJump : function(star) {
+			YAHOO.log(star, "debug", "SystemJump");
+			Game.OverlayManager.hideAll();
+			Lacuna.MapPlanet.MapVisible(false);
+			Lacuna.MapStar.MapVisible(false);
+			Lacuna.MapSystem.MapVisible(true);
+			Lacuna.Menu.SystemVisible();
+			Game.SetLocation(star.id, Lib.View.SYSTEM);
+			Lacuna.MapSystem.Load(star.id);
 		},
 		
 		Logout : function() {
@@ -440,7 +452,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 		//Cookie helpers functions
 		SetCookie : function(key, value, expiresDate) {
-			var opts = { domain: "lacunaexpanse.com" }
+			var opts = { domain: "lacunaexpanse.com" };
 			if(expiresDate) {
 				opts.expires = expiresDate;
 			}

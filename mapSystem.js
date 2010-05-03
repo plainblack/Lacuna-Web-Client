@@ -133,20 +133,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				}
 			}
 		},
-		Display : function(oResult) {
-			if(!this._gridCreated) {
-				var systemMap = document.createElement("div");
-				systemMap.id = "systemMap";
-				this._el = document.getElementById("content").appendChild(systemMap);
-				
-				Event.delegate(this._el, "click", this.ShowPlanet, "img.planet", this, true);
-				Event.delegate(this._el, "click", this.ShowPlanet, "span.planetName", this, true);
-			}
-			else {
-				//if it exists clear it and refill
-				this._el.innerHTML = "";
-			}
-			
+		Display : function(oResult) {			
 			var star = oResult.star,
 				bodies = oResult.bodies,
 				div = document.createElement("div"),
@@ -213,6 +200,18 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			this.fireEvent("onChangeToPlanetView", t.parentNode.Body.id);
 		},
 		Load : function(starId, isBody) {
+			if(!this._gridCreated) {
+				var systemMap = document.createElement("div");
+				systemMap.id = "systemMap";
+				this._el = document.getElementById("content").appendChild(systemMap);
+				this._gridCreated = true;
+				Event.delegate(this._el, "click", this.ShowPlanet, "img.planet", this, true);
+				Event.delegate(this._el, "click", this.ShowPlanet, "span.planetName", this, true);
+			}
+			else {
+				//if it exists clear it and refill
+				this._el.innerHTML = "";
+			}
 			if(starId) {
 				Lacuna.Pulser.Show();
 				var MapServ = Game.Services.Maps,

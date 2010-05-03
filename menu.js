@@ -391,7 +391,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			for(var pKey in planets) {
 				if(planets.hasOwnProperty(pKey)) {
 					var p = planets[pKey];
-					items.push({ text: p.name, id: "planetMenuItem"+(count++), onclick: { fn: this.menuClick, obj:p } });
+					items.push({ 
+						text: p.name, 
+						id: "planetMenuItem"+(count++), 
+						onclick: { fn: this.menuClick, obj:p },
+						submenu : {
+							id : "planetMenuItem"+count+"-Star",
+							itemData : [
+								{ text: "Go To Star ("+p.star_name+")", onclick: { fn: this.menuStarClick, obj:p } }
+							]
+						}
+					});
 				}
 			}
 			this.Menu.addItems(items);
@@ -462,7 +472,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 		},
 		menuClick : function(p_sType, p_aArgs, planet){
-			YAHOO.log(planet, "info", "PlanetMenu.planetMenuItem.click");
+			YAHOO.log(planet, "info", "PlanetMenu.menuClick.click");
 			Game.EmpireData.current_planet_id = planet.id;
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
 			
@@ -471,6 +481,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Lacuna.MapPlanet.MapVisible(true);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planet.id);
+		},
+		menuStarClick : function(p_sType, p_aArgs, planet){
+			YAHOO.log(planet, "info", "PlanetMenu.menuStarClick.click");
+			Game.SystemJump({id:planet.star_id, name:planet.star_name});
 		},
 		
 		show : function() {

@@ -7,6 +7,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
+		Pager = YAHOO.widget.Paginator,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
@@ -17,6 +18,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		this.createEvent("onRpcFailed");
 		this.createEvent("onShow");
 		this._buildPanel();
+		this._buildAttachmentPanel();
 	};
 	Messaging.prototype = {
 		_buildPanel : function() {
@@ -46,6 +48,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'				<div id="messagingArchiver">',
 				'					<button id="messagingArchiveSelected" type="button">Archive</button>',
 				'					<button id="messagingSelectAll" type="button">Select All</button>',
+				'				</div>',
+				'				<div id="messagingPaginator">',
 				'				</div>',
 				'				<ul id="messagingList"></ul>',
 				'			</div>',
@@ -121,9 +125,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Attachment</div>',
 				'<div class="bd">',
-				'	<div id="attachmentImage"></div>',
-				'	<div id="attachmentLink"></div>',
-				'	<div id="attachmentTable"></div>',
 				'	<div id="attachmentMap"></div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -134,73 +135,23 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				visible:false,
 				draggable:true,
 				fixedcenter:true,
-				modal:false,
+				modal:true,
 				close:true,
 				underlay:false,
 				width:"700px",
 				zIndex:10000
 			});
 			this.attachmentPanel.renderEvent.subscribe(function(){
-				this.image = Dom.get("attachmentImage");
-				this.link = Dom.get("attachmentLink");
-				this.table = Dom.get("attachmentTable");
 				this.map = Dom.get("attachmentMap");
 			});
-			
+			this.attachmentPanel.hideEvent.subscribe(function(){
+				this.map.innerHTML = "";
+			});
 			this.attachmentPanel.load = function(attachment) {
-				this.image.innerHTML = "";
-				this.link.innerHTML = "";
-				this.table.innerHTML = "";
 				this.map.innerHTML = "";
 				
 				this.show();
-				
-				if(attachment.image) {
-					var img = attachment.image;
-					if(img.link) {
-						this.image.innerHTML = [
-							'<a href="',img.link,'" title="',img.title,'"><img src="',img.url,'" alt="',img.title,'" title="',img.title,'" /></a>'
-						].join('');
-					}
-					else {
-						this.image.innerHTML = [
-							'<img src="',img.url,'" alt="',img.title,'" title="',img.title,'" />'
-						].join('');
-					}
-				}
-				if(attachment.link) {
-					var lnk = attachment.link;
-					this.link.innerHTML = [
-						'<a href="',lnk.url,'" title="',lnk.label,'">',lnk.label,'</a>'
-					].join('');
-				}
-				if(attachment.table) {
-					var tbl = attachment.table,
-						tblOut = ["<table>"],
-						hdRow = tbl[0];
-					//first row always headers
-					tblOut.push("<thead><tr>");
-					for(var c=0; c<hdRow.length; c++) {
-						tblOut.push("<td>");
-						tblOut.push(hdRow[c]);
-						tblOut.push("</td>");
-					}
-					tblOut.push("</tr></thead><tbody>");
-					
-					for(var i=1; i<tbl.length; i++) {
-						var row = tbl[i];
-						tblOut.push("<tr>");
-						for(var c=0; c<row.length; c++) {
-							tblOut.push("<td>");
-							tblOut.push(row[c]);
-							tblOut.push("</td>");
-						}
-						tblOut.push("</tr>");
-					}
-					tblOut.push("</tbody></table>");
-						
-					this.table.innerHTML = tblOut.join('');
-				}
+
 				if(attachment.map) {
 					var mp = attachment.map;
 					
@@ -321,7 +272,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		loadInboxMessages : function() {
 			this._setTab(this.inbox);
-		
+			if(this.pager) {this.pager.destroy();}
+			
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Game.GetSession(""),
@@ -330,6 +282,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
+					this.pager = new Pager({
+						rowsPerPage : 25,
+						totalRecords: o.result.message_count,
+						containers  : 'messagingPaginator',
+						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+						alwaysVisible : false
+
+					});
+					this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
+					this.pager.render();
+
 					this.processMessages(o.result,{inbox:1});
 				},
 				failure : function(o){
@@ -342,6 +305,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		loadSentMessages : function() {
 			this._setTab(this.sent);
+			if(this.pager) {this.pager.destroy();}
 			
 			var InboxServ = Game.Services.Inbox,
 				data = {
@@ -351,6 +315,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_sent(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
+					this.pager = new Pager({
+						rowsPerPage : 25,
+						totalRecords: o.result.message_count,
+						containers  : 'messagingPaginator',
+						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+						alwaysVisible : false
+
+					});
+					this.pager.subscribe('changeRequest',this.handleSentPagination, this, true);
+					this.pager.render();
+
 					this.processMessages(o.result, {sent:1});
 				},
 				failure : function(o){
@@ -363,6 +338,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		loadArchiveMessages : function() {
 			this._setTab(this.archive);
+			if(this.pager) {this.pager.destroy();}
 			
 			var InboxServ = Game.Services.Inbox,
 				data = {
@@ -372,6 +348,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_archived(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
+					this.pager = new Pager({
+						rowsPerPage : 25,
+						totalRecords: o.result.message_count,
+						containers  : 'messagingPaginator',
+						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+						alwaysVisible : false
+
+					});
+					this.pager.subscribe('changeRequest',this.handleArchivePagination, this, true);
+					this.pager.render();
+
 					this.processMessages(o.result,{archive:1});
 				},
 				failure : function(o){
@@ -382,12 +369,84 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				scope:this
 			});
 		},
+
+		handleInboxPagination : function (newState) {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: newState.page}
+				};
+			InboxServ.view_inbox(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result,{inbox:1});
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Messaging.handleInboxPagination");
+					this.fireEvent("onRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.pager.setState(newState);
+		},
+		handleSentPagination : function (newState) {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: newState.page}
+				};
+			InboxServ.view_sent(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result,{sent:1});
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Messaging.handleSentPagination");
+					this.fireEvent("onRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.pager.setState(newState);
+		},
+		handleArchivePagination : function (newState) {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: newState.page}
+				};
+			InboxServ.view_archived(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result,{archive:1});
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Messaging.handleArchivePagination");
+					this.fireEvent("onRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.pager.setState(newState);
+		},
+
 		processMessages : function(results, is) {
 			YAHOO.log(results, "info", "Messaging.processMessages");
 			var list = this.list,
 				messages = results.messages,
 				li = document.createElement("li"),
 				isTab = is || {};
+				
+			//clear list here	
+			Event.purgeElement(list, true);
+			list.innerHTML = "";
 			
 			for(var i=0; i<messages.length; i++) {
 				var msg = messages[i],
@@ -443,6 +502,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
 						if(msg.is.inbox && msg.has_read == "") {
 							Game.EmpireData.has_new_messages--;
+							if(Game.EmpireData.has_new_messages < 0) {
+								Game.EmpireData.has_new_messages = 0;
+							}
 							Dom.removeClass(matchedEl.parentNode, "unread");
 						}
 						else {
@@ -494,8 +556,78 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.from.innerHTML = msg.from;
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
-				this.body.innerHTML = msg.body.replace(/\n/gi,'<br>');
+				Event.purgeElement(this.body);
+				this.body.innerHTML = msg.body.replace(/\n/gi,'<br />');
+				if(msg.attachments) {
+					this.body.appendChild(document.createElement("hr"));
+					if(msg.attachments.image) {
+						var img = msg.attachments.image,
+							imgDiv = this.body.appendChild(document.createElement("div"));
+						imgDiv.id = "attachmentImage";
+						if(img.link) {
+							imgDiv.innerHTML = [
+								'<a href="',img.link,'" title="',img.title,'"><img src="',img.url,'" alt="',img.title,'" title="',img.title,'" /></a>'
+							].join('');
+						}
+						else {
+							imgDiv.innerHTML = [
+								'<img src="',img.url,'" alt="',img.title,'" title="',img.title,'" />'
+							].join('');
+						}
+					}
+					if(msg.attachments.link) {
+						var lnk = msg.attachments.link,
+							lnkDiv = this.body.appendChild(document.createElement("div"));
+						lnkDiv.id = "attachmentLink";
+						lnkDiv.innerHTML = [
+							'<a href="',lnk.url,'" title="',lnk.label,'">',lnk.label,'</a>'
+						].join('');
+					}
+					if(msg.attachments.table) {
+						var tbl = msg.attachments.table,
+							tblDiv = this.body.appendChild(document.createElement("div")),
+							tblOut = ["<table>"],
+							hdRow = tbl[0];
+						tblDiv.id = "attachmentTable";
+						//first row always headers
+						tblOut.push("<thead><tr>");
+						for(var c=0; c<hdRow.length; c++) {
+							tblOut.push("<th>");
+							tblOut.push(hdRow[c]);
+							tblOut.push("</th>");
+						}
+						tblOut.push("</tr></thead><tbody>");
+						
+						for(var i=1; i<tbl.length; i++) {
+							var row = tbl[i];
+							tblOut.push("<tr>");
+							for(var d=0; d<row.length; d++) {
+								tblOut.push("<td>");
+								tblOut.push(row[d]);
+								tblOut.push("</td>");
+							}
+							tblOut.push("</tr>");
+						}
+						tblOut.push("</tbody></table>");
+							
+						tblDiv.innerHTML = tblOut.join('');
+						if(tblDiv.clientHeight > 200) {
+							Dom.setStyle(tblDiv, "height", "200px");
+						}
+					}
+					if(msg.attachments.map) {
+						this.body.appendChild(document.createElement('br'));
+						var va = document.createElement("button");
+						va.type = "button";
+						va.innerHTML = "No Map Attachment Yet";
+						va = this.body.appendChild(va);
+						Event.on(va, "click", this.displayAttachment, this, true);
+					}
+				}
 			}
+		},
+		displayAttachment : function() {
+			this.attachmentPanel.load(this.viewingMessage.attachments);
 		},
 		sendMessage : function() {
 			var to = this.createTo.Selections();
@@ -589,6 +721,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				if(results.success.indexOf(el.Message.id) >= 0) {
 					delete this.toArchive[el.Message.id];
 					Game.EmpireData.has_new_messages--;
+					if(Game.EmpireData.has_new_messages < 0) {
+						Game.EmpireData.has_new_messages = 0;
+					}
 					this.toArchiveCount--;
 					Event.purgeElement(el);
 					el.parentNode.removeChild(el);

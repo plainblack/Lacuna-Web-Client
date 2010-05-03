@@ -390,6 +390,11 @@ about
 #messagingArchiver {
 	background-color:#52ACFF;
 }
+#messagingPaginator {
+	background-color:white;
+	margin:0px;
+	border:1px solid #52acff;
+}
 #messagingDisplay {
 	padding-top:5px;
 	margin-left:1%;
@@ -413,6 +418,19 @@ about
 	overflow: auto;
 	border:1px solid gray;
 	padding:2px 5px;
+}
+
+#attachmentTable  {
+	overflow:auto;
+}
+#attachmentTable th {
+	font-weight:bold;
+	border:1px solid #52ACFF;
+	padding:1px 2px;
+}
+#attachmentTable td {
+	border:1px solid #52ACFF;
+	padding:1px 2px;
 }
 
 /*
@@ -490,6 +508,8 @@ about
 	font-size: 140%;
 	font-family: impact, san-serif;
 	position: absolute;
+	left:0;
+	top:0;
 }
 .planetMapTileActionContainer {
 	z-index: 3;
@@ -501,17 +521,21 @@ about
 	left:0;
 	top:0;
 }
-.planetMapTileActionButton {
-	background: transparent url('http://localhost/lacuna/assets/ui/l/build.png');
-	width:58px; /*19px;*/
-	height:45px; /*22px;*/
+.planetMapTileActionLevel, .planetMapTileActionButton {
+	width:58px;
+	height:45px;
 	border:0;
 	cursor:pointer;
-	margin:97px 91px;
-	/*
-	margin:77px 71px;
-	margin:89px 90px;
-	*/
+	margin:88px 81px;
+	text-align:center;
+}
+.planetMapTileActionLevel {
+	font-size:25pt;
+	font-weight:bold;
+	color:white;
+}
+.planetMapTileActionButton {
+	background: transparent url('http://localhost/lacuna/assets/ui/l/build.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out, #mapiator_zoom_display {
 	position:absolute; 
@@ -537,6 +561,20 @@ about
 }
 .tileContainer div {
 	color:white;
+}
+.coordTop {
+	position: absolute;
+	top: 0;
+	width: 5px;
+	height: 30px;
+	overflow: visible;
+}
+.coordLeft {
+	position: absolute;
+	left: 0;
+	width: 30px;
+	height: 5px;
+	overflow: visible;
 }
 .coordX {
 	text-align: center;

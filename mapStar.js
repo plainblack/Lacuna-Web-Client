@@ -144,7 +144,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.LoadGrid({
 				x:xC,
 				y:yC,
-				z:zC,
+				z:zC
 			});
 		},
 		Load : function() {
