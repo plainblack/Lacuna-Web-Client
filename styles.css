@@ -520,13 +520,14 @@ about
 	position:absolute;
 	left:0;
 	top:0;
+	padding-top:50%;
 }
 .planetMapTileActionLevel, .planetMapTileActionButton {
 	width:58px;
 	height:45px;
 	border:0;
 	cursor:pointer;
-	margin:88px 81px;
+	margin:-22px auto 0;
 	text-align:center;
 }
 .planetMapTileActionLevel {
@@ -551,7 +552,7 @@ about
 }
 #mapiator_zoom_display {
 	top:65px;
-	color:#aaa;
+	color:#ddd;
 	font-weight:bold;
 	font-size:120%;	
 }

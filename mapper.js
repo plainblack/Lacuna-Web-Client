@@ -83,8 +83,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		move : function(mx,my) {
 			var mb = this._map.maxBounds; // = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
 			if(mb) {
-				var cb = this.calcCoordBounds(this.left + mx, this.top + my, this.left + mx + this._map.width, this.top + my + this._map.height),
-					tileSize = this._map.tileSizeInPx,
+				var tileSize = this._map.tileSizeInPx,
+					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize,
+					maxWidth = this._map.width > maxBoundsWidth ? maxBoundsWidth : this._map.width,
+					cb = this.calcCoordBounds(this.left + mx, this.top + my, this.left + mx + maxWidth, this.top + my + this._map.height),
 					error = false, tx, ty;
 				//if out of bounds, only move to max
 				//x axis
@@ -92,7 +94,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					mx = ((mb.x1Left * tileSize) - 30) - this.left;
 				}
 				else if(mx > 0 && cb.x2 > (mb.x2Right+1)) { //if moving right
-					mx = ((mb.x2Right+1) * tileSize) - (this.left + this._map.width);
+					mx = ((mb.x2Right+1) * tileSize) - (this.left + maxWidth);
 				}
 				//y axis
 				if(my < 0 && cb.y1 > mb.y1Top){ //if moving up 
@@ -105,7 +107,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			//modify with new values now
 			this.left += mx;
 			this.top += my;
-			this.right = this.left + this._map.width;
+			this.right = this.left + maxWidth;
 			this.bottom = this.top + this._map.height;
 			
 			return {x:mx,y:my};
@@ -271,7 +273,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				var div = this.domElement.appendChild(document.createElement('div'));
 				Dom.addClass(div, "planetMapTileActionContainer");
 				Dom.setStyle(div, "width", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(div, "height", this.map.tileSizeInPx + 'px');
+				Dom.setStyle(div, "height", Math.round(this.map.tileSizeInPx/2) + 'px');
 				if(this.data) {
 					div.innerHTML = ['<div class="planetMapTileActionLevel">',this.data.level,'</div>'].join('');
 				}
@@ -392,8 +394,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			Dom.addClass(anchor, "coordTop");
 
 			var pxSize = this.map.tileSizeInPx,
-				size = pxSize + "px";
-			for(var x=-15; x<=15; x++) {
+				size = pxSize + "px",
+				xMin = this.map.maxBounds.x1Left,
+				xMax = this.map.maxBounds.x2Right;
+			for(var x=xMin; x<=xMax; x++) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = x;
 				num.xIndex = x;
@@ -417,8 +421,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				negPxSize = pxSize * -1,
 				thrd = Math.ceil(pxSize / 3),
 				sizeLeft = (pxSize - thrd) + "px",
-				thrdTxt = thrd + "px";
-			for(var y=15; y>=-15; y--) {
+				thrdTxt = thrd + "px",
+				yMin = this.map.maxBounds.y2Bottom,
+				yMax = this.map.maxBounds.y1Top;
+			for(var y=yMax; y>=yMin; y--) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = y;
 				num.yIndex = y;
@@ -918,8 +924,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		init : function() {
-			this.maxZoom = 0; //2;
-			this.minZoom = 0; //-1;
+			this.maxZoom = 2;
+			this.minZoom = -1;
 			
 			this.bounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
 			this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
@@ -1022,24 +1028,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileCache[oBuilding.x][oBuilding.y] = oBuilding;
 		},
 		refresh : function() {
-			if(this.tileLayer) {
+			/*if(this.tileLayer) {
 				this.tileLayer.showTiles(true);
-			}
-			/*
+			}*/
 			this._setTileSizeByZoom();
-			if(this.movableContainer) {
-				this.movableContainer.reset();
-			}
-			if(this.visibleArea) {
-				this.visibleArea.reset();
-			}
-			if(this.tileLayer) {
-				this.tileLayer.render();
-			}
-			if(this.coordLayer) {
-				this.coordLayer.resize();
-			}
-			*/
+			
+			this.redraw();
+			
+			this.setCenterToCommand();
 		},
 		refreshTile : function(building) {
 			if(this.tileLayer) {
@@ -1077,21 +1073,36 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		if((map.maxZoom - map.minZoom) != 0) {
 			// add zoom buttons
 			var zoomInButton = document.createElement('div');
-			// zoomInButton.setAttribute('class', 'mapiator_zoom_in');
 			zoomInButton.id = 'mapiator_zoom_in';
-
-			map.mapDiv.appendChild( zoomInButton );
-			zoomInButton.onmouseup = function(){map.zoomIn();};
-
+			zoomInButton = map.mapDiv.appendChild( zoomInButton );
+			
 			this.zoomDisplay = document.createElement('div');
 			this.zoomDisplay.id = 'mapiator_zoom_display';
 			map.mapDiv.appendChild( this.zoomDisplay );
-
+			
 			var zoomOutButton = document.createElement('div');
 			zoomOutButton.id = 'mapiator_zoom_out';
+			zoomOutButton = map.mapDiv.appendChild( zoomOutButton );
+			
+			zoomInButton.onmouseup = function(){
+				map.zoomIn();
+				if(map.zoom == map.maxZoom) {
+					Dom.setStyle(zoomInButton,"visibility","hidden");
+				}
+				if(map.zoom > map.minZoom) {
+					Dom.setStyle(zoomOutButton,"visibility","visible");
+				}				
+			};
 
-			map.mapDiv.appendChild( zoomOutButton );
-			zoomOutButton.onmouseup = function(){map.zoomOut();};
+			zoomOutButton.onmouseup = function(){
+				map.zoomOut();
+				if(map.zoom == map.minZoom) {
+					Dom.setStyle(zoomOutButton,"visibility","hidden");
+				}
+				if(map.zoom < map.maxZoom) {
+					Dom.setStyle(zoomInButton,"visibility","visible");
+				}	
+			};
 
 			var preventDblClick = function(e){
 				if( map.IE ) {

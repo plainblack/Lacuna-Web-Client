@@ -319,7 +319,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'	<li><label>Star:</label>',body.star_name,'</li>',
 				'	<li><label>Orbit:</label>',body.orbit,'</li>',
 				body.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
-				body.alignment != "self" ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
+				body.alignment != "self" && body.empire && body.empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
 				'</ul>'
 			].join('');
 			
