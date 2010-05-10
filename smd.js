@@ -153,7 +153,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"description": "Returns the list of spies you have on your roster.",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
 						/*
@@ -301,6 +302,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/shipyard",
 
 				"services": {
+					"view_build_queue" : {
+						"description": "Retrieves what is already being built at this shipyard.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
 					"get_buildable" : {
 						"description": "Returns a list of buildable ships and their costs, and if they're not buildable, gives a reason why not in the form of an exception.",
 						"parameters": [
@@ -369,6 +379,54 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/spaceport",
 
 				"services": {
+					"send_colony_ship" : {
+						"description": "Dispatches a colony ship from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have colony ships, if any, and pick one of them.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"object", "optional":false}
+							/* to_body = 
+								 { "body_name" : "Earth" }
+								 or
+								 { "body_id" : "id-goes-here" }
+								 or
+								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
+							*/
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"colony_ship" : {
+								"date_arrives" : "01 31 2010 13:09:05 +0600"
+							},
+							"status" : { get_status() }
+						}
+						*/
+					},
+					"send_mining_platform_ship" : {
+						"description": "Dispatches a mining platform ship from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have mining platform ships, if any, and pick one of them. You can only dispatch a mining platform ship to an asteroid.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"object", "optional":false}
+							/* to_body = 
+								 { "body_name" : "Earth" }
+								 or
+								 { "body_id" : "id-goes-here" }
+								 or
+								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
+							*/
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"mining_platform_ship" : {
+								"date_arrives" : "01 31 2010 13:09:05 +0600"
+							},
+							"status" : { get_status() }
+						}
+						*/
+					},
 					"send_probe" : {
 						"description": "Dispatches a probe from one of the space ports on a planet to a star. It will automatically detect which space ports on the planet have probes, if any, and pick one of them to dispatch the probe.",
 						"parameters": [
@@ -426,7 +484,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"page_number", "type":"number", "optional":false}
+							{"name":"page_number", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
 						/*
@@ -473,6 +531,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"ore", "type":"number", "optional":false},
 							{"name":"energy", "type":"number", "optional":false},
 							{"name":"use_essentia", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"subsidize_recycling" : {
+						"description": "Will spend 2 essentia to complete the current recycling job immediately.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					}

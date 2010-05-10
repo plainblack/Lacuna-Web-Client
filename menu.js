@@ -11,6 +11,18 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 		
+	var convertNumDisplay = function(number) {
+		if(number > 1000000) {
+			return (Math.floor(number/100000) / 10) + 'm';
+		}
+		else if(number > 100000) {
+			return Math.floor(number/1000) + 'k';
+		}
+		else {
+			return Math.floor(number) || "-";
+		}
+	};
+		
 	var UserMenu = function() {
 		this.id = "userMenu";
 		this.container = Dom.get("header");
@@ -175,18 +187,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		updateTick : function() {
 			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			
-			if(Game.EmpireData.essentia > 100000) {
-				this.elEssentiaText.innerHTML = Math.floor(Game.EmpireData.essentia/1000) + 'k';
-			}
-			else {
-				this.elEssentiaText.innerHTML = Game.EmpireData.essentia || "-";
-			}
-			if(Game.EmpireData.happiness > 100000) {
-				this.elHappyText.innerHTML = Math.floor(Game.EmpireData.happiness/1000) + 'k';
-			}
-			else {
-				this.elHappyText.innerHTML = Math.round(Game.EmpireData.happiness) || "-";
-			}
+			this.elEssentiaText.innerHTML = convertNumDisplay(Game.EmpireData.essentia);
+			this.elHappyText.innerHTML = convertNumDisplay(Game.EmpireData.happiness);
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
@@ -421,43 +423,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				if(cp.food_stored > 100000) {
-					this.elFoodText.innerHTML = Math.floor(cp.food_stored/1000) + 'k';
-				}
-				else {
-					this.elFoodText.innerHTML = Math.round(cp.food_stored) || "-";
-				}
-				if(cp.ore_stored > 100000) {
-					this.elOreText.innerHTML = Math.floor(cp.ore_stored/1000) + 'k';
-				}
-				else {
-					this.elOreText.innerHTML = Math.round(cp.ore_stored) || "-";
-				}
-				if(cp.water_stored > 100000) {
-					this.elWaterText.innerHTML = Math.floor(cp.water_stored/1000) + 'k';
-				}
-				else {
-					this.elWaterText.innerHTML = Math.round(cp.water_stored) || "-";
-				}
+				this.elFoodText.innerHTML = convertNumDisplay(cp.food_stored);
+				this.elOreText.innerHTML = convertNumDisplay(cp.ore_stored);
+				this.elWaterText.innerHTML = convertNumDisplay(cp.water_stored);
 				
-				if(cp.energy_stored > 100000) {
-					this.elEnergyText.innerHTML = Math.floor(cp.energy_stored/1000) + 'k';
-				}
-				else {
-					this.elEnergyText.innerHTML = Math.round(cp.energy_stored) || "-";
-				}
-				if(cp.waste_stored > 100000) {
-					this.elWasteText.innerHTML = Math.floor(cp.waste_stored/1000) + 'k';
-				}
-				else {
-					this.elWasteText.innerHTML = Math.round(cp.waste_stored) || "-";
-				}
-				if(cp.happiness > 100000) {
-					this.elHappyText.innerHTML = Math.floor(cp.happiness/1000) + 'k';
-				}
-				else {
-					this.elHappyText.innerHTML = Math.round(cp.happiness) || "-";
-				}
+				this.elEnergyText.innerHTML = convertNumDisplay(cp.energy_stored);
+				this.elWasteText.innerHTML = convertNumDisplay(cp.waste_stored);
+				this.elHappyText.innerHTML = convertNumDisplay(cp.happiness);
 			}
 			else {
 				this.elText.innerHTML = "Planet";
@@ -472,6 +444,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 		},
 		menuClick : function(p_sType, p_aArgs, planet){
+			Lacuna.Menu.PlanetMenu.Menu.hide();
 			YAHOO.log(planet, "info", "PlanetMenu.menuClick.click");
 			Game.EmpireData.current_planet_id = planet.id;
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
@@ -483,6 +456,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Lacuna.MapPlanet.Load(planet.id);
 		},
 		menuStarClick : function(p_sType, p_aArgs, planet){
+			Lacuna.Menu.PlanetMenu.Menu.hide();
 			YAHOO.log(planet, "info", "PlanetMenu.menuStarClick.click");
 			Game.SystemJump({id:planet.star_id, name:planet.star_name});
 		},

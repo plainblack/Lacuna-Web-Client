@@ -628,6 +628,11 @@ body.yui-skin-sam .yui-navset .yui-nav .selected a:hover {
 	background:none repeat scroll 0 0 #52acff;
 }
 
+body.yui-skin-sam  .yui-pg-page {
+	background-color:transparent;
+	border:0px;
+}
+
 /*
 * System Map
 */

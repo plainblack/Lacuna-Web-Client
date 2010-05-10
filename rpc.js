@@ -301,7 +301,15 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 					return Lang.JSON.parse(results.responseText);
 				}
 				else {
-					return {"error":{"message":"Response Content-Type is not JSON"}};
+					if(results.status == -1) {
+						return {"error":{"message":"The Request has been Aborted because it was taking too long."}};
+					}
+					else if(results.status === 0) {
+						return {"error":{"message":"Communication with the server has been interrupted for an unknown reason."}};
+					}
+					else {
+						return {"error":{"message":"Response Content-Type is not JSON"}};
+					}
 				}
 			}
 		}

@@ -94,18 +94,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 			this.planetDetails.renderEvent.subscribe(function(){
 				this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
-				Event.delegate("planetDetailsInfo", "click", function(e, matchedEl, container){
-					if(this.selectedBody) {
-						if(matchedEl.innerHTML == "View") {
-							var id = this.selectedBody.id;
-							this.planetDetails.hide();
-							this.fireEvent("onChangeToPlanetView", id);
-						}
-						else if(matchedEl.id == "sendSpy") {
-							this.SendSpy(matchedEl, this.selectedBody.id);
-						}
-					}
-				}, "button", this, true);
+				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
 			}, this, true);
 			this.planetDetails.hideEvent.subscribe(function(){
 				this.selectedBody = undefined;
@@ -252,7 +241,7 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				},{
 					success : function(o){
 						YAHOO.log(o, "info", "MapSystem.Rename.success");
-						if(o.result) {
+						if(o.result && this.selectedBody) {
 							Dom.get("planetDetailsName").innerHTML = newName;
 							Game.EmpireData.planets[this.selectedBody.id].name = newName;
 							Lacuna.Menu.update();
@@ -273,6 +262,24 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 		Reset : function() {
 			delete this.locationId;
 			this.MapVisible(false);
+		},
+		DetailsClick : function(e, matchedEl, container){
+			if(this.selectedBody) {
+				if(matchedEl.innerHTML == "View") {
+					var id = this.selectedBody.id;
+					this.planetDetails.hide();
+					this.fireEvent("onChangeToPlanetView", id);
+				}
+				else if(matchedEl.id == "sendSpy") {
+					this.SendSpy(matchedEl, this.selectedBody.id);
+				}
+				else if(matchedEl.id == "sendColony") {
+					this.SendColonyShip(matchedEl, this.selectedBody.id);
+				}
+				else if(matchedEl.id == "sendMining") {
+					this.SendMiningShip(matchedEl, this.selectedBody.id);
+				}
+			}
 		},
 		SendSpy : function(el, id) {
 			Lacuna.Pulser.Show();
@@ -304,6 +311,64 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				scope:this
 			});
 		},
+		SendColonyShip : function(el, id) {
+			Lacuna.Pulser.Show();
+			el.disabled = true;
+			
+			Game.Services.Buildings.SpacePort.send_colony_ship({
+				session_id:Game.GetSession(),
+				from_body_id:Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id,
+				to_body:{body_id:id}
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapSystem.SendColonyShip.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					var par = el.parentNode;
+					par.removeChild(el);
+					par.innerHTML = ["<div>Arrives: ",Lib.formatServerDate(o.result.colony_ship.date_arrives),"</div>"].join('');
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapSystem.SendColonyShip.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+					var par = el.parentNode;
+					par.appendChild(document.createTextNode(o.error.message));
+					par.removeChild(el);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		SendMiningShip : function(el, id) {
+			Lacuna.Pulser.Show();
+			el.disabled = true;
+			
+			Game.Services.Buildings.SpacePort.send_mining_platform_ship({
+				session_id:Game.GetSession(),
+				from_body_id:Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id,
+				to_body:{body_id:id}
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapSystem.SendMiningShip.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					var par = el.parentNode;
+					par.removeChild(el);
+					par.innerHTML = ["<div>Arrives: ",Lib.formatServerDate(o.result.mining_platform_ship.date_arrives),"</div>"].join('');
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapSystem.SendMiningShip.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+					var par = el.parentNode;
+					par.appendChild(document.createTextNode(o.error.message));
+					par.removeChild(el);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
 		ShowPlanet : function(e, matchedEl, container) {
 			var body = matchedEl.parentNode.Body,
 				panel = this.planetDetails;
@@ -319,7 +384,9 @@ if (typeof YAHOO.lacuna.MapSystem == "undefined" || !YAHOO.lacuna.MapSystem) {
 				'	<li><label>Star:</label>',body.star_name,'</li>',
 				'	<li><label>Orbit:</label>',body.orbit,'</li>',
 				body.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
-				body.alignment != "self" && body.empire && body.empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
+				body.alignment != "none" && body.empire && body.empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
+				body.alignment == "none" && body.type == "habitable planet" ? '	<li><button id="sendColony" type="button">Send Colony Ship</button></li>' : '',
+				body.alignment == "none" && body.type == "asteroid" ? '	<li><button id="sendMining" type="button">Send Mining Ship</button></li>' : '',
 				'</ul>'
 			].join('');
 			

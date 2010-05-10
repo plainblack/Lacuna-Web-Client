@@ -216,7 +216,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Menu.updateTick();
 		},
 		onSystemChangeToPlanetView : function(planetId) {
-			Game.SetLocation(planetId, Lib.View.PLANET);
+			var cp = Game.EmpireData.planets[planetId];
+			if(cp) {
+				Game.EmpireData.current_planet_id = cp.id;
+				Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
+				Game.SetLocation(planetId, Lib.View.PLANET);
+			}
+			
 			Lacuna.MapSystem.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planetId);

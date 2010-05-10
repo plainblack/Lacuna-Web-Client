@@ -49,9 +49,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 		this._container = div;
 		
-		this.offsetX = 0;
-		this.offsetY = 0;
-		
 		this.reset();
 		parentEl.appendChild( div );
 	};
@@ -710,8 +707,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.centerX = Math.floor(0.5 * this.width);
 			this.centerY = Math.floor(0.5 * this.height);	
 			
-			this.visibleArea = new Mapper.VisibleArea(this);
 			this.movableContainer.reset();
+			this.visibleArea = new Mapper.VisibleArea(this);
 
 			this.coordLayer.redraw();
 			
@@ -1027,10 +1024,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			this.tileCache[oBuilding.x][oBuilding.y] = oBuilding;
 		},
-		refresh : function() {
-			/*if(this.tileLayer) {
-				this.tileLayer.showTiles(true);
-			}*/
+		refresh : function() {			
 			this._setTileSizeByZoom();
 			
 			this.redraw();
