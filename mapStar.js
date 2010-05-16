@@ -269,7 +269,31 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			];
 			
 			if(data.alignments == "unprobed") {
-				output.push('	<li><button id="sendProbe" type="button">Send Probe</button></li>');
+				output.push('	<li id="starDetailsIncomingProbe">Loading...</li>');
+				Game.Services.Buildings.Map.check_star_for_incoming_probe({
+					session_id:Game.GetSession(),
+					star_id:data.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapStar.ShowStar.check_star_for_incoming_probe.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
+						if(o.result.incoming_probe) {
+							Dom.get("starDetailsIncomingProbe").innerHTML = 'Probe will arrive at: ' + Lib.formatServerDate(o.result.incoming_probe);
+						}
+						else {
+							Dom.get("starDetailsIncomingProbe").innerHTML = '<button id="sendProbe" type="button">Send Probe</button>';
+						}
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "MapStar.ShowStar.check_star_for_incoming_probe.failure");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpcFailed", o);
+						Dom.get("starDetailsIncomingProbe").innerHTML = "Probe status unknown.";
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
 			} 
 			else {
 				output.push('	<li><button id="viewSystem" type="button">View</button></li>');

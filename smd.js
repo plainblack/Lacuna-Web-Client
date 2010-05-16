@@ -906,7 +906,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 			"transport":"POST",
 			"target":"/map",
 
-			"services": {			
+			"services": {
+				"check_star_for_incoming_probe" : {
+					"description": "Retrieves a chunk of the map and returns it as an array of hashes.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"star_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				
 				"get_stars" : {
 					"description": "Retrieves a chunk of the map and returns it as an array of hashes.",
 					"parameters": [

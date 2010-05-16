@@ -485,9 +485,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						].join('');
 					
 					if(up.can) {
-						Event.on(Sel.query("button", panel.upgradeProdUl, true), "click", function(e){
-							this.Upgrade();
-						}, this, true);
+						Event.on(Sel.query("button", panel.upgradeProdUl, true), "click", this.Upgrade, this, true);
 					}
 				}
 				else {
@@ -1586,7 +1584,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		RecycleGetTimeDisplay : function(recycle) {
 			var div = document.createElement("div"),
 				btnDiv = div.cloneNode(false);
-			div.innerHTML = ['<p>Time remaining on current recycling job:<span id="recycleTime">',Lib.formatTime(recycle.seconds_remaining),'</span></p>'].join('');
+			div.innerHTML = ['<p>Current recycling job:</p>',
+				'<ul><li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',recycle.ore,'</li>',
+				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',recycle.water,'</li>',
+				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',recycle.energy,'</li>',
+				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span id="recycleTime">',Lib.formatTime(recycle.seconds_remaining),'</span></li></ul>'
+			].join('');
 			
 			btnDiv.appendChild(document.createTextNode("You may subsidize the recycle job for 2 essentia and finish it immediately. "));
 			
@@ -2259,8 +2262,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		QueueReload : function(building) {
 			if(building.pending_build) {
 				this.buildings[building.id] = building;
-				this._map.addSingleTileData(building);
-				this._map.refresh();
+				this._map.refreshTile(building);
 				
 				var ms = (building.pending_build.seconds_remaining * 1000);
 				Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
