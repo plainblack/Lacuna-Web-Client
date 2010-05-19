@@ -520,7 +520,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<li><label>Buildings:</label>',planet.building_count,'</li>',
 						'			<li><label>Planet Size:</label>',planet.size,'</li>',
 						'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
-						'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y : ',planet.z,'z</li>',
+						'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y</li>',
 						'			<li><label>Star:</label>',planet.star_name,'</li>',
 						'			<li><label>Orbit:</label>',planet.orbit,'</li>',
 						'		</ul>',
@@ -1378,7 +1378,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'	<div class="yui-u">',
 						'		<div class="probeDelete"></div>',
 						'		<div>',st.name,'</div>',
-						'		<div>',st.x,' : ',st.y,' : ',st.z,'</div>',
+						'		<div>',st.x,' : ',st.y,'</div>',
 						'	</div>',
 						'</div>'
 					].join('');

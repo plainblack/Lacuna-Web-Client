@@ -148,9 +148,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.z = z;
 		this.x = x;
 		this.y = y;
-		this.offsetX = ox;
-		this.offsetY = oy;
+		this.offsetX = this.origOffsetX = ox;
+		this.offsetY = this.origOffsetY = oy;
 		this.map = map;
+		this.tileSizeInPx = map.tileSizeInPx;
 		
 		this.id = Tile.idFor(this.x,this.y,this.z);
 		this.domElement = document.createElement('div');
@@ -160,8 +161,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 		var s = this.domElement.style;
 		s.position = 'absolute';
-		s.width = '' + this.map.tileSizeInPx + 'px';
-		s.height = '' + this.map.tileSizeInPx + 'px';
+		s.width = '' + this.tileSizeInPx + 'px';
+		s.height = '' + this.tileSizeInPx + 'px';
 		s.zIndex = '5';
 		s.left = ''+ this.offsetX +'px';
 		s.top = ''+ this.offsetY +'px';
@@ -170,11 +171,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 		
 		Dom.addClass(this.domElement, "tile");
-		
-		// for debuging:
-		//this.domElement.appendChild(document.createTextNode(this.id));
-			
-		this.init();
 	};
 	Tile.prototype = {
 		//blank init that will always get called.  override in sub classes to change defaults
@@ -209,20 +205,78 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.StarTile, Tile, {
 		init : function() {
-			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ",", this.z, ")"].join('') : "Uncharted Space";
+			this.domElement.title = this.data ? [this.data.name, " (", this.x, ",", this.y, ")"].join('') : "Uncharted Space";
 			
-			if(this.data && this.data.alignments) {
-				this.domElement.innerHTML = "";
-				var alignment = this.domElement.appendChild(document.createElement('div'));
-				Dom.setStyle(alignment, "width", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(alignment, "height", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(alignment, "z-index", '2');
-				Dom.setStyle(alignment, "background", ['transparent url(',Lib.AssetUrl,'star_map/',this.data.alignments,'.png',') no-repeat scroll center'].join(''));
+			if(this.data) {
+				this._createImage();
+				this._createAlignments();
 			}
 		},
 		refresh : function() {
-			Mapper.StarTile.superclass.refresh.call(this);
+			var obj = this.map.getTile(this.x,this.y,this.z);
+			this.blank = obj.blank;
+			this.image = obj.image;
+			this.url = obj.url;
+			this.data = obj.data;
+			if(this.url) {
+				Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
+			}
+			
+			if(this.data) {
+				if(this.data.isStar) {
+					this.tileSizeInPx = this.map.tileSizeInPx*2;
+					var q = this.tileSizeInPx / 4;
+					this.offsetX = this.origOffsetX - q;
+					this.offsetY = this.origOffsetY - q;
+				}
+				else {
+					this.tileSizeInPx = this.map.tileSizeInPx;
+					this.offsetX = this.origOffsetX;
+					this.offsetY = this.origOffsetY;
+				}
+				Dom.setStyle(this.domElement, "width", ''+this.tileSizeInPx+'px');
+				Dom.setStyle(this.domElement, "height", ''+this.tileSizeInPx+'px');
+				Dom.setStyle(this.domElement, "left", ''+this.offsetX+'px');
+				Dom.setStyle(this.domElement, "top", ''+this.offsetY+'px');
+			}
+			
 			this.init();
+		},
+		
+		_createImage : function() {
+			if(!this.imageHolder) {
+				var image = this.domElement.appendChild(document.createElement('div'));
+				Dom.setStyle(image, "width", this.tileSizeInPx + 'px');
+				Dom.setStyle(image, "height", this.tileSizeInPx + 'px');
+				Dom.setStyle(image, "position", "absolute");
+				this.imageHolder = image;
+			}
+			if(this.data.orbit) {
+				var pSize = (100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx);
+				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+			}
+			else {
+				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
+			}
+		},
+		_createAlignments : function() {
+			if(this.data.alignment) {
+				if(!this.alignHolder) {
+					var align = this.domElement.appendChild(document.createElement('div'));
+					Dom.setStyle(align, "width", this.tileSizeInPx + 'px');
+					Dom.setStyle(align, "height", this.tileSizeInPx + 'px');
+					Dom.setStyle(align, "position", "absolute");
+					Dom.setStyle(align, "z-index", '2');
+					this.alignHolder = align;
+				}
+				if(this.data.orbit) {
+					var pSize = (100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx);
+					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.alignment,'.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+				}
+				else {
+					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.alignment,'.png" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
+				}
+			}
 		}
 	});
 	
@@ -260,8 +314,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(!this.counter) {
 				var counter = this.domElement.appendChild(document.createElement('div'));
 				Dom.addClass(counter, "planetMapTileCounter");
-				Dom.setStyle(counter, "width", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(counter, "height", this.map.tileSizeInPx + 'px');
+				Dom.setStyle(counter, "width", this.tileSizeInPx + 'px');
+				Dom.setStyle(counter, "height", this.tileSizeInPx + 'px');
 				this.counter = counter;
 			}
 		},
@@ -269,8 +323,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(!this.actionIcon) {
 				var div = this.domElement.appendChild(document.createElement('div'));
 				Dom.addClass(div, "planetMapTileActionContainer");
-				Dom.setStyle(div, "width", this.map.tileSizeInPx + 'px');
-				Dom.setStyle(div, "height", Math.round(this.map.tileSizeInPx/2) + 'px');
+				Dom.setStyle(div, "width", this.tileSizeInPx + 'px');
+				Dom.setStyle(div, "height", Math.round(this.tileSizeInPx/2) + 'px');
 				if(this.data) {
 					div.innerHTML = ['<div class="planetMapTileActionLevel">',this.data.level,'</div>'].join('');
 				}
@@ -745,9 +799,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.StarMap, Map, {
 		init : function() {
-			this.maxZoom = 15;
-			this.minZoom = -15;
-			this.maxBounds = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
+			var mapSize = Game.ServerData.star_map_size;
+			this.zoom = 0;
+			this.maxZoom = 0;
+			this.minZoom = 0;
+			this.maxBounds = {x1Left:mapSize.x[0],x2Right:mapSize.x[1],y1Top:mapSize.y[1],y2Bottom:mapSize.y[0]};
 			this.requestQueue = [];
 		
 			this.Tile = Mapper.StarTile;
@@ -772,16 +828,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.moveByPx(ox * -1, oy * -1);
 			}
 		},
-		getTile : function(x, y, z){
-			var zSet = this.tileCache[z],
-				xSet = zSet ? zSet[x] : null,
-				star = xSet ? xSet[y] : null;
+		getTile : function(x, y){
+			var xSet = this.tileCache[x],
+				body = xSet ? xSet[y] : null;
 			
-			if(star) {
-				return {data:star, url:[Lib.AssetUrl,'star_map/',star.color,'.png'].join('')};
+			if(body) {
+				if(body.isStar) {
+					return {data:body, image:[Lib.AssetUrl,'star_map/',body.color,'.png'].join('')};
+				}
+				else if(body.isPlanet) {
+					return {data:body, image:[Lib.AssetUrl,'star_system/',body.image,'.png'].join('')};
+				}
 			}
 			else {
-				return {blank:true, url:Lib.AssetUrl + 'ui/blankstar.png'};
+				return {blank:true};
 			}
 		},
 		getTileData : function(callback, x1, x2, y1, y2) {
@@ -810,15 +870,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					x1 : x1, 
 					x2 : x2, 
 					y1 : y1, 
-					y2 : y2, 
-					z : this.zoom
+					y2 : y2
 				};
-				YAHOO.log(data);
+				YAHOO.log(data, "debug", "StarMap.getTileData.requestData");
 				//now call back for data
 				//this.currentRequest = 
 				Game.Services.Maps.get_stars(data,{
 					success : function(o){
-						YAHOO.log(["GET_STARS ", o]);
+						YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.success");
 						if(o && o.result) {
 							Game.ProcessStatus(o.result.status);
 							this.addTileData(o.result.stars);
@@ -831,7 +890,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						}*/
 					},
 					failure : function(o){
-						YAHOO.log(["GET_STARS FAILED ", o.error.message, o]);
+						YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.failure");
 						callback.success.call(callback.scope || this, callback.argument);
 						//this.currentRequest = undefined;
 					},
@@ -846,16 +905,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 		updateBounds : function(oStar) {
 			//force numbers
-			oStar.z *= 1;
 			oStar.x *= 1;
 			oStar.y *= 1;
-			
-			if(!this.bounds[oStar.z]) {
-				//set z levels to 0 by default
-				this.bounds[oStar.z] = {x1Left:0,x2Right:0,y1Top:0,y2Bottom:0};
-			}
-			//do this no matter what
-			var bnds = this.bounds[oStar.z];
+			var bnds = this.bounds;
 			
 			if(bnds.x1Left > oStar.x) {
 				bnds.x1Left = oStar.x;
@@ -875,19 +927,25 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			//var startZoomLevel = 0;
 			for(var i=0; i<aStars.length; i++) {
 				var star = aStars[i];
-				if(!this.tileCache[star.z]) {
-					this.tileCache[star.z] = {};
+				star.isStar = true;
+				if(!this.tileCache[star.x]) {
+					this.tileCache[star.x] = {};
 				}
-				if(!this.tileCache[star.z][star.x]) {
-					this.tileCache[star.z][star.x] = {};
+				this.tileCache[star.x][star.y] = star;
+
+				if(star.bodies) {
+					for(var bKey in star.bodies){
+						if(star.bodies.hasOwnProperty(bKey)){
+							var body = star.bodies[bKey];
+							body.isPlanet = true;
+							if(!this.tileCache[body.x]) {
+								this.tileCache[body.x] = {};
+							}
+							this.tileCache[body.x][body.y] = body;
+						}
+					}
 				}
-				this.tileCache[star.z][star.x][star.y] = star;
-				/*startZoomLevel = star.z;
-				if(star.alignments == "self") {
-					this.currentSystem = star;
-					this.currentSystem.x *= 1;
-					this.currentSystem.y *= 1;
-				}*/
+
 				this.updateBounds(star);
 			}
 			//return startZoomLevel;
@@ -1001,9 +1059,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					}
 					if(!this.tileCache[tile.x]) {
 						this.tileCache[tile.x] = {};
-					}
-					if(!this.tileCache[tile.x][tile.y]) {
-						this.tileCache[tile.x][tile.y] = {};
 					}
 					this.tileCache[tile.x][tile.y] = tile;
 				}

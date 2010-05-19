@@ -309,12 +309,12 @@ SHINEY
 }
 
 
-.back, .food { left:10px; }
+.change, .food { left:10px; }
 .inbox, .ore { left:130px; }
 .bookmark, .water { left:250px; }
 .essentia, .energy { right:250px; }
 #header .happiness, .waste { right:130px; }
-.forward, #footer .happiness { right:10px; }
+#footer .happiness { right:10px; }
 #header .click, #footer .click { z-index:1003; cursor:pointer; }
 
 /*
@@ -633,50 +633,14 @@ body.yui-skin-sam  .yui-pg-page {
 	border:0px;
 }
 
-/*
-* System Map
-*/
-#systemMap {
-	text-align:left;
-}
-.orbit {
-	vertical-align: middle;
-	position: absolute;
-	text-align: right;
-}
-.orbit span {
-	display: inline-block;
-	color: white;
-}
-.planet {
+
+.planet, .star {
 	cursor: pointer;
 	position: relative;
 	display: inline;
 	vertical-align: middle;
 }
-.planetName {
-	cursor: pointer;
-}
-#orbit1 { width: 250px; top: 80px; }
-#planet1, #planetAlignment1 { width: 60px; }
-#orbit2 { width: 345px; top: 140px; }
-#planet2, #planetAlignment2 { width: 75px; }
-#orbit3 { width: 450px; top: 210px; }
-#planet3, #planetAlignment3 { width: 90px; }
-#orbit4 { width: 570px; top: 285px; }
-#planet4, #planetAlignment4 { width: 105px; }
-#orbit5 { width: 700px; top: 370px; }
-#planet5, #planetAlignment5 { width: 120px; }
-#orbit6 { width: 855px; top: 460px; }
-#planet6, #planetAlignment6 { width: 135px; }
-#orbit7 { width: 1020px; top: 560px; }
-#planet7, #planetAlignment7 { width: 150px; }
 
-#planetAlignment1, #planetAlignment2, #planetAlignment3, #planetAlignment4, #planetAlignment5, #planetAlignment6, #planetAlignment7  {
-	position:absolute;
-	right:0px;
-	top:0px;
-}
 
 /*
 planet details

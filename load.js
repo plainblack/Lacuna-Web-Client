@@ -67,12 +67,6 @@
 		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
-		name: "mapSystem",
-		type: "js",
-		fullpath: host + "mapSystem.js?" + t,
-		requires : ["game","selector","tabview"]
-	});
-	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
@@ -115,7 +109,7 @@
 		fullpath: host + "menu.js?" + t,
 		requires : ["about","essentia","messaging","menu","profile"]
 	});
-	loader.require("gameMenu","logger","login","mapPlanet","mapStar","mapSystem");
+	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();
 		

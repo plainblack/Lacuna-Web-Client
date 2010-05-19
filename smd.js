@@ -600,13 +600,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				"get_full_status" : {
-					"description": "get full empire status",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-				},
 				"view_profile" : {
 					"description": "Provides a list of the editable properties of the current empire's profile. See also the edit_profile and view_public_profile  methods.",
 					"parameters": [

@@ -30,8 +30,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.elClick = Dom.get(this.clickId);
 		this.elText = Dom.get("users");
 		
-		this.createEvent("onBackClick");
-		this.createEvent("onForwardClick");
+		this.createEvent("onChangeClick");
 		this.createEvent("onInboxClick");
 	};
 	UserMenu.prototype = {
@@ -87,9 +86,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.update();
 		},
 		createLeft : function() {
-			var back = document.createElement("div"),
-				backClick = back.cloneNode(false),
-				backImg = back.appendChild(document.createElement("img")),
+			var change = document.createElement("div"),
+				changeClick = change.cloneNode(false),
+				changeImg = change.appendChild(document.createElement("img")),
 				inbox = document.createElement("div"),
 				inboxClick = inbox.cloneNode(false),
 				inboxImg = inbox.appendChild(document.createElement("img"));//,
@@ -97,14 +96,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				//bookmarkClick = bookmark.cloneNode(false),
 				//bookmarkImg = bookmark.appendChild(document.createElement("img"));
 
-			backImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
-			backImg.alt = "Back";
-			Event.on(backClick, "click", function() {
-				this.fireEvent("onBackClick");
+			changeImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
+			changeImg.alt = "Change";
+			Event.on(changeClick, "click", function() {
+				this.fireEvent("onChangeClick");
 			}, this, true);
-			Dom.addClass([back,backClick], "back");
-			Dom.addClass([back,backClick], "menuItem");
-			Dom.addClass(backClick, "click");
+			Dom.addClass([change,changeClick], "change");
+			Dom.addClass([change,changeClick], "menuItem");
+			Dom.addClass(changeClick, "click");
 			
 			inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			inboxImg.alt = "Inbox";
@@ -124,9 +123,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([bookmark,bookmarkClick], "menuItem");
 			Dom.addClass(bookmarkClick, "click");*/
 			
-			this.elBack = this.container.appendChild(back);
-			this.elBackClick = this.container.appendChild(backClick);
-			this.elBackImg = backImg;
+			this.elChange = this.container.appendChild(change);
+			this.elChangeClick = this.container.appendChild(changeClick);
+			this.elChangeImg = changeImg;
 			this.elInbox = this.container.appendChild(inbox);
 			this.elInboxClick = this.container.appendChild(inboxClick);
 			this.elInboxImg = inboxImg;
@@ -141,11 +140,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				happy = document.createElement("div"),
 				happyOver = happy.cloneNode(false),
 				happyImg = happy.appendChild(document.createElement("img")),
-				happyTxt = happy.appendChild(document.createElement("span")),
-				forward = document.createElement("div"),
-				forwardClick = forward.cloneNode(false),
-				forwardImg = forward.appendChild(document.createElement("img")),
-				forwardTxt = forward.appendChild(document.createElement("span"));
+				happyTxt = happy.appendChild(document.createElement("span"));
 				
 			essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
 			essentiaImg.alt = essentiaImg.title = "Essentia";
@@ -160,15 +155,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([happy,happyOver], "happiness");
 			Dom.addClass([happy,happyOver], "menuItem");
 			Dom.addClass(happyOver, "click");
-
-			forwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
-			forwardImg.alt = "Forward";
-			Event.on(forwardClick, "click", function() {
-				this.fireEvent("onForwardClick");
-			}, this, true);
-			Dom.addClass([forward,forwardClick], "forward");
-			Dom.addClass([forward,forwardClick], "menuItem");
-			Dom.addClass(forwardClick, "click");
 			
 			this.elEssentia = this.container.appendChild(essentia);
 			this.elEssentiaClick = this.container.appendChild(essentiaClick);
@@ -176,9 +162,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elHappy = this.container.appendChild(happy);
 			this.elHappyOver = this.container.appendChild(happyOver);
 			this.elHappyText = happyTxt;
-			this.elForward = this.container.appendChild(forward);
-			this.elForwardClick = this.container.appendChild(forwardClick);
-			this.elForwardImg = forwardImg;
 		},
 		update : function() {
 			this.elText.innerHTML = Game.EmpireData.name || "Empire";
@@ -197,22 +180,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(this.container, Lib.Styles.HIDDEN);
 		},
 		starVisible : function(vis) {
-			this.elBackClick.title = "To your Planet";
-			this.elBackImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
-			this.elForwardClick.title = "To your planet's Star System";
-			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
-		},
-		systemVisible : function(vis) {
-			this.elBackClick.title = "To the Universe";
-			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
-			this.elForwardClick.title = "To your Planet";
-			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
+			this.elChangeClick.title = "To your Planet";
+			this.elChangeImg.src = Lib.AssetUrl + 'ui/l/planet_side.png';
 		},
 		planetVisible : function(vis) {
-			this.elBackClick.title = "To your planet's Star System";
-			this.elBackImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
-			this.elForwardClick.title = "To the Universe";
-			this.elForwardImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
+			this.elChangeClick.title = "To the Universe";
+			this.elChangeImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 		},
 		showAbout : function() {
 			Game.OverlayManager.hideAll();
@@ -392,7 +365,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var items = [];
 			for(var pKey in planets) {
 				if(planets.hasOwnProperty(pKey)) {
-					var p = planets[pKey];
+					var p = planets[pKey]
 					items.push({ 
 						text: p.name, 
 						id: "planetMenuItem"+(count++), 
@@ -458,7 +431,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		menuStarClick : function(p_sType, p_aArgs, planet){
 			Lacuna.Menu.PlanetMenu.Menu.hide();
 			YAHOO.log(planet, "info", "PlanetMenu.menuStarClick.click");
-			Game.SystemJump({id:planet.star_id, name:planet.star_name});
+			Game.StarJump({id:planet.star_id, name:planet.star_name, x:planet.x, y:planet.y});
 		},
 		
 		show : function() {
@@ -503,15 +476,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		this.UserMenu = new UserMenu();
 		this.PlanetMenu = new PlanetMenu();
 		
-		this.createEvent("onBackClick");
-		this.createEvent("onForwardClick");
+		this.createEvent("onChangeClick");
 		this.createEvent("onInboxClick");
 		
-		this.UserMenu.subscribe("onBackClick", function() {
-			this.fireEvent("onBackClick");
-		}, this, true);
-		this.UserMenu.subscribe("onForwardClick", function() {
-			this.fireEvent("onForwardClick");
+		this.UserMenu.subscribe("onChangeClick", function() {
+			this.fireEvent("onChangeClick");
 		}, this, true);
 		this.UserMenu.subscribe("onInboxClick", function() {
 			this.fireEvent("onInboxClick");
@@ -546,7 +515,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.UserMenu.hide();
 			this.PlanetMenu.hide();
 			this._starVisible = false;
-			this._systemVisible = false;
 			this._planetVisible = false;
 		},
 		show : function() {
@@ -555,27 +523,16 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		StarVisible : function() {
 			this._starVisible = true;
-			this._systemVisible = false;
 			this._planetVisible = false;
 			this.UserMenu.starVisible();
 		},
-		SystemVisible : function() {
-			this._starVisible = false;
-			this._systemVisible = true;
-			this._planetVisible = false;
-			this.UserMenu.systemVisible();
-		},
 		PlanetVisible : function() {
 			this._starVisible = false;
-			this._systemVisible = false;
 			this._planetVisible = true;
 			this.UserMenu.planetVisible();
 		},
 		IsStarVisible : function() {
 			return this._starVisible;
-		},
-		IsSystemVisible : function() {
-			return this._systemVisible;
 		},
 		IsPlanetVisible : function() {
 			return this._planetVisible;
