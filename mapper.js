@@ -224,8 +224,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			if(this.data) {
 				if(this.data.isStar) {
-					this.tileSizeInPx = this.map.tileSizeInPx*2;
-					var q = this.tileSizeInPx / 4;
+					this.tileSizeInPx = this.map.tileSizeInPx*3;
+					var q = this.map.tileSizeInPx;
 					this.offsetX = this.origOffsetX - q;
 					this.offsetY = this.origOffsetY - q;
 				}
@@ -253,7 +253,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			if(this.data.orbit) {
 				var pSize = (100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx);
-				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
 			}
 			else {
 				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
@@ -271,7 +271,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				}
 				if(this.data.orbit) {
 					var pSize = (100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx);
-					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.alignment,'.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.alignment,'.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
 				}
 				else {
 					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.alignment,'.png" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
@@ -808,7 +808,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 			this.Tile = Mapper.StarTile;
 
-			this.setTileSizeInPx(100);
+			this.setTileSizeInPx(75);
 		},
 		setCenterTo : function(locX, locY) {
 			if(Lang.isNumber(locX) && Lang.isNumber(locY) && this.tileLayer) {
@@ -848,7 +848,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			var xDiff = Math.abs(x2-x1),
 				yDiff = Math.abs(y2-y1);
 				
-			if((xDiff * yDiff) > 100) { //if out of bounds split and try again
+			if((xDiff * yDiff) > 400) { //if out of bounds split and try again
 				var half;
 				if(xDiff > 0) { //make sure x diff isn't zero so we can split it in half, other wise use Y axis
 					half = Math.floor(xDiff/2);

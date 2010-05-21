@@ -305,7 +305,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li><label>Y: </label>',data.y,'</li>'
 			];
 			
-			if(data.alignments == "unprobed") {
+			if(!data.bodies) {
 				output.push('	<li id="starDetailsIncomingProbe">Loading...</li>');
 				Game.Services.Maps.check_star_for_incoming_probe({
 					session_id:Game.GetSession(),

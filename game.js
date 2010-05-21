@@ -199,7 +199,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Game.SetLocation(planetId, Lib.View.PLANET);
 			}
 			
-			Lacuna.MapSystem.MapVisible(false);
+			Lacuna.MapStar.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planetId);
 			YAHOO.log(planetId, "info", "onChangeToPlanetView");
@@ -365,9 +365,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.OverlayManager.hideAll();
 			Lacuna.MapPlanet.MapVisible(false);
 			Lacuna.MapStar.MapVisible(true);
-			Lacuna.MapSystem.MapVisible(false);
 			Lacuna.Menu.StarVisible(true);
-			Game.SetLocation("home", Lib.View.STAR);
+			//Game.SetLocation("home", Lib.View.STAR);
 			Lacuna.MapStar.Jump(star.x*1, star.y*1);
 		},
 		

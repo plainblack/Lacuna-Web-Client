@@ -454,7 +454,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				msg.is = isTab;
 				nLi.Message = msg;
 				Dom.addClass(nLi, "message");
-				if(msg.has_read == "") {
+				if(msg.has_read == "0") {
 					Dom.addClass(nLi, "unread");
 				}
 				nLi.innerHTML = [
