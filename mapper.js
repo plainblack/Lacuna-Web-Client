@@ -106,6 +106,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.top += my;
 			this.right = this.left + maxWidth;
 			this.bottom = this.top + this._map.height;
+			this.centerX = this.left + (maxWidth/2);
+			this.centerY = this.top + (this._map.height/2);
 			
 			return {x:mx,y:my};
 		},
@@ -130,6 +132,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			var tileSize = this._map.tileSizeInPx;
 			return [Math.ceil(this.right / tileSize),
 			Math.floor(this.bottom / tileSize)];
+		},
+		centerLoc : function(){
+			var tileSize = this._map.tileSizeInPx;
+			return [Math.ceil(this.centerX / tileSize),
+			Math.floor((this.centerY*-1) / tileSize)];
 		},
 		reset : function() {
 			this.left = 0;
@@ -185,15 +192,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
 			}
 		},
-			
-		notInDom : function() {
-			return this._notInDom;
+		
+		appendToDom : function() {
+			return this.domElement && !this.blank && !this.domElement.parentNode;
 		},
 		remove : function() {
 			if( this.domElement && this.domElement.parentNode) {
 				this.domElement.parentNode.removeChild(this.domElement);
 			}
-			this._notInDom = true;
 		}
 	};
 	Tile.idFor = function(x,y,z){
@@ -300,6 +306,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			Mapper.PlanetTile.superclass.refresh.call(this);
 			this.init();
 		},
+		appendToDom : function() {
+			return this.domElement;
+		},
+		
 		refreshCounter : function() {
 			var obj = this.map.getTile(this.x,this.y,this.z);
 			this.blank = obj.blank;
@@ -320,7 +330,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		_createActionIcon : function() {
-			if(!this.actionIcon) {
+			if(this.actionIcon) {
+				if(this.data) {
+					this.actionIcon.innerHTML = ['<div class="planetMapTileActionLevel">',this.data.level,'</div>'].join('');
+				}
+				else {
+					this.actionIcon.innerHTML = '<div class="planetMapTileActionButton"></div>';
+				}
+			}
+			else {
 				var div = this.domElement.appendChild(document.createElement('div'));
 				Dom.addClass(div, "planetMapTileActionContainer");
 				Dom.setStyle(div, "width", this.tileSizeInPx + 'px');
@@ -560,7 +578,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						if(tile.blank) {
 							tile.refresh();
 						}
-						if(tile.notInDom() && tile.domElement) {
+						if(tile.appendToDom()) {
 							this.tileContainer.appendChild( tile.domElement );	
 						}
 					}
@@ -582,7 +600,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						//var offsets = this.visibleArea.getOffsetFromCoords(xc, xy, this.baseTileCoords[0], this.baseTileCoords[1]);
 						tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this.map);
 						this.tileCache[tile.id] = tile;
-						if( tile.domElement ) {
+						if( tile.appendToDom() ) {
 							this.tileContainer.appendChild( tile.domElement );
 						}
 					}
@@ -593,7 +611,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						if(tile.blank) {
 							tile.refresh();
 						}
-						if(tile.notInDom() && tile.domElement) {
+						if(tile.appendToDom()) {
 							this.tileContainer.appendChild( tile.domElement );	
 						}
 					}
@@ -798,17 +816,34 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Mapper.StarMap.superclass.constructor.call(this, divId);
 	};
 	Lang.extend(Mapper.StarMap, Map, {
+		_setTileSizeByZoom : function() {
+			switch(this.zoom){
+				case 2:
+					this.setTileSizeInPx(150);
+					break;
+				case 1:
+					this.setTileSizeInPx(100);
+					break;
+				case -1:
+					this.setTileSizeInPx(50);
+					break;
+				default:
+					this.setTileSizeInPx(75);
+					break;
+			}
+		},
 		init : function() {
+			this.maxZoom = 2;
+			this.minZoom = -1;
+			
 			var mapSize = Game.ServerData.star_map_size;
-			this.zoom = 0;
-			this.maxZoom = 0;
-			this.minZoom = 0;
 			this.maxBounds = {x1Left:mapSize.x[0],x2Right:mapSize.x[1],y1Top:mapSize.y[1],y2Bottom:mapSize.y[0]};
 			this.requestQueue = [];
 		
 			this.Tile = Mapper.StarTile;
-
-			this.setTileSizeInPx(75);
+			
+			this.zoom = 0;
+			this._setTileSizeByZoom();
 		},
 		setCenterTo : function(locX, locY) {
 			if(Lang.isNumber(locX) && Lang.isNumber(locY) && this.tileLayer) {
@@ -949,6 +984,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.updateBounds(star);
 			}
 			//return startZoomLevel;
+		},
+		refresh : function() {
+			var vac = this.visibleArea.centerLoc();
+			
+			this._setTileSizeByZoom();
+			
+			this.redraw();
+			
+			this.setCenterTo(vac[0],vac[1]);
 		},
 		reset : function() {
 			this.tileCache = {};
@@ -1128,6 +1172,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.zoomDisplay = document.createElement('div');
 			this.zoomDisplay.id = 'mapiator_zoom_display';
 			map.mapDiv.appendChild( this.zoomDisplay );
+			this.setZoomDisplay(map.zoom);
 			
 			var zoomOutButton = document.createElement('div');
 			zoomOutButton.id = 'mapiator_zoom_out';

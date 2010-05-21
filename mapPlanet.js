@@ -220,7 +220,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		Mapper : function(oArgs) {
-			this.MapVisible(true);
 			YAHOO.log(oArgs.buildings, "debug", "Mapper");
 			this.buildings = oArgs.buildings;
 			this.surfaceUrl = [Lib.AssetUrl,'planet_side/',oArgs.body.surface_image,'.jpg'].join('');
@@ -231,7 +230,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.SetSize();
 				
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
-				map.setZoomLevel(map.addTileData(oArgs.buildings));
+				map.addTileData(oArgs.buildings);
 				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
@@ -271,6 +270,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
+			this.MapVisible(true);
 			
 			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+this.surfaceUrl+'") repeat scroll 0 0 black');
 			Lacuna.Pulser.Hide();
@@ -305,10 +305,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		ReLoadTile : function(id) {
+			YAHOO.log(this._isVisible, "info", "MapPlanet.ReLoadTile._isVisible");
 			if(this._isVisible && id) {
+				YAHOO.log(id, "info", "MapPlanet.ReLoadTile.id");
 				var building = this.buildings[id];
 				if(building) {
-					YAHOO.log(building, "info", "MapPlanet.ReLoadTile");
+					YAHOO.log(building, "info", "MapPlanet.ReLoadTile.building");
 					
 					this.ViewData(id, building.url, {
 						url:building.url
@@ -349,6 +351,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					newB.x = x;
 					newB.y = y;
 					newB.updated = (newB.level != this.buildings[newB.id].level);
+					var remaining = 0;
+					if(newB.pending_build) {
+						remaining = newB.pending_build.seconds_remaining*1;
+					}
+					if(remaining < 0) {
+						delete newB.pending_build;
+					}
+					else if(remaining > 0) {
+						this.QueueReload(newB);
+					}
+
 					this.buildings[newB.id] = newB;
 					this._map.refreshTile(newB);
 

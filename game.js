@@ -552,6 +552,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		QueueFire : function(type, id) {
+			YAHOO.log(arguments, "debug", "Game.QueueFire");
 			switch(type) {
 				case Lib.QueueTypes.PLANET:
 					Lacuna.MapPlanet.ReLoadTile(id);
@@ -561,6 +562,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				case Lib.QueueTypes.SYSTEM:
 					break;
 				default:
+					YAHOO.log("type unknown", "debug", "Game.QueueFire");
 					break;
 			}
 		},
