@@ -79,8 +79,11 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					
 					if(this.elRemember.checked) {
 						var now = new Date();
+						 //** REMOVE THIS!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+						Cookie.remove("lacunaEmpireName");
+						 //** REMOVE THIS!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 						Cookie.set("lacunaEmpireName", this.elName.value, {
-							domain: "lacunaexpanse.com",
+							domain: Game.domain,
 							expires: new Date(now.setFullYear(now.getFullYear() + 1))
 						});
 					}
@@ -107,7 +110,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				scope:this
 			});
 		},
-		show : function(sessionExpired) {
+		show : function(error) {
 			Game.OverlayManager.hideAll();
 			this.elForm.reset();
 			this.Dialog.show();
@@ -116,8 +119,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				this.elName.value = str;
 				this.elRemember.checked = true;
 			}
-			if(sessionExpired) {
-				this.setMessage("Your session has expired. Please login again.");
+			if(error) {
+				this.setMessage(error.message);
 			}
 		},
 		hide : function() {

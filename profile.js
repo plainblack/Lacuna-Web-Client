@@ -152,7 +152,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					Dom.addClass(nLi, "medal");
 					nLi.MedalId = id;
 					nLi.innerHTML = [
-					'	<div class="medalPublic"><input type="checkbox"', (medal["public"] ? ' checked' : ''), ' /></div>',
+					'	<div class="medalPublic"><input type="checkbox"', (medal["public"] == "1" ? ' checked' : ''), ' /></div>',
 					'	<div class="medalContainer">',
 					'		<img src="',Lib.AssetUrl,'medal/',medal.image,'.png" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
 					'	</div>'

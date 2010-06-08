@@ -69,7 +69,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.createLeft();
 			this.createRight();
-
+/*
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,10],
@@ -82,7 +82,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			});
 			
 			this.userMenuTT = userMenuTT;
-			
+*/
 			this.update();
 		},
 		createLeft : function() {
@@ -136,11 +136,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var essentia = document.createElement("div"),
 				essentiaClick = essentia.cloneNode(false),
 				essentiaImg = essentia.appendChild(document.createElement("img")),
-				essentiaTxt = essentia.appendChild(document.createElement("span")),
-				happy = document.createElement("div"),
-				happyOver = happy.cloneNode(false),
-				happyImg = happy.appendChild(document.createElement("img")),
-				happyTxt = happy.appendChild(document.createElement("span"));
+				essentiaTxt = essentia.appendChild(document.createElement("span"));
 				
 			essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
 			essentiaImg.alt = essentiaImg.title = "Essentia";
@@ -149,19 +145,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([essentia,essentiaClick], "menuItem");
 			Dom.addClass(essentiaClick, "click");
 			
-			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
-			happyImg.alt = happyImg.title = "Happiness";
-			happyOver.id = "userMenuHappiness";
-			Dom.addClass([happy,happyOver], "happiness");
-			Dom.addClass([happy,happyOver], "menuItem");
-			Dom.addClass(happyOver, "click");
-			
 			this.elEssentia = this.container.appendChild(essentia);
 			this.elEssentiaClick = this.container.appendChild(essentiaClick);
 			this.elEssentiaText = essentiaTxt;
-			this.elHappy = this.container.appendChild(happy);
-			this.elHappyOver = this.container.appendChild(happyOver);
-			this.elHappyText = happyTxt;
 		},
 		update : function() {
 			this.elText.innerHTML = Game.EmpireData.name || "Empire";
@@ -171,7 +157,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			
 			this.elEssentiaText.innerHTML = convertNumDisplay(Game.EmpireData.essentia);
-			this.elHappyText.innerHTML = convertNumDisplay(Game.EmpireData.happiness);
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
@@ -190,9 +175,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		showAbout : function() {
 			Game.OverlayManager.hideAll();
 			Lacuna.About.show();
-		},
+		}
 		
-		getTextFor : function(id) {
+		/*getTextFor : function(id) {
 			var ED = Game.EmpireData,
 				output;
 			switch(id){
@@ -204,7 +189,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 			}
 			return output.join('');
-		}
+		}*/
 	};
 	Lang.augmentProto(UserMenu, Util.EventProvider);
 	
@@ -365,7 +350,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var items = [];
 			for(var pKey in planets) {
 				if(planets.hasOwnProperty(pKey)) {
-					var p = planets[pKey]
+					var p = planets[pKey];
 					items.push({ 
 						text: p.name, 
 						id: "planetMenuItem"+(count++), 
@@ -423,8 +408,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
 			
 			Lacuna.MapStar.MapVisible(false);
-			Lacuna.MapSystem.MapVisible(false);
-			Lacuna.MapPlanet.MapVisible(true);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planet.id);
 		},

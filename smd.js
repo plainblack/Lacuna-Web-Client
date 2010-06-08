@@ -82,6 +82,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"demolish" : {
+						"description": "Allows you to instantly destroy a building provided it wouldn't put you into a negative resource production situation. For example, if you're producing only a net positive of 100 food per hour, and you destroy a corn field that would take away 200 food per hour, then the game won't allow you to demolish that building.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"view" : {
 						"description": "Retrieves the properties of the building.",
 						"parameters": [

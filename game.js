@@ -37,7 +37,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 		
 		Start : function() {
-			Lacuna.Pulser = new Lacuna.Pulse();
+			Game.domain = window.location.host || "lacunaexpanse.com";
+			if(!Lacuna.Pulser) {
+				Lacuna.Pulser = new Lacuna.Pulse();
+			}
 			Lacuna.Pulser.Show();
 			
 			var session = Game.GetSession();
@@ -53,15 +56,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		Failure : function(o){
-			if(o.error.code == 1006) {
+			if(o.error.code == 1006 || o.error.code == 1002) {
 				Game.Reset();
-				Game.DoLogin(true);
+				Game.DoLogin(o.error);
 			}
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
 			}
 		},
-		DoLogin : function(sessionExpired) {
+		DoLogin : function(error) {
 			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
@@ -79,7 +82,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 			}
 			Game.OverlayManager.hideAll();
-			Lacuna.Game.LoginDialog.show(sessionExpired);
+			Lacuna.Game.LoginDialog.show(error);
 			Lacuna.Menu.hide();
 			Lacuna.Pulser.Hide();
 		},
@@ -100,21 +103,17 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.PlanetVisible();
 				Lacuna.MapPlanet.Load(Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id);
 			}
+			else if(locationView == "planet") {
+				Lacuna.MapStar.MapVisible(false);
+				Lacuna.MapPlanet.MapVisible(true);
+				Lacuna.Menu.PlanetVisible();
+				Lacuna.MapPlanet.Load(locationId);
+			}
 			else {
-				switch(locationView) {
-					case "planet":
-						Lacuna.MapStar.MapVisible(false);
-						Lacuna.MapPlanet.MapVisible(true);
-						Lacuna.Menu.PlanetVisible();
-						Lacuna.MapPlanet.Load(locationId);
-						break;
-					default:
-						Lacuna.MapStar.MapVisible(true);
-						Lacuna.MapPlanet.MapVisible(false);
-						Lacuna.Menu.StarVisible();
-						Lacuna.MapStar.Load();
-						break;
-				}
+				Lacuna.MapStar.MapVisible(true);
+				Lacuna.MapPlanet.MapVisible(false);
+				Lacuna.Menu.StarVisible();
+				Lacuna.MapStar.Load();
 			}
 			Lacuna.Pulser.Hide();
 		},
@@ -141,6 +140,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				
 				Lacuna.Messaging.subscribe("onRpc", Game.onRpc);
 				Lacuna.Messaging.subscribe("onRpcFailed", Lacuna.Game.Failure);
+				
+				Lacuna.Essentia.subscribe("onRpc", Game.onRpc);
+				Lacuna.Essentia.subscribe("onRpcFailed", Lacuna.Game.Failure);
 				
 				Lacuna.Game._hasRun = true;
 				
@@ -192,6 +194,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 
 		onChangeToPlanetView : function(planetId) {
+			YAHOO.log(planetId, "info", "onChangeToPlanetView");
 			var cp = Game.EmpireData.planets[planetId];
 			if(cp) {
 				Game.EmpireData.current_planet_id = cp.id;
@@ -202,7 +205,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapStar.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planetId);
-			YAHOO.log(planetId, "info", "onChangeToPlanetView");
 		},
 		onRpc : function(oResult){
 			Lacuna.Game.ProcessStatus(oResult.status);
@@ -313,7 +315,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				}
 				if(doMenuUpdate) {
-					Lacuna.Menu.update()
+					Lacuna.Menu.update();
 				}
 			}
 		},	
@@ -366,7 +368,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapPlanet.MapVisible(false);
 			Lacuna.MapStar.MapVisible(true);
 			Lacuna.Menu.StarVisible(true);
-			//Game.SetLocation("home", Lib.View.STAR);
 			Lacuna.MapStar.Jump(star.x*1, star.y*1);
 		},
 		
@@ -398,23 +399,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			});
 			
 			Lacuna.MapStar.Reset();
-			Lacuna.MapSystem.Reset();
 			Lacuna.MapPlanet.Reset();
 		},
 		
 		//Cookie helpers functions
 		SetCookie : function(key, value, expiresDate) {
-			var opts = { domain: "lacunaexpanse.com" };
+			var opts = { domain: Game.domain };
 			if(expiresDate) {
 				opts.expires = expiresDate;
 			}
 			Cookie.setSub("lacuna", key, value, opts);
 		},
 		RemoveCookie : function(key) {
-			Cookie.removeSub("lacuna", key, { domain: "lacunaexpanse.com" });
+			Cookie.removeSub("lacuna", key, { domain: Game.domain });
 		},
 		RemoveAllCookies : function() {
-			Cookie.remove("lacuna", { domain: "lacunaexpanse.com" });
+			Cookie.remove("lacuna", { domain: Game.domain });
 		},
 		SetLocation : function(id, view) {
 			Game.SetCookie("locationId", id);

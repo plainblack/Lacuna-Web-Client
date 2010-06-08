@@ -13,6 +13,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		Lib = Lacuna.Library;
 		
 	var Essentia = function() {
+		this.createEvent("onRpc");
+		this.createEvent("onRpcFailed");
+		
 		this.id = "essentia";
 		
 		var container = document.createElement("div");
@@ -138,9 +141,11 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					success : function(o){
 						YAHOO.log(o, "info", "Essentia.boost.success");
 						this.update(o.result);
+						this.fireEvent("onRpc", o.result);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Essentia.boost.failure");
+						this.fireEvent("onRpcFailed", o.result);
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -1,5 +1,6 @@
 html {
 	background: black url('http://localhost/lacuna/assets/star_system/field.png');
+	color:#fff;
 }
 body {
 	font-family:verdana;
@@ -11,6 +12,9 @@ body {
 }
 select, input, button, textarea, button {
 	font-family:verdana;
+}
+a, a:link, a:visited {
+	color:#fff;
 }
 
 .clearafter { height:100%; }
@@ -36,10 +40,12 @@ select, input, button, textarea, button {
 #header {
 	top: 0;
 	z-index:1000;
+	background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_back.png");
 }
 #footer {
 	bottom: 0;
 	z-index:1000;
+	background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_back.png");
 }
 
 .hidden {
@@ -217,7 +223,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 .menuItem {
 	display:inline-block;
 	height:54px; /* 1 less than height of bar */
-	color:black;
+	color:#ddd;
 	min-width:100px;
 	position:absolute;
 	width:120px;
@@ -245,11 +251,11 @@ SHINEY
 	z-index:1001;
 }
 #headerShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_shine.png");
+	/*background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_shine.png");*/
 	top:0;
 }
 #footerShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_shine.png");
+	/*background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_shine.png");*/
 	bottom:0;
 }
 
@@ -277,7 +283,7 @@ SHINEY
 	z-index:1004;
 }
 #planetsCenterShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom_shine.png");
+	/*background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom_shine.png");*/
 	bottom:0;
 	z-index:1004;
 }
@@ -312,8 +318,8 @@ SHINEY
 .change, .food { left:10px; }
 .inbox, .ore { left:130px; }
 .bookmark, .water { left:250px; }
-.essentia, .energy { right:250px; }
-#header .happiness, .waste { right:130px; }
+.energy { right:250px; }
+.essentia, .waste { right:130px; }
 #footer .happiness { right:10px; }
 #header .click, #footer .click { z-index:1003; cursor:pointer; }
 
@@ -404,6 +410,7 @@ about
 	display:inline-block;
 	font-weight:bold;
 	width:75px;
+	color:#000;
 }
 #messagingDisplay div, #messagingCreator div.messagingCreatorC {
 	border-width:1px 1px 0;
@@ -579,7 +586,8 @@ about
 }
 .coordX {
 	text-align: center;
-	vertical-align: middle;
+	vertical-align: bottom;
+	line-height:25px;
 	background: transparent;
 	color: white;
 	border: 1px solid white;
@@ -710,8 +718,11 @@ planet details
 .buildingReason  {
 	font-size:85%;
 }
-#buildingBuilderUnavailable .buildingDesc  {
+/*#buildingBuilderUnavailable .buildingDesc  {
 	border-top:1px solid #52acff;
+}*/
+#builderFilterTbl {
+	width:400px;
 }
 /*#buildingDetailsExtra {
 	padding: 5px 0;
@@ -1005,7 +1016,7 @@ TextboxList
 .yui-skin-sam .TextboxList .TextboxListInputSingle { position:static; /*width:10em;*/ }
 
 .yui-skin-sam .TextboxList .TextboxListAutoComplete { width:10em; }
-.yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { OVERFLOW-Y:scroll; HEIGHT:100px; TEXT-ALIGN:left }
+.yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { overflow-y:scroll; height:100px; text-align:left; background-color:#52acff; }
 
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete { width:10em; }
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { TEXT-ALIGN:left }

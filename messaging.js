@@ -248,7 +248,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			this.createResponse.innerHTML = "";
 			if(this.viewingMessage) {
 				if(isAll) {
-					var to = [this.viewingMessage.from];
+					var to = [{name:this.viewingMessage.from}];
 					for(var i=0; i<this.viewingMessage.recipients.length; i++) {
 						var nm = this.viewingMessage.recipients[i];
 						if(nm != Game.EmpireData.name) {
@@ -500,7 +500,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
-						if(msg.is.inbox && msg.has_read == "") {
+						if(msg.is.inbox && msg.has_read == "0") {
 							Game.EmpireData.has_new_messages--;
 							if(Game.EmpireData.has_new_messages < 0) {
 								Game.EmpireData.has_new_messages = 0;

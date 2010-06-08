@@ -179,8 +179,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 		Jump : function(xC,yC) {
 			this.LoadGrid({
-				x:xC,
-				y:yC
+				x:(xC-1),
+				y:(yC+1)
 			});
 		},
 		Load : function() {
@@ -476,7 +476,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 		ShowPlanet : function(tile) {
 			var body = tile.data,
-				panel = this.planetDetails;
+				panel = this.planetDetails,
+				empire = body.empire || {alignment:"none"};
 			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:100px;height:100px;" />'].join('');
 			Dom.get("planetDetailsInfo").innerHTML = [
 				'<ul>',
@@ -488,10 +489,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
 				'	<li><label>Star:</label>',body.star_name,'</li>',
 				'	<li><label>Orbit:</label>',body.orbit,'</li>',
-				body.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
-				body.alignment != "none" && body.empire && body.empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
-				body.alignment == "none" && body.type == "habitable planet" ? '	<li><button id="sendColony" type="button">Send Colony Ship</button></li>' : '',
-				body.alignment == "none" && body.type == "asteroid" ? '	<li><button id="sendMining" type="button">Send Mining Ship</button></li>' : '',
+				empire.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
+				empire.alignment != "none" && empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
+				empire.alignment == "none" && body.type == "habitable planet" ? '	<li><button id="sendColony" type="button">Send Colony Ship</button></li>' : '',
+				empire.alignment == "none" && body.type == "asteroid" ? '	<li><button id="sendMining" type="button">Send Mining Ship</button></li>' : '',
 				'</ul>'
 			].join('');
 			
@@ -516,7 +517,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			Dom.get("planetDetailsUraninite").innerHTML = body.ore.uraninite;
 			Dom.get("planetDetailsZircon").innerHTML = body.ore.zircon;
 			
-			if(body.alignment == "self"){
+			if(empire.alignment == "self"){
 				if(panel.renameTab) {
 					panel.tabView.addTab(panel.renameTab, 1);
 					panel.renameTab = undefined;

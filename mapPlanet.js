@@ -29,7 +29,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.innerHTML = ['<div class="hd">Details</div>',
 				'<div class="bd">',
 				'	<div class="yui-gf" style="padding-bottom:5px;">',
-				'		<div class="yui-u first">',
+				'		<div class="yui-u first" id="buildingDetailsImgBkgd" style="text-align:center;">',
 				'			<img id="buildingDetailsImg" src="" alt="" style="width:100px;height:100px;" />',
 				'		</div>',
 				'		<div class="yui-u">',
@@ -129,6 +129,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.timeLeftLi = Dom.get("buildingDetailsTimeLeft");
 				
 				this.tabView = new YAHOO.widget.TabView("buildingDetailTabs");
+				this.tabView.getTabByLabel = function(label) {
+					var tabs = this.get("tabs");
+					for(var t=0; t<tabs.length; t++) {
+						var tab = tabs[t];
+						if(tab.get("label") == label) {
+							return this.getTab(t);
+						}
+					}
+				};
 				this.tabView.set('activeIndex',0);
 				
 				this.upgradeUl = Dom.get("buildingDetailsUpgradeCost");
@@ -159,7 +168,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Builder</div>',
 				'<div class="bd">',
-				'	<div id="builderTabs" class="yui-navset">',
+				'	<div>',
+				'		<div id="builderFilterContainer" style="border-bottom: 2px solid #52ACFF; padding-bottom: 2px;"><label class="ib" style="vertical-align: top;">Tags</label><input id="builderFilter" type="text" /></div>',
+				'		<div id="builderBuildingContainer" style="overflow:auto;height:450px;"><ul id="builderList"></ul></div>',
+				'	</div>',
+				'</div>'].join('');
+				/*'	<div id="builderTabs" class="yui-navset">',
 				'		<ul class="yui-nav">',
 				'			<li><a href="#builderBuildable"><em>Buildable</em></a></li>',
 				'			<li><a href="#builderUnavailable"><em>Unavailable</em></a></li>',
@@ -169,7 +183,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			<div id="builderUnavailable" style="overflow:auto;height:450px;"><ul id="buildingBuilderUnavailable"></ul></div>',
 				'		</div>',
 				'	</div>',
-				'</div>'].join('');
+				'</div>'].join('');*/
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
 			
@@ -185,15 +199,178 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				context:["header","tr","br"]
 			});
 			this.buildingBuilder.renderEvent.subscribe(function(){
-				this.tabView = new YAHOO.widget.TabView('builderTabs');
-				this.list = Dom.get("buildingBuilderList");
-				this.unavailable = Dom.get("buildingBuilderUnavailable");
+				//this.tabView = new YAHOO.widget.TabView('builderTabs');
+				//this.list = Dom.get("buildingBuilderList");
+				//this.unavailable = Dom.get("buildingBuilderUnavailable");
+				this.list = Dom.get("builderList");
+				
+				var dataSource = new Util.LocalDataSource([{name:"Now"},{name:"Soon"},{name:"Later"},{name:"Infrastructure"},{name:"Intelligence"},{name:"Happiness"},
+					{name:"Ships"},{name:"Colonization"},{name:"Resources"},{name:"Food"},{name:"Ore"},{name:"Water"},{name:"Energy"},{name:"Waste"}]);
+					
+				var oTextboxList = new YAHOO.lacuna.TextboxList("builderFilter", dataSource, { //config options
+					maxResultsDisplayed: 14,
+					minQueryLength:0,
+					multiSelect:true,
+					forceSelection:false,
+					formatResultLabelKey:"name",
+					formatResultColumnKeys:["name"],
+					useIndicator:true
+				});
+				oTextboxList.dirtyEvent.subscribe(this.filterChange, this, true);
+				oTextboxList.SelectItems([{name:"Now"}]);
+				
+				this.tagFilter = oTextboxList;
 			});
-			this.buildingBuilder.showEvent.subscribe(function() {
+			/*this.buildingBuilder.showEvent.subscribe(function() {
 				this.tabView.set('activeIndex', 0);
-			});
+			});*/
 			this.buildingBuilder.isVisible = function() {
 				return this.cfg.getProperty("visible");
+			};
+			
+			this.buildingBuilder.filterChange = function() {
+				this.updateDisplay();
+			};
+			this.buildingBuilder.load = function(b, request) {
+				this.buildable = b; //store
+
+				Event.delegate(this.list, "click", function(e, matchedEl, container) {
+					Lacuna.MapPlanet.Build(matchedEl.building, request.x, request.y);
+				}, "button");
+				Event.delegate(this.list, "click", function(e, matchedEl, container) {
+					var desc = Sel.query('div.buildingDesc', matchedEl.parentNode, true);
+					if(desc) {
+						var dis = Dom.getStyle(desc, "display");
+						Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
+					}
+				}, "span.buildingName");
+				
+				this.updateDisplay();
+			};
+			this.buildingBuilder.resetDisplay = function() {
+				delete this.buildable;
+				Event.purgeElement(this.list);
+				this.list.innerHTML = "";
+			};
+			this.buildingBuilder.updateDisplay = function() {
+				this.list.innerHTML = "";
+
+				var b = this.buildable,
+					frag = document.createDocumentFragment(),
+					li = document.createElement("li"),
+					filters = this.tagFilter._oTblSelections,
+					filterCount = 0,
+					names = [],
+					reason, br;
+					
+				for(var key in filters) {
+					if(filters.hasOwnProperty(key)){
+						filterCount++;
+					}
+				}
+				
+				for(var name in b) {
+					if(b.hasOwnProperty(name)) {
+						var tags = b[name].build.tags,
+							filterMatch = 0;
+						for(var t=0; t<tags.length; t++) {
+							if(filters[tags[t]]){
+								filterMatch++;
+							}
+						}
+						if(filterMatch == filterCount) {
+							names.push(name);
+						}
+					}
+				}
+				names.sort();
+				
+				for(var i=0; i<names.length; i++) {
+					var bd = b[names[i]],
+						nLi = li.cloneNode(false),
+						costs = bd.build.cost,
+						prod = bd.production;
+						
+					bd.name = names[i];
+					
+					if(bd.build.reason) {
+						br = bd.build.reason;
+						switch(br[0]) {
+							case 1011:
+								reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								break;
+							case 1012:
+								if(br[2]) {
+									reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								}
+								else {
+									reason = br[1];
+								}
+								break;
+							case 1013:
+								if(br.length == 2) {
+									reason = br[1];
+								}
+								else if(Lang.isArray(br[2])){
+									if(br[1].indexOf("Goldilox") < 0) {
+										reason = [br[1], ' Requires ', br[2].join(' level ')].join('');
+									}
+									else {
+										reason = [br[1], ' Orbits Allowed: ', br[2].join(', ')].join('');
+									}
+								}
+								else {
+									reason = [br[1], ' Requires level ', br[2]].join('');
+								}
+								break;
+							default:
+								reason = "";
+								break;
+						}
+					}
+					else {
+						reason = undefined;
+					}
+					
+					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
+					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center;">',
+					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
+					'	</div>',
+					'	<div class="yui-u" style="width:65%">',
+					'		<span class="buildingName">',bd.name,'</span>: ',
+					reason ? '		<span class="buildingReason">'+reason+'</span>' : '',
+					'		<div class="buildingDesc" style="display:none;', (reason ? 'border-top:1px solid #52acff;' : ''), '">',Lib.Descriptions[bd.url],'</div>',
+					'		<div><label style="font-weight:bold;">Cost:</label>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
+					'		</div>',
+					'		<div><label style="font-weight:bold;">Prod:</label>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
+					'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
+					'		</div>',
+					'	</div>',
+					'	<div class="yui-u" style="width:10%">',
+					'		<button type="button">Build</button>',
+					'	</div>',
+					'</div>'].join('');
+					Sel.query("button", nLi, true).building = bd;
+						
+					frag.appendChild(nLi);
+				}
+
+				this.list.appendChild(frag);
+			};
+			this.buildingBuilder.resetFilter = function() {
+				this.tagFilter.ResetSelections();
+				this.tagFilter.SelectItems([{name:"Now"}]);				
 			};
 			
 			this.buildingBuilder.render();
@@ -223,10 +400,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			YAHOO.log(oArgs.buildings, "debug", "Mapper");
 			this.buildings = oArgs.buildings;
 			this.surfaceUrl = [Lib.AssetUrl,'planet_side/',oArgs.body.surface_image,'.jpg'].join('');
+			Dom.setStyle("buildingDetailsImgBkgd","background",['transparent url(',this.surfaceUrl,') no-repeat left top'].join(''));
 			if(!this._gridCreated) {
 				var planetMap = document.createElement("div");
 				planetMap.id = "planetMap";
 				this._elGrid = document.getElementById("content").appendChild(planetMap);
+				this.MapVisible(true); //needs to be visible before we set sizing and  map
 				this.SetSize();
 				
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
@@ -262,6 +441,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}, "div.tile", this, true); 
 			}
 			else {
+				this.MapVisible(true); //needs to be visible before we set sizing and  map
 				if(!this._elGrid.parentNode) {
 					document.getElementById("content").appendChild(this._elGrid);
 				}
@@ -270,7 +450,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
-			this.MapVisible(true);
 			
 			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+this.surfaceUrl+'") repeat scroll 0 0 black');
 			Lacuna.Pulser.Hide();
@@ -332,9 +511,96 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			if(this._map) {
 				this._map.reset();
 			}
+			this.buildingDetails.resetQueue();
+			this.buildingBuilder.resetFilter();
 			this.MapVisible(false);
 		},
-		
+
+		BuilderView : function(tile) {
+			YAHOO.log(tile, "info", "BuilderView");
+			var BodyServ = Game.Services.Body,
+				data = {
+					session_id: Game.GetSession(""),
+					body_id: this.locationId,
+					x:tile.x,
+					y:tile.y
+				};
+			
+			this.buildingBuilder.resetDisplay();
+			
+			//Event.purgeElement(this.buildingBuilder.list);
+			//this.buildingBuilder.list.innerHTML = "";
+			//Event.purgeElement(this.buildingBuilder.unavailable);
+			//this.buildingBuilder.unavailable.innerHTML = "";
+			
+			Game.OverlayManager.hideAll();
+			Lacuna.Pulser.Show();
+			this.buildingBuilder.show();
+			
+			BodyServ.get_buildable(data,{
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.BuilderView.success");
+					this.fireEvent("onMapRpc", o.result);
+					
+					this.BuilderProcess(o.result, data);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.BuilderView.failure");
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		BuilderProcess : function(oResults, request) {
+			if(this.buildingBuilder.isVisible() && oResults) {
+				var b = oResults.buildable;
+				if(b) {
+					this.buildingBuilder.load(b, request);
+				}
+			}
+			Lacuna.Pulser.Hide();
+		},
+		Build : function(building, x, y) {
+			Lacuna.Pulser.Show();
+			var BuildingServ = Game.Services.Buildings.Generic,
+				data = {
+					session_id: Game.GetSession(""),
+					planet_id: this.locationId,
+					x:x,
+					y:y
+				};
+			
+			BuildingServ.build(data,{
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.Build.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					this.buildingBuilder.hide();
+
+					var b = building; //originally passed in building data from BuildProcess
+					b.id = o.result.building.id;
+					b.level = o.result.building.level;
+					b.pending_build = o.result.building.pending_build;
+					b.x = x;
+					b.y = y;
+					YAHOO.log(b, "info", "MapPlanet.Build.success.building");
+					//this.UpdateCost(b.build.cost);
+					
+					this.QueueReload(b);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.Build.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+					this.buildingBuilder.hide();
+				},
+				timeout:Game.Timeout,
+				scope:this,
+				target:building.url
+			});
+		},
+				
 		ViewData : function(id, url, callback, x, y) {
 			var BuildingServ = Game.Services.Buildings.Generic,
 				data = {
@@ -355,15 +621,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					if(newB.pending_build) {
 						remaining = newB.pending_build.seconds_remaining*1;
 					}
-					if(remaining < 0) {
-						delete newB.pending_build;
-					}
-					else if(remaining > 0) {
+					if(remaining != 0) {
 						this.QueueReload(newB);
 					}
-
-					this.buildings[newB.id] = newB;
-					this._map.refreshTile(newB);
+					else {
+						this.buildings[newB.id] = newB;
+						this._map.refreshTile(newB);
+					}
 
 					if(callback && callback.success) {
 						callback.success.call(this, o.result, callback.url, x, y);
@@ -395,7 +659,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.hide(); //hide panel which removes existing info	
 			//clear values
 			panel.name.innerHTML = "Loading";
-			panel.img.src = [Lib.AssetUrl, "planet_side/ground.png"].join('');
+			panel.img.src = this.surfaceUrl;
 			panel.desc.innerHTML = "";
 			panel.curEnergy.innerHTML = "";
 			panel.curFood.innerHTML = "";
@@ -468,6 +732,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 				else {
 					panel.timeLeftLi.innerHTML = "";
+					
+					var btn = document.createElement("button");
+					btn.type = "button";
+					btn.innerHTML = "Demolish";
+					Event.on(btn, "click", this.Demolish, this, true);
+					
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Demolish", contentEl: btn}));
 				}
 				
 				Event.purgeElement(panel.upgradeUl);
@@ -533,6 +804,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<li><label>Buildings:</label>',planet.building_count,'</li>',
 						'			<li><label>Planet Size:</label>',planet.size,'</li>',
 						'			<li><label>Plots Available:</label>',(planet.size*1) - (planet.building_count*1),'</li>',
+						'			<li><label>Population:</label>',planet.population,'</li>',
 						'			<li><label>Location in Universe:</label>',planet.x,'x : ',planet.y,'y</li>',
 						'			<li><label>Star:</label>',planet.star_name,'</li>',
 						'			<li><label>Orbit:</label>',planet.orbit,'</li>',
@@ -767,6 +1039,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'		<ul>',
 						'			<li><label>Algae</label><span class="buildingDetailsNum">',stored.algae,'</span></li>',
 						'			<li><label>Apple</label><span class="buildingDetailsNum">',stored.apple,'</span></li>',
+						'			<li><label>Bean</label><span class="buildingDetailsNum">',stored.bean,'</span></li>',
 						'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
 						'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
 						'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
@@ -1021,7 +1294,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 				else if(oResults.recycle) { //waste recycling center
 					if(oResults.recycle.can) {
-						panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Recycle", contentEl: this.RecycleGetDisplay()}));
+						panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Recycle", contentEl: this.RecycleGetDisplay(oResults.recycle)}));
 					}
 					else if(oResults.recycle.seconds_remaining) {
 						//output = ['<p>Time remaining on current recycling job:<span id="recycleTime">',Lib.formatTime(oResults.recycle.seconds_remaining),'</span></p>'].join('');
@@ -1064,220 +1337,28 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		
-		BuilderView : function(tile) {
-			YAHOO.log(tile, "info", "BuilderView");
-			var BodyServ = Game.Services.Body,
-				data = {
-					session_id: Game.GetSession(""),
-					body_id: this.locationId,
-					x:tile.x,
-					y:tile.y
-				};
-			
-			Event.purgeElement(this.buildingBuilder.list);
-			this.buildingBuilder.list.innerHTML = "";
-			Event.purgeElement(this.buildingBuilder.unavailable);
-			this.buildingBuilder.unavailable.innerHTML = "";
-			
-			Game.OverlayManager.hideAll();
-			Lacuna.Pulser.Show();
-			this.buildingBuilder.show();
-			
-			BodyServ.get_buildable(data,{
-				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.BuilderView.success");
-					this.fireEvent("onMapRpc", o.result);
-					
-					this.BuilderProcess(o.result, data);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.BuilderView.failure");
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
-		},
-		BuilderProcess : function(oResults, request) {
-			if(this.buildingBuilder.isVisible() && oResults) {
-				var b = oResults.buildable;
-				if(b) {			
-					var frag = document.createDocumentFragment(),
-						unavailFrag = document.createDocumentFragment(),
-						li = document.createElement("li"),
-						names = [], //tags={},
-						reason, br;
-					
-					for(var name in b) {
-						if(b.hasOwnProperty(name)) {
-							names.push(name);
-							/*var bd = b[name];
-							for(var i=0; i<bd.build.tags.length; i++){
-								var tagBuildings = tags[bd.build.tags[i]] || {};
-								tagBuildings[name] = bd;
-								tags[bd.build.tags[i]] = tagBuildings;
-							}*/
-						}
-					}
-					names.sort();
-					
-					for(var i=0; i<names.length; i++) {
-						var bd = b[names[i]],
-							nLi = li.cloneNode(false),
-							costs = bd.build.cost,
-							prod = bd.production;
-							
-						bd.name = names[i];
-						
-						if(bd.build.can) {
-							nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
-							'	<div class="yui-u first" style="width:20%;background:transparent url(',this.surfaceUrl,') no-repeat center;text-align:center;">',
-							'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
-							'	</div>',
-							'	<div class="yui-u" style="width:65%">',
-							'		<span class="buildingName">',bd.name,'</span>: ',
-							'		<div class="buildingDesc" style="display:none">',Lib.Descriptions[bd.url],'</div>',
-							'		<div><label style="font-weight:bold;">Cost:</label>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
-							'		</div>',
-							'		<div><label style="font-weight:bold;">Prod:</label>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
-							'		</div>',
-							'	</div>',
-							'	<div class="yui-u" style="width:10%">',
-							'		<button type="button">Build</button>',
-							'	</div>',
-							'</div>'].join('');
-							Sel.query("button", nLi, true).building = bd;
-							
-							frag.appendChild(nLi);
-						}
-						else {
-							br = bd.build.reason;
-							switch(br[0]) {
-								case 1011:
-									reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-									break;
-								case 1012:
-									if(br[2]) {
-										reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-									}
-									else {
-										reason = br[1];
-									}
-									break;
-								case 1013:
-									if(br.length == 2) {
-										reason = br[1];
-									}
-									else if(Lang.isArray(br[2])){
-										reason = [br[1], ' Requires ', br[2].join(' level ')].join('');
-									}
-									else {
-										reason = [br[1], ' Requires level ', br[2]].join('');
-									}
-									break;
-								default:
-									reason = "";
-									break;
-							}
-							nLi.innerHTML = ['<div class="yui-gf" style="margin-bottom:2px;">',
-							'	<div class="yui-u first" style="width:20%;">',
-							'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
-							'	</div>',
-							'	<div class="yui-u" style="width:78%;">',
-							'		<span class="buildingName">',bd.name,'</span>: ',
-							'		<span class="buildingReason">',reason,'</span>',
-							'		<div class="buildingDesc" style="display:none">',Lib.Descriptions[bd.url],'</div>',
-							'		<div><label style="font-weight:bold;">Cost:</label>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',costs.food,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',costs.ore,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',costs.water,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',costs.energy,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',costs.waste,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(costs.time),'</span>',
-							'		</div>',
-							'		<div><label style="font-weight:bold;">Prod:</label>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',prod.food_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',prod.ore_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',prod.water_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',prod.energy_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',prod.waste_hour,'</span></span>',
-							'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span>',prod.happiness_hour,'</span></span>',
-							'		</div>',
-							'	</div>',
-							'</div>'].join('');
-							
-							unavailFrag.appendChild(nLi);
-						}
-					}
-
-					Event.delegate(this.buildingBuilder.list, "click", function(e, matchedEl, container) {
-						this.Build(matchedEl.building, request.x, request.y);
-					}, "button", this, true);
-					Event.delegate([this.buildingBuilder.list,this.buildingBuilder.unavailable], "click", function(e, matchedEl, container) {
-						var desc = Sel.query('div.buildingDesc', matchedEl.parentNode, true);
-						if(desc) {
-							var dis = Dom.getStyle(desc, "display");
-							Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
-						}
-					}, "span.buildingName");
-					
-					this.buildingBuilder.list.appendChild(frag);
-					this.buildingBuilder.unavailable.appendChild(unavailFrag);
-				}
+		Demolish : function() {
+			if(confirm(['Are you sure you want to Demolish the level ',this.currentBuilding.building.level,' ',this.currentBuilding.building.name,'?'].join(''))) {
+				Lacuna.Pulser.Show();
+				Game.Services.Buildings.Generic.demolish({
+					session_id:Game.GetSession(),
+					building_id:this.currentBuilding.building.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapPlanet.Demolish.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "MapPlanet.Demolish.failure");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this,
+					target:this.currentBuilding.building.url
+				});
 			}
-			Lacuna.Pulser.Hide();
-		},
-		
-		Build : function(building, x, y) {
-			Lacuna.Pulser.Show();
-			var BuildingServ = Game.Services.Buildings.Generic,
-				data = {
-					session_id: Game.GetSession(""),
-					planet_id: this.locationId,
-					x:x,
-					y:y
-				};
-			
-			BuildingServ.build(data,{
-				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.Build.success");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
-					this.buildingBuilder.hide();
-
-					var b = building; //originally passed in building data from BuildProcess
-					b.id = o.result.building.id;
-					b.level = o.result.building.level;
-					b.pending_build = o.result.building.pending_build;
-					b.x = x;
-					b.y = y;
-					YAHOO.log(b, "info", "MapPlanet.Build.success.building");
-					this.UpdateCost(b.build.cost);
-					
-					this.QueueReload(b);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.Build.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-					this.buildingBuilder.hide();
-				},
-				timeout:Game.Timeout,
-				scope:this,
-				target:building.url
-			});
 		},
 		DevMinistryQueue : function(remaining, el){
 			if(remaining <= 0) {
@@ -1303,9 +1384,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Game.EmpireData.essentia = e - o.result.essentia_spent*1;
 					this.fireEvent("onMapRpc", o.result);
 					
-					var tab = this.buildingDetails.tabView.getTab(1);
-					Event.purgeElement(tab.get("contentEl"));
-					this.buildingDetails.tabView.removeTab(tab);
+					var tab = this.buildingDetails.tabView.getTabByLabel("Build Queue");
+					if(tab) {
+						Event.purgeElement(tab.get("contentEl"));
+						this.buildingDetails.tabView.removeTab(tab);
+						this.buildingDetails.tabView.selectTab(0);
+					}
 					
 					//remove all tile timers
 					Game.QueueResetPlanet();
@@ -1334,6 +1418,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						newsRssLinks = Dom.get("newsRssLinks"),
 						rssFrag = document.createDocumentFragment(),
 						li = document.createElement("li");
+						
+					newsFeed.innerHTML = "";
+					newsRssLinks.innerHTML = "";
 						
 					for(var i=0; i<news.length; i++) {
 						var ni = news[i],
@@ -1385,8 +1472,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					nLi.innerHTML = [
 						'<div class="probeStarContainer yui-gf">',
-						'	<div class="yui-u first probeAction" style="background:black url(',Lib.AssetUrl,'star_map/',st.color,'.png',') no-repeat scroll left center;">',
-						'		<img src="',Lib.AssetUrl,'star_map/',st.alignments,'.png" alt="',st.name,'"/>',
+						'	<div class="yui-u first probeAction" style="background-color:black;">',
+						'		<img src="',Lib.AssetUrl,'star_map/',st.color,'.png" alt="',st.name,'" style="width:50px;height:50px;" />',
 						'	</div>',
 						'	<div class="yui-u">',
 						'		<div class="probeDelete"></div>',
@@ -1458,7 +1545,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		ProbeJump : function(e, matchedEl, container) {
 			if(container.Star) {
-				Game.SystemJump(container.Star);
+				Game.StarJump(container.Star);
 			}
 		},
 		Recycle : function(e) {
@@ -1491,12 +1578,22 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this.fireEvent("onMapRpc", o.result);
 							
 							//var output = ['<p>Time remaining on current recycling job:<span id="recycleTime">',Lib.formatTime(o.result.seconds_remaining),'</span></p>'].join('');
-							var tab = panel.tabView.getTab(1),
-								ce = tab.get("contentEl");
-							Event.purgeElement(ce);
-							ce.innerHTML = "";
-							ce.appendChild(this.RecycleGetTimeDisplay(o.result));
-							panel.addQueue(o.result.seconds_remaining, this.RecycleQueue, "recycleTime");
+							var tab = panel.tabView.getTabByLabel("Build Queue");
+							if(tab){
+								if(o.result.seconds_remaining && o.result.seconds_remaining*1 > 0) {
+									var ce = tab.get("contentEl");
+									Event.purgeElement(ce);
+									ce.innerHTML = "";
+									ce.appendChild(this.RecycleGetTimeDisplay(o.result));
+									panel.addQueue(o.result.seconds_remaining, this.RecycleQueue, "recycleTime");
+								}
+								else {
+									dataStore.recycleOreEl.value = "";
+									dataStore.recycleWaterEl.value = "";
+									dataStore.recycleEnergyEl.value = "";
+									dataStore.recycleMessageEl.innerHTML = "";
+								}
+							}
 						},
 						failure : function(o){
 							YAHOO.log(o, "error", "MapPlanet.Recycle.failure");
@@ -1509,14 +1606,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 			}
 		},
-		RecycleGetDisplay : function() {
+		RecycleGetDisplay : function(recycle) {
 			var panel = this.buildingDetails,
 				planet = Game.GetCurrentPlanet(),
 				ul = document.createElement("ul"),
 				li = document.createElement("li"),
 				nLi = li.cloneNode(false),
 				input;
+				
+			nLi.innerHTML = ['Can recycle a maximum of ',recycle.max_recycle,' waste at ',recycle.seconds_per_resource,' seconds per resource.'].join(''); 
+			ul.appendChild(nLi);
 			
+			nLi = li.cloneNode(false);
 			nLi.innerHTML = '<label>Recycle into:</label>';
 			ul.appendChild(nLi);
 			
@@ -1598,9 +1699,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			var div = document.createElement("div"),
 				btnDiv = div.cloneNode(false);
 			div.innerHTML = ['<p>Current recycling job:</p>',
-				'<ul><li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',recycle.ore,'</li>',
-				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',recycle.water,'</li>',
-				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',recycle.energy,'</li>',
+				'<ul><li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span>',recycle.ore || '','</li>',
+				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" /></span>',recycle.water || '','</li>',
+				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span>',recycle.energy || '','</li>',
 				'<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span id="recycleTime">',Lib.formatTime(recycle.seconds_remaining),'</span></li></ul>'
 			].join('');
 			
@@ -1651,11 +1752,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpc", o.result);
 					
 					this.buildingDetails.resetQueue();
-					var tab = this.buildingDetails.tabView.getTab(1),
-						ce = tab.get("contentEl");
-					Event.purgeElement(ce);
-					ce.innerHTML = "";
-					ce.appendChild(this.RecycleGetDisplay());
+					var tab = this.buildingDetails.tabView.getTabByLabel("Build Queue");
+					if(tab){
+						var ce = tab.get("contentEl");
+						Event.purgeElement(ce);
+						ce.innerHTML = "";
+						ce.appendChild(this.RecycleGetDisplay());
+					}
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.RecycleSubsidize.failure");
@@ -1823,7 +1926,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(o, "info", "MapPlanet.ShipBuild.success");
 					Lacuna.Pulser.Hide();
 					this.Self.fireEvent("onMapRpc", o.result);
-					this.Self.UpdateCost(this.Ship.cost);
+					//this.Self.UpdateCost(this.Ship.cost);
 					var ds = this.Self.buildingDetails.dataStore;
 					ds.ship_build_queue = o.result;
 					this.Self.ShipyardDisplay();
@@ -1871,7 +1974,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Dom.addClass(nUl, "clearafter");
 
 					Dom.addClass(nLi,"shipType");
-					nLi.innerHTML = Lib.Ships[ship.ship_type];
+					nLi.innerHTML = Lib.Ships[ship.type];
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -2172,7 +2275,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this.buildingDetails.dataStore.spies = undefined;
 							cb.spies.current = (cb.spies.current*1) + (o.result.trained*1);
 							Dom.get("spiesCurrent").innerHTML = cb.spies.current;
-							this.UpdateCost(cb.spies.training_costs, trained);
+							//this.UpdateCost(cb.spies.training_costs, trained);
 						}
 					},
 					failure : function(o){
@@ -2207,7 +2310,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					b.level = o.result.building.level;
 					b.pending_build = o.result.building.pending_build;
 					YAHOO.log(b, "info", "MapPlanet.Upgrade.success.building");
-					this.UpdateCost(b.upgrade.cost);
+					//this.UpdateCost(b.upgrade.cost);
 					
 					this.QueueReload(b);
 				},
@@ -2221,7 +2324,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				target:building.url
 			});
 		},
-		UpdateCost : function(cost, multiplier) {
+		/*UpdateCost : function(cost, multiplier) {
 			var planet = Game.EmpireData.planets[this.locationId];
 			if(planet && cost) {
 				multiplier = multiplier || 1;
@@ -2242,10 +2345,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					planet.water_stored = planet.water_capacity;
 				}
 				
-				/*planet.waste_stored += cost.waste*1;
-				if(planet.waste_stored > planet.waste_capacity) {
-					planet.waste_stored = planet.waste_capacity;
-				}*/
+				//planet.waste_stored += cost.waste*1;
+				//if(planet.waste_stored > planet.waste_capacity) {
+				//	planet.waste_stored = planet.waste_capacity;
+				//}
 				
 				var wasteOverage = 0;
 				if(planet.waste_stored < planet.waste_capacity){
@@ -2270,14 +2373,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 				Lacuna.Menu.updateTick();
 			}
-		},
+		},*/
 		
 		QueueReload : function(building) {
 			if(building.pending_build) {
+				building.pending_build.seconds_remaining *= 1;
+				building.pending_build.seconds_remaining += 2; //I seem to be a head normally now
 				this.buildings[building.id] = building;
 				this._map.refreshTile(building);
 				
 				var ms = (building.pending_build.seconds_remaining * 1000);
+				YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueReload");
 				Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
 			}
 		},
