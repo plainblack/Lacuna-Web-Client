@@ -734,7 +734,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.timeLeftLi.innerHTML = "";
 					
 					var btn = document.createElement("button");
-					btn.type = "button";
+					btn.setAttribute("type", "button");
 					btn.innerHTML = "Demolish";
 					Event.on(btn, "click", this.Demolish, this, true);
 					
@@ -826,7 +826,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					subDiv.appendChild(document.createTextNode('You can subsidize the build queue for '+oResults.subsidy_cost+' Essentia to finish immediately.'));
 					var btn = document.createElement("button");
-					btn.type = "button";
+					btn.setAttribute("type", "button");
 					btn.innerHTML = "Subsidize";
 					btn = subDiv.appendChild(btn);
 					Event.on(btn, "click", this.DevSubsidize, this, true);
@@ -1614,7 +1614,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				nLi = li.cloneNode(false),
 				input;
 				
-			nLi.innerHTML = ['Can recycle a maximum of ',recycle.max_recycle,' waste at ',recycle.seconds_per_resource,' seconds per resource.'].join(''); 
+			nLi.innerHTML = ['Can recycle a maximum of ',recycle.max_recycle,' waste at ', Math.floor(3600 / recycle.seconds_per_resource),'/hour.'].join(''); 
 			ul.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
@@ -1684,7 +1684,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			nLi = li.cloneNode(false);
 			var btn = document.createElement("button");
-			btn.type = "button";
+			btn.setAttribute("type", "button");
 			btn.innerHTML = "Recycle";
 			btn = nLi.appendChild(btn);
 			Event.on(btn, "click", this.Recycle, this, true);
@@ -1708,7 +1708,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			btnDiv.appendChild(document.createTextNode("You may subsidize the recycle job for 2 essentia and finish it immediately. "));
 			
 			var bbtn = document.createElement("button");
-			bbtn.type = "button";
+			bbtn.setAttribute("type", "button");
 			bbtn.innerHTML = "Subsidize";
 			bbtn = btnDiv.appendChild(bbtn);
 			Event.on(bbtn, "click", this.RecycleSubsidize, this, true);
@@ -1874,7 +1874,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Dom.addClass(nLi,"shipBuild");
 					if(ship.can) {
 						var bbtn = document.createElement("button");
-						bbtn.type = "button";
+						bbtn.setAttribute("type", "button");
 						bbtn.innerHTML = "Build";
 						bbtn = nLi.appendChild(bbtn);
 						Event.on(bbtn, "click", this.ShipBuild, {Self:this,Type:shipName,Ship:ship}, true);
@@ -2062,7 +2062,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						
 						nLi.appendChild(sel);
 						
-						btn.type = "button";
+						btn.setAttribute("type", "button");
 						btn.innerHTML = "Assign";
 						Dom.setStyle(btn,"display","none");
 						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id}, true);
@@ -2076,7 +2076,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"spyBurn");
 					var bbtn = document.createElement("button");
-					bbtn.type = "button";
+					bbtn.setAttribute("type", "button");
 					bbtn.innerHTML = "Burn";
 					bbtn = nLi.appendChild(bbtn);
 					nUl.appendChild(nLi);
@@ -2199,10 +2199,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			inp.type = "text";
 			inp.value = this.Spy.name;
 			this.Input = inp;
-			bSave.type = "button";
+			bSave.setAttribute("type", "button");
 			bSave.innerHTML = "S";
 			Event.on(bSave,"click",this.Self.SpyNameSave,this,true);
-			bCancel.type = "button";
+			bCancel.setAttribute("type", "button");
 			bCancel.innerHTML = "X";
 			Event.on(bCancel,"click",this.Self.SpyNameClear,this,true);
 						

@@ -618,7 +618,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					if(msg.attachments.map) {
 						this.body.appendChild(document.createElement('br'));
 						var va = document.createElement("button");
-						va.type = "button";
+						va.setAttribute("type", "button");
 						va.innerHTML = "No Map Attachment Yet";
 						va = this.body.appendChild(va);
 						Event.on(va, "click", this.displayAttachment, this, true);
