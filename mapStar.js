@@ -478,7 +478,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var body = tile.data,
 				panel = this.planetDetails,
 				empire = body.empire || {alignment:"none"};
-			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:100px;height:100px;" />'].join('');
+			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:200px;height:200px;" />'].join('');
 			Dom.get("planetDetailsInfo").innerHTML = [
 				'<ul>',
 				'	<li id="planetDetailsName">',body.name,'</li>',
