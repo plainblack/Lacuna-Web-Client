@@ -26,6 +26,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Intelligence : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Intelligence),
 				Network19 : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Network19),
 				Observatory : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Observatory),
+				Park : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Park),
 				Recycler : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Recycler),
 				Shipyard : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Shipyard),
 				SpacePort : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.SpacePort)

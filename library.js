@@ -99,6 +99,9 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 				return seconds;
 			}
 		},
+		formatNumber : function(num) {
+			return Util.Number.format(num,{thousandsSeparator:","})
+		},
 		parseServerDate : function(strDate) {
 			var pieces = strDate.split(' '), //[day, month, year, hr:min:sec, timez]
 				time = pieces[3].split(':');

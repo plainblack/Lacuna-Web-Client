@@ -302,6 +302,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			Park : {
+				"SMDVersion":"2.0",
+				"description": "Park",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/park",
+
+				"services": {
+					"throw_a_party" : {
+						"description": "Initiates a party. It will cost you 10,000 food, and the party will last for a day. For 10,000 food you'll get 3,000 happiness. For each type of food available in quantities of 500 or more, you'll get a multiplier added to that. So if you have 4 types of food, you'll get 12,000 happiness. In addition, you get a 0.3 to your multiplier for each level of park that you have. Therefore a level 10 park is the same as adding three extra foods to your party!",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"} // status
+					}
+				}
+			},
 			Shipyard : {
 				"SMDVersion":"2.0",
 				"description": "Shipyard",

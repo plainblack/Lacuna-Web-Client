@@ -758,7 +758,7 @@ planet details
 	width:15px;
 }
 
-.spiesHeader {
+/*.spiesHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
@@ -785,6 +785,41 @@ planet details
 }
 .spyInfo .spyBurn {
 	width:60px;
+}
+*/
+.spy {
+	width: 200px;
+	min-height: 125px;
+	display: -moz-inline-stack;
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1;
+	*display: inline;
+
+}
+.spyInfo {
+	border:1px solid black;
+	background-color:#52ACFF;
+	margin:2px;
+	padding:0 2px;
+	position:relative;
+}
+.spyInfo  input {
+	font-weight:normal;
+	font-size:90%;
+}
+.spyInfo .spyName {
+	font-weight:bold;
+	cursor:url(http://localhost/lacuna/assets/ui/web/pen_m.cur), text;
+}
+.spyInfo .spyBurn {
+	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll center center transparent;
+	height:11px;
+	width:11px;
+	position: absolute;
+	right: 0;
+	top:0;
+	cursor:pointer;
 }
 
 .newsFeedContainer {

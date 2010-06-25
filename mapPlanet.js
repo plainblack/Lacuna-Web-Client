@@ -56,6 +56,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum"></span></li>',
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum"></span></li>',
 				'							<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum"></span></li>',
+				'							<li id="buildingDetailsDemolish"></li>',
 				'						</ul>',
 				'					</div>',
 				'					<div class="yui-u">',
@@ -148,6 +149,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.curOre = Dom.get("buildingDetailsOre");
 				this.curWaste = Dom.get("buildingDetailsWaste");
 				this.curWater = Dom.get("buildingDetailsWater");
+				this.demolishLi = Dom.get("buildingDetailsDemolish");
 			
 				this.queue = [];
 				this.dataStore = {};
@@ -709,6 +711,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				panel.curOre.innerHTML = building.ore_hour;
 				panel.curWaste.innerHTML = building.waste_hour;
 				panel.curWater.innerHTML = building.water_hour;
+				Event.purgeElement(panel.demolishLi);
 				
 				if(building.pending_build) {
 					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
@@ -729,16 +732,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this
 						);
 					}
+					panel.demolishLi.innerHTML = '<span style="color:red;">Unable to Demolish</span>';
 				}
 				else {
 					panel.timeLeftLi.innerHTML = "";
-					
-					var btn = document.createElement("button");
-					btn.setAttribute("type", "button");
-					btn.innerHTML = "Demolish";
-					Event.on(btn, "click", this.Demolish, this, true);
-					
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Demolish", contentEl: btn}));
+					panel.demolishLi.innerHTML = '<button type="button">Demolish</button>';
+					Event.on(Sel.query("button", panel.demolishLi, true), "click", this.Demolish, this, true);
 				}
 				
 				Event.purgeElement(panel.upgradeUl);
@@ -755,7 +754,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
 						'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 					].join('');
-
 
 					panel.upgradeProdUl.innerHTML = ['<li><ul><li>Upgrade Production</li>',
 						'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span class="buildingDetailsNum">',up.production.food_hour,'</span></li>',
@@ -1023,13 +1021,23 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					}, this, true);
 				}
 				else if(oResults.party) { //if it's a park
+					var div = document.createElement("div");
 					if(oResults.party.can_throw) {
-						output = '<p>Throw a party!  Get John to put this in.</p>';
+						var btn = document.createElement("button");
+						btn.setAttribute("type", "button");
+						btn.innerHTML = "Throw Party!";
+						btn = div.appendChild(btn);
+						Event.on(btn, "click", this.Party, this, true);
+					}
+					else if(oResults.party.seconds_remaining*1 > 0) {
+						div.innerHTML = ['<p>You will get ',Lib.formatNumber(oResults.party.happiness),' happiness from your party!'].join('');
+						div.appendChild(this.PartyGetTimeDisplay(oResults.party));
+						panel.addQueue(oResults.party.seconds_remaining, this.PartyQueue, "partyTime");
 					}
 					else {
-						output = '<p>You need at least 10,000 food to throw a party.</p>';
+						div.innerHTML = '<p>You need at least 10,000 food to throw a party.</p>';
 					}
-					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", content: output}));
+					panel.tabView.addTab(new YAHOO.widget.Tab({ label: "Party", contentEl: div}));
 				}
 				else if(oResults.food_stored) {
 					stored = oResults.food_stored;
@@ -1193,14 +1201,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					var spiesTab = new YAHOO.widget.Tab({ label: "Spies", content: [
 						'<div>',
-						'	<ul class="spiesHeader spyInfo clearafter">',
+						/*'	<ul class="spiesHeader spyInfo clearafter">',
 						'		<li class="spyName">Name</li>',
 						'		<li class="spyAssignedTo">Assigned To</li>',
 						'		<li class="spyAvailableWhen">Available When</li>',
 						'		<li class="spyAssignment">Assignment</li>',
 						'		<li class="spyBurn">Burn</li>',
-						'	</ul>',
-						'	<div>',
+						'	</ul>',*/
+						'	<div style="height:300px;overflow-y:auto;">',
 						'		<div id="spiesDetails">',
 						'		</div>',
 						'	</div>',
@@ -1452,6 +1460,63 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				scope:this
 			});
 		},
+		Party : function(e) {
+			Lacuna.Pulser.Show();
+			
+			Game.Services.Buildings.Park.throw_a_party({
+				session_id:Game.GetSession(),
+				building_id:this.currentBuilding.building.id
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.Party.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					
+					var tab = this.buildingDetails.tabView.getTabByLabel("Party");
+					if(tab) {
+						var ce = tab.get("contentEl");
+						Event.purgeElement(ce);
+						
+						if(o.result.seconds_remaining && o.result.seconds_remaining*1 > 0) {
+							ce.innerHTML = "";
+							ce.appendChild(this.PartyGetTimeDisplay(o.result));
+							this.buildingDetails.addQueue(o.result.seconds_remaining, this.PartyQueue, "partyTime");
+						}
+						else {
+							this.buildingDetails.tabView.removeTab(tab);
+							this.buildingDetails.tabView.selectTab(0);
+						}
+					}
+					
+					//remove all tile timers
+					Game.QueueResetPlanet();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.Party.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});	
+		},
+		PartyGetTimeDisplay : function(party) {
+			var div = document.createElement("div");
+			div.innerHTML = ['<span>Party time remaining: </span><span id="partyTime">',Lib.formatTime(party.seconds_remaining),'</span>'].join('');
+					
+			return div;
+		},
+		PartyQueue : function(remaining, el){
+			if(remaining <= 0) {
+				var span = Dom.get(el),
+					p = span.parentNode;
+				p.removeChild(span);
+				p.innerHTML = "No Parties being thrown.";
+			}
+			else {
+				Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
+			}
+		},
 		ProbesDisplay : function() {
 			var panel = this.buildingDetails,
 				stars = panel.dataStore.probes,
@@ -1614,7 +1679,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				nLi = li.cloneNode(false),
 				input;
 				
-			nLi.innerHTML = ['Can recycle a maximum of ',recycle.max_recycle,' waste at ', Math.floor(3600 / recycle.seconds_per_resource),'/hour.'].join(''); 
+			nLi.innerHTML = ['Can recycle a maximum of ',Lib.formatNumber(recycle.max_recycle),' waste at ', Lib.formatNumber(Math.floor(3600 / recycle.seconds_per_resource)),'/hour.'].join(''); 
 			ul.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
@@ -1733,7 +1798,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				ds = this.dataStore;
 			if(Lang.isNumber(val)){
 				ds.totalWasteToRecycle = ds.totalWasteToRecycle - input.originalValue + val;
-				ds.totalWasteToRecycleEl.innerHTML = ds.totalWasteToRecycle;
+				ds.totalWasteToRecycleEl.innerHTML = Lib.formatNumber(ds.totalWasteToRecycle);
 				input.originalValue = val;
 			}
 			else {
@@ -2009,7 +2074,96 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		SpyPopulate : function() {
 			var details = Dom.get("spiesDetails");
-			
+			if(details) {
+				var panel = this.buildingDetails,
+					spies = panel.dataStore.spies.spies,
+					assign = panel.dataStore.spies.possible_assignments,
+					div = document.createElement("div"),
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+						
+				for(var i=0; i<spies.length; i++) {
+					var spy = spies[i],
+						spyContainer = div.cloneNode(false),
+						spyInfo = spyContainer.appendChild(div.cloneNode(false)),
+						nUl = spyInfo.appendChild(ul.cloneNode(false)),
+						nLi = li.cloneNode(false);
+						
+					Dom.addClass(spyContainer, "spy");
+					
+					Dom.addClass(spyInfo, "spyInfo");
+
+					Dom.addClass(nLi,"spyName");
+					nLi.innerHTML = spy.name;
+					nUl.appendChild(nLi);
+					Event.on(nLi, "click", this.SpyName, {Self:this,Spy:spy,el:nLi}, true);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyLevel");
+					nLi.innerHTML = '<label>Level:</label>' + spy.level;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyOffense");
+					nLi.innerHTML = '<label>Offense:</label>' + spy.offense_rating;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyDefense");
+					nLi.innerHTML = '<label>Defense:</label>' + spy.defense_rating;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyMission");
+					nLi.innerHTML = '<label>Last Mission Score:</label>' + spy.last_mission_score;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyAssignedTo");
+					nLi.innerHTML = '<label>Assigned To:</label>' + spy.assigned_to.name;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"spyAssignment");
+					if(spy.is_available) {
+						var sel = document.createElement("select"),
+							opt = document.createElement("option"),
+							btn = document.createElement("button");
+						for(var a=0; a<assign.length; a++) {
+							nOpt = opt.cloneNode(false);
+							nOpt.value = nOpt.innerHTML = assign[a];
+							if(spy.assignment == nOpt.value) { nOpt.selected = true; sel.currentAssign = nOpt.value; }
+							sel.appendChild(nOpt);
+						}
+						Event.on(sel, "change", this.SpyAssignChange);
+						
+						nLi.appendChild(sel);
+						nLi.appendChild(document.createElement("br"));
+						
+						btn.setAttribute("type", "button");
+						btn.innerHTML = "Assign";
+						Dom.setStyle(btn,"display","none");
+						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id}, true);
+						sel.Button = nLi.appendChild(btn);
+					}
+					else {
+						nLi.innerHTML = [spy.assignment, ' - Available: ', Lib.formatServerDate(spy.available_on)].join('');
+					}
+					nUl.appendChild(nLi);
+
+					burnSpyDiv = div.cloneNode(false),
+					Dom.addClass(burnSpyDiv,"spyBurn");
+					spyInfo.appendChild(burnSpyDiv);
+					
+					Event.on(burnSpyDiv, "click", this.SpyBurn, {Self:this,Spy:spy,Container:spyContainer}, true);
+
+					details.appendChild(spyContainer);
+				}
+			}
+			/*
 			if(details) {
 				var panel = this.buildingDetails,
 					spies = panel.dataStore.spies.spies,
@@ -2092,7 +2246,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					}
 				},10);
-			}
+			}*/
 		},
 		SpyHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
@@ -2158,37 +2312,39 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			});
 		},
 		SpyBurn : function() {
-			Lacuna.Pulser.Show();
-			var cb = this.Self.currentBuilding;
-			
-			Game.Services.Buildings.Intelligence.burn_spy({
-				session_id:Game.GetSession(),
-				building_id:cb.building.id,
-				spy_id:this.Id
-			}, {
-				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.SpyBurn.success");
-					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpc", o.result);
-					var spies = this.Self.buildingDetails.dataStore.spies.spies;
-					for(var i=0; i<spies.length; i++) {
-						if(spies[i].id == this.Id) {
-							spies.splice(i,1);
-							break;
+			if(confirm(["Are you sure you want to Burn ",this.Spy.name,"?"].join(''))) {
+				Lacuna.Pulser.Show();
+				var cb = this.Self.currentBuilding;
+				
+				Game.Services.Buildings.Intelligence.burn_spy({
+					session_id:Game.GetSession(),
+					building_id:cb.building.id,
+					spy_id:this.Spy.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapPlanet.SpyBurn.success");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpc", o.result);
+						var spies = this.Self.buildingDetails.dataStore.spies.spies;
+						for(var i=0; i<spies.length; i++) {
+							if(spies[i].id == this.Spy.id) {
+								spies.splice(i,1);
+								break;
+							}
 						}
-					}
-					this.Line.parentNode.removeChild(this.Line);
-					cb.spies.current = (cb.spies.current*1) - 1;
-					Dom.get("spiesCurrent").innerHTML = cb.spies.current;
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.SpyBurn.failure");
-					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
+						this.Container.parentNode.removeChild(this.Container);
+						cb.spies.current = (cb.spies.current*1) - 1;
+						Dom.get("spiesCurrent").innerHTML = cb.spies.current;
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "MapPlanet.SpyBurn.failure");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		SpyName : function() {
 			this.el.innerHTML = "";
@@ -2200,15 +2356,16 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			inp.value = this.Spy.name;
 			this.Input = inp;
 			bSave.setAttribute("type", "button");
-			bSave.innerHTML = "S";
+			bSave.innerHTML = "Save";
 			Event.on(bSave,"click",this.Self.SpyNameSave,this,true);
 			bCancel.setAttribute("type", "button");
-			bCancel.innerHTML = "X";
+			bCancel.innerHTML = "Cancel";
 			Event.on(bCancel,"click",this.Self.SpyNameClear,this,true);
 						
 			Event.removeListener(this.el, "click");		
 				
 			this.el.appendChild(inp);
+			this.el.appendChild(document.createElement("br"));
 			this.el.appendChild(bSave);
 			this.el.appendChild(bCancel);
 		},

@@ -56,7 +56,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 
 			Event.addListener(this.elClick, "click", function(ev){
 				//this.align("tl","bl");
-				this.show();
+				if(!this.cfg.getProperty("visible")){
+					this.show();
+				}
 				Event.stopEvent(ev);
 			}, userMenu, true);
 			
@@ -350,20 +352,32 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var items = [];
 			for(var pKey in planets) {
 				if(planets.hasOwnProperty(pKey)) {
-					var p = planets[pKey];
-					items.push({ 
-						text: p.name, 
-						id: "planetMenuItem"+(count++), 
-						onclick: { fn: this.menuClick, obj:p },
-						submenu : {
+					var p = planets[pKey],
+						pObj = { 
+							text: p.name, 
+							id: "planetMenuItem"+(count++), 
+							onclick: { fn: this.menuClick, obj:p }
+						};
+					if(p.star_name) {
+						pObj.submenu = {
 							id : "planetMenuItem"+count+"-Star",
 							itemData : [
 								{ text: "Go To Star ("+p.star_name+")", onclick: { fn: this.menuStarClick, obj:p } }
 							]
 						}
-					});
+					}
+					items.push(pObj);
 				}
 			}
+			
+			items.sort(function(a,b){
+				var nameA = a.text.toLowerCase( );
+				var nameB = b.text.toLowerCase( );
+				if (nameA < nameB) {return -1}
+				if (nameA > nameB) {return 1}
+				return 0;
+			});
+			
 			this.Menu.addItems(items);
 			this.Menu.render();
 			

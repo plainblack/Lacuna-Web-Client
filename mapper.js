@@ -600,7 +600,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		showTiles : function(refresh) {
-			var bounds = this.visibleArea.coordBounds();
+			var bounds = this.map instanceof Mapper.PlanetMap ? {x1:this.map.maxBounds.x1Left,x2:this.map.maxBounds.x2Right,y1:this.map.maxBounds.y1Top,y2:this.map.maxBounds.y2Bottom} : this.visibleArea.coordBounds();
 			var tiles = {};
 			//from left to right (smaller to bigger)
 			for(var xc=bounds.x1; xc <= bounds.x2; xc++){
