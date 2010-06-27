@@ -238,6 +238,27 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:5px;
 	margin-top:8px;
 }
+/*div.essentia span {
+	margin-left:52px;
+}
+div.food span {
+	margin-left:47px;
+}
+div.ore span {
+	margin-left:41px;
+}
+div.water span {
+	margin-left:38px;
+}
+div.energy span {
+	margin-left:23px;
+}
+div.waste span {
+	margin-left:33px;
+}
+div.happiness span {
+	margin-left:41px;
+}*/
 
 /*
 SHINEY
@@ -251,11 +272,11 @@ SHINEY
 	z-index:1001;
 }
 #headerShine {
-	/*background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_shine.png");*/
+	background-image:url("http://localhost/lacuna/assets/ui/web/t.png");
 	top:0;
 }
 #footerShine {
-	/*background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_shine.png");*/
+	background-image:url("http://localhost/lacuna/assets/ui/web/t.png");
 	bottom:0;
 }
 
@@ -314,6 +335,42 @@ SHINEY
 	left:0;
 }
 
+/*.changeBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/star_map.png) no-repeat scroll center center;
+}
+div.changeInUniverse {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/planet_side.png) no-repeat scroll center center;
+}
+.inboxBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/inbox.png) no-repeat scroll center center;
+}
+div.inboxHasNewMessages {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/inbox_new.png) no-repeat scroll center center;
+}
+
+.essentiaBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/essentia.png) no-repeat scroll left center;
+}
+
+.foodBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/food.png) no-repeat scroll left center;
+}
+.oreBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/ore.png) no-repeat scroll left center;
+}
+.waterBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/water.png) no-repeat scroll left center;
+}
+
+.energyBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/energy.png) no-repeat scroll left center;
+}
+.wasteBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/waste.png) no-repeat scroll left center;
+}
+.happinessBg {
+	background: transparent url(http://localhost/lacuna/assets/ui/l/happiness.png) no-repeat scroll left center;
+}*/
 
 .change, .food { left:10px; }
 .inbox, .ore { left:130px; }

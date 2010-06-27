@@ -107,7 +107,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([change,changeClick], "menuItem");
 			Dom.addClass(changeClick, "click");
 			
-			inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages == 1 ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
+			inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			inboxImg.alt = "Inbox";
 			Event.on(inboxClick, "click", function() {
 				this.fireEvent("onInboxClick");
