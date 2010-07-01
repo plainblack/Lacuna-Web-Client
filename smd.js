@@ -219,6 +219,112 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			Mining : {
+				"SMDVersion":"2.0",
+				"description": "Mining Ministry",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/miningministry",
+
+				"services": {
+					"view_platforms" : {
+						"description": "Returns a list of the mining platforms currently controlled by this ministry.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"max_platforms" : 1,
+							"platforms" : [
+								{
+									"id" : "id-goes-here",
+									"asteroid" : {
+										"id" : "id-goes-here",
+										"name" : "Kuiper"
+									},
+									"rutile_hour" : 10,
+									"chromite_hour" : 10,
+									"chalcopyrite_hour" : 10,
+									"galena_hour" : 10,
+									"gold_hour" : 10,
+									"uraninite_hour" : 10,
+									"bauxite_hour" : 10,
+									"goethite_hour" : 10,
+									"halite_hour" : 10,
+									"gypsum_hour" : 10,
+									"trona_hour" : 10,
+									"kerogen_hour" : 10,
+									"methane_hour" : 10,
+									"anthracite_hour" : 10,
+									"sulfur_hour" : 10,
+									"zircon_hour" : 10,
+									"monazite_hour" : 10,
+									"fluorite_hour" : 10,
+									"beryl_hour" : 10,
+									"magnetite_hour" : 10,  
+									"production_capacity" : 100, # expressed as a percentage
+									"shipping_capacity" : 51 # expressed as a percentage
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"view_ships" : {
+						"description": "Shows you the ships that are working in the mining fleet, and available to work in the mining fleet.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"ships" : [
+								{
+									"name" : "CS4",
+									"id" : "id-goes-here",
+									"task" : "Mining",
+									"speed" : 350,
+									"hold_size" : 5600
+								},
+								...
+							],
+							"status" : { ... }
+						 }
+						*/
+					},
+					"add_cargo_ship_to_fleet" : {
+						"description": "Take a cargo ship from the space port and add it to the mining fleet.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_count", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"} //status
+					},
+					"remove_cargo_ship_from_fleet" : {
+						"description": "Tell one of the cargo ships in the mining fleet to come home and park at the space port.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_count", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"} //status
+					},
+					"abandon_platform" : {
+						"description": "Close down an existing mining platform.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"asteroid_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"} //status
+					}
+				}
+			},
 			Network19 : {
 				"SMDVersion":"2.0",
 				"description": "Network19",
@@ -1142,6 +1248,200 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Retrieves a list of the game credits. It is an array of hashes of arrays.",
 					"parameters": [],
 					"returns":{"type":"array"}
+				},
+				
+				"empire_rank" : {
+					"description": "Returns a sorted list of empires ranked according to various stats.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":true}, //Defaults to empire_size_rank. Possible values are: empire_size_rank, university_level_rank, offense_success_rate_rank, defense_success_rate_rank, and dirtiest_rank
+						{"name":"page_number", "type":"number", "optional":true}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { ... },
+						"empires" : [
+							{
+								"empire_id" : "id-goes-here",                   # unique id
+								"empire_name" : "Earthlings",                   # empire name
+								"colony_count" : "1",                           # number of planets colonized
+								"colony_count_delta" : "0",                     # number of planets colonized this week
+								"population" : "7000000000",                    # number of citizens on all planets in the empire
+								"population_delta" : "140000",                  # growth of population this week
+								"empire_size" : "7000000000",                   # size of entire empire
+								"empire_size_delta" : "140000",                 # growth of empire this week
+								"building_count" : "50",                        # number of buildings across all colonies
+								"university_level" : "25",                      # highest level of university research
+								"average_building_level" : "20",                # average level of all buildings across all colonies
+								"highest_building_level" : "26",                # highest building across all colonies
+								"food_hour" : "1111111",                        # food production from all colonies
+								"energy_hour" : "222222",                       # energy production from all colonies
+								"waste_hour" : "3333333",                       # waste production from all colonies
+								"ore_hour" : "4444444",                         # ore production from all colonies
+								"water_hour" : "11111111",                      # water production from all colonies
+								"happiness_hour" : "2222222",                   # happiness production from all colonies
+								"spy_count" : "103",                            # number of spys from all colonies
+								"offense_success_rate" : "0.793",               # the offense rate of success of spies at all colonies
+								"offense_success_rate_delta" : "0.1001",        # the change in the offensive success rate for this week
+								"defense_success_rate" : "0.49312",             # the defense rate of success of spies at all colonies
+								"defense_success_rate_delta" : "0.2219",        # the change in the defensive success rate for this week
+								"dirtiest" : "7941",                            # the number of times a spy has attempted to hurt another empire
+								"dirtiest_delta" : "167",                       # the change in the dirtiest for the week
+							  },
+							...
+						],
+						"total_empires" : 5939,
+						"page_number" : 3
+					 }
+					*/
+				},
+				
+				"find_empire_rank" : {
+					"description": "Search for a particular empire in the empire_rank().",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":false},
+						{"name":"empire_name", "type":"string", "optional":false} //Must be at least 3 characters to search.
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { ... },
+						"empires" : [
+							{
+								"empire_id" : "id-goes-here",
+								"empire_name" : "Earthlings",
+								"page_number" : "54",
+							}
+							...
+						]
+					 }
+					*/
+				},
+				
+				"colony_rank" : {
+					"description": "Returns a sorted list of planets ranked according to various stats.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":true}, //Defaults to population_rank. Possible values are: population_rank
+						{"name":"page_number", "type":"number", "optional":true}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { ... },
+						"colonies" : [
+							{
+								"empire_id" : "id-goes-here",                   # unique id
+								"empire_name" : "Earthlings",                   # empire name
+								"planet_id" : "id-goes-here",                   # unique id
+								"planet_name" : "Earth",                        # name of the planet
+								"population" : "7000000000",                    # number of citizens on planet
+								"population_delta" : "140000",                  # growth of population this week
+								"building_count" : "50",                        # number of buildings at this colony
+								"average_building_level" : "20",                # average level of all buildings at this colony
+								"highest_building_level" : "26",                # highest building at this colony
+								"food_hour" : "1111111",                        # food production at this colony
+								"energy_hour" : "222222",                       # energy production at this colony
+								"waste_hour" : "3333333",                       # waste production at this colony
+								"ore_hour" : "4444444",                         # ore production at this colony
+								"water_hour" : "11111111",                      # water production at this colony
+								"happiness_hour" : "2222222",                   # happiness production at this colony
+								"spy_count" : "103",                            # number of spys at this colony
+								"offense_success_rate" : "0.793",               # the offense rate of success of spies at this colony
+								"offense_success_rate_delta" : "0.1001",        # the change in the offensive success rate for this week
+								"defense_success_rate" : "0.49312",             # the defense rate of success of spies at this colony
+								"defense_success_rate_delta" : "0.2219",        # the change in the defensive success rate for this week
+								"dirtiest" : "7941",                            # the number of times a spy has attempted to hurt another empire
+								"dirtiest_delta" : "167",                       # the change in the dirtiest for the week
+							  },
+							...
+						],
+					   "total_colonies" : 5939,
+					   "page_number" : 3
+					 }
+					*/
+				},
+				
+				"find_colony_rank" : {
+					"description": "Search for a particular colony in the colony_rank()",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":false},
+						{"name":"empire_name", "type":"string", "optional":false} //Must be at least 3 characters to search.
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { ... },
+						"colonies" : [
+							{
+								"planet_id" : "id-goes-here",
+								"planet_name" : "Earth",
+								"page_number" : "33",
+							}
+							...
+						]
+					 }
+					*/
+				},
+				
+				"spy_rank" : {
+					"description": "Returns a sorted list of spies ranked according to various stats.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":true}, //Defaults to level_rank. Possible values are: level_rank  success_rate_rank and dirtiest_rank
+						{"name":"page_number", "type":"number", "optional":true}
+					],
+					"returns":{"type":"object"}
+					/*
+					 {
+						"status" : { ... },
+						"spies" : [
+							{
+								"empire_id" : "id-goes-here",                   # unique id
+								"empire_name" : "Earthlings",                   # empire name
+								"spy_id" : "id-goes-here",                      # unique id
+								"spy_name" : "Agent Null",                      # the name of this spy
+								"age" : "3693",                                 # how old is this guy in seconds
+								"level" : "18",                                 # the level of this spy
+								"level_delta" : "2",                            # the change in level this week
+								"success_rate" : "0.731",                       # the rate of success this spy has had for both offense and defensive tasks
+								"success_rate_delta" : "0.012",                 # the chance in success_rate this week
+								"dirtiest" : "7941",                            # the number of times a spy has attempted to hurt another empire
+								"dirtiest_delta" : "167",                       # the change in the dirtiest for the week
+							  },
+							...
+						],
+					   "total_spies" : 5939,
+					   "page_number" : 3
+					 }
+					*/
+				},
+				
+				"find_spy_rank" : {
+					"description": "Search for a particular spy in the spy_rank()",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"sort_by", "type":"string", "optional":false},
+						{"name":"empire_name", "type":"string", "optional":false} //Must be at least 3 characters to search.
+					],
+					"returns":{"type":"object"}
+					/*
+					{
+						"status" : { ... },
+						"spy" : [
+							{
+								"spy_id" : "id-goes-here",
+								"spy_name" : "Agent Null",
+								"empire_name" : "Earthlings", # used to help distinguish like named spies
+								"page_number" : "54",
+							}
+							...
+						]
+					 }
+					*/
 				}
 				
 			}

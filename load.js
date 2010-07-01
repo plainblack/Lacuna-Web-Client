@@ -6,6 +6,25 @@
 		combine: false,
 		filter: "RAW"			
 	});
+	
+	/*loader.addModule({
+		name: "raphael",
+		type: "js",
+		varName : "Raphael",
+		fullpath: host + "raphael.js?" + t
+	});
+	loader.addModule({
+		name: "gRaphael",
+		type: "js",
+		fullpath: host + "g.raphael.js?" + t,
+		requires : ["raphael"]
+	});
+	loader.addModule({
+		name: "gRaphaelBar",
+		type: "js",
+		fullpath: host + "g.bar.js?" + t,
+		requires : ["gRaphael"]
+	});*/
 	loader.addModule({
 		name: "smd",
 		type: "js",
@@ -97,6 +116,12 @@
 		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
+		name: "stats",
+		type: "js",
+		fullpath: host + "stats.js?" + t,
+		requires : ["container","datasource","datatable","game","selector","tabview"]
+	});
+	loader.addModule({
 		name: "pulse",
 		type: "js",
 		fullpath: host + "pulse.js?" + t,
@@ -107,7 +132,7 @@
 		name: "gameMenu",
 		type: "js",
 		fullpath: host + "menu.js?" + t,
-		requires : ["about","essentia","messaging","menu","profile"]
+		requires : ["about","essentia","messaging","menu","profile","stats"]
 	});
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {

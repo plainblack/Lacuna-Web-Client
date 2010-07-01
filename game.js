@@ -24,6 +24,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic),
 				Development : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Development),
 				Intelligence : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Intelligence),
+				Mining : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Mining),
 				Network19 : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Network19),
 				Observatory : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Observatory),
 				Park : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Park),

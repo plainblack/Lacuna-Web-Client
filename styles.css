@@ -52,7 +52,7 @@ a, a:link, a:visited {
 	display:none;
 }
 .alert {
-	color:red;
+	color:pink;
 }
 
 /*
@@ -86,10 +86,8 @@ body.yui-skin-sam .yui-panel .hd {
 	background:url("http://localhost/lacuna/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
 	border-width:0;
 	margin-left:10px;
-	font-family:impact, sans-serif;
 	font-size:110%;
-	font-weight:normal;
-	color:#fff;
+	color:#FFD800;
 	line-height:1.75;
 }
 
@@ -101,26 +99,26 @@ body.yui-skin-sam .yui-panel .bd {
 	-webkit-border-top-right-radius: 10px;
 	-webkit-border-top-left-radius: 10px;
 	border-radius:10px 10px 0 0;
-	border-width: 5px 5px 0;
+	border-width: 2px 2px 0;
 	border-style:solid;
-	border-color:#52ACFF;
+	border-color:#000;
 }
 body.yui-skin-sam .yui-panel .ft {
 	-moz-border-radius:0 0 10px 10px;
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	border-radius:0 0 10px 10px;
-	border-width: 0 5px 5px;
+	border-width: 0 2px 2px;
 	border-style:solid;
-	border-color:#52ACFF;
+	border-color:#000;
 }
 body.yui-skin-sam .nofooter .bd {
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	border-width: 5px;
+	border-width: 2px;
 	border-style:solid;
-	border-color:#52ACFF;
+	border-color:#000;
 } 
 body.yui-skin-sam .container-close {
 	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll 0 0 transparent;
@@ -128,7 +126,7 @@ body.yui-skin-sam .container-close {
 	height:23px;
 	position:absolute;
 	right:1px;
-	top:5px;
+	top:3px;
 	width:23px;
 }
 
@@ -238,27 +236,6 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:5px;
 	margin-top:8px;
 }
-/*div.essentia span {
-	margin-left:52px;
-}
-div.food span {
-	margin-left:47px;
-}
-div.ore span {
-	margin-left:41px;
-}
-div.water span {
-	margin-left:38px;
-}
-div.energy span {
-	margin-left:23px;
-}
-div.waste span {
-	margin-left:33px;
-}
-div.happiness span {
-	margin-left:41px;
-}*/
 
 /*
 SHINEY
@@ -299,7 +276,7 @@ SHINEY
 	z-index:1003;
 }
 #userCenterShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/selector_top_shine.png");
+	/*background-image:url("http://localhost/lacuna/assets/ui/web/selector_top_shine.png");*/
 	top:0;
 	z-index:1004;
 }
@@ -815,16 +792,27 @@ planet details
 	width:15px;
 }
 
-/*.spiesHeader {
+.spiesHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
+}
+.spyInfo {
+	border:1px solid #ddd;
+	padding:2px;
+	margin:0 2px 2px 0;
 }
 .spyInfo li {
 	float:left;
 	font-size:90%;
 }
+.spyInfo li label {
+	font-weight:bold;
+	margin-right:3px;
+}
 .spyInfo .spyName {
 	width:100px;
+	font-weight:bold;
+	font-size:100%;
 	cursor:url(http://localhost/lacuna/assets/ui/web/pen_m.cur), text;
 }
 .spyInfo .spyName input {
@@ -832,7 +820,7 @@ planet details
 	font-size:90%;
 }
 .spyInfo .spyAssignedTo {
-	width:100px;
+	width:200px;
 }
 .spyInfo .spyAvailableWhen {
 	width:170px;
@@ -840,43 +828,33 @@ planet details
 .spyInfo .spyAssignment {
 	width:200px;
 }
+.spyInfo .spyAssignment  select {
+	width:190px;
+}
+.spyInfo .spyOffense {
+	width:100px;
+}
+.spyInfo .spyDefense {
+	width:100px;
+}
+.spyInfo .spyLevel {
+	width:100px;
+}
+.spyInfo .spyIntel {
+	width:100px;
+}
+.spyInfo .spyMayhem {
+	width:100px;
+}
+.spyInfo .spyPolitics {
+	width:100px;
+}
+.spyInfo .spyTheft {
+	width:100px;
+}
 .spyInfo .spyBurn {
 	width:60px;
-}
-*/
-.spy {
-	width: 200px;
-	min-height: 125px;
-	display: -moz-inline-stack;
-	display: inline-block;
-	vertical-align: top;
-	zoom: 1;
-	*display: inline;
-
-}
-.spyInfo {
-	border:1px solid black;
-	background-color:#52ACFF;
-	margin:2px;
-	padding:0 2px;
-	position:relative;
-}
-.spyInfo  input {
-	font-weight:normal;
-	font-size:90%;
-}
-.spyInfo .spyName {
-	font-weight:bold;
-	cursor:url(http://localhost/lacuna/assets/ui/web/pen_m.cur), text;
-}
-.spyInfo .spyBurn {
-	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll center center transparent;
-	height:11px;
-	width:11px;
-	position: absolute;
-	right: 0;
-	top:0;
-	cursor:pointer;
+	float:right;
 }
 
 .newsFeedContainer {
@@ -1045,6 +1023,26 @@ Essentia Dialog
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
+
+
+ul.statsList label{
+	font-weight:bold;
+	padding-right:5px;
+}
+ul.statsSubList, ul.statsSubList ul {
+	padding-left:40px;
+}
+.statsSubHeader {
+	cursor:pointer;
+	text-decoration:underline;
+}
+#statsEmpireTable, #statsColonyTable, #statsSpyTable {
+	color:black;
+}
+#statsEmpire, #statsColony, #statsSpy{
+	background-color:#ddd;
+}
+
 
 /*
 TextboxList

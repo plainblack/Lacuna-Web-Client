@@ -43,6 +43,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			userMenu.addItems([{ text: "Essentia", id: "ess", onclick: { fn: Lacuna.Essentia.show } }
 			]);
 			userMenu.addItems([{ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } },
+				{ text: "Stats", id: "us", onclick: { fn: Lacuna.Stats.show } },
 				{ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } },
 				{ text: "Logout", id: "ul", onclick: { fn: Game.Logout } }
 			]);
@@ -444,22 +445,22 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				output;
 			switch(id){
 				case "planetMenuFood":
-					output = [Math.round(planet.food_stored), '/', planet.food_capacity, ' : ', planet.food_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.food_stored)), '/', Lib.formatNumber(planet.food_capacity), ' : ', Lib.formatNumber(planet.food_hour),'/hr'];
 					break;
 				case "planetMenuOre":
-					output = [Math.round(planet.ore_stored), '/', planet.ore_capacity, ' : ', planet.ore_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.ore_stored)), '/', Lib.formatNumber(planet.ore_capacity), ' : ', Lib.formatNumber(planet.ore_hour),'/hr'];
 					break;
 				case "planetMenuWater":
-					output = [Math.round(planet.water_stored), '/', planet.water_capacity, ' : ', planet.water_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.water_stored)), '/', Lib.formatNumber(planet.water_capacity), ' : ', Lib.formatNumber(planet.water_hour),'/hr'];
 					break;
 				case "planetMenuEnergy":
-					output = [Math.round(planet.energy_stored), '/', planet.energy_capacity, ' : ', planet.energy_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.energy_stored)), '/', Lib.formatNumber(planet.energy_capacity), ' : ', Lib.formatNumber(planet.energy_hour),'/hr'];
 					break;
 				case "planetMenuWaste":
-					output = [Math.round(planet.waste_stored), '/', planet.waste_capacity, ' : ', planet.waste_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.waste_stored)), '/', Lib.formatNumber(planet.waste_capacity), ' : ', Lib.formatNumber(planet.waste_hour),'/hr'];
 					break;
 				case "planetMenuHappiness":
-					output = [Math.round(planet.happiness), ' : ', planet.happiness_hour,'/hr'];
+					output = [Lib.formatNumber(Math.round(planet.happiness)), ' : ', Lib.formatNumber(planet.happiness_hour),'/hr'];
 					break;
 				default:
 					output = [];
