@@ -611,6 +611,31 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						 */
 					},
+					"view_all_ships" : {
+						"description": "Returns a list of all ships",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"ships" : [
+								{
+									"name" : "CS4",
+									"id" : "id-goes-here",
+									"task" : "Mining",
+									"speed" : 350,
+									"hold_size" : 5600
+									"type" : "cargo_ship",
+								},
+								...
+							],
+							"number_of_ships" : 13,
+							"status" : { ... }
+						 }
+						*/
+					},
 					"view_ships_travelling" : {
 						"description": "Returns a list of the ships that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
 						"parameters": [

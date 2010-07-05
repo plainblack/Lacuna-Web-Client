@@ -230,6 +230,44 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 .food  img, .ore  img, .water  img, .essentia  img, .energy  img, .happiness  img, .waste  img {
 	float:left;
 }
+.food img {
+	width:45px;
+	height:45px;
+}
+.ore img {
+	width:39px;
+	height:45px;
+}
+.water img {
+	width:36px;
+	height:45px;
+}
+.essentia img {
+	width:50px;
+	height:45px;
+}
+.energy img {
+	width:21px;
+	height:45px;
+}
+.happiness img {
+	width:38px;
+	height:45px;
+}
+.waste img {
+	width:31px;
+	height:45px;
+}
+.inbox img {
+	width:39px;
+	height:45px;
+}
+.change img {
+	width:40px;
+	height:45px;
+	
+}
+
 .menuItem  span {
 	float:left;
 	font-size:25px;
@@ -311,43 +349,6 @@ SHINEY
 	top:0;
 	left:0;
 }
-
-/*.changeBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/star_map.png) no-repeat scroll center center;
-}
-div.changeInUniverse {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/planet_side.png) no-repeat scroll center center;
-}
-.inboxBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/inbox.png) no-repeat scroll center center;
-}
-div.inboxHasNewMessages {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/inbox_new.png) no-repeat scroll center center;
-}
-
-.essentiaBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/essentia.png) no-repeat scroll left center;
-}
-
-.foodBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/food.png) no-repeat scroll left center;
-}
-.oreBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/ore.png) no-repeat scroll left center;
-}
-.waterBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/water.png) no-repeat scroll left center;
-}
-
-.energyBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/energy.png) no-repeat scroll left center;
-}
-.wasteBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/waste.png) no-repeat scroll left center;
-}
-.happinessBg {
-	background: transparent url(http://localhost/lacuna/assets/ui/l/happiness.png) no-repeat scroll left center;
-}*/
 
 .change, .food { left:10px; }
 .inbox, .ore { left:130px; }
@@ -792,6 +793,39 @@ planet details
 	width:15px;
 }
 
+.smallFood {
+	width:38px;
+	height:22px;
+}
+.smallOre{
+	width:21px;
+	height:22px;
+}
+.smallWater{
+	width:15px;
+	height:22px;
+}
+.smallEnergy{
+	width:11px;
+	height:22px;
+}
+.smallWaste{
+	width:16px;
+	height:22px;
+}
+.smallHappy{
+	width:22px;
+	height:22px;
+}
+.smallEssentia{
+	width:28px;
+	height:22px;
+}
+.smallTime {
+	width:21px;
+	height:22px;
+}
+
 .spiesHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
@@ -927,6 +961,22 @@ planet details
 }
 .shipInfo .shipTo {
 	width:140px;
+}
+
+.shipInfo .shipTypeImage {
+	width:54px;
+}
+.shipInfo .shipName {
+	width:120px;
+}
+.shipInfo .shipTask{
+	width:100px;
+}
+.shipInfo .shipSpeed {
+	width:75px;
+}
+.shipInfo .shipHold {
+	width:75px;
 }
 
 .shipQueueHeader {
