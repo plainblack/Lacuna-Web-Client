@@ -85,6 +85,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<ul class="yui-nav">',
 				'			<li><a href="#planetDetailOre"><em>Ore</em></a></li>',
 				'			<li><a href="#planetDetailRename"><em>Rename</em></a></li>',
+				'			<li><a href="#planetDetailMoveSpies"><em>Move Spies</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content">',
 				'			<div id="planetDetailOre">',
@@ -123,6 +124,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'				<li><label>New Planet Name: </label><input type="text" id="planetDetailNewName" maxlength="100" /></li>',
 				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button></li>',
 				'			</ul></div>',
+				'			<div id="planetDetailMoveSpies">',
+				'				Moves spies from planet <input type="text" id="planetDetailMoveSpiesFrom" />',
+				'				to planet <input type="text" id="planetDetailMoveSpiesTo" />',
+				'				with ships <input type="text" id="planetDetailMoveSpiesShips" />',
+				'				<button type="button" id="planetDetailMoveSpiesSubmit">Move</button>',
+				'			</div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -522,11 +529,17 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					panel.tabView.addTab(panel.renameTab, 1);
 					panel.renameTab = undefined;
 				}
+				if(panel.moveTab) {
+					panel.tabView.addTab(panel.moveTab, 2);
+					panel.moveTab = undefined;
+				}
 				Dom.get("planetDetailNewName").value = "";
 			}
-			else if(panel.tabView.get("tabs").length == 2){
+			else if(panel.tabView.get("tabs").length == 3){
 				panel.renameTab = panel.tabView.getTab(1);
+				panel.moveTab = panel.tabView.getTab(2);
 				panel.tabView.removeTab(panel.renameTab);
+				panel.tabView.removeTab(panel.moveTab);
 			}
 			
 			Game.OverlayManager.hideAll();
