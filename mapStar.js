@@ -152,6 +152,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
 				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
+				Event.delegate("planetDetailMoveSpies", "click", this.MoveSpiesClick, "button", this, true);
 			}, this, true);
 			this.planetDetails.hideEvent.subscribe(function(){
 				this.selectedBody = undefined;
@@ -347,7 +348,74 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.selectedStar = data;
 			panel.show();
 		},
-	
+		ShowPlanet : function(tile) {
+			var body = tile.data,
+				panel = this.planetDetails,
+				empire = body.empire || {alignment:"none"};
+			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:200px;height:200px;" />'].join('');
+			Dom.get("planetDetailsInfo").innerHTML = [
+				'<ul>',
+				'	<li id="planetDetailsName">',body.name,'</li>',
+				'	<li><label>Type: </label>',body.type,'</li>',
+				'	<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "None"),'</li>',
+				'	<li><label>Water: </label>',body.water,'</li>',
+				'	<li><label>Planet Size:</label>',body.size,'</li>',
+				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
+				'	<li><label>Star:</label>',body.star_name,'</li>',
+				'	<li><label>Orbit:</label>',body.orbit,'</li>',
+				empire.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
+				empire.alignment != "none" && empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
+				empire.alignment == "none" && body.type == "habitable planet" ? '	<li><button id="sendColony" type="button">Send Colony Ship</button></li>' : '',
+				empire.alignment == "none" && body.type == "asteroid" ? '	<li><button id="sendMining" type="button">Send Mining Ship</button></li>' : '',
+				'</ul>'
+			].join('');
+			
+			Dom.get("planetDetailsAnthracite").innerHTML = body.ore.anthracite;
+			Dom.get("planetDetailsBauxite").innerHTML = body.ore.bauxite;
+			Dom.get("planetDetailsBeryl").innerHTML = body.ore.beryl;
+			Dom.get("planetDetailsChalcopyrite").innerHTML = body.ore.chalcopyrite;
+			Dom.get("planetDetailsChromite").innerHTML = body.ore.chromite;
+			Dom.get("planetDetailsFluorite").innerHTML = body.ore.fluorite;
+			Dom.get("planetDetailsGalena").innerHTML = body.ore.galena;
+			Dom.get("planetDetailsGoethite").innerHTML = body.ore.goethite;
+			Dom.get("planetDetailsGold").innerHTML = body.ore.gold;
+			Dom.get("planetDetailsGypsum").innerHTML = body.ore.gypsum;
+			Dom.get("planetDetailsHalite").innerHTML = body.ore.halite;
+			Dom.get("planetDetailsKerogen").innerHTML = body.ore.kerogen;
+			Dom.get("planetDetailsMagnetite").innerHTML = body.ore.magnetite;
+			Dom.get("planetDetailsMethane").innerHTML = body.ore.methane;
+			Dom.get("planetDetailsMonazite").innerHTML = body.ore.monazite;
+			Dom.get("planetDetailsRutile").innerHTML = body.ore.rutile;
+			Dom.get("planetDetailsSulfur").innerHTML = body.ore.sulfur;
+			Dom.get("planetDetailsTrona").innerHTML = body.ore.trona;
+			Dom.get("planetDetailsUraninite").innerHTML = body.ore.uraninite;
+			Dom.get("planetDetailsZircon").innerHTML = body.ore.zircon;
+			
+			if(empire.alignment == "self"){
+				if(panel.renameTab) {
+					panel.tabView.addTab(panel.renameTab, 1);
+					panel.renameTab = undefined;
+				}
+				if(panel.moveTab) {
+					panel.tabView.addTab(panel.moveTab, 2);
+					panel.moveTab = undefined;
+				}
+				Dom.get("planetDetailNewName").value = "";
+			}
+			else if(panel.tabView.get("tabs").length == 3){
+				panel.renameTab = panel.tabView.getTab(1);
+				panel.moveTab = panel.tabView.getTab(2);
+				panel.tabView.removeTab(panel.renameTab);
+				panel.tabView.removeTab(panel.moveTab);
+			}
+			
+			Game.OverlayManager.hideAll();
+			this.selectedBody = body;
+			this.selectedTile = tile;
+			panel.tabView.selectTab(0);
+			panel.show();
+		},
+		
 		Rename : function() {
 			var newName = Dom.get("planetDetailNewName").value;
 			Game.Services.Body.rename({
@@ -481,74 +549,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				scope:this
 			});
 		},
-		ShowPlanet : function(tile) {
-			var body = tile.data,
-				panel = this.planetDetails,
-				empire = body.empire || {alignment:"none"};
-			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:200px;height:200px;" />'].join('');
-			Dom.get("planetDetailsInfo").innerHTML = [
-				'<ul>',
-				'	<li id="planetDetailsName">',body.name,'</li>',
-				'	<li><label>Type: </label>',body.type,'</li>',
-				'	<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "None"),'</li>',
-				'	<li><label>Water: </label>',body.water,'</li>',
-				'	<li><label>Planet Size:</label>',body.size,'</li>',
-				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
-				'	<li><label>Star:</label>',body.star_name,'</li>',
-				'	<li><label>Orbit:</label>',body.orbit,'</li>',
-				empire.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
-				empire.alignment != "none" && empire.name ? '	<li><button id="sendSpy" type="button">Send Spy</button></li>' : '',
-				empire.alignment == "none" && body.type == "habitable planet" ? '	<li><button id="sendColony" type="button">Send Colony Ship</button></li>' : '',
-				empire.alignment == "none" && body.type == "asteroid" ? '	<li><button id="sendMining" type="button">Send Mining Ship</button></li>' : '',
-				'</ul>'
-			].join('');
-			
-			Dom.get("planetDetailsAnthracite").innerHTML = body.ore.anthracite;
-			Dom.get("planetDetailsBauxite").innerHTML = body.ore.bauxite;
-			Dom.get("planetDetailsBeryl").innerHTML = body.ore.beryl;
-			Dom.get("planetDetailsChalcopyrite").innerHTML = body.ore.chalcopyrite;
-			Dom.get("planetDetailsChromite").innerHTML = body.ore.chromite;
-			Dom.get("planetDetailsFluorite").innerHTML = body.ore.fluorite;
-			Dom.get("planetDetailsGalena").innerHTML = body.ore.galena;
-			Dom.get("planetDetailsGoethite").innerHTML = body.ore.goethite;
-			Dom.get("planetDetailsGold").innerHTML = body.ore.gold;
-			Dom.get("planetDetailsGypsum").innerHTML = body.ore.gypsum;
-			Dom.get("planetDetailsHalite").innerHTML = body.ore.halite;
-			Dom.get("planetDetailsKerogen").innerHTML = body.ore.kerogen;
-			Dom.get("planetDetailsMagnetite").innerHTML = body.ore.magnetite;
-			Dom.get("planetDetailsMethane").innerHTML = body.ore.methane;
-			Dom.get("planetDetailsMonazite").innerHTML = body.ore.monazite;
-			Dom.get("planetDetailsRutile").innerHTML = body.ore.rutile;
-			Dom.get("planetDetailsSulfur").innerHTML = body.ore.sulfur;
-			Dom.get("planetDetailsTrona").innerHTML = body.ore.trona;
-			Dom.get("planetDetailsUraninite").innerHTML = body.ore.uraninite;
-			Dom.get("planetDetailsZircon").innerHTML = body.ore.zircon;
-			
-			if(empire.alignment == "self"){
-				if(panel.renameTab) {
-					panel.tabView.addTab(panel.renameTab, 1);
-					panel.renameTab = undefined;
-				}
-				if(panel.moveTab) {
-					panel.tabView.addTab(panel.moveTab, 2);
-					panel.moveTab = undefined;
-				}
-				Dom.get("planetDetailNewName").value = "";
+		MoveSpiesClick : function(e, matchedEl, container) {
+			if(this.selectedBody) {
 			}
-			else if(panel.tabView.get("tabs").length == 3){
-				panel.renameTab = panel.tabView.getTab(1);
-				panel.moveTab = panel.tabView.getTab(2);
-				panel.tabView.removeTab(panel.renameTab);
-				panel.tabView.removeTab(panel.moveTab);
-			}
-			
-			Game.OverlayManager.hideAll();
-			this.selectedBody = body;
-			this.selectedTile = tile;
-			panel.tabView.selectTab(0);
-			panel.show();
 		}
-	
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);
 	

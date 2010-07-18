@@ -12,10 +12,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		Lib = Lacuna.Library;
 		
 	var convertNumDisplay = function(number) {
-		if(number > 1000000) {
+		if(number >= 1000000 || number <= -1000000) {
 			return (Math.floor(number/100000) / 10) + 'm';
 		}
-		else if(number > 100000) {
+		else if(number >= 100000 || number <= -100000) {
 			return Math.floor(number/1000) + 'k';
 		}
 		else {

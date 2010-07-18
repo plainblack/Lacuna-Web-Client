@@ -162,6 +162,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.buildingDetails.resetQueue();
 				this.buildingDetails.dataStore = {};
 				this.currentBuilding = undefined;
+				if(this.currentViewConnection) {
+					Lacuna.Pulser.Hide();
+					Util.Connect.abort(this.currentViewConnection);
+				}
 			}, this, true);
 			
 			this.buildingDetails.render();
@@ -227,6 +231,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				this.tagFilter = oTextboxList;
 			});
+			this.buildingBuilder.hideEvent.subscribe(function(){
+				if(this.currentBuildConnection) {
+					Lacuna.Pulser.Hide();
+					Util.Connect.abort(this.currentBuildConnection);
+				}
+			}, this, true);
 			/*this.buildingBuilder.showEvent.subscribe(function() {
 				this.tabView.set('activeIndex', 0);
 			});*/
@@ -253,7 +263,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				this.updateDisplay();
 			};
-			this.buildingBuilder.resetDisplay = function() {
+			this.buildingBuilder.resetDisplay = function(conn) {
+				if(conn) {
+					Lacuna.Pulser.Hide();
+					Util.Connect.abort(conn);
+				}
 				delete this.buildable;
 				Event.purgeElement(this.list);
 				this.list.innerHTML = "";
@@ -456,6 +470,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
+			this.QueueBuidings(oArgs.buildings);
 			
 			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+this.surfaceUrl+'") repeat scroll 0 0 black');
 			Lacuna.Pulser.Hide();
@@ -532,7 +547,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					y:tile.y
 				};
 			
-			this.buildingBuilder.resetDisplay();
+			this.buildingBuilder.resetDisplay(this.currentBuildConnection);
 			
 			//Event.purgeElement(this.buildingBuilder.list);
 			//this.buildingBuilder.list.innerHTML = "";
@@ -543,14 +558,16 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			Lacuna.Pulser.Show();
 			this.buildingBuilder.show();
 			
-			BodyServ.get_buildable(data,{
+			this.currentBuildConnection = BodyServ.get_buildable(data,{
 				success : function(o){
+					delete this.currentBuildConnection;
 					YAHOO.log(o, "info", "MapPlanet.BuilderView.success");
 					this.fireEvent("onMapRpc", o.result);
 					
 					this.BuilderProcess(o.result, data);
 				},
 				failure : function(o){
+					delete this.currentBuildConnection;
 					YAHOO.log(o, "error", "MapPlanet.BuilderView.failure");
 					this.fireEvent("onMapRpcFailed", o);
 				},
@@ -614,7 +631,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					building_id: id
 				};
 			
-			BuildingServ.view(data,{
+			return BuildingServ.view(data,{
 				success : function(o){
 					YAHOO.log(o, "info", "MapPlanet.ViewData.success");
 					this.fireEvent("onMapRpc", o.result);
@@ -687,8 +704,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			this.buildingDetails.show(); //show before we get data so it looks like we're doing something
 			
-			this.ViewData(tile.data.id, tile.data.url, {
-				success:this.DetailsProcess,
+			this.currentViewConnection = this.ViewData(tile.data.id, tile.data.url, {
+				success:function(oResults, url, x, y){
+					delete this.currentViewConnection;
+					this.DetailsProcess(oResults, url, x, y);
+				},
+				failure:function(){
+					delete this.currentViewConnection;
+				},
 				url:tile.data.url
 			}, tile.x, tile.y);
 		},
@@ -1102,15 +1125,16 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						'			<li><label>Beetle</label><span class="buildingDetailsNum">',stored.beetle,'</span></li>',
 						'			<li><label>Bread</label><span class="buildingDetailsNum">',stored.bread,'</span></li>',
 						'			<li><label>Burger</label><span class="buildingDetailsNum">',stored.burger,'</span></li>',
+						'			<li><label>Cheese</label><span class="buildingDetailsNum">',stored.cheese,'</span></li>',
 						'			<li><label>Chip</label><span class="buildingDetailsNum">',stored.chip,'</span></li>',
 						'			<li><label>Cider</label><span class="buildingDetailsNum">',stored.cider,'</span></li>',
 						'			<li><label>Corn</label><span class="buildingDetailsNum">',stored.corn,'</span></li>',
 						'			<li><label>Fungus</label><span class="buildingDetailsNum">',stored.fungus,'</span></li>',
-						'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
 						'		</ul>',
 						'	</div>',
 						'	<div class="yui-u first">',
 						'		<ul>',
+						'			<li><label>Lapis</label><span class="buildingDetailsNum">',stored.lapis,'</span></li>',
 						'			<li><label>Meal</label><span class="buildingDetailsNum">',stored.meal,'</span></li>',
 						'			<li><label>Milk</label><span class="buildingDetailsNum">',stored.milk,'</span></li>',
 						'			<li><label>Pancake</label><span class="buildingDetailsNum">',stored.pancake,'</span></li>',
@@ -1371,8 +1395,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				else if(building.url == "/miningministry") {
 					var platformTab = new YAHOO.widget.Tab({ label: "Platforms", content: [
 						'<div class="platformContainer">',
-						'	<ul id="platformDetails" class="platformInfo">',
-						'	</ul>',
+						'	<div id="platformDetails">',
+						'	</div>',
 						'</div>'
 					].join('')});
 					platformTab.subscribe("activeChange", function(e) {
@@ -1405,6 +1429,38 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						}
 					}, this, true);
 					panel.tabView.addTab(platformTab);
+					var shipsTab = new YAHOO.widget.Tab({ label: "Ships", content: [
+						'<div class="shipsContainer">',
+						'	<div id="miningShipsAddContainer">',
+						'		<button id="miningShipsAdd" type="button">Add</button> <select id="miningShipsAvailable"></select> to Mining Crew.',
+						'	</div>',
+						'	<div id="miningShipsRemoveContainer">',
+						'		<button id="miningShipsRemove" type="button">Remove</button> <select id="miningShipsWorking"></select> from Mining Crew.',
+						'	</div>',
+						'	<ul class="shipHeader shipInfo clearafter">',
+						'		<li class="shipName">Name</li>',
+						'		<li class="shipTask">Task</li>',
+						'		<li class="shipSpeed">Speed</li>',
+						'		<li class="shipHold">Hold</li>',
+						'	</ul>',
+						'	<div id="shipsDetails">',
+						'	</div>',
+						'</div>'
+					].join('')});
+					shipsTab.subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							if(!panel.dataStore.ships) {
+								this.MiningMinistryShipsView();
+							}
+							else {
+								this.MiningMinistryShipsPopulate();
+							}
+						}
+					}, this, true);
+					panel.tabView.addTab(shipsTab);
+					
+					Event.on("miningShipsAdd", "click", this.MiningMinistryShipsAdd, this, true);
+					Event.on("miningShipsRemove", "click", this.MiningMinistryShipsRemove, this, true);
 				}
 
 				//storage tab last
@@ -1452,6 +1508,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						YAHOO.log(o, "info", "MapPlanet.Demolish.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
+						this._map.removeTile(this.currentBuilding.building.x, this.currentBuilding.building.y);
+						this.buildingDetails.hide();						
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "MapPlanet.Demolish.failure");
@@ -1509,23 +1567,343 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		MiningMinistryPlatforms : function() {
 			var panel = this.buildingDetails,
-				platforms = panel.dataStore.platforms,
+				platforms = panel.dataStore.platforms.platforms,
 				details = Dom.get("platformDetails");
 				
 			if(details) {
+				var ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				
-				var li = document.createElement("li");
 				for(var i=0; i<platforms.length; i++) {
 					var obj = platforms[i],
+						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false);
 						
-					nLi.innerHTML = ['Asteroid:',obj.asteroid.name, '<br/>Production Capacity:',obj.production_capacity, '<br/>Shipping Capacity:', obj.shipping_capacity].join('');
-						
-					nLi = details.appendChild(nLi);
+					nUl.Platform = obj;
+					Dom.addClass(nUl, "platformInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					Dom.addClass(nLi,"platformLocation");
+					nLi.innerHTML = "<label>Asteroid:</label> " + obj.asteroid.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformProduction");
+					nLi.innerHTML = "<label>Production Capacity:</label> " + obj.production_capacity + "%";
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformShipping");
+					nLi.innerHTML = "<label>Shipping Capacity:</label> " + obj.shipping_capacity + "%";
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformOre");
+					var outOre = ['<label>Ore Per Hour:</label><ul>'];
+					if(obj.anthracite_hour > 0) {
+						outOre.push('<li><label>Anthracite:</label> ');
+						outOre.push(obj.anthracite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.bauxite_hour > 0) {
+						outOre.push('<li><label>Bauxite:</label> ');
+						outOre.push(obj.bauxite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.beryl_hour > 0) {
+						outOre.push('<li><label>Beryl:</label> ');
+						outOre.push(obj.beryl_hour);
+						outOre.push('</li>');
+					}
+					if(obj.chalcopyrite_hour > 0) {
+						outOre.push('<li><label>Chalcopyrite:</label> ');
+						outOre.push(obj.chalcopyrite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.chromite_hour > 0) {
+						outOre.push('<li><label>Chromite:</label> ');
+						outOre.push(obj.chromite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.fluorite_hour > 0) {
+						outOre.push('<li><label>Fluorite:</label> ');
+						outOre.push(obj.fluorite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.galena_hour > 0) {
+						outOre.push('<li><label>Galena:</label> ');
+						outOre.push(obj.galena_hour);
+						outOre.push('</li>');
+					}
+					if(obj.goethite_hour > 0) {
+						outOre.push('<li><label>Goethite:</label> ');
+						outOre.push(obj.goethite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.gold_hour > 0) {
+						outOre.push('<li><label>Gold:</label> ');
+						outOre.push(obj.gold_hour);
+						outOre.push('</li>');
+					}
+					if(obj.gypsum_hour > 0) {
+						outOre.push('<li><label>Gypsum:</label> ');
+						outOre.push(obj.gypsum_hour);
+						outOre.push('</li>');
+					}
+					if(obj.halite_hour > 0) {
+						outOre.push('<li><label>Halite:</label> ');
+						outOre.push(obj.halite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.kerogen_hour > 0) {
+						outOre.push('<li><label>Kerogen:</label> ');
+						outOre.push(obj.kerogen_hour);
+						outOre.push('</li>');
+					}
+					if(obj.magnetite_hour > 0) {
+						outOre.push('<li><label>Magnetite:</label> ');
+						outOre.push(obj.magnetite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.methane_hour > 0) {
+						outOre.push('<li><label>Methane:</label> ');
+						outOre.push(obj.methane_hour);
+						outOre.push('</li>');
+					}
+					if(obj.monazite_hour > 0) {
+						outOre.push('<li><label>Monazite:</label> ');
+						outOre.push(obj.monazite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.rutile_hour > 0) {
+						outOre.push('<li><label>Rutile:</label> ');
+						outOre.push(obj.rutile_hour);
+						outOre.push('</li>');
+					}
+					if(obj.sulfur_hour > 0) {
+						outOre.push('<li><label>Sulfur:</label> ');
+						outOre.push(obj.sulfur_hour);
+						outOre.push('</li>');
+					}
+					if(obj.trona_hour > 0) {
+						outOre.push('<li><label>Trona:</label> ');
+						outOre.push(obj.trona_hour);
+						outOre.push('</li>');
+					}
+					if(obj.uraninite_hour > 0) {
+						outOre.push('<li><label>Uraninite:</label> ');
+						outOre.push(obj.uraninite_hour);
+						outOre.push('</li>');
+					}
+					if(obj.zircon_hour > 0) {
+						outOre.push('<li><label>Zircon:</label> ');
+						outOre.push(obj.zircon_hour);
+						outOre.push('</li>');
+					}
+					outOre.push('</ul>');
+					nLi.innerHTML = outOre.join('');
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformAbandon");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					bbtn.innerHTML = "Abandon";
+					bbtn = nLi.appendChild(bbtn);
+					nUl.appendChild(nLi);
+
+					details.appendChild(nUl);
+					
+					Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
 				}
 			}
+		},
+		MiningMinistryPlatformAbandon : function() {
+			if(confirm(["Are you sure you want to Abandon the mining platform at  ",this.Platform.asteroid.name,"?"].join(''))) {
+				Lacuna.Pulser.Show();
+				
+				Game.Services.Buildings.Mining.abandon_platform({
+					session_id:Game.GetSession(),
+					building_id:this.Self.currentBuilding.building.id,
+					platform_id:this.Platform.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapPlanet.MiningMinistryPlatformAbandon.success");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpc", o.result);
+						var platforms = this.Self.buildingDetails.dataStore.platforms.platforms;
+						for(var i=0; i<platforms.length; i++) {
+							if(platforms[i].id == this.Platform.id) {
+								platforms.splice(i,1);
+								break;
+							}
+						}
+						this.Line.parentNode.removeChild(this.Line);
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "MapPlanet.MiningMinistryPlatformAbandon.failure");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+		},
+		MiningMinistryShipsView : function() {
+			Lacuna.Pulser.Show();
+			Game.Services.Buildings.Mining.view_ships({session_id:Game.GetSession(),building_id:this.currentBuilding.building.id}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.MiningMinistryShipsView.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					this.buildingDetails.dataStore.ships = o.result.ships;
+					
+					this.MiningMinistryShipsPopulate();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.MiningMinistryShipsView.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		MiningMinistryShipsPopulate : function() {
+			var panel = this.buildingDetails,
+				ships = panel.dataStore.ships,
+				details = Dom.get("shipsDetails");
+			
+			if(details) {
+				var ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					availShips = [],
+					workingShips = [];
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					if(ship.task == "Docked") {
+						availShips.push(ship);
+					}
+					else {
+						workingShips.push(ship);
+					}
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = ship.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipTask");
+					nLi.innerHTML = ship.task;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipSpeed");
+					nLi.innerHTML = ship.speed;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipHold");
+					nLi.innerHTML = ship.hold_size;
+					nUl.appendChild(nLi);
+								
+					details.appendChild(nUl);
+					
+				}
+				
+				Dom.setStyle("miningShipsAddContainer", "display", (availShips.length > 0 ? "" : "none"));
+				Dom.setStyle("miningShipsRemoveContainer", "display", (workingShips.length > 0 ? "" : "none"));
+				var availSel = Dom.get("miningShipsAvailable"),
+					workingSel = Dom.get("miningShipsWorking");
+				availSel.options.length = 0;
+				workingSel.options.length = 0;
+				if(availShips.length > 0 || workingShips.length > 0) {
+					var opt = document.createElement("option"),
+						n;
+					for(n=0; n<availShips.length; n++){
+						var nOpt = opt.cloneNode(false);
+						nOpt.value = n+1;
+						nOpt.innerHTML = n+1;
+						availSel.appendChild(nOpt);
+					}
+					for(n=0; n<workingShips.length; n++){
+						var nOpt = opt.cloneNode(false);
+						nOpt.value = n+1;
+						nOpt.innerHTML = n+1;
+						workingSel.appendChild(nOpt);
+					}
+				}
+			}
+		},
+		MiningMinistryShipsAdd : function() {
+			Lacuna.Pulser.Show();
+			var availSel = Dom.get("miningShipsAvailable"),
+				opts = availSel.options,
+				ind = availSel.selectedIndex,
+				count = opts[ind].value;
+				
+			Game.Services.Buildings.Mining.add_cargo_ship_to_fleet({
+				session_id:Game.GetSession(),
+				building_id:this.currentBuilding.building.id,
+				ship_count:count
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.MiningMinistryShipsAdd.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					this.MiningMinistryShipsView();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.MiningMinistryShipsAdd.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		MiningMinistryShipsRemove : function() {
+			Lacuna.Pulser.Show();
+			var sel = Dom.get("miningShipsWorking"),
+				opts = sel.options,
+				ind = sel.selectedIndex,
+				count = opts[ind].value;
+				
+			Game.Services.Buildings.Mining.remove_cargo_ship_from_fleet({
+				session_id:Game.GetSession(),
+				building_id:this.currentBuilding.building.id,
+				ship_count:count
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapPlanet.MiningMinistryShipsRemove.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					this.MiningMinistryShipsView();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapPlanet.MiningMinistryShipsRemove.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		},
 		NewsGet : function(id) {
 			Lacuna.Pulser.Show();
@@ -2661,6 +3039,21 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},*/
 		
+		QueueBuidings : function(buildings) {
+			for(var key in buildings) {
+				if(buildings.hasOwnProperty(key)){
+					var building = buildings[key];
+					if(building.pending_build) {
+						building.pending_build.seconds_remaining *= 1;
+						building.pending_build.seconds_remaining += 2; //I seem to be a head normally now
+						this.buildings[building.id] = building;
+						var ms = (building.pending_build.seconds_remaining * 1000);
+						YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueBuidings");
+						Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
+					}
+				}
+			}
+		},
 		QueueReload : function(building) {
 			if(building.pending_build) {
 				building.pending_build.seconds_remaining *= 1;

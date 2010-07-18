@@ -1,5 +1,5 @@
 html {
-	background: black url('http://localhost/lacuna/assets/star_system/field.png');
+	background: black url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/star_system/field.png');
 	color:#fff;
 }
 body {
@@ -40,12 +40,12 @@ a, a:link, a:visited {
 #header {
 	top: 0;
 	z-index:1000;
-	background-image:url("http://localhost/lacuna/assets/ui/web/bar_top_back.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/bar_top_back.png");
 }
 #footer {
 	bottom: 0;
 	z-index:1000;
-	background-image:url("http://localhost/lacuna/assets/ui/web/bar_bottom_back.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/bar_bottom_back.png");
 }
 
 .hidden {
@@ -83,7 +83,7 @@ body.yui-skin-sam .yui-panel {
 }
 body.yui-skin-sam .yui-panel .hd {
 	width:250px;
-	background:url("http://localhost/lacuna/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
+	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
 	border-width:0;
 	margin-left:10px;
 	font-size:110%;
@@ -92,7 +92,7 @@ body.yui-skin-sam .yui-panel .hd {
 }
 
 .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft {
-	background-image:url("http://localhost/lacuna/assets/ui/bkg.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/bkg.png");
 }
 body.yui-skin-sam .yui-panel .bd {
 	-moz-border-radius:10px 10px 0 0;
@@ -121,7 +121,7 @@ body.yui-skin-sam .nofooter .bd {
 	border-color:#000;
 } 
 body.yui-skin-sam .container-close {
-	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll 0 0 transparent;
+	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll 0 0 transparent;
 	cursor:pointer;
 	height:23px;
 	position:absolute;
@@ -287,11 +287,11 @@ SHINEY
 	z-index:1001;
 }
 #headerShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/t.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/t.png");
 	top:0;
 }
 #footerShine {
-	background-image:url("http://localhost/lacuna/assets/ui/web/t.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/t.png");
 	bottom:0;
 }
 
@@ -304,22 +304,22 @@ SHINEY
 	width:334px;
 }
 #usersCenter {
-	background-image:url("http://localhost/lacuna/assets/ui/web/selector_top.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_top.png");
 	top:0;
 	z-index:1003;
 }
 #planetsCenter {
-	background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom.png");
+	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_bottom.png");
 	bottom:0;
 	z-index:1003;
 }
 #userCenterShine {
-	/*background-image:url("http://localhost/lacuna/assets/ui/web/selector_top_shine.png");*/
+	/*background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_top_shine.png");*/
 	top:0;
 	z-index:1004;
 }
 #planetsCenterShine {
-	/*background-image:url("http://localhost/lacuna/assets/ui/web/selector_bottom_shine.png");*/
+	/*background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_bottom_shine.png");*/
 	bottom:0;
 	z-index:1004;
 }
@@ -336,7 +336,7 @@ SHINEY
 #usersArrow {
 	width: 100%; 
 	height: 100%; 
-	background: url("http://localhost/lacuna/assets/ui/down.png") no-repeat scroll center 55px transparent;
+	background: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/down.png") no-repeat scroll center 55px transparent;
 	position:absolute;
 	top:0;
 	left:0;
@@ -344,7 +344,7 @@ SHINEY
 #planetsArrow {
 	width: 100%; 
 	height: 100%; 
-	background: url("http://localhost/lacuna/assets/ui/up.png") no-repeat scroll center 10px transparent;
+	background: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/up.png") no-repeat scroll center 10px transparent;
 	position:absolute;
 	top:0;
 	left:0;
@@ -481,7 +481,7 @@ about
 .speciesSlider_bg {
 	display:inline-block;
 	position: relative;
-	background: url(http://localhost/lacuna/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
+	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
 	height: 28px;
 	width: 210px;
 }
@@ -542,7 +542,7 @@ about
 	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
 }
 /*#planetMap {
-	background: brown url('http://localhost/lacuna/assets/planet_side/ground.png');
+	background: brown url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/planet_side/ground.png');
 }*/
 .planetMapTileCounter {
 	z-index: 2;
@@ -578,7 +578,7 @@ about
 	color:white;
 }
 .planetMapTileActionButton {
-	background: transparent url('http://localhost/lacuna/assets/ui/l/build.png');
+	background: transparent url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/l/build.png');
 }
 #mapiator_zoom_in, #mapiator_zoom_out, #mapiator_zoom_display {
 	position:absolute; 
@@ -589,7 +589,7 @@ about
 	cursor:pointer;
 }
 #mapiator_zoom_in {
-	background: url(http://localhost/lacuna/assets/ui/in.png);
+	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/in.png);
 	top:35px;
 }
 #mapiator_zoom_display {
@@ -599,7 +599,7 @@ about
 	font-size:120%;	
 }
 #mapiator_zoom_out {
-	background: url(http://localhost/lacuna/assets/ui/out.png);
+	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/out.png);
 	top:95px;
 }
 .tileContainer div {
@@ -705,31 +705,6 @@ planet details
 	width:30px;
 	vertical-align:middle;
 }
-.buildQueue li {
-	float:left;
-}
-.buildQueue .buildQueueName {
-	width:200px;
-}
-.buildQueue .buildQueueLevel {
-	width:50px;
-	text-align:right;
-}
-.buildQueue .buildQueueTime  {
-	width:100px;
-	text-align:right;
-}
-.buildQueue .buildQueueCoords  {
-	width:100px;
-	text-align:right;
-}
-.buildQueueHeader .buildQueueLevel , .buildQueueHeader .buildQueueTime  {
-	text-align:center;
-}
-.buildQueueHeader {
-	font-weight:bold;
-	border-bottom:1px solid #52acff;
-}
 .buildingDetailsNum { 
 	display:inline-block;
 	text-align:right;
@@ -826,28 +801,92 @@ planet details
 	height:22px;
 }
 
-.spiesHeader {
+
+.newsFeedContainer {
+	height:200px;
+	overflow-y:auto;
+	font-size:90%;
+	margin:5px 0;
+	padding:1px;
+	border: 1px solid #52acff;
+}
+.newsRssLinksContainer {
+}
+.newsRssLinks li {
+	float:left;
+}
+.newsRssLink a {
+	vertical-align:middle;
+}
+
+/* shared display headers */
+.buildQueueHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .platformHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.spyInfo {
+.buildQueue li , .probeInfo li , .spyInfo li , .shipInfo li, .shipQueue li , .platformInfo li {
+	float:left;
+}
+
+.spyInfo, .platformInfo {
 	border:1px solid #ddd;
 	padding:2px;
 	margin:0 2px 2px 0;
 }
-.spyInfo li {
-	float:left;
+.spyInfo li , .platformInfo li{
 	font-size:90%;
 }
-.spyInfo li label {
+.spyInfo li label, .platformInfo li label{
 	font-weight:bold;
 	margin-right:3px;
 }
+
+
+.buildQueue .buildQueueName {
+	width:200px;
+}
+.buildQueue .buildQueueLevel {
+	width:50px;
+	text-align:right;
+}
+.buildQueue .buildQueueTime  {
+	width:100px;
+	text-align:right;
+}
+.buildQueue .buildQueueCoords  {
+	width:100px;
+	text-align:right;
+}
+.buildQueueHeader .buildQueueLevel , .buildQueueHeader .buildQueueTime  {
+	text-align:center;
+}
+
+
+.probeInfo .probeStar {
+	width:200px;
+	border:1px solid black;
+	background-color:#52ACFF;
+	margin:2px;
+	position:relative;
+}
+.probeStar .probeAction {
+	cursor:pointer;
+}
+.probeStar .probeDelete {
+	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll center center transparent;
+	height:11px;
+	width:11px;
+	position: absolute;
+	right: 0pt;
+	cursor:pointer;
+}
+
+
 .spyInfo .spyName {
 	width:100px;
 	font-weight:bold;
 	font-size:100%;
-	cursor:url(http://localhost/lacuna/assets/ui/web/pen_m.cur), text;
+	cursor:url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/pen_m.cur), text;
 }
 .spyInfo .spyName input {
 	width:95px;
@@ -891,56 +930,7 @@ planet details
 	float:right;
 }
 
-.newsFeedContainer {
-	height:200px;
-	overflow-y:auto;
-	font-size:90%;
-	margin:5px 0;
-	padding:1px;
-	border: 1px solid #52acff;
-}
-.newsRssLinksContainer {
-}
-.newsRssLinks li {
-	float:left;
-}
-.newsRssLink a {
-	vertical-align:middle;
-}
 
-.probeHeader {
-	font-weight:bold;
-	border-bottom:1px solid #52acff;
-}
-.probeInfo li {
-	float:left;
-}
-.probeInfo .probeStar {
-	width:200px;
-	border:1px solid black;
-	background-color:#52ACFF;
-	margin:2px;
-	position:relative;
-}
-.probeStar .probeAction {
-	cursor:pointer;
-}
-.probeStar .probeDelete {
-	background:url("http://localhost/lacuna/assets/ui/close.png") no-repeat scroll center center transparent;
-	height:11px;
-	width:11px;
-	position: absolute;
-	right: 0pt;
-	cursor:pointer;
-}
-
-.shipHeader {
-	font-weight:bold;
-	border-bottom:1px solid #52acff;
-}
-.shipInfo li {
-	float:left;
-}
 .shipInfo .shipType {
 	width:180px;
 }
@@ -962,7 +952,6 @@ planet details
 .shipInfo .shipTo {
 	width:140px;
 }
-
 .shipInfo .shipTypeImage {
 	width:54px;
 }
@@ -979,13 +968,7 @@ planet details
 	width:75px;
 }
 
-.shipQueueHeader {
-	font-weight:bold;
-	border-bottom:1px solid #52acff;
-}
-.shipQueue li {
-	float:left;
-}
+
 .shipQueue .shipQueueType {
 	width:180px;
 }
@@ -993,6 +976,25 @@ planet details
 	width:150px;
 }
 
+.platformInfo .platformLocation {
+	width:250px;
+}
+.platformInfo .platformProduction {
+	width:200px;
+}
+.platformInfo .platformShipping {
+	width:200px;
+}
+.platformInfo .platformOre {
+	width:550px;
+}
+.platformInfo .platformOre  ul li{
+	float:left;
+	margin: 0 4px;
+}
+.platformInfo .platformAbandon {
+	width:100px;
+}
 
 body.yui-skin-sam .yui-tt .bd {
 	background-color:#52acff;
@@ -1140,7 +1142,7 @@ TextboxList
     padding:0 15px 0 2px;
 }
 .TextboxList .TextboxListBitBoxDelete {
-    background:transparent url(http://localhost/lacuna/assets/ui/crosssmall.gif) repeat scroll 0 0;
+    background:transparent url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/crosssmall.gif) repeat scroll 0 0;
     display:block;
     font-size:1px;
     height:7px;
@@ -1169,7 +1171,7 @@ TextboxList
     top:1px;
     #top:2px;
     position:absolute;
-    background:transparent url(http://localhost/lacuna/assets/ui/dropdown.gif) repeat scroll 0 0;
+    background:transparent url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/dropdown.gif) repeat scroll 0 0;
     z-index:2;
     display:-moz-inline-stack; /*mozilla 2.0*/
     display:inline-block; /*mozilla 3.0, ie 8*/

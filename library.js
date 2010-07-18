@@ -41,7 +41,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 	};
 		
 	var Library = {
-		AssetUrl : "http://localhost/lacuna/assets/", //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
+		AssetUrl : "https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
 		Styles : {
 			HIDDEN : "hidden",
 			ALERT : "alert"

@@ -15,15 +15,21 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 		});
 		panel.render();
 		this._panel = panel;
+		this.counter = 0;
 	};
 	Pulse.prototype = {
 		Show : function() {
 			this._panel.bringToTop();
 			this._panel.show();
+			this.counter++;
 		},
 		
 		Hide : function() {
-			this._panel.hide();
+			this.counter--;
+			if(this.counter <= 0) {
+				this.counter = 0;
+				this._panel.hide();
+			}
 		}
 	};
 	YAHOO.lacuna.Pulse = Pulse;

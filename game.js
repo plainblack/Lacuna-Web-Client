@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		Failure : function(o){
-			if(o.error.code == 1006 || o.error.code == 1002) {
+			if(o.error.code == 1006) {
 				Game.Reset();
 				Game.DoLogin(o.error);
 			}
@@ -96,8 +96,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.recInt = setInterval(Game.Tick, 1000);
 			//init event subscribtions if we need to
 			Game.InitEvents();
-			//init queue for refreshing data
-			Game.InitQueue();
 			//load the correct screen
 			var locationId = Cookie.getSub("lacuna","locationId"),
 				locationView = Cookie.getSub("lacuna","locationView");
@@ -165,34 +163,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				});
 			}
-		},
-		InitQueue : function() {
-			//set queue to blank
-			Game.queue = {};
-					
-			var BodyServ = Game.Services.Body,
-				data = {
-					session_id: Game.GetSession(""),
-					body_id: Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id
-				};
-			
-			BodyServ.get_build_queue(data,{
-				success : function(o){
-					YAHOO.log(o, "info", "Game.InitQueue.success");
-					Game.ProcessStatus(o.result);
-					var q = o.result.build_queue;
-					for(var bId in q) {
-						if(q.hasOwnProperty(bId)) {
-							Game.QueueAdd(bId, Lib.QueueTypes.PLANET, (q[bId].seconds_remaining * 1000));
-						}
-					}
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Game.InitQueue.failure");
-					Game.Failure(o);
-				},
-				timeout:Game.Timeout
-			});
 		},
 
 		onChangeToPlanetView : function(planetId) {
@@ -399,7 +369,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Cookie.remove("lacuna",{
 				domain: "lacunaexpanse.com"
 			});
-			
+			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();
 		},
