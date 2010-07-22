@@ -967,7 +967,9 @@ planet details
 .shipInfo .shipHold {
 	width:75px;
 }
-
+.shipInfo .shipAction {
+	width:100px;
+}
 
 .shipQueue .shipQueueType {
 	width:180px;

@@ -1431,17 +1431,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.tabView.addTab(platformTab);
 					var shipsTab = new YAHOO.widget.Tab({ label: "Ships", content: [
 						'<div class="shipsContainer">',
-						'	<div id="miningShipsAddContainer">',
-						'		<button id="miningShipsAdd" type="button">Add</button> <select id="miningShipsAvailable"></select> to Mining Crew.',
-						'	</div>',
-						'	<div id="miningShipsRemoveContainer">',
-						'		<button id="miningShipsRemove" type="button">Remove</button> <select id="miningShipsWorking"></select> from Mining Crew.',
-						'	</div>',
 						'	<ul class="shipHeader shipInfo clearafter">',
 						'		<li class="shipName">Name</li>',
 						'		<li class="shipTask">Task</li>',
 						'		<li class="shipSpeed">Speed</li>',
 						'		<li class="shipHold">Hold</li>',
+						'		<li class="shipHold">Hold</li>',
+						'		<li class="shipAction"></li>',
 						'	</ul>',
 						'	<div id="shipsDetails">',
 						'	</div>',
@@ -1822,52 +1818,41 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Dom.addClass(nLi,"shipHold");
 					nLi.innerHTML = ship.hold_size;
 					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipAction");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					bbtn.innerHTML = ship.task == "Docked" ? "Start Mining" : "Stop Mining";
+					bbtn = nLi.appendChild(bbtn);
+					nUl.appendChild(nLi);
+					
+					if(ship.task == "Docked") {
+						Event.on(bbtn, "click", this.MiningMinistryShipsAdd, {Self:this,Ship:ship}, true);
+					}
+					else {
+						Event.on(bbtn, "click", this.MiningMinistryShipsRemove, {Self:this,Ship:ship}, true);
+					}
 								
 					details.appendChild(nUl);
 					
-				}
-				
-				Dom.setStyle("miningShipsAddContainer", "display", (availShips.length > 0 ? "" : "none"));
-				Dom.setStyle("miningShipsRemoveContainer", "display", (workingShips.length > 0 ? "" : "none"));
-				var availSel = Dom.get("miningShipsAvailable"),
-					workingSel = Dom.get("miningShipsWorking");
-				availSel.options.length = 0;
-				workingSel.options.length = 0;
-				if(availShips.length > 0 || workingShips.length > 0) {
-					var opt = document.createElement("option"),
-						n;
-					for(n=0; n<availShips.length; n++){
-						var nOpt = opt.cloneNode(false);
-						nOpt.value = n+1;
-						nOpt.innerHTML = n+1;
-						availSel.appendChild(nOpt);
-					}
-					for(n=0; n<workingShips.length; n++){
-						var nOpt = opt.cloneNode(false);
-						nOpt.value = n+1;
-						nOpt.innerHTML = n+1;
-						workingSel.appendChild(nOpt);
-					}
 				}
 			}
 		},
 		MiningMinistryShipsAdd : function() {
 			Lacuna.Pulser.Show();
-			var availSel = Dom.get("miningShipsAvailable"),
-				opts = availSel.options,
-				ind = availSel.selectedIndex,
-				count = opts[ind].value;
 				
 			Game.Services.Buildings.Mining.add_cargo_ship_to_fleet({
 				session_id:Game.GetSession(),
-				building_id:this.currentBuilding.building.id,
-				ship_count:count
+				building_id:this.Self.currentBuilding.building.id,
+				ship_id:this.Ship.id
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "MapPlanet.MiningMinistryShipsAdd.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					this.MiningMinistryShipsView();
+					delete this.buildingDetails.dataStore.platforms; //reset platforms so we geto the new correct info
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.MiningMinistryShipsAdd.failure");
@@ -1875,26 +1860,23 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpcFailed", o);
 				},
 				timeout:Game.Timeout,
-				scope:this
+				scope:this.Self
 			});
 		},
 		MiningMinistryShipsRemove : function() {
 			Lacuna.Pulser.Show();
-			var sel = Dom.get("miningShipsWorking"),
-				opts = sel.options,
-				ind = sel.selectedIndex,
-				count = opts[ind].value;
-				
+			
 			Game.Services.Buildings.Mining.remove_cargo_ship_from_fleet({
 				session_id:Game.GetSession(),
-				building_id:this.currentBuilding.building.id,
-				ship_count:count
+				building_id:this.Self.currentBuilding.building.id,
+				ship_id:this.Ship.id
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "MapPlanet.MiningMinistryShipsRemove.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					this.MiningMinistryShipsView();
+					delete this.buildingDetails.dataStore.platforms; //reset platforms so we geto the new correct info
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.MiningMinistryShipsRemove.failure");
@@ -1902,7 +1884,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.fireEvent("onMapRpcFailed", o);
 				},
 				timeout:Game.Timeout,
-				scope:this
+				scope:this.Self
 			});
 		},
 		NewsGet : function(id) {

@@ -329,7 +329,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.blank = obj.blank;
 			this.url = obj.url;
 			this.data = obj.data;
-			if(this.data && this.data.pending_build && this.data.pending_build.seconds_remaining > 0) {
+			if(this.data && this.data.pending_build && this.data.pending_build.seconds_remaining > 0.5) {
 				this._createCounter();
 				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
 			}
