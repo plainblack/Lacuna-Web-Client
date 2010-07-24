@@ -127,6 +127,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				return this.cfg.getProperty("visible");
 			};
 			
+			this.buildingDetails.showEvent.subscribe(function(){
+				this.isVisible = true;
+			}, this, true);
 			this.buildingDetails.renderEvent.subscribe(function(){
 				this.img = Dom.get("buildingDetailsImg");
 				this.name = Dom.get("buildingDetailsName");
@@ -159,9 +162,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.dataStore = {};
 			});
 			this.buildingDetails.hideEvent.subscribe(function(){
+				this.isVisible = undefined;
 				this.buildingDetails.resetQueue();
 				this.buildingDetails.dataStore = {};
 				this.currentBuilding = undefined;
+				if(this.currentBuildingObj) {
+					this.currentBuildingObj.destroy();
+					this.currentBuildingObj = undefined;
+				}
 				if(this.currentViewConnection) {
 					Lacuna.Pulser.Hide();
 					Util.Connect.abort(this.currentViewConnection);
@@ -395,6 +403,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			this.buildingBuilder.render();
 			Game.OverlayManager.register(this.buildingBuilder);
+		},
+		_fireRpcSuccess : function(o){
+			this.fireEvent("onMapRpc", o.result);
+		},
+		_fireRpcFailed : function(o){
+			this.fireEvent("onMapRpcFailed", o);
+		},
+		_fireQueueAdd : function(obj) {
+			if(this.buildingDetails.isVisible) {
+				this.buildingDetails.addQueue(obj.seconds, obj.fn, obj.el, obj.scope);
+			}
 		},
 		
 		IsVisible : function() {
@@ -803,6 +822,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				var output, stored, 
 					bq, ul, li, div;
+				
+				/*switch(building.url) {
+					case "/planetarycommand":
+				}*/
 				
 				if(oResults.planet) { //if it's the planetary command
 					var planet = oResults.planet;
@@ -1457,6 +1480,16 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					Event.on("miningShipsAdd", "click", this.MiningMinistryShipsAdd, this, true);
 					Event.on("miningShipsRemove", "click", this.MiningMinistryShipsRemove, this, true);
+				}
+				else if(building.url == "/archaeology") {
+					this.currentBuildingObj = new Lacuna.buildings.Archaeology(building,oResults.work);
+					this.currentBuildingObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
+					this.currentBuildingObj.subscribe("onMapRpcFailed", this._fireRpcFailed, this, true);
+					this.currentBuildingObj.subscribe("onQueueAdd", this._fireQueueAdd, this, true);
+					var tabs = this.currentBuildingObj.getTabs();
+					for(var at=0; at<tabs.length; at++) {
+						panel.tabView.addTab(tabs[at]);
+					}
 				}
 
 				//storage tab last

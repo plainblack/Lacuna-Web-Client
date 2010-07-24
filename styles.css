@@ -824,7 +824,7 @@ planet details
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .probeInfo li , .spyInfo li , .shipInfo li, .shipQueue li , .platformInfo li {
+.buildQueue li , .probeInfo li , .spyInfo li , .shipInfo li, .shipQueue li , .platformInfo li , .archaeologyGlyphInfo li {
 	float:left;
 }
 

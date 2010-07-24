@@ -195,7 +195,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var cId = Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id;
 			if(!this.locationId) {
 				if(cId) {
-					Lacuna.Pulser.Show();
 					var loc = Game.EmpireData.planets[cId];
 					if(loc) {
 						this.locationId = cId;

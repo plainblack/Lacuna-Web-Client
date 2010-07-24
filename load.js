@@ -6,25 +6,7 @@
 		combine: false,
 		filter: "RAW"			
 	});
-	
-	/*loader.addModule({
-		name: "raphael",
-		type: "js",
-		varName : "Raphael",
-		fullpath: host + "raphael.js?" + t
-	});
-	loader.addModule({
-		name: "gRaphael",
-		type: "js",
-		fullpath: host + "g.raphael.js?" + t,
-		requires : ["raphael"]
-	});
-	loader.addModule({
-		name: "gRaphaelBar",
-		type: "js",
-		fullpath: host + "g.bar.js?" + t,
-		requires : ["gRaphael"]
-	});*/
+
 	loader.addModule({
 		name: "smd",
 		type: "js",
@@ -86,10 +68,16 @@
 		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
+		name: "archaeology",
+		type: "js",
+		fullpath: host + "buildingArchaeology.js?" + t,
+		requires : ["game","tabview"]
+	});
+	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["event-delegate","event-mouseenter","game","mapper","selector","tabview"]
+		requires : ["archaeology","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

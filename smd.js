@@ -109,6 +109,84 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			Archaeology : {
+				"SMDVersion":"2.0",
+				"description": "Archaeology Ministry",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/archaeology",
+				
+				"services": {
+					"search_for_glyph" : {
+						"description": "Searches through ore looking for glyphs left behind by the ancient race. Takes 10,000 of one type of ore to search.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ore_type", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						{
+							"status" : { get_status() },
+							"seconds_remaining" : 10800
+						 }
+						*/
+					},
+					"get_glyphs" : {
+						"description": "Returns a list of glyphs that have been found by this archaeology ministry.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"glyphs" : [
+								{
+									"id" : "id-goes-here",
+									"type" : "bauxite",
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"assemble_glyphs" : {
+						"description": "Turns glyphs into rare ancient items.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ids", "type":"array", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"item_name" : "Volcano"
+						 }
+						*/
+					},
+					"get_ores_available_for_processing" : {
+						"description": "Returns a list of ore names that the user has enough of to process for glyphs.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"ore" : {
+								"bauxite" : 39949,
+								"rutile" : 19393
+							}
+						 }
+						*/
+					}
+					
+				}
+			},
 			Development : {
 				"SMDVersion":"2.0",
 				"description": "Development Ministry",
@@ -1473,7 +1551,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 		}
 	};
 
-	YAHOO.lacuna.SMD = smd;
+	YAHOO.lacuna.SMD = { Services:smd };
 })();
 YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"}); 
 

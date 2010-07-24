@@ -13,26 +13,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 	var Game = {
 		EmpireData : {},
 		ServerData : {},
-		Services : {
-			Body : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Body),
-			Empire : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Empire),
-			Inbox : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Inbox),
-			Maps : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Map),
-			Species : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Species),
-			Stats : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Stats),
-			Buildings : {
-				Generic : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Generic),
-				Development : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Development),
-				Intelligence : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Intelligence),
-				Mining : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Mining),
-				Network19 : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Network19),
-				Observatory : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Observatory),
-				Park : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Park),
-				Recycler : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Recycler),
-				Shipyard : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.Shipyard),
-				SpacePort : new YAHOO.rpc.Service(YAHOO.lacuna.SMD.Buildings.SpacePort)
-			}
-		},
+		Services : {},
 		Timeout : 30000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		onTick : new Util.CustomEvent("onTick"),
@@ -45,13 +26,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Lacuna.Pulser.Show();
 			
+			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
+			
 			var session = Game.GetSession();
 			if(!session) {
-				Lacuna.Game.DoLogin();
+				Game.DoLogin();
 			}
 			else {
 				//Run rest of UI since we're logged in
-				Lacuna.Game.GetStatus({
+				Game.GetStatus({
 					success:Lacuna.Game.Run,
 					failure:Lacuna.Game.Failure
 				});
@@ -94,6 +77,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//set our interval going for resource calcs since Logout clears it
 			Game.recTime = (new Date()).getTime();
 			Game.recInt = setInterval(Game.Tick, 1000);
+			/* possible new pattern for game loop
+			(function GameLoop(){
+				Game.Tick()
+				setTimeout(GameLoop, 1000);
+			})();*/
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//load the correct screen
@@ -164,7 +152,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				});
 			}
 		},
-
+		InitServices : function(smd) {
+			var serviceOut = {};
+			for(var sKey in smd) {
+				if(smd.hasOwnProperty(sKey)) {
+					var oSmd = smd[sKey];
+					if(oSmd.services) {
+						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd);
+					}
+					else {
+						serviceOut[sKey] = Game.InitServices(oSmd);
+					}
+				}
+			}
+			return serviceOut;
+		},
+		
 		onChangeToPlanetView : function(planetId) {
 			YAHOO.log(planetId, "info", "onChangeToPlanetView");
 			var cp = Game.EmpireData.planets[planetId];
