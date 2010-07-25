@@ -926,7 +926,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				YAHOO.log(data, "debug", "StarMap.getTileData.requestData");
 				//now call back for data
 				//this.currentRequest = 
-				Game.Services.Maps.get_stars(data,{
+				Game.Services.Map.get_stars(data,{
 					success : function(o){
 						YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.success");
 						if(o && o.result) {

@@ -314,7 +314,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			if(!data.bodies) {
 				output.push('	<li id="starDetailsIncomingProbe">Loading...</li>');
-				Game.Services.Maps.check_star_for_incoming_probe({
+				Game.Services.Map.check_star_for_incoming_probe({
 					session_id:Game.GetSession(),
 					star_id:data.id
 				}, {

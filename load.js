@@ -68,16 +68,94 @@
 		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
+		name: "building",
+		type: "js",
+		fullpath: host + "building.js?" + t,
+		requires : ["game","paginator","tabview"]
+	});
+	loader.addModule({
 		name: "archaeology",
 		type: "js",
 		fullpath: host + "buildingArchaeology.js?" + t,
-		requires : ["game","tabview"]
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "development",
+		type: "js",
+		fullpath: host + "buildingDevelopment.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "foodreserve",
+		type: "js",
+		fullpath: host + "buildingFoodReserve.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "intelligence",
+		type: "js",
+		fullpath: host + "buildingIntelligence.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "miningministry",
+		type: "js",
+		fullpath: host + "buildingMiningMinistry.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "network19",
+		type: "js",
+		fullpath: host + "buildingNetwork19.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "observatory",
+		type: "js",
+		fullpath: host + "buildingObservatory.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "orestorage",
+		type: "js",
+		fullpath: host + "buildingOreStorage.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "park",
+		type: "js",
+		fullpath: host + "buildingPark.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "planetarycommand",
+		type: "js",
+		fullpath: host + "buildingPlanetaryCommand.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "shipyard",
+		type: "js",
+		fullpath: host + "buildingShipyard.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "spaceport",
+		type: "js",
+		fullpath: host + "buildingSpacePort.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "wasterecycling",
+		type: "js",
+		fullpath: host + "buildingWasteRecycling.js?" + t,
+		requires : ["building"]
 	});
 	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["archaeology","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","shipyard","spaceport","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

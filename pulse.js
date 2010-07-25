@@ -22,16 +22,16 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 			YAHOO.log("SHOW PULSER!");
 			this._panel.bringToTop();
 			this._panel.show();
-			this.counter++;
+			//this.counter++;
 		},
 		
 		Hide : function() {
 			YAHOO.log("HIDE PULSER!");
-			this.counter--;
-			if(this.counter <= 0) {
-				this.counter = 0;
+			//this.counter--;
+			//if(this.counter <= 0) {
+			//	this.counter = 0;
 				this._panel.hide();
-			}
+			//}
 		}
 	};
 	YAHOO.lacuna.Pulse = Pulse;

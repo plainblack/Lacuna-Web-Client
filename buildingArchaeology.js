@@ -12,19 +12,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 
-	var Archaeology = function(building, work){
-		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
-		this.createEvent("onQueueAdd");
-		this.building = building;
-		this.work = work;
+	var Archaeology = function(result){
+		Archaeology.superclass.constructor.call(this, result);
+		
 		this.service = Game.Services.Buildings.Archaeology;
 	};
 	
-	Archaeology.prototype = {
-		destroy : function() {
-			this.unsubscribeAll();
-		},
+	Lang.extend(Archaeology, Lacuna.buildings.Building, {
 		getTabs : function() {
 			return [this._getSearchTab(), this._getViewTab()];
 		},
@@ -83,7 +77,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			var ce = this.searchTab.get("contentEl");
 			Event.purgeElement(ce);
 			ce.innerHTML = 'Time left on current search: <span id="archaeologySearchTime"></span>';
-			this.fireEvent("onQueueAdd", {seconds:seconds_remaining, fn:this.searchQueue, el:"archaeologySearchTime"});
+			this.addQueue(seconds_remaining, this.searchQueue, "archaeologySearchTime");
 		},
 		searchQueue : function(remaining, el){
 			if(remaining <= 0) {
@@ -223,10 +217,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				});
 			}
 		}
-	};
-	Lang.augmentProto(Archaeology, Util.EventProvider);
+	});
 	
-	YAHOO.lacuna.buildings.Archaeology = Archaeology;
+	Lacuna.buildings.Archaeology = Archaeology;
 
 })();
 YAHOO.register("archaeology", YAHOO.lacuna.buildings.Archaeology, {version: "1", build: "0"}); 
