@@ -77,7 +77,7 @@
 		name: "archaeology",
 		type: "js",
 		fullpath: host + "buildingArchaeology.js?" + t,
-		requires : ["building"]
+		requires : ["animation","building","dragdrop"]
 	});
 	loader.addModule({
 		name: "development",

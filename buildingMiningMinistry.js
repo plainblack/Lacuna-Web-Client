@@ -371,7 +371,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 		MiningMinistryShipsAdd : function() {
 			Lacuna.Pulser.Show();
 				
-			this.service.add_cargo_ship_to_fleet({
+			this.Self.service.add_cargo_ship_to_fleet({
 				session_id:Game.GetSession(),
 				building_id:this.Self.building.id,
 				ship_id:this.Ship.id
@@ -395,7 +395,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 		MiningMinistryShipsRemove : function() {
 			Lacuna.Pulser.Show();
 			
-			this.service.remove_cargo_ship_from_fleet({
+			this.Self.service.remove_cargo_ship_from_fleet({
 				session_id:Game.GetSession(),
 				building_id:this.Self.building.id,
 				ship_id:this.Ship.id

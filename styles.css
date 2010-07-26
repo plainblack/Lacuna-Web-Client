@@ -1,3 +1,8 @@
+/*
+yellow: #FFD800
+pink: pink
+*/
+
 html {
 	background: black url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/star_system/field.png');
 	color:#fff;
@@ -839,6 +844,26 @@ planet details
 .spyInfo li label, .platformInfo li label{
 	font-weight:bold;
 	margin-right:3px;
+}
+
+div.archaeologySlots {
+	float:left;
+	padding:5px;
+}
+ul.archaeologyGlyphInfo {
+	position:relative;
+	width:310px;
+	height:300px;
+	border:1px solid #FFD800;
+	margin:0;
+	padding:0;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+ul.archaeologyGlyphInfo li {
+	margin:1px;
+	cursor:move;
+	zoom:1;
 }
 
 

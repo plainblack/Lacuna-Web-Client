@@ -1,16 +1,120 @@
 YAHOO.namespace("lacuna.buildings");
 
 if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.buildings.Archaeology) {
-	
+
 (function(){
 	var Lang = YAHOO.lang,
 		Util = YAHOO.util,
+		DDM = Util.DragDropMgr,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
+		
+	var DDList = function(id, sGroup, config) {
+		DDList.superclass.constructor.call(this, id, sGroup, config);
+
+		var el = this.getDragEl();
+		Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
+
+		this.goingUp = false;
+		this.lastY = 0;
+	};
+	YAHOO.extend(DDList, YAHOO.util.DDProxy, {
+		startDrag: function(x, y) {
+			// make the proxy look like the source element
+			var dragEl = this.getDragEl();
+			var clickEl = this.getEl();
+			Dom.setStyle(clickEl, "visibility", "hidden");
+
+			dragEl.innerHTML = clickEl.innerHTML;
+
+			Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
+			Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
+			Dom.setStyle(dragEl, "border", "2px solid gray");
+			Dom.setStyle(dragEl, "zIndex", Dom.getStyle("buildingDetails_c", "zIndex")*1+1);
+		},
+		endDrag: function(e) {
+			var srcEl = this.getEl();
+			var proxy = this.getDragEl();
+
+			// Show the proxy element and animate it to the src element's location
+			Dom.setStyle(proxy, "visibility", "");
+			var a = new YAHOO.util.Motion( 
+				proxy, { 
+					points: { 
+						to: Dom.getXY(srcEl)
+					}
+				}, 
+				0.2, 
+				YAHOO.util.Easing.easeOut 
+			)
+			var proxyid = proxy.id;
+			var thisid = this.id;
+
+			// Hide the proxy and show the source element when finished with the animation
+			a.onComplete.subscribe(function() {
+					Dom.setStyle(proxyid, "visibility", "hidden");
+					Dom.setStyle(thisid, "visibility", "");
+				});
+			a.animate();
+		},
+		onDragDrop: function(e, id) {
+			if (id == "archaeologyGlyphDetails" || id == "archaeologyGlyphCombine") {
+
+				// The position of the cursor at the time of the drop (YAHOO.util.Point)
+				var pt = DDM.interactionInfo.point; 
+
+				// The region occupied by the source element at the time of the drop
+				var region = DDM.interactionInfo.sourceRegion; 
+
+				// Check to see if we are over the source element's location.  We will
+				// append to the bottom of the list once we are sure it was a drop in
+				// the negative space (the area of the list without any list items)
+				if (!region.intersect(pt)) {
+					var destEl = Dom.get(id);
+					var destDD = DDM.getDDById(id);
+					destEl.appendChild(this.getEl());
+					destDD.isEmpty = false;
+					DDM.refreshCache();
+				}
+
+			}
+		},
+		onDrag: function(e) {
+			// Keep track of the direction of the drag for use during onDragOver
+			var y = Event.getPageY(e);
+
+			if (y < this.lastY) {
+				this.goingUp = true;
+			} else if (y > this.lastY) {
+				this.goingUp = false;
+			}
+
+			this.lastY = y;
+		},
+		onDragOver: function(e, id) {
+			var srcEl = this.getEl();
+			var destEl = Dom.get(id);
+
+			// We are only concerned with list items, we ignore the dragover
+			// notifications for the list.
+			if (destEl.nodeName.toLowerCase() == "li") {
+				var orig_p = srcEl.parentNode;
+				var p = destEl.parentNode;
+
+				if (this.goingUp) {
+					p.insertBefore(srcEl, destEl); // insert above
+				} else {
+					p.insertBefore(srcEl, destEl.nextSibling); // insert below
+				}
+
+				DDM.refreshCache();
+			}
+		}
+	});
 
 	var Archaeology = function(result){
 		Archaeology.superclass.constructor.call(this, result);
@@ -44,15 +148,28 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		},
 		_getViewTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "View Glyphs", content: [
-				'<div>',
-				'	<ul id="archaeologyGlyphDetails" class="archaeologyGlyphInfo">',
-				'	</ul>',
+				'<div class="clearafter">',
+				'	<div class="archaeologySlots">',
+				'		<label>Available Glyphs</label>',
+				'		<ul id="archaeologyGlyphDetails" class="archaeologyGlyphInfo">',
+				'		</ul>',
+				'	</div>',
+				'	<div class="archaeologySlots">',
+				'		<label>Combine Glyphs</label>',
+				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
+				'		</ul>',
+				'		<div><button type="button" id="archaeologyCombine">Combine</button></div>',
+				'	</div>',
 				'</div>'
 			].join('')});
 			tab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getGlyphs();
 				}
+			}, this, true);
+			
+			Event.onAvailable("archaeologyCombine", function(e){
+				Event.on("archaeologyCombine", "click", this.assembleGlyph, this, true);
 			}, this, true);
 			
 			this.viewTab = tab;
@@ -96,8 +213,32 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				details = Dom.get("archaeologyGlyphDetails");
 				
 			if(details) {
-				Event.purgeElement(details);
-				details.innerHTML = "";
+				if(!this.glyphList) {
+					this.glyphList = new Util.DDTarget("archaeologyGlyphDetails");
+					this.glyphList.isGlyphContainer = true;
+				}
+				else {
+					var gl = Sel.query("li", "archaeologyGlyphDetails");
+					for(var gli=0, glLen=gl.length; gli<glLen; gli++) {
+						var glio = gl[gli];
+						glio.DD.unreg();
+						glio.parentNode.removeChild(glio);
+						glio = null;
+					}
+				}
+				if(!this.glyphCombine) {
+					this.glyphCombine = new Util.DDTarget("archaeologyGlyphCombine");
+					this.glyphCombine.isGlyphContainer = true;
+				}
+				else {
+					var gc = Sel.query("li", "archaeologyGlyphCombine");
+					for(var gci=0, gcLen=gc.length; gci<gcLen; gci++) {
+						var gcio = gc[gci];
+						gcio.DD.unreg();
+						gcio.parentNode.removeChild(gcio);
+						gcio = null;
+					}
+				}
 				
 				var li = document.createElement("li");
 				
@@ -110,11 +251,12 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					
 					nLi.innerHTML = [
 						'<div class="archaeologyGlyphContainer">',
-						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" style="width:158px;height:200px;" />',
+						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:119px;height:150px;" />', //"width:158px;height:200px;"
 						'</div>'
 					].join('');
 					
 					nLi = details.appendChild(nLi);
+					nLi.DD = new DDList(nLi);
 				}
 			}
 		},
@@ -174,13 +316,19 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		},
 		assembleGlyph : function() {
 			Lacuna.Pulser.Show();
-			this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, ids:[]}, {
+			var glyphs = Sel.query("li", "archaeologyGlyphCombine"),
+				glyphIds = [];
+			for(var g=0, len=glyphs.length; g<len; g++) {
+				glyphIds.push(glyphs[g].Glyph.id);
+			}
+			
+			this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, ids:glyphIds}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
-					
-					this.MiningMinistryShipsPopulate();
+					delete this.glyphs;
+					this.getGlyphs();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Archaeology.assembleGlyph.failure");
