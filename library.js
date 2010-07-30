@@ -122,6 +122,17 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		},
+		convertNumDisplay : function(number) {
+			if(number >= 1000000 || number <= -1000000) {
+				return (Math.floor(number/100000) / 10) + 'm';
+			}
+			else if(number >= 100000 || number <= -100000) {
+				return Math.floor(number/1000) + 'k';
+			}
+			else {
+				return Math.floor(number) || "-";
+			}
+		},
 		
 		Descriptions : {
 			"/algae" : "The Algae Cropper produces algae to be used as food by your empire.  It also produces a small amount of energy and can be built in any orbit.  The higher the level of the cropper the more food and energy it produces.",

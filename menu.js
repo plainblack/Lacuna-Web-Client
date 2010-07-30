@@ -11,18 +11,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 		
-	var convertNumDisplay = function(number) {
-		if(number >= 1000000 || number <= -1000000) {
-			return (Math.floor(number/100000) / 10) + 'm';
-		}
-		else if(number >= 100000 || number <= -100000) {
-			return Math.floor(number/1000) + 'k';
-		}
-		else {
-			return Math.floor(number) || "-";
-		}
-	};
-		
 	var UserMenu = function() {
 		this.id = "userMenu";
 		this.container = Dom.get("header");
@@ -159,7 +147,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		updateTick : function() {
 			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
 			
-			this.elEssentiaText.innerHTML = convertNumDisplay(Game.EmpireData.essentia);
+			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia);
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
@@ -396,13 +384,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				this.elFoodText.innerHTML = convertNumDisplay(cp.food_stored);
-				this.elOreText.innerHTML = convertNumDisplay(cp.ore_stored);
-				this.elWaterText.innerHTML = convertNumDisplay(cp.water_stored);
+				this.elFoodText.innerHTML = Lib.convertNumDisplay(cp.food_stored);
+				this.elOreText.innerHTML = Lib.convertNumDisplay(cp.ore_stored);
+				this.elWaterText.innerHTML = Lib.convertNumDisplay(cp.water_stored);
 				
-				this.elEnergyText.innerHTML = convertNumDisplay(cp.energy_stored);
-				this.elWasteText.innerHTML = convertNumDisplay(cp.waste_stored);
-				this.elHappyText.innerHTML = convertNumDisplay(cp.happiness);
+				this.elEnergyText.innerHTML = Lib.convertNumDisplay(cp.energy_stored);
+				this.elWasteText.innerHTML = Lib.convertNumDisplay(cp.waste_stored);
+				this.elHappyText.innerHTML = Lib.convertNumDisplay(cp.happiness);
 			}
 			else {
 				this.elText.innerHTML = "Planet";
