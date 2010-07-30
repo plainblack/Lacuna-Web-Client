@@ -353,7 +353,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 							itemData : [
 								{ text: "Go To Star ("+p.star_name+")", onclick: { fn: this.menuStarClick, obj:p } }
 							]
-						}
+						};
 					}
 					items.push(pObj);
 				}
@@ -362,8 +362,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			items.sort(function(a,b){
 				var nameA = a.text.toLowerCase( );
 				var nameB = b.text.toLowerCase( );
-				if (nameA < nameB) {return -1}
-				if (nameA > nameB) {return 1}
+				if (nameA < nameB) {return -1;}
+				if (nameA > nameB) {return 1;}
 				return 0;
 			});
 			

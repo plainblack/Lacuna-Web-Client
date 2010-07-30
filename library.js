@@ -100,7 +100,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			}
 		},
 		formatNumber : function(num) {
-			return Util.Number.format(num,{thousandsSeparator:","})
+			return Util.Number.format(num,{thousandsSeparator:","});
 		},
 		parseServerDate : function(strDate) {
 			var pieces = strDate.split(' '), //[day, month, year, hr:min:sec, timez]

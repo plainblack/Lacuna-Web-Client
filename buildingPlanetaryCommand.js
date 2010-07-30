@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 			this.planetTab = tab;
 			
 			return tab;
-		},
+		}
 	});
 	
 	Lacuna.buildings.PlanetaryCommand = PlanetaryCommand;

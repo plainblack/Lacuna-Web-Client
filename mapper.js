@@ -1025,16 +1025,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_setTileSizeByZoom : function() {
 			switch(this.zoom){
 				case 2:
-					this.setTileSizeInPx(430);
+					this.setTileSizeInPx(400);
 					break;
 				case 1:
-					this.setTileSizeInPx(320);
+					this.setTileSizeInPx(300);
 					break;
 				case -1:
-					this.setTileSizeInPx(110);
+					this.setTileSizeInPx(100);
 					break;
 				default:
-					this.setTileSizeInPx(220);
+					this.setTileSizeInPx(200);
 					break;
 			}
 		},
@@ -1165,7 +1165,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		removeTile : function(x,y) {
-			if(this.tileCache && tileCache[x] && this.tileCache[x][y]) {
+			if(this.tileCache && this.tileCache[x] && this.tileCache[x][y]) {
 				delete this.tileCache[x][y];
 			}
 			var tile = this.tileLayer.findTile(x,y,this.zoom);
