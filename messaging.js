@@ -544,11 +544,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				
 				if(msg.from != msg.to) {
 					Dom.setStyle("messagingReplyC", "display", "");
-					Dom.setStyle(this.body, "height", "290px");
 				}
 				else {
 					Dom.setStyle("messagingReplyC", "display", "none");
-					Dom.setStyle(this.body, "height", "310px");
 				}
 
 				this.viewingMessage = msg;
