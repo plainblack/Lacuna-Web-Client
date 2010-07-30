@@ -400,8 +400,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.render();
 			Game.OverlayManager.register(this.buildingBuilder);
 		},
-		_fireRpcSuccess : function(o){
-			this.fireEvent("onMapRpc", o.result);
+		_fireRpcSuccess : function(result){
+			this.fireEvent("onMapRpc", result);
 		},
 		_fireRpcFailed : function(o){
 			this.fireEvent("onMapRpcFailed", o);
