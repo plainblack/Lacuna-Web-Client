@@ -467,9 +467,6 @@ about
 	padding:2px 5px;
 }
 
-#attachmentTable  {
-	overflow:auto;
-}
 #attachmentTable th {
 	font-weight:bold;
 	border:1px solid #52ACFF;

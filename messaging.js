@@ -609,9 +609,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						tblOut.push("</tbody></table>");
 							
 						tblDiv.innerHTML = tblOut.join('');
-						if(tblDiv.clientHeight > 200) {
-							Dom.setStyle(tblDiv, "height", "200px");
-						}
 					}
 					if(msg.attachments.map) {
 						this.body.appendChild(document.createElement('br'));
