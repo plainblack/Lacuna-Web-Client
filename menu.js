@@ -410,6 +410,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Game.EmpireData.current_planet_id = planet.id;
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
 			
+			Game.OverlayManager.hideAll();
 			Lacuna.MapStar.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planet.id);
