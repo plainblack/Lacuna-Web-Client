@@ -555,6 +555,23 @@ about
 	left:0;
 	top:0;
 }
+.planetMapEfficiencyBarContainer {
+	z-index: 2;
+	text-align: center;
+	font-size: 100%;
+	font-family: impact, san-serif;
+	line-height:15px;
+	height:15px;
+	position: absolute;
+	left:0;
+	bottom:5px;
+	border:1px solid #999;
+	background-color:#444;
+}
+.planetMapEfficiencyBar {
+	z-index: 2;
+	height:100%;
+}
 .planetMapTileActionContainer {
 	z-index: 3;
 	text-align: left;

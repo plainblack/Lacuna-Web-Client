@@ -20,7 +20,7 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 	
 	Lang.extend(Network19, Lacuna.buildings.Building, {
 		getTabs : function() {
-			return [this._getCoverageTab()];
+			return Network19.superclass.getTabs.call(this).concat([this._getCoverageTab()]);
 		},
 		_getCoverageTab : function() {
 			this.coverageTab = new YAHOO.widget.Tab({ label: "Coverage", content: [

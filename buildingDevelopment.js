@@ -20,12 +20,11 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 	
 	Lang.extend(Development, Lacuna.buildings.Building, {
 		getTabs : function() {
+			var tabs = Development.superclass.getTabs.call(this);
 			if(this.result.build_queue && this.result.build_queue.length > 0) {
-				return [this._getQueueTab()];
+				tabs[tabs.length] = this._getQueueTab();
 			}
-			else {
-				return [];
-			}
+			return tabs;
 		},
 		_getQueueTab : function() {
 			var bq = this.result.build_queue,

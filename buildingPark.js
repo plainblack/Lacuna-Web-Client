@@ -20,7 +20,7 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 	
 	Lang.extend(Park, Lacuna.buildings.Building, {
 		getTabs : function() {
-			return [this._getPartyTab()];
+			return Park.superclass.getTabs.call(this).concat([this._getPartyTab()]);
 		},
 		_getPartyTab : function() {
 			var div = document.createElement("div");

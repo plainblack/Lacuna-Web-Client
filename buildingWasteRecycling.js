@@ -19,8 +19,12 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 	
 	Lang.extend(WasteRecycling, Lacuna.buildings.Building, {
 		getTabs : function() {
-			var t = this._getRecycleTab();
-			return t ? [t] : [];
+			var t = this._getRecycleTab(),
+				rt = WasteRecycling.superclass.getTabs.call(this);
+			if(t) {
+				rt[rt.length] = t;
+			}
+			return rt;
 		},
 		_getRecycleTab : function() {
 			if(this.result.recycle.can) {

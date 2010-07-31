@@ -105,8 +105,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-					}
-
+					},
+					"repair" : {
+						"description": "Repair buildings Efficiency to 100%",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 				}
 			},
 			Archaeology : {

@@ -307,6 +307,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		init : function() {
 			this.domElement.title = this.data ? [this.data.name, " ", this.data.level, " (", this.x, ",", this.y, ")"].join('') : "Ground";
 			this._createActionIcon();
+			
 			if(this.data && this.data.pending_build) {
 				this._createCounter();
 				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
@@ -314,6 +315,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			else if(this.counter) {
 				this.counter.parentNode.removeChild(this.counter);
 				delete this.counter;
+			}
+			
+			if(this.data && this.data.efficiency*1 < 100) {
+				this._createEfficiencyBar(this.data.efficiency*1);
+			}
+			else if(this.cBar) {
+				this.cBar.parentNode.removeChild(this.cBar);
+				delete this.cBar;
+				delete this.eBar;
 			}
 		},
 		refresh : function() {
@@ -368,6 +378,30 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					div.innerHTML = '<div class="planetMapTileActionButton"></div>';
 				}
 				this.actionIcon = div;
+			}
+		},
+		_createEfficiencyBar : function(efficiency) {
+			if(!this.cBar) {
+				var bar = this.domElement.appendChild(document.createElement('div'));
+				Dom.addClass(bar, "planetMapEfficiencyBarContainer");
+				Dom.setStyle(bar, "width", this.tileSizeInPx + 'px');
+				this.eBar = bar.appendChild(document.createElement('div'));
+				Dom.addClass(this.eBar, "planetMapEfficiencyBar");
+				this.cBar = bar;
+			}
+			Dom.setStyle(this.eBar, "width", Math.floor(this.tileSizeInPx*(efficiency/100)) + 'px');
+			this.eBar.innerHTML = efficiency + "%";
+			if(efficiency > 60) {
+				Dom.setStyle(this.cBar, "border-color", 'yellow');
+				Dom.setStyle(this.eBar, "background-color", 'yellow');
+			}
+			else if(efficiency > 30) {
+				Dom.setStyle(this.cBar, "border-color", 'orange');
+				Dom.setStyle(this.eBar, "background-color", 'orange');
+			}
+			else {
+				Dom.setStyle(this.cBar, "border-color", 'red');
+				Dom.setStyle(this.eBar, "background-color", 'red');
 			}
 		}
 	});

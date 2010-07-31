@@ -20,7 +20,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 	
 	Lang.extend(SpacePort, Lacuna.buildings.Building, {
 		getTabs : function() {
-			return [this._getDockTab(), this._getTravelTab(), this._getViewTab()];
+			return SpacePort.superclass.getTabs.call(this).concat([this._getDockTab(), this._getTravelTab(), this._getViewTab()]);
 		},
 		_getDockTab : function() {
 			var ships = this.result.docked_ships;

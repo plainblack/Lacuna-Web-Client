@@ -124,7 +124,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 	
 	Lang.extend(Archaeology, Lacuna.buildings.Building, {
 		getTabs : function() {
-			return [this._getSearchTab(), this._getViewTab()];
+			return Archaeology.superclass.getTabs.call(this).concat([this._getSearchTab(), this._getViewTab()]);
 		},
 		_getSearchTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "Search", content: [
