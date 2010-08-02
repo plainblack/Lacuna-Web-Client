@@ -154,7 +154,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					nLi.innerHTML = [
 					'	<div class="medalPublic"><input type="checkbox"', (medal["public"] == "1" ? ' checked' : ''), ' /></div>',
 					'	<div class="medalContainer">',
-					'		<img src="',Lib.AssetUrl,'medal/',medal.image,'.png" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
+					'		<img src="',Lib.AssetUrl,'medal/',medal.image,'.png" alt="',medal.name,'" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
 					'	</div>'
 					].join('');
 						

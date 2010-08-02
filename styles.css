@@ -750,7 +750,7 @@ planet details
 /*#buildingBuilderUnavailable .buildingDesc  {
 	border-top:1px solid #52acff;
 }*/
-#builderFilterTbl {
+#builderInfrastructureFilterTbl, #builderResourcesFilterTbl{
 	width:400px;
 }
 /*#buildingDetailsExtra {
@@ -1053,7 +1053,8 @@ PROFILE
 	width:75px;
 }
 .medalContainer {
-	overflow: auto;
+	overflow: hidden;
+	font-size:80%;
 	zoom:1;
 	height:50px;
 	width:50px;

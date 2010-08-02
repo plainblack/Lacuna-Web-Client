@@ -41,7 +41,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.timeWater = Dom.get("essentialDetailsTimeWater");
 			this.timeEnergy = Dom.get("essentialDetailsTimeEnergy");
 			this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
-			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness"], "click", this.boost, this, true);
+			this.timeStorage = Dom.get("essentialDetailsTimeStorage");
+			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage"], "click", this.boost, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
@@ -90,6 +91,12 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'				<li class="essentiaDetailsBoost"><button id="essentiaBoostHappiness" type="button">Buy</button></li>',
 			'				<li class="essentiaDetailsTime" id="essentialDetailsTimeHappiness"></li>',
 			'			</ul>',
+			'			<ul class="essentiaBoosts clearafter">',
+			'				<li class="essentiaDetailsImg">Storage</li>',
+			'				<li class="essentiaDetailsCost">5<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></li>',
+			'				<li class="essentiaDetailsBoost"><button id="essentiaBoostStorage" type="button">Buy</button></li>',
+			'				<li class="essentiaDetailsTime" id="essentialDetailsTimeStorage"></li>',
+			'			</ul>',
 			'		</form>',
 			'	</div>',
 			'	<div class="ft"></div>'
@@ -135,6 +142,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				case "essentiaBoostHappiness":
 					func = Game.Services.Empire.boost_happiness;
 					break;
+				case "essentiaBoostStorage":
+					func = Game.Services.Empire.boost_storage;
+					break;
 			}
 			if(func) {
 				func({session_id:Game.GetSession("")},{
@@ -168,6 +178,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			else if(results.happiness_boost) {
 				this.updateTime(this.timeHappiness, results.happiness_boost);
 			}
+			else if(results.storage_boost) {
+				this.updateTime(this.timeStorage, results.storage_boost);
+			}
 		},
 		populate : function(results) {
 			var boosts = results.boosts;
@@ -177,6 +190,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.updateTime(this.timeWater, boosts.water);
 			this.updateTime(this.timeEnergy, boosts.energy);
 			this.updateTime(this.timeHappiness, boosts.happiness);
+			this.updateTime(this.timeStorage, boosts.storage);
 		},
 		updateTime : function(el, sDate) {
 			if(sDate) {

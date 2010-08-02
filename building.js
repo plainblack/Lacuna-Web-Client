@@ -16,6 +16,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onQueueAdd");
 		this.createEvent("onQueueReset");
 		this.createEvent("onRemoveTab");
+		this.createEvent("onUpdateTile");
 		//common elements
 		this.building = oResults.building;
 		this.work = oResults.work;
@@ -46,6 +47,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		removeTab : function(tab) {
 			this.fireEvent("onRemoveTab", tab);
 		},
+		updateBuildingTile : function() {
+			this.fireEvent("onUpdateTile");
+		},
 		
 		_getRepairTab : function() {
 			this.repairTab = new YAHOO.widget.Tab({ label: "Repair", content: [
@@ -75,6 +79,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					if(this.repairTab) {
 						Event.removeListener("repair", "click");
 						this.removeTab(this.repairTab);
+						this.updateBuildingTile();
 					}
 				},
 				failure : function(o){
