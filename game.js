@@ -363,6 +363,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				failure : function(o){
 					YAHOO.log(["LOGOUT FAILED: ", o]);
 					Lacuna.Pulser.Hide();
+					Game.Failure.call(this, o);
 				},
 				timeout:Game.Timeout
 			});

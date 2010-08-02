@@ -394,14 +394,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(efficiency > 60) {
 				Dom.setStyle(this.cBar, "border-color", 'yellow');
 				Dom.setStyle(this.eBar, "background-color", 'yellow');
+				Dom.setStyle(this.eBar, "color", 'black');
 			}
 			else if(efficiency > 30) {
 				Dom.setStyle(this.cBar, "border-color", 'orange');
 				Dom.setStyle(this.eBar, "background-color", 'orange');
+				Dom.setStyle(this.eBar, "color", 'white');
 			}
 			else {
 				Dom.setStyle(this.cBar, "border-color", 'red');
 				Dom.setStyle(this.eBar, "background-color", 'red');
+				Dom.setStyle(this.eBar, "color", 'white');
 			}
 		}
 	});

@@ -491,6 +491,7 @@ about
 	left:0.275em;
 	position:absolute;
 	top:0.25em;
+	color:black;
 }
 
 #speciesHO div {
@@ -1130,12 +1131,15 @@ ul.statsSubList, ul.statsSubList ul {
 	cursor:pointer;
 	text-decoration:underline;
 }
-#statsEmpireTable, #statsColonyTable, #statsSpyTable {
+#statsTabs .yui-dt {
+	color:black;
+}
+/*#statsEmpireTable, #statsColonyTable, #statsSpyTable {
 	color:black;
 }
 #statsEmpire, #statsColony, #statsSpy{
 	background-color:#ddd;
-}
+}*/
 
 
 /*
