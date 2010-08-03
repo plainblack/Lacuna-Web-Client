@@ -25,11 +25,7 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 		_getPartyTab : function() {
 			var div = document.createElement("div");
 			if(this.result.party.can_throw) {
-				var btn = document.createElement("button");
-				btn.setAttribute("type", "button");
-				btn.innerHTML = "Throw Party!";
-				btn = div.appendChild(btn);
-				Event.on(btn, "click", this.Party, this, true);
+				div.appendChild(this.PartyGetDisplay());
 			}
 			else if(this.result.party.seconds_remaining*1 > 0) {
 				div.innerHTML = ['<p>You will get ',Lib.formatNumber(this.result.party.happiness),' happiness from your party!'].join('');
@@ -55,13 +51,16 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 					this.fireEvent("onMapRpc", o.result);
 					
 					if(this.partyTab) {
-						var ce = tab.get("contentEl");
+						var ce = this.partyTab.get("contentEl");
 						Event.purgeElement(ce);
+						ce.innerHTML = "";
 						
-						if(o.result.seconds_remaining && o.result.seconds_remaining*1 > 0) {
-							ce.innerHTML = "";
-							ce.appendChild(this.PartyGetTimeDisplay(o.result));
-							this.addQueue(o.result.seconds_remaining, this.PartyQueue, "partyTime");
+						if(o.result.work && o.result.work.seconds_remaining && o.result.work.seconds_remaining*1 > 0) {
+							ce.appendChild(this.PartyGetTimeDisplay(o.result.party));
+							this.addQueue(o.result.work.seconds_remaining, this.PartyQueue, "partyTime");
+						}
+						else if(o.result.party && o.result.party.can_throw) {
+							ce.appendChild(this.PartyGetDisplay());
 						}
 						else {
 							this.removeTab(this.partyTab);
@@ -79,6 +78,13 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				timeout:Game.Timeout,
 				scope:this
 			});	
+		},
+		PartyGetDisplay : function() {
+			var btn = document.createElement("button");
+			btn.setAttribute("type", "button");
+			btn.innerHTML = "Throw Party!";
+			Event.on(btn, "click", this.Party, this, true);
+			return btn;
 		},
 		PartyGetTimeDisplay : function(party) {
 			var div = document.createElement("div");

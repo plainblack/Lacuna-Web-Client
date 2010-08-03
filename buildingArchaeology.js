@@ -353,7 +353,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
 						
-						this.populateActiveSearch(o.result.seconds_remaining);
+						this.populateActiveSearch(o.result.work.seconds_remaining);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.searchForGlyph.failure");

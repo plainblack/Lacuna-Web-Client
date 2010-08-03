@@ -66,12 +66,12 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 							this.fireEvent("onMapRpc", o.result);
 							
 							if(this.recycleTab){
-								if(o.result.seconds_remaining && o.result.seconds_remaining*1 > 0) {
+								if(o.result.work && o.result.work.seconds_remaining && o.result.work.seconds_remaining*1 > 0) {
 									var ce = this.recycleTab.get("contentEl");
 									Event.purgeElement(ce);
 									ce.innerHTML = "";
-									ce.appendChild(this.RecycleGetTimeDisplay(o.result, water, ore, energy));
-									this.addQueue(o.result.seconds_remaining, this.RecycleQueue, "recycleTime");
+									ce.appendChild(this.RecycleGetTimeDisplay(o.result.recycle, water, ore, energy));
+									this.addQueue(o.result.work.seconds_remaining, this.RecycleQueue, "recycleTime");
 								}
 								else {
 									this.recycleOreEl.value = "";
@@ -244,7 +244,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						var ce = this.recycleTab.get("contentEl");
 						Event.purgeElement(ce);
 						ce.innerHTML = "";
-						ce.appendChild(this.RecycleGetDisplay());
+						ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
 					}
 				},
 				failure : function(o){

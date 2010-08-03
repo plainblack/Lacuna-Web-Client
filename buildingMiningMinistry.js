@@ -40,11 +40,9 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				'		<li class="shipTask">Task</li>',
 				'		<li class="shipSpeed">Speed</li>',
 				'		<li class="shipHold">Hold</li>',
-				'		<li class="shipHold">Hold</li>',
 				'		<li class="shipAction"></li>',
 				'	</ul>',
-				'	<div id="shipsDetails">',
-				'	</div>',
+				'	<div><div id="shipsDetails"></div></div>',
 				'</div>'
 			].join('')});
 			this.shipsTab.subscribe("activeChange", this.viewShips, this, true);
@@ -115,20 +113,23 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					Dom.addClass(nLi,"platformLocation");
 					nLi.innerHTML = "<label>Asteroid:</label> " + obj.asteroid.name;
 					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"platformProduction");
-					nLi.innerHTML = "<label>Production Capacity:</label> " + obj.production_capacity + "%";
-					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"platformShipping");
-					nLi.innerHTML = "<label>Shipping Capacity:</label> " + obj.shipping_capacity + "%";
+					nLi.innerHTML = "<label>Shipping Usage:</label> " + obj.shipping_capacity + "%";
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformAbandon");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					bbtn.innerHTML = "Abandon";
+					bbtn = nLi.appendChild(bbtn);
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"platformOre");
-					var outOre = ['<label>Ore Per Hour:</label><ul>'];
+					var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
 					if(obj.anthracite_hour > 0) {
 						outOre.push('<li><label>Anthracite:</label> ');
 						outOre.push(obj.anthracite_hour);
@@ -232,19 +233,19 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					outOre.push('</ul>');
 					nLi.innerHTML = outOre.join('');
 					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"platformAbandon");
-					var bbtn = document.createElement("button");
-					bbtn.setAttribute("type", "button");
-					bbtn.innerHTML = "Abandon";
-					bbtn = nLi.appendChild(bbtn);
-					nUl.appendChild(nLi);
 
 					details.appendChild(nUl);
 					
 					Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
 				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(details.parentNode.clientHeight > 300) {
+						Dom.setStyle(details.parentNode,"height","300px");
+						Dom.setStyle(details.parentNode,"overflow-y","auto");
+					}
+				},10);
 			}
 		},
 		MiningMinistryPlatformAbandon : function() {
@@ -366,6 +367,14 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					details.appendChild(nUl);
 					
 				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(details.parentNode.clientHeight > 300) {
+						Dom.setStyle(details.parentNode,"height","300px");
+						Dom.setStyle(details.parentNode,"overflow-y","auto");
+					}
+				},10);
 			}
 		},
 		MiningMinistryShipsAdd : function() {

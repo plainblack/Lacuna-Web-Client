@@ -57,8 +57,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipFrom">From</li>',
 				'		<li class="shipTo">To</li>',
 				'	</ul>',
-				'	<div id="shipDetails">',
-				'	</div>',
+				'	<div><div id="shipDetails"></div></div>',
 				'</div>'
 			].join('')});
 			//subscribe after adding so active doesn't fire
@@ -76,8 +75,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipSpeed">Speed</li>',
 				'		<li class="shipHold">Hold Size</li>',
 				'	</ul>',
-				'	<div id="shipsAllDetails">',
-				'	</div>',
+				'	<div><div id="shipsAllDetails"></div></div>',
 				'</div>'
 			].join('')});
 			//subscribe after adding so active doesn't fire
@@ -192,6 +190,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					details.appendChild(nUl);
 					
 				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(details.parentNode.clientHeight > 300) {
+						Dom.setStyle(details.parentNode,"height","300px");
+						Dom.setStyle(details.parentNode,"overflow-y","auto");
+					}
+				},10);
 			}
 		},
 		SpacePortQueue : function(remaining, elLine){
@@ -253,6 +259,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					details.appendChild(nUl);
 					
 				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(details.parentNode.clientHeight > 300) {
+						Dom.setStyle(details.parentNode,"height","300px");
+						Dom.setStyle(details.parentNode,"overflow-y","auto");
+					}
+				},10);
 			}
 		}
 		
