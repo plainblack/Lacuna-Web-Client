@@ -776,9 +776,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.currentTab = this.inbox.id;
 					}
 					this.loadTab();
-					this.subscribe("onPageLoaded", function (o) {
+					var showMessageOnce;
+					showMessageOnce = function(o) {
 						this.displayMessage(message);
-					}, this, true);
+						this.unsubscribe("onPageLoaded", showMessageOnce);
+					};
+					this.subscribe("onPageLoaded", showMessageOnce, this, true);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadMessage.failure");
