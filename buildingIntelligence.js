@@ -182,6 +182,18 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						Dom.setStyle(btn,"display","none");
 						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id}, true);
 						sel.Button = nLi.appendChild(btn);
+						
+						var result = document.createElement("div");
+						Dom.setStyle(result, "display", "none");
+						var result_text = document.createElement("span");
+						sel.ResultText = result.appendChild(result_text);
+						var result_link = document.createElement("a");
+						result_link.href = "#";
+						result_link.innerHTML = "View Report";
+						Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id}, true);
+						Dom.setStyle(result_link, "display", "none");
+						sel.ResultLink = result.appendChild(result_link);
+						sel.Results = nLi.appendChild(result);
 					}
 					else {
 						nLi.innerHTML = spy.assignment;
@@ -259,6 +271,12 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				},10);
 			}
 		},
+		SpyShowMessage : function () {
+			var message_id = this.ResultLink.MessageId;
+			if (message_id) {
+				Lacuna.Messaging.showMessage(message_id);
+			}
+		},
 		SpyHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
 			this.service.view_spies({
@@ -308,6 +326,16 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					Lacuna.Pulser.Hide();
 					this.Self.fireEvent("onMapRpc", o.result);
 					delete this.Self.spies;
+					var mission = o.result.mission;
+					this.Assign.ResultText.innerHTML = "Mission " + mission.result + " ";
+					Dom.setStyle(this.Assign.Results, "display", "block");
+					if (mission.message_id) {
+						this.Assign.ResultLink.MessageId = mission.message_id;
+						Dom.setStyle(this.Assign.ResultLink, "display", "inline");
+					}
+					else {
+						Dom.setStyle(this.Assign.ResultLink, "display", "none");
+					}
 					this.Assign.currentAssign = assign;
 					this.Self.SpyAssignChange.call(this.Assign);
 				},
