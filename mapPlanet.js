@@ -184,18 +184,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'<div class="bd">',
 				'	<div id="builderTabs" class="yui-navset">',
 				'		<ul class="yui-nav">',
-				'			<li><a href="#builderInfrastructure"><em>Infrastructure</em></a></li>',
 				'			<li><a href="#builderResources"><em>Resources</em></a></li>',
+				'			<li><a href="#builderInfrastructure"><em>Infrastructure</em></a></li>',
 				'			<li><a href="#builderPlans"><em>Plans</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content" style="padding:0 0 0 0.5em;">',
-				'			<div id="builderInfrastructure">',
-				'				<div id="builderInfrastructureFilterContainer" style="border-bottom: 2px solid #52ACFF; padding: 2px;"><label class="ib" style="vertical-align: top;">Select Tag:</label><input id="builderInfrastructureFilter" type="text" /></div>',
-				'				<div style="overflow:auto;height:420px;"><ul id="builderInfrastructureList"></ul></div>',
-				'			</div>',
 				'			<div id="builderResources">',
 				'				<div id="builderResourcesFilterContainer" style="border-bottom: 2px solid #52ACFF; padding: 2px;"><label class="ib" style="vertical-align: top;">Select Tag:</label><input id="builderResourcesFilter" type="text" /></div>',
 				'				<div style="overflow:auto;height:420px;"><ul id="builderResourcesList"></ul></div>',
+				'			</div>',
+				'			<div id="builderInfrastructure">',
+				'				<div id="builderInfrastructureFilterContainer" style="border-bottom: 2px solid #52ACFF; padding: 2px;"><label class="ib" style="vertical-align: top;">Select Tag:</label><input id="builderInfrastructureFilter" type="text" /></div>',
+				'				<div style="overflow:auto;height:420px;"><ul id="builderInfrastructureList"></ul></div>',
 				'			</div>',
 				'			<div id="builderPlans">',
 				'				<div" style="overflow:auto;height:450px;"><ul id="builderPlanList"></ul></div>',
@@ -273,10 +273,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var mainTag;
 				switch(e.newValue) {
 					case 0:
-						mainTag = "Infrastructure";
+						mainTag = "Resources";
 						break;
 					case 1:
-						mainTag = "Resources";
+						mainTag = "Infrastructure";
 						break;
 					default:
 						mainTag = "Plan";
