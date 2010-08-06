@@ -325,6 +325,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 
 				Event.delegate(selList, "click", this.build, "button", this, true);
+				Event.delegate(selList, "click", this.build, "img.buildingImage", this, true);
 				Event.delegate(selList, "click", this.expandDesc, "span.buildingName");
 			};
 			this.buildingBuilder.build = function(e, matchedEl, container) {
@@ -434,7 +435,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
 					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center;">',
-					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;" />',
+					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;cursor:pointer" class="buildingImage" />',
 					'	</div>',
 					'	<div class="yui-u" style="width:65%">',
 					'		<span class="buildingName">',bd.name,'</span>: ',
@@ -464,6 +465,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					
 					if(!isLater) {
 						Sel.query("button", nLi, true).building = bd;
+						Sel.query("img.buildingImage", nLi, true).building = bd;
 					}
 						
 					frag.appendChild(nLi);
