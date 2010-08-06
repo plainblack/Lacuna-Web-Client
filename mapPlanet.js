@@ -198,7 +198,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'				<div style="overflow:auto;height:420px;"><ul id="builderInfrastructureList"></ul></div>',
 				'			</div>',
 				'			<div id="builderPlans">',
-				'				<div" style="overflow:auto;height:450px;"><ul id="builderPlanList"></ul></div>',
+				'				<div style="overflow:auto;height:450px;"><ul id="builderPlanList"></ul></div>',
 				'			</div>',
 				'		</div>',
 				'	</div>',
