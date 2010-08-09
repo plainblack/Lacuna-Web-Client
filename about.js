@@ -97,7 +97,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 							for(var x=0; x<obj[prop].length; x++) {
 								html.push("<li>");
 								html.push(obj[prop][x]);
-								html.push("</li");
+								html.push("</li>");
 							}
 							html.push("</ul>");
 							nLi.innerHTML = html.join('');
