@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,10],
-				context:[this.elChangeClick,this.elDestructClick]
+				context:[this.elChangeClick,"userMenuProfile",this.elEssentiaClick,this.elDestructClick,"userMenuStats","userMenuAbout","userMenuLogout"]
 			});
 			// Set the text for the tooltip just before we display it.
 			userMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -117,6 +117,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			profileImg.src = Lib.AssetUrl + 'ui/l/profile.png';
 			profileImg.alt = "profile";
+			profileClick.id = "userMenuProfile";
 			Event.on(profileClick, "click", Lacuna.Profile.show, this, true);
 			Dom.addClass([profile,profileClick], "profile");
 			Dom.addClass([profile,profileClick], "menuItem");
@@ -124,6 +125,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
 			essentiaImg.alt = essentiaImg.title = "Essentia";
+			essentiaClick.id = "userMenuEssentia";
 			Event.on(essentiaClick, "click", Lacuna.Essentia.show);
 			Dom.addClass([essentia,essentiaClick], "essentia");
 			Dom.addClass([essentia,essentiaClick], "menuItem");
@@ -247,6 +249,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			switch(id){
 				case "userMenuChange":
 					output = [this._planetVisible ? "To the Universe" : "To your Planet"];
+					break;
+				case "userMenuProfile":
+					output = ['Profile'];
+					break;
+				case "userMenuEssentia":
+					output = ['Essentia'];
 					break;
 				case "userMenuDestruct":
 					if(ED.self_destruct_active*1 === 1) {
