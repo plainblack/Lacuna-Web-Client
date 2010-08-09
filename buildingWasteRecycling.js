@@ -18,13 +18,11 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 	};
 	
 	Lang.extend(WasteRecycling, Lacuna.buildings.Building, {
-		getTabs : function() {
-			var t = this._getRecycleTab(),
-				rt = WasteRecycling.superclass.getTabs.call(this);
+		getChildTabs : function() {
+			var t = this._getRecycleTab();
 			if(t) {
-				rt[rt.length] = t;
+				return [t];
 			}
-			return rt;
 		},
 		_getRecycleTab : function() {
 			if(this.result.recycle.can) {
@@ -201,7 +199,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			bbtn = btnDiv.appendChild(bbtn);
 			Event.on(bbtn, "click", this.RecycleSubsidize, this, true);
 			
-			div.appendChild(btnDiv);			
+			div.appendChild(btnDiv);
 			return div;
 		},
 		RecycleQueue : function(remaining, el){

@@ -19,8 +19,8 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 	};
 	
 	Lang.extend(Network19, Lacuna.buildings.Building, {
-		getTabs : function() {
-			return Network19.superclass.getTabs.call(this).concat([this._getCoverageTab()]);
+		getChildTabs : function() {
+			return [this._getCoverageTab()];
 		},
 		_getCoverageTab : function() {
 			this.coverageTab = new YAHOO.widget.Tab({ label: "Coverage", content: [
@@ -82,36 +82,39 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 					this.fireEvent("onMapRpc", o.result);
 					
 					var news = o.result.news,
-						newsFeed = Dom.get("newsFeed"),
-						feedFrag = document.createDocumentFragment(),
-						rss = o.result.feeds,
-						newsRssLinks = Dom.get("newsRssLinks"),
-						rssFrag = document.createDocumentFragment(),
-						li = document.createElement("li");
+						newsFeed = Dom.get("newsFeed");
 						
-					newsFeed.innerHTML = "";
-					newsRssLinks.innerHTML = "";
+					if(newsFeed) {
+						var feedFrag = document.createDocumentFragment(),
+							rss = o.result.feeds,
+							newsRssLinks = Dom.get("newsRssLinks"),
+							rssFrag = document.createDocumentFragment(),
+							li = document.createElement("li");
 						
-					for(var i=0; i<news.length; i++) {
-						var ni = news[i],
-							nLi = li.cloneNode(false);
-						Dom.addClass(nLi, "newsHeadline");
-						nLi.innerHTML = [Lib.formatServerDateShort(ni.date), ": ", ni.headline].join('');
-						feedFrag.appendChild(nLi);
-					}
-					newsFeed.appendChild(feedFrag);
-					
-					for(var key in rss) {
-						if(rss.hasOwnProperty(key)){
-							var link = rss[key],
-								rssLi = li.cloneNode(false);
-							Dom.addClass(rssLi, "newsRssLink");
-							rssLi.innerHTML = [key, '<a href="', link, '" target="_blank"><img src="', Lib.AssetUrl, 'ui/rss.png" alt="rss" style="margin-left:1px" /></a>'].join('');
-							rssFrag.appendChild(rssLi);
-						}
-					}
-					newsRssLinks.appendChild(rssFrag);
+						
+						newsFeed.innerHTML = "";
+						newsRssLinks.innerHTML = "";
 							
+						for(var i=0; i<news.length; i++) {
+							var ni = news[i],
+								nLi = li.cloneNode(false);
+							Dom.addClass(nLi, "newsHeadline");
+							nLi.innerHTML = [Lib.formatServerDateShort(ni.date), ": ", ni.headline].join('');
+							feedFrag.appendChild(nLi);
+						}
+						newsFeed.appendChild(feedFrag);
+						
+						for(var key in rss) {
+							if(rss.hasOwnProperty(key)){
+								var link = rss[key],
+									rssLi = li.cloneNode(false);
+								Dom.addClass(rssLi, "newsRssLink");
+								rssLi.innerHTML = [key, '<a href="', link, '" target="_blank"><img src="', Lib.AssetUrl, 'ui/rss.png" alt="rss" style="margin-left:1px" /></a>'].join('');
+								rssFrag.appendChild(rssLi);
+							}
+						}
+						newsRssLinks.appendChild(rssFrag);
+					}
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Network19.NewsGet.failure");

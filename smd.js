@@ -512,6 +512,79 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			Security : {
+				"SMDVersion":"2.0",
+				"description": "Security",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/security",
+
+				"services": {
+					"view_prisoners" : {
+						"description": "Displays a list of the spies that have been captured.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"prisoners" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "James Bond",
+									"level" : "20",
+									"sentence_expires" : "01 31 2010 13:09:05 +0600"
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"execute_prisoner" : {
+						"description": "You may choose to execute a prisoner rather than letting him serve his sentence and be released. However, that will cost you 10,000 times the prisoner's level in happiness from your planet. So a level 11 prisoner would cost you 110,000 happiness.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"prisoner_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"release_prisoner" : {
+						"description": "You may choose to release a prisoner by calling this method.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"prisoner_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_foreign_spies" : {
+						"description": "Displays a list of the spies that are on your planet, and have a level lower than your security ministry.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"spies" : [
+								{
+									"name" : "James Bond",
+									"level" : 11,
+									"next_mission" : "01 31 2010 13:09:05 +0600"
+								},
+								...
+							]
+						 }
+						*/
+					}
+				}
+			},
 			Shipyard : {
 				"SMDVersion":"2.0",
 				"description": "Shipyard",
@@ -1029,6 +1102,20 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"storage_boost" : "01 31 2010 13:09:05 +0600"
 					 }
 					*/
+				},
+				"enable_self_destruct" : {
+					"description": "Enables a destruction countdown of 24 hours. Sometime after the timer runs out, the empire will vaporize.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"disable_self_destruct" : {
+					"description": "Disables the self distruction countdown.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
 			}
 		},

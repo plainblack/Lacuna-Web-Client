@@ -22,12 +22,12 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 	Lang.extend(Intelligence, Lacuna.buildings.Building, {
 		destroy : function() {
 			if(this.pager) {
-				this.pager.destroy()
+				this.pager.destroy();
 			}
 			Intelligence.superclass.destroy.call(this);
 		},
-		getTabs : function() {
-			return Intelligence.superclass.getTabs.call(this).concat([this._getTrainTab(), this._getSpiesTab()]);
+		getChildTabs : function() {
+			return [this._getTrainTab(), this._getSpiesTab()];
 		},
 		_getTrainTab : function() {
 			var spies = this.result.spies;

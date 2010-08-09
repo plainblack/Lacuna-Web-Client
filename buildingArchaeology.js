@@ -123,8 +123,8 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 	};
 	
 	Lang.extend(Archaeology, Lacuna.buildings.Building, {
-		getTabs : function() {
-			return Archaeology.superclass.getTabs.call(this).concat([this._getSearchTab(), this._getViewTab()]);
+		getChildTabs : function() {
+			return [this._getSearchTab(), this._getViewTab()];
 		},
 		_getSearchTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "Search", content: [
@@ -251,6 +251,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					
 					nLi.innerHTML = [
 						'<div class="archaeologyGlyphContainer">',
+						'	<div class="archaeologyGlyphHeader">',obj.type,'</div>',
 						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:119px;height:150px;" />', //"width:158px;height:200px;"
 						'</div>'
 					].join('');

@@ -71,7 +71,7 @@
 		name: "building",
 		type: "js",
 		fullpath: host + "building.js?" + t,
-		requires : ["game","paginator","tabview"]
+		requires : ["game","paginator","selector","tabview"]
 	});
 	loader.addModule({
 		name: "archaeology",
@@ -134,6 +134,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "security",
+		type: "js",
+		fullpath: host + "buildingSecurity.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "shipyard",
 		type: "js",
 		fullpath: host + "buildingShipyard.js?" + t,
@@ -155,7 +161,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","shipyard","spaceport","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

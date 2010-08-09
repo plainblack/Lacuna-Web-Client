@@ -8,8 +8,8 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
 	};
 	
 	YAHOO.lang.extend(FoodReserve, YAHOO.lacuna.buildings.Building, {
-		getTabs : function() {
-			return FoodReserve.superclass.getTabs.call(this).concat([this._getFoodTab()]);
+		getChildTabs : function() {
+			return [this._getFoodTab()];
 		},
 		_getFoodTab : function() {
 			var stored = this.result.food_stored;

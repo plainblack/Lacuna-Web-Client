@@ -126,7 +126,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			if(number >= 1000000 || number <= -1000000) {
 				return (Math.floor(number/100000) / 10) + 'm';
 			}
-			else if(number >= 100000 || number <= -100000) {
+			else if(number >= 10000 || number <= -10000) {
 				return Math.floor(number/1000) + 'k';
 			}
 			else {

@@ -19,8 +19,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 	};
 	
 	Lang.extend(Shipyard, Lacuna.buildings.Building, {
-		getTabs : function() {
-			return Shipyard.superclass.getTabs.call(this).concat([this._getQueueTab(), this._getBuildTab()]);
+		getChildTabs : function() {
+			return [this._getQueueTab(), this._getBuildTab()];
 		},
 		_getQueueTab : function() {
 			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", content: '<div><ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul><div id="shipsBuilding"></div></div>'});

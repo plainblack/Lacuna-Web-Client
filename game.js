@@ -126,6 +126,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Game.OverlayManager.hideAll();
 					Lacuna.Messaging.show();
 				});
+				Lacuna.Menu.subscribe("onDestructClick", Game.onDestructClick);
 				
 				Lacuna.Messaging.subscribe("onRpc", Game.onRpc);
 				Lacuna.Messaging.subscribe("onRpcFailed", Lacuna.Game.Failure);
@@ -209,6 +210,34 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			}
 		},
+		onDestructClick : function() {
+			YAHOO.log("onDestructClick", "debug", "Game");
+
+			Lacuna.Pulser.Show();	
+			var ED = Game.EmpireData,
+				EmpireServ = Game.Services.Empire,
+				session = Game.GetSession(),
+				func;
+			if(ED.self_destruct_active*1 === 1) {
+				func = EmpireServ.disable_self_destruct;
+			}
+			else {
+				func = EmpireServ.enable_self_destruct;
+			}
+			
+			func({session_id:session},{
+				success : function(o){
+					Game.ProcessStatus(o.result.status);
+					Lacuna.Pulser.Hide();
+				},
+				failure : function(o){
+					YAHOO.log(["DESTRUCT FAILED: ", o]);
+					Lacuna.Pulser.Hide();
+					Game.Failure.call(this, o);
+				},
+				timeout:Game.Timeout
+			});
+		},
 		
 		ProcessStatus : function(status) {
 			if(status) {
@@ -288,6 +317,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Lang.augmentObject(p, planet, true);
 						
 						doMenuUpdate = true;
+					}
+				
+					if(planet.needs_surface_refresh && planet.needs_surface_refresh*1 === 1) {
+						Lacuna.MapPlanet.Refresh();
 					}
 				}
 				if(doMenuUpdate) {

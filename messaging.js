@@ -557,7 +557,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
 				Event.purgeElement(this.body);
-				this.body.innerHTML = msg.body.replace(/\n/gi,'<br />');
+				this.body.innerHTML = msg.body ? msg.body.replace(/\n/gi,'<br />') : '';
 				if(msg.attachments) {
 					this.body.appendChild(document.createElement("hr"));
 					if(msg.attachments.image) {
