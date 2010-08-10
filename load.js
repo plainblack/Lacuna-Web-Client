@@ -220,6 +220,10 @@
 		progressLoaderC.parentNode.removeChild(progressLoaderC);
 	};
 	loader.onProgress = function(o) {
+		if(firstFile) {
+			progressLoader.total = this.sorted.length - this._combining.length + 1; //remove the count of the files that are getting combined but still record it as 1 file
+			firstFile = undefined;
+		}
 		progressLoader.counter++;
 		var perc = progressLoader.counter / progressLoader.total;
 		progressLoader.style.width = Math.ceil(perc * progressLoaderC.offsetWidth) + "px";
@@ -233,23 +237,22 @@
 	loader.calculate();
 	
 	var status = [
-		'loading ships',
-		'starting engines',
-		'breaking atmo',
-		'calculating trajectory',
-		'engaging hyper drive',
-		'traveling the verse',
-		'other witty comments'
-	];
-	
-	var progressLoaderC = document.createElement("div"),
+			'loading ships',
+			'starting engines',
+			'breaking atmo',
+			'calculating trajectory',
+			'engaging hyper drive',
+			'traveling the verse',
+			'other witty comments'
+		],
+		firstFile = true,
+		progressLoaderC = document.createElement("div"),
 		progressLoader = progressLoaderC.appendChild(progressLoaderC.cloneNode(false));
 	//container
 	progressLoaderC.id = "loadingProgress";
 	progressLoaderC.style.backgroundColor = '#FFD800';
 	//progress bar
 	progressLoader.counter = 0;
-	progressLoader.total = loader.sorted.length;
 	progressLoader.style.backgroundColor = "#fff";
 	progressLoader.style.textAlign = "left"; 
 	progressLoader.style.paddingLeft = "10px"; 
