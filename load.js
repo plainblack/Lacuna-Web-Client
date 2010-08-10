@@ -1,4 +1,11 @@
 (function(){
+	
+	var p = document.getElementById("pulsing");
+	if(p.className.indexOf('hidden') < 0) {
+		p.className += ' hidden';
+	}
+	
+	
 	var t = "1",
 		host = "http://localhost/lacuna/"; //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
 	var loader = new YAHOO.util.YUILoader({
@@ -197,7 +204,7 @@
 		name: "pulse",
 		type: "js",
 		fullpath: host + "pulse.js?" + t,
-		requires : ["container","event"]
+		requires : ["container","dom","event"]
 	});
 	/*add after requirements*/
 	loader.addModule({
@@ -208,13 +215,51 @@
 	});
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {
-		YAHOO.widget.Logger.enableBrowserConsole();
-		
+		YAHOO.widget.Logger.enableBrowserConsole();		
 		YAHOO.lacuna.Game.Start();
+		progressLoaderC.parentNode.removeChild(progressLoaderC);
+	};
+	loader.onProgress = function(o) {
+		progressLoader.counter++;
+		var perc = progressLoader.counter / progressLoader.total;
+		progressLoader.style.width = Math.ceil(perc * progressLoaderC.offsetWidth) + "px";
+		progressLoader.innerHTML = [Math.round(perc*1000)/10, '% - ', progressLoader.counter < status.length ? status[progressLoader.counter] : o.name].join('');
 	};
 	loader.onFailure = function(o) {
 		YAHOO.log(o);
 	};
+
+	//pre calc so we can discover how many files are getting loaded for the progress bar
+	loader.calculate();
+	
+	var status = [
+		'loading ships',
+		'starting engines',
+		'breaking atmo',
+		'calculating trajectory',
+		'engaging hyper drive',
+		'traveling the verse',
+		'other witty comments'
+	];
+	
+	var progressLoaderC = document.createElement("div"),
+		progressLoader = progressLoaderC.appendChild(progressLoaderC.cloneNode(false));
+	//container
+	progressLoaderC.id = "loadingProgress";
+	progressLoaderC.style.backgroundColor = '#FFD800';
+	//progress bar
+	progressLoader.counter = 0;
+	progressLoader.total = loader.sorted.length;
+	progressLoader.style.backgroundColor = "#fff";
+	progressLoader.style.textAlign = "left"; 
+	progressLoader.style.paddingLeft = "10px"; 
+	progressLoader.style.color = "black"; 
+	progressLoader.style.height = "30px"; 
+	progressLoader.style.lineHeight = "30px"; 
+	progressLoader.style.width = "1px";
+	progressLoader.innerHTML = status[progressLoader.counter];
+	
+	document.body.insertBefore(progressLoaderC, document.body.firstChild);
 
 	loader.insert();
 })();

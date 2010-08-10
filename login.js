@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Lacuna.Pulser.Show();
 			this.setMessage("");	
 			var EmpireServ = Game.Services.Empire;
-			EmpireServ.login({name:this.elName.value, password:this.elPass.value},{
+			EmpireServ.login({name:this.elName.value, password:this.elPass.value, api_key:Lib.ApiKey},{
 				success : function(o){
 					YAHOO.log(o, "info", "Login.handleLogin.success");
 					//clear the session just in case

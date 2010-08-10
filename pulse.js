@@ -13,6 +13,7 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 			visible:false,
 			width:"100px"
 		});
+		YAHOO.util.Dom.removeClass("pulsing", "hidden");
 		panel.render();
 		this._panel = panel;
 		this.counter = 0;

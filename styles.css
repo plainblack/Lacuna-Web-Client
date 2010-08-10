@@ -226,9 +226,9 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 .menuItem {
 	display:inline-block;
 	height:54px; /* 1 less than height of bar */
-	color:#ddd;
+	color:#fff; /*#ddd;*/
 	min-width:55px;
-	width:70px;
+	width:60px;
 	position:absolute;
 	padding-top:5px;
 	text-align:left;
@@ -239,9 +239,11 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 #header .essentia {
 	text-align:left;
 }
-#footer .menuItem , #header .essentia{
-	min-width:100px;
-	width:120px;
+#footer .menuItem {
+	width:100px;
+} 
+#header .essentia{
+	width:110px;
 }
 .food  img, .ore  img, .water  img, .essentia  img, .energy  img, .happiness  img, .waste  img , .plots img {
 	float:left;
@@ -286,6 +288,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 .plots img {
 	width:45px;
 	height:45px;
+	
 }
 .profile img {
 	width:45px;
@@ -321,7 +324,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	font-size:150%;
 	margin-left:2px;
 	margin-top:2px;
-	width:73px;
+	width:53px;
 	overflow:hidden;
 	/*font-size:25px;
 	margin-left:5px;
@@ -332,7 +335,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	font-size:110%;
 	margin-left:2px;
 	margin-top:2px;
-	width:73px;
+	width:53px;
 	overflow:hidden;
 }
 #header .menuItem , #footer .plots .stored{
@@ -417,23 +420,23 @@ SHINEY
 
 /* header menu */
 .change { left:10px; }
-.inbox { left:80px; }
-.profile { left:150px; }
-.essentia { left:220px; }
-.destruct { right:360px; }
-.tutorial { right:290px; }
-.support { right:220px; }
-.stats { right:150px; }
-.about { right:80px; }
+.inbox { left:70px; }
+.profile { left:130px; }
+.essentia { left:190px; line-height:45px; }
+.destruct { right:310px; }
+.tutorial { right:250px; }
+.support { right:190px; }
+.stats { right:130px; }
+.about { right:70px; }
 .logout { right:10px; }
 /* footer menu */
 .food { left:10px; }
-.ore { left:130px; }
-.water { left:250px; }
-.energy { left:370px; }
-.waste { right:250px; }
-#footer .happiness { right:130px; }
-.plots  { right:10px; }
+.ore { left:110px; }
+.water { left:210px; }
+.energy { left:310px; }
+.waste { right:210px; }
+#footer .happiness { right:110px; }
+.plots  { right:10px; line-height:45px; }
 
 #header .click, #footer .click { z-index:1003; cursor:pointer; }
 

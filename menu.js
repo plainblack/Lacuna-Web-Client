@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,10],
-				context:[this.elChangeClick,"userMenuProfile",this.elEssentiaClick,this.elDestructClick,"userMenuStats","userMenuAbout","userMenuLogout"]
+				context:[this.elChangeClick,"userMenuProfile",this.elEssentiaClick,this.elDestructClick,"userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
 			});
 			// Set the text for the tooltip just before we display it.
 			userMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -157,19 +157,21 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var destruct = document.createElement("div"),
 				destructClick = destruct.cloneNode(false),
 				destructImg = destruct.appendChild(document.createElement("img")),
-				destructTxt = destruct.appendChild(document.createElement("span")),
+				tutorial = this.container.appendChild(document.createElement("div")),
+				tutorialClick = this.container.appendChild(document.createElement("a")),
+				tutorialImg = tutorial.appendChild(document.createElement("img")),
+				support = this.container.appendChild(document.createElement("div")),
+				supportClick = this.container.appendChild(document.createElement("a")),
+				supportImg = support.appendChild(document.createElement("img")),
 				stats = this.container.appendChild(document.createElement("div")),
 				statsClick = this.container.appendChild(stats.cloneNode(false)),
 				statsImg = stats.appendChild(document.createElement("img")),
-				statsTxt = stats.appendChild(document.createElement("span")),
 				about = this.container.appendChild(document.createElement("div")),
 				aboutClick = this.container.appendChild(about.cloneNode(false)),
 				aboutImg = about.appendChild(document.createElement("img")),
-				aboutTxt = about.appendChild(document.createElement("span")),
 				logout = this.container.appendChild(document.createElement("div")),
 				logoutClick = this.container.appendChild(logout.cloneNode(false)),
-				logoutImg = logout.appendChild(document.createElement("img")),
-				logoutTxt = logout.appendChild(document.createElement("span"));
+				logoutImg = logout.appendChild(document.createElement("img"));
 				
 			destructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
 			destructImg.alt = destructImg.title = "Destruct";
@@ -177,38 +179,49 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Event.on(destructClick, "click", function() {
 				this.fireEvent("onDestructClick");
 			}, this, true);
-			Dom.addClass([destruct,destructClick], "destruct");
-			Dom.addClass([destruct,destructClick], "menuItem");
+			Dom.addClass([destruct,destructClick], "destruct menuItem");
 			Dom.addClass(destructClick, "click");
+			
+			tutorialImg.src = Lib.AssetUrl + 'ui/l/tutorial.png';
+			tutorialImg.alt = tutorialImg.title = "Tutorial";
+			tutorialClick.id = "userMenuTutorial";
+			tutorialClick.href = "http://www.lacunaexpanse.com/tutorial";
+			tutorialClick.target = "_new";
+			Dom.addClass([tutorial,tutorialClick], "tutorial menuItem");
+			Dom.addClass(tutorialClick, "click");
+			
+			supportImg.src = Lib.AssetUrl + 'ui/l/support.png';
+			supportImg.alt = supportImg.title = "Support";
+			supportClick.id = "userMenuSupport";
+			supportClick.href = "http://community.lacunaexpanse.com/forums/support";
+			supportClick.target = "_new";
+			Dom.addClass([support,supportClick], "support menuItem");
+			Dom.addClass(supportClick, "click");
 			
 			statsImg.src = Lib.AssetUrl + 'ui/l/stats.png';
 			statsImg.alt = statsImg.title = "Stats";
 			statsClick.id = "userMenuStats";
 			Event.on(statsClick, "click", Lacuna.Stats.show, this, true);
-			Dom.addClass([stats,statsClick], "stats");
-			Dom.addClass([stats,statsClick], "menuItem");
+			Dom.addClass([stats,statsClick], "stats menuItem");
 			Dom.addClass(statsClick, "click");
 			
 			aboutImg.src = Lib.AssetUrl + 'ui/l/about.png';
 			aboutImg.alt = aboutImg.title = "About";
 			aboutClick.id = "userMenuAbout";
 			Event.on(aboutClick, "click", Lacuna.Menu.UserMenu.showAbout, this, true);
-			Dom.addClass([about,aboutClick], "about");
-			Dom.addClass([about,aboutClick], "menuItem");
+			Dom.addClass([about,aboutClick], "about menuItem");
 			Dom.addClass(aboutClick, "click");
 			
 			logoutImg.src = Lib.AssetUrl + 'ui/l/logout.png';
 			logoutImg.alt = logoutImg.title = "Logout";
 			logoutClick.id = "userMenuLogout";
 			Event.on(logoutClick, "click", Game.Logout, this, true);
-			Dom.addClass([logout,logoutClick], "logout");
-			Dom.addClass([logout,logoutClick], "menuItem");
+			Dom.addClass([logout,logoutClick], "logout menuItem");
 			Dom.addClass(logoutClick, "click");
 			
 			this.elDestruct = this.container.appendChild(destruct);
 			this.elDestructClick = this.container.appendChild(destructClick);
 			this.elDestructImg = destructImg;
-			this.elDestructText = destructTxt;
 		},
 		update : function() {
 			this.elText.innerHTML = Game.EmpireData.name || "Empire";
@@ -255,6 +268,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 				case "userMenuEssentia":
 					output = ['Essentia'];
+					break;
+				case "userMenuTutorial":
+					output = ['Tutorial'];
+					break;
+				case "userMenuSupport":
+					output = ['Support'];
 					break;
 				case "userMenuDestruct":
 					if(ED.self_destruct_active*1 === 1) {

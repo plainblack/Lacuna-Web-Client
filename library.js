@@ -1,3 +1,9 @@
+/*
+Public Key:
+53137d8f-3544-4118-9001-b0acbec70b3d
+Private Key:
+d07c9bd4-fcb7-427f-9064-218064677fef 
+*/
 YAHOO.namespace("lacuna");
 /*
 indexOf is a recent addition to the ECMA-262 standard; as such it may not be present in all browsers. You can work around this by inserting the 
@@ -41,6 +47,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 	};
 		
 	var Library = {
+		ApiKey : "53137d8f-3544-4118-9001-b0acbec70b3d",
 		AssetUrl : "https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
 		Styles : {
 			HIDDEN : "hidden",

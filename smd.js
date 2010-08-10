@@ -889,7 +889,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "login empire",
 					"parameters": [
 						{"name":"name", "type":"string", "optional":false},
-						{"name":"password", "type":"string", "optional":false}
+						{"name":"password", "type":"string", "optional":false},
+						{"name":"api_key", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
 				},
@@ -905,7 +906,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"found" : {
 					"description": "found empire",
 					"parameters": [
-						{"name":"empire_id", "type":"string", "optional":false}
+						{"name":"empire_id", "type":"string", "optional":false},
+						{"name":"api_key", "type":"string", "optional":false},
+						{"name":"invite_code", "type":"string", "optional":true}
 					],
 					"returns":{"type":"object"}
 				},
