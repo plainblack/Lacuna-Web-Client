@@ -257,6 +257,8 @@
 	progressLoader.style.height = "30px"; 
 	progressLoader.style.lineHeight = "30px"; 
 	progressLoader.style.width = "1px";
+	progressLoader.style.overflow = "visible";
+	progressLoader.style.whiteSpace = "nowrap";
 	progressLoader.innerHTML = status[progressLoader.counter];
 	
 	document.body.insertBefore(progressLoaderC, document.body.firstChild);
