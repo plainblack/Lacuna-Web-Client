@@ -221,7 +221,12 @@
 	};
 	loader.onProgress = function(o) {
 		if(firstFile) {
-			progressLoader.total = this.sorted.length - this._combining.length + 1; //remove the count of the files that are getting combined but still record it as 1 file
+			if(this._combining) {
+				progressLoader.total = this.sorted.length - this._combining.length + 1; //remove the count of the files that are getting combined but still record it as 1 file
+			}
+			else {
+				progressLoader.total = this.sorted.length
+			}
 			firstFile = undefined;
 		}
 		progressLoader.counter++;
