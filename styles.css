@@ -14,6 +14,7 @@ body {
 	text-align:left;
 	min-width: 1050px;
 	/*min-height: 768px;*/
+	overflow: hidden;
 }
 select, input, button, textarea, button {
 	font-family:verdana;
