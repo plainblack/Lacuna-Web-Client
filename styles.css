@@ -240,6 +240,15 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 #header .essentia {
 	text-align:left;
 }
+#header .inbox span {
+	display: block;
+	position: absolute;
+	top: 26px;
+	left: 31px;
+	width: 21px;
+	font-size: 11pt;
+	text-align: center;
+}
 #footer .menuItem {
 	width:100px;
 } 
@@ -278,7 +287,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	height:45px;
 }
 .inbox img {
-	width:39px;
+	width:45px;
 	height:45px;
 }
 .change img {

@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,10],
-				context:[this.elChangeClick,"userMenuProfile",this.elEssentiaClick,this.elDestructClick,"userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
+				context:[this.elChangeClick,"userMenuProfile",this.elInboxClick,this.elEssentiaClick,this.elDestructClick,"userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
 			});
 			// Set the text for the tooltip just before we display it.
 			userMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -85,6 +85,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				inbox = document.createElement("div"),
 				inboxClick = inbox.cloneNode(false),
 				inboxImg = inbox.appendChild(document.createElement("img")),
+				inboxTxt = inbox.appendChild(document.createElement("span"));
 				profile = this.container.appendChild(document.createElement("div")),
 				profileClick = this.container.appendChild(profile.cloneNode(false)),
 				profileImg = profile.appendChild(document.createElement("img")),
@@ -107,7 +108,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(changeClick, "click");
 			
 			inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
-			inboxImg.alt = "Inbox";
+			inboxImg.alt = inboxImg.title = "Inbox";
+			inboxClick.id = "userMenuInbox";
+			if (Game.EmpireData.has_new_messages) {
+				inboxImg.title += " (" + Game.EmpireData.has_new_messages + " new)";
+			}
 			Event.on(inboxClick, "click", function() {
 				this.fireEvent("onInboxClick");
 			}, this, true);
@@ -146,6 +151,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elInbox = this.container.appendChild(inbox);
 			this.elInboxClick = this.container.appendChild(inboxClick);
 			this.elInboxImg = inboxImg;
+			this.elInboxText = inboxTxt;
 			//profile appended at the top since we don't have to change it ever
 			this.elEssentia = this.container.appendChild(essentia);
 			this.elEssentiaClick = this.container.appendChild(essentiaClick);
@@ -229,6 +235,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		},
 		updateTick : function() {
 			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
+			if (Game.EmpireData.has_new_messages) {
+				this.elInboxImg.title = "Inbox (" + Game.EmpireData.has_new_messages + " new)";
+				this.elInboxText.innerHTML = Game.EmpireData.has_new_messages;
+				Dom.setStyle(this.elInboxText, "display", "block");
+			}
+			else {
+				this.elInboxImg.title = "Inbox";
+				Dom.setStyle(this.elInboxText, "display", "none");
+			}
 			this.elDestructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
 			
 			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia);
@@ -265,6 +280,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 				case "userMenuProfile":
 					output = ['Profile'];
+					break;
+				case "userMenuInbox":
+					if (Game.EmpireData.has_new_messages) {
+						output = ["Inbox (" + Game.EmpireData.has_new_messages + " new)"];
+					}
+					else {
+						output = ["Inbox"];
+					}
 					break;
 				case "userMenuEssentia":
 					output = ['Essentia'];
