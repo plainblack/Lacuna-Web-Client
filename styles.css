@@ -848,7 +848,7 @@ planet details
 #builderMenu .builderMenuGroup a {
 	display: block;
 	width: 200px;
-	height: 22px;
+	height: 25px;
 	vertical-align: middle;
 	text-align: center;
 	margin-left: auto;
@@ -858,13 +858,9 @@ planet details
 
 #builderMenu .builderMenuGroup a {
 	text-decoration: none;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #6060d0;
-	background-color: #2020c0;
+	background-image: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/button_bkg_200.png");
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 #builderMenu .builderMenuGroup em {
 	font-weight: bold;
