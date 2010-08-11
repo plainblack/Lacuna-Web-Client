@@ -23,7 +23,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
 		
-		this.Dialog = new YAHOO.widget.Panel(this.id, {
+		this.Panel = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
 			fixedcenter:true,
 			visible:false,
@@ -34,14 +34,14 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			width:"450px",
 			zIndex:9999
 		});
-		this.Dialog.renderEvent.subscribe(function(){
+		this.Panel.renderEvent.subscribe(function(){
 			this.elCreditsList = Dom.get("aboutCredits");
 			this.elVersion = Dom.get("aboutVersion");
 			
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
-		this.Dialog.render();
-		Game.OverlayManager.register(this.Dialog);
+		this.Panel.render();
+		Game.OverlayManager.register(this.Panel);
 	};
 	About.prototype = {
 		_getHtml : function() {
@@ -77,10 +77,10 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			}
 			this.elVersion.innerHTML = Game.ServerData.version;
 			Game.OverlayManager.hideAll();
-			this.Dialog.show();
+			this.Panel.show();
 		},
 		hide : function() {
-			this.Dialog.hide();
+			this.Panel.hide();
 		},
 		
 		populateCredits : function(results) {
@@ -105,7 +105,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 					}
 				}
 				this.hasCredits = true;
-				this.Dialog.center();
+				this.Panel.center();
 			}
 		}
 		
