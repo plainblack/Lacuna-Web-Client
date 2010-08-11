@@ -18,14 +18,14 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 		
 		var container = document.createElement("div");
 		container.id = this.id;
+		Dom.addClass(container, "nofooter");
 		Dom.addClass(container, Lib.Styles.HIDDEN);
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
 		
-		this.Dialog = new YAHOO.widget.Dialog(this.id, {
+		this.Dialog = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
 			fixedcenter:true,
-			postmethod:"none",
 			visible:false,
 			draggable:true,
 			underlay:false,
@@ -48,18 +48,17 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			return [
 			'	<div class="hd">About</div>',
 			'	<div class="bd">',
-			'		<form name="aboutForm">',
-			'			<label>The Lacuna Expanse</label>',
+			'		<div style="overflow:auto;height:400px">',
+			'			The Lacuna Expanse',
 			'			<ul>',
 			'				<li>&copy; 2010 by Lacuna Expanse Corp</li>',
 			'				<li>Server Version: <span id="aboutVersion"></span></li>',
 			'			</ul><br/>',
-			'			<label>Credits</label>',
+			'			Credits',
 			'			<ul id="aboutCredits">',
 			'			</ul>',
-			'		</form>',
+			'		</div>',
 			'	</div>',
-			'	<div class="ft"></div>'
 			].join('');
 		},
 		show : function() {
