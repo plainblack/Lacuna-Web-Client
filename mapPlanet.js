@@ -280,8 +280,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.setTile = function(tile) {
 				this.currentTile = tile;
 			};
-			this.buildingBuilder.load = function(b, request) {
+			this.buildingBuilder.load = function(b, q, request) {
 				this.buildable[request.tag] = b; //store
+				this.queue_status = q;
 				
 				this.updateDisplay();
 			};
@@ -317,6 +318,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				if (this.timeFilter.value.length) {
 					filters[this.timeFilter.value] = 1;
 				}
+				var isQueueFull = this.queue_status.max == this.queue_status.current;
 				
 				list.innerHTML = "";
 				
@@ -400,6 +402,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					}
 					else {
 						reason = undefined;
+						if (isQueueFull) {
+							reason = "Build queue is full.";
+						}
 					}
 					
 					nLi.innerHTML = [
@@ -428,12 +433,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" class="smallHappy" /></span><span>',prod.happiness_hour,'</span></span>',
 					'		</div>',
 					'	</div>',
-					'	<div class="yui-u" style="width:10%">',
-					isLater ? '' : '		<button type="button">Build</button>',
+					'	<div class="yui-u" style="width:10%;margin-top:20px">',
+					(isLater || isQueueFull) ? '' : '		<button type="button">Build</button>',
 					'	</div>',
 					'</div>'].join('');
 					
-					if(!isLater) {
+					if(!isLater && !isQueueFull) {
 						Sel.query("button", nLi, true).building = bd;
 						Sel.query("img.buildingImage", nLi, true).building = bd;
 					}
@@ -708,8 +713,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		BuilderProcess : function(oResults, request) {
 			if(this.buildingBuilder.isVisible() && oResults) {
 				var b = oResults.buildable;
+				var q = oResults.build_queue;
 				if(b) {
-					this.buildingBuilder.load(b, request);
+					this.buildingBuilder.load(b, q, request);
 				}
 			}
 			Lacuna.Pulser.Hide();
