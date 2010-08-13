@@ -689,27 +689,71 @@ about
 .planetMapTileActionButton {
 	background: transparent url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/l/build.png');
 }
-#mapiator_zoom_in, #mapiator_zoom_out, #mapiator_zoom_display {
-	position:absolute; 
-	z-index:30; 
-	width:39px; 
-	height:20px; 
+.mapiator_nav {
+	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/zoom.png);
+	position:absolute;
+	z-index:30;
+	width:62px;
+	height:300px;
 	left:40px;
-	cursor:pointer;
+	top:40px;
 }
-#mapiator_zoom_in {
-	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/in.png);
-	top:35px;
+.mapiator_zoom_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 110px;
+	left: 20px;
+	width: 21px;
+	height: 150px;
 }
-#mapiator_zoom_display {
-	top:65px;
-	color:#ddd;
-	font-weight:bold;
-	font-size:120%;	
+.mapiator_zoom_slider_thumb {
+	cursor: row-resize;
 }
-#mapiator_zoom_out {
-	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/out.png);
-	top:95px;
+.mapiator_zoom_in,
+.mapiator_zoom_out,
+.mapiator_nav_up,
+.mapiator_nav_right,
+.mapiator_nav_down,
+.mapiator_nav_left
+{
+	position: absolute;
+	cursor: pointer;
+}
+.mapiator_zoom_in {
+	top: 86px;
+	left: 21px;
+	width: 18px;
+	height: 19px;
+}
+.mapiator_zoom_out {
+	top: 269px;
+	left: 21px;
+	width: 18px;
+	height: 8px;
+}
+.mapiator_nav_up {
+	top: 2px;
+	left: 21px;
+	width: 20px;
+	height: 20px;
+}
+.mapiator_nav_down {
+	top: 38px;
+	left: 21px;
+	width: 20px;
+	height: 20px;
+}
+.mapiator_nav_left {
+	top: 20px;
+	left: 2px;
+	width: 20px;
+	height: 20px;
+}
+.mapiator_nav_right {
+	top: 20px;
+	left: 38px;
+	width: 20px;
+	height: 20px;
 }
 .tileContainer div {
 	color:white;
