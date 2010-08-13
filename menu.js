@@ -112,6 +112,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			inboxClick.id = "userMenuInbox";
 			if (Game.EmpireData.has_new_messages) {
 				inboxImg.title += " (" + Game.EmpireData.has_new_messages + " new)";
+				inboxTxt.innerHTML = Game.EmpireData.has_new_messages;
 			}
 			Event.on(inboxClick, "click", function() {
 				this.fireEvent("onInboxClick");
@@ -238,11 +239,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if (Game.EmpireData.has_new_messages) {
 				this.elInboxImg.title = "Inbox (" + Game.EmpireData.has_new_messages + " new)";
 				this.elInboxText.innerHTML = Game.EmpireData.has_new_messages;
-				Dom.setStyle(this.elInboxText, "display", "block");
 			}
 			else {
 				this.elInboxImg.title = "Inbox";
-				Dom.setStyle(this.elInboxText, "display", "none");
+				this.elInboxText.innerHTML = "";
 			}
 			this.elDestructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
 			
