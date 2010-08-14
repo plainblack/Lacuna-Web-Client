@@ -85,7 +85,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				inbox = document.createElement("div"),
 				inboxClick = inbox.cloneNode(false),
 				inboxImg = inbox.appendChild(document.createElement("img")),
-				inboxTxt = inbox.appendChild(document.createElement("span"));
+				inboxTxt = inbox.appendChild(document.createElement("span")),
 				profile = this.container.appendChild(document.createElement("div")),
 				profileClick = this.container.appendChild(profile.cloneNode(false)),
 				profileImg = profile.appendChild(document.createElement("img")),
