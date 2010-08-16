@@ -31,12 +31,13 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 		},
 		_getTrainTab : function() {
 			var spies = this.result.spies;
+			var canTrain = spies.current * 1 < spies.maximum * 1;
 			this.trainTab = new YAHOO.widget.Tab({ label: "Train Spies", content: [
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul>',
 				'			<li><span style="font-weight:bold;">Spies:</span> <span id="spiesCurrent">',spies.current,'</span> of ',spies.maximum,'</li>',
-				spies.current < spies.maximum ? '<li><span style="font-weight:bold;">Train:</span> <select id="spiesTrainNumber"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select> new spies. <button type="button" id="spiesTrain">Train</button></li>' : '',
+				canTrain ? '<li><span style="font-weight:bold;">Train:</span> <select id="spiesTrainNumber"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select> new spies. <button type="button" id="spiesTrain">Train</button></li>' : '',
 				'		</ul>',
 				'	</div>',
 				'	<div class="yui-u">',
@@ -52,7 +53,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				'	</div>',
 				'</div>'
 			].join('')});
-			if(spies.current < spies.maximum) {
+			if(canTrain) {
 				var btn = Sel.query("button", this.trainTab.get("contentEl"), true);
 				if(btn) {
 					Event.on(btn, "click", this.SpyTrain, this, true);
@@ -455,7 +456,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			var select = Dom.get("spiesTrainNumber"),
 				num = select[select.selectedIndex].value*1;
 				
-			if(Lang.isNumber(num) && num < this.result.spies.maximum) {
+			if(Lang.isNumber(num) && num < this.result.spies.maximum * 1) {
 				Lacuna.Pulser.Show();
 				this.service.train_spy({session_id:Game.GetSession(),building_id:this.building.id,quantity:num}, {
 					success : function(o){

@@ -794,6 +794,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		removeElement : function( p ) {
 			delete this._pathsAndPolygons[p.id];
 		},
+		moveByTiles : function( x, y ) {
+			this.moveByPx( x * this.tileSizeInPx, y * this.tileSizeInPx);
+		},
 		moveByPx : function( x,y ) {
 			var n = this.visibleArea.move( x*-1,y*-1 );
 			//move values back to positive for us to use
@@ -1226,56 +1229,62 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.dd.subscribe("endDragEvent", this.endDrag, this, true);
 		
 		if((map.maxZoom - map.minZoom) != 0) {
-			// add zoom buttons
-			var zoomInButton = document.createElement('div');
-			zoomInButton.id = 'mapiator_zoom_in';
-			zoomInButton = map.mapDiv.appendChild( zoomInButton );
-			
-			this.zoomDisplay = document.createElement('div');
-			this.zoomDisplay.id = 'mapiator_zoom_display';
-			map.mapDiv.appendChild( this.zoomDisplay );
-			this.setZoomDisplay(map.zoom);
-			
-			var zoomOutButton = document.createElement('div');
-			zoomOutButton.id = 'mapiator_zoom_out';
-			zoomOutButton = map.mapDiv.appendChild( zoomOutButton );
-			
-			zoomInButton.onmouseup = function(){
-				map.zoomIn();
-				if(map.zoom == map.maxZoom) {
-					Dom.setStyle(zoomInButton,"visibility","hidden");
-				}
-				if(map.zoom > map.minZoom) {
-					Dom.setStyle(zoomOutButton,"visibility","visible");
-				}				
+			var navEl = document.createElement('div');
+			navEl.className = 'mapiator_nav';
+			navEl.innerHTML = [
+				'<div class="mapiator_zoom_slider">',
+				'	<div class="mapiator_zoom_slider_thumb">',
+				'		<img src="' + Lib.AssetUrl + 'ui/zoom_slider.png" />',
+				'	</div>',
+				'</div>',
+				'<div class="mapiator_zoom_in"></div>',
+				'<div class="mapiator_zoom_out"></div>',
+				'<div class="mapiator_nav_up"></div>',
+				'<div class="mapiator_nav_right"></div>',
+				'<div class="mapiator_nav_down"></div>',
+				'<div class="mapiator_nav_left"></div>'
+			].join('');
+			map.mapDiv.appendChild(navEl);
+			Event.on(Sel.query(".mapiator_zoom_in", navEl, true), "click", map.zoomIn, map, true);
+			Event.on(Sel.query(".mapiator_zoom_out", navEl, true), "click", map.zoomOut, map, true);
+			var moveMap = function(e, o) {
+				map.moveByTiles(o[0], o[1]);
 			};
+			Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
+			Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
+			Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
+			Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
 
-			zoomOutButton.onmouseup = function(){
-				map.zoomOut();
-				if(map.zoom == map.minZoom) {
-					Dom.setStyle(zoomOutButton,"visibility","hidden");
-				}
-				if(map.zoom < map.maxZoom) {
-					Dom.setStyle(zoomInButton,"visibility","visible");
-				}	
-			};
+			var sliderId = Dom.generateId(Sel.query(".mapiator_zoom_slider", navEl, true), "mapiator_zoom_slider");
+			var thumbId = Dom.generateId(Sel.query(".mapiator_zoom_slider_thumb", navEl, true), "mapiator_zoom_slider_thumb");
 
-			var preventDblClick = function(e){
-				if( map.IE ) {
-					window.event.cancelBubble=true;
-				}
-				else {
-					e.stopPropagation();
-				}
+			var zoomSize = 140;
+			var zoomScale = Math.floor(zoomSize / (map.maxZoom - map.minZoom));
+			var zoomSlider = YAHOO.widget.Slider.getVertSlider(
+				sliderId,
+				thumbId,
+				0,
+				zoomSize,
+				zoomScale
+			);
+			zoomSlider.setZoom = function(zoom) {
+				this.setValue((map.maxZoom - zoom) * zoomScale);
 			};
-			zoomInButton.ondblclick = preventDblClick;
-			zoomOutButton.ondblclick = preventDblClick;
+			zoomSlider.getZoom = function() {
+				return map.maxZoom - this.getValue() / zoomScale;
+			};
+			zoomSlider.setZoom(map.zoom);
+			zoomSlider.subscribe("change", function () {
+				map.setZoomLevel( this.getZoom() );
+				map.refresh();
+			});
+			this.zoomSlider = zoomSlider;
 		}
 	};
 	Mapper.TraditionalController.prototype = {
 		setZoomDisplay : function(zoom) {
-			if(this.zoomDisplay) {
-				this.zoomDisplay.innerHTML = zoom;
+			if(this.zoomSlider) {
+				this.zoomSlider.setZoom(zoom);
 			}
 		},
 		startDrag : function(e){
