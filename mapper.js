@@ -496,9 +496,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		resize : function() {
 			var pxSize = this.map.tileSizeInPx,
 				size = pxSize + "px",
+				xMin = this.map.maxBounds.x1Left,
+				xMax = this.map.maxBounds.x2Right,
 				xEls = Sel.query("div.coordX", this.xCoords);
 			Dom.batch(xEls, function(el){
-				Dom.setStyle(el, "width", size);
+				if (el.xIndex >= xMin && el.xIndex <= xMax) {
+					Dom.setStyle(num, "width", size);
+				}
+				else {
+					Dom.setStyle(num, "width", (pxSize * 3) + "px");
+				}
 				Dom.setStyle(el, "left", (el.xIndex * pxSize) + "px");
 			}, this, true);
 			
@@ -506,11 +513,18 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				thrd = Math.ceil(pxSize / 3),
 				sizeLeft = (pxSize - thrd) + "px",
 				thrdTxt = thrd + "px",
+				yMin = this.map.maxBounds.y1Top,
+				yMax = this.map.maxBounds.y2Bottom,
 				yEls = Sel.query("div.coordY", this.yCoords);
 			Dom.batch(yEls, function(el){
-				Dom.setStyle(el, "padding-top", thrdTxt);
-				Dom.setStyle(el, "height", sizeLeft);
 				Dom.setStyle(el, "top", (el.yIndex * negPxSize) + "px");
+				if (el.yIndex >= yMin && el.yIndex <= yMax) {
+					Dom.setStyle(num, "height", sizeLeft);
+					Dom.setStyle(el, "padding-top", thrdTxt);
+				}
+				else {
+					Dom.setStyle(num, "height", (pxSize * 3) + "px");
+				}
 			}, this, true);
 		},
 		displayXCoords : function() {
@@ -521,12 +535,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				size = pxSize + "px",
 				xMin = this.map.maxBounds.x1Left,
 				xMax = this.map.maxBounds.x2Right;
-			for(var x=xMin; x<=xMax; x++) {
+			for(var x=xMin - 1; x<=xMax + 1; x++) {
 				var num = this.div.cloneNode(false);
-				num.innerHTML = x;
 				num.xIndex = x;
+				if (x >= xMin && x <= xMax) {
+					num.innerHTML = x;
+					Dom.setStyle(num, "width", size);
+				}
+				else {
+					Dom.setStyle(num, "width", (pxSize * 3) + "px");
+				}
 				Dom.addClass(num, "coordX");
-				Dom.setStyle(num, "width", size);
 				Dom.setStyle(num, "left", (x * pxSize) + "px");
 				anchor.appendChild(num);
 			}
@@ -548,13 +567,19 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				thrdTxt = thrd + "px",
 				yMin = this.map.maxBounds.y2Bottom,
 				yMax = this.map.maxBounds.y1Top;
-			for(var y=yMax; y>=yMin; y--) {
+			for(var y=yMax + 1; y>=yMin - 1; y--) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = y;
 				num.yIndex = y;
+				if (y >= yMin && y <= yMax) {
+					num.innerHTML = y;
+					Dom.setStyle(num, "height", sizeLeft);
+					Dom.setStyle(num, "padding-top", thrdTxt);
+				}
+				else {
+					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");
+				}
 				Dom.addClass(num, "coordY");
-				Dom.setStyle(num, "padding-top", thrdTxt);
-				Dom.setStyle(num, "height", sizeLeft);
 				Dom.setStyle(num, "top", (y * negPxSize) + "px");
 				anchor.appendChild(num);
 			}
