@@ -84,23 +84,24 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(mb) {
 				var tileSize = this._map.tileSizeInPx,
 					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize,
-					maxBoundsHeight = (mb.y2Bottom - mb.y1Top) * tileSize;
+					maxBoundsHeight = (mb.y2Bottom - mb.y1Top) * tileSize,
+					extraSpace = 30 + Math.ceil(tileSize / 2);
 					
 				if(maxWidth > maxBoundsWidth) {
 					maxWidth = maxBoundsWidth;
 				}
-				var	cb = this.calcCoordBounds(this.left + mx + 30, this.top + my + 30, this.left + mx + maxWidth, this.top + my + maxHeight);
+				var	cb = this.calcCoordBounds(this.left + mx + extraSpace, this.top + my + extraSpace, this.left + mx + maxWidth, this.top + my + maxHeight);
 				//if out of bounds, only move to max
 				//x axis
 				if(mx < 0 && cb.x1 < mb.x1Left) { //if moving left
-					mx = mb.x1Left * tileSize - 30 - this.left;
+					mx = mb.x1Left * tileSize - extraSpace - this.left;
 				}
 				else if(mx > 0 && cb.x2 > (mb.x2Right+1)) { //if moving right
 					mx = ((mb.x2Right+1) * tileSize) - (this.left + maxWidth);
 				}
 				//y axis
 				if(my < 0 && cb.y1 > mb.y1Top){ //if moving up 
-					my = 0 - mb.y1Top * tileSize - 30 - this.top;
+					my = 0 - mb.y1Top * tileSize - extraSpace - this.top;
 				}
 				else if(my > 0 && cb.y2 < (mb.y2Bottom-1)) { //if moving down
 					my = - ((mb.y2Bottom-1) * tileSize) - (this.top + maxHeight);
