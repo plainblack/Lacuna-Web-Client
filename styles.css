@@ -733,7 +733,7 @@ about
 	position:absolute;
 	z-index:30;
 	width:20px;
-	height:240px;
+	height:255px;
 	left:60px;
 	top:100px;
 }
@@ -753,14 +753,13 @@ about
 	cursor: pointer;
 	width: 18px;
 	left: 1px;
+	height: 19px;
 }
 .mapiator_zoom_in {
 	top: 26px;
-	height: 19px;
 }
 .mapiator_zoom_out {
 	top: 209px;
-	height: 8px;
 }
 .tileContainer div {
 	color:white;
