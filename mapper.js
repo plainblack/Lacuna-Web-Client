@@ -1254,10 +1254,29 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.dd.subscribe("startDragEvent", this.startDrag, this, true);
 		this.dd.subscribe("endDragEvent", this.endDrag, this, true);
 		
+		var navEl = document.createElement('div');
+		navEl.className = 'mapiator_nav';
+		navEl.innerHTML = [
+			'<div class="mapiator_nav_up"></div>',
+			'<div class="mapiator_nav_right"></div>',
+			'<div class="mapiator_nav_down"></div>',
+			'<div class="mapiator_nav_left"></div>'
+		].join('');
+		map.mapDiv.appendChild(navEl);
+		var moveMap = function(e, o) {
+			map.moveByTiles(o[0], o[1]);
+		};
+		Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
+		Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
+		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
+		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
+
+
+
 		if((map.maxZoom - map.minZoom) != 0) {
-			var navEl = document.createElement('div');
-			navEl.className = 'mapiator_nav';
-			navEl.innerHTML = [
+			var zoomEl = document.createElement('div');
+			zoomEl.className = 'mapiator_zoom';
+			zoomEl.innerHTML = [
 				'<div class="mapiator_zoom_slider">',
 				'	<div class="mapiator_zoom_slider_thumb">',
 				'		<img src="' + Lib.AssetUrl + 'ui/zoom_slider.png" />',
@@ -1265,24 +1284,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				'</div>',
 				'<div class="mapiator_zoom_in"></div>',
 				'<div class="mapiator_zoom_out"></div>',
-				'<div class="mapiator_nav_up"></div>',
-				'<div class="mapiator_nav_right"></div>',
-				'<div class="mapiator_nav_down"></div>',
-				'<div class="mapiator_nav_left"></div>'
 			].join('');
-			map.mapDiv.appendChild(navEl);
-			Event.on(Sel.query(".mapiator_zoom_in", navEl, true), "click", map.zoomIn, map, true);
-			Event.on(Sel.query(".mapiator_zoom_out", navEl, true), "click", map.zoomOut, map, true);
-			var moveMap = function(e, o) {
-				map.moveByTiles(o[0], o[1]);
-			};
-			Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
-			Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
-			Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
-			Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
-
-			var sliderId = Dom.generateId(Sel.query(".mapiator_zoom_slider", navEl, true), "mapiator_zoom_slider");
-			var thumbId = Dom.generateId(Sel.query(".mapiator_zoom_slider_thumb", navEl, true), "mapiator_zoom_slider_thumb");
+			map.mapDiv.appendChild(zoomEl);
+			Event.on(Sel.query(".mapiator_zoom_in", zoomEl, true), "click", map.zoomIn, map, true);
+			Event.on(Sel.query(".mapiator_zoom_out", zoomEl, true), "click", map.zoomOut, map, true);
+			var sliderId = Dom.generateId(Sel.query(".mapiator_zoom_slider", zoomEl, true), "mapiator_zoom_slider");
+			var thumbId = Dom.generateId(Sel.query(".mapiator_zoom_slider_thumb", zoomEl, true), "mapiator_zoom_slider_thumb");
 
 			var zoomSize = 140;
 			var zoomScale = Math.floor(zoomSize / (map.maxZoom - map.minZoom));
