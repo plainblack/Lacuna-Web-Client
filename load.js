@@ -9,9 +9,9 @@
 	var t = "1",
 		host = "http://localhost/lacuna/"; //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
 	var loader = new YAHOO.util.YUILoader({
+		filter: "RAW",
 		allowRollup: false,
-		combine: false,
-		filter: "RAW"			
+		combine: false
 	});
 
 	loader.addModule({
@@ -225,7 +225,7 @@
 				progressLoader.total = this.sorted.length - this._combining.length + 1; //remove the count of the files that are getting combined but still record it as 1 file
 			}
 			else {
-				progressLoader.total = this.sorted.length
+				progressLoader.total = this.sorted.length;
 			}
 			firstFile = undefined;
 		}

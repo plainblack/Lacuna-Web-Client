@@ -50,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				}, 
 				0.2, 
 				YAHOO.util.Easing.easeOut 
-			)
+			);
 			var proxyid = proxy.id;
 			var thisid = this.id;
 

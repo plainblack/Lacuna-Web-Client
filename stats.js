@@ -238,7 +238,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				'	</li>',
 				'	</ul>',
 				'</li>',
-				'</ul>',
+				'</ul>'
 			].join('');
 		},
 		_getBuildingsHtml : function() {
