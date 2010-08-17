@@ -1239,6 +1239,12 @@ PROFILE
 	display:inline-block;
 	width:75px;
 }
+#profileDescription {
+	width: 428px;
+}
+#profileStatus {
+	width: 424px;
+}
 .medalContainer {
 	overflow: hidden;
 	font-size:80%;
@@ -1271,6 +1277,39 @@ PROFILE
 #profileSpecies span {
 	display:inline-block;
 	width:250px;
+}
+#detailsAccount,
+#detailsPlayer,
+#detailsNotes {
+	padding : 5px;
+}
+#profileNotes {
+	width: 100%;
+	height: 300px;
+}
+#detailsAccount label,
+#detailsPlayer label {
+	display: inline-block;
+	width: 350px;
+	text-align: right;
+}
+#detailsAccount label input,
+#detailsPlayer label input {
+	margin-left: 5px;
+	width: 200px
+}
+#profileChangePassword {
+	display: block;
+	margin: 0 auto;
+}
+#detailsAccount[changepassword] #profileChangePassword {
+	display: none;
+}
+#detailsAccount .changepassword {
+	display: none;
+}
+#detailsAccount[changepassword] .changepassword {
+	display: block;
 }
 
 /*
