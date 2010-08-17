@@ -996,8 +996,9 @@ planet details
 }
 .newsRssLinksContainer {
 }
-.newsRssLinks li {
+#newsRssLinks li {
 	float:left;
+	margin-right: 10px;
 }
 .newsRssLink a {
 	vertical-align:middle;
