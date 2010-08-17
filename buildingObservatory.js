@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 	Lang.extend(Observatory, Lacuna.buildings.Building, {
 		destroy : function() {
 			if(this.pager) {
-				this.pager.destroy()
+				this.pager.destroy();
 			}
 			Observatory.superclass.destroy.call(this);
 		},

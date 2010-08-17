@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			'			<ul id="aboutCredits">',
 			'			</ul>',
 			'		</div>',
-			'	</div>',
+			'	</div>'
 			].join('');
 		},
 		show : function() {
