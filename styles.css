@@ -1309,13 +1309,13 @@ PROFILE
 	display: block;
 	margin: 0 auto;
 }
-#detailsAccount[changepassword] #profileChangePassword {
+#detailsAccount.password-changed #profileChangePassword {
 	display: none;
 }
 #detailsAccount .changepassword {
 	display: none;
 }
-#detailsAccount[changepassword] .changepassword {
+#detailsAccount.password-changed .changepassword {
 	display: block;
 }
 

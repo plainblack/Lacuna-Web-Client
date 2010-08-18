@@ -60,7 +60,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				this.current_password.value =
 					this.new_password.value =
 					this.confirm_password.value = "";
-				this.account_tab.setAttribute('changepassword', 'true');
+				Dom.addClass(this.account_tab, "password-changed");
 			}, this, true);
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			this.tabView.set('activeIndex',0);
@@ -125,7 +125,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		},
 		handleUpdate : function() {
 			var updatesLeft = 1;
-			if (this.account_tab.hasAttribute('changepassword')) {
+			if (Dom.hasClass(this.account_tab, 'password-changed')) {
 				if (this.new_password.value != this.confirm_password.value) {
 					alert("Passwords don't match!");
 					this.tabView.set('activeIndex', 4);
@@ -153,7 +153,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						},{
 						success : function(o){
 							YAHOO.log(o, "info", "Profile.handleUpdate.password.success");
-							this.account_tab.removeAttribute('changepassword');
+							Dom.removeClass(this.account_tab, 'password-changed');
 							if (--updatesLeft == 0) {
 								this.hide();
 							}
@@ -209,7 +209,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		},
 
 		handlePasswordUpdate : function () {
-			if (! this.account_tab.hasAttribute('changepassword')) {
+			if (! Dom.hasClass(this.account_tab, 'password-changed')) {
 				this.hide();
 			}
 			else if (this.new_password.value != this.confirm_password.value) {
@@ -289,7 +289,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.current_password.value =
 				this.new_password.value =
 				this.confirm_password.value = "";
-			this.account_tab.removeAttribute('changepassword');
+			Dom.removeClass(this.account_tab, 'password-changed');
 	
 			var frag = document.createDocumentFragment(),
 				li = document.createElement('li');
