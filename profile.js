@@ -36,8 +36,32 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		this.Dialog.renderEvent.subscribe(function(){
 			this.description = Dom.get("profileDescription");
 			this.status = Dom.get("profileStatus");
+			this.email = Dom.get("profileEmail");
+			this.city = Dom.get("profileCity");
+			this.country = Dom.get("profileCountry");
+			this.skype = Dom.get("profileSkype");
+			this.player_name = Dom.get("profilePlayerName");
 			this.medals = Dom.get("profileMedalsList");
 			this.species = Dom.get("profileSpecies");
+			this.notes = Dom.get("profileNotes");
+			this.sitter_password = Dom.get("profileSitterPassword");
+			this.current_password = Dom.get("profileCurrentPassword");
+			this.new_password = Dom.get("profileNewPassword");
+			this.confirm_password = Dom.get("profileConfirmPassword");
+			this.account_tab = Dom.get('detailsAccount');
+			Event.on(this.sitter_password, 'focus', function() {
+				this.type = 'text';
+			});
+			Event.on(this.sitter_password, 'blur', function() {
+				this.type = 'password';
+			});
+			Event.on('profileChangePassword', 'click', function(e) {
+				Event.stopEvent(e);
+				this.current_password.value =
+					this.new_password.value =
+					this.confirm_password.value = "";
+				Dom.addClass(this.account_tab, "password-changed");
+			}, this, true);
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			this.tabView.set('activeIndex',0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
@@ -50,23 +74,46 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			return [
 			'	<div class="hd">Profile</div>',
 			'	<div class="bd">',
-			'		<form name="profileForm">',
+			'		<form name="profileForm" autocomplete="off">',
 			'			<ul id="profileDetails">',
 			'				<li><label style="vertical-align:top;">Description:</label><textarea id="profileDescription" cols="47"></textarea></li>',
 			'				<li><label>Status:</label><input id="profileStatus" maxlength="100" size="50" /></li>',
 			'			</ul>',				
 			'			<div id="profileTabs" class="yui-navset">',
 			'				<ul class="yui-nav">',
+			'					<li><a href="#detailsPlayer"><em>Player</em></a></li>',
 			'					<li><a href="#detailsMedals"><em>Medals</em></a></li>',
 			'					<li><a href="#detailsSpecies"><em>Species</em></a></li>',
+			'					<li><a href="#detailsNotes"><em>Notes</em></a></li>',
+			'					<li><a href="#detailsAccount"><em>Account</em></a></li>',
 			'				</ul>',
 			'				<div class="yui-content" style="padding:0;">',
+			'					<div id="detailsPlayer">',
+			'						<ul id="profilePlayer">',
+			'							<li><label>Name:<input id="profilePlayerName" /></label></li>',
+			'							<li><label>Email:<input id="profileEmail" /></label></li>',
+			'							<li><label>City:<input id="profileCity" /></label></li>',
+			'							<li><label>Country:<input id="profileCountry" /></label></li>',
+			'							<li><label>Skype:<input id="profileSkype" /></label></li>',
+			'						</ul>',
+			'					</div>',
 			'					<div id="detailsMedals">',
 			'						<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsSpecies">',
 			'						<ul id="profileSpecies">',
+			'						</ul>',
+			'					</div>',
+			'					<div id="detailsNotes">',
+			'						<textarea id="profileNotes"></textarea>',
+			'					</div>',
+			'					<div id="detailsAccount">',
+			'						<ul>',
+			'							<li><label>Sitter Password:<input id="profileSitterPassword" type="password" /></label></li>',
+			'							<li style="margin-top: 20px"><input type="submit" value="Change Account Password" id="profileChangePassword" /><label class="changepassword">Current Password:<input id="profileCurrentPassword" type="password" /></label></li>',
+			'							<li><label class="changepassword">New Password:<input id="profileNewPassword" type="password" /></label></li>',
+			'							<li><label class="changepassword">Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -77,6 +124,52 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			].join('');
 		},
 		handleUpdate : function() {
+			var updatesLeft = 1;
+			if (Dom.hasClass(this.account_tab, 'password-changed')) {
+				if (this.new_password.value != this.confirm_password.value) {
+					alert("Passwords don't match!");
+					this.tabView.set('activeIndex', 4);
+					this.confirm_password.focus();
+					return;
+				}
+				else if (this.new_password.value == "") {
+					if (this.current_password.value == "") {
+						alert("Cannot set empty password!");
+						this.tabView.set('activeIndex', 4);
+						this.current_password.focus();
+						return;
+					}
+				}
+				else if (this.current_password.value == "") {
+					// do nothing
+				}
+				else {
+					updatesLeft++;
+					Game.Services.Empire.change_password({
+							session_id:Game.GetSession(""),
+							current_password:this.current_password.value,
+							password1:this.new_password.value,
+							password2:this.confirm_password.value,
+						},{
+						success : function(o){
+							YAHOO.log(o, "info", "Profile.handleUpdate.password.success");
+							Dom.removeClass(this.account_tab, 'password-changed');
+							if (--updatesLeft == 0) {
+								this.hide();
+							}
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "Profile.handleUpdate.password.failure");
+							alert(o.error.message);
+							this.tabView.set('activeIndex', 4);
+							this.current_password.focus();
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
+				}
+			}
+			
 			var pmc = Sel.query("li", "profileMedalsList"),
 				publicMedals = [];
 			for(var i=0; i<pmc.length; i++){
@@ -90,19 +183,62 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					profile:{
 						description:this.description.value,
 						status_message:this.status.value,
+						email:this.email.value,
+						city:this.city.value,
+						country:this.country.value,
+						skype:this.skype.value,
+						player_name:this.player_name.value,
+						notes:this.notes.value,
+						sitter_password:this.sitter_password.value,
 						public_medals:publicMedals
 					}
 				},{
 				success : function(o){
 					YAHOO.log(o, "info", "Profile.handleUpdate.success");
-					this.hide();
+					if (--updatesLeft == 0) {
+						this.hide();
+					}
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.handleUpdate.failure");
+					alert(o.error.message);
 				},
 				timeout:Game.Timeout,
 				scope:this
 			});
+		},
+
+		handlePasswordUpdate : function () {
+			if (! Dom.hasClass(this.account_tab, 'password-changed')) {
+				this.hide();
+			}
+			else if (this.new_password.value != this.confirm_password.value) {
+				alert("Passwords don't match!");
+			}
+			else if (this.new_password.value == "") {
+				this.hide();
+			}
+			else if (this.current_password.value == "") {
+				this.hide();
+			}
+			else {
+				Game.Services.Empire.change_password({
+						session_id:Game.GetSession(""),
+						current_password:this.current_password.value,
+						password1:this.new_password.value,
+						password2:this.confirm_password.value,
+					},{
+					success : function(o){
+						YAHOO.log(o, "info", "Profile.handlePasswordUpdate.success");
+						this.hide();
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "Profile.handlePasswordUpdate.failure");
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		
 		show : function() {
@@ -130,6 +266,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				scope:Lacuna.Profile
 			});
 			Game.OverlayManager.hideAll();
+			Lacuna.Profile.tabView.set('activeIndex',0);
 			Lacuna.Profile.Dialog.center();
 			Lacuna.Profile.Dialog.show();
 		},
@@ -141,6 +278,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			var p = results.profile;
 			this.description.value = p.description;
 			this.status.value = p.status_message;
+			this.email.value = p.email;
+			this.city.value = p.city;
+			this.country.value = p.country;
+			this.skype.value = p.skype;
+			this.player_name.value = p.player_name;
+			this.notes.value = p.notes;
+			this.sitter_password.value = p.sitter_password;
+			this.sitter_password.type = "password";
+			this.current_password.value =
+				this.new_password.value =
+				this.confirm_password.value = "";
+			Dom.removeClass(this.account_tab, 'password-changed');
 	
 			var frag = document.createDocumentFragment(),
 				li = document.createElement('li');

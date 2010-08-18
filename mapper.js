@@ -80,39 +80,40 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		move : function(mx,my) {
 			var mb = this._map.maxBounds; // = {x1Left:-15,x2Right:15,y1Top:15,y2Bottom:-15};
 			var maxWidth = this._map.width;
+			var maxHeight = this._map.height;
 			if(mb) {
 				var tileSize = this._map.tileSizeInPx,
-					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize;
+					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize,
+					maxBoundsHeight = (mb.y2Bottom - mb.y1Top) * tileSize,
+					extraSpace = 30 + Math.ceil(tileSize / 2);
 					
 				if(maxWidth > maxBoundsWidth) {
 					maxWidth = maxBoundsWidth;
 				}
-				
-				var	cb = this.calcCoordBounds(this.left + mx, this.top + my, this.left + mx + maxWidth, this.top + my + this._map.height),
-					error = false, tx, ty;
+				var	cb = this.calcCoordBounds(this.left + mx + extraSpace, this.top + my + extraSpace, this.left + mx + maxWidth, this.top + my + maxHeight);
 				//if out of bounds, only move to max
 				//x axis
 				if(mx < 0 && cb.x1 < mb.x1Left) { //if moving left
-					mx = ((mb.x1Left * tileSize) - 30) - this.left;
+					mx = mb.x1Left * tileSize - extraSpace - this.left;
 				}
 				else if(mx > 0 && cb.x2 > (mb.x2Right+1)) { //if moving right
 					mx = ((mb.x2Right+1) * tileSize) - (this.left + maxWidth);
 				}
 				//y axis
 				if(my < 0 && cb.y1 > mb.y1Top){ //if moving up 
-					my = (mb.y1Top * tileSize) + this.top;
+					my = 0 - mb.y1Top * tileSize - extraSpace - this.top;
 				}
 				else if(my > 0 && cb.y2 < (mb.y2Bottom-1)) { //if moving down
-					my = ((mb.y2Bottom-1) * tileSize) + (this.top + this._map.height);
+					my = - ((mb.y2Bottom-1) * tileSize) - (this.top + maxHeight);
 				}
 			}
 			//modify with new values now
 			this.left += mx;
 			this.top += my;
 			this.right = this.left + maxWidth;
-			this.bottom = this.top + this._map.height;
+			this.bottom = this.top + maxHeight;
 			this.centerX = this.left + (maxWidth/2);
-			this.centerY = this.top + (this._map.height/2);
+			this.centerY = this.top + (maxHeight/2);
 			
 			return {x:mx,y:my};
 		},
@@ -496,9 +497,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		resize : function() {
 			var pxSize = this.map.tileSizeInPx,
 				size = pxSize + "px",
+				xMin = this.map.maxBounds.x1Left,
+				xMax = this.map.maxBounds.x2Right,
 				xEls = Sel.query("div.coordX", this.xCoords);
 			Dom.batch(xEls, function(el){
-				Dom.setStyle(el, "width", size);
+				if (el.xIndex >= xMin && el.xIndex <= xMax) {
+					Dom.setStyle(num, "width", size);
+				}
+				else {
+					Dom.setStyle(num, "width", (pxSize * 3) + "px");
+				}
 				Dom.setStyle(el, "left", (el.xIndex * pxSize) + "px");
 			}, this, true);
 			
@@ -506,11 +514,18 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				thrd = Math.ceil(pxSize / 3),
 				sizeLeft = (pxSize - thrd) + "px",
 				thrdTxt = thrd + "px",
+				yMin = this.map.maxBounds.y1Top,
+				yMax = this.map.maxBounds.y2Bottom,
 				yEls = Sel.query("div.coordY", this.yCoords);
 			Dom.batch(yEls, function(el){
-				Dom.setStyle(el, "padding-top", thrdTxt);
-				Dom.setStyle(el, "height", sizeLeft);
 				Dom.setStyle(el, "top", (el.yIndex * negPxSize) + "px");
+				if (el.yIndex >= yMin && el.yIndex <= yMax) {
+					Dom.setStyle(num, "height", sizeLeft);
+					Dom.setStyle(el, "padding-top", thrdTxt);
+				}
+				else {
+					Dom.setStyle(num, "height", (pxSize * 3) + "px");
+				}
 			}, this, true);
 		},
 		displayXCoords : function() {
@@ -521,12 +536,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				size = pxSize + "px",
 				xMin = this.map.maxBounds.x1Left,
 				xMax = this.map.maxBounds.x2Right;
-			for(var x=xMin; x<=xMax; x++) {
+			for(var x=xMin - 1; x<=xMax + 1; x++) {
 				var num = this.div.cloneNode(false);
-				num.innerHTML = x;
 				num.xIndex = x;
+				if (x >= xMin && x <= xMax) {
+					num.innerHTML = x;
+					Dom.setStyle(num, "width", size);
+				}
+				else {
+					Dom.setStyle(num, "width", (pxSize * 3) + "px");
+				}
 				Dom.addClass(num, "coordX");
-				Dom.setStyle(num, "width", size);
 				Dom.setStyle(num, "left", (x * pxSize) + "px");
 				anchor.appendChild(num);
 			}
@@ -548,13 +568,19 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				thrdTxt = thrd + "px",
 				yMin = this.map.maxBounds.y2Bottom,
 				yMax = this.map.maxBounds.y1Top;
-			for(var y=yMax; y>=yMin; y--) {
+			for(var y=yMax + 1; y>=yMin - 1; y--) {
 				var num = this.div.cloneNode(false);
 				num.innerHTML = y;
 				num.yIndex = y;
+				if (y >= yMin && y <= yMax) {
+					num.innerHTML = y;
+					Dom.setStyle(num, "height", sizeLeft);
+					Dom.setStyle(num, "padding-top", thrdTxt);
+				}
+				else {
+					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");
+				}
 				Dom.addClass(num, "coordY");
-				Dom.setStyle(num, "padding-top", thrdTxt);
-				Dom.setStyle(num, "height", sizeLeft);
 				Dom.setStyle(num, "top", (y * negPxSize) + "px");
 				anchor.appendChild(num);
 			}
@@ -1228,10 +1254,29 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.dd.subscribe("startDragEvent", this.startDrag, this, true);
 		this.dd.subscribe("endDragEvent", this.endDrag, this, true);
 		
+		var navEl = document.createElement('div');
+		navEl.className = 'mapiator_nav';
+		navEl.innerHTML = [
+			'<div class="mapiator_nav_up"></div>',
+			'<div class="mapiator_nav_right"></div>',
+			'<div class="mapiator_nav_down"></div>',
+			'<div class="mapiator_nav_left"></div>'
+		].join('');
+		map.mapDiv.appendChild(navEl);
+		var moveMap = function(e, o) {
+			map.moveByTiles(o[0], o[1]);
+		};
+		Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
+		Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
+		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
+		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
+
+
+
 		if((map.maxZoom - map.minZoom) != 0) {
-			var navEl = document.createElement('div');
-			navEl.className = 'mapiator_nav';
-			navEl.innerHTML = [
+			var zoomEl = document.createElement('div');
+			zoomEl.className = 'mapiator_zoom';
+			zoomEl.innerHTML = [
 				'<div class="mapiator_zoom_slider">',
 				'	<div class="mapiator_zoom_slider_thumb">',
 				'		<img src="' + Lib.AssetUrl + 'ui/zoom_slider.png" />',
@@ -1239,24 +1284,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				'</div>',
 				'<div class="mapiator_zoom_in"></div>',
 				'<div class="mapiator_zoom_out"></div>',
-				'<div class="mapiator_nav_up"></div>',
-				'<div class="mapiator_nav_right"></div>',
-				'<div class="mapiator_nav_down"></div>',
-				'<div class="mapiator_nav_left"></div>'
 			].join('');
-			map.mapDiv.appendChild(navEl);
-			Event.on(Sel.query(".mapiator_zoom_in", navEl, true), "click", map.zoomIn, map, true);
-			Event.on(Sel.query(".mapiator_zoom_out", navEl, true), "click", map.zoomOut, map, true);
-			var moveMap = function(e, o) {
-				map.moveByTiles(o[0], o[1]);
-			};
-			Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
-			Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
-			Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
-			Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
-
-			var sliderId = Dom.generateId(Sel.query(".mapiator_zoom_slider", navEl, true), "mapiator_zoom_slider");
-			var thumbId = Dom.generateId(Sel.query(".mapiator_zoom_slider_thumb", navEl, true), "mapiator_zoom_slider_thumb");
+			map.mapDiv.appendChild(zoomEl);
+			Event.on(Sel.query(".mapiator_zoom_in", zoomEl, true), "click", map.zoomIn, map, true);
+			Event.on(Sel.query(".mapiator_zoom_out", zoomEl, true), "click", map.zoomOut, map, true);
+			var sliderId = Dom.generateId(Sel.query(".mapiator_zoom_slider", zoomEl, true), "mapiator_zoom_slider");
+			var thumbId = Dom.generateId(Sel.query(".mapiator_zoom_slider_thumb", zoomEl, true), "mapiator_zoom_slider_thumb");
 
 			var zoomSize = 140;
 			var zoomScale = Math.floor(zoomSize / (map.maxZoom - map.minZoom));

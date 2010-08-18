@@ -1119,6 +1119,33 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"session_id", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
+				},
+				"send_password_reset_message" : {
+					"description": "Starts a password recovery process by sending an email with a recovery key.",
+					"parameters": [
+						{"name":"params", "type":"object", "optional":false},
+					],
+					"returns":{"type":"object"}
+				},
+				"reset_password" : {
+					"description": "Changes the empire password that has been forgotten.",
+					"parameters": [
+						{"name":"reset_key", "type":"string", "optional":false},
+						{"name":"password1", "type":"string", "optional":false},
+						{"name":"password2", "type":"string", "optional":false},
+						{"name":"api_key", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"change_password" : {
+					"description": "Changes the empire password.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"current_password", "type":"string", "optional":false},
+						{"name":"password1", "type":"string", "optional":false},
+						{"name":"password2", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
 			}
 		},

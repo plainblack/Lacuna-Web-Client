@@ -693,67 +693,73 @@ about
 	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/zoom.png);
 	position:absolute;
 	z-index:30;
-	width:62px;
-	height:300px;
+	width:60px;
+	height:60px;
 	left:40px;
 	top:40px;
+}
+.mapiator_nav_up,
+.mapiator_nav_down,
+.mapiator_nav_left,
+.mapiator_nav_right {
+	position: absolute;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+}
+.mapiator_nav_up {
+	top: 2px;
+}
+.mapiator_nav_up,
+.mapiator_nav_down {
+	left: 21px;
+}
+.mapiator_nav_down {
+	top: 38px;
+}
+.mapiator_nav_left,
+.mapiator_nav_right {
+	top: 20px;
+}
+.mapiator_nav_left {
+	left: 2px;
+}
+.mapiator_nav_right {
+	left: 38px;
+}
+.mapiator_zoom {
+	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/zoom.png);
+	background-position: -20px -60px;
+	position:absolute;
+	z-index:30;
+	width:20px;
+	height:255px;
+	left:60px;
+	top:100px;
 }
 .mapiator_zoom_slider {
 	position: absolute;
 	cursor: pointer;
-	top: 110px;
-	left: 20px;
-	width: 21px;
+	top: 50px;
+	width: 20px;
 	height: 150px;
 }
 .mapiator_zoom_slider_thumb {
 	cursor: row-resize;
 }
 .mapiator_zoom_in,
-.mapiator_zoom_out,
-.mapiator_nav_up,
-.mapiator_nav_right,
-.mapiator_nav_down,
-.mapiator_nav_left
-{
+.mapiator_zoom_out {
 	position: absolute;
 	cursor: pointer;
-}
-.mapiator_zoom_in {
-	top: 86px;
-	left: 21px;
 	width: 18px;
+	left: 1px;
 	height: 19px;
 }
+.mapiator_zoom_in {
+	top: 26px;
+}
 .mapiator_zoom_out {
-	top: 269px;
-	left: 21px;
-	width: 18px;
-	height: 8px;
-}
-.mapiator_nav_up {
-	top: 2px;
-	left: 21px;
-	width: 20px;
-	height: 20px;
-}
-.mapiator_nav_down {
-	top: 38px;
-	left: 21px;
-	width: 20px;
-	height: 20px;
-}
-.mapiator_nav_left {
-	top: 20px;
-	left: 2px;
-	width: 20px;
-	height: 20px;
-}
-.mapiator_nav_right {
-	top: 20px;
-	left: 38px;
-	width: 20px;
-	height: 20px;
+	top: 209px;
 }
 .tileContainer div {
 	color:white;
@@ -996,8 +1002,9 @@ planet details
 }
 .newsRssLinksContainer {
 }
-.newsRssLinks li {
+#newsRssLinks li {
 	float:left;
+	margin-right: 10px;
 }
 .newsRssLink a {
 	vertical-align:middle;
@@ -1239,6 +1246,12 @@ PROFILE
 	display:inline-block;
 	width:75px;
 }
+#profileDescription {
+	width: 428px;
+}
+#profileStatus {
+	width: 424px;
+}
 .medalContainer {
 	overflow: hidden;
 	font-size:80%;
@@ -1271,6 +1284,39 @@ PROFILE
 #profileSpecies span {
 	display:inline-block;
 	width:250px;
+}
+#detailsAccount,
+#detailsPlayer,
+#detailsNotes {
+	padding : 5px;
+}
+#profileNotes {
+	width: 100%;
+	height: 300px;
+}
+#detailsAccount label,
+#detailsPlayer label {
+	display: inline-block;
+	width: 350px;
+	text-align: right;
+}
+#detailsAccount label input,
+#detailsPlayer label input {
+	margin-left: 5px;
+	width: 200px
+}
+#profileChangePassword {
+	display: block;
+	margin: 0 auto;
+}
+#detailsAccount.password-changed #profileChangePassword {
+	display: none;
+}
+#detailsAccount .changepassword {
+	display: none;
+}
+#detailsAccount.password-changed .changepassword {
+	display: block;
 }
 
 /*
