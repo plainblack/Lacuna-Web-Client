@@ -6,13 +6,25 @@
 	}
 	
 	
-	var t = "1",
-		host = "http://localhost/lacuna/"; //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
+	var t = "1", host;
+	/** local */
+	host = "http://localhost/lacuna/";
 	var loader = new YAHOO.util.YUILoader({
+		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "RAW",
 		allowRollup: false,
 		combine: false
 	});
+	/** end */
+	/** s3
+	host = "//s3.amazonaws.com/alpha.lacunaexpanse.com/";
+	var loader = new YAHOO.util.YUILoader({
+		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
+		filter: "MIN",
+		allowRollup: true,
+		combine: false
+	});
+	/** end */
 
 	loader.addModule({
 		name: "smd",
