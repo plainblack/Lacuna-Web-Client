@@ -201,6 +201,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.handleUpdate.failure");
+					alert(o.error.message);
 				},
 				timeout:Game.Timeout,
 				scope:this
