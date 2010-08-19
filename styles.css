@@ -159,6 +159,11 @@ dialogs
 #login input[type="text"],#login input[type="password"] { width:220px; }
 #login li { margin-bottom:3px; }
 
+li.loginFacebook {
+	margin-top: 5px;
+	text-align: center;
+}
+
 #createEmpire label {
 	width:130px;
 }
@@ -174,6 +179,9 @@ dialogs
 	text-align:right;
 	padding-right:5px;
 	vertical-align:top;
+}
+.facebookLogin .empirePassword {
+	display: none;
 }
 
 /*

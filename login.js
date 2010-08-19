@@ -27,8 +27,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
 		'				<li><label>Password</label><input type="password" id="loginPass"  /></li>',
 		'				<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /></li>',
+		'				<li><a id="loginCreate" href="#">Create an Empire</a></li>',
+		'				<li class="loginFacebook"><a href="/facebook/authorize"><img src="' + Lib.AssetUrl + 'ui/web/facebook-login-button.png" /></a></li>',
 		'			</ul>',
-		'			<a id="loginCreate" href="#">Create an Empire</a>',
 		'		</form>',
 		'	</div>',
 		'	<div class="ft"></div>'

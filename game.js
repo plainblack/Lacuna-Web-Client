@@ -28,17 +28,40 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
-			var session = Game.GetSession();
-			if(!session) {
-				Game.DoLogin();
+			var query = {};
+			var vars = window.location.hash.substring(1).split('&');
+			if (vars.length > 0) {
+				for (var i=0; i<vars.length; i++) {
+					var pair = vars[i].split("=");
+					query[pair[0]] = pair[1];
+				}
 			}
-			else {
-				//Run rest of UI since we're logged in
+
+			var session = Game.GetSession();
+			if (query.facebook_uid) {
+				// window.location.hash = '';
+				Game.InitLogin();
+				Game.LoginDialog.initEmpire();
+				Game.EmpireCreator.createFacebook(query.facebook_uid, query.facebook_token, query.facebook_name);
+				return;
+			}
+			else if (query.session_id) {
+				window.location.hash = '';
+				Game.SetCookie("session", query.session_id);
 				Game.GetStatus({
 					success:Lacuna.Game.Run,
 					failure:Lacuna.Game.Failure
 				});
 			}
+			else if (! session) {
+				Game.DoLogin();
+				return;
+			}
+			//Run rest of UI since we're logged in
+			Game.GetStatus({
+				success:Lacuna.Game.Run,
+				failure:Lacuna.Game.Failure
+			});
 		},
 		Failure : function(o){
 			YAHOO.log(o, "debug", "Game.Failure");
@@ -50,8 +73,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				alert(o.error.message);
 			}
 		},
-		DoLogin : function(error) {
-			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+		InitLogin : function(error) {
 			if(!Lacuna.Game.LoginDialog) {
 				Lacuna.Game.LoginDialog = new Lacuna.Login();
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
@@ -67,6 +89,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.Run();
 				});
 			}
+		},
+		DoLogin : function(error) {
+			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
+			this.InitLogin();
 			Game.OverlayManager.hideAll();
 			Lacuna.Game.LoginDialog.show(error);
 			Lacuna.Menu.hide();
