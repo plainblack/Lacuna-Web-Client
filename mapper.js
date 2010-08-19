@@ -1283,7 +1283,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				'	</div>',
 				'</div>',
 				'<div class="mapiator_zoom_in"></div>',
-				'<div class="mapiator_zoom_out"></div>',
+				'<div class="mapiator_zoom_out"></div>'
 			].join('');
 			map.mapDiv.appendChild(zoomEl);
 			Event.on(Sel.query(".mapiator_zoom_in", zoomEl, true), "click", map.zoomIn, map, true);

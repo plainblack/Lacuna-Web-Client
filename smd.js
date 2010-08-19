@@ -1123,7 +1123,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"send_password_reset_message" : {
 					"description": "Starts a password recovery process by sending an email with a recovery key.",
 					"parameters": [
-						{"name":"params", "type":"object", "optional":false},
+						{"name":"params", "type":"object", "optional":false}
 					],
 					"returns":{"type":"object"}
 				},

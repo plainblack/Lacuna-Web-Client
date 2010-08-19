@@ -74,7 +74,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				Lacuna.Pulser.Show();
 				var EmpireServ = Game.Services.Empire,
 					data = {
-						name: this.elName.value,
+						name: this.elName.value
 					};
 				if (this.facebook_uid) {
 					data.facebook_uid = this.facebook_uid;
