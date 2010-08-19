@@ -31,13 +31,12 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 		},
 		_getTrainTab : function() {
 			var spies = this.result.spies;
-			var canTrain = spies.current * 1 < spies.maximum * 1;
 			this.trainTab = new YAHOO.widget.Tab({ label: "Train Spies", content: [
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul>',
 				'			<li><span style="font-weight:bold;">Spies:</span> <span id="spiesCurrent">',spies.current,'</span> of ',spies.maximum,'</li>',
-				canTrain ? '<li><span style="font-weight:bold;">Train:</span> <select id="spiesTrainNumber"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select> new spies. <button type="button" id="spiesTrain">Train</button></li>' : '',
+				'			<li id="spiesTrainOptions"><span style="font-weight:bold;">Train:</span> <select id="spiesTrainNumber"></select> new spies. <button type="button" id="spiesTrain">Train</button></li>',
 				'		</ul>',
 				'	</div>',
 				'	<div class="yui-u">',
@@ -53,11 +52,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				'	</div>',
 				'</div>'
 			].join('')});
-			if(canTrain) {
-				var btn = Sel.query("button", this.trainTab.get("contentEl"), true);
-				if(btn) {
-					Event.on(btn, "click", this.SpyTrain, this, true);
-				}
+			this.trainTab.subscribe("activeChange", this.trainView, this, true);
+			var btn = Sel.query("button", this.trainTab.get("contentEl"), true);
+			if(btn) {
+				Event.on(btn, "click", this.SpyTrain, this, true);
 			}
 			
 			return this.trainTab;
@@ -91,6 +89,32 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			return this.spiesTab;
 		},
 		
+		trainView : function(e) {
+			var spies = this.result.spies;
+			var canTrain = spies.maximum - spies.current;
+			Dom.get("spiesCurrent").innerHTML = spies.current;
+			if (canTrain > 0) {
+				Dom.setStyle('spiesTrainOptions', 'visibility', 'visible');
+				var elNumSelect = Dom.get('spiesTrainNumber');
+				if (canTrain > 5) {
+					canTrain = 5;
+				}
+				var currentNum = elNumSelect.children.length;
+				for (var i = canTrain; i < currentNum; i++) {
+					elNumSelect.removeChild(elNumSelect.lastChild);
+				}
+				for (var i = currentNum + 1; i <= canTrain; i++) {
+					var elOption = document.createElement('option');
+					elOption.value = i;
+					elOption.innerHTML = i;
+					elNumSelect.appendChild(elOption);
+				}
+			}
+			else {
+				Dom.setStyle('spiesTrainOptions', 'visibility', 'collapse');
+			}
+
+		},
 		spiesView : function(e) {
 			if(e.newValue) {
 				if(!this.spies) {
@@ -372,7 +396,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						}
 						this.Line.parentNode.removeChild(this.Line);
 						this.Self.result.spies.current = (this.Self.result.spies.current*1) - 1;
-						Dom.get("spiesCurrent").innerHTML = this.Self.result.spies.current;
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Intelligence.SpyBurn.failure");
@@ -456,7 +479,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			var select = Dom.get("spiesTrainNumber"),
 				num = select[select.selectedIndex].value*1;
 				
-			if(Lang.isNumber(num) && num < this.result.spies.maximum * 1) {
+			if(Lang.isNumber(num) && num <= this.result.spies.maximum - this.result.spies.current) {
 				Lacuna.Pulser.Show();
 				this.service.train_spy({session_id:Game.GetSession(),building_id:this.building.id,quantity:num}, {
 					success : function(o){
@@ -467,7 +490,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						if(trained > 0) {
 							this.spies = undefined;
 							this.result.spies.current = (this.result.spies.current*1) + (o.result.trained*1);
-							Dom.get("spiesCurrent").innerHTML = this.result.spies.current;
+							this.trainView();
+							// Dom.get("spiesCurrent").innerHTML = this.result.spies.current;
 							//this.UpdateCost(this.spies.training_costs, trained);
 						}
 					},
