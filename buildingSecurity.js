@@ -54,6 +54,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 		_getSpiesTab : function() {
 			this.spiesTab = new YAHOO.widget.Tab({ label: "Foreign Spies", content: [
 				'<div>',
+				'	<p>There may be spies on your planet that we don\'t know about.</p>',
 				'	<ul class="spiesHeader securityInfo clearafter">',
 				'		<li class="securityName">Name</li>',
 				'		<li class="securityLevel">Level</li>',
