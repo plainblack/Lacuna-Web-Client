@@ -1359,6 +1359,10 @@ Essentia Dialog
 	border-bottom:1px solid #52acff;
 }
 
+.essentiaPurchase {
+	text-align: center;
+	margin-top: 10px;
+}
 
 ul.statsList label{
 	font-weight:bold;

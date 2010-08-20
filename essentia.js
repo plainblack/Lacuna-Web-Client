@@ -43,6 +43,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
 			this.timeStorage = Dom.get("essentialDetailsTimeStorage");
 			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage"], "click", this.boost, this, true);
+			Event.on("essentiaPurchaseButton", "click", function(){
+				window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=0,scrollbars=0,height=550,width=600,directories=0");
+			});
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Dialog.render();
@@ -98,6 +101,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'				<li class="essentiaDetailsTime" id="essentialDetailsTimeStorage"></li>',
 			'			</ul>',
 			'		</form>',
+			'		<div class="essentiaPurchase">',
+			'			<button id="essentiaPurchaseButton">Purchase Essentia</button>',
+			'		</div>',
 			'	</div>',
 			'	<div class="ft"></div>'
 			].join('');
@@ -122,7 +128,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		hide : function() {
 			this.Dialog.hide();
 		},
-		
+		paymentFinished : function(amount) {
+		},
 		boost : function(e) {
 			var target = Event.getTarget(e);
 			var func;
