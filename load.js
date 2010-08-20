@@ -314,7 +314,11 @@
 			'making friends',
 			'oxidizing lizards',
 			'<span style="background-color: #000000; color: #ffffff;">&nbsp;&nbsp;&nbsp;&nbsp;[ REDACTED ]&nbsp;&nbsp;&nbsp;</span>',
-			'coercing automatons'
+			'coercing automatons',
+			'dissociating ions',
+			'taking a break',
+			'watching paint dry',
+			'decanting the clones'
 		],
 		firstFile = true,
 		progressLoaderC = document.createElement("div"),
