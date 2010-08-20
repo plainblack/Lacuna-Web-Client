@@ -260,14 +260,59 @@
 			'calculating trajectory',
 			'engaging hyper drive',
 			'traveling the verse',
-			'other witty comments'
+			'other witty comments',
+			'reticulating splines',
+			'compacting nebulas',
+			'colliding asteroids',
+			'corroding spreadsheets',
+			'irradiating pneumatic systems',
+			'constructing universe',
+			'detonating luggage',
+			'harvesting politicians',
+			'inflating government structure',
+			'discrediting liquids',
+			'camoflaging nerds',
+			'villifying heroes',
+			'flooding prairies',
+			'nebulizing nebulas',
+			'spinning plates',
+			'fortifying bread',
+			'lambasting vampires',
+			'elevating vectors',
+			'caching favors',
+			'predicting history',
+			'looking suave',
+			'babelizing translations',
+			'necrotizing decimals',
+			'capitalizing numerals',
+			'compressing water',
+			'reliving the past',
+			'delivering ingots',
+			'bottling particles',
+			'refactoring physics',
+			'cavitating airflow',
+			'corrupting time stream',
+			'unbalancing gyroscopes'
 		],
 		firstFile = true,
 		progressLoaderC = document.createElement("div"),
 		progressLoader = progressLoaderC.appendChild(progressLoaderC.cloneNode(false));
+	var i = status.length;
+	while ( --i ) {
+		var j = Math.floor( Math.random() * ( i + 1 ) );
+		var tempi = status[i];
+		var tempj = status[j];
+		status[i] = tempj;
+		status[j] = tempi;
+	}
+	
 	//container
 	progressLoaderC.id = "loadingProgress";
 	progressLoaderC.style.backgroundColor = '#FFD800';
+	progressLoaderC.style.position = 'absolute';
+	progressLoaderC.style.top = '30px';
+	progressLoaderC.style.left = '30px';
+	progressLoaderC.style.right = '30px';
 	//progress bar
 	progressLoader.counter = 0;
 	progressLoader.style.backgroundColor = "#fff";
