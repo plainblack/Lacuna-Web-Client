@@ -4,7 +4,7 @@ pink: pink
 */
 
 html {
-	background: black url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/star_system/field.png');
+	background: black url('assets/star_system/field.png');
 	color:#fff;
 }
 body {
@@ -46,12 +46,12 @@ a, a:link, a:visited {
 #header {
 	top: 0;
 	z-index:1000;
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/bar_top_back.png");
+	background-image:url("assets/ui/web/bar_top_back.png");
 }
 #footer {
 	bottom: 0;
 	z-index:1000;
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/bar_bottom_back.png");
+	background-image:url("assets/ui/web/bar_bottom_back.png");
 }
 
 .hidden {
@@ -89,7 +89,7 @@ body.yui-skin-sam .yui-panel {
 }
 body.yui-skin-sam .yui-panel .hd {
 	width:250px;
-	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/tab.png") no-repeat scroll 0 0 transparent;
+	background:url("assets/ui/tab.png") no-repeat scroll 0 0 transparent;
 	border-width:0;
 	margin-left:10px;
 	font-size:110%;
@@ -98,7 +98,7 @@ body.yui-skin-sam .yui-panel .hd {
 }
 
 .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft {
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/bkg.png");
+	background-image:url("assets/ui/bkg.png");
 }
 body.yui-skin-sam .yui-panel .bd {
 	-moz-border-radius:10px 10px 0 0;
@@ -127,7 +127,7 @@ body.yui-skin-sam .nofooter .bd {
 	border-color:#000;
 } 
 body.yui-skin-sam .container-close {
-	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll 0 0 transparent;
+	background:url("assets/ui/close.png") no-repeat scroll 0 0 transparent;
 	cursor:pointer;
 	height:23px;
 	position:absolute;
@@ -159,6 +159,11 @@ dialogs
 #login input[type="text"],#login input[type="password"] { width:220px; }
 #login li { margin-bottom:3px; }
 
+li.loginFacebook {
+	margin-top: 5px;
+	text-align: center;
+}
+
 #createEmpire label {
 	width:130px;
 }
@@ -174,6 +179,9 @@ dialogs
 	text-align:right;
 	padding-right:5px;
 	vertical-align:top;
+}
+.facebookLogin .empirePassword {
+	display: none;
 }
 
 /*
@@ -365,11 +373,11 @@ SHINEY
 	z-index:1001;
 }
 #headerShine {
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/t.png");
+	background-image:url("assets/ui/web/t.png");
 	top:0;
 }
 #footerShine {
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/t.png");
+	background-image:url("assets/ui/web/t.png");
 	bottom:0;
 }
 
@@ -382,22 +390,22 @@ SHINEY
 	width:334px;
 }
 #usersCenter {
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_top.png");
+	background-image:url("assets/ui/web/selector_top.png");
 	top:0;
 	z-index:1003;
 }
 #planetsCenter {
-	background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_bottom.png");
+	background-image:url("assets/ui/web/selector_bottom.png");
 	bottom:0;
 	z-index:1003;
 }
 #userCenterShine {
-	/*background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_top_shine.png");*/
+	/*background-image:url("assets/ui/web/selector_top_shine.png");*/
 	top:0;
 	z-index:1004;
 }
 #planetsCenterShine {
-	/*background-image:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/selector_bottom_shine.png");*/
+	/*background-image:url("assets/ui/web/selector_bottom_shine.png");*/
 	bottom:0;
 	z-index:1004;
 }
@@ -414,7 +422,7 @@ SHINEY
 #usersArrow {
 	/*width: 100%; 
 	height: 100%; 
-	background: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/down.png") no-repeat scroll center 55px transparent;
+	background: url("assets/ui/down.png") no-repeat scroll center 55px transparent;
 	position:absolute;
 	top:0;
 	left:0;*/
@@ -422,7 +430,7 @@ SHINEY
 #planetsArrow {
 	width: 100%; 
 	height: 100%; 
-	background: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/up.png") no-repeat scroll center 10px transparent;
+	background: url("assets/ui/up.png") no-repeat scroll center 10px transparent;
 	position:absolute;
 	top:0;
 	left:0;
@@ -572,7 +580,7 @@ about
 .speciesSlider_bg {
 	display:inline-block;
 	position: relative;
-	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
+	background: url(assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
 	height: 28px;
 	width: 210px;
 }
@@ -631,10 +639,10 @@ about
 	width:700px;*/
 	border:0 none;
 	clear:both;
-	cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default;
+	cursor: url(assets/ui/web/openhand.cur), default;
 }
 /*#planetMap {
-	background: brown url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/planet_side/ground.png');
+	background: brown url('assets/planet_side/ground.png');
 }*/
 .planetMapTileCounter {
 	z-index: 2;
@@ -687,10 +695,10 @@ about
 	color:white;
 }
 .planetMapTileActionButton {
-	background: transparent url('https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/l/build.png');
+	background: transparent url('assets/ui/l/build.png');
 }
 .mapiator_nav {
-	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/zoom.png);
+	background: url(assets/ui/zoom.png);
 	position:absolute;
 	z-index:30;
 	width:60px;
@@ -728,7 +736,7 @@ about
 	left: 38px;
 }
 .mapiator_zoom {
-	background: url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/zoom.png);
+	background: url(assets/ui/zoom.png);
 	background-position: -20px -60px;
 	position:absolute;
 	z-index:30;
@@ -917,7 +925,7 @@ planet details
 
 #builderMenu .builderMenuGroup a {
 	text-decoration: none;
-	background-image: url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/button_bkg_200.png");
+	background-image: url("assets/ui/button_bkg_200.png");
 	background-repeat: no-repeat;
 	background-position: center center;
 }
@@ -1091,7 +1099,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	cursor:pointer;
 }
 .probeStar .probeDelete {
-	background:url("https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/close.png") no-repeat scroll center center transparent;
+	background:url("assets/ui/close.png") no-repeat scroll center center transparent;
 	height:11px;
 	width:11px;
 	position: absolute;
@@ -1119,7 +1127,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 	font-weight:bold;
 	font-size:100%;
-	cursor:url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/web/pen_m.cur), text;
+	cursor:url(assets/ui/web/pen_m.cur), text;
 }
 .spyInfo .spyName input {
 	width:95px;
@@ -1292,7 +1300,7 @@ PROFILE
 }
 #profileNotes {
 	width: 100%;
-	height: 300px;
+	height: 200px;
 }
 #detailsAccount label,
 #detailsPlayer label {
@@ -1351,6 +1359,10 @@ Essentia Dialog
 	border-bottom:1px solid #52acff;
 }
 
+.essentiaPurchase {
+	text-align: center;
+	margin-top: 10px;
+}
 
 ul.statsList label{
 	font-weight:bold;
@@ -1420,7 +1432,7 @@ TextboxList
     padding:0 15px 0 2px;
 }
 .TextboxList .TextboxListBitBoxDelete {
-    background:transparent url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/crosssmall.gif) repeat scroll 0 0;
+    background:transparent url(assets/ui/crosssmall.gif) repeat scroll 0 0;
     display:block;
     font-size:1px;
     height:7px;
@@ -1449,7 +1461,7 @@ TextboxList
     top:1px;
     #top:2px;
     position:absolute;
-    background:transparent url(https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/ui/dropdown.gif) repeat scroll 0 0;
+    background:transparent url(assets/ui/dropdown.gif) repeat scroll 0 0;
     z-index:2;
     display:-moz-inline-stack; /*mozilla 2.0*/
     display:inline-block; /*mozilla 3.0, ie 8*/

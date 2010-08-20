@@ -48,7 +48,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		
 	var Library = {
 		ApiKey : "53137d8f-3544-4118-9001-b0acbec70b3d",
-		AssetUrl : "https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
+		AssetUrl : "//s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
 		Styles : {
 			HIDDEN : "hidden",
 			ALERT : "alert"
@@ -183,7 +183,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			"/potato" : "The Potato Patch allows you to grow potatoes to be used as food for you empire.  The patch can only be used in orbits 3 and 4 (its goldilox zone).  The higher the level of the patch the more food it produces.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",
 			"/propulsion" : "Work done in the Propulsion System Factory allows your ships to move faster through space by way of upgraded engines.  The higher the building level the faster your ships move.  All ships originating from this planet are affected.  In order to produce high performance engines you'll need a good supply of structural minerals such as rutile, chromite, bauxite, magnetite, beryl, or goethite.",
 			"/oversight" : "The Oversight Ministry reduces the amount of time buildings take to upgrade through better project management. All buildings will be produced 1% faster per level of the Oversight Ministry.",
-			"/security" : "The Security Ministry increases the effectiveness of your counter-spies.  The higher the building level the more training your counter-spies receive.",
+			"/security" : "The Security Ministry increases the effectiveness of your counter-spies and allows you to detect foreign spies.  The higher the building level the more training your counter-spies receive.  The building will be able to detect foreign spies with a level equal to or lower than the building.  It will also help detect incoming ships containing spies.",
 			"/shake" : "The Beeldeban Protein Shake Factory converts the beeldeban that are harvested in the Beeldeban Herder into protein shakes, at a small loss, to be used as food.  The higher the level of the factory the more food is converted.",
 			"/shipyard" : "The Shipyard is where the construction of your empire's ships takes place.  The types of ships that can be built in the Shipyard are dependent on some of the other buildings on your planet.  The higher the building level the faster ships are produced.  ",
 			"/singularity" : "The Singularity Energy  Plant produces energy  by pulling it from subspace.  This is the cleanest and most powerful form of energy in the universe. This is extremely expensive to build and requires a very high level University  to construct.  The higher the building level the more energy is produced.",

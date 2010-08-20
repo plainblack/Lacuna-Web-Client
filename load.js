@@ -6,13 +6,25 @@
 	}
 	
 	
-	var t = "1",
-		host = "http://localhost/lacuna/"; //https://s3.amazonaws.com/webclient.lacunaexpanse.com/
+	var t = "1", host;
+	/** local */
+	host = "http://localhost/lacuna/";
 	var loader = new YAHOO.util.YUILoader({
+		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "RAW",
 		allowRollup: false,
 		combine: false
 	});
+	/** end */
+	/** s3
+	host = "//s3.amazonaws.com/alpha.lacunaexpanse.com/";
+	var loader = new YAHOO.util.YUILoader({
+		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
+		filter: "MIN",
+		allowRollup: true,
+		combine: false
+	});
+	/** end */
 
 	loader.addModule({
 		name: "smd",
@@ -248,14 +260,81 @@
 			'calculating trajectory',
 			'engaging hyper drive',
 			'traveling the verse',
-			'other witty comments'
+			'other witty comments',
+			'reticulating splines',
+			'compacting nebulas',
+			'colliding asteroids',
+			'corroding spreadsheets',
+			'irradiating pneumatic systems',
+			'constructing universe',
+			'detonating luggage',
+			'harvesting politicians',
+			'inflating government structure',
+			'discrediting liquids',
+			'camoflaging nerds',
+			'villifying heroes',
+			'flooding prairies',
+			'nebulizing nebulas',
+			'spinning plates',
+			'fortifying bread',
+			'lambasting vampires',
+			'elevating vectors',
+			'caching favors',
+			'predicting history',
+			'looking suave',
+			'babelizing translations',
+			'necrotizing decimals',
+			'capitalizing numerals',
+			'compressing water',
+			'reliving the past',
+			'delivering ingots',
+			'bottling particles',
+			'refactoring physics',
+			'cavitating airflow',
+			'corrupting time stream',
+			'unbalancing gyroscopes',
+			'fishing for compliments',
+			'refuting evidence',
+			'rotating pinions',
+			'engaging clutch',
+			'ejecting pilot',
+			'reciting poetry',
+			'investigating rumors',
+			'deconstructing philosophies',
+			'monetizing colors',
+			'digitizing electrolytes',
+			'motivating livestock',
+			'assuming the worst',
+			'ignoring mummies',
+			'disconnecting engineers',
+			'remembering the future',
+			'broadcasting the truth',
+			'entertaining the possibility',
+			'developing a theory',
+			'making friends',
+			'oxidizing lizards',
+			'<span style="background-color: #000000; color: #ffffff;">&nbsp;&nbsp;&nbsp;&nbsp;[ REDACTED ]&nbsp;&nbsp;&nbsp;</span>',
+			'coercing automatons'
 		],
 		firstFile = true,
 		progressLoaderC = document.createElement("div"),
 		progressLoader = progressLoaderC.appendChild(progressLoaderC.cloneNode(false));
+	var i = status.length;
+	while ( --i ) {
+		var j = Math.floor( Math.random() * ( i + 1 ) );
+		var tempi = status[i];
+		var tempj = status[j];
+		status[i] = tempj;
+		status[j] = tempi;
+	}
+	
 	//container
 	progressLoaderC.id = "loadingProgress";
 	progressLoaderC.style.backgroundColor = '#FFD800';
+	progressLoaderC.style.position = 'absolute';
+	progressLoaderC.style.top = '30px';
+	progressLoaderC.style.left = '30px';
+	progressLoaderC.style.right = '30px';
 	//progress bar
 	progressLoader.counter = 0;
 	progressLoader.style.backgroundColor = "#fff";

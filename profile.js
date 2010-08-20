@@ -149,7 +149,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 							session_id:Game.GetSession(""),
 							current_password:this.current_password.value,
 							password1:this.new_password.value,
-							password2:this.confirm_password.value,
+							password2:this.confirm_password.value
 						},{
 						success : function(o){
 							YAHOO.log(o, "info", "Profile.handleUpdate.password.success");
@@ -226,7 +226,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						session_id:Game.GetSession(""),
 						current_password:this.current_password.value,
 						password1:this.new_password.value,
-						password2:this.confirm_password.value,
+						password2:this.confirm_password.value
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Profile.handlePasswordUpdate.success");

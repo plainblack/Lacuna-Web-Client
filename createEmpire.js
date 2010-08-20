@@ -24,8 +24,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'		<form name="empireForm">',
 		'			<ul>',
 		'				<li><label for="empireName">Empire Name</label><input type="text" id="empireName" /></li>',
-		'				<li><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
-		'				<li><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
+		'				<li class="empirePassword"><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
+		'				<li class="empirePassword"><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
 		'			</ul>',
 		'			<div id="empireMessage" class="hidden"></div>',
 		'		</form>',
@@ -74,11 +74,17 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				Lacuna.Pulser.Show();
 				var EmpireServ = Game.Services.Empire,
 					data = {
-						name: this.elName.value,
-						password: this.elPass.value,
-						password1: this.elPassConfirm.value
+						name: this.elName.value
 					};
-					
+				if (this.facebook_uid) {
+					data.facebook_uid = this.facebook_uid;
+					data.facebook_token = this.facebook_token;
+				}
+				else {
+					data.password = this.elPass.value;
+					data.password1 = this.elPassConfirm.value;
+				}
+				
 				EmpireServ.is_name_available({name:data.name}, {
 					success : function(o) {
 						YAHOO.log(o);
@@ -123,8 +129,22 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
+		createFacebook : function(uid, token, name) {
+			this.savedEmpire = undefined;
+			this.elName.value = name + "'s Empire";
+			
+			this.facebook_uid = uid;
+			this.facebook_token = token;
+			
+			Dom.addClass(this.id, 'facebookLogin');
+			Game.OverlayManager.hideAll();
+			this.Dialog.show();
+		},
 		show : function(doNotClear) {
 			Game.OverlayManager.hideAll();
+			Dom.removeClass(this.id, 'facebookLogin');
+			delete this.facebook_uid;
+			delete this.facebook_token;
 			if(!doNotClear) {
 				this.savedEmpire = undefined;
 				this.elName.value = "";
