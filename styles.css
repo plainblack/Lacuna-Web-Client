@@ -164,6 +164,16 @@ li.loginFacebook {
 	text-align: center;
 }
 
+#createEmpire .empireAgreeCheck {
+	margin-top: 5px;
+}
+#createEmpire .empireAgreeCheck input {
+	margin-left: 75px;
+	margin-right: 5px;
+}
+#createEmpire .empireAgreeCheck label {
+	width: auto;
+}
 #createEmpire label {
 	width:130px;
 }

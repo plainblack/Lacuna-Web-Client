@@ -26,6 +26,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'				<li><label for="empireName">Empire Name</label><input type="text" id="empireName" /></li>',
 		'				<li class="empirePassword"><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
 		'				<li class="empirePassword"><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
+		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeTOS" /><label for="empireAgreeTOS">I agree to the <a href="http://www.lacunaexpanse.com/terms/" target="_blank">Terms of Service</a>.</label></li>',
+		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeRules" /><label for="empireAgreeRules">I agree to abide by <a href="http://www.lacunaexpanse.com/rules/" target="_blank">the rules</a>.</label></li>',
 		'			</ul>',
 		'			<div id="empireMessage" class="hidden"></div>',
 		'		</form>',
@@ -52,6 +54,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			//get el's after rendered
 			this.elName = Dom.get("empireName");
 			this.elPass = Dom.get("empirePass");
+			this.elAgreeTOS = Dom.get("empireAgreeTOS");
+			this.elAgreeRules = Dom.get("empireAgreeRules");
 			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elMessage = Dom.get("empireMessage");
 			
@@ -65,6 +69,10 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	};
 	CreateEmpire.prototype = {
 		handleCreate : function() {
+			if (! this.elAgreeTOS.checked || ! this.elAgreeRules.checked) {
+				this.setMessage("You must agree to the Terms of Service and the rules before registering.");
+				return;
+			}
 			this.setMessage("");
 			if(this.savedEmpire && this.savedEmpire.name == this.elName.value) {
 				Game.SpeciesCreator.show(this.savedEmpire.id);
@@ -132,6 +140,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		createFacebook : function(uid, token, name) {
 			this.savedEmpire = undefined;
 			this.elName.value = name + "'s Empire";
+			this.elAgreeTOS.checked = false;
+			this.elAgreeRules.checked = false;
 			
 			this.facebook_uid = uid;
 			this.facebook_token = token;
@@ -149,6 +159,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				this.savedEmpire = undefined;
 				this.elName.value = "";
 				this.elPass.value = "";
+				this.elAgreeTOS.checked = false;
+				this.elAgreeRules.checked = false;
 				this.elPassConfirm.value = "";
 			}
 			this.Dialog.show();
