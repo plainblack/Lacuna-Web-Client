@@ -318,7 +318,11 @@
 			'dissociating ions',
 			'taking a break',
 			'watching paint dry',
-			'decanting the clones'
+			'decanting the clones',
+			'motoring movers',
+			'scaping goats',
+			'assembling deployments',
+			'deploying assemblages'
 		],
 		firstFile = true,
 		progressLoaderC = document.createElement("div"),
