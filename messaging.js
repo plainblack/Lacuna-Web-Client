@@ -509,10 +509,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 							}
 							Dom.removeClass(matchedEl.parentNode, "unread");
 						}
-						else {
-							//only allow status update if it wasn't a new message.  this makes sure we don't screw up the message count
-							this.fireEvent("onRpc", o.result);
-						}
+						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
 					},
 					failure : function(o){
@@ -769,6 +766,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				success : function(o){
 					YAHOO.log(o, "info", "Messaging.showMessage.success");
 					var message = o.result.message;
+					this.fireEvent("onRpc", o);
 					if (message.has_archived != "0") {
 						this.currentTab = this.archive.id;
 					}
@@ -776,12 +774,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.currentTab = this.inbox.id;
 					}
 					this.loadTab();
-					var showMessageOnce;
-					showMessageOnce = function(o) {
-						this.displayMessage(message);
-						this.unsubscribe("onPageLoaded", showMessageOnce);
-					};
-					this.subscribe("onPageLoaded", showMessageOnce, this, true);
+					this.displayMessage(message);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadMessage.failure");
