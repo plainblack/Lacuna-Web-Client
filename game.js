@@ -431,7 +431,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			clearInterval(Game.recInt);
 	
 			Cookie.remove("lacuna",{
-				domain: "lacunaexpanse.com"
+				domain: Game.domain
 			});
 			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
