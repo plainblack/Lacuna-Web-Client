@@ -1163,10 +1163,14 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:170px;
 }
 .spyInfo .spyAssignment {
-	width:200px;
+	width:340px;
 }
-.spyInfo .spyAssignment  select {
-	width:190px;
+.spyInfo .spyAssignment select {
+	width:210px;
+	margin-right: 5px;
+}
+.spyInfo .spyAssignResult a {
+	margin-left: 1em;
 }
 .spyInfo .spyOffense {
 	width:100px;

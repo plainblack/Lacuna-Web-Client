@@ -210,6 +210,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						
 						var result = document.createElement("div");
 						Dom.setStyle(result, "display", "none");
+						Dom.addClass(result, 'spyAssignResult');
 						var result_text = document.createElement("span");
 						sel.ResultText = result.appendChild(result_text);
 						var result_link = document.createElement("a");
@@ -352,7 +353,9 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					this.Self.fireEvent("onMapRpc", o.result);
 					delete this.Self.spies;
 					var mission = o.result.mission;
-					this.Assign.ResultText.innerHTML = "Mission " + mission.result + " ";
+					this.Assign.ResultText.innerHTML = "Mission " + mission.result + (
+						mission.reason ? ": " + mission.reason
+							: ".");
 					Dom.setStyle(this.Assign.Results, "display", "block");
 					if (mission.message_id) {
 						this.Assign.ResultLink.MessageId = mission.message_id;

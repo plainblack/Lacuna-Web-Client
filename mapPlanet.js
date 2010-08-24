@@ -527,10 +527,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(visible, "info", "MapPlanet.MapVisible");
 					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
 				}
-				if(visible) {
-					Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+Lib.AssetUrl+'planet_side/surface-a.jpg") repeat scroll 0 0 black');
-				}
-				else {
+				if(! visible) {
 					this.buildingDetails.hide();
 					this.buildingBuilder.hide();
 				}
@@ -592,7 +589,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 			this.QueueBuidings(oArgs.buildings);
 			
-			Dom.setStyle(document.getElementsByTagName("html"), 'background', 'url("'+this.surfaceUrl+'") repeat scroll 0 0 black');
 			Lacuna.Pulser.Hide();
 		},
 		Load : function(planetId) {
