@@ -48,6 +48,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		div.style.position = 'absolute';
 		
 		this._container = div;
+		this._parentEl = parentEl;
 		
 		this.reset();
 		parentEl.appendChild( div );
@@ -58,6 +59,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.offsetY += y;
 			this._container.style.left = ''+ this.offsetX +'px';
 			this._container.style.top  = ''+ this.offsetY +'px';
+			Dom.setStyle(this._parentEl, 'background-position', this.offsetX + 'px ' + this.offsetY + 'px');
 		},
 		reset : function() {
 			this.offsetX = 0;
@@ -411,32 +413,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	});
 	
 	
-	Mapper.UnderLayer = function(map) {
-		this.map = map;
-		this.div = document.createElement('div'); //so we can clone it a lot
-	};
-	Mapper.UnderLayer.prototype = {
-		redraw : function() {
-			if( this.containerDiv ) {
-				this.map.movableContainer.removeChild( this.containerDiv );
-			}
-			this.containerDiv = this.div.cloneNode(false);
-			Dom.addClass(this.containerDiv, "underlayContainer");
-			Dom.setStyle(this.containerDiv, "background", ['transparent url("',this.map._surfaceUrl,'") repeat scroll 0 0'].join(''));
-			var s = this.containerDiv.style;
-			s.position = 'absolute';
-			var bounds = this.map.maxBounds,
-				ts = this.map.tileSizeInPx;
-			s.left = (bounds.x1Left * ts) + 'px';
-			s.top = ((bounds.y1Top*-1) * ts) + 'px';
-			s.width = ((bounds.x2Right - bounds.x1Left) * ts) + ts + 'px'; //have to add an extra tile to account for 0 coords
-			s.height = ((bounds.y1Top - bounds.y2Bottom) * ts) + ts + 'px';
-			s.zIndex = '0';
-			
-			this.map.movableContainer.appendChild( this.containerDiv );
-		}
-	};
-
 	Mapper.CoordLayer = function(map) {
 		this.map = map;
 		this.offsetX = 0;
@@ -897,6 +873,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	
 	Mapper.StarMap = function( divId ) {
 		Mapper.StarMap.superclass.constructor.call(this, divId);
+		Dom.setStyle(this.mapDiv, 'background-image', 'url("'+Lib.AssetUrl+'star_system/field.png")');
 	};
 	Lang.extend(Mapper.StarMap, Map, {
 		_setTileSizeByZoom : function() {
@@ -1085,7 +1062,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	
 	Mapper.PlanetMap = function( divId, surfaceUrl ) {
 		Mapper.PlanetMap.superclass.constructor.call(this, divId);
-		this._surfaceUrl = surfaceUrl;
+		this.setSurfaceUrl(surfaceUrl);
 	};
 	Lang.extend(Mapper.PlanetMap, Map, {
 		_setTileSizeByZoom : function() {
@@ -1114,14 +1091,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.Tile = Mapper.PlanetTile;
 			this.keepTilesOutOfBounds = true;
 			
-			this.underLayer = new Mapper.UnderLayer(this);
-			
 			this.zoom = 0;
 			this._setTileSizeByZoom();
 		},
 		redraw : function() {
 			Mapper.PlanetMap.superclass.redraw.call(this);
-			this.underLayer.redraw();
 		},
 		setCenterToCommand : function() {
 			if(this.command && this.tileLayer) {
@@ -1165,9 +1139,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		setSurfaceUrl : function(surfaceUrl) {
 			this._surfaceUrl = surfaceUrl;
-			if(this.underLayer) {
-				this.underLayer.redraw();
-			}
+			Dom.setStyle(this.mapDiv, 'background-image', 'url("' + surfaceUrl + '")');
 		},
 		//don't update bounds on plant.  We have all data at start
 		/*updateBounds : function(oTile) {
