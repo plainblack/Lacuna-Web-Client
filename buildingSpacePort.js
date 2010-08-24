@@ -8,6 +8,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
+		Pager = YAHOO.widget.Paginator,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
@@ -19,6 +20,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 	};
 	
 	Lang.extend(SpacePort, Lacuna.buildings.Building, {
+		destroy : function() {
+			if(this.shipsPager) {
+				this.shipsPager.destroy();
+			}
+			SpacePort.superclass.destroy.call(this);
+		},
 		getChildTabs : function() {
 			return [this._getDockTab(), this._getTravelTab(), this._getViewTab()];
 		},
@@ -52,12 +59,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling Ships", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
-				'		<li class="shipType">Type</li>',
+				'		<li class="shipTypeImage">Type</li>',
 				'		<li class="shipArrives">Arrives</li>',
 				'		<li class="shipFrom">From</li>',
 				'		<li class="shipTo">To</li>',
 				'	</ul>',
 				'	<div><div id="shipDetails"></div></div>',
+				'	<div id="shipsPaginator"></div>',
 				'</div>'
 			].join('')});
 			//subscribe after adding so active doesn't fire
@@ -90,17 +98,28 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Show();
 					this.service.view_ships_travelling({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
 						success : function(o){
-							YAHOO.log(o, "info", "MapPlanet.SpacePort.view_ships_travelling.success");
+							YAHOO.log(o, "info", "SpacePort.view_ships_travelling.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
 							this.shipsTraveling = {
 								number_of_ships_travelling: o.result.number_of_ships_travelling,
 								ships_travelling: o.result.ships_travelling
 							};
+							this.shipsPager = new Pager({
+								rowsPerPage : 25,
+								totalRecords: o.result.number_of_ships_travelling,
+								containers  : 'shipsPaginator',
+								template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+								alwaysVisible : false
+
+							});
+							this.shipsPager.subscribe('changeRequest',this.ShipHandlePagination, this, true);
+							this.shipsPager.render();
+							
 							this.SpacePortPopulate();
 						},
 						failure : function(o){
-							YAHOO.log(o, "error", "MapPlanet.SpacePort.view_ships_travelling.failure");
+							YAHOO.log(o, "error", "SpacePort.view_ships_travelling.failure");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpcFailed", o);
 						},
@@ -119,17 +138,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Show();
 					this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
 						success : function(o){
-							YAHOO.log(o, "info", "MapPlanet.SpacePort.view_all_ships.success");
+							YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
 							this.shipsAll = {
 								number_of_ships: o.result.number_of_ships,
 								ships: o.result.ships
 							};
+							
 							this.SpacePortShipsPopulate();
 						},
 						failure : function(o){
-							YAHOO.log(o, "error", "MapPlanet.SpacePort.view_all_ships.failure");
+							YAHOO.log(o, "error", "SpacePort.view_all_ships.failure");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpcFailed", o);
 						},
@@ -166,8 +186,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Dom.addClass(nUl, "shipInfo");
 					Dom.addClass(nUl, "clearafter");
 
-					Dom.addClass(nLi,"shipType");
-					nLi.innerHTML = Lib.Ships[ship.type];
+					Dom.addClass(nLi,"shipTypeImage");
+					Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
+					Dom.setStyle(nLi, "text-align", "center");
+					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />'].join('');
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -200,6 +222,35 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				},10);
 			}
 		},
+		ShipHandlePagination : function(newState) {
+			Lacuna.Pulser.Show();
+			this.service.view_ships_travelling({
+				session_id:Game.GetSession(),
+				building_id:this.building.id,
+				page_number:newState.page
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "SpacePort.ShipHandlePagination.view_ships_travelling.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					this.shipsTraveling = {
+						number_of_ships_travelling: o.result.number_of_ships_travelling,
+						ships_travelling: o.result.ships_travelling
+					};
+					this.SpacePortPopulate();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "SpacePort.ShipHandlePagination.view_ships_travelling.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.shipsPager.setState(newState);
+		},
 		SpacePortQueue : function(remaining, elLine){
 			if(remaining <= 0) {
 				elLine.parentNode.removeChild(elLine);
@@ -208,6 +259,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				Sel.query("li.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
 			}
 		},
+		
 		SpacePortShipsPopulate : function() {
 			var details = Dom.get("shipsAllDetails");
 			
@@ -255,6 +307,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Dom.addClass(nLi,"shipHold");
 					nLi.innerHTML = ship.hold_size;
 					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipScuttle");
+					if(ship.task == "Docked") {
+						var bbtn = document.createElement("button");
+						bbtn.setAttribute("type", "button");
+						bbtn.innerHTML = "Scuttle";
+						bbtn = nLi.appendChild(bbtn);
+						Event.on(bbtn, "click", this.ShipScuttle, {Self:this,Ship:ship,Line:nUl}, true);
+					}
+					nUl.appendChild(nLi);
 								
 					details.appendChild(nUl);
 					
@@ -268,7 +331,40 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					}
 				},10);
 			}
-		}
+		},
+		
+		ShipScuttle : function() {
+			if(confirm(["Are you sure you want to Scuttle ",this.Ship.name,"?"].join(''))) {
+				Lacuna.Pulser.Show();
+				
+				this.Self.service.scuttle_ship({
+					session_id:Game.GetSession(),
+					building_id:this.Self.building.id,
+					ship_id:this.Ship.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpc", o.result);
+						var ships = this.Self.shipsAll.ships;
+						for(var i=0; i<ships.length; i++) {
+							if(ships[i].id == this.Ship.id) {
+								ships.splice(i,1);
+								break;
+							}
+						}
+						this.Line.parentNode.removeChild(this.Line);
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "SpacePort.ShipScuttle.failure");
+						Lacuna.Pulser.Hide();
+						this.Self.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+		},
 		
 	});
 	

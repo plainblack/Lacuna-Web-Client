@@ -94,7 +94,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Login.handleLogin.failure");
-					this.setMessage(o.error.message);
+					this.setMessage(o.error.message || "There was a problem logging in.  Please try again.");
 					Lacuna.Pulser.Hide();
 					/*if(o.error.code == 1010) {
 						//haven't founded empire yet so take them to species

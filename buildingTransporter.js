@@ -17,26 +17,29 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		this.transport = result.transport;
 		
 		this.service = Game.Services.Buildings.Transporter;
-		
-		this.subscribe("onShow", this.getStoredResources, this, true);
 	};
 	
-	Lang.extend(Transporter, Lacuna.buildings.Building, {
+	Lang.extend(Transporter, Lacuna.buildings.Trade, {
 		getChildTabs : function() {
-			return [this._getOneForOneTab()];
+			this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
+			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getOneForOneTab : function() {
 			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div>',
-				'<div>You may trade one-for-one with Lacuna Corp for 3 essentia per transaction.</div>',
+				'<div>You may trade one-for-one with Lacuna Corp for 3<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per transaction.</div>',
 				'<ul>',
-				'	<li><label>Want:</label><select id="transporterOneForOneWant"></select>',
-				'	<li><label>Trading:</label><select id="transporterOneForOneHave"></select>',
-				'	<li><button id="transporterOneForOneTrade">Trade</button>',
-				'</ul>'
+				'	<li><label>Want:</label><select id="transporterOneForOneWant"></select></li>',
+				'	<li><label>Have:</label><select id="transporterOneForOneHave"></select></li>',
+				'	<li><label>Quantity:</label><input type="text" id="transporterOneForOneQuantity" /></li>',
+				'	<li id="transporterOneForOneMessage" class="alert"></li>',
+				'	<li><button id="transporterOneForOneTrade">Submit Trade</button></li>',
+				'</ul>',
 			'</div>'].join('')});
 			
+			this.subscribe("onLoadResources", this.populateOneForOneHave, this, true);
+			
 			Event.onAvailable("transporterOneForOneWant", function(e){
-				var elm = Event.getTarget(e),
+				var elm = Dom.get("transporterOneForOneWant"),
 					opt = document.createElement("option"),
 					nOpt, optGroup;
 				for(var r in Lib.ResourceTypes) {
@@ -55,7 +58,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 							
 							elm.appendChild(optGroup);
 						}
-						else {
+						else if(resource) {
 							nOpt = opt.cloneNode(false);
 							nOpt.value = r;
 							nOpt.innerHTML = r.titleCaps();
@@ -64,34 +67,9 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					}
 				}
 			}, this, true);
-			Event.on("transporterOneForOneTrade", "click", this.assembleGlyph, this, true);
+			Event.on("transporterOneForOneTrade", "click", this.Trade, this, true);
 			
 			return this.oneForOne;
-		},
-		
-		getStoredResources : function(force) {
-			if(force || !this.resources) {
-				this.service.get_stored_resources({
-						session_id: Game.GetSession(""),
-						building_id: this.building.id
-					},{
-					success : function(o){
-						YAHOO.log(o, "info", "Transporter.getStoredResources.success");
-						this.fireEvent("onMapRpc", o.result);
-						this.resources = o.result.resources;
-						this.populateOneForOneHave();
-						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Transporter.getStoredResources.failure");
-						
-						this.fireEvent("onMapRpcFailed", o);
-					},
-					timeout:Game.Timeout,
-					scope:this
-				}
-			}
 		},
 		
 		populateOneForOneHave : function() {
@@ -112,27 +90,64 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 								if(this.resources[name]) {
 									nOpt = opt.cloneNode(false);
 									nOpt.value = name;
-									nOpt.innerHTML = name.titleCaps();
+									nOpt.innerHTML = [name.titleCaps(), ' (', this.resources[name], ')'].join('');
 									optGroup.appendChild(nOpt);
 								}
 							}
 							
 							elm.appendChild(optGroup);
 						}
-						else if(this.resources[r]) {
+						else if(this.resources[r] && resource) {
 							nOpt = opt.cloneNode(false);
 							nOpt.value = r;
-							nOpt.innerHTML = r.titleCaps();
+							nOpt.innerHTML = [r.titleCaps(), ' (', this.resources[r], ')'].join('');
 							elm.appendChild(nOpt);
 						}
 					}
 				}
 			}
+		},
+		Trade : function() {
+			var data = {
+				session_id: Game.GetSession(""),
+				building_id: this.building.id,
+				have: Lib.getSelectedOptionValue(Dom.get("transporterOneForOneHave")),
+				want: Lib.getSelectedOptionValue(Dom.get("transporterOneForOneWant")),
+				quantity: Dom.get("transporterOneForOneQuantity").value*1
+			};
+			
+			if(data.quantity > this.transport.max) {
+				Dom.get("transporterOneForOneMessage").innerHTML = ["Quantity must be less than ", this.transport.max, ", which is the maximum for this level transporter."].join('');
+			}
+			else if(data.quantity < 0 || data.quantity > this.resources[data.have]*1) {
+				Dom.get("transporterOneForOneMessage").innerHTML = "Quantity must be greater than 0 and less than or equal to the resources you have on hand.";
+			}
+			else {
+				this.service.trade_one_for_one(data, {
+					success : function(o){
+						YAHOO.log(o, "info", "Transporter.Trade.success");
+						this.fireEvent("onMapRpc", o.result);
+						Dom.get("transporterOneForOneHave").selectedIndex = -1;
+						Dom.get("transporterOneForOneWant").selectedIndex = -1;
+						Dom.get("transporterOneForOneQuantity").value = "";
+						this.getStoredResources(true);
+						Lacuna.Pulser.Hide();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						YAHOO.log(o, "error", "Transporter.Trade.failure");
+						
+						this.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		}
 	
 	});
 	
-	YAHOO.lacuna.buildings.Transporter = Transporter;
+	Lacuna.buildings.Transporter = Transporter;
 
 })();
 YAHOO.register("transporter", YAHOO.lacuna.buildings.Transporter, {version: "1", build: "0"}); 

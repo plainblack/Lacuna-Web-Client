@@ -27,7 +27,47 @@ if (!Array.prototype.indexOf) {
 		}  
 		return -1;  
 	};  
-} 
+}
+if (!String.prototype.titleCaps) {
+	String.small = "(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v[.]?|via|vs[.]?)";
+	String.punct = "([!\"#$%&'()*+,./:;<=>?@[\\\\\\]^_`{|}~-]*)";
+  
+	String.prototype.titleCaps = function(){
+		var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0;
+		
+		while (true) {
+			var m = split.exec(this);
+
+			parts.push( this.substring(index, m ? m.index : this.length)
+				.replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, function(all){
+					return /[A-Za-z]\.[A-Za-z]/.test(all) ? all : String.upper(all);
+				})
+				.replace(RegExp("\\b" + String.small + "\\b", "ig"), String.lower)
+				.replace(RegExp("^" + String.punct + String.small + "\\b", "ig"), function(all, punct, word){
+					return punct + String.upper(word);
+				})
+				.replace(RegExp("\\b" + String.small + String.punct + "$", "ig"), String.upper));
+			
+			index = split.lastIndex;
+			
+			if ( m ) parts.push( m[0] );
+			else break;
+		}
+		
+		return parts.join("").replace(/ V(s?)\. /ig, " v$1. ")
+			.replace(/(['Õ])S\b/ig, "$1s")
+			.replace(/\b(AT&T|Q&A)\b/ig, function(all){
+				return all.toUpperCase();
+			});
+	};
+	String.lower = function(word){
+		return word.toLowerCase();
+	};
+	String.upper = function(word){
+	  return word.substr(0,1).toUpperCase() + word.substr(1);
+	};
+
+}
 	
 if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 	
@@ -48,7 +88,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		
 	var Library = {
 		ApiKey : "53137d8f-3544-4118-9001-b0acbec70b3d",
-		AssetUrl : "//s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
+		AssetUrl : "https://s3.amazonaws.com/alpha.lacunaexpanse.com/assets/",
 		Styles : {
 			HIDDEN : "hidden",
 			ALERT : "alert"
@@ -141,6 +181,27 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			}
 		},
 		
+		getSelectedOption : function(select) {
+			//just making sure
+			select = Dom.get(select);
+
+			var opts = select.options,
+				ind = select.selectedIndex;
+			return ind >= 0 && opts.length > ind ? opts[ind] : null;
+		},
+		getSelectedOptionValue : function(select) {
+			var opt = Library.getSelectedOption(select);
+			return opt ? opt.value : null;
+		},
+		
+		ResourceTypes : {
+			"energy":1,
+			"essentia":0,
+			"food":["algae","apple","bean","beetle","burger","bread","chip","cider","corn","fungus","lapis","meal","milk","pancake","pie","potato","root","shake","soup","syrup","wheat"],
+			"ore":["anthracite","bauxite","beryl","chromite","chalcopyrite","fluorite","galena","goethite","gold","gypsum","halite","kerogen","magnetite","methane","monazite","rutile","sulfur","trona","uraninite","zircon"],
+			"waste":1,
+			"water":1
+		},
 		Descriptions : {
 			"/algae" : "The Algae Cropper produces algae to be used as food by your empire.  It also produces a small amount of energy and can be built in any orbit.  The higher the level of the cropper the more food and energy it produces.",
 			"/apple" : "Allows you to grow apples to feed your empire.  You can only grow apples in orbit 3 (its goldilox zone).  Food production increases for every level of the orchard.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",

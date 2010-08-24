@@ -20,14 +20,12 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 	};
 	Pulse.prototype = {
 		Show : function() {
-			YAHOO.log("SHOW PULSER!");
 			this._panel.bringToTop();
 			this._panel.show();
 			//this.counter++;
 		},
 		
 		Hide : function() {
-			YAHOO.log("HIDE PULSER!");
 			//this.counter--;
 			//if(this.counter <= 0) {
 			//	this.counter = 0;

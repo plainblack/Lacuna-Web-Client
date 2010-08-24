@@ -125,8 +125,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Attachment</div>',
-				'<div class="bd">',
-				'	<div id="attachmentMap"></div>',
+				'<div class="bd" style="height:500px;overflow:auto;">',
+				'	<div id="attachmentMap">',
+				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
@@ -148,14 +149,34 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			this.attachmentPanel.hideEvent.subscribe(function(){
 				this.map.innerHTML = "";
 			});
-			this.attachmentPanel.load = function(attachment) {
+			this.attachmentPanel.load = function(map) {
 				this.map.innerHTML = "";
-				
-				this.show();
 
-				if(attachment.map) {
-					var mp = attachment.map;
+				if(map) {
+					Dom.setStyle(this.map, "background", ['url("',Lib.AssetUrl,'planet_side/',map.surface,'.jpg") repeat scroll 0 0 black'].join(''));
 					
+					var tiles = {},
+						tbody = [];
+						
+					for(var t=0; t<map.buildings.length; t++) {
+						var b = map.buildings[t];
+						if(!tiles[b.x]) { tiles[b.x] = {}; }
+						tiles[b.x][b.y] = b.image;
+					}
+					
+					for(var x=-5; x<= 5; x++) {
+						for(var y=5; y>= -5; y--) {
+							tbody.push('<div class="attachmentMapTile">');
+							if(tiles[x] && tiles[x][y]) {
+								tbody.push(['<img src="',Lib.AssetUrl,'planet_side/100/',tiles[x][y],'.png" style="width:100px;height:100px;" />'].join(''));
+							}
+							tbody.push('</div>');
+						}
+					}
+					
+					this.map.innerHTML = tbody.join('');
+					
+					this.show();
 				}
 			};
 			
@@ -616,7 +637,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.body.appendChild(document.createElement('br'));
 						var va = document.createElement("button");
 						va.setAttribute("type", "button");
-						va.innerHTML = "No Map Attachment Yet";
+						va.innerHTML = "Open Map";
 						va = this.body.appendChild(va);
 						Event.on(va, "click", this.displayAttachment, this, true);
 					}
@@ -624,7 +645,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		displayAttachment : function() {
-			this.attachmentPanel.load(this.viewingMessage.attachments);
+			this.attachmentPanel.load(this.viewingMessage.attachments.map);
 		},
 		sendMessage : function() {
 			var to = this.createTo.Selections();

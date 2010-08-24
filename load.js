@@ -171,6 +171,18 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "trade",
+		type: "js",
+		fullpath: host + "buildingTradeMinistry.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "transporter",
+		type: "js",
+		fullpath: host + "buildingTransporter.js?" + t,
+		requires : ["building","trade"]
+	});
+	loader.addModule({
 		name: "wasterecycling",
 		type: "js",
 		fullpath: host + "buildingWasteRecycling.js?" + t,
@@ -180,7 +192,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

@@ -31,9 +31,12 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 		},
 		_getProbesTab : function() {
 			this.probesTab = new YAHOO.widget.Tab({ label: "Probes", content: [
-					'<div class="probeContainer">',
-					'	<ul id="probeDetails" class="probeInfo">',
-					'	</ul>',
+					'<div>',
+					'	<div class="probeContainer clearafter">',
+					'		<ul id="probeDetails" class="probeInfo">',
+					'		</ul>',
+					'	</div>',
+					'	<div id="probePaginator"></div>',
 					'</div>'
 				].join('')});
 			this.probesTab.subscribe("activeChange", this.GetProbes, this, true);

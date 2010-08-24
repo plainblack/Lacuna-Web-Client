@@ -19,10 +19,12 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onQueueReset");
 		this.createEvent("onAddTab");
 		this.createEvent("onRemoveTab");
+		this.createEvent("onSelectTab");
 		this.createEvent("onReloadTabs");
 		this.createEvent("onUpdateTile");
 		this.createEvent("onHide");
 		//for internal use
+		this.createEvent("onLoad");
 		this.createEvent("onRepair");
 		//common elements
 		this.building = oResults.building;
@@ -36,6 +38,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 	Building.prototype = {
 		destroy : function() {
 			this.unsubscribeAll();
+		},
+		load : function() {
+			this.fireEvent("onLoad");
 		},
 		getTabs : function() {
 			if(this.building.efficiency*1 < 100 && this.building.repair_costs) {

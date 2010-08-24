@@ -326,6 +326,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, ids:glyphIds}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
+					alert("You have found a " + o.result.item_name + "!");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					delete this.glyphs;
