@@ -2011,6 +2011,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"password2", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
+				},
+				"redeem_essentia_code" : {
+					"description": "Redeem an essentia code.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"essentia_code", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
 			}
 		},
