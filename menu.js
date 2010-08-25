@@ -602,7 +602,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			YAHOO.log(planet, "info", "PlanetMenu.menuClick.click");
 			Game.EmpireData.current_planet_id = planet.id;
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
-			
+			Game.SetLocation(planet.id, Lib.View.PLANET);
 			Game.OverlayManager.hideAll();
 			Lacuna.MapStar.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();

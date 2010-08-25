@@ -53,7 +53,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					failure:Lacuna.Game.Failure
 				});
 			}
-			else if (! session) {
+			else if (!session) {
 				Game.DoLogin();
 				return;
 			}
@@ -119,6 +119,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.Load(Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id);
 			}
 			else if(locationView == "planet") {
+				Game.EmpireData.current_planet_id = locationId;
 				Lacuna.MapStar.MapVisible(false);
 				Lacuna.MapPlanet.MapVisible(true);
 				Lacuna.Menu.PlanetVisible();
