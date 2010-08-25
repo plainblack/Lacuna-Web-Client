@@ -219,6 +219,326 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					*/
 				}
 			},
+			Embassy : {
+				"SMDVersion":"2.0",
+				"description": "Embassy",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/embassy",
+				
+				"services": {
+					"create_alliance" : {
+						"description": "Create a new alliance. Returns the same output as get_alliance_status.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						/*
+						# create_alliance ( session_id, building_id, name )
+
+							* session_id
+							* building_id
+							* name 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"dissolve_alliance" : {
+						"description": "Can only be called by alliance leader. Disbands and existing alliance.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						/*
+						# dissolve_alliance ( session_id, building_id )
+
+							* session_id
+							* building_id 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"get_alliance_status" : {
+						"description": "Returns everything about an alliance that members should know.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						/*
+						# get_alliance_status ( session_id, building_id )
+
+							* session_id
+							* building_id 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"alliance" : {
+								"id" : "id-goes-here",
+								"name" : "United Federation of Planets",
+								"members" : [
+									{
+										"empire_id" : "id goes here",
+										"name" : "Klingons",
+									}
+									...
+								],
+								"leader_id" : "id goes here",
+								"forum_uri" : "http://forum.example.com/",
+								"description" : "This is public information.",
+								"announcements" : "This is private information.",
+								"date_created" : "01 31 2010 13:09:05 +0600"
+							 }
+						 }
+						*/
+					},
+					"send_invite" : {
+						"description": "Can only be called by alliance leader. Invite an empire to an alliance.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"invitee_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# send_invite ( session_id, building_id, invitee_id, [ message ] )
+
+							* session_id
+							* building_id
+							* invitee_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"withdraw_invite" : {
+						"description": "Can only be called by alliance leader. Delete an invitation.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"invite_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# withdraw_invite ( session_id, building_id, invite_id, [ message ] )
+
+							* session_id
+							* building_id
+							* invite_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"accept_invite" : {
+						"description": "Accept an invitation. Returns the same output as get_alliance_status.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"invite_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# accept_invite ( session_id, building_id, invite_id, [ message ] )
+
+							* session_id
+							* building_id
+							* invite_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"get_alliance_status" : { ... },
+						 }
+						*/
+					},
+					"reject_invite" : {
+						"description": "Delete an invitation.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"invite_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# reject_invite ( session_id, building_id, invite_id, [ message ] )
+
+							* session_id
+							* building_id
+							* invite_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"get_pending_invites" : {
+						"description": "Can only be called by the alliance leader. Returns a list of invitations that have been sent out, but that have not been accepted, rejected, or withdrawn.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						/*
+						# get_pending_invites ( session_id, building_id )
+
+							* session_id
+							* building_id 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"invites" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "The Borg",
+									"empire_id" : "id-goes-here"
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"get_my_invites" : {
+						"description": "Returns a list of invitations that have been offered to this empire.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						/*
+						# get_my_invites ( session_id, building_id )
+
+							* session_id
+							* building_id 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"invites" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "United Federation of Planets",
+									"alliance_id" : "id-goes-here"
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"assign_alliance_leader" : {
+						"description": "Sets a new empire to lead the alliance. Can only be called by the current alliance leader. Returns the same thing as get_alliance_status.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"new_leader_id", "type":"string", "optional":false}
+						],
+						/*
+						# assign_alliance_leader ( session_id, building_id, new_leader_id )
+
+							* session_id
+							* building_id
+							* new_leader_id 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"get_alliance_status" : { ... },
+						 }
+						*/
+					},
+					"update_alliance" : {
+						"description": "Updates the properties of an alliance. Returns the same thing as get_alliance_status. Can only be called by the alliance leader.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"params", "type":"object", "optional":false}
+						],
+						/*
+						# update_alliance ( session_id, building_id, params )
+
+							* session_id
+							* building_id
+							* params 
+								- forum_uri
+								- description
+								- announcements
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"get_alliance_status" : { ... },
+						 }
+						*/
+					},
+					"leave_alliance" : {
+						"description": "A member of an alliance revokes their own membership.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# leave_alliance ( session_id, building_id, [ message ] )
+
+							* session_id
+							* building_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+						 }
+						*/
+					},
+					"expel_member" : {
+						"description": "Forcibly removes a member from an alliance. Returns the same thing as get_alliance_status. Can only be called by the alliance leader.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"empire_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						/*
+						# expel_member ( session_id, building_id, empire_id, [ message ] )
+
+							* session_id
+							* building_id
+							* empire_id
+							* message 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"get_alliance_status" : { ... },
+						 }
+						*/
+					}
+				}
+			},
 			Intelligence : {
 				"SMDVersion":"2.0",
 				"description": "Intelligence",
@@ -1138,23 +1458,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/transporter",
 
 				"services": {
-					"view" : {
-						"description": "",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						{
-						   "building" : { ... },
-						   "status" : { ... },
-						   "transport" : {
-							 "max" : 2500
-						   }
-						}
-						*/
-					},
 					"add_trade" : {
 						"description": "Queues a trade for others to see. In addition to anything offered in your trade, setting up the trade will cost you 1 essentia.",
 						"parameters": [

@@ -23,6 +23,9 @@ select, input, button, textarea, button {
 a, a:link, a:visited {
 	color:#fff;
 }
+h1,h2,h3,h4,h5,h6 {
+	font-weight:bold;
+}
 
 .clearafter { height:100%; }
 .clearafter:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
@@ -1043,11 +1046,11 @@ planet details
 }
 
 /* shared display headers */
-.buildQueueHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader {
+.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .platformInfo li , .archaeologyGlyphInfo li {
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .platformInfo li , .archaeologyGlyphInfo li {
 	float:left;
 }
 
@@ -1110,6 +1113,18 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	text-align:center;
 }
 
+.embassyInfo .embassyAlliance {
+	width:200px;
+}
+.embassyInfo .embassyEmpire {
+	width:200px;
+}
+.embassyInfo .embassyMessage {
+	width:250px;
+}
+.embassyInfo .embassyAction {
+	width:100px;
+}
 
 .probeInfo .probeStar {
 	width:200px;

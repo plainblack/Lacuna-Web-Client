@@ -214,6 +214,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						]
 					});
 			};
+			oTextboxList.doBeforeLoadData = function(sQuery, oResponse, oPayload){
+				var tq = decodeURIComponent(sQuery);
+				if(tq[0] == "@") {
+					switch(tq[1].toLowerCase()) {
+						case "a":
+							oResponse.results.push({name:"@ally"});
+							break;
+					}
+				}
+				return true;
+			};
 			
 			this.createTo = oTextboxList;
 		},

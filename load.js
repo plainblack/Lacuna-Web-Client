@@ -105,6 +105,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "embassy",
+		type: "js",
+		fullpath: host + "buildingEmbassy.js?" + t,
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "foodreserve",
 		type: "js",
 		fullpath: host + "buildingFoodReserve.js?" + t,
@@ -192,7 +198,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: host + "mapPlanet.js?" + t,
-		requires : ["archaeology","development","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","embassy","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",
