@@ -1421,6 +1421,15 @@ Essentia Dialog
 	margin-top: 10px;
 }
 
+#essentiaRedeem form div {
+	text-align: center;
+	height: 35px;
+	margin-top: 15px;
+}
+#essentiaRedeemCode {
+	width: 290px;
+}
+
 ul.statsList label{
 	font-weight:bold;
 	padding-right:5px;

@@ -12,6 +12,94 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 		
+	var EssentiaRedeem = function() {
+		this.createEvent("onRpc");
+		this.createEvent("onRpcFailed");
+		this.createEvent("onHide");
+
+		this.id = "essentiaRedeem";
+		
+		var container = document.createElement("div");
+		container.id = this.id;
+		Dom.addClass(container, Lib.Styles.HIDDEN);
+		container.innerHTML = this._getHtml();
+		document.body.insertBefore(container, document.body.firstChild);
+		this.Dialog = new YAHOO.widget.Dialog(this.id, {
+			constraintoviewport:true,
+			fixedcenter:true,
+			visible:false,
+			buttons:[
+				{ text:"Redeem", handler:{fn:this.handleRedeem, scope:this}, isDefault:true },
+				{ text:"Cancel", handler:{fn:this.hide, scope:this} }
+			],
+			draggable:true,
+			underlay:false,
+			modal:true,
+			close:true,
+			width:"500px",
+			zIndex:9999
+		});
+		this.Dialog.renderEvent.subscribe(function(){
+			this.redeemCode = Dom.get("essentiaRedeemCode");
+			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+		}, this, true);
+		this.Dialog.hideEvent.subscribe(function() {
+			this.fireEvent('onHide');
+		}, this, true);
+		this.Dialog.render();
+		Game.OverlayManager.register(this.Dialog);
+	};
+	EssentiaRedeem.prototype = {
+		_getHtml : function() {
+			return [
+			'	<div class="hd">Redeem Essentia</div>',
+			'	<div class="bd">',
+			'		<form name="essentiaRedeemForm">',
+			'			<div>',
+			'				<label>Essentia Code: <input id="essentiaRedeemCode" /></label>',
+			'			</div>',
+			'		</form>',
+			'	</div>',
+			'	<div class="ft"></div>'
+			].join('');
+		},
+		show : function() {
+			this.redeemCode.value = '';
+			Game.OverlayManager.hideAll();
+			this.Dialog.show();
+		},
+		hide : function() {
+			this.Dialog.hide();
+		},
+		handleRedeem : function (e) {
+			Event.stopEvent(e);
+			var code = this.redeemCode.value;
+			var currentEssentia = Game.EmpireData.essentia;
+			Lacuna.Pulser.Show();
+			Game.Services.Empire.redeem_essentia_code({
+				session_id:Game.GetSession(""),
+				essentia_code: code
+			},{
+				success : function(o){
+					YAHOO.log(o, "info", "EssentiaRedeem.show.success");
+					Lacuna.Pulser.Hide();
+					var addedEssentia = o.result.status.empire.essentia - currentEssentia;
+					alert('Redeemed code for '+addedEssentia+' essentia.');
+					this.fireEvent('onRpc', o);
+					this.hide();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "EssentiaRedeem.show.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent('onRpcFailed', o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+	};
+	Lang.augmentProto(EssentiaRedeem, Util.EventProvider);
+
 	var Essentia = function() {
 		this.createEvent("onRpc");
 		this.createEvent("onRpcFailed");
@@ -46,8 +134,15 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			Event.on("essentiaPurchaseButton", "click", function(){
 				window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=0,scrollbars=0,height=550,width=600,directories=0");
 			});
+			Event.on("essentiaRedeemShowButton", "click", this.essentiaRedeem.show, this.essentiaRedeem, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
+
+		this.essentiaRedeem = new EssentiaRedeem();
+		this.essentiaRedeem.subscribe('onRpc', function (o) { this.fireEvent('onRpc',o) }, this, true);
+		this.essentiaRedeem.subscribe('onRpcFailed', function (o) { this.fireEvent('onRpcFailed',o) }, this, true);
+		this.essentiaRedeem.subscribe('onHide', this.show, this, true);
+
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 	};
@@ -102,7 +197,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'			</ul>',
 			'		</form>',
 			'		<div class="essentiaPurchase">',
-			'			<button id="essentiaPurchaseButton">Purchase Essentia</button>',
+			'			<button id="essentiaRedeemShowButton">Redeem Code</button> <button id="essentiaPurchaseButton">Purchase Essentia</button>',
 			'		</div>',
 			'	</div>',
 			'	<div class="ft"></div>'
@@ -129,6 +224,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.Dialog.hide();
 		},
 		paymentFinished : function(amount) {
+		},
+		redeemClick : function (e) {
+			this.essentiaRedeem.show();
 		},
 		boost : function(e) {
 			var target = Event.getTarget(e);
@@ -217,11 +315,12 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				el.innerHTML = "&nbsp;";
 			}
 		}
-		
 	};
+
 	Lang.augmentProto(Essentia, Util.EventProvider);
 			
 	Lacuna.Essentia = new Essentia();
+
 })();
 YAHOO.register("essentia", YAHOO.lacuna.Essentia, {version: "1", build: "0"}); 
 
