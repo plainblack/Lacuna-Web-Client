@@ -191,6 +191,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						Dom.get("embassyCreateName").value = "";
 						this.addTab(this._getAllianceTab());
 						this.addTab(this._getMemberTab());
+						this.addTab(this._getSendTab());
 						this.removeTab(this.createTab);
 						this.MembersPopulate();
 						Lacuna.Pulser.Hide();
