@@ -199,6 +199,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 		onChangeToPlanetView : function(planetId) {
 			YAHOO.log(planetId, "info", "onChangeToPlanetView");
+			Game.PlanetJump(Game.EmpireData.planets[planetId]);
+			/*
 			var cp = Game.EmpireData.planets[planetId];
 			if(cp) {
 				Game.EmpireData.current_planet_id = cp.id;
@@ -209,6 +211,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapStar.MapVisible(false);
 			Lacuna.Menu.PlanetVisible();
 			Lacuna.MapPlanet.Load(planetId);
+			*/
 		},
 		onRpc : function(oResult){
 			Lacuna.Game.ProcessStatus(oResult.status);
@@ -405,6 +408,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapStar.MapVisible(true);
 			Lacuna.Menu.StarVisible(true);
 			Lacuna.MapStar.Jump(star.x*1, star.y*1);
+		},
+		PlanetJump : function(planet) {
+			if(!planet) {
+				//try to find home planet
+				planet = Game.EmpireData.planets[Game.EmpireData.home_planet_id];
+			}
+			//make sure we have found a planet to look at
+			if(planet) {
+				Game.EmpireData.current_planet_id = planet.id;
+				Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
+				Game.SetLocation(planet.id, Lib.View.PLANET);
+			
+				Lacuna.MapStar.MapVisible(false);
+				Lacuna.Menu.PlanetVisible();
+				Lacuna.MapPlanet.Load(planet.id);
+			}
 		},
 		
 		Logout : function() {

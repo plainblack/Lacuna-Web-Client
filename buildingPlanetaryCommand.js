@@ -18,7 +18,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 	
 	Lang.extend(PlanetaryCommand, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getPlanetTab()];
+			return [this._getPlanetTab(), this._getAbandonTab()];
 		},
 		_getPlanetTab : function() {
 			var planet = this.result.planet,
@@ -58,6 +58,42 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 			this.planetTab = tab;
 			
 			return tab;
+		},
+		_getAbandonTab : function() {
+			this.abandonTab = new YAHOO.widget.Tab({ label: "Abandon", content: ['<div>',
+			'	<div id="commandMessage" class="alert">This colony and everything on it will disappear if you abandon it.</div>',
+			'	<button type="button" id="commandAbandon">Abandon Colony</button>',
+			'</div>'].join('')});
+			
+			Event.on("commandAbandon", "click", this.Abandon, this, true);
+			
+			return this.abandonTab;
+		},
+		Abandon : function() {
+			var cp = Game.GetCurrentPlanet();
+			if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
+				Game.Services.Body.abandon({
+					session_id:Game.GetSession(""),
+					body_id:cp.id
+				}, {
+				success : function(o){
+					YAHOO.log(o, "info", "PlanetaryCommand.abandon.success");
+					this.fireEvent("onMapRpc", o.result);
+
+					Game.PlanetJump(); //jumps to home planet if nothing passed in
+					
+					Lacuna.Pulser.Hide();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					YAHOO.log(o, "error", "PlanetaryCommand.abandon.failure");
+					
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+			}
 		}
 	});
 	

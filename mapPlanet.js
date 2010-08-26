@@ -504,11 +504,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				panel.tabView.selectTab(0);
 			}
 		},
-		_fireUpdateTile : function() {
-			var building = this.currentBuilding.building;
+		_fireUpdateTile : function(building) {
+			//var building = this.currentBuilding.building;
 			if(building && building.id && building.name) {
-				building.efficiency = "100";
-				delete building.repair_costs;
+				building.efficiency = building.efficiency || "100";
+				if(build.efficiency == "100") {
+					delete building.repair_costs;
+				}
 				this.buildable[building.id] = building;
 				this._map.refreshTile(building);
 			}
@@ -559,7 +561,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._gridCreated = true;
 				
 				Event.delegate(this._map.mapDiv, "click", function(e, matchedEl, container) {
-					var planet = Game.EmpireData.planets[Game.EmpireData.current_planet_id];
+					var planet = Game.GetCurrentPlanet();
 					if(!this._map.controller.isDragging()) {
 						var tile = this._map.tileLayer.findTileById(matchedEl.parentNode.id);
 						if(tile && tile.data) {
@@ -723,6 +725,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			Lacuna.Pulser.Hide();
 		},
 		Build : function(building, x, y) {
+			if(Game.EmpireData.is_isolationist == "1" && building.url == "/espionage" && !confirm("If you build an Espionage Ministry you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?")) {
+				return;
+			}
+		
 			Lacuna.Pulser.Show();
 			var BuildingServ = Game.Services.Buildings.Generic,
 				data = {

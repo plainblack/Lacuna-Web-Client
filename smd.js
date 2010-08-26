@@ -12,6 +12,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 			"target":"/body",
 
 			"services": {
+				"abandon" : {
+					"description": "Abandon's a colony, and destroys everything on the planet.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
 				"get_buildings" : {
 					"description": "Retrieves a list of the buildings on a planet.",
 					"parameters": [

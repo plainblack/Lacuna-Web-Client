@@ -360,6 +360,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'	<div id="',panelId,'message"></div>',
 				'	<div id="',panelId,'captcha" style="margin:5px 0;"></div>',
 				'	<label for="',panelId,'answer">Answer:</label><input type="text" id="',panelId,'answer" />',
+				'	<div id="',panelId,'error" class="alert" style="text-align:right;"></div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			
@@ -379,6 +380,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				this.message = Dom.get(panelId+"message");
 				this.captcha = Dom.get(panelId+"captcha");
 				this.answer = Dom.get(panelId+"answer");
+				this.error = Dom.get(panelId+"error");
 			});
 			this.acceptVerify.hideEvent.subscribe(function(){
 				this.message.innerHTML = "";
@@ -392,9 +394,22 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
 				
 				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask_description, '</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer_description,'</span>.'].join('');
-				this.captcha.innerHTML = ['<img src="', captcha.url, '" alt="Error retrieving captcha" />'].join('');
+				this.setCaptcha(captcha.url);
 				
 				this.show();
+			};
+			this.acceptVerify.setCaptcha = function(url) {
+				this.captcha.innerHTML = ['<img src="', url, '" alt="Loading captcha.  If it does not appear please cancel the trade and try again." />'].join('');
+			};
+			this.acceptVerify.setError = function(msg) {
+				this.answer.value = "";
+				this.error.innerHTML = msg;
+				var a = new Util.Anim(this.error, {opacity:{from:1,to:0}}, 4);
+				a.onComplete.subscribe(function(){
+					this.error.innerHTML = "";
+					//Dom.setStyle(this.error, "opacity", 1);
+				}, this, true);
+				a.animate();
 			};
 			this.acceptVerify.getAnswer = function() {
 				return this.answer.value;
@@ -560,7 +575,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Lacuna.Pulser.Hide();
 					YAHOO.log(o, "error", "Trade.accept_trade.failure");
 					
-					this.Self.fireEvent("onMapRpcFailed", o);
+					if(o.error.code == 1014) {
+						this.Self.availableTrades.captcha = o.error.data;
+						this.Self.acceptVerify.setCaptcha(o.error.data.url);
+						this.Self.acceptVerify.setError(o.error.message);
+					}
+					else {					
+						this.Self.fireEvent("onMapRpcFailed", o);
+					}
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -898,7 +920,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				case 4:
 					data.offer = {
 						type:"ship",
-						prisoner_id:Lib.getSelectedOptionValue("tradeAddShipName")
+						ship_id:Lib.getSelectedOptionValue("tradeAddShipName")
 					};
 					break;
 				default:
@@ -1089,17 +1111,19 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				hasResources, hasPlans, hasGlyphs;
 				
 			for(var n=0; n<lis.length; n++) {
-				items[n] = lis[n].Object;
-				switch(items[n].type) {
-					case "plan":
-						hasPlanes = true;
-						break;
-					case "glyph":
-						hasGlyphs = true;
-						break;
-					default:
-						hasResources = true;
-						break;
+				if(lis[n].Object) {
+					items[n] = lis[n].Object;
+					switch(items[n].type) {
+						case "plan":
+							hasPlanes = true;
+							break;
+						case "glyph":
+							hasGlyphs = true;
+							break;
+						default:
+							hasResources = true;
+							break;
+					}
 				}
 			}
 			data.items = items;
