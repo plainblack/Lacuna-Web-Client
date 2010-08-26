@@ -1139,9 +1139,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						YAHOO.log(o, "info", "Trade.Push.success");
 						this.fireEvent("onMapRpc", o.result);
 						
-						var ic = Dom.get("tradePushItems");
-						Event.purgeElement(ic);
-						ic.innerHTML = "";
+						for(var n=0; n<lis.length; n++) {
+							if(lis[n].Object) {
+								Event.purgeElement(lis[n]);
+								lis[n].parentNode.removeChild(lis[n]);
+							}
+						}
+						Dom.get("tradePushResourceQuantity").value = "";
 						
 						if(hasResources) {
 							this.getStoredResources(true);
@@ -1152,6 +1156,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						if(hasGlyphs) {
 							this.getGlyphs(true);
 						}
+						
+						var msg = Dom.get("tradePushMessage");
+						msg.innerHTML = ["Successfully pushed to ", Lib.getSelectedOption(Dom.get("tradePushColony")).innerHTML, '.'].join('');
+						var a = new Util.Anim("tradePushMessage", {opacity:{from:1,to:0}}, 4);
+						a.onComplete.subscribe(function(){
+							msg.innerHTML = "";
+							Dom.setStyle(msg, "opacity", 1);
+						}, this, true);
+						a.animate();
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
