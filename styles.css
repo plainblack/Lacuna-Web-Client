@@ -724,6 +724,9 @@ about
 .planetMapTileActionButton {
 	background: transparent url('assets/ui/l/build.png');
 }
+.plots-full .planetMapTileActionButton {
+	background: transparent url('assets/ui/l/build-no.png');
+}
 .mapiator_nav {
 	background: url(assets/ui/zoom.png);
 	position:absolute;
@@ -834,6 +837,13 @@ about
 	width: 30px;
 	position: absolute;
 	left: 0;
+}
+
+.tile .planetMapTileActionContainer {
+	visibility: hidden;
+}
+.tile:hover .planetMapTileActionContainer {
+	visibility: visible;
 }
 
 body.yui-skin-sam .yui-navset .yui-nav,

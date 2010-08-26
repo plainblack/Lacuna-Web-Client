@@ -547,6 +547,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
 				map.addTileData(oArgs.buildings);
+				map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
 				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
@@ -558,24 +559,20 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._gridCreated = true;
 				
 				Event.delegate(this._map.mapDiv, "click", function(e, matchedEl, container) {
+					var planet = Game.EmpireData.planets[Game.EmpireData.current_planet_id];
 					if(!this._map.controller.isDragging()) {
 						var tile = this._map.tileLayer.findTileById(matchedEl.parentNode.id);
 						if(tile && tile.data) {
 							this.DetailsView(tile);
 						}
-						else {
+						else if (planet.size*1 > planet.building_count*1) {
 							this.BuilderView(tile);
+						}
+						else {
+							alert("You've already reached the maximum number of buildings for this planet");
 						}
 					}
 				}, "div.planetMapTileActionContainer", this, true); //"button.planetMapTileActionButton"
-				Event.delegate(this._map.mapDiv, "mouseenter", function(e, matchedEl, container) {
-					var c = Sel.query("div.planetMapTileActionContainer", matchedEl, true);
-					Dom.setStyle(c, "visibility", "visible");
-				}, "div.tile", this, true); 
-				Event.delegate(this._map.mapDiv, "mouseleave", function(e, matchedEl, container) {
-					var c = Sel.query("div.planetMapTileActionContainer", matchedEl, true);
-					Dom.setStyle(c, "visibility", "hidden");
-				}, "div.tile", this, true); 
 			}
 			else {
 				this.MapVisible(true); //needs to be visible before we set sizing and  map
@@ -584,6 +581,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 				this._map.reset();
 				this._map.setSurfaceUrl(this.surfaceUrl);
+				this._map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
@@ -608,6 +606,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					success : function(o){
 						YAHOO.log(o, "info", "MapPlanet.Refresh");
 						this.fireEvent("onMapRpc", o.result);
+						var planet = Game.EmpireData.planets[Game.EmpireData.current_planet_id];
+						this._map.setPlotsAvailable(planet.size*1 - planet.building_count*1);
 						this._map.addTileData(o.result.buildings);
 						this._map.refresh();
 					},
@@ -697,14 +697,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.currentBuildConnection = Game.Services.Body.get_buildable(data,{
 				success : function(o){
 					delete this.currentBuildConnection;
-					YAHOO.log(o, "info", "MapPlanet.BuilderPlans.success");
+					YAHOO.log(o, "info", "MapPlanet.BuilderGet.success");
 					this.fireEvent("onMapRpc", o.result);
 					
 					this.BuilderProcess(o.result, data);
 				},
 				failure : function(o){
 					delete this.currentBuildConnection;
-					YAHOO.log(o, "error", "MapPlanet.BuilderPlans.failure");
+					YAHOO.log(o, "error", "MapPlanet.BuilderGet.failure");
 					this.fireEvent("onMapRpcFailed", o);
 					Lacuna.Pulser.Hide();
 				},

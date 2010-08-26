@@ -1141,6 +1141,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this._surfaceUrl = surfaceUrl;
 			Dom.setStyle(this.mapDiv, 'background-image', 'url("' + surfaceUrl + '")');
 		},
+		setPlotsAvailable : function(plots) {
+			if (plots > 0) {
+				Dom.removeClass(this.mapDiv, 'plots-full');
+			}
+			else {
+				Dom.addClass(this.mapDiv, 'plots-full');
+			}
+		},
 		//don't update bounds on plant.  We have all data at start
 		/*updateBounds : function(oTile) {
 		},*/
