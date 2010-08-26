@@ -534,13 +534,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
-						if(msg.is.inbox && msg.has_read == "0") {
-							Game.EmpireData.has_new_messages--;
-							if(Game.EmpireData.has_new_messages < 0) {
-								Game.EmpireData.has_new_messages = 0;
-							}
-							Dom.removeClass(matchedEl.parentNode, "unread");
-						}
+						Dom.removeClass(matchedEl.parentNode, "unread");
 						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
 					},
@@ -798,18 +792,18 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				success : function(o){
 					YAHOO.log(o, "info", "Messaging.showMessage.success");
 					var message = o.result.message;
-					this.fireEvent("onRpc", o);
 					if (message.has_archived != "0") {
 						this.currentTab = this.archive.id;
 					}
 					else {
 						this.currentTab = this.inbox.id;
 					}
+					this.fireEvent("onRpc", o);
 					this.loadTab();
 					this.displayMessage(message);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadMessage.failure");
+					YAHOO.log(o, "error", "Messaging.showMessage.failure");
 					this.fireEvent("onRpcFailed", o);
 				},
 				timeout:Game.Timeout,
