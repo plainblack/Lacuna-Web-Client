@@ -552,6 +552,9 @@ about
 	margin:0px;
 	border:1px solid #52acff;
 }
+#messagingPaginator .yui-pg-current-page {
+	color: #000;
+}
 #messagingDisplay {
 	padding-top:5px;
 	margin-left:1%;

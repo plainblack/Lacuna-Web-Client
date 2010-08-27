@@ -320,8 +320,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						totalRecords: o.result.message_count,
 						containers  : 'messagingPaginator',
 						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+						pageLinks : 5,
 						alwaysVisible : false
-
 					});
 					this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
 					this.pager.render();
