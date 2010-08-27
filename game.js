@@ -36,17 +36,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					query[pair[0]] = pair[1];
 				}
 			}
+			window.location.hash = '';
 
 			var session = Game.GetSession();
-			if (query.facebook_uid) {
-				// window.location.hash = '';
+			if (query.reset_password) {
 				Game.InitLogin();
-				Game.LoginDialog.initEmpire();
+				Game.LoginDialog.initResetPassword();
+				Game.LoginDialog.ResetPassword.showReset(query.reset_password);
+				return;
+			}
+			if (query.facebook_uid) {
+				Game.InitLogin();
+				Game.LoginDialog.initEmpireCreator();
 				Game.EmpireCreator.createFacebook(query.facebook_uid, query.facebook_token, query.facebook_name);
 				return;
 			}
 			else if (query.session_id) {
-				window.location.hash = '';
 				Game.SetSession(query.session_id);
 				Game.GetStatus({
 					success:Lacuna.Game.Run,

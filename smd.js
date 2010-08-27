@@ -1995,9 +1995,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				},
 				"send_password_reset_message" : {
 					"description": "Starts a password recovery process by sending an email with a recovery key.",
-					"parameters": [
-						{"name":"params", "type":"object", "optional":false}
-					],
+					"parameters": {
+						empire_id:{"type":"string", "optional":true},
+						empire_name:{"type":"string", "optional":true},
+						email:{"type":"string", "optional":true}
+					},
 					"returns":{"type":"object"}
 				},
 				"reset_password" : {
