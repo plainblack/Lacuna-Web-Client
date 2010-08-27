@@ -174,7 +174,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'						<li><a href="#Infrastructure" class="buildMenuAll">All Infrastructure</a></li>',
 				'					</ul>',
 				'				</li>',
-				'				<li class="builderMenuGroup"><a href="#Plans"><em>Plans</em></a></li>',
+				'				<li class="builderMenuGroup"><a href="#Plan"><em>Plans</em></a></li>',
 				'				<li class="builderMenuGroup"><a href="#"><em>All Buildings</em></a></li>',
 				'			</ul>',
 				'		</div>',
@@ -362,6 +362,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						costs = bd.build.cost,
 						prod = bd.production,
 						isLater = bd.build.tags.indexOf('Later') > -1;
+						isPlan = bd.build.tags.indexOf('Plan') > -1;
 						
 					bd.name = names[i];
 					
@@ -404,6 +405,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						reason = undefined;
 						if (isQueueFull) {
 							reason = "Build queue is full.";
+						}
+						else if (isPlan) {
+							var extra_level = bd.build.extra_level*1;
+							if (extra_level) {
+								reason = "Will build to level " + (extra_level + 1) + " for free with plan.";
+							}
+							else {
+								reason = "Will build for free with plan.";
+							}
 						}
 					}
 					
