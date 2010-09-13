@@ -261,7 +261,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this._starVisible = true;
 		},
 		planetVisible : function(vis) {
-			this.elChangeClick.title = "To the Universe";
+			this.elChangeClick.title = "To the Starmap";
 			this.elChangeImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 			this._planetVisible = true;
 			this._starVisible = false;
