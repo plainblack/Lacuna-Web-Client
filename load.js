@@ -216,7 +216,7 @@
 		name: "essentia",
 		type: "js",
 		fullpath: host + "essentia.js?" + t,
-		requires : ["container","game"]
+		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
 		name: "profile",

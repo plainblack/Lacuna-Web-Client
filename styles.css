@@ -139,6 +139,13 @@ body.yui-skin-sam .container-close {
 	top:3px;
 	width:23px;
 }
+body.yui-skin-sam .yui-panel hr {
+	margin: 10px 0 12px;
+	height: 0px;
+	border: none;
+	border-top: 1px solid rgb(82, 172, 255);
+}
+}
 
 /*#pulsing_c { 
 	width:99%;
@@ -169,9 +176,6 @@ dialogs
 
 #login hr {
 	margin: 17px 0 15px;
-	height: 0px;
-	border: none;
-	border-top: 1px solid rgb(82, 172, 255);
 }
 
 .loginWrapper {
@@ -233,12 +237,6 @@ dialogs
 }
 #createEmpire label {
 	width:130px;
-}
-#createSpecies hr {
-	margin: 10px 0 12px;
-	height: 0px;
-	border: none;
-	border-top: 1px solid rgb(82, 172, 255);
 }
 #speciesAffinityTooltip {
 	z-index:20000 !important;
@@ -1522,45 +1520,40 @@ PROFILE
 /*
 Essentia Dialog
 */
-.essentiaBoosts li {
-	float:left;
+#essentiaTabBoost table {
+	width: 100%;
 }
-.essentiaBoosts img {
+.essentiaAmount {
+	margin-bottom: 5px;
+}
+#essentiaTabBoost .essentiaDetailsImg {
+	width: 25px;
+}
+#essentiaTabBoost .essentiaDetailsText {
+	width: 180px;
+}
+#essentiaTabBoost .essentiaDetailsCost {
+	width: 45px;
+}
+#essentiaTabBoost .essentiaDetailsBoost {
+	width: 65px;
+}
+#essentiaTabBoost .essentiaDetailsTime {
+	padding-right: 10px;
+	text-align: right;
+}
+#essentiaTabBoost th {
+	text-align: center;
+}
+#essentiaTabBoost img {
 	vertical-align:middle;
 }
-.essentiaBoosts .essentiaDetailsImg {
-	width:30px;
-}
-.essentiaBoosts .essentiaDetailsTime {
-	width:200px;
-	text-align:right;
-}
-.essentiaBoosts .essentiaDetailsCost  {
-	width:100px;
-	text-align:right;
-}
-.essentiaBoosts .essentiaDetailsBoost  {
-	width:100px;
-	text-align:right;
-}
-.essentiaHeader .essentiaDetailsTime, .essentiaHeader .essentiaDetailsCost, .essentiaHeader .essentiaDetailsBoost {
-	text-align:center;
-}
-.essentiaHeader {
-	font-weight:bold;
-	border-bottom:1px solid #52acff;
+
+#essentiaGetMore {
+	text-align: center;
+	margin: 10px 0;
 }
 
-.essentiaPurchase {
-	text-align: center;
-	margin-top: 10px;
-}
-
-#essentiaRedeem form div {
-	text-align: center;
-	height: 35px;
-	margin-top: 15px;
-}
 #essentiaRedeemCode {
 	width: 290px;
 }
