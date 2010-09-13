@@ -19,16 +19,26 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		var container = document.createElement("div");
 		container.id = this.id;
 		Dom.addClass(container, "hidden");
+
+		// currently have to turn off autocomplete.  Firefox asks to
+		// remember login but is unable to fill in the saved values later.
 		container.innerHTML = [
 		'	<div class="hd">Login</div>',
 		'	<div class="bd">',
-		'		<form id="loginForm" name="loginForms">',
+		'		<form id="loginForm" name="loginForms" autocomplete="off">',
 		'			<ul>',
 		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
-		'				<li><label>Password</label><input type="password" id="loginPass"  /></li>',
-		'				<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /></li>',
-		'				<li><a id="loginCreate" href="#">Create an Empire</a></li>',
-		'				<li class="loginFacebook"><a href="/facebook/authorize"><img src="' + Lib.AssetUrl + 'ui/web/facebook-login-button.png" /></a></li>',
+		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass"  /></li>',
+		'				<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /> <button>Login</button></li>',
+		'			</ul>',
+		'			<hr />',
+		'			<div class="loginFacebook">',
+		'				<a href="/facebook/authorize"><img src="' + Lib.AssetUrl + 'ui/web/facebook-login-button.png" /></a>',
+		'			</div>',
+		'			<hr />',
+		'			<ul class="loginExtras">',
+		'				<li><a id="loginCreate" href="#">Don\'t have an account?</a></li>',
+		'				<li><a id="loginReset" href="#">Forgotten your password?</a></li>',
 		'			</ul>',
 		'		</form>',
 		'	</div>',
@@ -36,12 +46,10 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		].join('');
 		document.body.insertBefore(container, document.body.firstChild);
 		
-		this.Dialog = new YAHOO.widget.Dialog(this.id, {
+		this.Dialog = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
 			fixedcenter:true,
-			postmethod:"none",
 			visible:false,
-			buttons:[ { text:"Login", handler:{fn:this.handleLogin, scope:this}, isDefault:true } ],
 			draggable:false,
 			modal:true,
 			close:false,
@@ -56,21 +64,22 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elCreate = Dom.get("loginCreate");
 			this.elRemember = Dom.get("loginRemember");
 			this.elForm = Dom.get("loginForm");
-		
-			Event.addListener(this.elCreate, "click", this.createEmpireClick, this, true);
+			this.elCreate = Dom.get("loginCreate");
+			this.elReset = Dom.get("loginReset");
+			
+			Event.addListener(this.elCreate, "click", function(e){Event.stopEvent(e);this.createEmpire()}, this, true);
+			Event.addListener(this.elReset, "click", function(e){Event.stopEvent(e);this.resetPassword()}, this, true);
+			Event.addListener(this.elForm, "submit", function(e){Event.stopEvent(e);this.handleLogin()}, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		
-		this.Dialog.cfg.queueProperty("keylisteners", [new YAHOO.util.KeyListener("loginPass", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } ), 
-			new YAHOO.util.KeyListener("loginRemember", { keys:13 }, { fn:this.handleLogin, scope:this, correctScope:true } )
-		]); 
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 	};
 	Login.prototype = {
 		handleLogin : function() {
 			Lacuna.Pulser.Show();
-			this.setMessage("");	
+			this.setMessage("");
 			var EmpireServ = Game.Services.Empire;
 			EmpireServ.login({name:this.elName.value, password:this.elPass.value, api_key:Lib.ApiKey},{
 				success : function(o){
@@ -134,13 +143,19 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			if(!this.elMessage) {
 				var d = document.createElement("div");
 				d.id = "loginMessage";
-				this.elCreate.parentNode.insertBefore(d, this.elCreate);
+				var eUl = this.elName.parentNode.parentNode;
+				eUl.parentNode.insertBefore(d, eUl.nextSibling);
 				this.elMessage = d;
 			}
-			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
-			this.elMessage.innerHTML = str;
+			if (str && str.length > 0) {
+				Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
+				this.elMessage.innerHTML = str;
+			}
+			else {
+				Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
+			}
 		},
-		initEmpire : function() {
+		initEmpireCreator : function() {
 			if(!Game.EmpireCreator) {
 				Game.EmpireCreator = new Lacuna.CreateEmpire(this);
 				Game.EmpireCreator.subscribe("onCreateSuccessful",function(oArgs) {
@@ -148,15 +163,222 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				}, this, true);
 			}
 		},
-		createEmpireClick : function(e) {
-			Event.stopEvent(e); //stop href click
+		createEmpire : function() {
 			this.hide(); //hide login
-			this.initEmpire();
+			this.initEmpireCreator();
 			Game.OverlayManager.hideAll();
 			Game.EmpireCreator.show();
+		},
+		initResetPassword : function() {
+			if(!this.ResetPassword) {
+				this.ResetPassword = new ResetPassword(this);
+				this.ResetPassword.subscribe("onResetSuccessful",function(oArgs) {
+					this.fireEvent("onLoginSuccessful",oArgs);
+				}, this, true);
+			}
+		},
+		resetPassword : function() {
+			this.hide(); //hide login
+			this.initResetPassword();
+			Game.OverlayManager.hideAll();
+			this.ResetPassword.show(this.elName.value);
 		}
 	};
 	Lang.augmentProto(Login, Util.EventProvider);
+
+	var ResetPassword = function(Login) {
+		this.createEvent("onResetSuccessful");
+		this._login = Login;
+		
+		this.emailId = "resetPasswordEmail";
+
+		var emailContainer = document.createElement("div");
+		emailContainer.id = this.emailId;
+		Dom.addClass(emailContainer, "hidden");
+		emailContainer.innerHTML = [
+		'	<div class="hd">Reset Password</div>',
+		'	<div class="bd">',
+		'		<form id="resetEmailForm" name="resetEmailForm">',
+		'			<p>',
+		'				Enter either your empire name, or the email address used on the account.  You will be sent an email with instructions for resetting your password.',
+		'			</p>',
+		'			<ul>',
+		'				<li><label for="resetEmpireName">Empire Name</label><input type="text" id="resetEmpireName" /></li>',
+		'				<li><label for="resetEmail">Email</label><input type="text" id="resetEmail" /></li>',
+		'				<li><a href="#" id="resetShowKey">Already have a reset key?</a></li>',
+		'			</ul>',
+		'		</form>',
+		'	</div>',
+		'	<div class="ft"></div>'
+		].join('');
+		document.body.insertBefore(emailContainer, document.body.firstChild);
+		
+		this.EmailDialog = new YAHOO.widget.Dialog(this.emailId, {
+			constraintoviewport:true,
+			fixedcenter:true,
+			visible:false,
+			draggable:false,
+			modal:true,
+			close:true,
+			width:"400px",
+			underlay:false,
+			zIndex:9999,
+			buttons:[
+				{text:"Send Reset Email", handler:function(){this.submit()}, isDefault: true},
+				{text:"Cancel", handler:function(){this.cancel()}},
+			],
+			hideaftersubmit: false,
+			postmethod: "manual"
+		});
+		this.EmailDialog.renderEvent.subscribe(function(){
+			this.elName = Dom.get("resetEmpireName");
+			this.elEmail = Dom.get("resetEmail");
+			
+			Event.on('resetShowKey', 'click', function(e){this.showReset();}, this, true);
+			Dom.removeClass(this.emailId, Lib.Styles.HIDDEN);
+		}, this, true);
+		this.EmailDialog.submitEvent.subscribe(this.sendEmail, this, true);
+		this.EmailDialog.cancelEvent.subscribe(this.hide, this, true);
+		this.EmailDialog.render();
+		Game.OverlayManager.register(this.EmailDialog);
+
+		this.resetId = "resetPasswordKey";
+
+		var resetContainer = document.createElement("div");
+		resetContainer.id = this.resetId;
+		Dom.addClass(resetContainer, "hidden");
+		resetContainer.innerHTML = [
+		'	<div class="hd">Reset Password</div>',
+		'	<div class="bd">',
+		'		<form id="resetForm" name="resetForm">',
+		'			<p>',
+		'				Enter the reset key you have received in your email, along with what you would like your password set to.',
+		'			</p>',
+		'			<ul>',
+		'				<li><label for="resetKey">Reset Key</label><input maxlength="36" type="text" id="resetKey" /></li>',
+		'				<li><label for="resetPassword1">Password</label><input type="password" id="resetPassword1" /></li>',
+		'				<li><label for="resetPassword2">Confirm Password</label><input type="password" id="resetPassword2" /></li>',
+		'			</ul>',
+		'		</form>',
+		'	</div>',
+		'	<div class="ft"></div>'
+		].join('');
+		document.body.insertBefore(resetContainer, document.body.firstChild);
+		
+		this.ResetDialog = new YAHOO.widget.Dialog(this.resetId, {
+			constraintoviewport:true,
+			fixedcenter:true,
+			visible:false,
+			draggable:false,
+			modal:true,
+			close:true,
+			width:"450px",
+			underlay:false,
+			zIndex:9999,
+			buttons:[
+				{text:"Reset Password", handler:function(){this.submit()}, isDefault: true},
+				{text:"Cancel", handler:function(){this.cancel()}},
+			],
+			hideaftersubmit: false,
+			postmethod: "manual"
+		});
+		this.ResetDialog.renderEvent.subscribe(function(){
+			this.elKey = Dom.get("resetKey");
+			this.elPassword1 = Dom.get("resetPassword1");
+			this.elPassword2 = Dom.get("resetPassword2");
+			
+			Dom.removeClass(this.resetId, Lib.Styles.HIDDEN);
+		}, this, true);
+		this.ResetDialog.submitEvent.subscribe(this.resetPassword, this, true);
+		this.ResetDialog.cancelEvent.subscribe(this.hide, this, true);
+		this.ResetDialog.render();
+		Game.OverlayManager.register(this.ResetDialog);
+	};
+	ResetPassword.prototype = {
+		show : function(empire_name) {
+			this.elName.value = empire_name ? empire_name : '';
+			this.elEmail.value = '';
+			this.EmailDialog.getButtons()[0].disabled = false;
+			this.EmailDialog.show();
+		},
+		hide : function() {
+			this.EmailDialog.hide();
+			this.ResetDialog.hide();
+			this._login.show();
+		},
+		sendEmail : function() {
+			var empireName = this.elName.value;
+			var email = this.elEmail.value;
+			var data = {};
+			if (empireName.length > 0) {
+				data.empire_name = empireName;
+			}
+			if (email.length > 0) {
+				data.email = email;
+			}
+			this.EmailDialog.getButtons()[0].disabled = true;
+			Lacuna.Pulser.Show();
+			Game.Services.Empire.send_password_reset_message(data,{
+				success: function(o) {
+					YAHOO.log(o, "info", "ResetPassword.sendEmail.failure");
+					Lacuna.Pulser.Hide();
+					this.showReset();
+				},
+				failure: function(o) {
+					YAHOO.log(o, "error", "ResetPassword.sendEmail.failure");
+					Lacuna.Pulser.Hide();
+					this.EmailDialog.getButtons()[0].disabled = false;
+					alert(o.error.message);
+				},
+				timeout: Game.Timeout,
+				scope: this
+			});
+		},
+		showReset : function(reset_key) {
+			if (reset_key) {
+				this.elKey.value = reset_key;
+			}
+			else {
+				this.elKey.value = '';
+			}
+			this.elPassword1.value = '';
+			this.elPassword2.value = '';
+			this.EmailDialog.hide();
+			this.ResetDialog.show();
+		},
+		resetPassword : function() {
+			var reset_key = this.elKey.value;
+			var password1 = this.elPassword1.value;
+			var password2 = this.elPassword2.value;
+			if (password1 != password2) {
+				alert("Passwords do not match!");
+			}
+			else {
+				Lacuna.Pulser.Show();
+				Game.Services.Empire.reset_password({
+					reset_key: reset_key,
+					password1: password1,
+					password2: password2,
+					api_key:Lib.ApiKey
+				},{
+					success: function(o) {
+						YAHOO.log(o, "info", "ResetPassword.resetPassword.failure");
+						Lacuna.Pulser.Hide();
+						this.fireEvent('onResetSuccessful', o);
+						this.hide();
+					},
+					failure: function(o) {
+						YAHOO.log(o, "error", "ResetPassword.resetPassword.failure");
+						Lacuna.Pulser.Hide();
+						alert(o.error.message);
+					},
+					timeout: Game.Timeout,
+					scope: this
+				});
+			}
+		}
+	};
+	Lang.augmentProto(ResetPassword, Util.EventProvider);
 
 	Lacuna.Login = Login;
 })();

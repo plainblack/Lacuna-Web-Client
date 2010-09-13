@@ -36,18 +36,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					query[pair[0]] = pair[1];
 				}
 			}
+			window.location.hash = '';
 
 			var session = Game.GetSession();
-			if (query.facebook_uid) {
-				// window.location.hash = '';
+			if (query.reset_password) {
 				Game.InitLogin();
-				Game.LoginDialog.initEmpire();
+				Game.LoginDialog.initResetPassword();
+				Game.LoginDialog.ResetPassword.showReset(query.reset_password);
+				return;
+			}
+			if (query.facebook_uid) {
+				Game.InitLogin();
+				Game.LoginDialog.initEmpireCreator();
 				Game.EmpireCreator.createFacebook(query.facebook_uid, query.facebook_token, query.facebook_name);
 				return;
 			}
 			else if (query.session_id) {
-				window.location.hash = '';
-				Game.SetCookie("session", query.session_id);
+				Game.SetSession(query.session_id);
 				Game.GetStatus({
 					success:Lacuna.Game.Run,
 					failure:Lacuna.Game.Failure
@@ -79,7 +84,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Game.LoginDialog.subscribe("onLoginSuccessful",function(oArgs) {
 					var result = oArgs.result;
 					//remember session
-					Game.SetCookie("session", result.session_id);
+					Game.SetSession(result.session_id);
 
 					Game.RemoveCookie("locationId");
 					Game.RemoveCookie("locationView");
@@ -380,7 +385,20 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			});
 		},
 		GetSession : function(replace) {
-			return Cookie.getSub("lacuna","session") || replace;
+			if (! this._session) {
+				this._session = Cookie.getSub('lacuna', 'session');
+			}
+			return this._session || replace;
+		},
+		SetSession : function(session) {
+			if (session) {
+				Game.SetCookie('session', session);
+				Game._session = session;
+			}
+			else {
+				Game.RemoveCookie('session');
+				delete Game._session;
+			}
 		},
 		GetCurrentPlanet : function() {
 			var ED = Game.EmpireData,
@@ -453,6 +471,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Cookie.remove("lacuna",{
 				domain: Game.domain
 			});
+			Game.SetSession();
 			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();

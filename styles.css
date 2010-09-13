@@ -160,12 +160,43 @@ dialogs
 #login label {
 	width:130px;
 }
-#login input[type="text"],#login input[type="password"] { width:220px; }
+#login input[type="text"],#login input[type="password"] { width:242px; }
 #login li { margin-bottom:3px; }
 
-li.loginFacebook {
-	margin-top: 5px;
+#loginForm button {
+	float: right;
+	margin-right: 5px;
+}
+
+#login hr {
+	margin: 10px 0;
+}
+
+.loginFacebook {
 	text-align: center;
+}
+.loginExtras li {
+	list-style: disc inside none;
+}
+
+#resetPasswordEmail li,
+#resetPasswordKey li {
+	margin: 3px 0;
+}
+
+#resetPasswordEmail input[type="text"],
+#resetPasswordEmail input[type="password"] {
+	width:242px;
+}
+#resetPasswordKey input[type="text"],
+#resetPasswordKey input[type="password"] {
+	width:292px;
+}
+
+#resetPasswordEmail label,
+#resetPasswordKey label {
+	display: inline-block;
+	width:130px;
 }
 
 #createEmpire .empireAgreeCheck {
@@ -551,6 +582,9 @@ about
 	background-color:white;
 	margin:0px;
 	border:1px solid #52acff;
+}
+#messagingPaginator .yui-pg-current-page {
+	color: #000;
 }
 #messagingDisplay {
 	padding-top:5px;
