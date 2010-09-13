@@ -47,7 +47,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if (query.facebook_uid) {
 				Game.InitLogin();
 				Game.LoginDialog.initEmpireCreator();
-				Game.EmpireCreator.createFacebook(query.facebook_uid, query.facebook_token, query.facebook_name);
+				Game.EmpireCreator.facebookReturn(query.facebook_uid, query.facebook_token, query.facebook_name);
 				return;
 			}
 			else if (query.session_id) {

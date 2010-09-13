@@ -21,11 +21,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		container.innerHTML = [
 		'	<div class="hd">Create Empire</div>',
 		'	<div class="bd">',
-		'		<form name="empireForm">',
+		'		<form name="empireForm" autocomplete="no">',
 		'			<ul>',
 		'				<li><label for="empireName">Empire Name</label><input type="text" id="empireName" /></li>',
 		'				<li class="empirePassword"><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
 		'				<li class="empirePassword"><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
+		'				<li class="empireCaptcha"><img src="" id="empireCaptchaImage" /><button id="empireRefreshCaptcha">New Captcha</button</li>',
+		'				<li class="empireCaptcha"><label for="empireCaptcha">Answer: </label><input type="text" id="empireCaptcha" /></li>',
 		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeTOS" /><label for="empireAgreeTOS">I agree to the <a href="http://www.lacunaexpanse.com/terms/" target="_blank">Terms of Service</a>.</label></li>',
 		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeRules" /><label for="empireAgreeRules">I agree to abide by <a href="http://www.lacunaexpanse.com/rules/" target="_blank">the rules</a>.</label></li>',
 		'			</ul>',
@@ -54,10 +56,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			//get el's after rendered
 			this.elName = Dom.get("empireName");
 			this.elPass = Dom.get("empirePass");
+			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elAgreeTOS = Dom.get("empireAgreeTOS");
 			this.elAgreeRules = Dom.get("empireAgreeRules");
-			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elMessage = Dom.get("empireMessage");
+			this.elCaptchaImage = Dom.get("empireCaptchaImage");
+			this.elCaptcha = Dom.get("empireCaptcha");
+			Event.on('empireRefreshCaptcha', 'click', function(e){Event.stopEvent(e);this.refreshCaptcha()}, this, true);
 			
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
@@ -65,9 +70,27 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 		
+		try{
 		this.initSpecies();
+		}catch(e){alert(e)};
 	};
 	CreateEmpire.prototype = {
+		refreshCaptcha : function() {
+			Game.Services.Empire.fetch_captcha({},{
+				success : function(o){
+					YAHOO.log(o, "info", "RefreshCaptcha");
+					this.captchaGUID = o.result.guid;
+					this.elCaptchaImage.src = o.result.url;
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "RefreshCaptchaFailure");
+					this.setMessage(o.error.message);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		
 		handleCreate : function() {
 			if (! this.elAgreeTOS.checked || ! this.elAgreeRules.checked) {
 				this.setMessage("You must agree to the Terms of Service and the rules before registering.");
@@ -84,43 +107,27 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					data = {
 						name: this.elName.value
 					};
-				if (this.facebook_uid) {
-					data.facebook_uid = this.facebook_uid;
-					data.facebook_token = this.facebook_token;
+				if (this.facebook) {
+					data.facebook_uid = this.facebook.uid;
+					data.facebook_token = this.facebook.token;
 				}
 				else {
-					data.password = this.elPass.value;
-					data.password1 = this.elPassConfirm.value;
+					data.captcha_guid = this.captchaGUID;
+					data.captcha_solution = this.elCaptcha.value;
 				}
-				
-				EmpireServ.is_name_available({name:data.name}, {
-					success : function(o) {
-						YAHOO.log(o);
-						if(o.result == 1) {
-							EmpireServ.create(data,{
-								success : function(o){
-									YAHOO.log(o, "info", "CreateEmpire");
-									this.savedEmpire = data;
-									this.savedEmpire.id = o.result;
-									Game.SpeciesCreator.show(o.result);
-									Lacuna.Pulser.Hide();
-									this.hide(); //hide empire
-								},
-								failure : function(o){
-									YAHOO.log(o, "error", "CreateEmpireFailure");
-									this.setMessage(o.error.message);
-									Lacuna.Pulser.Hide();
-								},
-								timeout:Game.Timeout,
-								scope:this
-							});
-						}
-						else {
-							this.setMessage("Empire name is unavailable.  Please choose another.");
-						}
+				data.password = this.elPass.value;
+				data.password1 = this.elPassConfirm.value;
+				EmpireServ.create(data,{
+					success : function(o){
+						YAHOO.log(o, "info", "CreateEmpire");
+						this.savedEmpire = data;
+						this.savedEmpire.id = o.result;
+						Game.SpeciesCreator.show(o.result);
+						Lacuna.Pulser.Hide();
+						this.hide(); //hide empire
 					},
-					failure : function(o) {
-						YAHOO.log(o);
+					failure : function(o){
+						YAHOO.log(o, "error", "CreateEmpireFailure");
 						this.setMessage(o.error.message);
 						Lacuna.Pulser.Hide();
 					},
@@ -137,7 +144,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		createFacebook : function(uid, token, name) {
+		facebookReturn : function(uid, token, name) {
 			this.savedEmpire = undefined;
 			this.elName.value = name + "'s Empire";
 			this.elAgreeTOS.checked = false;
@@ -163,6 +170,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				this.elAgreeRules.checked = false;
 				this.elPassConfirm.value = "";
 			}
+			this.refreshCaptcha();
 			this.Dialog.show();
 		},
 		hide : function() {

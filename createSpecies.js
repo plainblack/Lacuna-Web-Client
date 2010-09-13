@@ -6,6 +6,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 	var Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
+		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Slider = YAHOO.widget.Slider,
@@ -14,7 +15,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 	var CreateSpecies = function(Empire) {
 		this.id = "createSpecies";
 		this._empire = Empire;
-		this.oldSpecies = {};
 		this.createEvent("onCreateSuccessful");
 		
 		var container = document.createElement("div");
@@ -39,52 +39,119 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		});
 		this.Dialog.renderEvent.subscribe(function(){
 			//get el's after rendered
+			this.elMessage = Dom.get("speciesMessage");
 			this.elName = Dom.get("speciesName");
 			this.elDesc = Dom.get("speciesDesc");
-			this.elMessage = Dom.get("speciesMessage");
-			this.elSelect = Dom.get("speciesSelect");
-			this.elCreate = Dom.get("speciesCreate");
+			this.elSpeciesHuman = Dom.get("speciesHuman");
+			this.elSpeciesCustom = Dom.get("speciesCustom");
+			this.elCustomTemplates = Dom.get("speciesTemplates");
+			this._createSliders();
+			Event.on(this.elSpeciesHuman, 'click', this.selectHuman, this, true);
+			Event.on(this.elSpeciesCustom, 'click', this.selectCustom, this, true);
+			Event.delegate(this.elCustomTemplates, 'click', function(e, matchedEl) {
+				Event.stopEvent(e);
+				this.selectTemplate(this.speciesTemplates[matchedEl.TemplateIndex]);
+			}, '.speciesTemplate', this, true);
 			
-			Event.on(this.elSelect, "change", function(e, oSelf) {
-				oSelf.setMessage("");
-				if(this.selectedIndex == 1) {
-					Dom.setStyle(oSelf.elCreate, "display", "block");
-					oSelf.Dialog.center();
-					if(!oSelf._slidersCreated) {
-						oSelf._createSliders();
-					}
-				}
-				else {
-					Dom.setStyle(oSelf.elCreate, "display", "none");
-					oSelf.Dialog.center();
-				}
-			}, this);
-			
-			Dom.setStyle(this.elCreate, "display", "none");
+			for (var i = 0; i < this.speciesTemplates.length; i++) {
+				var template = this.speciesTemplates[i];
+				var tButton = document.createElement('button');
+				tButton.innerHTML = template.name;
+				tButton.title = template.description;
+				tButton.TemplateIndex = i;
+				Dom.addClass(tButton, 'speciesTemplate');
+				this.elCustomTemplates.appendChild(tButton);
+			}
+			this.selectHuman();
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
-		this.Dialog.cfg.queueProperty("keylisteners", new YAHOO.util.KeyListener("speciesSelect", { keys:13 }, { fn:this.handleCreate, scope:this, correctScope:true } )); 
+		this.speciesTemplates = [
+			{
+				name : 'Average',
+				description : 'Not specializing in any area, but without any particular weaknesses.',
+				habitable_orbits: {min:3,max:3},
+				manufacturing_affinity: 4,
+				deception_affinity: 4,
+				research_affinity: 4,
+				management_affinity: 4,
+				farming_affinity: 4,
+				mining_affinity: 4,
+				science_affinity: 4,
+				environmental_affinity: 4,
+				political_affinity: 4,
+				trade_affinity: 4,
+				growth_affinity : 4
+			},
+			{
+				name : 'Gardociens',
+				description : 'Resilient and able to colonize most any planet.  Somewhat docile, but very quick learners and above average at producing any resource.',
+				habitable_orbits: {min:2,max:7},
+				manufacturing_affinity: 3,
+				deception_affinity: 3,
+				research_affinity: 3,
+				management_affinity: 5,
+				farming_affinity: 5,
+				mining_affinity: 5,
+				science_affinity: 5,
+				environmental_affinity: 5,
+				political_affinity: 1,
+				trade_affinity: 1,
+				growth_affinity : 3
+			},
+			{
+				name : 'Warmonger',
+				description : 'Adept at ship building and espionage. They are bent on domination.',
+				habitable_orbits: {min:4,max:5},
+				manufacturing_affinity: 4,
+				deception_affinity: 7,
+				research_affinity: 2,
+				management_affinity: 4,
+				farming_affinity: 2,
+				mining_affinity: 2,
+				science_affinity: 7,
+				environmental_affinity: 2,
+				political_affinity: 7,
+				trade_affinity: 1,
+				growth_affinity : 5
+			},
+			{
+				name : 'Viral',
+				description : 'Proficient at growing at the most expedient pace like a virus in the Expanse.',
+				habitable_orbits: {min:1,max:7},
+				manufacturing_affinity: 1,
+				deception_affinity: 4,
+				research_affinity: 7,
+				management_affinity: 7,
+				farming_affinity: 1,
+				mining_affinity: 1,
+				science_affinity: 1,
+				environmental_affinity: 1,
+				political_affinity: 7,
+				trade_affinity: 1,
+				growth_affinity : 7
+			},
+			{
+				name : 'Trader',
+				description : 'Masters of commerce and ship building.',
+				habitable_orbits: {min:2,max:3},
+				manufacturing_affinity: 5,
+				deception_affinity: 4,
+				research_affinity: 7,
+				management_affinity: 7,
+				farming_affinity: 1,
+				mining_affinity: 1,
+				science_affinity: 7,
+				environmental_affinity: 1,
+				political_affinity: 1,
+				trade_affinity: 7,
+				growth_affinity : 2
+			},
+			
+		];
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 	};
 	CreateSpecies.prototype = {
-		_clearSliders : function() {
-			if(this._slidersCreated) {
-				this.speciesHO.setMinValue(0,true);
-				this.speciesHO.setMaxValue(200,true);
-				this.speciesConst.setValue(0,true);
-				this.speciesDecep.setValue(0,true);
-				this.speciesResearch.setValue(0,true);
-				this.speciesManagement.setValue(0,true);
-				this.speciesFarming.setValue(0,true);
-				this.speciesMining.setValue(0,true);
-				this.speciesScience.setValue(0,true);
-				this.speciesEnviro.setValue(0,true);
-				this.speciesPolitical.setValue(0,true);
-				this.speciesTrade.setValue(0,true);
-				this.speciesGrowth.setValue(0,true);
-			}
-		},
 		_createSliders : function() {
 			this.speciesHO = this._createHabitableOrbits();
 			this.speciesConst = this._createHorizSingle("speciesConst", "speciesConst_thumb", "speciesConst_num");
@@ -101,79 +168,73 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			
 			this.elTotal = Dom.get("speciesPointTotal");
 			this.elTotal.innerHTML = 45;
-			this.totalValue = 45;
-			this.values = {
-				speciesHO: {min:4,max:4},
-				speciesConst : 4,
-				speciesDecep : 4,
-				speciesResearch : 4,
-				speciesManagement : 4,
-				speciesFarming : 4,
-				speciesMining : 4,
-				speciesScience : 4,
-				speciesEnviro : 4,
-				speciesPolitical : 4,
-				speciesTrade : 4,
-				speciesGrowth : 4
-			};
 			
-			var updateTotal = function(ignore, oSelf) {
-				var val;
-				if(this.minSlider) {
-					var min = oSelf.convertValue(this.minVal),
-						max = oSelf.convertValue(this.maxVal),
-						curVals = oSelf.values.speciesHO,
-						curVal = curVals.max - curVals.min + 1;
-					
-					val = max-min+1;
-						
-					oSelf.totalValue -= curVal;
-					oSelf.totalValue += val;
-					curVals.min = min;
-					curVals.max = max;
-				}
-				else {
-					val = oSelf.convertValue(this.getValue());
-					oSelf.totalValue -= oSelf.values[this.key];
-					oSelf.totalValue += val;
-					oSelf.values[this.key] = val;
-				}
+			var updateTotal = function() {
+				var total = this.getSpeciesData().affinity_total;
+				this.elTotal.innerHTML = total;
 				
-				oSelf.elTotal.innerHTML = oSelf.totalValue;
-				if(oSelf.totalValue > 45) {
-					Dom.replaceClass("speciesPointTotalLine", "speciesPointsValid", "speciesPointsInvalid");
+				if(total > 45) {
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsValid");
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsLow");
+					Dom.addClass("speciesPointTotalLine", "speciesPointsInvalid");
+				}
+				else if(total == 45) {
+					Dom.addClass("speciesPointTotalLine", "speciesPointsValid");
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsLow");
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsInvalid");
 				}
 				else {
-					Dom.replaceClass("speciesPointTotalLine", "speciesPointsInvalid", "speciesPointsValid");
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsValid");
+					Dom.addClass("speciesPointTotalLine", "speciesPointsLow");
+					Dom.removeClass("speciesPointTotalLine", "speciesPointsInvalid");
 				}
 			};
 			
-			this.speciesHO.subscribe('change', updateTotal, this);
-			this.speciesConst.subscribe('change', updateTotal, this);
-			this.speciesDecep.subscribe('change', updateTotal, this);
-			this.speciesResearch.subscribe('change', updateTotal, this);
-			this.speciesManagement.subscribe('change', updateTotal, this);
-			this.speciesFarming.subscribe('change', updateTotal, this);
-			this.speciesMining.subscribe('change', updateTotal, this);
-			this.speciesScience.subscribe('change', updateTotal, this);
-			this.speciesEnviro.subscribe('change', updateTotal, this);
-			this.speciesPolitical.subscribe('change', updateTotal, this);
-			this.speciesTrade.subscribe('change', updateTotal, this);
-			this.speciesGrowth.subscribe('change', updateTotal, this);
-			
-			this._slidersCreated = true;
+			this.speciesHO.subscribe('change', updateTotal, this, true);
+			this.speciesConst.subscribe('change', updateTotal, this, true);
+			this.speciesDecep.subscribe('change', updateTotal, this, true);
+			this.speciesResearch.subscribe('change', updateTotal, this, true);
+			this.speciesManagement.subscribe('change', updateTotal, this, true);
+			this.speciesFarming.subscribe('change', updateTotal, this, true);
+			this.speciesMining.subscribe('change', updateTotal, this, true);
+			this.speciesScience.subscribe('change', updateTotal, this, true);
+			this.speciesEnviro.subscribe('change', updateTotal, this, true);
+			this.speciesPolitical.subscribe('change', updateTotal, this, true);
+			this.speciesTrade.subscribe('change', updateTotal, this, true);
+			this.speciesGrowth.subscribe('change', updateTotal, this, true);
+
+			this._affinityTooltip = new YAHOO.widget.Tooltip('speciesAffinityTooltip', {
+				zIndex:10200,
+				xyoffset:[0,10],
+				context: Sel.query('.speciesAffinities label', 'speciesCreate'),
+			});
 		},
 		_createHabitableOrbits : function () {
-			var range = 200,
-				tickSize = 15,
+			var range = 180,
+				tickSize = 30,
 				from = Dom.get("speciesHO_from"),
 				to = Dom.get("speciesHO_to");
 
 			// Create the DualSlider
-			var slider = Slider.getHorizDualSlider("speciesHO",
-				"speciesHO_min_thumb", "speciesHO_max_thumb",
-				range, tickSize, [90,105]);
-				
+			var YW = YAHOO.widget;
+			var mint = new YW.SliderThumb("speciesHO_min_thumb", "speciesHO_min", 0, range, 0, 0, tickSize);
+			var maxt = new YW.SliderThumb("speciesHO_max_thumb", "speciesHO_max", 0, range, 0, 0, tickSize);
+
+			var mins = new YW.Slider("speciesHO", "speciesHO", mint, "horiz");
+			var maxs = new YW.Slider("speciesHO", "speciesHO", maxt, "horiz");
+			var slider = new YW.DualSlider(mins, maxs, range, [90,90]);
+			var mintSetX = mint.setXConstraint;
+			mint.setXConstraint = function (iLeft, iRight, iTickSize) {
+				iRight += iTickSize * 1.5;
+				mintSetX.apply(mint, [iLeft, iRight, iTickSize]);
+			};
+			var maxtSetX = maxt.setXConstraint;
+			maxt.setXConstraint = function (iLeft, iRight, iTickSize) {
+				iLeft += iTickSize;
+				maxtSetX.apply(maxt, [iLeft, iRight, iTickSize]);
+			};
+
+			// slider.minRange = -15;
 			// Decorate the DualSlider instance with some new properties and
 			// methods to maintain the highlight element
 			YAHOO.lang.augmentObject(slider, {
@@ -182,46 +243,286 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				// A method to update the status and update the highlight
 				updateHighlight : function () {
 					var delta = this.maxVal - this.minVal;
-					if (this.activeSlider === this.minSlider) {
-						// If the min thumb moved, move the highlight's left edge
-						Dom.setStyle(this._highlight,'left', (this.minVal + 12) + 'px');
-					}
-					// Adjust the width of the highlight to match inner boundary
-					Dom.setStyle(this._highlight,'width', Math.max(delta - 12,0) + 'px');
+					Dom.setStyle(this._highlight,'left', (this.minVal - 5) + 'px');
+					Dom.setStyle(this._highlight,'width', Math.max(delta + 27,0) + 'px');
+				},
+				getMinOrbit : function() {
+					return (this.minVal - 14) / tickSize + 1;
+				},
+				getMaxOrbit : function() {
+					return (this.maxVal + 14) / tickSize + 1;
+				},
+				setMinOrbit : function(orbit, skipAnim, force, silent) {
+					var value = (orbit - 1) * tickSize + 14;
+					this.setMinValue(value, skipAnim, force, silent);
+					return orbit;
+				},
+				setMaxOrbit : function(orbit, skipAnim, force, silent) {
+					var value = (orbit - 1) * tickSize - 14;
+					this.setMaxValue(value, skipAnim, force, silent);
+					return orbit;
+				},
+				setOrbits : function(minOrbit, maxOrbit, skipAnim, force, silent) {
+					var min = (minOrbit - 1) * tickSize + 14;
+					var max = (maxOrbit - 1) * tickSize - 14;
+					this.setValues(min, max, skipAnim, force, silent);
 				}
 			},true);
 			// Attach the highlight method to the slider's change event
 			slider.subscribe('change',slider.updateHighlight,slider,true);
+			this.Dialog.showEvent.subscribe(slider.updateHighlight,slider,true);
 			slider.updateHighlight();
 
 			var updateUI = function () {
-				from.innerHTML = this.convertValue(slider.minVal);
-				to.innerHTML = this.convertValue(slider.maxVal);
+				from.innerHTML = this.getMinOrbit();
+				to.innerHTML = this.getMaxOrbit();
 			};
-			slider.subscribe('ready', updateUI, this, true);
-			slider.subscribe('change', updateUI, this, true);
+			slider.subscribe('ready', updateUI);
+			slider.subscribe('change', updateUI);
 
 			return slider;
 		},
 		_createHorizSingle : function (container, thumb, num) {
-			var range = 200,
+			var range = 180,
 				tickSize = 30,
 				elNum = Dom.get(num);
 
 			// Create the Slider
 			var slider = Slider.getHorizSlider(container,
 				thumb, 0, range, tickSize);
-			slider.setValue(100);
 			slider.key = container;
-
+			YAHOO.lang.augmentObject(slider, {
+				getAffinity : function() {
+					return this.getValue() / tickSize + 1;
+				},
+				setAffinity : function(affinity, skipAnim, force, silent) {
+					var value = (affinity - 1) * tickSize;
+					this.setValue(value, skipAnim, force, silent);
+					return affinity;
+				}
+			});
+			slider.setAffinity(4);
 			var updateUI = function () {
-				elNum.innerHTML = this.convertValue(slider.getValue());
+				elNum.innerHTML = this.getAffinity();
 			};
-			slider.subscribe('ready', updateUI, this, true);
-			slider.subscribe('change', updateUI, this, true);
+			slider.subscribe('ready', updateUI);
+			slider.subscribe('change', updateUI);
 
 			return slider;
 		},
+		getSpeciesData : function() {
+			var data = {
+				human: (this.speciesType == this.elSpeciesHuman.id),
+				name: this.elName.value,
+				description: this.elDesc.value.substr(0,1024),
+				habitable_orbits: {min:this.speciesHO.getMinOrbit(),max:this.speciesHO.getMaxOrbit()},
+				manufacturing_affinity: this.speciesConst.getAffinity(),
+				deception_affinity: this.speciesDecep.getAffinity(),
+				research_affinity: this.speciesResearch.getAffinity(),
+				management_affinity: this.speciesManagement.getAffinity(),
+				farming_affinity: this.speciesFarming.getAffinity(),
+				mining_affinity: this.speciesMining.getAffinity(),
+				science_affinity: this.speciesScience.getAffinity(),
+				environmental_affinity: this.speciesEnviro.getAffinity(),
+				political_affinity: this.speciesPolitical.getAffinity(),
+				trade_affinity: this.speciesTrade.getAffinity(),
+				growth_affinity : this.speciesGrowth.getAffinity()
+			};
+			data.affinity_total =
+				data.habitable_orbits.max - data.habitable_orbits.min + 1 +
+				data.manufacturing_affinity +
+				data.deception_affinity +
+				data.research_affinity +
+				data.management_affinity +
+				data.farming_affinity +
+				data.mining_affinity +
+				data.science_affinity +
+				data.environmental_affinity +
+				data.political_affinity +
+				data.trade_affinity +
+				data.growth_affinity;
+			return data;
+		},
+		setSpeciesData : function(data) {
+			if (data.human) {
+				data = {
+					name : 'Human',
+					description : '',
+					habitable_orbits: {min:3,max:3},
+					manufacturing_affinity: 4,
+					deception_affinity: 4,
+					research_affinity: 4,
+					management_affinity: 4,
+					farming_affinity: 4,
+					mining_affinity: 4,
+					science_affinity: 4,
+					environmental_affinity: 4,
+					political_affinity: 4,
+					trade_affinity: 4,
+					growth_affinity : 4,
+					affinity_total: 45
+				};
+				this.speciesType = this.elSpeciesHuman.id;
+				this.elName.disabled = true;
+				this.elDesc.disabled = true;
+				this.speciesHO.minSlider.lock();
+				this.speciesHO.maxSlider.lock();
+				this.speciesConst.lock();
+				this.speciesDecep.lock();
+				this.speciesResearch.lock();
+				this.speciesManagement.lock();
+				this.speciesFarming.lock();
+				this.speciesMining.lock();
+				this.speciesScience.lock();
+				this.speciesEnviro.lock();
+				this.speciesPolitical.lock();
+				this.speciesTrade.lock();
+				this.speciesGrowth.lock();
+				Dom.setStyle('speciesCreate', 'opacity', 0.5);
+				Dom.addClass(this.elSpeciesHuman, 'species-selected');
+				Dom.removeClass(this.elSpeciesCustom, 'species-selected');
+			}
+			else {
+				this.speciesType = this.elSpeciesCustom.id;
+				this.elName.disabled = false;
+				this.elDesc.disabled = false;
+				this.speciesHO.minSlider.unlock();
+				this.speciesHO.maxSlider.unlock();
+				this.speciesConst.unlock();
+				this.speciesDecep.unlock();
+				this.speciesResearch.unlock();
+				this.speciesManagement.unlock();
+				this.speciesFarming.unlock();
+				this.speciesMining.unlock();
+				this.speciesScience.unlock();
+				this.speciesEnviro.unlock();
+				this.speciesPolitical.unlock();
+				this.speciesTrade.unlock();
+				this.speciesGrowth.unlock();
+				Dom.setStyle('speciesCreate', 'opacity', 1);
+				Dom.removeClass(this.elSpeciesHuman, 'species-selected');
+				Dom.addClass(this.elSpeciesCustom, 'species-selected');
+			}
+			if (data.template) {
+				this.elName.value = '';
+				this.elDesc.value = '';
+			}
+			else {
+				this.elName.value = data.name;
+				this.elDesc.value = data.description;
+			}
+			this.speciesHO.setOrbits(data.habitable_orbits.min, data.habitable_orbits.max, true, true);
+			this.speciesConst.setAffinity(data.manufacturing_affinity,true,true);
+			this.speciesDecep.setAffinity(data.deception_affinity,true,true);
+			this.speciesResearch.setAffinity(data.research_affinity,true,true);
+			this.speciesManagement.setAffinity(data.management_affinity,true,true);
+			this.speciesFarming.setAffinity(data.farming_affinity,true,true);
+			this.speciesMining.setAffinity(data.mining_affinity,true,true);
+			this.speciesScience.setAffinity(data.science_affinity,true,true);
+			this.speciesEnviro.setAffinity(data.environmental_affinity,true,true);
+			this.speciesPolitical.setAffinity(data.political_affinity,true,true);
+			this.speciesTrade.setAffinity(data.trade_affinity,true,true);
+			this.speciesGrowth.setAffinity(data.growth_affinity,true,true);
+		},
+
+		selectHuman : function(e) {
+			if (e) {
+				Event.stopEvent(e);
+			}
+			this.setSpeciesData({human: true});
+		},
+		selectTemplate : function(data) {
+			data.template = true;
+			this.setSpeciesData(data);
+		},
+		validateSpecies : function(data) {
+			if (data.human) {
+				return true;
+			}
+			if (data.affinity_total > 45) {
+				throw "You can only have a maximum of 45 points.";
+			}
+			else if (data.affinity_total < 45) {
+				throw "You must use exactly 45 points.";
+			}
+			else if ( ! this._expert && (
+				data.manufacturing_affinity == 1 ||
+				data.deception_affinity == 1 ||
+				data.research_affinity == 1 ||
+				data.management_affinity == 1 ||
+				data.farming_affinity == 1 ||
+				data.mining_affinity == 1 ||
+				data.science_affinity == 1 ||
+				data.environmental_affinity == 1 ||
+				data.political_affinity == 1 ||
+				data.trade_affinity == 1 ||
+				data.growth_affinity == 1
+			)) {
+				if (confirm("Setting an affinity to 1 is an expert setting, and is not recommended unless you're absolutely sure you know what you're doing.  Are you sure you want to continue?")) {
+					this._expert = true;
+				}
+				else {
+					return false;
+				}
+			}
+			return true;
+		},
+		handleCreate : function() {
+			this.setMessage("");
+			var SpeciesServ = Game.Services.Species,
+				data = this.getSpeciesData();
+			try {
+				if ( ! this.validateSpecies(data) ) {
+					return;
+				}
+			}
+			catch (e) {
+				this.setMessage(e);
+				return;
+			}
+			if (data.human) {
+				SpeciesServ.set_human({empire_id: this.empireId},{
+					success : function(o) {
+						YAHOO.log(o, "info", "SetSpeciesHuman");
+						this._found();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						YAHOO.log(o, "error", "SetSpeciesHumanFailure");
+						this.setMessage(o.error.message);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+			else {
+				var ho = data.habitable_orbits;
+				data.habitable_orbits = [];
+				for(var i=ho.min; i<=ho.max; i++) {
+					data.habitable_orbits.push(i);
+				}
+				delete data.human;
+				delete data.affinity_total;
+				SpeciesServ.create({empire_id: this.empireId, params: data}, {
+					success : function(o) {
+						YAHOO.log(o, "info", "CreateSpecies");
+						this._found();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						YAHOO.log(o, "error", "CreateSpeciesFailure");
+						this.setMessage(o.error.message);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+		},
+		handleCancel : function() {
+			this.hide();
+			this._empire.show(true);
+		},
+
 		_found : function() {
 			Lacuna.Pulser.Show();
 			var EmpireServ = Game.Services.Empire;
@@ -243,297 +544,104 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		},
 		_getHtml : function() {
 			return [
-			'	<div class="hd">Create Species</div>',
-			'	<div class="bd">',
-			'		<form name="speciesForm">',
-			'			<div style="text-align:center;">',
-			'				<label>Select your Species:</label>',
-			'				<select id="speciesSelect">',
-			'					<option value="human_species">Human</option>',
-			'					<option value="create">Create your own</option>',
-			'				</select>',
-			'			</div>',
-			'			<div id="speciesCreate">',
-			'				<ul style="margin-top:5px; padding-top:5px; border-top:1px solid #52acff;">',
-			'					<li style="margin-bottom:3px;"><label for="speciesName">Name</label><input type="text" id="speciesName" maxlength="30" size="30" /></li>',
-			'					<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
-			'					<li id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
-			'				</ul>',
-			'				<div class="yui-g">',
-			'					<div class="yui-u first">',
-			'						<ul>',
-			'							<li><label>Habitable Orbits</label>',
-			'								<div id="speciesHO" class="speciesSlider_bg" title="Habitable Orbits Selector">',
-			'									<span id="speciesHO_highlight"></span>',
-			'									<div id="speciesHO_min_thumb"><span id="speciesHO_from" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'									<div id="speciesHO_max_thumb"><span id="speciesHO_to" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Manufacturing</label>',
-			'								<div id="speciesConst" class="speciesSlider_bg" title="Manufacturing Selector">',
-			'									<div id="speciesConst_thumb"><span id="speciesConst_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Deception</label>',
-			'								<div id="speciesDecep" class="speciesSlider_bg" title="Deception Selector">',
-			'									<div id="speciesDecep_thumb"><span id="speciesDecep_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Research</label>',
-			'								<div id="speciesResearch" class="speciesSlider_bg" title="Research Selector">',
-			'									<div id="speciesResearch_thumb"><span id="speciesResearch_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Management</label>',
-			'								<div id="speciesManagement" class="speciesSlider_bg" title="Management Selector">',
-			'									<div id="speciesManagement_thumb"><span id="speciesManagement_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Farming</label>',
-			'								<div id="speciesFarming" class="speciesSlider_bg" title="Farming Selector">',
-			'									<div id="speciesFarming_thumb"><span id="speciesFarming_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'						</ul>',
-			'					</div>',
-			'					<div class="yui-u">',
-			'						<ul>',
-			'							<li><label>Mining</label>',
-			'								<div id="speciesMining" class="speciesSlider_bg" title="Mining Selector">',
-			'									<div id="speciesMining_thumb"><span id="speciesMining_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Science</label>',
-			'								<div id="speciesScience" class="speciesSlider_bg" title="Science Selector">',
-			'									<div id="speciesScience_thumb"><span id="speciesScience_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Environmental</label>',
-			'								<div id="speciesEnviro" class="speciesSlider_bg" title="Environmental Selector">',
-			'									<div id="speciesEnviro_thumb"><span id="speciesEnviro_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Political</label>',
-			'								<div id="speciesPolitical" class="speciesSlider_bg" title="Political Selector">',
-			'									<div id="speciesPolitical_thumb"><span id="speciesPolitical_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Trade</label>',
-			'								<div id="speciesTrade" class="speciesSlider_bg" title="Trade Selector">',
-			'									<div id="speciesTrade_thumb"><span id="speciesTrade_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'							<li><label>Growth</label>',
-			'								<div id="speciesGrowth" class="speciesSlider_bg" title="Growth Selector">',
-			'									<div id="speciesGrowth_thumb"><span id="speciesGrowth_num" class="thumbDisplay">1</span><img src="//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/slider/assets/thumb-n.gif" style="width:15px;height:21px;"></div>',
-			'								</div>',
-			'							</li>',
-			'						</ul>',
-			'					</div>',
-			'				</div>',
-			'			</div>',
-			'			<div id="speciesMessage" class="hidden"></div>',
-			'		</form>',
-			'	</div>',
-			'	<div class="ft"></div>'
+				'	<div class="hd">Create Species</div>',
+				'	<div class="bd">',
+				'		<form name="speciesForm">',
+				'			<div id="speciesButtons">',
+				'				Species: ',
+				'				<button id="speciesHuman">Human</button>',
+				'				<span id="speciesCustom">Custom: </span>',
+				'				<span id="speciesTemplates">',
+				'				</span>',
+				'			</div>',
+				'			<div id="speciesCreate">',
+				'				<ul style="margin-top:5px; padding-top:5px; border-top:1px solid #52acff;">',
+				'					<li style="margin-bottom:3px;"><label for="speciesName">Species Name</label><input type="text" id="speciesName" maxlength="30" size="30" /></li>',
+				'					<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
+				'					<li id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</li>',
+				'				</ul>',
+				'				<div class="yui-g speciesAffinities">',
+				'					<div class="yui-u first">',
+				'						<ul>',
+				'							<li><label title="Determines the orbits your species can inhabit. Orbits 2-5 have the most abundant food. Orbits 1,6 and 7 have less competition from other players.">Habitable Orbits</label>',
+				'								<div id="speciesHO" class="speciesSlider_bg" title="Habitable Orbits Selector">',
+				'									<span id="speciesHO_highlight"></span>',
+				'									<div id="speciesHO_min">',
+			'											<div id="speciesHO_min_thumb"><span id="speciesHO_from" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb-half-left.png" /></div>',
+				'									</div>',
+				'									<div id="speciesHO_max">',
+				'										<div id="speciesHO_max_thumb"><span id="speciesHO_to" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb-half-right.png" /></div>',
+				'									</div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases the output of buildings that convert one resource into another.">Manufacturing</label>',
+				'								<div id="speciesConst" class="speciesSlider_bg" title="Manufacturing Selector">',
+				'									<div id="speciesConst_thumb"><span id="speciesConst_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Determines how skilled your spies are naturally.">Deception</label>',
+				'								<div id="speciesDecep" class="speciesSlider_bg" title="Deception Selector">',
+				'									<div id="speciesDecep_thumb"><span id="speciesDecep_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Decreases the amount of resources it takes to upgrade buildings.">Research</label>',
+				'								<div id="speciesResearch" class="speciesSlider_bg" title="Research Selector">',
+				'									<div id="speciesResearch_thumb"><span id="speciesResearch_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Decreases the amount of time it takes to build and process everything.">Management</label>',
+				'								<div id="speciesManagement" class="speciesSlider_bg" title="Management Selector">',
+				'									<div id="speciesManagement_thumb"><span id="speciesManagement_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases your production of food.">Farming</label>',
+				'								<div id="speciesFarming" class="speciesSlider_bg" title="Farming Selector">',
+				'									<div id="speciesFarming_thumb"><span id="speciesFarming_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'						</ul>',
+				'					</div>',
+				'					<div class="yui-u">',
+				'						<ul>',
+				'							<li><label title="Increases your production of ore.">Mining</label>',
+				'								<div id="speciesMining" class="speciesSlider_bg" title="Mining Selector">',
+				'									<div id="speciesMining_thumb"><span id="speciesMining_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases production from power plants, and technological upgrades such as the Propulsion Factory.">Science</label>',
+				'								<div id="speciesScience" class="speciesSlider_bg" title="Science Selector">',
+				'									<div id="speciesScience_thumb"><span id="speciesScience_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases your production of water, and decreases your production of waste.">Environmental</label>',
+				'								<div id="speciesEnviro" class="speciesSlider_bg" title="Environmental Selector">',
+				'									<div id="speciesEnviro_thumb"><span id="speciesEnviro_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases happiness production, and lowers the cost of settling new colonies.">Political</label>',
+				'								<div id="speciesPolitical" class="speciesSlider_bg" title="Political Selector">',
+				'									<div id="speciesPolitical_thumb"><span id="speciesPolitical_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Increases the amount of goods that can be hauled on cargo ships and transported through Subspace Transporters, and gives you some advantages trading with Lacuna Expanse Corp.">Trade</label>',
+				'								<div id="speciesTrade" class="speciesSlider_bg" title="Trade Selector">',
+				'									<div id="speciesTrade_thumb"><span id="speciesTrade_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'							<li><label title="Sets the starting size of your Planetary Command Center on each colony you create, which gives you more starting production and storage.">Growth</label>',
+				'								<div id="speciesGrowth" class="speciesSlider_bg" title="Growth Selector">',
+				'									<div id="speciesGrowth_thumb"><span id="speciesGrowth_num" class="thumbDisplay">1</span><img src="'+Lib.AssetUrl+'ui/web/slider-thumb.png" /></div>',
+				'								</div>',
+				'							</li>',
+				'						</ul>',
+				'					</div>',
+				'				</div>',
+				'			</div>',
+				'			<div id="speciesMessage" class="hidden"></div>',
+				'		</form>',
+				'	</div>',
+				'	<div class="ft"></div>'
 			].join('');
-		},
-		_diffSpecies : function(ns) {
-			var os = this.oldSpecies;
-			
-			var hoDiff = !os.habitable_orbits ? true : os.habitable_orbits.length != ns.habitable_orbits.length;
-			if(!hoDiff) {
-				for(var h=0; h<os.habitable_orbits.length; h++) {
-					if(os.habitable_orbits[h] != ns.habitable_orbits[h]) {
-						hoDiff = true;
-						break;
-					}
-				}
-			}
-			
-			return hoDiff
-				|| os.name != ns.name
-				|| os.description != ns.description
-				|| os.manufacturing_affinity != ns.manufacturing_affinity
-				|| os.deception_affinity != ns.deception_affinity
-				|| os.research_affinity != ns.research_affinity
-				|| os.management_affinity != ns.management_affinity
-				|| os.farming_affinity != ns.farming_affinity
-				|| os.mining_affinity != ns.mining_affinity
-				|| os.science_affinity != ns.science_affinity
-				|| os.environmental_affinity != ns.environmental_affinity
-				|| os.political_affinity != ns.political_affinity
-				|| os.trade_affinity != ns.trade_affinity
-				|| os.growth_affinity != ns.growth_affinity;
-		},
-	
-		handleCreate : function() {
-			this.setMessage("");
-			var SpeciesServ = Game.Services.Species;
-			//if the select human go directly to founding the empire
-			if(this.elSelect.selectedIndex == 0) {
-				if(this.createdSpeciesOnce) {
-					Lacuna.Pulser.Show();
-					SpeciesServ.set_human({empire_id: this.empireId}, {
-						success : function(o) {
-							YAHOO.log(o, "info", "SetHuman");
-							//set back to false since we're human again
-							this.createdSpeciesOnce = false;
-							this._found();
-						},
-						failure : function(o) {
-							YAHOO.log(o, "info", "SetHumanFailure");
-							Lacuna.Pulser.Hide();
-							this.setMessage(o.error.message);
-						},
-						timeout:Game.Timeout,
-						scope:this
-					});
-				}
-				else {
-					this._found();
-				}
-			}
-			else {
-				if(this.totalValue > 45) {
-					this.setMessage("You can only have a maximum of 45 points.");
-				}
-				else {
-					var speciesHO = this.values.speciesHO,
-						ho = [];
-					if(speciesHO.max - speciesHO.min == 0) {
-						ho.push(speciesHO.min);
-					}
-					else {
-						for(var i=speciesHO.min; i<=speciesHO.max; i++) {
-							ho.push(i);
-						}
-					}
-
-					var data = {
-							empire_id:this.empireId,
-							params: {
-								name: this.elName.value,
-								description: this.elDesc.value.substr(0,1024),
-								habitable_orbits: ho,
-								manufacturing_affinity: this.values.speciesConst,
-								deception_affinity: this.values.speciesDecep,
-								research_affinity: this.values.speciesResearch,
-								management_affinity: this.values.speciesManagement,
-								farming_affinity: this.values.speciesFarming,
-								mining_affinity: this.values.speciesMining,
-								science_affinity: this.values.speciesScience,
-								environmental_affinity: this.values.speciesEnviro,
-								political_affinity: this.values.speciesPolitical,
-								trade_affinity: this.values.speciesTrade,
-								growth_affinity : this.values.speciesGrowth
-							}
-						},
-						isDiff = this._diffSpecies(data.params);
-					
-					var go = true;
-					if(isDiff && (data.params.manufacturing_affinity == 1
-						|| data.params.deception_affinity == 1
-						|| data.params.research_affinity == 1
-						|| data.params.management_affinity == 1
-						|| data.params.farming_affinity == 1
-						|| data.params.mining_affinity == 1
-						|| data.params.science_affinity == 1
-						|| data.params.environmental_affinity == 1
-						|| data.params.political_affinity == 1
-						|| data.params.trade_affinity == 1
-						|| data.params.growth_affinity == 1
-					)) {
-						go = confirm("Setting an affinity to 1 is an expert setting, and is not recommended unless you're absolutely sure you know what you're doing.  Are you sure you want to continue?");
-					}
-					
-					if(go) {
-						if(isDiff && this.oldSpecies.name != data.params.name) {
-							Lacuna.Pulser.Show();
-							//if there is a difference and the names aren't the same make sure the name is available then create
-							SpeciesServ.is_name_available({name:data.params.name}, {
-								success : function(o) {
-									YAHOO.log(o);
-									if(o.result == 1) {
-										SpeciesServ.create(data,{
-											success : function(o){
-												YAHOO.log(o, "info", "SpeciesCreate");
-												this.oldSpecies = data.params;
-												//set true in case there are errors in creating empire so when they click save again we set species correctly
-												this.createdSpeciesOnce = true;
-												this._found();
-											},
-											failure : function(o){
-												YAHOO.log(o, "info", "SpeciesCreateFailure");
-												Lacuna.Pulser.Hide();
-												if(o.error.code == 1007) {
-													this.setMessage("You can only have a maximum of 45 points.");
-												}
-												else {
-													this.setMessage(o.error.message);
-												}
-											},
-											timeout:Game.Timeout,
-											scope:this
-										});
-									}
-									else {
-										this.setMessage("Species name is unavailable.  Please choose another.");
-									}
-								},
-								failure : function(o) {
-									YAHOO.log(o);
-									Lacuna.Pulser.Hide();
-									this.setMessage(o.error.message);
-								},
-								timeout:Game.Timeout,
-								scope:this
-							});
-						}
-						else if(isDiff){
-							Lacuna.Pulser.Show();
-							//if there is a difference and the names are the same create
-							SpeciesServ.create(data,{
-								success : function(o){
-									YAHOO.log(o, "info", "SpeciesCreate");
-									//set true in case there are errors in creating empire so when they click save again we set species correctly
-									this.createdSpeciesOnce = true;
-									this._found();
-								},
-								failure : function(o){
-									YAHOO.log(o, "info", "SpeciesCreateFailure");
-									Lacuna.Pulser.Hide();
-									if(o.error.code == 1007) {
-										this.setMessage("You can only have a maximum of 45 points.");
-									}
-									else {
-										this.setMessage(o.error.message);
-									}
-								},
-								timeout:Game.Timeout,
-								scope:this
-							});
-						}
-						else {
-							//otherwise everything is the same so just try to found it again
-							this._found();
-						}
-					}
-				}
-			}
-		},
-		handleCancel : function() {
-			if(this.elSelect.selectedIndex == 1) {
-				//set it back ot human since they canceled
-				this.elSelect.selectedIndex = 0;
-				Dom.setStyle(this.elCreate, "display", "none");
-				this.Dialog.center();
-			}
-			else {
-				//if it's already human send them back to empire
-				this.hide();
-				this._empire.show(true);
-			}
 		},
 		setMessage : function(str) {
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
@@ -544,24 +652,12 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 			this.Dialog.center();
-			if(!this._slidersCreated && Dom.getStyle(this.elCreate, "display") != "none") {
-				this._createSliders();
-			}
 		},
 		hide : function() {
-			this._clearSliders();
-			this.createdSpeciesOnce = false; //set this back to nothing since if they cancel they have to create an empire again before we get back to this screen
-			this.oldSpecies = {};
-			this.elSelect.selectedIndex = 0;
-			Dom.setStyle(this.elCreate, "display", "none");
-			this.elName.value = "";
-			this.elDesc.value = "";
 			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
+			this.selectHuman();
 		},
-		convertValue : function(val) {
-			return Math.floor(val * 0.035) + 1;
-		}
 	};
 	YAHOO.lang.augmentProto(CreateSpecies, Util.EventProvider);
 

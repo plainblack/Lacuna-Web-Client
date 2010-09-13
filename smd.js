@@ -1895,6 +1895,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
+				"fetch_captcha" : {
+					"description": "fetch a captcha for account creation",
+					"parameters": [],
+					"returns":{"type":"object"}
+				},
 				"create" : {
 					"description": "create empire",
 					"parameters": {
