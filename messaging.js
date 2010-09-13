@@ -111,6 +111,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//set start display
 				Dom.setStyle(this.display, "visibility", "hidden");
 				Event.delegate("messagingTabs", "click", this.tabClick, "li.tab", this, true);
+				Event.delegate(this.body, "click", function(e, el) { Event.stopEvent(e); }, "a.profile_link", this, true);
+// XXX actually show profile
 			}, this, true);
 			this.messagingPanel.hideEvent.subscribe(function(){
 				this.attachmentPanel.hide();
@@ -580,7 +582,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
 				Event.purgeElement(this.body);
-				this.body.innerHTML = msg.body ? msg.body.replace(/\n/gi,'<br />') : '';
+				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';
 				if(msg.attachments) {
 					this.body.appendChild(document.createElement("hr"));
 					if(msg.attachments.image) {
@@ -699,6 +701,20 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					scope:this
 				});
 			}
+		},
+		formatBody : function(body) {
+			body = body.replace(/&/g,'&amp;');
+			body = body.replace(/</g,'&lt;');
+			body = body.replace(/>/g,'&gt;');
+			body = body.replace(/\n/g,'<br />');
+			body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
+			body = body.replace(/{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)}/gi, function(str,icon){
+				var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
+				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
+			});
+			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/-]+)\]/gi,'<a href="$1">$1</a>');
+			body = body.replace(/{Empire\s+(\d+)\s+([^}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			return body;
 		},
 		replyMessage : function(e) {
 			this.currentTab = this.create.id;
