@@ -702,6 +702,10 @@ about
 	clear:both;
 	cursor: url(assets/ui/web/openhand.cur), default;
 }
+#planetMap .tile:hover {
+	border: 1px dashed #fff;
+	margin: -1px;
+}
 /*#planetMap {
 	background: brown url('assets/planet_side/ground.png');
 }*/
