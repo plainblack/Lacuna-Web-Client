@@ -34,6 +34,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<div class="yui-u" id="starDetailsInfo">',
 				'		</div>',
 				'	</div>',
+				'	<div id="starDetailTabs" class="yui-navset">',
+				'		<ul class="yui-nav">',
+				'		</ul>',
+				'		<div class="yui-content">',
+				'		</div>',
+				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
@@ -52,14 +58,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			this.starDetails.renderEvent.subscribe(function(){
 				this.starDetails.tabView = new YAHOO.widget.TabView("starDetailTabs");
-				Event.delegate("starDetailsInfo", "click", function(e, matchedEl, container){
+				/*Event.delegate("starDetailsInfo", "click", function(e, matchedEl, container){
 					var data = this.selectedStar;
 					if(data) {
 						if(matchedEl.innerHTML == "Send Probe") {
 							this.SendProbe(data);
 						}
 					}
-				}, "button", this, true);
+				}, "button", this, true);*/
 			}, this, true);
 			this.starDetails.hideEvent.subscribe(function(){
 				this.selectedStar = undefined;
@@ -221,27 +227,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				this._map = map;
 				this._gridCreated = true;
 				
-				Event.delegate(this._map.mapDiv, "click", function(e, matchedEl, container) {
-					if(!this._map.controller.isDragging()) {
-						var tile = this._map.tileLayer.findTileById(matchedEl.id);
-						if(tile && tile.data) {
-							if(tile.data.isStar) {
-								this.ShowStar(tile);
-							}
-							else if(tile.data.isPlanet) {
-								this.ShowPlanet(tile);
-							}
-						}
-					}
-				}, "div.tile", this, true);
-				/*Event.delegate(this._map.mapDiv, "dblclick", function(e, matchedEl, container) {
-					var tile = this._map.tileLayer.findTileById(matchedEl.id);
-					if(tile && tile.data.alignments.indexOf("self") >= 0) {
-						YAHOO.log([tile.id, tile.data]);
-						Game.OverlayManager.hideAll();
-						this.fireEvent("onChangeToSystemView", tile.data);
-					}
-				}, "div.tile", this, true);*/
+				Event.delegate(this._map.mapDiv, "click", this.GridClick, "div.tile", this, true);
 			}
 			else {
 				//move to current planet
@@ -250,6 +236,19 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			this.MapVisible(true);
 			Lacuna.Pulser.Hide();
+		},
+		GridClick : function(e, matchedEl, container) {
+			if(!this._map.controller.isDragging()) {
+				var tile = this._map.tileLayer.findTileById(matchedEl.id);
+				if(tile && tile.data) {
+					if(tile.data.isStar) {
+						this.ShowStar(tile);
+					}
+					else if(tile.data.isPlanet) {
+						this.ShowPlanet(tile);
+					}
+				}
+			}
 		},
 		SetSize : function() {
 			var size = Game.GetSize();
@@ -268,77 +267,62 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.MapVisible(false);
 		},
 	
-		SendProbe : function(data) {
-			Lacuna.Pulser.Show();
-			var send = Dom.get("sendProbe");
-			send.disabled = true;
+		GetShipsTab : function(planetId) {
+			var tab = new YAHOO.widget.Tab({ label: "Ships", content: [
 			
-			Game.Services.Buildings.SpacePort.send_probe({
+			].join('')});
+			
+			Game.Services.Buildings.Spaceport.get_ships_for({
 				session_id:Game.GetSession(),
-				from_body_id:Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id,
-				to_star:{star_id:data.id}
+				from_body_id:Game.GetCurrentPlanet().id,
+				target_id:planetId
 			}, {
 				success : function(o){
-					YAHOO.log(o, "info", "MapStar.SendProbe.success");
+					YAHOO.log(o, "info", "MapStar.ShowStar.get_ships_for.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
-					var par = send.parentNode;
-					par.removeChild(send);
-					par.innerHTML = "Arrives: " + Lib.formatServerDate(o.result.probe.date_arrives);
+					this.currentShips = o.result;
+					if(o.result.incoming && o.result.incoming.length > 0) {
+						for(var n=0; n<o.result.incoming.length; n++) {
+							
+						}
+					}
+					/*if(o.result.incoming_probe) {
+						Dom.get("starDetailsIncomingProbe").innerHTML = 'Probe will arrive at: ' + Lib.formatServerDate(o.result.incoming_probe);
+					}
+					else {
+						Dom.get("starDetailsIncomingProbe").innerHTML = '<button id="sendProbe" type="button">Send Probe</button>';
+					}*/
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.SendProbe.failure");
+					YAHOO.log(o, "error", "MapStar.ShowStar.get_ships_for.failure");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpcFailed", o);
-					var par = send.parentNode;
-					par.appendChild(document.createTextNode(o.error.message));
-					par.removeChild(send);
+					//Dom.get("starDetailsIncomingProbe").innerHTML = "Probe status unknown.";
 				},
 				timeout:Game.Timeout,
 				scope:this
 			});
+			
+			return tab;
 		},
+	
 		ShowStar : function(tile) {
 			var data = tile.data,
 				panel = this.starDetails;
 			Dom.get("starDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',data.color,'.png" alt="',data.name,'" style="width:100px;height:100px;" />'].join('');
-			var output = [
+			
+			if(!data.bodies) {
+				panel.shipsTabView.addTab(this.GetShipsTab(data.id));
+			}
+			
+			Dom.get("starDetailsInfo").innerHTML = [
 				'<ul>',
 				'	<li id="starDetailsName">',data.name,'</li>',
 				'	<li><label>X: </label>',data.x,'</li>',
-				'	<li><label>Y: </label>',data.y,'</li>'
-			];
-			
-			if(!data.bodies) {
-				output.push('	<li id="starDetailsIncomingProbe">Loading...</li>');
-				Game.Services.Map.check_star_for_incoming_probe({
-					session_id:Game.GetSession(),
-					star_id:data.id
-				}, {
-					success : function(o){
-						YAHOO.log(o, "info", "MapStar.ShowStar.check_star_for_incoming_probe.success");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
-						if(o.result.incoming_probe) {
-							Dom.get("starDetailsIncomingProbe").innerHTML = 'Probe will arrive at: ' + Lib.formatServerDate(o.result.incoming_probe);
-						}
-						else {
-							Dom.get("starDetailsIncomingProbe").innerHTML = '<button id="sendProbe" type="button">Send Probe</button>';
-						}
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "MapStar.ShowStar.check_star_for_incoming_probe.failure");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
-						Dom.get("starDetailsIncomingProbe").innerHTML = "Probe status unknown.";
-					},
-					timeout:Game.Timeout,
-					scope:this
-				});
-			}
-			
-			output.push('</ul>');
-			Dom.get("starDetailsInfo").innerHTML = output.join('');
+				'	<li><label>Y: </label>',data.y,'</li>',
+				'</ul>'
+			].join('');
 			
 			Game.OverlayManager.hideAll();
 			this.selectedStar = data;
@@ -456,6 +440,36 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					this.SendMiningShip(matchedEl, this.selectedBody.id);
 				}
 			}
+		},
+		SendProbe : function(data) {
+			Lacuna.Pulser.Show();
+			var send = Dom.get("sendProbe");
+			send.disabled = true;
+			
+			Game.Services.Buildings.SpacePort.send_probe({
+				session_id:Game.GetSession(),
+				from_body_id:Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id,
+				to_star:{star_id:data.id}
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapStar.SendProbe.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					var par = send.parentNode;
+					par.removeChild(send);
+					par.innerHTML = "Arrives: " + Lib.formatServerDate(o.result.probe.date_arrives);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapStar.SendProbe.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+					var par = send.parentNode;
+					par.appendChild(document.createTextNode(o.error.message));
+					par.removeChild(send);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		},
 		SendSpy : function(el, id) {
 			Lacuna.Pulser.Show();

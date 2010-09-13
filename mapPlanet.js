@@ -174,7 +174,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'						<li><a href="#Infrastructure" class="buildMenuAll">All Infrastructure</a></li>',
 				'					</ul>',
 				'				</li>',
-				'				<li class="builderMenuGroup"><a href="#Plans"><em>Plans</em></a></li>',
+				'				<li class="builderMenuGroup"><a href="#Plan"><em>Plans</em></a></li>',
 				'				<li class="builderMenuGroup"><a href="#"><em>All Buildings</em></a></li>',
 				'			</ul>',
 				'		</div>',
@@ -505,14 +505,19 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		_fireUpdateTile : function(building) {
-			//var building = this.currentBuilding.building;
 			if(building && building.id && building.name) {
-				building.efficiency = building.efficiency || "100";
-				if(build.efficiency == "100") {
+				building.efficiency = (building.efficiency || 100)*1;
+				if(building.efficiency == 100) {
 					delete building.repair_costs;
 				}
-				this.buildable[building.id] = building;
+				this.buildings[building.id] = building;
 				this._map.refreshTile(building);
+			}
+		},
+		_fireRemoveTile : function(building) {
+			if(building && building.id) {
+				delete this.buildings[building.id];
+				this._map.removeTile(building.x, building.y);
 			}
 		},
 		_fireHide : function() {
@@ -930,6 +935,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				classObj.subscribe("onSelectTab", this._fireSelectTab, this, true);
 				classObj.subscribe("onReloadTabs", this._fireReloadTabs, this, true);
 				classObj.subscribe("onUpdateTile", this._fireUpdateTile, this, true);
+				classObj.subscribe("onRemoveTile", this._fireRemoveTile, this, true);
 				classObj.subscribe("onHide", this._fireHide, this, true);
 			}
 			

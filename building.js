@@ -22,6 +22,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onSelectTab");
 		this.createEvent("onReloadTabs");
 		this.createEvent("onUpdateTile");
+		this.createEvent("onRemoveTile");
 		this.createEvent("onHide");
 		//for internal use
 		this.createEvent("onLoad");
@@ -44,7 +45,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		getTabs : function() {
 			if(this.building.efficiency*1 < 100 && this.building.repair_costs) {
-				return [this._getRepairTab()];
+				return [this._getProductionTab(), this._getRepairTab()];
 			}
 			else {
 				var tabs = [this._getProductionTab()],
@@ -83,6 +84,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		updateBuildingTile : function(building) {
 			this.fireEvent("onUpdateTile", building);
+		},
+		removeBuildingTile : function(building) {
+			this.fireEvent("onRemoveTile", building);
 		},
 		
 		_getRepairTab : function() {
@@ -208,7 +212,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						YAHOO.log(o, "info", "Building.Demolish.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
-						this.updateBuildingTile(this.building);
+						this.removeBuildingTile(this.building);
 						this.fireEvent("onHide");					
 					},
 					failure : function(o){
@@ -285,7 +289,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				'</div>'];
 			return new YAHOO.widget.Tab({ label: "Storage", content: output.join('')});
 		}
-};
+	};
 	Lang.augmentProto(Building, Util.EventProvider);
 	
 	YAHOO.lacuna.buildings.Building = Building;
