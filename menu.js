@@ -246,7 +246,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 			this.elDestructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
 			
-			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia);
+			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia, true);
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
