@@ -166,7 +166,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" class="smallWaste" /></span><span class="buildingDetailsNum">',up.production.waste_hour,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" class="smallHappy" /></span><span class="buildingDetailsNum">',up.production.happiness_hour,'</span></li>',
 					'	</ul></li>',
-					up.can ? '<li><button id="buildingDetailsUpgrade" type="button">Upgrade</button></li>' : '<li class="alert">Unable to Upgrade:</li><li class="alert">',up.reason[1],'</li>'
+					up.can ? '<li><button id="buildingDetailsUpgrade" type="button">Upgrade to Level ' + (1 + this.building.level) + '</button></li>' : '<li class="alert">Unable to Upgrade:</li><li class="alert">',up.reason[1],'</li>'
 					].join('') : '',
 				'			</ul>',
 				'		</div>',
