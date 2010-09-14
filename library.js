@@ -169,12 +169,15 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		},
-		convertNumDisplay : function(number) {
+		convertNumDisplay : function(number, always) {
 			if(number >= 1000000 || number <= -1000000) {
 				return (Math.floor(number/100000) / 10) + 'm';
 			}
 			else if(number >= 10000 || number <= -10000) {
 				return Math.floor(number/1000) + 'k';
+			}
+			else if(always) {
+				return Math.floor(number);
 			}
 			else {
 				return Math.floor(number) || "-";

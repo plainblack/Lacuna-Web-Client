@@ -246,7 +246,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 			this.elDestructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
 			
-			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia);
+			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia, true);
 		},
 		show : function() {
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
@@ -261,7 +261,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this._starVisible = true;
 		},
 		planetVisible : function(vis) {
-			this.elChangeClick.title = "To the Star Map";
+			this.elChangeClick.title = "To the Starmap";
 			this.elChangeImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 			this._planetVisible = true;
 			this._starVisible = false;
@@ -276,7 +276,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				output;
 			switch(id){
 				case "userMenuChange":
-					output = [this._planetVisible ? "To the Star Map" : "To your Planet"];
+					output = [this._planetVisible ? "To the Starmap" : "To your Planet"];
 					break;
 				case "userMenuProfile":
 					output = ['Profile'];
