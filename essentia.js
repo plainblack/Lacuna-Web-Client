@@ -96,7 +96,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				timeout:Game.Timeout,
 				scope:this
 			});
-		},
+		}
 	};
 	Lang.augmentProto(EssentiaRedeem, Util.EventProvider);
 
@@ -139,8 +139,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		}, this, true);
 
 		this.essentiaRedeem = new EssentiaRedeem();
-		this.essentiaRedeem.subscribe('onRpc', function (o) { this.fireEvent('onRpc',o) }, this, true);
-		this.essentiaRedeem.subscribe('onRpcFailed', function (o) { this.fireEvent('onRpcFailed',o) }, this, true);
+		this.essentiaRedeem.subscribe('onRpc', function (o) { this.fireEvent('onRpc',o); }, this, true);
+		this.essentiaRedeem.subscribe('onRpcFailed', function (o) { this.fireEvent('onRpcFailed',o); }, this, true);
 		this.essentiaRedeem.subscribe('onHide', this.show, this, true);
 
 		this.Dialog.render();

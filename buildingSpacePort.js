@@ -364,7 +364,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					scope:this
 				});
 			}
-		},
+		}
 		
 	});
 	
