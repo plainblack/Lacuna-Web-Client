@@ -144,14 +144,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				//only subscribe once.
 				Game.onTick.subscribe(Game.QueueProcess);
 				//this will be called on the first load and create menu
-				Lacuna.MapStar.subscribe("onMapLoaded", function(oResult){
-					Lacuna.Game.ProcessStatus(oResult.status);
-				});
-				Lacuna.MapStar.subscribe("onMapLoadFailed", Lacuna.Game.Failure);
+				Lacuna.MapStar.subscribe("onMapRpc", Game.onRpc);
+				Lacuna.MapStar.subscribe("onMapRpcFailed", Game.Failure);
 				Lacuna.MapStar.subscribe("onChangeToPlanetView", Game.onChangeToPlanetView);
 								
 				Lacuna.MapPlanet.subscribe("onMapRpc", Game.onRpc);
-				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Lacuna.Game.Failure);
+				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Game.Failure);
 				
 				Lacuna.Menu.subscribe("onChangeClick", Game.onChangeClick);
 				Lacuna.Menu.subscribe("onInboxClick", function() {
@@ -161,12 +159,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.subscribe("onDestructClick", Game.onDestructClick);
 				
 				Lacuna.Messaging.subscribe("onRpc", Game.onRpc);
-				Lacuna.Messaging.subscribe("onRpcFailed", Lacuna.Game.Failure);
+				Lacuna.Messaging.subscribe("onRpcFailed", Game.Failure);
 				
 				Lacuna.Essentia.subscribe("onRpc", Game.onRpc);
-				Lacuna.Essentia.subscribe("onRpcFailed", Lacuna.Game.Failure);
+				Lacuna.Essentia.subscribe("onRpcFailed", Game.Failure);
 				
-				Lacuna.Game._hasRun = true;
+				Game._hasRun = true;
 				
 				Event.on(window, "resize", function (e) {
 					//taken from YUI Overlay

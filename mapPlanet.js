@@ -95,7 +95,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			};
 			this.buildingDetails.resetQueue = function() {
 				Game.onTick.unsubscribe(this.processQueue);
-				this.interval = undefined;
 				this.queue = [];
 			};
 			this.buildingDetails.isVisible = function() {

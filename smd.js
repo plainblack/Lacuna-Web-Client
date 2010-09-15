@@ -1028,6 +1028,121 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/spaceport",
 
 				"services": {
+					"get_ships_for" : {
+						"description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"target", "type":"object", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						{
+							"incoming" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "P13",
+									"type_human" : "Probe",
+									"type" : "probe",
+									"task" : "Travelling",
+									"speed" : "1200",
+									"stealth" : "0",
+									"hold_size" : "0",
+									"date_started" : "01 31 2010 13:09:05 +0600",
+									"date_available" : "02 01 2010 10:08:33 +0600",
+									"date_arrives" : "02 01 2010 10:08:33 +0600",
+									"from" : {
+									   "id" : "id-goes-here",
+									   "type" : "body",
+									   "name" : "Earth"
+									},
+									"to" : {
+									   "id" : "id-goes-here",
+									   "type" : "star",
+									   "name" : "Sol"
+									}
+								},
+								...
+							],
+							"available" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "D13",
+									"type_human" : "Detonator",
+									"type" : "detonator",
+									"task" : "Docked",
+									"speed" : "700",
+									"stealth" : "0",
+									"hold_size" : "0",
+									"date_started" : "01 31 2010 13:09:05 +0600",
+									"date_available" : "01 31 2010 13:09:05 +0600"
+								},
+								...
+							],
+							"mining_platforms" : [
+								{
+									empire_id   =>  "id-goes-here",
+									empire_name => "The Peeps From Across The Street"
+								},
+								...
+							],
+							"status" : { ... }
+						 }
+						*/
+					},
+					"send_ship" : {
+						"description": "Sends a ship to a specified body or star. Use with get_ships_for.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"target", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"ship" : {
+								"id" : "id-goes-here",
+								"name" : "P13",
+								"type_human" : "Probe",
+								"type" : "probe",
+								"task" : "Travelling",
+								"speed" : "1200",
+								"stealth" : "0",
+								"hold_size" : "0",
+								"date_started" : "01 31 2010 13:09:05 +0600",
+								"date_available" : "02 01 2010 10:08:33 +0600",
+								"date_arrives" : "02 01 2010 10:08:33 +0600",
+								"from" : {
+								   "id" : "id-goes-here",
+								   "type" : "body",
+								   "name" : "Earth"
+								},
+								"to" : {
+								   "id" : "id-goes-here",
+								   "type" : "star",
+								   "name" : "Sol"
+								}
+							}  
+						 }
+						*/
+					},
+					"name_ship" : {
+						"description": "Set the name of a ship.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						* session_id
+						* building_id
+						* ship_id
+						* name 
+						*/
+					},
 					"scuttle_ship" : {
 						"description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
 						"parameters": [
@@ -1036,106 +1151,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"ship_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
-					},
-					"send_colony_ship" : {
-						"description": "Dispatches a colony ship from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have colony ships, if any, and pick one of them.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"object", "optional":false}
-							/* to_body = 
-								 { "body_name" : "Earth" }
-								 or
-								 { "body_id" : "id-goes-here" }
-								 or
-								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
-							*/
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"colony_ship" : {
-								"date_arrives" : "01 31 2010 13:09:05 +0600"
-							},
-							"status" : { get_status() }
-						}
-						*/
-					},
-					"send_mining_platform_ship" : {
-						"description": "Dispatches a mining platform ship from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have mining platform ships, if any, and pick one of them. You can only dispatch a mining platform ship to an asteroid.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"object", "optional":false}
-							/* to_body = 
-								 { "body_name" : "Earth" }
-								 or
-								 { "body_id" : "id-goes-here" }
-								 or
-								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
-							*/
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"mining_platform_ship" : {
-								"date_arrives" : "01 31 2010 13:09:05 +0600"
-							},
-							"status" : { get_status() }
-						}
-						*/
-					},
-					"send_probe" : {
-						"description": "Dispatches a probe from one of the space ports on a planet to a star. It will automatically detect which space ports on the planet have probes, if any, and pick one of them to dispatch the probe.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_star", "type":"object", "optional":false}
-							/* to_star = 
-								 { "star_name" : "Sol" }
-								or
-								 { "star_id" : "id-goes-here" }
-								or
-								 { "x" : 4, "y" : -3, "z" : 5 }
-							*/
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"probe" : {
-								"date_arrives" : "01 31 2010 13:09:05 +0600"
-							},
-							"status" : { get_status() }
-						}
-						*/
-					},
-					"send_spy_pod" : {
-						"description": "Dispatches a spy pod from one of the space ports on a planet to another body. It will automatically detect which space ports on the planet have spy pods, if any, and pick one of them to dispatch the spy pod. In order to send a spy pod you must also have an idle spy available.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"object", "optional":false}
-							/* to_body = 
-								 { "body_name" : "Earth" }
-								 or
-								 { "body_id" : "id-goes-here" }
-								 or
-								 { "x" : 4, "y" : -3, "z" : 5, "orbit" : 3 }
-							*/
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"spy_pod" : {
-								"date_arrives" : "01 31 2010 13:09:05 +0600",
-								"carrying_spy" : {
-								   "id" : "id-goes-here",
-								   "name" : "Jason Bourne",
-								}
-							},
-							"status" : { get_status() }
-						 }
-						 */
 					},
 					"view_all_ships" : {
 						"description": "Returns a list of all ships",
@@ -1194,7 +1209,120 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							]
 						 }
 						*/
+					},
+					"send_spies" : {
+						"description": "Returns a list of all ships",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"spy_ids", "type":"array", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							 "ship" : {
+								 "date_arrives" : "01 31 2010 13:09:05 +0600",
+								 "spies_sent" : ["id-goes-here","id-goes-here","id-goes-here"],     # should be identical to "spy_ids"
+								 "spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"]  # should only contain something if you're cheating, or a spy dies/turns between RPC calls
+							 },
+							 "status" : { ... }
+						 }
+						*/
+					},
+					"fetch_spies" : {
+						"description": "Returns a list of all ships",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"spy_ids", "type":"array", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							 "ship" : {
+								 "date_arrives" : "01 31 2010 13:09:05 +0600",
+							 },
+							 "status" : { ... }
+						 }
+						*/
+					},
+					"get_available_spy_ships" : {
+						"description": "Returns a list of ships capable of sending spies.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							 "status" : { ... },
+							 "ships" : [
+								 {
+									"id" : "id-goes-here",
+									"name" : "CS4",
+									"hold_size" : 1100,
+									"speed" : 400,
+									"type" : "cargo_ship"
+								 },
+								 ...
+							 ]
+						 }
+						*/
+					},
+					"get_available_spy_ships_for_fetch" : {
+						"description": "Returns a list of ships capable of retrieving spies.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							 "status" : { ... },
+							 "ships" : [
+								 {
+									"id" : "id-goes-here",
+									"name" : "CS4",
+									"hold_size" : 1100,
+									"speed" : 400,
+									"type" : "cargo_ship"
+								 },
+								 ...
+							 ]
+						 }
+						*/
+					},
+					"get_my_available_spies" : {
+						"description": "Returns a list of spies that are controlled by this empire and are on the specified body and are available for transport (assignment is Idle).",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"on_body_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+						   "spies" : [
+							  {
+								 "id" : "id-goes-here",
+								 "level" : 12,
+								 "name" : "Jack Bauer",
+								 "from" : {
+									"id" : "id-goes-here",
+									"name" : "Earth"
+								 },
+							  },
+							  ...
+						   ],
+						   "status" : { ... }
+						 }
+
+						*/
 					}
+
 				}
 			},
 			Trade : {

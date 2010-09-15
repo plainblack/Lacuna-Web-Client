@@ -269,15 +269,28 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			"/wheat" : "The Wheat Farm allows you to grow wheat on your planet.  You can only grow wheat on planets that are in orbits 2, 3 or 4 (the goldilox zone).  The Farm will produce more wheat for each level it is increased. All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive."
 		},
 		Ships :  {
-			gas_giant_settlement_platform_ship:"Gas Giant Platform",
-			terraforming_platform_ship:"Terraforming Platform",
+			bomber:"Bomber",
 			cargo_ship:"Cargo Ship",
-			probe:"Probe",
-			space_station:"Space Station",
+			colony_ship:"Colony Ship",
+			detonator:"Detonator",
+			dory:"Dory",
+			drone:"Drone",
+			excavator:"Excavator",
+			fighter:"Fighter",
+			freighter:"Freighter",
+			gas_giant_settlement_platform_ship:"Gas Giant Platform",
 			mining_platform_ship:"Mining Platform",
-			spy_pod:"Spy Pod",
+			observatory_seeker:"Observatory Seeker",
+			probe:"Probe",
+			scanner:"Scanner",
+			scow:"Scow",
+			security_ministry_seeker:"Security Ministry Seeker",
 			smuggler_ship:"Smuggler Ship",
-			colony_ship:"Colony Ship"
+			space_station:"Space Station",
+			spaceport_seeker:"Spaceport Seeker",
+			spy_pod:"Spy Pod",
+			spy_shuttle:"Spy Shuttle",
+			terraforming_platform_ship:"Terraforming Platform"
 		}
 	};
 	

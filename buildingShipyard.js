@@ -192,44 +192,44 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					var shipName = shipNames[i],
 						ship = ships[shipName],
 						nLi = li.cloneNode(false);
-					/*	nUl = ul.cloneNode(false),
-						nLi = li.cloneNode(false);
-						
-					nUl.Ship = ship;
-					Dom.addClass(nUl, "shipInfo");
-					Dom.addClass(nUl, "clearafter");
-
-					Dom.addClass(nLi,"shipType");
-					nLi.innerHTML = Lib.Ships[shipName];
-					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipCost");
-					nLi.innerHTML = [
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" /></span><span>',ship.cost.food,'</span></span>',
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" /></span><span>',ship.cost.ore,'</span></span>',
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" /></span><span>',ship.cost.water,'</span></span>',
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" /></span><span>',ship.cost.energy,'</span></span>',
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" /></span><span>',ship.cost.waste,'</span></span>',
-						'<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" /></span>',Lib.formatTime(ship.cost.seconds),'</span>'
-					].join('');
-					nUl.appendChild(nLi);
 					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipAttributes");
-					nLi.innerHTML = "Speed: " + ship.attributes.speed;
-					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipBuild");
-					if(ship.can) {
-						var bbtn = document.createElement("button");
-						bbtn.setAttribute("type", "button");
-						bbtn.innerHTML = "Build";
-						bbtn = nLi.appendChild(bbtn);
-						Event.on(bbtn, "click", this.ShipBuild, {Self:this,Type:shipName,Ship:ship}, true);
+					if(ship.reason) {
+						br = ship.reason;
+						switch(br[0]) {
+							case 1011:
+								reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								break;
+							case 1012:
+								if(br[2]) {
+									reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
+								}
+								else {
+									reason = br[1];
+								}
+								break;
+							case 1013:
+								if(br.length == 2) {
+									reason = br[1];
+								}
+								else if(Lang.isArray(br[2])){
+									if(br[1].indexOf("Goldilox") < 0) {
+										reason = [br[1], ' Requires ', br[2].join(' level ')].join('');
+									}
+									else {
+										reason = [br[1], ' Orbits Allowed: ', br[2].join(', ')].join('');
+									}
+								}
+								else {
+									reason = [br[1], ' Requires level ', br[2]].join('');
+								}
+								break;
+							default:
+								reason = br[1];
+								break;
+						}
+						
+						reason = '<div style="font-style:italic;">'+reason+'</div>';
 					}
-					nUl.appendChild(nLi);*/
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
 					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
@@ -249,6 +249,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					'			<span><label>Speed: </label><span>',ship.attributes.speed,'</span></span>',
 					'			<span><label>Hold Size: </label><span>',ship.attributes.hold_size,'</span></span>',
 					'		</div>',
+					!ship.can ? reason : '',
 					'	</div>',
 					'	<div class="yui-u" style="width:8%">',
 					ship.can ? '		<button type="button">Build</button>' : '',
