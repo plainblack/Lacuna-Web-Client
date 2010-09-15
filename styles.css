@@ -162,18 +162,36 @@ dialogs
 }
 #login input[type="text"],#login input[type="password"] { width:242px; }
 #login li { margin-bottom:3px; }
+#loginForm {
+	margin: 5px;
+}
 
-#loginForm button {
+.loginMain button {
 	float: right;
 	margin-right: 5px;
 }
 
 #login hr {
-	margin: 10px 0;
+	margin: 17px 0 15px;
+	height: 0px;
+	border: none;
+	border-top: 1px solid rgb(82, 172, 255);
 }
 
-.loginFacebook {
+.loginCreate {
+	width: 200px;
+	margin-top: 10px;
 	text-align: center;
+	float: right;
+}
+.loginMain {
+	width: 384px;
+	border-right: 1px solid rgb(82, 172, 255);
+	padding: 32px 5px;
+	height: 100px;
+}
+.loginExtras {
+	margin: 10px;
 }
 .loginExtras li {
 	list-style: disc inside none;
