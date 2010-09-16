@@ -247,10 +247,10 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					Dom.setStyle(this._highlight,'width', Math.max(delta + 27,0) + 'px');
 				},
 				getMinOrbit : function() {
-					return (this.minVal - 14) / tickSize + 1;
+					return Math.round((this.minVal - 14) / tickSize) + 1;
 				},
 				getMaxOrbit : function() {
-					return (this.maxVal + 14) / tickSize + 1;
+					return Math.round((this.maxVal + 14) / tickSize) + 1;
 				},
 				setMinOrbit : function(orbit, skipAnim, force, silent) {
 					var value = (orbit - 1) * tickSize + 14;
