@@ -25,7 +25,19 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		container.innerHTML = [
 		'	<div class="hd">Login</div>',
 		'	<div class="bd">',
-		'		<form id="loginForm" name="loginForms" autocomplete="off">',
+		'		<div class="loginWrapper">',
+		'			<div class="loginMain">',
+		'				<form id="loginForm" name="loginForms" autocomplete="off">',
+		'					<ul>',
+		'						<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
+		'						<li><label for="loginPass">Password</label><input type="password" id="loginPass"  /></li>',
+		'						<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /> <button>Login</button></li>',
+		'					</ul>',
+		'					<ul class="loginExtras">',
+		'						<li><a id="loginReset" href="#">Forgotten your password?</a></li>',
+		'					</ul>',
+		'				</form>',
+		'			</div>',
 		'			<div class="loginCreate">',
 		'				<ul>',
 		'					<li><strong>Have a Facebook account?</strong></li>',
@@ -38,17 +50,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'					<li><button id="loginCreate">Create an Empire</button></li>',
 		'				</ul>',
 		'			</div>',
-		'			<div class="loginMain">',
-		'				<ul>',
-		'					<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
-		'					<li><label for="loginPass">Password</label><input type="password" id="loginPass"  /></li>',
-		'					<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /> <button>Login</button></li>',
-		'				</ul>',
-		'				<ul class="loginExtras">',
-		'					<li><a id="loginReset" href="#">Forgotten your password?</a></li>',
-		'				</ul>',
-		'			</div>',
-		'		</form>',
+		'		</div>',
 		'	</div>',
 		].join('');
 		document.body.insertBefore(container, document.body.firstChild);
@@ -61,7 +63,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"640px",
+			width:"650px",
 			underlay:false,
 			zIndex:9999
 		});
@@ -136,6 +138,10 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			if(str) {
 				this.elName.value = str;
 				this.elRemember.checked = true;
+				this.elPass.focus();
+			}
+			else {
+				this.elName.focus();
 			}
 			if(error) {
 				this.setMessage(error.message);
