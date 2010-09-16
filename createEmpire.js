@@ -131,6 +131,12 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					failure : function(o){
 						YAHOO.log(o, "error", "CreateEmpireFailure");
 						this.setMessage(o.error.message);
+						if (o.error.code == 1014) {
+							this.captchaGUID = o.error.data.guid;
+							this.elCaptchaImage.src = o.error.data.url;
+							this.elCaptcha.value = '';
+							this.elCaptcha.focus();
+						}
 						Lacuna.Pulser.Hide();
 					},
 					timeout:Game.Timeout,
@@ -169,9 +175,11 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				this.savedEmpire = undefined;
 				this.elName.value = "";
 				this.elPass.value = "";
+				this.elPassConfirm.value = "";
 				this.elAgreeTOS.checked = false;
 				this.elAgreeRules.checked = false;
-				this.elPassConfirm.value = "";
+				this.elCaptchaImage.src = '';
+				this.elCaptcha.value = '';
 			}
 			this.refreshCaptcha();
 			this.Dialog.show();
