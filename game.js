@@ -41,14 +41,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			var session = Game.GetSession();
 			if (query.reset_password) {
 				Game.InitLogin();
-				Game.LoginDialog.initResetPassword();
-				Game.LoginDialog.ResetPassword.showReset(query.reset_password);
+				Game.LoginDialog.resetPassword(query.reset_password);
 				return;
 			}
 			if (query.facebook_uid) {
 				Game.InitLogin();
 				Game.LoginDialog.initEmpireCreator();
-				Game.EmpireCreator.createFacebook(query.facebook_uid, query.facebook_token, query.facebook_name);
+				Game.EmpireCreator.facebookReturn(query.facebook_uid, query.facebook_token, query.facebook_name);
 				return;
 			}
 			else if (query.session_id) {

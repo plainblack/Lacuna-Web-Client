@@ -162,18 +162,36 @@ dialogs
 }
 #login input[type="text"],#login input[type="password"] { width:242px; }
 #login li { margin-bottom:3px; }
+#loginForm {
+	margin: 5px;
+}
 
-#loginForm button {
+.loginMain button {
 	float: right;
 	margin-right: 5px;
 }
 
 #login hr {
-	margin: 10px 0;
+	margin: 17px 0 15px;
+	height: 0px;
+	border: none;
+	border-top: 1px solid rgb(82, 172, 255);
 }
 
-.loginFacebook {
+.loginCreate {
+	width: 200px;
+	margin-top: 10px;
 	text-align: center;
+	float: right;
+}
+.loginMain {
+	width: 384px;
+	border-right: 1px solid rgb(82, 172, 255);
+	padding: 32px 5px;
+	height: 100px;
+}
+.loginExtras {
+	margin: 10px;
 }
 .loginExtras li {
 	list-style: disc inside none;
@@ -199,6 +217,9 @@ dialogs
 	width:130px;
 }
 
+.facebookLogin .empireCaptcha {
+	display: none;
+}
 #createEmpire .empireAgreeCheck {
 	margin-top: 5px;
 }
@@ -212,21 +233,46 @@ dialogs
 #createEmpire label {
 	width:130px;
 }
+#createSpecies hr {
+	margin: 10px 0 12px;
+	height: 0px;
+	border: none;
+	border-top: 1px solid rgb(82, 172, 255);
+}
+#speciesAffinityTooltip {
+	z-index:20000 !important;
+}
+
+
 #createEmpire input[type="text"],#createEmpire input[type="password"] { width:220px; }
 #createEmpire li { margin-bottom:3px; }
 
-#createSpecies label {
-	width:140px
+#createSpecies input[type="text"] {
+	width:250px;
+}
+#createSpecies textarea {
+	width:253px;
 }
 #createSpecies li label {
+	width:140px;
 	display:inline-block;
-	width:120px;
 	text-align:right;
 	padding-right:5px;
 	vertical-align:top;
 }
-.facebookLogin .empirePassword {
-	display: none;
+#createSpecies .speciesAffinities li label {
+	vertical-align:middle;
+}
+.species-selected {
+	font-weight: bold;
+}
+#speciesHuman {
+	width: 75px;
+}
+#speciesCustom {
+	display: inline-block;
+	text-align: right;
+	width: 70px;
 }
 
 /*
@@ -641,31 +687,46 @@ about
 .speciesSlider_bg {
 	display:inline-block;
 	position: relative;
-	background: url(assets/ui/slider-bg-fader.gif) 0 5px no-repeat;
+	background: url("assets/ui/tickbar.png") -11px 5px no-repeat;
 	height: 28px;
-	width: 210px;
-}
-.thumbDisplay {
-	left:0.275em;
-	position:absolute;
-	top:0.25em;
-	color:black;
+	width: 198px;
+	top: 5px;
 }
 
-#speciesHO div {
+#speciesHO_min,
+#speciesHO_max {
+	display: inline-block;
 	position: absolute;
-	cursor: default;
-	top: 4px;
+	top: 0px;
 }
-#speciesHO_highlight { 
-	position: absolute; 
-	background: green; 
+#speciesHO_min {
+	left: -7px;
+}
+
+#speciesHO_max {
+	left: 7px;
+}
+
+.thumbDisplay {
+	position:absolute;
+	display: block;
+	text-align: center;
+	width: 100%;
+	color:black;
+	bottom: 2px;
+}
+
+#speciesHO_highlight {
+	position: absolute;
+	background: green;
 	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
-	top: 10px; 
-	left: 12px; 
-	height: 13px; 
-	width: 188px; 
-} 
+	top: 10px;
+	left: 12px;
+	height: 13px;
+	width: 188px;
+}
+#speciesHO_max_thumb,
+#speciesHO_min_thumb,
 #speciesConst_thumb,
 #speciesDecep_thumb,
 #speciesResearch_thumb,
@@ -679,15 +740,16 @@ about
 #speciesGrowth_thumb  {
 	position: absolute;
 	cursor: default;
-	top: 4px;
+	top: 8px;
 }
 
 .speciesPointTotal {
 	padding: 10px 0pt; 
 	font-size: 150%;
 }
-.speciesPointsValid { color:green; }
-.speciesPointsInvalid { color:red; }
+.speciesPointsValid { color:#00e000; }
+.speciesPointsInvalid { color:#f00; }
+.speciesPointsLow { color:#ff0 ; }
 
 
 /*

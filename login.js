@@ -26,25 +26,33 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'	<div class="hd">Login</div>',
 		'	<div class="bd">',
 		'		<form id="loginForm" name="loginForms" autocomplete="off">',
-		'			<ul>',
-		'				<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
-		'				<li><label for="loginPass">Password</label><input type="password" id="loginPass"  /></li>',
-		'				<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /> <button>Login</button></li>',
-		'			</ul>',
-		'			<hr />',
-		'			<div class="loginFacebook">',
-		'				<a href="/facebook/authorize"><img src="' + Lib.AssetUrl + 'ui/web/facebook-login-button.png" /></a>',
+		'			<div class="loginCreate">',
+		'				<ul>',
+		'					<li><strong>Have a Facebook account?</strong></li>',
+		'					<li>Log in or Create Empire</li>',
+		'					<li><a href="/facebook/authorize"><img src="' + Lib.AssetUrl + 'ui/web/facebook-login-button.png" /></a></li>',
+		'				</ul>',
+		'				<hr />',
+		'				<ul>',
+		'					<li><strong>Don\'t have an account?</strong></li>',
+		'					<li><button id="loginCreate">Create an Empire</button></li>',
+		'				</ul>',
 		'			</div>',
-		'			<hr />',
-		'			<ul class="loginExtras">',
-		'				<li><a id="loginCreate" href="#">Don\'t have an account?</a></li>',
-		'				<li><a id="loginReset" href="#">Forgotten your password?</a></li>',
-		'			</ul>',
+		'			<div class="loginMain">',
+		'				<ul>',
+		'					<li><label for="loginName">Empire Name</label><input type="text" id="loginName" /></li>',
+		'					<li><label for="loginPass">Password</label><input type="password" id="loginPass"  /></li>',
+		'					<li><label for="loginRemember">Remember Empire?</label><input type="checkbox" id="loginRemember" /> <button>Login</button></li>',
+		'				</ul>',
+		'				<ul class="loginExtras">',
+		'					<li><a id="loginReset" href="#">Forgotten your password?</a></li>',
+		'				</ul>',
+		'			</div>',
 		'		</form>',
 		'	</div>',
-		'	<div class="ft"></div>'
 		].join('');
 		document.body.insertBefore(container, document.body.firstChild);
+		Dom.addClass(container, "nofooter");
 		
 		this.Dialog = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
@@ -53,7 +61,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"400px",
+			width:"640px",
 			underlay:false,
 			zIndex:9999
 		});
@@ -169,19 +177,21 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Game.OverlayManager.hideAll();
 			Game.EmpireCreator.show();
 		},
-		initResetPassword : function() {
+		resetPassword : function(reset_key) {
+			this.hide(); //hide login
 			if(!this.ResetPassword) {
 				this.ResetPassword = new ResetPassword(this);
 				this.ResetPassword.subscribe("onResetSuccessful",function(oArgs) {
 					this.fireEvent("onLoginSuccessful",oArgs);
 				}, this, true);
 			}
-		},
-		resetPassword : function() {
-			this.hide(); //hide login
-			this.initResetPassword();
 			Game.OverlayManager.hideAll();
-			this.ResetPassword.show(this.elName.value);
+			if (reset_key) {
+				this.ResetPassword.showReset(reset_key);
+			}
+			else {
+				this.ResetPassword.show(this.elName.value);
+			}
 		}
 	};
 	Lang.augmentProto(Login, Util.EventProvider);
