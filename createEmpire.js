@@ -115,8 +115,10 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					data.captcha_guid = this.captchaGUID;
 					data.captcha_solution = this.elCaptcha.value;
 				}
-				data.password = this.elPass.value;
-				data.password1 = this.elPassConfirm.value;
+				if (this.elPass.value.length > 0) {
+					data.password = this.elPass.value;
+					data.password1 = this.elPassConfirm.value;
+				}
 				EmpireServ.create(data,{
 					success : function(o){
 						YAHOO.log(o, "info", "CreateEmpire");
@@ -150,8 +152,10 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elAgreeTOS.checked = false;
 			this.elAgreeRules.checked = false;
 			
-			this.facebook_uid = uid;
-			this.facebook_token = token;
+			this.facebook = {
+				uid: uid,
+				token: token
+			};
 			
 			Dom.addClass(this.id, 'facebookLogin');
 			Game.OverlayManager.hideAll();
@@ -160,8 +164,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		show : function(doNotClear) {
 			Game.OverlayManager.hideAll();
 			Dom.removeClass(this.id, 'facebookLogin');
-			delete this.facebook_uid;
-			delete this.facebook_token;
+			delete this.facebook;
 			if(!doNotClear) {
 				this.savedEmpire = undefined;
 				this.elName.value = "";

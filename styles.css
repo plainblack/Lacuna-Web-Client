@@ -217,6 +217,9 @@ dialogs
 	width:130px;
 }
 
+.facebookLogin .empireCaptcha {
+	display: none;
+}
 #createEmpire .empireAgreeCheck {
 	margin-top: 5px;
 }
@@ -270,10 +273,6 @@ dialogs
 	display: inline-block;
 	text-align: right;
 	width: 70px;
-}
-/* XXX */
-.facebookLogin .empirePassword {
-	display: none;
 }
 
 /*
