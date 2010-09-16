@@ -581,16 +581,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					YAHOO.log(o, "info", "Trade.accept_trade.success");
 					this.Self.fireEvent("onMapRpc", o.result);
 					this.Self.acceptVerify.hide();
-					/*var trades = this.Self.availableTrades.trades;
-					for(var i=0; i<trades.length; i++) {
-						if(trades[i].id == this.Trade.id) {
-							trades.splice(i,1);
-							break;
-						}
-					}
-					this.Line.parentNode.removeChild(this.Line);*/
 					//force get the new availabe list after accepting so we get a new captcha
-					this.Self.getAvailable();
+					this.Self.getAvailable({newValue:true});
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){

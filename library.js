@@ -238,7 +238,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		ResourceTypes : {
 			"energy":1,
 			"essentia":0,
-			"food":["algae","apple","bean","beetle","burger","bread","chip","cider","corn","fungus","lapis","meal","milk","pancake","pie","potato","root","shake","soup","syrup","wheat"],
+			"food":["algae","apple","bean","beetle","burger","bread","cheese","chip","cider","corn","fungus","lapis","meal","milk","pancake","pie","potato","root","shake","soup","syrup","wheat"],
 			"ore":["anthracite","bauxite","beryl","chromite","chalcopyrite","fluorite","galena","goethite","gold","gypsum","halite","kerogen","magnetite","methane","monazite","rutile","sulfur","trona","uraninite","zircon"],
 			"waste":1,
 			"water":1

@@ -589,8 +589,8 @@ about
 #messagingDisplay {
 	padding-top:5px;
 	margin-left:1%;
-	overflow: auto;
-	height:384px;
+	/*overflow: auto;
+	height:384px;*/
 }
 #messagingDisplay label , #messagingCreator label{
 	background-color:#D2D2D2;
