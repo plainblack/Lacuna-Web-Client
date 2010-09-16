@@ -161,6 +161,44 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return cd;
 			//"23 03 2010 01:20:11 +0000"
 		},
+		parseReason : function(reason, defReason) {
+			var output = "";
+			if(reason) {
+				switch(reason[0]) {
+					case 1011:
+						output = [reason[1], ' Requires more ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
+						break;
+					case 1012:
+						if(reason[2]) {
+							output = [reason[1], ' Requires higher production of ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
+						}
+						else {
+							output = reason[1];
+						}
+						break;
+					case 1013:
+						if(reason.length == 2) {
+							output = reason[1];
+						}
+						else if(Lang.isArray(reason[2])){
+							if(reason[1].indexOf("Goldilox") < 0) {
+								output = [reason[1], ' Requires ', reason[2].join(' level ')].join('');
+							}
+							else {
+								output = [reason[1], ' Orbits Allowed: ', reason[2].join(', ')].join('');
+							}
+						}
+						else {
+							output = [reason[1], ' Requires level ', reason[2]].join('');
+						}
+						break;
+					default:
+						output = defReason || reason[1];
+						break;
+				}
+			}
+			return output;
+		},
 		formatServerDate : function(oDate) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en");

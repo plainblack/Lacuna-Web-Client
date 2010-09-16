@@ -18,11 +18,11 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		
 		this.service = Game.Services.Buildings.Trade;
 		
+		this.createEvent("onLoadResources");
 		this.createEvent("onLoadGlyphs");
 		this.createEvent("onLoadPlans");
-		this.createEvent("onLoadPrisoners");
-		this.createEvent("onLoadResources");
 		this.createEvent("onLoadShips");
+		this.createEvent("onLoadPrisoners");
 		
 		this.subscribe("onLoad", this.getStoredResources, this, true);
 	};
@@ -51,6 +51,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'		<li><a href="#"><em>Resource</em></a></li>',
 				'		<li><a href="#"><em>Glyph</em></a></li>',
 				'		<li><a href="#"><em>Plan</em></a></li>',
+				'		<li><a href="#"><em>Ship</em></a></li>',
+				'		<li><a href="#"><em>Prisoner</em></a></li>',
 				'	</ul>',
 				'	<div class="yui-content">',
 				'		<div>',
@@ -61,6 +63,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'		</div>',
 				'		<div>',
 				'			<label>Name:</label><select id="tradePushPlanName"></select><button id="tradePushPlanAdd">Add</button>',
+				'		</div>',
+				'		<div>',
+				'			<label>Name:</label><select id="tradePushShipName"></select><button id="tradePushShipAdd">Add</button>',
+				'		</div>',
+				'		<div>',
+				'			<label>Name:</label><select id="tradePushPrisonerName"></select><button id="tradePushPrisonerAdd">Add</button>',
 				'		</div>',
 				'	</div>',
 				'</div>',
@@ -85,6 +93,16 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 							this.getPlans();
 						}
 					},this,true);
+					this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getShips();
+						}
+					},this,true);
+					this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getPrisoners();
+						}
+					},this,true);
 					
 					this.pushTabView.selectTab(0);
 				}
@@ -93,6 +111,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.subscribe("onLoadResources", this.populatePushResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populatePushGlyphName, this, true);
 			this.subscribe("onLoadPlans", this.populatePushPlanName, this, true);
+			this.subscribe("onLoadShips", this.populatePushShipName, this, true);
+			this.subscribe("onLoadPrisoners", this.populatePushPrisonerName, this, true);
 			
 			Event.onAvailable("tradePushColony", function(){
 				var opt = document.createElement("option"),
@@ -112,6 +132,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			Event.on("tradePushResourceAdd", "click", this.PushAddResource, this, true);
 			Event.on("tradePushGlyphAdd", "click", this.PushAddGlyph, this, true);
 			Event.on("tradePushPlanAdd", "click", this.PushAddPlan, this, true);
+			Event.on("tradePushShipAdd", "click", this.PushAddShip, this, true);
+			Event.on("tradePushPrisonerAdd", "click", this.PushAddPrisoner, this, true);
 			Event.on("tradePushSend", "click", this.Push, this, true);
 			
 			return this.push;
@@ -1036,6 +1058,40 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				}
 			}
 		},
+		populatePushShipName : function() {
+			var elm = Dom.get("tradePushShipName"),
+				opt = document.createElement("option"),
+				nOpt;
+				
+			if(elm) {
+				elm.options.length = 0;	
+				for(var x=0; x < this.ships.length; x++) {
+					var obj = this.ships[x];
+					nOpt = opt.cloneNode(false);
+					nOpt.Ship = obj;
+					nOpt.value = obj.id;
+					nOpt.innerHTML = [obj.name].join('');
+					elm.appendChild(nOpt);
+				}
+			}
+		},
+		populatePushPrisonerName : function() {
+			var elm = Dom.get("tradePushPrisonerName"),
+				opt = document.createElement("option"),
+				nOpt;
+				
+			if(elm) {
+				elm.options.length = 0;	
+				for(var x=0; x < this.prisoners.length; x++) {
+					var obj = this.prisoners[x];
+					nOpt = opt.cloneNode(false);
+					nOpt.Prisoner = obj;
+					nOpt.value = obj.id;
+					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
+					elm.appendChild(nOpt);
+				}
+			}
+		},
 		PushAddResource : function(){
 			var opt = Lib.getSelectedOption("tradePushResourceName"),
 				c = Dom.get("tradePushItems"),
@@ -1095,6 +1151,42 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
 					item.Object = {plan_id:opt.value, type:"plan"};
+					content.innerHTML = opt.innerHTML;
+					c.appendChild(item);
+				}
+			}
+		},
+		PushAddShip : function(){
+			var opt = Lib.getSelectedOption("tradePushShipName"),
+				c = Dom.get("tradePushItems");
+			if(opt && c) {
+				var item = document.createElement("li"),
+					del = item.appendChild(document.createElement("div")),
+					content = item.appendChild(document.createElement("div"));
+				item.id = "tradeShip-" + opt.value;
+				if(Sel.query("#"+item.id, c).length == 0) {
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					item.Object = {ship_id:opt.value, type:"ship"};
+					content.innerHTML = opt.innerHTML;
+					c.appendChild(item);
+				}
+			}
+		},
+		PushAddPrisoner : function(){
+			var opt = Lib.getSelectedOption("tradePushPrisonerName"),
+				c = Dom.get("tradePushItems");
+			if(opt && c) {
+				var item = document.createElement("li"),
+					del = item.appendChild(document.createElement("div")),
+					content = item.appendChild(document.createElement("div"));
+				item.id = "tradePrisoner-" + opt.value;
+				if(Sel.query("#"+item.id, c).length == 0) {
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					item.Object = {prisoner_id:opt.value, type:"prisoner"};
 					content.innerHTML = opt.innerHTML;
 					c.appendChild(item);
 				}

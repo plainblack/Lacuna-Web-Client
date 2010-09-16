@@ -934,7 +934,7 @@ planet details
 	font-family:impact;
 	font-size:120%;	
 }
-#planetDetails label {
+#planetDetailsInfo label , #planetDetailOre label {
 	font-weight:bold;
 	display:inline-block;
 	width:100px;
@@ -1300,6 +1300,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .shipInfo .shipAction {
 	width:100px;
+}
+.shipInfo .shipReason {
+	width:150px;
 }
 
 .shipQueue .shipQueueType {

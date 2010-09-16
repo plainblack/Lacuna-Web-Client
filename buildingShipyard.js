@@ -191,44 +191,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				for(var i=0; i<shipNames.length; i++) {
 					var shipName = shipNames[i],
 						ship = ships[shipName],
-						nLi = li.cloneNode(false);
+						nLi = li.cloneNode(false),
+						reason="";
 					
-					if(ship.reason) {
-						br = ship.reason;
-						switch(br[0]) {
-							case 1011:
-								reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-								break;
-							case 1012:
-								if(br[2]) {
-									reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-								}
-								else {
-									reason = br[1];
-								}
-								break;
-							case 1013:
-								if(br.length == 2) {
-									reason = br[1];
-								}
-								else if(Lang.isArray(br[2])){
-									if(br[1].indexOf("Goldilox") < 0) {
-										reason = [br[1], ' Requires ', br[2].join(' level ')].join('');
-									}
-									else {
-										reason = [br[1], ' Orbits Allowed: ', br[2].join(', ')].join('');
-									}
-								}
-								else {
-									reason = [br[1], ' Requires level ', br[2]].join('');
-								}
-								break;
-							default:
-								reason = br[1];
-								break;
-						}
-						
-						reason = '<div style="font-style:italic;">'+reason+'</div>';
+					if(ship.reason) {						
+						reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason)+'</div>';
 					}
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',

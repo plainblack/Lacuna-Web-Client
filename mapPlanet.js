@@ -369,39 +369,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					bd.name = names[i];
 					
 					if(bd.build.reason) {
-						br = bd.build.reason;
-						switch(br[0]) {
-							case 1011:
-								reason = [br[1], ' Requires more ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-								break;
-							case 1012:
-								if(br[2]) {
-									reason = [br[1], ' Requires higher production of ', (Lang.isArray(br[2]) ? br[2].join(', ') : br[2])].join('');
-								}
-								else {
-									reason = br[1];
-								}
-								break;
-							case 1013:
-								if(br.length == 2) {
-									reason = br[1];
-								}
-								else if(Lang.isArray(br[2])){
-									if(br[1].indexOf("Goldilox") < 0) {
-										reason = [br[1], ' Requires ', br[2].join(' level ')].join('');
-									}
-									else {
-										reason = [br[1], ' Orbits Allowed: ', br[2].join(', ')].join('');
-									}
-								}
-								else {
-									reason = [br[1], ' Requires level ', br[2]].join('');
-								}
-								break;
-							default:
-								reason = "";
-								break;
-						}
+						reason = Lib.parseReason(bd.build.reason, "");
 					}
 					else {
 						reason = undefined;
