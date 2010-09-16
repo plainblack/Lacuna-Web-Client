@@ -235,16 +235,24 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.updateTick();
 		},
 		updateTick : function() {
-			this.elInboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
+			var new_inbox_image;
 			if (Game.EmpireData.has_new_messages) {
+				new_inbox_image = Lib.AssetUrl + 'ui/l/inbox_new.png';
 				this.elInboxImg.title = "Inbox (" + Game.EmpireData.has_new_messages + " new)";
 				this.elInboxText.innerHTML = Game.EmpireData.has_new_messages;
 			}
 			else {
+				new_inbox_image = Lib.AssetUrl + 'ui/l/inbox.png';
 				this.elInboxImg.title = "Inbox";
 				this.elInboxText.innerHTML = "";
 			}
-			this.elDestructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
+			if (this.elInboxImg.src != new_inbox_image) {
+				this.elInboxImg.src = new_inbox_image;
+			}
+			var new_destruct_image = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
+			if (this.elDestructImg.src != new_destruct_image) {
+				this.elDestructImg.src = new_destruct_image;
+			}
 			
 			this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia, true);
 		},
