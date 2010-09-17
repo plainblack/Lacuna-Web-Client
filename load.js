@@ -17,7 +17,7 @@
 	});
 	/** end */
 	/** s3
-	host = "//s3.amazonaws.com/alpha.lacunaexpanse.com/";
+	host = "//s3.amazonaws.com/pt.lacunaexpanse.com/";
 	var loader = new YAHOO.util.YUILoader({
 		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "MIN",
