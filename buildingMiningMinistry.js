@@ -23,6 +23,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 		},
 		_getPlatformTab : function() {
 			this.platformTab = new YAHOO.widget.Tab({ label: "Platforms", content: [
+				'<div id="platformShippingInfo"></div>',
 				'<div class="platformContainer">',
 				'	<div id="platformDetails">',
 				'	</div>',
@@ -59,7 +60,8 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 							YAHOO.log(o, "info", "MiningMinistry.view_platforms.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
-							this.platforms = { max_platforms:o.result.max_platforms,
+							this.platforms = { 
+								max_platforms:o.result.max_platforms,
 								platforms:o.result.platforms
 							};
 							
@@ -90,13 +92,39 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 			}
 		},
 		
+		CapacityDescription : function(capacity) {
+			var output = ['Current production to shipping metric is ', capacity, '. '];
+			if(capacity == -1) {
+				output.push('You have no ships servicing your platforms.');
+			}
+			else if(capacity == 0) {
+				output.push('Production has stopped for some reason.');
+			}
+			else if(capacity > 100) {
+				output.push('You are producing more than your ships can handle. Add more ship to bring the value closer to 100.');
+			}
+			else if(capacity < 100) {
+				output.push('Your ships have more capacity than the platforms are producing. You may remove ships or add platforms to get closer to 100.');
+			}
+			else if(capacity == 100) {
+				output.push('Your shipping capacity and production values are exactly in sync.');
+			}
+			return output.join('');
+		},
 		MiningMinistryPlatforms : function() {
 			var platforms = this.platforms.platforms,
 				details = Dom.get("platformDetails");
 				
 			if(details) {
 				var ul = document.createElement("ul"),
-					li = document.createElement("li");
+					li = document.createElement("li"),
+					info = Dom.get("platformShippingInfo");
+					
+				if(platforms.length > 0) {
+					info.innerHTML = ['Total of ', platforms.length, ' platforms deployed.  This ministry can control a maximum of ', this.platforms.max_platforms, 
+						' platforms. ', this.CapacityDescription(platforms[0].shipping_capacity)
+					].join('');
+				}
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
@@ -112,11 +140,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 
 					Dom.addClass(nLi,"platformLocation");
 					nLi.innerHTML = "<label>Asteroid:</label> " + obj.asteroid.name;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"platformShipping");
-					nLi.innerHTML = "<label>Shipping Usage:</label> " + obj.shipping_capacity + "%";
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);

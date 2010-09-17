@@ -1156,6 +1156,12 @@ planet details
 	vertical-align:middle;
 }
 
+#observatoryInfo, #platformShippingInfo {
+	margin-bottom: 2px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid #52ACFF;
+}
+
 /* shared display headers */
 .buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader {
 	font-weight:bold;

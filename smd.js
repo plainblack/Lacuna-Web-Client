@@ -1028,209 +1028,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/spaceport",
 
 				"services": {
-					"get_ships_for" : {
-						"description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"target", "type":"object", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						{
-							"incoming" : [
-								{
-									"id" : "id-goes-here",
-									"name" : "P13",
-									"type_human" : "Probe",
-									"type" : "probe",
-									"task" : "Travelling",
-									"speed" : "1200",
-									"stealth" : "0",
-									"hold_size" : "0",
-									"date_started" : "01 31 2010 13:09:05 +0600",
-									"date_available" : "02 01 2010 10:08:33 +0600",
-									"date_arrives" : "02 01 2010 10:08:33 +0600",
-									"from" : {
-									   "id" : "id-goes-here",
-									   "type" : "body",
-									   "name" : "Earth"
-									},
-									"to" : {
-									   "id" : "id-goes-here",
-									   "type" : "star",
-									   "name" : "Sol"
-									}
-								},
-								...
-							],
-							"available" : [
-								{
-									"id" : "id-goes-here",
-									"name" : "D13",
-									"type_human" : "Detonator",
-									"type" : "detonator",
-									"task" : "Docked",
-									"speed" : "700",
-									"stealth" : "0",
-									"hold_size" : "0",
-									"date_started" : "01 31 2010 13:09:05 +0600",
-									"date_available" : "01 31 2010 13:09:05 +0600"
-								},
-								...
-							],
-							"mining_platforms" : [
-								{
-									empire_id   =>  "id-goes-here",
-									empire_name => "The Peeps From Across The Street"
-								},
-								...
-							],
-							"status" : { ... }
-						 }
-						*/
-					},
-					"send_ship" : {
-						"description": "Sends a ship to a specified body or star. Use with get_ships_for.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false},
-							{"name":"target", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"status" : { ... },
-							"ship" : {
-								"id" : "id-goes-here",
-								"name" : "P13",
-								"type_human" : "Probe",
-								"type" : "probe",
-								"task" : "Travelling",
-								"speed" : "1200",
-								"stealth" : "0",
-								"hold_size" : "0",
-								"date_started" : "01 31 2010 13:09:05 +0600",
-								"date_available" : "02 01 2010 10:08:33 +0600",
-								"date_arrives" : "02 01 2010 10:08:33 +0600",
-								"from" : {
-								   "id" : "id-goes-here",
-								   "type" : "body",
-								   "name" : "Earth"
-								},
-								"to" : {
-								   "id" : "id-goes-here",
-								   "type" : "star",
-								   "name" : "Sol"
-								}
-							}  
-						 }
-						*/
-					},
-					"name_ship" : {
-						"description": "Set the name of a ship.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false},
-							{"name":"name", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						* session_id
-						* building_id
-						* ship_id
-						* name 
-						*/
-					},
-					"scuttle_ship" : {
-						"description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-					},
-					"view_all_ships" : {
-						"description": "Returns a list of all ships",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"ships" : [
-								{
-									"name" : "CS4",
-									"id" : "id-goes-here",
-									"task" : "Mining",
-									"speed" : 350,
-									"hold_size" : 5600
-									"type" : "cargo_ship",
-								},
-								...
-							],
-							"number_of_ships" : 13,
-							"status" : { ... }
-						 }
-						*/
-					},
-					"view_ships_travelling" : {
-						"description": "Returns a list of the ships that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"page_number", "type":"number", "optional":true}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"status" : { get_status() },
-							"number_of_ships_travelling" : 30,
-							"ships_travelling" : [
-							   {
-								   "id" : "id-goes-here",
-								   "ship_type" : "probe",
-								   "date_arrives" : "01 31 2010 13:09:05 +0600",
-								   "from" : {
-									   "id" : "id-goes-here",
-									   "type" : "body",
-									   "name" : "Earth",
-								   },
-								   "to" : {
-									   "id" : "id-goes-here",
-									   "type" : "star",
-									   "name" : "Sol",
-								   }
-							   },
-							   ...
-							]
-						 }
-						*/
-					},
-					"send_spies" : {
-						"description": "Returns a list of all ships",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false},
-							{"name":"spy_ids", "type":"array", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							 "ship" : {
-								 "date_arrives" : "01 31 2010 13:09:05 +0600",
-								 "spies_sent" : ["id-goes-here","id-goes-here","id-goes-here"],     # should be identical to "spy_ids"
-								 "spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"]  # should only contain something if you're cheating, or a spy dies/turns between RPC calls
-							 },
-							 "status" : { ... }
-						 }
-						*/
-					},
 					"fetch_spies" : {
 						"description": "Returns a list of all ships",
 						"parameters": [
@@ -1320,6 +1117,242 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						   "status" : { ... }
 						 }
 
+						*/
+					},
+					"get_ships_for" : {
+						"description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"target", "type":"object", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						{
+							"incoming" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "P13",
+									"type_human" : "Probe",
+									"type" : "probe",
+									"task" : "Travelling",
+									"speed" : "1200",
+									"stealth" : "0",
+									"hold_size" : "0",
+									"date_started" : "01 31 2010 13:09:05 +0600",
+									"date_available" : "02 01 2010 10:08:33 +0600",
+									"date_arrives" : "02 01 2010 10:08:33 +0600",
+									"from" : {
+									   "id" : "id-goes-here",
+									   "type" : "body",
+									   "name" : "Earth"
+									},
+									"to" : {
+									   "id" : "id-goes-here",
+									   "type" : "star",
+									   "name" : "Sol"
+									}
+								},
+								...
+							],
+							"available" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "D13",
+									"type_human" : "Detonator",
+									"type" : "detonator",
+									"task" : "Docked",
+									"speed" : "700",
+									"stealth" : "0",
+									"hold_size" : "0",
+									"date_started" : "01 31 2010 13:09:05 +0600",
+									"date_available" : "01 31 2010 13:09:05 +0600"
+								},
+								...
+							],
+							"mining_platforms" : [
+								{
+									empire_id   =>  "id-goes-here",
+									empire_name => "The Peeps From Across The Street"
+								},
+								...
+							],
+							"status" : { ... }
+						 }
+						*/
+					},
+					"name_ship" : {
+						"description": "Set the name of a ship.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						* session_id
+						* building_id
+						* ship_id
+						* name 
+						*/
+					},
+					"scuttle_ship" : {
+						"description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"send_ship" : {
+						"description": "Sends a ship to a specified body or star. Use with get_ships_for.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"target", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"ship" : {
+								"id" : "id-goes-here",
+								"name" : "P13",
+								"type_human" : "Probe",
+								"type" : "probe",
+								"task" : "Travelling",
+								"speed" : "1200",
+								"stealth" : "0",
+								"hold_size" : "0",
+								"date_started" : "01 31 2010 13:09:05 +0600",
+								"date_available" : "02 01 2010 10:08:33 +0600",
+								"date_arrives" : "02 01 2010 10:08:33 +0600",
+								"from" : {
+								   "id" : "id-goes-here",
+								   "type" : "body",
+								   "name" : "Earth"
+								},
+								"to" : {
+								   "id" : "id-goes-here",
+								   "type" : "star",
+								   "name" : "Sol"
+								}
+							}  
+						 }
+						*/
+					},
+					"send_spies" : {
+						"description": "Returns a list of all ships",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"from_body_id", "type":"string", "optional":false},
+							{"name":"to_body", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false},
+							{"name":"spy_ids", "type":"array", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							 "ship" : {
+								 "date_arrives" : "01 31 2010 13:09:05 +0600",
+								 "spies_sent" : ["id-goes-here","id-goes-here","id-goes-here"],     # should be identical to "spy_ids"
+								 "spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"]  # should only contain something if you're cheating, or a spy dies/turns between RPC calls
+							 },
+							 "status" : { ... }
+						 }
+						*/
+					},
+					"view_all_ships" : {
+						"description": "Returns a list of all ships",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"ships" : [
+								{
+									"name" : "CS4",
+									"id" : "id-goes-here",
+									"task" : "Mining",
+									"speed" : 350,
+									"hold_size" : 5600
+									"type" : "cargo_ship",
+								},
+								...
+							],
+							"number_of_ships" : 13,
+							"status" : { ... }
+						 }
+						*/
+					},
+					"view_foreign_ships" : {
+						"description": "Shows you all the foreign ships that are incoming. However, the list is filtered by the stealth of the ship vs the level of the SpacePort.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+							 {
+								"ships" : [
+									{
+										"id" : "id-goes-here",
+										"name" : "CS3",
+										"type_human" : "Cargo Ship",
+										"type" : "cargo_ship",
+										"date_arrives" : "02 01 2010 10:08:33 +0600",
+										"from" : {
+											"id" : "id-goes-here",
+											"name" : "Earth",
+											"empire" : {
+												"id" : "id-goes-here",
+												"name" : "Earthlings"
+											}
+										}
+									},
+									...
+								],
+								"number_of_ships" : 13,
+								"status" : { ... }
+							 }
+						*/
+					},
+					"view_ships_travelling" : {
+						"description": "Returns a list of the ships that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"number_of_ships_travelling" : 30,
+							"ships_travelling" : [
+							   {
+								   "id" : "id-goes-here",
+								   "ship_type" : "probe",
+								   "date_arrives" : "01 31 2010 13:09:05 +0600",
+								   "from" : {
+									   "id" : "id-goes-here",
+									   "type" : "body",
+									   "name" : "Earth",
+								   },
+								   "to" : {
+									   "id" : "id-goes-here",
+									   "type" : "star",
+									   "name" : "Sol",
+								   }
+							   },
+							   ...
+							]
+						 }
 						*/
 					}
 

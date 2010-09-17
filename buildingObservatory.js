@@ -32,6 +32,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 		_getProbesTab : function() {
 			this.probesTab = new YAHOO.widget.Tab({ label: "Probes", content: [
 					'<div>',
+					'	<div id="observatoryInfo"></div>',
 					'	<div class="probeContainer clearafter">',
 					'		<ul id="probeDetails" class="probeInfo">',
 					'		</ul>',
@@ -53,6 +54,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							YAHOO.log(o, "info", "Observatory.get_probed_stars.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
+							this.ProbeInfoDisplay(o.result);
 							this.probes = o.result.stars;
 							this.pager = new Pager({
 								rowsPerPage : 25,
@@ -79,6 +81,12 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 				else {
 					this.ProbesDisplay();
 				}
+			}
+		},
+		ProbeInfoDisplay : function(data) {
+			var info = Dom.get("observatoryInfo");
+			if(info) {
+				info.innerHTML = ['Total of ', data.star_count, ' probes in use.  This observatory can control a maximum of ', data.max_probes, ' probes.'].join('');
 			}
 		},
 		ProbesDisplay : function() {
