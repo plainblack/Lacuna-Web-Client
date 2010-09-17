@@ -203,7 +203,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					'		<img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" />',
 					'	</div>',
 					'	<div class="yui-u" style="width:67%">',
-					'		<span class="buildingName">',Lib.Ships[shipName],'</span>: ',
+					'		<span class="shipName">',Lib.Ships[shipName],'</span>: ',
+					'		<div class="shipDesc" style="display:none;">',Game.GetShipDesc(shipName),'</div>',
 					'		<div><label style="font-weight:bold;">Cost:</label>',
 					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span>',ship.cost.food,'</span></span>',
 					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre" /></span><span>',ship.cost.ore,'</span></span>',
@@ -229,6 +230,15 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					details.appendChild(nLi);
 					
 				}
+				
+				Event.delegate(details, "click", this.ShipExpandDesc, "span.shipName");
+			}
+		},
+		ShipExpandDesc : function(e, matchedEl, container) {
+			var desc = Sel.query('div.shipDesc', matchedEl.parentNode, true);
+			if(desc) {
+				var dis = Dom.getStyle(desc, "display");
+				Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
 			}
 		},
 		ShipBuild : function() {

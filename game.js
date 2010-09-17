@@ -12,6 +12,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 	var Game = {
 		EmpireData : {},
+		Resources : {},
 		ServerData : {},
 		Services : {},
 		Timeout : 30000,
@@ -66,6 +67,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				success:Lacuna.Game.Run,
 				failure:Lacuna.Game.Failure
 			});
+			Game.GetResources();
 		},
 		Failure : function(o){
 			YAHOO.log(o, "debug", "Game.Failure");
@@ -439,6 +441,35 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.PlanetVisible();
 				Lacuna.MapPlanet.Load(planet.id);
 			}
+		},
+		
+		GetResources : function(callback) {
+			var EmpireServ = Game.Services.Empire,
+				session = Game.GetSession();
+			Util.Connect.asyncRequest('GET', 'resources.json', { 
+				success: function(o) {
+					YAHOO.log(o, "info", "GetResources.success");
+					Lacuna.Pulser.Hide();
+					try {
+						Game.Resources = Lang.JSON.parse(o.responseText);
+					}
+					catch(ex) {
+						YAHOO.log(ex);
+					}
+				}, 
+				failure: function(o) {
+					YAHOO.log(o, "error", "GetResources.failure");
+				},
+				scope: this
+			});
+		},
+		GetBuildingDesc : function(url) {
+			var desc = Game.Resources.buildings[url];
+			return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+		},
+		GetShipDesc : function(type) {
+			var desc = Game.Resources.ships[type];
+			return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
 		},
 		
 		Logout : function() {

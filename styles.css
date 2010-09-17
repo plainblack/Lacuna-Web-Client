@@ -1016,10 +1016,10 @@ planet details
 	text-align:right;
 	width:80px;
 }
-#buildingDetailsName, .buildingName {
+#buildingDetailsName, .buildingName, .shipName {
 	font-weight:bold;
 }
-.buildingName {
+.buildingName, .shipName  {
 	cursor:pointer;
 	text-decoration:underline;
 }
@@ -1027,7 +1027,7 @@ planet details
 	border-top:1px solid #52acff;
 	font-size:85%;
 }
-.buildingDesc  {
+.buildingDesc, .shipDesc  {
 	border-bottom:1px solid #52acff;
 	font-size:85%;
 }

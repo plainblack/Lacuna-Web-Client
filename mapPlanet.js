@@ -363,7 +363,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						nLi = li.cloneNode(false),
 						costs = bd.build.cost,
 						prod = bd.production,
-						isLater = bd.build.tags.indexOf('Later') > -1;
+						isLater = bd.build.tags.indexOf('Later') > -1,
 						isPlan = bd.build.tags.indexOf('Plan') > -1;
 						
 					bd.name = names[i];
@@ -395,7 +395,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<div class="yui-u" style="width:65%">',
 					'		<span class="buildingName">',bd.name,'</span>: ',
 					reason ? '		<span class="buildingReason">'+reason+'</span>' : '',
-					'		<div class="buildingDesc" style="display:none;', (reason ? 'border-top:1px solid #52acff;' : ''), '">',Lib.Descriptions[bd.url],'</div>',
+					'		<div class="buildingDesc" style="display:none;', (reason ? 'border-top:1px solid #52acff;' : ''), '">',Game.GetBuildingDesc(bd.url),'</div>',
 					'		<div><label style="font-weight:bold;">Cost:</label>',
 					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span>',costs.food,'</span></span>',
 					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre"  /></span><span>',costs.ore,'</span></span>',
