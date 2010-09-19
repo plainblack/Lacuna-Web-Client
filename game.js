@@ -301,7 +301,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									id: pKey,
 									name: status.empire.planets[pKey],
 									star_name: "",
-									image:"a1"
+									image: undefined
 								};
 							}
 							else {
@@ -432,7 +432,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//make sure we have found a planet to look at
 			if(planet) {
 				Game.EmpireData.current_planet_id = planet.id;
-				Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
+				Lacuna.Menu.PlanetMenu.elText.innerHTML = [planet.image ? '<img src="'+Lib.AssetUrl+'star_system/'+planet.image+'.png" class="menuPlanetThumb" />' : '', planet.name].join('');
 				Game.SetLocation(planet.id, Lib.View.PLANET);
 			
 				Lacuna.MapStar.MapVisible(false);
