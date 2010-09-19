@@ -937,7 +937,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				//fill production tab
 				panel.name.innerHTML = [building.name, ' ', building.level].join('');
 				panel.img.src = [Lib.AssetUrl, "planet_side/", building.image, ".png"].join('');
-				panel.desc.innerHTML = Lib.Descriptions[building.url];
+				panel.desc.innerHTML = Game.GetBuildingDesc(building.url);
 				if(building.pending_build) {
 					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
 					if(building.pending_build.seconds_remaining > 0) {
