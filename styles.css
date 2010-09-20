@@ -1539,19 +1539,6 @@ PROFILE
 	margin-left: 5px;
 	width: 200px
 }
-#profileChangePassword {
-	display: block;
-	margin: 0 auto;
-}
-#detailsAccount.password-changed #profileChangePassword {
-	display: none;
-}
-#detailsAccount .changepassword {
-	display: none;
-}
-#detailsAccount.password-changed .changepassword {
-	display: block;
-}
 
 /*
 Essentia Dialog

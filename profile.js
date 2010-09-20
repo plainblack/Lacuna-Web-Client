@@ -55,13 +55,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			Event.on(this.sitter_password, 'blur', function() {
 				this.type = 'password';
 			});
-			Event.on('profileChangePassword', 'click', function(e) {
-				Event.stopEvent(e);
-				this.current_password.value =
-					this.new_password.value =
-					this.confirm_password.value = "";
-				Dom.addClass(this.account_tab, "password-changed");
-			}, this, true);
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			this.tabView.set('activeIndex',0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
@@ -76,8 +69,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'	<div class="bd">',
 			'		<form name="profileForm" autocomplete="off">',
 			'			<ul id="profileDetails">',
-			'				<li><label style="vertical-align:top;">Description:</label><textarea id="profileDescription" cols="47"></textarea></li>',
-			'				<li><label>Status:</label><input id="profileStatus" maxlength="100" size="50" /></li>',
+			'				<li><label style="vertical-align:top;" title="The publicly displayed description for your empire.">Description:</label><textarea id="profileDescription" cols="47"></textarea></li>',
+			'				<li><label title="What are you doing right now?">Status:</label><input id="profileStatus" maxlength="100" size="50" /></li>',
 			'			</ul>',				
 			'			<div id="profileTabs" class="yui-navset">',
 			'				<ul class="yui-nav">',
@@ -91,13 +84,14 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'					<div id="detailsPlayer">',
 			'						<ul id="profilePlayer">',
 			'							<li><label>Name:<input id="profilePlayerName" /></label></li>',
-			'							<li><label>Email:<input id="profileEmail" /></label></li>',
+			'							<li><label title="Your email is used to recover your password if it is lost, and to send you any unused essentia if you cancel your account.">Email:<input id="profileEmail" /></label></li>',
 			'							<li><label>City:<input id="profileCity" /></label></li>',
 			'							<li><label>Country:<input id="profileCountry" /></label></li>',
 			'							<li><label>Skype:<input id="profileSkype" /></label></li>',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsMedals">',
+			'						<div>Select the medals to display on your profile :</div>',
 			'						<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
 			'						</ul>',
 			'					</div>',
@@ -106,14 +100,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsNotes">',
-			'						<textarea id="profileNotes"></textarea>',
+			'						<textarea id="profileNotes" title="Write down anything you would like to store with your account."></textarea>',
 			'					</div>',
 			'					<div id="detailsAccount">',
 			'						<ul>',
-			'							<li><label>Sitter Password:<input id="profileSitterPassword" type="password" /></label></li>',
-			'							<li style="margin-top: 20px"><input type="submit" value="Change Account Password" id="profileChangePassword" /><label class="changepassword">Current Password:<input id="profileCurrentPassword" type="password" /></label></li>',
-			'							<li><label class="changepassword">New Password:<input id="profileNewPassword" type="password" /></label></li>',
-			'							<li><label class="changepassword">Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
+			'							<li><label title="The sitter password can be used to allow others to log in to your account to help you manage it, but doesn\'t allow access edit your profile or delete the account.">Sitter Password:<input id="profileSitterPassword" type="password" /></label></li>',
+			'						</ul>',
+			'						<hr />',
+			'						<ul>',
+			'							<li style="text-align: center; margin-bottom: 2px;">Change Account Password:</li>',
+			'							<li><label>Current Password:<input id="profileCurrentPassword" type="password" /></label></li>',
+			'							<li><label>New Password:<input id="profileNewPassword" type="password" /></label></li>',
+			'							<li><label>Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -125,23 +123,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		},
 		handleUpdate : function() {
 			var updatesLeft = 1;
-			if (Dom.hasClass(this.account_tab, 'password-changed')) {
+			if (this.current_password.value != "") {
 				if (this.new_password.value != this.confirm_password.value) {
 					alert("Passwords don't match!");
 					this.tabView.set('activeIndex', 4);
 					this.confirm_password.focus();
 					return;
 				}
-				else if (this.new_password.value == "") {
-					if (this.current_password.value == "") {
-						alert("Cannot set empty password!");
-						this.tabView.set('activeIndex', 4);
-						this.current_password.focus();
-						return;
-					}
-				}
-				else if (this.current_password.value == "") {
-					// do nothing
+				else if (this.new_password.value == "" && this.confirm_password.value == "") {
+					alert("Cannot set empty password!");
+					this.tabView.set('activeIndex', 4);
+					this.new_password.focus();
+					return;
 				}
 				else {
 					updatesLeft++;
