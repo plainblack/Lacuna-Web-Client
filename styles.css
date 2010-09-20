@@ -26,6 +26,9 @@ a, a:link, a:visited {
 h1,h2,h3,h4,h5,h6 {
 	font-weight:bold;
 }
+button, input[type="submit"], input[type="button"] {
+	padding: 2px 6px 3px;
+}
 
 .clearafter { height:100%; }
 .clearafter:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
@@ -221,21 +224,47 @@ dialogs
 	width:130px;
 }
 
+#createEmpire .requiredField {
+	color: #f00;
+}
+#createEmpire li.requiredField {
+	text-align: center;
+}
+.facebookLogin .empirePassword .empireCaptcha {
+	display: none;
+}
+
+#createEmpire li label {
+	text-align:right;
+	padding-right:5px;
+	vertical-align:top;
+	width:140px;
+}
 .facebookLogin .empireCaptcha {
 	display: none;
 }
+.empireCaptcha img, .empireCaptcha button {
+	vertical-align: middle;
+}
+#empireCaptchaBorder {
+	display: inline-block;
+	border: 1px solid #000;
+	width: 300px;
+	height: 80px;
+	margin-right: 5px;
+}
+#createEmpire li.empireCaptcha label {
+	width: 57px;
+}
 #createEmpire .empireAgreeCheck {
 	margin-top: 5px;
+	padding-left: 65px;
 }
 #createEmpire .empireAgreeCheck input {
-	margin-left: 75px;
 	margin-right: 5px;
 }
 #createEmpire .empireAgreeCheck label {
 	width: auto;
-}
-#createEmpire label {
-	width:130px;
 }
 #speciesAffinityTooltip {
 	z-index:20000 !important;
@@ -243,6 +272,7 @@ dialogs
 
 
 #createEmpire input[type="text"],#createEmpire input[type="password"] { width:220px; }
+#createEmpire textarea { width:224px; }
 #createEmpire li { margin-bottom:3px; }
 
 #createSpecies input[type="text"] {
