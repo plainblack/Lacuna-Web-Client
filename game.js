@@ -9,7 +9,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,
 		Lib = Lacuna.Library;
-		
+
 	var Game = {
 		EmpireData : {},
 		Resources : {},
@@ -19,7 +19,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		onTick : new Util.CustomEvent("onTick"),
 		OverlayManager : new YAHOO.widget.OverlayManager(),
-		
+
 		Start : function() {
 			Game.domain = window.location.host || "lacunaexpanse.com";
 			if(!Lacuna.Pulser) {
@@ -110,6 +110,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//set our interval going for resource calcs since Logout clears it
 			Game.recTime = (new Date()).getTime();
 			Game.recInt = setInterval(Game.Tick, 1000);
+			//chat system
+			//Game.InitEnvolve();
 			/* possible new pattern for game loop
 			(function GameLoop(){
 				Game.Tick()
@@ -139,6 +141,108 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Lacuna.Pulser.Hide();
 		},
+		/*InitEnvolve : function() {
+			if(!this.Envolve) {	
+				var container = document.createElement("div");
+				container.id = "envolveChat";
+				Dom.addClass(container, "nofooter");
+				Dom.addClass(container, Lib.Styles.HIDDEN);
+				container.innerHTML = [
+				'<div class="hd">Chat</div>',
+				'<div class="bd">',
+				'	<iframe src="https://',Game.domain,'/chat.html"></iframe>',
+				'</div>'
+				].join('');
+				document.body.appendChild(container, document.body.firstChild);
+				
+				this.Envolve = new YAHOO.widget.Panel("envolveChat", {
+					constraintoviewport:true,
+					fixedcenter:false,
+					visible:false,
+					draggable:true,
+					underlay:false,
+					modal:false,
+					close:true,
+					width:"450px",
+					zIndex:19999
+				});
+				this.Envolve.renderEvent.subscribe(function(){					
+					Dom.removeClass("envolveChat", Lib.Styles.HIDDEN);
+				}, this, true);
+				this.Envolve.render();
+				
+				var div = document.createElement("div");
+				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
+				Dom.setStyle(div, "position", "absolute");
+				Dom.setStyle(div, "bottom", "0");
+				Dom.setStyle(div, "left", "0");
+				Dom.setStyle(div, "width", "100%");
+				Dom.setStyle(div, "height", "25px");
+				Dom.setStyle(div, "background-color", "#0ba2f2");
+				Dom.setStyle(div, "color", "#1bb2f2");
+				Dom.setStyle(div, "font-family", "helvetica");
+				Dom.setStyle(div, "font-size", "20px");
+				Game._envolveContainer = document.body.appendChild(div);
+				
+				Event.on(Game._envolveContainer, "click", function(){
+					this.Envolve.show();
+				}, this, true);
+			}
+			return;
+			
+			if(!Game._envolveContainer) {
+				var div = document.createElement("div"),
+					iframe = document.createElement("iframe");
+					
+				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
+				Dom.setStyle(div, "position", "absolute");
+				Dom.setStyle(div, "bottom", "0");
+				Dom.setStyle(div, "left", "0");
+				Dom.setStyle(div, "width", "100%");
+				Dom.setStyle(div, "height", "25px");
+				Dom.setStyle(div, "background-color", "#0ba2f2");
+				Dom.setStyle(div, "color", "#1bb2f2");
+				Dom.setStyle(div, "font-family", "helvetica");
+				Dom.setStyle(div, "font-size", "20px");
+				
+				Game._envolveContainer = document.body.appendChild(div);
+				
+				//iframe.innerHTML = [
+				//	'<html><body>',
+				//	'<script type="text/javascript">envoSn=2487</script>',
+				//	'<script type="text/javascript" src="http://d.envolve.com/env.nocache.js"></script>',
+				//	'<form><input type="hidden" id="EnvolveDesiredFirstName" value="',Game.EmpireData.name,'" />',
+				//	'<input type="hidden" id="EnvolveDesiredLastName" value=" " /></form>',
+				//	'</body></html>',
+				//].join('');
+				iframe.src = "https://" + Game.domain + "/chat.html";
+				
+				Game._envolveIframe = Game._envolveContainer.appendChild(iframe);
+				
+				//,
+				//	frm = document.createElement("form"),
+				//	fName = frm.appendChild(document.createElement("input")),
+				//	lName = frm.appendChild(document.createElement("input")),
+				//	s = document.createElement("script")
+					
+				//fName.setAttribute("type", "hidden");
+				//fName.id = "EnvolveDesiredFirstName";
+				//fName.value = Game.EmpireData.name;
+				
+				//lName.setAttribute("type", "hidden");
+				//lName.id = "EnvolveDesiredLastName";
+				//lName.value = " ";
+				
+				//Game._envolveForm = document.body.appendChild(frm);
+					
+				//s.type = "text/javascript";
+				//s.src = "http://d.envolve.com/env.nocache.js";
+				//Game._envolveScript = document.body.appendChild(s);
+			}
+			else if(Game._envolveContainer) {
+				Dom.setStyle(Game._envolveContainer, "display", "");
+			}
+		},*/
 		InitEvents : function() {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
@@ -200,7 +304,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			return serviceOut;
 		},
-		
+
 		onChangeToPlanetView : function(planetId) {
 			YAHOO.log(planetId, "info", "onChangeToPlanetView");
 			Game.PlanetJump(Game.EmpireData.planets[planetId]);
@@ -272,7 +376,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				timeout:Game.Timeout
 			});
 		},
-		
+
 		ProcessStatus : function(status) {
 			if(status) {
 				var doMenuUpdate;
@@ -442,7 +546,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.Load(planet.id);
 			}
 		},
-		
+
 		GetResources : function(callback) {
 			var EmpireServ = Game.Services.Empire,
 				session = Game.GetSession();
@@ -464,14 +568,18 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			});
 		},
 		GetBuildingDesc : function(url) {
-			var desc = Game.Resources.buildings[url];
-			return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+			if(Game.Resources && Game.Resources.buildings) {
+				var desc = Game.Resources.buildings[url];
+				return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+			}
 		},
 		GetShipDesc : function(type) {
-			var desc = Game.Resources.ships[type];
-			return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+			if(Game.Resources && Game.Resources.ships) {
+				var desc = Game.Resources.ships[type];
+				return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+			}
 		},
-		
+
 		Logout : function() {
 			Lacuna.Pulser.Show();
 			
@@ -481,6 +589,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
 					YAHOO.log(o);
+					//Dom.setStyle(Game._envolveContainer, "display", "none");
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
@@ -504,7 +613,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();
 		},
-		
+
 		//Cookie helpers functions
 		SetCookie : function(key, value, expiresDate) {
 			var opts = { domain: Game.domain };
@@ -523,7 +632,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.SetCookie("locationId", id);
 			Game.SetCookie("locationView", view);
 		},
-		
+
 		//Tick related
 		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,

@@ -263,27 +263,51 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		
 		_getStorageTab : function() {
+			var fc = this.building.food_capacity*1,
+				oc = this.building.ore_capacity*1,
+				wc = this.building.water_capacity*1,
+				ec = this.building.energy_capacity*1,
+				sc = this.building.waste_capacity*1,
+				currentStorage = 0;
+				
+			if(fc != 0) {
+				currentStorage += fc;
+			}
+			if(oc != 0) {
+				currentStorage += oc;
+			}
+			if(wc != 0) {
+				currentStorage += wc;
+			}
+			if(ec != 0) {
+				currentStorage += ec;
+			}
+			if(sc != 0) {
+				currentStorage += sc;
+			}
+			
 			var p = this.building.upgrade.production;
 			output = [
+				'<div style="margin-bottom:2px;padding-bottom:2px;border-bottom:1px solid #52acff;">Currently Used Storage: ',currentStorage,'/',fc+oc+wc+ec+sc,'</div>',
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul>',
-				'			<li>Current Storage</li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span class="buildingDetailsNum">',this.building.food_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre" /></span><span class="buildingDetailsNum">',this.building.ore_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" class="smallWater" /></span><span class="buildingDetailsNum">',this.building.water_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" class="smallEnergy" /></span><span class="buildingDetailsNum">',this.building.energy_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" class="smallWaste" /></span><span class="buildingDetailsNum">',this.building.waste_capacity,'</span></li>',
+				'			<li>Current Building Storage</li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></span><span class="buildingDetailsNum">',this.building.food_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span><span class="buildingDetailsNum">',this.building.ore_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span><span class="buildingDetailsNum">',this.building.water_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span class="buildingDetailsNum">',this.building.energy_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',this.building.waste_capacity,'</span></li>',
 				'		</ul>',
 				'	</div>',
 				'	<div class="yui-u">',
 				'		<ul id="buildingDetailsUpgradeStorage">',
-				'			<li>Upgrade Storage</li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre" /></span><span class="buildingDetailsNum">',p.ore_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" class="smallWater" /></span><span class="buildingDetailsNum">',p.water_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" class="smallEnergy" /></span><span class="buildingDetailsNum">',p.energy_capacity,'</span></li>',
-				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" class="smallWaste" /></span><span class="buildingDetailsNum">',p.waste_capacity,'</span></li>',
+				'			<li>Upgrade to Building Storage</li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></span><span class="buildingDetailsNum">',p.food_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span><span class="buildingDetailsNum">',p.ore_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span><span class="buildingDetailsNum">',p.water_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span class="buildingDetailsNum">',p.energy_capacity,'</span></li>',
+				'			<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',p.waste_capacity,'</span></li>',
 				'		</ul>',
 				'	</div>',
 				'</div>'];

@@ -593,7 +593,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					success : function(o){
 						YAHOO.log(o, "info", "MapPlanet.Refresh");
 						this.fireEvent("onMapRpc", o.result);
-						var planet = Game.EmpireData.planets[Game.EmpireData.current_planet_id];
+						var planet = Game.GetCurrentPlanet();
 						this._map.setPlotsAvailable(planet.size*1 - planet.building_count*1);
 						this._map.addTileData(o.result.buildings);
 						this._map.refresh();
@@ -709,8 +709,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 			Lacuna.Pulser.Hide();
 		},
+		NotIsolationist : function(building) {
+			if(Game.EmpireData.is_isolationist == "1") {
+				if(building.url == "/espionage" && !confirm("If you build an Espionage Ministry you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?")) {
+					return true;
+				}
+				else if(building.url == "/munitionslab" && !confirm("If you build a Munitions Lab you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?")) {
+					return true;
+				}
+			}
+		},
 		Build : function(building, x, y) {
-			if(Game.EmpireData.is_isolationist == "1" && building.url == "/espionage" && !confirm("If you build an Espionage Ministry you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?")) {
+			if(this.NotIsolationist(building)) {
 				return;
 			}
 		

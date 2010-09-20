@@ -156,6 +156,7 @@ body.yui-skin-sam .yui-panel hr {
 }
 .yui-skin-sam #pulsing .bd, .yui-skin-sam #pulsing.ft {
 	background:transparent;
+	border-width:0px;
 }
 
 /*
@@ -645,7 +646,7 @@ about
 	color:#000;
 }
 #messagingDisplay div, #messagingCreator div.messagingCreatorC {
-	border-width:1px 1px 0;
+	border-width:1px 0 0 0;
 	border-style:solid;
 	border-color:#D2D2D2;
 }
@@ -653,8 +654,14 @@ about
 	padding-left:2px;
 }
 #messagingDisplay #messagingBody {
-	border:1px solid gray;
+	border-top:1px solid #D2D2D2;
 	padding:2px 5px;
+}
+
+#messagingBody #attachmentImage {
+	border-color:transparent;
+	border-style:none;
+	border-width:0;
 }
 
 #attachmentTable th {

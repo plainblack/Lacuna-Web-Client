@@ -486,7 +486,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				target = {star_id : oSelf.selectedStar.id};
 			}
 			
-			if(target) {
+			if(target && NotIsolationist(ship)) {
 				Game.Services.Buildings.SpacePort.send_ship({
 					session_id:Game.GetSession(),
 					ship_id:ship.id,
@@ -507,6 +507,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					scope:oSelf
 				});
 			}
+		},
+		NotIsolationist : function(ship) {
+			if(Game.EmpireData.is_isolationist == "1" && ship.type == "colony_ship") {
+				return confirm("If you colonize another planet you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?");
+			}
+			return true;
 		},
 	
 		CreateShipsUnavailTab : function(panel) {
