@@ -635,22 +635,22 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				output;
 			switch(id){
 				case "planetMenuFood":
-					output = [Lib.formatNumber(Math.round(planet.food_stored)), '/', Lib.formatNumber(planet.food_capacity), ' : ', Lib.formatNumber(planet.food_hour),'/hr'];
+					output = ['<div><strong>Food</strong></div><div><img alt="" class="smallFood" src="',Lib.AssetUrl,'ui/s/food.png" /> ',Lib.formatNumber(planet.food_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.food_stored)), '/', Lib.formatNumber(planet.food_capacity),'</div>'];
 					break;
 				case "planetMenuOre":
-					output = [Lib.formatNumber(Math.round(planet.ore_stored)), '/', Lib.formatNumber(planet.ore_capacity), ' : ', Lib.formatNumber(planet.ore_hour),'/hr'];
+					output = ['<div><strong>Ore</strong></div><div><img alt="" class="smallOre" src="',Lib.AssetUrl,'ui/s/ore.png" /> ',Lib.formatNumber(planet.ore_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.ore_stored)), '/', Lib.formatNumber(planet.ore_capacity),'</div>'];
 					break;
 				case "planetMenuWater":
-					output = [Lib.formatNumber(Math.round(planet.water_stored)), '/', Lib.formatNumber(planet.water_capacity), ' : ', Lib.formatNumber(planet.water_hour),'/hr'];
+					output = ['<div><strong>Water</strong></div><div><img alt="" class="smallWater" src="',Lib.AssetUrl,'ui/s/water.png" /> ',Lib.formatNumber(planet.water_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.water_stored)), '/', Lib.formatNumber(planet.water_capacity),'</div>'];
 					break;
 				case "planetMenuEnergy":
-					output = [Lib.formatNumber(Math.round(planet.energy_stored)), '/', Lib.formatNumber(planet.energy_capacity), ' : ', Lib.formatNumber(planet.energy_hour),'/hr'];
+					output = ['<div><strong>Energy</strong></div><div><img alt="" class="smallEnergy" src="',Lib.AssetUrl,'ui/s/energy.png" /> ',Lib.formatNumber(planet.energy_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.energy_stored)), '/', Lib.formatNumber(planet.energy_capacity),'</div>'];
 					break;
 				case "planetMenuWaste":
-					output = [Lib.formatNumber(Math.round(planet.waste_stored)), '/', Lib.formatNumber(planet.waste_capacity), ' : ', Lib.formatNumber(planet.waste_hour),'/hr'];
+					output = ['<div><strong>Waste</strong></div><div><img alt="" class="smallWaste" src="',Lib.AssetUrl,'ui/s/waste.png" /> ',Lib.formatNumber(planet.waste_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.waste_stored)), '/', Lib.formatNumber(planet.waste_capacity),'</div>'];
 					break;
 				case "planetMenuHappiness":
-					output = [Lib.formatNumber(Math.round(planet.happiness)), ' : ', Lib.formatNumber(planet.happiness_hour),'/hr'];
+					output = ['<div><strong>Happiness</strong></div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(planet.happiness_hour),'/hr</div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(Math.round(planet.happiness)),'</div>'];
 					break;
 				case "planetMenuPlots":
 					output = [planet.size*1 - planet.building_count*1, ' Plots Available'];

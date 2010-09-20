@@ -306,6 +306,9 @@ dialogs
 /*
 menu
 */
+#planetMenuTT strong {
+	font-weight: bold;
+}
 #userMenu, #planetMenu {
 	width:315px;
 }
@@ -1161,6 +1164,10 @@ planet details
 }
 .smallTime {
 	width:21px;
+	height:22px;
+}
+.smallStorage {
+	width:22px;
 	height:22px;
 }
 
