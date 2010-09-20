@@ -226,7 +226,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Event.delegate("builderFilter", "click", this.clickBuildMenu, 'a.buildMenuLink', this, true);
 				Event.delegate(this.buildingList, "click", this.build, "button", this, true);
 				Event.delegate(this.buildingList, "click", this.build, "img.buildingImage", this, true);
-				Event.delegate(this.buildingList, "click", this.expandDesc, "span.buildingName");
 			});
 			this.buildingBuilder.hideEvent.subscribe(function(){
 				if(this.currentBuildConnection) {
@@ -290,13 +289,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			};
 			this.buildingBuilder.build = function(e, matchedEl, container) {
 				Lacuna.MapPlanet.Build(matchedEl.building, this.currentTile.x, this.currentTile.y);
-			};
-			this.buildingBuilder.expandDesc = function(e, matchedEl, container) {
-				var desc = Sel.query('div.buildingDesc', matchedEl.parentNode, true);
-				if(desc) {
-					var dis = Dom.getStyle(desc, "display");
-					Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
-				}
 			};
 			this.buildingBuilder.resetDisplay = function(conn) {
 				if(conn) {
@@ -388,33 +380,46 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					}
 					
 					nLi.innerHTML = [
-					'<div class="yui-gb" style="margin-bottom:2px;">',
-					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center;">',
-					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:100px;height:100px;cursor:pointer" class="buildingImage" />',
+					'<div class="yui-gb" style="padding-bottom: 2px; margin-bottom:2px; border-bottom: 1px solid #52acff;">',
+					'	<div class="yui-u first" style="width:200px;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center">',
+					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:200px;height:200px;cursor:pointer" class="buildingImage" />',
 					'	</div>',
-					'	<div class="yui-u" style="width:65%">',
-					'		<span class="buildingName">',bd.name,'</span>: ',
-					reason ? '		<span class="buildingReason">'+reason+'</span>' : '',
-					'		<div class="buildingDesc" style="display:none;', (reason ? 'border-top:1px solid #52acff;' : ''), '">',Game.GetBuildingDesc(bd.url),'</div>',
-					'		<div><label style="font-weight:bold;">Cost:</label>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span>',costs.food,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre"  /></span><span>',costs.ore,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" class="smallWater" /></span><span>',costs.water,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" class="smallEnergy" /></span><span>',costs.energy,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" class="smallWaste" /></span><span>',costs.waste,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" class="smallTime" /></span>',Lib.formatTime(costs.time),'</span>',
+					'	<div class="yui-u" style="margin-left: 10px; width:350px">',
+					'		<div class="buildingName">',bd.name,':</div>',
+					reason ? '		<div class="buildingReason">'+reason+'</div>' : '',
+					'		<div class="buildingDesc">',Game.GetBuildingDesc(bd.url),'</div>',
+					'		<table class="buildingStats" cellpadding="0" cellspacing="0">',
+					'			<tr><td></td>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></th>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre"  /></th>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></th>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></th>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></th>',
+					'				<th><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></th>',
+					'			</tr>',
+					'			<tr><th>Cost:</th>',
+					'				<td>',costs.food,'</td>',
+					'				<td>',costs.ore,'</td>',
+					'				<td>',costs.water,'</td>',
+					'				<td>',costs.energy,'</td>',
+					'				<td>',costs.waste,'</td>',
+					'				<td></td>',
+					'			</tr>',
+					'			<tr><th>Prod:</th>',
+					'				<td>',prod.food_hour,'/hr</td>',
+					'				<td>',prod.ore_hour,'/hr</td>',
+					'				<td>',prod.water_hour,'/hr</td>',
+					'				<td>',prod.energy_hour,'/hr</td>',
+					'				<td>',prod.waste_hour,'/hr</td>',
+					'				<td>',prod.happiness_hour,'/hr</td>',
+					'			</tr>',
+					'		</table>',
+					'		<div style="margin-top: 5px; text-align: center; padding-left: 20px; height: 30px">',
+					(isLater || isQueueFull) ? '' : '			<button style="width: 100px; height: 30px; font-size: 12pt">Build</button>',
+					'			<img class="smallTime" style="margin-left: ',
+					(isLater || isQueueFull) ? '120px' : '20px',
+					'; vertical-align: middle" src="',Lib.AssetUrl,'ui/s/time.png" />',Lib.formatTime(costs.time),' sec',
 					'		</div>',
-					'		<div><label style="font-weight:bold;">Prod:</label>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" class="smallFood" /></span><span>',prod.food_hour,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" class="smallOre"  /></span><span>',prod.ore_hour,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" class="smallWater" /></span><span>',prod.water_hour,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" class="smallEnergy" /></span><span>',prod.energy_hour,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" class="smallWaste" /></span><span>',prod.waste_hour,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/happiness.png" class="smallHappy" /></span><span>',prod.happiness_hour,'</span></span>',
-					'		</div>',
-					'	</div>',
-					'	<div class="yui-u" style="width:10%;margin-top:20px">',
-					(isLater || isQueueFull) ? '' : '		<button type="button">Build</button>',
 					'	</div>',
 					'</div>'].join('');
 					
@@ -947,7 +952,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				//fill production tab
 				panel.name.innerHTML = [building.name, ' ', building.level].join('');
 				panel.img.src = [Lib.AssetUrl, "planet_side/", building.image, ".png"].join('');
-				panel.desc.innerHTML = Lib.Descriptions[building.url];
+				panel.desc.innerHTML = Game.GetBuildingDesc(building.url);
 				if(building.pending_build) {
 					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
 					if(building.pending_build.seconds_remaining > 0) {

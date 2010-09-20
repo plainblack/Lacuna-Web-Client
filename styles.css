@@ -26,6 +26,9 @@ a, a:link, a:visited {
 h1,h2,h3,h4,h5,h6 {
 	font-weight:bold;
 }
+button, input[type="submit"], input[type="button"] {
+	padding: 2px 6px 3px;
+}
 
 .clearafter { height:100%; }
 .clearafter:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
@@ -145,7 +148,6 @@ body.yui-skin-sam .yui-panel hr {
 	border: none;
 	border-top: 1px solid rgb(82, 172, 255);
 }
-}
 
 /*#pulsing_c { 
 	width:99%;
@@ -223,21 +225,47 @@ dialogs
 	width:130px;
 }
 
+#createEmpire .requiredField {
+	color: #f00;
+}
+#createEmpire li.requiredField {
+	text-align: center;
+}
+.facebookLogin .empirePassword .empireCaptcha {
+	display: none;
+}
+
+#createEmpire li label {
+	text-align:right;
+	padding-right:5px;
+	vertical-align:top;
+	width:140px;
+}
 .facebookLogin .empireCaptcha {
 	display: none;
 }
+.empireCaptcha img, .empireCaptcha button {
+	vertical-align: middle;
+}
+#empireCaptchaBorder {
+	display: inline-block;
+	border: 1px solid #000;
+	width: 300px;
+	height: 80px;
+	margin-right: 5px;
+}
+#createEmpire li.empireCaptcha label {
+	width: 57px;
+}
 #createEmpire .empireAgreeCheck {
 	margin-top: 5px;
+	padding-left: 65px;
 }
 #createEmpire .empireAgreeCheck input {
-	margin-left: 75px;
 	margin-right: 5px;
 }
 #createEmpire .empireAgreeCheck label {
 	width: auto;
-}
-#createEmpire label {
-	width:130px;
 }
 #speciesAffinityTooltip {
 	z-index:20000 !important;
@@ -245,6 +273,7 @@ dialogs
 
 
 #createEmpire input[type="text"],#createEmpire input[type="password"] { width:220px; }
+#createEmpire textarea { width:224px; }
 #createEmpire li { margin-bottom:3px; }
 
 #createSpecies input[type="text"] {
@@ -278,6 +307,9 @@ dialogs
 /*
 menu
 */
+#planetMenuTT strong {
+	font-weight: bold;
+}
 #userMenu, #planetMenu {
 	width:315px;
 }
@@ -1024,7 +1056,7 @@ planet details
 #buildingDetailsName, .buildingName, .shipName {
 	font-weight:bold;
 }
-.buildingName, .shipName  {
+.shipName {
 	cursor:pointer;
 	text-decoration:underline;
 }
@@ -1032,11 +1064,24 @@ planet details
 	border-top:1px solid #52acff;
 	font-size:85%;
 }
+.buildingStats {
+	width: 100%;
+}
+.buildingStats th {
+	font-weight: bold;
+}
 .buildingDesc, .shipDesc  {
-	border-bottom:1px solid #52acff;
 	font-size:85%;
 }
+.shipDesc  {
+	border-bottom:1px solid #52acff;
+}
+.buildingDesc a {
+	display: block;
+	text-align: right;
+}
 .buildingReason  {
+	color: #f66;
 	font-size:85%;
 }
 /*#buildingBuilderUnavailable .buildingDesc  {
@@ -1112,26 +1157,38 @@ planet details
 .smallFood {
 	width:22px; /*38px;*/
 	height:22px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 .smallOre{
 	width:19px; /*21px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .smallWater{
 	width:18px; /*15px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 .smallEnergy{
 	width:10px; /*11px;*/
 	height:22px;
+	padding-left: 7px;
+	padding-right: 7px;
 }
 .smallWaste{
 	width:15px; /*16px;*/
 	height:22px;
+	padding-left: 5px;
+	padding-right: 4px;
 }
 .smallHappy{
 	width:19px; /*22px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .smallEssentia{
 	width:24px; /*28px;*/
@@ -1140,6 +1197,14 @@ planet details
 .smallTime {
 	width:21px;
 	height:22px;
+	padding-left: 2px;
+	padding-right: 1px;
+}
+.smallStorage {
+	width:22px;
+	height:22px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 
@@ -1509,19 +1574,6 @@ PROFILE
 #detailsPlayer label input {
 	margin-left: 5px;
 	width: 200px
-}
-#profileChangePassword {
-	display: block;
-	margin: 0 auto;
-}
-#detailsAccount.password-changed #profileChangePassword {
-	display: none;
-}
-#detailsAccount .changepassword {
-	display: none;
-}
-#detailsAccount.password-changed .changepassword {
-	display: block;
 }
 
 /*

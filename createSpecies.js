@@ -83,7 +83,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				growth_affinity : 4
 			},
 			{
-				name : 'Gardociens',
+				name : 'Resilient',
 				description : 'Resilient and able to colonize most any planet.  Somewhat docile, but very quick learners and above average at producing any resource.',
 				habitable_orbits: {min:2,max:7},
 				manufacturing_affinity: 3,
@@ -526,7 +526,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		_found : function() {
 			Lacuna.Pulser.Show();
 			var EmpireServ = Game.Services.Empire;
-			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey}, {
+			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey, invite_code:this.inviteCode}, {
 				success : function(o) {
 					YAHOO.log(o, "info", "CreateSpecies._found.success");
 					Lacuna.Pulser.Hide();
@@ -647,8 +647,9 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		show : function(empire) {
+		show : function(empire, inviteCode) {
 			this.empireId = empire;
+			this.inviteCode = inviteCode;
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 			this.Dialog.center();

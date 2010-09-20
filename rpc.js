@@ -11,7 +11,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 	var Lang = YAHOO.lang, 
 		Util = YAHOO.util;
 
-	var Service = function(smd, callback) {
+	var Service = function(smd, callback, baseUrl) {
 
 	   if( Lang.isString(smd) ) {
 		  this.smdUrl = smd;
@@ -19,6 +19,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 	   }
 	   else if( Lang.isObject(smd) ) {
 		  this._smd = smd;
+		  this._baseUrl = baseUrl;
 		  this.process(callback);
 	   }
 	   else {
@@ -45,6 +46,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 			var self = this;
 			var func = function(oParams, opts) {
 				var smd = self._smd;
+				var baseUrl = self._baseUrl;
 				
 				var envelope = YAHOO.rpc.Envelope[method.envelope || smd.envelope];
 				var callback = {
@@ -126,6 +128,10 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 					var a=this.smdUrl.split('/');
 					a[a.length-1]="";
 					url = a.join("/")+url;
+				}
+				else if ( baseUrl ) {
+					baseUrl = baseUrl.replace(/\/?$/,'/');
+					url = url.replace(/^\//, baseUrl);
 				}
 
 				var r = {

@@ -21,7 +21,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 
 		Start : function() {
-			Game.domain = window.location.host || "lacunaexpanse.com";
+			var l = window.location;
+			Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
+			Game.domain = l.host || "lacunaexpanse.com";
 			if(!Lacuna.Pulser) {
 				Lacuna.Pulser = new Lacuna.Pulse();
 			}
@@ -30,7 +32,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
 			var query = {};
-			var vars = window.location.hash.substring(1).split('&');
+			var vars = l.hash.substring(1).split('&');
 			if (vars.length > 0) {
 				for (var i=0; i<vars.length; i++) {
 					var pair = vars[i].split("=");
@@ -53,10 +55,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			else if (query.session_id) {
 				Game.SetSession(query.session_id);
-				Game.GetStatus({
-					success:Lacuna.Game.Run,
-					failure:Lacuna.Game.Failure
-				});
 			}
 			else if (!session) {
 				Game.DoLogin();
@@ -295,7 +293,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(smd.hasOwnProperty(sKey)) {
 					var oSmd = smd[sKey];
 					if(oSmd.services) {
-						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd);
+						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd, undefined, Game.RPCBase);
 					}
 					else {
 						serviceOut[sKey] = Game.InitServices(oSmd);
@@ -407,7 +405,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									id: pKey,
 									name: status.empire.planets[pKey],
 									star_name: "",
-									image:"a1"
+									image: undefined
 								};
 							}
 							else {
@@ -538,7 +536,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//make sure we have found a planet to look at
 			if(planet) {
 				Game.EmpireData.current_planet_id = planet.id;
-				Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
+				Lacuna.Menu.PlanetMenu.elText.innerHTML = [planet.image ? '<img src="'+Lib.AssetUrl+'star_system/'+planet.image+'.png" class="menuPlanetThumb" />' : '', planet.name].join('');
 				Game.SetLocation(planet.id, Lib.View.PLANET);
 			
 				Lacuna.MapStar.MapVisible(false);
@@ -550,7 +548,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		GetResources : function(callback) {
 			var EmpireServ = Game.Services.Empire,
 				session = Game.GetSession();
-			Util.Connect.asyncRequest('GET', 'resources.json', { 
+			Util.Connect.asyncRequest('GET', 'resources.json', {
 				success: function(o) {
 					YAHOO.log(o, "info", "GetResources.success");
 					Lacuna.Pulser.Hide();

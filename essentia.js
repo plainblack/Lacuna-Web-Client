@@ -48,7 +48,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.tabView = new YAHOO.widget.TabView('essentiaTabs');
 			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage"], "click", this.boost, this, true);
 			Event.on('essentiaRedeemButton', 'click', this.redeemClick, this, true);
-			Event.on("essentiaPurchaseButton", "click", function(){
+			Event.on("essentiaPurchaseButton", "click", function(e){
+				Event.stopEvent(e);
 				window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=0,scrollbars=0,height=550,width=600,directories=0");
 			});
 			Game.onTick.subscribe(function(){
@@ -87,42 +88,42 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'						<table>',
 			'							<tr><td colspan="4">&nbsp;</td><th>Expires</th></tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallFood" src="',Lib.AssetUrl,'ui/s/food.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallFood" title="Food" src="',Lib.AssetUrl,'ui/s/food.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% food per hour</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostFood">Boost</button></td>',
 			'								<td class="essentiaDetailsTime" id="essentialDetailsTimeFood"></td>',
 			'							</tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallOre" src="',Lib.AssetUrl,'ui/s/ore.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallOre" title="Ore" src="',Lib.AssetUrl,'ui/s/ore.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% ore per hour</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostOre">Boost</button></td>',
 			'								<td class="essentiaDetailsTime" id="essentialDetailsTimeOre"></td>',
 			'							</tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallWater" src="',Lib.AssetUrl,'ui/s/water.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallWater" title="Water" src="',Lib.AssetUrl,'ui/s/water.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% water per hour</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostWater">Boost</button></td>',
 			'								<td class="essentiaDetailsTime" id="essentialDetailsTimeWater"></td>',
 			'							</tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallEnergy" src="',Lib.AssetUrl,'ui/s/energy.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallEnergy" title="Energy" src="',Lib.AssetUrl,'ui/s/energy.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% energy per hour</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostEnergy">Boost</button></td>',
 			'								<td class="essentiaDetailsTime" id="essentialDetailsTimeEnergy"></td>',
 			'							</tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallHappiness" src="',Lib.AssetUrl,'ui/s/happiness.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallHappiness" title="Happiness" src="',Lib.AssetUrl,'ui/s/happiness.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% happiness per hour</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostHappiness">Boost</button></td>',
 			'								<td class="essentiaDetailsTime" id="essentialDetailsTimeHappiness"></td>',
 			'							</tr>',
 			'							<tr>',
-			'								<td class="essentiaDetailsImg"><img class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" /></td>',
+			'								<td class="essentiaDetailsImg"><img class="smallStorage" title="Storage" src="',Lib.AssetUrl,'ui/s/storage.png" /></td>',
 			'								<td class="essentiaDetailsText">+25% storage capacity</td>',
 			'								<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'								<td class="essentiaDetailsBoost"><button id="essentiaBoostStorage">Boost</button></td>',

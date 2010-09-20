@@ -22,15 +22,23 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'	<div class="hd">Create Empire</div>',
 		'	<div class="bd">',
 		'		<form name="empireForm" autocomplete="no">',
-		'			<ul>',
-		'				<li><label for="empireName">Empire Name</label><input type="text" id="empireName" /></li>',
-		'				<li class="empirePassword"><label for="empirePass">Password</label><input type="password" id="empirePass" /></li>',
-		'				<li class="empirePassword"><label for="empirePassConfirm">Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
-		'				<li class="empireCaptcha"><img src="" id="empireCaptchaImage" /><button id="empireRefreshCaptcha">New Captcha</button</li>',
-		'				<li class="empireCaptcha"><label for="empireCaptcha">Answer: </label><input type="text" id="empireCaptcha" /></li>',
-		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeTOS" /><label for="empireAgreeTOS">I agree to the <a href="http://www.lacunaexpanse.com/terms/" target="_blank">Terms of Service</a>.</label></li>',
-		'				<li class="empireAgreeCheck"><input type="checkbox" id="empireAgreeRules" /><label for="empireAgreeRules">I agree to abide by <a href="http://www.lacunaexpanse.com/rules/" target="_blank">the rules</a>.</label></li>',
-		'			</ul>',
+		'			<div style="overflow: hidden">',
+		'				<ul style="float:left">',
+		'					<li><label for="empireName" title="Empire name must be between 3 and 30 characters and cannot contain the characters @, &amp;, <, >, or ;"><span class="requiredField">* </span>Empire Name</label><input type="text" id="empireName" maxlength="30" /></li>',
+		'					<li class="empirePassword"><label for="empirePass" title="Password must be between 6 and 30 characters long."><span class="requiredField">* </span>Password</label><input type="password" id="empirePass" maxlength="30"/></li>',
+		'					<li class="empirePassword"><label for="empirePassConfirm" title="Must be the same as the password"><span class="requiredField">* </span>Password Confirm</label><input type="password" id="empirePassConfirm" /></li>',
+		'					<li class="empireEmail"><label for="empireEmail" title="Used for password recovery and otifications.">EMail</label><input type="text" id="empireEmail" /></li>',
+		'					<li class="empireDesc"><label for="empireDesc" title="Description of your empire to show to other players.">Description</label><textarea id="empireDesc"></textarea></li>',
+		'					<li class="empireFriendCode"><label for="empireFriendCode" title="If you don\'t have a friend invite code, this can be ignored.">Friend Invite Code</label><input type="text" id="empireFriendCode" /></li>',
+		'				</ul>',
+		'				<ul style="float:right">',
+		'					<li class="empireCaptcha"><span id="empireCaptchaBorder"><img alt="" width="300" height="80" src="" id="empireCaptchaImage" /></span><button id="empireRefreshCaptcha"><img alt="Refresh" src="'+Lib.AssetUrl+'ui/s/refresh.png" /></button</li>',
+		'					<li class="empireCaptcha"><span class="requiredField">* </span><label for="empireCaptcha">Answer: </label><input type="text" id="empireCaptcha" /></li>',
+		'					<li class="empireAgreeCheck"><span class="requiredField">* </span><input type="checkbox" id="empireAgreeTOS" /><label for="empireAgreeTOS">I agree to the <a href="http://www.lacunaexpanse.com/terms/" target="_blank">Terms of Service</a>.</label></li>',
+		'					<li class="empireAgreeCheck"><span class="requiredField">* </span><input type="checkbox" id="empireAgreeRules" /><label for="empireAgreeRules">I agree to abide by <a href="http://www.lacunaexpanse.com/rules/" target="_blank">the rules</a>.</label></li>',
+		'					<li class="requiredField">* Required field</li>',
+		'				</ul>',
+		'			</div>',
 		'			<div id="empireMessage" class="hidden"></div>',
 		'		</form>',
 		'	</div>',
@@ -48,13 +56,16 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			draggable:false,
 			modal:true,
 			close:false,
-			width:"400px",
+			width:"750px",
 			underlay:false,
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
 			//get el's after rendered
 			this.elName = Dom.get("empireName");
+			this.elDesc = Dom.get("empireDesc");
+			this.elEmail = Dom.get("empireEmail");
+			this.elFriendCode = Dom.get("empireFriendCode");
 			this.elPass = Dom.get("empirePass");
 			this.elPassConfirm = Dom.get("empirePassConfirm");
 			this.elAgreeTOS = Dom.get("empireAgreeTOS");
@@ -62,6 +73,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elMessage = Dom.get("empireMessage");
 			this.elCaptchaImage = Dom.get("empireCaptchaImage");
 			this.elCaptcha = Dom.get("empireCaptcha");
+			Event.on(this.elCaptchaImage, 'load', function(){Dom.setStyle(this, 'visibility', 'inherit')} );
 			Event.on('empireRefreshCaptcha', 'click', function(e){Event.stopEvent(e);this.refreshCaptcha()}, this, true);
 			
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
@@ -76,6 +88,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	};
 	CreateEmpire.prototype = {
 		refreshCaptcha : function() {
+			Dom.setStyle(this.elCaptchaImage, 'visibility' , 'hidden');
 			Game.Services.Empire.fetch_captcha({},{
 				success : function(o){
 					YAHOO.log(o, "info", "RefreshCaptcha");
@@ -98,14 +111,16 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			}
 			this.setMessage("");
 			if(this.savedEmpire && this.savedEmpire.name == this.elName.value) {
-				Game.SpeciesCreator.show(this.savedEmpire.id);
+				Game.SpeciesCreator.show(this.savedEmpire.id, this.elFriendCode.value);
 				this.hide(); //hide empire
 			}
 			else {
 				Lacuna.Pulser.Show();
 				var EmpireServ = Game.Services.Empire,
 					data = {
-						name: this.elName.value
+						name: this.elName.value,
+						description: this.elDesc.value,
+						email: this.elEmail.value
 					};
 				if (this.facebook) {
 					data.facebook_uid = this.facebook.uid;
@@ -121,10 +136,10 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				}
 				EmpireServ.create(data,{
 					success : function(o){
-						YAHOO.log(o, "info", "CreateEmpire");
+							YAHOO.log(o, "info", "CreateEmpire");
 						this.savedEmpire = data;
 						this.savedEmpire.id = o.result;
-						Game.SpeciesCreator.show(o.result);
+						Game.SpeciesCreator.show(o.result, this.elFriendCode.value);
 						Lacuna.Pulser.Hide();
 						this.hide(); //hide empire
 					},
@@ -174,11 +189,13 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			if(!doNotClear) {
 				this.savedEmpire = undefined;
 				this.elName.value = "";
+				this.elDesc.value = "";
+				this.elEmail.value = "";
+				this.elFriendCode.value = "";
 				this.elPass.value = "";
 				this.elPassConfirm.value = "";
 				this.elAgreeTOS.checked = false;
 				this.elAgreeRules.checked = false;
-				this.elCaptchaImage.src = '';
 				this.elCaptcha.value = '';
 			}
 			this.refreshCaptcha();

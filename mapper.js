@@ -308,7 +308,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
-			this.domElement.title = this.data ? [this.data.name, " ", this.data.level, " (", this.x, ",", this.y, ")"].join('') : "Ground";
+			this.domElement.title = this.data ? this.data.name : "Ground";
 			this._createActionIcon();
 			
 			if(this.data && this.data.pending_build) {
