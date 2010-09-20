@@ -5,26 +5,14 @@
 		p.className += ' hidden';
 	}
 	
-	
 	var t = "1", host;
-	/** local */
-	host = "http://localhost/lacuna/";
+	host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
 	var loader = new YAHOO.util.YUILoader({
-		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
-		filter: "RAW",
-		allowRollup: false,
-		combine: false
-	});
-	/** end */
-	/** s3
-	host = "//s3.amazonaws.com/pt.lacunaexpanse.com/";
-	var loader = new YAHOO.util.YUILoader({
-		base: "https://ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
+		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "MIN",
 		allowRollup: true,
 		combine: false
 	});
-	/** end */
 
 	loader.addModule({
 		name: "smd",
