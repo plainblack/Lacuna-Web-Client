@@ -1049,7 +1049,7 @@ planet details
 #buildingDetailsName, .buildingName, .shipName {
 	font-weight:bold;
 }
-.buildingName, .shipName  {
+.shipName {
 	cursor:pointer;
 	text-decoration:underline;
 }
@@ -1057,11 +1057,24 @@ planet details
 	border-top:1px solid #52acff;
 	font-size:85%;
 }
+.buildingStats {
+	width: 100%;
+}
+.buildingStats th {
+	font-weight: bold;
+}
 .buildingDesc, .shipDesc  {
-	border-bottom:1px solid #52acff;
 	font-size:85%;
 }
+.shipDesc  {
+	border-bottom:1px solid #52acff;
+}
+.buildingDesc a {
+	display: block;
+	text-align: right;
+}
 .buildingReason  {
+	color: #f66;
 	font-size:85%;
 }
 /*#buildingBuilderUnavailable .buildingDesc  {
@@ -1137,26 +1150,38 @@ planet details
 .smallFood {
 	width:22px; /*38px;*/
 	height:22px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 .smallOre{
 	width:19px; /*21px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .smallWater{
 	width:18px; /*15px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 .smallEnergy{
 	width:10px; /*11px;*/
 	height:22px;
+	padding-left: 7px;
+	padding-right: 7px;
 }
 .smallWaste{
 	width:15px; /*16px;*/
 	height:22px;
+	padding-left: 5px;
+	padding-right: 4px;
 }
 .smallHappy{
 	width:19px; /*22px;*/
 	height:22px;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .smallEssentia{
 	width:24px; /*28px;*/
@@ -1165,10 +1190,14 @@ planet details
 .smallTime {
 	width:21px;
 	height:22px;
+	padding-left: 2px;
+	padding-right: 1px;
 }
 .smallStorage {
 	width:22px;
 	height:22px;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 

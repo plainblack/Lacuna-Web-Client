@@ -139,11 +139,8 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			else if(hour > 0) {
 				return [hour,xPad(min,'0'),xPad(seconds,'0')].join(':');
 			}
-			else if(min > 0) {
-				return [min,xPad(seconds,'0')].join(':');
-			}
 			else {
-				return seconds;
+				return [min,xPad(seconds,'0')].join(':');
 			}
 		},
 		formatNumber : function(num) {
