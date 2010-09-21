@@ -2195,6 +2195,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"essentia_code", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
+				},
+				"update_species" : {
+					"description": "Updates the empire's species.",
+					"parameters": [
+						{"name":"empire_id", "type":"string", "optional":false},
+						{"name":"params", "type":"object", "optional":false}
+					],
+					"returns":{"type":"string"}
+				},
+				"view_species_stats" : {
+					"description": "Returns a list of the stats associated with an empire's species as it was originally created.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"get_species_templates" : {
+					"description": "Returns a list of species templates that can be used to populate the form for update_species.",
+					"parameters": [],
+					"returns":{"type":"object"}
 				}
 			}
 		},
@@ -2443,84 +2463,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"name", "type":"string", "optional":false}
 					],
 					"returns":{"type":"number"}
-				}
-			}
-		},
-		Species : {
-			"SMDVersion":"2.0",
-			"description": "SMD service demonstration",
-
-			"envelope":"JSON-RPC-2.0",
-			"transport":"POST",
-			"target":"/species",
-
-			"services": {
-
-				"is_name_available" : {
-					"description": "check if species name is available",
-					"parameters": [
-						{"name":"name", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-				},
-				
-				"create" : {
-					"description": "create species",
-					"parameters": [
-						{"name":"empire_id", "type":"string", "optional":false},
-						{"name":"params", "type":"object", "optional":false}
-						/*params ={
-							name:{"type":"string", "optional":false},
-							description:{"type":"string", "optional":false},
-							habitable_orbits:{"type":"number", "optional":false},
-							construction_affinity:{"type":"number", "optional":false},
-							deception_affinity:{"type":"number", "optional":false},
-							research_affinity:{"type":"number", "optional":false},
-							management_affinity:{"type":"number", "optional":false},
-							farming_affinity:{"type":"number", "optional":false},
-							mining_affinity:{"type":"number", "optional":false},
-							science_affinity:{"type":"number", "optional":false},
-							environmental_affinity:{"type":"number", "optional":false},
-							political_affinity:{"type":"number", "optional":false},
-							trade_affinity:{"type":"number", "optional":false},
-							growth_affinity:{"type":"number", "optional":false}
-						}*/
-					],
-					"returns":{"type":"string"}
-				},
-				
-				"set_human" : {
-					"description": "set empires species to human",
-					"parameters": [
-						{"name":"empire_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"string"}
-				},
-				
-				"view_stats" : {
-					"description": "Returns a list of the stats associated with an empire's species as it was originally created. An empire can only view it's own species stats throught his method.",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"string"}
-					/*
-					 {
-						"name" : "Human",
-						"description" : "The descendants of Earth.",
-						"habitable_orbits" : [3],
-						"manufacturing_affinity" : 4,
-						"deception_affinity" : 4,
-						"research_affinity" : 4,
-						"management_affinity" : 4,
-						"farming_affinity" : 4,
-						"mining_affinity" : 4,
-						"science_affinity" : 4,
-						"environmental_affinity" : 4,
-						"political_affinity" : 4,
-						"trade_affinity" : 4,
-						"growth_affinity" : 4
-					 }
-					*/
 				}
 			}
 		},
