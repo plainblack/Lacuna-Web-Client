@@ -314,7 +314,13 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 						return {"error":{"message":"Communication with the server has been interrupted for an unknown reason."}};
 					}
 					else {
-						return {"error":{"message":"Response Content-Type is not JSON"}};
+						// YUI loses headers for Cross-Origin requests, so try as JSON anyway
+						try {
+							return Lang.JSON.parse(results.responseText);
+						}
+						catch(e) {
+							return {"error":{"message":"Response Content-Type is not JSON"}};
+						}
 					}
 				}
 			}
