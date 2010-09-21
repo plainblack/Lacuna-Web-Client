@@ -7,6 +7,7 @@ light blue: #52ACFF
 html {
 	background: black url('assets/star_system/field.png');
 	color:#fff;
+	overflow: hidden;
 }
 body {
 	font-family:verdana;
