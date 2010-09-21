@@ -189,7 +189,7 @@ dialogs
 
 .loginWrapper {
 	margin: 5px;
-	overflow: auto;
+	overflow: hidden;
 }
 .loginCreate {
 	width: 200px;
