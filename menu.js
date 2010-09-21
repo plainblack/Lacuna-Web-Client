@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,10],
-				context:[this.elChangeClick,"userMenuProfile",this.elInboxClick,this.elEssentiaClick,this.elDestructClick,"userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
+				context:[this.elChangeClick,"userMenuProfile",this.elInboxClick,this.elEssentiaClick,this.elDestructClick,"userMenuInvite", "userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
 			});
 			// Set the text for the tooltip just before we display it.
 			userMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -310,6 +310,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 				case "userMenuEssentia":
 					output = ['Essentia'];
+					break;
+				case "userMenuInvite":
+					output = ['Invite a Friend'];
 					break;
 				case "userMenuTutorial":
 					output = ['Tutorial'];
