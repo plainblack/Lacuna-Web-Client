@@ -93,6 +93,43 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
+
+					if (result.welcome_message_id) {
+						var container = document.createElement('div');
+						container.id = 'welcomeMessage';
+						document.body.insertBefore(container, document.body.firstChild);
+						var welcome = new YAHOO.widget.SimpleDialog(container, {
+							width: "300px",
+							fixedcenter: true,
+							visible: false,
+							draggable: false,
+							text: "Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.",
+							constraintoviewport: true,
+							modal: true,
+							close: false,
+							zindex: 20000,
+							buttons: [
+								{ text:"View Tuturial", handler:function() {
+									this.hide();
+									Lacuna.Messaging.showMessage(result.welcome_message_id);
+								}, isDefault:true },
+								{ text:"Skip Tutorial",  handler:function() {
+									this.hide();
+								} } ]
+						});
+						welcome.renderEvent.subscribe(function() {
+							this.show();
+						});
+						welcome.hideEvent.subscribe(function() {
+							Game.OverlayManager.remove(welcome);
+							this.destroy();
+							welcome = undefined;
+							container = undefined;
+						});
+
+						Game.OverlayManager.register(welcome);
+						welcome.render();
+					}
 				});
 			}
 		},
