@@ -207,6 +207,12 @@
 		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
+		name: "invite",
+		type: "js",
+		fullpath: host + "invite.js?" + t,
+		requires : ["container","game"]
+	});
+	loader.addModule({
 		name: "profile",
 		type: "js",
 		fullpath: host + "profile.js?" + t,
@@ -229,7 +235,7 @@
 		name: "gameMenu",
 		type: "js",
 		fullpath: host + "menu.js?" + t,
-		requires : ["about","essentia","messaging","menu","profile","stats"]
+		requires : ["about","essentia","messaging","menu","profile","stats","invite"]
 	});
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {

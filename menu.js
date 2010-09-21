@@ -177,7 +177,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elDestructImg = destructImg;
 		},
 		createRight : function() {
-			var tutorial = this.container.appendChild(document.createElement("div")),
+			var invite = this.container.appendChild(document.createElement("div")),
+				inviteClick = this.container.appendChild(document.createElement("a")),
+				inviteImg = invite.appendChild(document.createElement("img")),
+				tutorial = this.container.appendChild(document.createElement("div")),
 				tutorialClick = this.container.appendChild(document.createElement("a")),
 				tutorialImg = tutorial.appendChild(document.createElement("img")),
 				support = this.container.appendChild(document.createElement("div")),
@@ -193,6 +196,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				logoutClick = this.container.appendChild(logout.cloneNode(false)),
 				logoutImg = logout.appendChild(document.createElement("img"));
 				
+			inviteImg.src = Lib.AssetUrl + 'ui/l/invite_friend.png';
+			inviteImg.alt = inviteImg.title = "Invite Friend";
+			inviteClick.id = "userMenuInvite";
+			Event.on(inviteClick, "click", Lacuna.Invite.show, this, true);
+			Dom.addClass([invite,inviteClick], "invite menuItem");
+			Dom.addClass(inviteClick, "click");
+			
 			tutorialImg.src = Lib.AssetUrl + 'ui/l/tutorial.png';
 			tutorialImg.alt = tutorialImg.title = "Tutorial";
 			tutorialClick.id = "userMenuTutorial";

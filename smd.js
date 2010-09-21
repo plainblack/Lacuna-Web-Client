@@ -2215,6 +2215,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Returns a list of species templates that can be used to populate the form for update_species.",
 					"parameters": [],
 					"returns":{"type":"object"}
+				},
+				"invite_friend" : {
+					"description": "Send an invitation code to a friend so that they can start in the same zone as your empire.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"email", "type":"string", "optional":false},
+						{"name":"message", "type":"string", "optional":true}
+					],
+					"returns":{"type":"object"}
 				}
 			}
 		},
