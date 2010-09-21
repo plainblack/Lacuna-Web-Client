@@ -96,6 +96,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				//bookmark = document.createElement("div"),
 				//bookmarkClick = bookmark.cloneNode(false),
 				//bookmarkImg = bookmark.appendChild(document.createElement("img"));
+				destruct = document.createElement("div"),
+				destructClick = destruct.cloneNode(false),
+				destructImg = destruct.appendChild(document.createElement("img")),
 
 			changeImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
 			changeImg.alt = "Change";
@@ -145,6 +148,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass([bookmark,bookmarkClick], "bookmark");
 			Dom.addClass([bookmark,bookmarkClick], "menuItem");
 			Dom.addClass(bookmarkClick, "click");*/
+
+			destructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
+			destructImg.alt = destructImg.title = "Destruct";
+			destructClick.id = "userMenuDestruct";
+			Event.on(destructClick, "click", function() {
+				this.fireEvent("onDestructClick");
+			}, this, true);
+			Dom.addClass([destruct,destructClick], "destruct menuItem");
+			Dom.addClass(destructClick, "click");
 			
 			this.elChange = this.container.appendChild(change);
 			this.elChangeClick = this.container.appendChild(changeClick);
@@ -159,12 +171,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elEssentiaText = essentiaTxt;
 			//this.elBookmark = this.container.appendChild(bookmark);
 			//this.elBookmarkClick = this.container.appendChild(bookmarkClick);
+			
+			this.elDestruct = this.container.appendChild(destruct);
+			this.elDestructClick = this.container.appendChild(destructClick);
+			this.elDestructImg = destructImg;
 		},
 		createRight : function() {
-			var destruct = document.createElement("div"),
-				destructClick = destruct.cloneNode(false),
-				destructImg = destruct.appendChild(document.createElement("img")),
-				tutorial = this.container.appendChild(document.createElement("div")),
+			var tutorial = this.container.appendChild(document.createElement("div")),
 				tutorialClick = this.container.appendChild(document.createElement("a")),
 				tutorialImg = tutorial.appendChild(document.createElement("img")),
 				support = this.container.appendChild(document.createElement("div")),
@@ -180,15 +193,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				logoutClick = this.container.appendChild(logout.cloneNode(false)),
 				logoutImg = logout.appendChild(document.createElement("img"));
 				
-			destructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
-			destructImg.alt = destructImg.title = "Destruct";
-			destructClick.id = "userMenuDestruct";
-			Event.on(destructClick, "click", function() {
-				this.fireEvent("onDestructClick");
-			}, this, true);
-			Dom.addClass([destruct,destructClick], "destruct menuItem");
-			Dom.addClass(destructClick, "click");
-			
 			tutorialImg.src = Lib.AssetUrl + 'ui/l/tutorial.png';
 			tutorialImg.alt = tutorialImg.title = "Tutorial";
 			tutorialClick.id = "userMenuTutorial";
@@ -225,10 +229,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Event.on(logoutClick, "click", Game.Logout, this, true);
 			Dom.addClass([logout,logoutClick], "logout menuItem");
 			Dom.addClass(logoutClick, "click");
-			
-			this.elDestruct = this.container.appendChild(destruct);
-			this.elDestructClick = this.container.appendChild(destructClick);
-			this.elDestructImg = destructImg;
 		},
 		update : function() {
 			this.elText.innerHTML = Game.EmpireData.name || "Empire";
