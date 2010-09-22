@@ -571,13 +571,17 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		GetBuildingDesc : function(url) {
 			if(Game.Resources && Game.Resources.buildings) {
 				var desc = Game.Resources.buildings[url];
-				return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+				if(desc) {
+					return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+				}
 			}
 		},
 		GetShipDesc : function(type) {
 			if(Game.Resources && Game.Resources.ships) {
 				var desc = Game.Resources.ships[type];
-				return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+				if(desc) {
+					return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+				}
 			}
 		},
 
