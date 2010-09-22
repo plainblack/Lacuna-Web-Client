@@ -304,7 +304,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.createTo.SelectItems([{name:this.viewingMessage.from}]);
 				}
 				this.createSubject.value = (this.viewingMessage.forwarding ? "Fwd: " : "Re: ") + this.viewingMessage.subject;
-				this.createText.value = "\n\n***************\nOn " + Lib.formatServerDate(msg.date) + " " + this.viewingMessage.from + " wrote:\n" + this.viewingMessage.body;
+				this.createText.value = "\n\n***************\nOn " + Lib.formatServerDate(this.viewingMessage.date) + " " + this.viewingMessage.from + " wrote:\n" + this.viewingMessage.body;
 			}
 			else {
 				this.createTo.ResetSelections();
@@ -746,7 +746,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		archiveMessage : function(e) {
 			if(!this.toArchive[this.viewingMessage.id]) {
-				this.toArchive[this.viewingMessage.id] = msg;
+				this.toArchive[this.viewingMessage.id] = this.viewingMessage;
 				this.toArchiveCount++;
 			}
 			
@@ -757,12 +757,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				};
 			InboxServ.archive_messages(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "Messaging.archiveMessages.success");
+					YAHOO.log(o, "info", "Messaging.archiveMessage.success");
 					//this.fireEvent("onRpc", o.result); //don't do this or it will update our message count again.  Eventual Consistency
 					this.archiveProcess(o.result);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
+					YAHOO.log(o, "error", "Messaging.archiveMessage.failure");
 					this.fireEvent("onRpcFailed", o);
 				},
 				timeout:Game.Timeout,
