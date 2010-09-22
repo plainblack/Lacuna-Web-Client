@@ -29,7 +29,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onRepair");
 		//common elements
 		this.building = oResults.building;
-		this.work = oResults.work;
+		this.work = oResults.building.work;
 		//delete status since it's rather large
 		delete oResults.status;
 		//so we can store just in case anyway
@@ -119,7 +119,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						this.removeTab(this.repairTab);
 						o.result.building.url = this.building.url;
 						this.building = o.result.building;
-						this.work = o.result.work;
+						this.work = o.result.building.work;
 						this.result = o.result;
 						this.updateBuildingTile(o.result.building);
 						this.fireEvent("onReloadTabs");

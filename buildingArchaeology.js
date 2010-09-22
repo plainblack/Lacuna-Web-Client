@@ -354,8 +354,8 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						YAHOO.log(o, "info", "Archaeology.searchForGlyph.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
-						
-						this.populateActiveSearch(o.result.work.seconds_remaining);
+						this.work = o.result.building.work;
+						this.populateActiveSearch(o.result.building.work.seconds_remaining);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.searchForGlyph.failure");

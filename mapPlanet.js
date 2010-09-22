@@ -384,7 +384,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'	<div class="yui-u first" style="width:200px;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center">',
 					'		<img src="',Lib.AssetUrl,'planet_side/',bd.image,'.png" style="width:200px;height:200px;cursor:pointer" class="buildingImage" />',
 					'	</div>',
-					'	<div class="yui-u" style="margin-left: 10px; width:350px">',
+					'	<div class="yui-u" style="margin-left: 10px; width:349px">',
 					'		<div class="buildingName">',bd.name,':</div>',
 					reason ? '		<div class="buildingReason">'+reason+'</div>' : '',
 					'		<div class="buildingDesc">',Game.GetBuildingDesc(bd.url),'</div>',

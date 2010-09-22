@@ -92,13 +92,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				essentia = document.createElement("div"),
 				essentiaClick = essentia.cloneNode(false),
 				essentiaImg = essentia.appendChild(document.createElement("img")),
-				essentiaTxt = essentia.appendChild(document.createElement("span"));//,
+				essentiaTxt = essentia.appendChild(document.createElement("span")),
+				destruct = document.createElement("div"),
+				destructClick = destruct.cloneNode(false),
+				destructImg = destruct.appendChild(document.createElement("img"));
+				
 				//bookmark = document.createElement("div"),
 				//bookmarkClick = bookmark.cloneNode(false),
 				//bookmarkImg = bookmark.appendChild(document.createElement("img"));
-				destruct = document.createElement("div"),
-				destructClick = destruct.cloneNode(false),
-				destructImg = destruct.appendChild(document.createElement("img")),
 
 			changeImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
 			changeImg.alt = "Change";

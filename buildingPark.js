@@ -54,10 +54,10 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 						var ce = this.partyTab.get("contentEl");
 						Event.purgeElement(ce);
 						ce.innerHTML = "";
-						
-						if(o.result.work && o.result.work.seconds_remaining && o.result.work.seconds_remaining*1 > 0) {
+						this.work = o.result.building.work;
+						if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 							ce.appendChild(this.PartyGetTimeDisplay(o.result.party));
-							this.addQueue(o.result.work.seconds_remaining, this.PartyQueue, "partyTime");
+							this.addQueue(this.work.seconds_remaining, this.PartyQueue, "partyTime");
 						}
 						else if(o.result.party && o.result.party.can_throw) {
 							ce.appendChild(this.PartyGetDisplay());

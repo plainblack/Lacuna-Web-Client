@@ -55,7 +55,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'				<ul id="messagingList"></ul>',
 				'			</div>',
 				'			<div id="messagingDisplay" class="yui-u">',
-				'				<div id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></div>',
+				'				<div id="messagingActions" style="border-width: 1px;">',
+				'					<span id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></span>',
+				'					<button id="messagingForward" type="button">Forward</button>',
+				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
+				'				</div>',
 				'				<div style="height:369px;overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
 				'					<div><label>From:</label><span id="messagingFrom"></span></div>',
@@ -91,6 +95,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//list and display view
 				Event.on("messagingReply", "click", this.replyMessage, this, true);
 				Event.on("messagingReplyAll", "click", this.replyAllMessage, this, true);
+				Event.on("messagingForward", "click", this.forwardMessage, this, true);
+				Event.on("messagingArchiveDisplayed", "click", this.archiveMessage, this, true);
 				this.list = Dom.get("messagingList");
 				this.timestamp = Dom.get("messagingTimestamp");
 				this.from = Dom.get("messagingFrom");
@@ -297,8 +303,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				else {
 					this.createTo.SelectItems([{name:this.viewingMessage.from}]);
 				}
-				this.createSubject.value = "Re: " + this.viewingMessage.subject;
-				this.createText.value = "\n\n***************\n" + this.viewingMessage.body;
+				this.createSubject.value = (this.viewingMessage.forwarding ? "Fwd: " : "Re: ") + this.viewingMessage.subject;
+				this.createText.value = "\n\n***************\nOn " + Lib.formatServerDate(msg.date) + " " + this.viewingMessage.from + " wrote:\n" + this.viewingMessage.body;
 			}
 			else {
 				this.createTo.ResetSelections();
@@ -668,9 +674,16 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					};
 				
 				if(this.viewingMessage) {
-					data.options = {
-						in_reply_to:this.viewingMessage.id
-					};
+					if(this.viewingMessage.forwarding) {
+						data.options = {
+							forward:this.viewingMessage.id
+						};
+					}
+					else {
+						data.options = {
+							in_reply_to:this.viewingMessage.id
+						};
+					}
 				}
 				
 				InboxServ.send_message(data, {
@@ -725,6 +738,36 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		replyAllMessage : function(e) {
 			this.currentTab = this.create.id;
 			this.loadTab(true);
+		},
+		forwardMessage : function(e) {
+			this.currentTab = this.create.id;
+			this.viewingMessage.forwarding = true;
+			this.loadTab();
+		},
+		archiveMessage : function(e) {
+			if(!this.toArchive[this.viewingMessage.id]) {
+				this.toArchive[this.viewingMessage.id] = msg;
+				this.toArchiveCount++;
+			}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					message_ids: [this.viewingMessage.id]
+				};
+			InboxServ.archive_messages(data, {
+				success : function(o){
+					YAHOO.log(o, "info", "Messaging.archiveMessages.success");
+					//this.fireEvent("onRpc", o.result); //don't do this or it will update our message count again.  Eventual Consistency
+					this.archiveProcess(o.result);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
+					this.fireEvent("onRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		},
 		archiveMessages : function() {
 			if(this.toArchiveCount > 0) {

@@ -62,14 +62,14 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 							YAHOO.log(o, "info", "WasteRecycling.Recycle.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
-							
+							this.work = this.result.building.work;
 							if(this.recycleTab){
-								if(o.result.work && o.result.work.seconds_remaining && o.result.work.seconds_remaining*1 > 0) {
+								if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 									var ce = this.recycleTab.get("contentEl");
 									Event.purgeElement(ce);
 									ce.innerHTML = "";
 									ce.appendChild(this.RecycleGetTimeDisplay(o.result.recycle, water, ore, energy));
-									this.addQueue(o.result.work.seconds_remaining, this.RecycleQueue, "recycleTime");
+									this.addQueue(this.work.seconds_remaining, this.RecycleQueue, "recycleTime");
 								}
 								else {
 									this.recycleOreEl.value = "";
