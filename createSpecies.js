@@ -25,7 +25,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		
 		this.Dialog = new YAHOO.widget.Dialog(this.id, {
 			constraintoviewport:false,
-			fixedcenter:false,
+			fixedcenter:true,
 			postmethod:"none",
 			visible:false,
 			buttons:[ { text:"Found Empire", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
@@ -42,15 +42,11 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.elMessage = Dom.get("speciesMessage");
 			this.elName = Dom.get("speciesName");
 			this.elDesc = Dom.get("speciesDesc");
-			this.elSpeciesHuman = Dom.get("speciesHuman");
-			this.elSpeciesCustom = Dom.get("speciesCustom");
-			this.elCustomTemplates = Dom.get("speciesTemplates");
+			this.elTemplates = Dom.get("speciesTemplates");
 			this._createSliders();
-			Event.on(this.elSpeciesHuman, 'click', this.selectHuman, this, true);
-			Event.on(this.elSpeciesCustom, 'click', this.selectCustom, this, true);
-			Event.delegate(this.elCustomTemplates, 'click', function(e, matchedEl) {
+			Event.delegate(this.elTemplates, 'click', function(e, matchedEl) {
 				Event.stopEvent(e);
-				this.selectTemplate(this.speciesTemplates[matchedEl.TemplateIndex]);
+				this.selectTemplate(matchedEl.TemplateIndex);
 			}, '.speciesTemplate', this, true);
 			
 			for (var i = 0; i < this.speciesTemplates.length; i++) {
@@ -60,16 +56,17 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				tButton.title = template.description;
 				tButton.TemplateIndex = i;
 				Dom.addClass(tButton, 'speciesTemplate');
-				this.elCustomTemplates.appendChild(tButton);
+				this.elTemplates.appendChild(tButton);
 			}
-			this.selectHuman();
+			this.selectTemplate(0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.speciesTemplates = [
 			{
 				name : 'Average',
 				description : 'Not specializing in any area, but without any particular weaknesses.',
-				habitable_orbits: {min:3,max:3},
+				min_orbit: 3,
+				max_orbit: 3,
 				manufacturing_affinity: 4,
 				deception_affinity: 4,
 				research_affinity: 4,
@@ -85,7 +82,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			{
 				name : 'Resilient',
 				description : 'Resilient and able to colonize most any planet.  Somewhat docile, but very quick learners and above average at producing any resource.',
-				habitable_orbits: {min:2,max:7},
+				min_orbit: 2,
+				max_orbit: 7,
 				manufacturing_affinity: 3,
 				deception_affinity: 3,
 				research_affinity: 3,
@@ -101,7 +99,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			{
 				name : 'Warmonger',
 				description : 'Adept at ship building and espionage. They are bent on domination.',
-				habitable_orbits: {min:4,max:5},
+				min_orbit: 4,
+				max_orbit: 5,
 				manufacturing_affinity: 4,
 				deception_affinity: 7,
 				research_affinity: 2,
@@ -117,7 +116,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			{
 				name : 'Viral',
 				description : 'Proficient at growing at the most expedient pace like a virus in the Expanse.',
-				habitable_orbits: {min:1,max:7},
+				min_orbit: 1,
+				max_orbit: 7,
 				manufacturing_affinity: 1,
 				deception_affinity: 4,
 				research_affinity: 7,
@@ -133,7 +133,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			{
 				name : 'Trader',
 				description : 'Masters of commerce and ship building.',
-				habitable_orbits: {min:2,max:3},
+				min_orbit: 2,
+				max_orbit: 3,
 				manufacturing_affinity: 5,
 				deception_affinity: 4,
 				research_affinity: 7,
@@ -312,10 +313,10 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		},
 		getSpeciesData : function() {
 			var data = {
-				human: (this.speciesType == this.elSpeciesHuman.id),
 				name: this.elName.value,
 				description: this.elDesc.value.substr(0,1024),
-				habitable_orbits: {min:this.speciesHO.getMinOrbit(),max:this.speciesHO.getMaxOrbit()},
+				min_orbit: this.speciesHO.getMinOrbit(),
+				max_orbit: this.speciesHO.getMaxOrbit(),
 				manufacturing_affinity: this.speciesConst.getAffinity(),
 				deception_affinity: this.speciesDecep.getAffinity(),
 				research_affinity: this.speciesResearch.getAffinity(),
@@ -329,7 +330,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				growth_affinity : this.speciesGrowth.getAffinity()
 			};
 			data.affinity_total =
-				data.habitable_orbits.max - data.habitable_orbits.min + 1 +
+				data.max_orbit - data.min_orbit + 1 +
 				data.manufacturing_affinity +
 				data.deception_affinity +
 				data.research_affinity +
@@ -344,74 +345,9 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			return data;
 		},
 		setSpeciesData : function(data) {
-			if (data.human) {
-				data = {
-					name : 'Human',
-					description : '',
-					habitable_orbits: {min:3,max:3},
-					manufacturing_affinity: 4,
-					deception_affinity: 4,
-					research_affinity: 4,
-					management_affinity: 4,
-					farming_affinity: 4,
-					mining_affinity: 4,
-					science_affinity: 4,
-					environmental_affinity: 4,
-					political_affinity: 4,
-					trade_affinity: 4,
-					growth_affinity : 4,
-					affinity_total: 45
-				};
-				this.speciesType = this.elSpeciesHuman.id;
-				this.elName.disabled = true;
-				this.elDesc.disabled = true;
-				this.speciesHO.minSlider.lock();
-				this.speciesHO.maxSlider.lock();
-				this.speciesConst.lock();
-				this.speciesDecep.lock();
-				this.speciesResearch.lock();
-				this.speciesManagement.lock();
-				this.speciesFarming.lock();
-				this.speciesMining.lock();
-				this.speciesScience.lock();
-				this.speciesEnviro.lock();
-				this.speciesPolitical.lock();
-				this.speciesTrade.lock();
-				this.speciesGrowth.lock();
-				Dom.setStyle('speciesCreate', 'opacity', 0.5);
-				Dom.addClass(this.elSpeciesHuman, 'species-selected');
-				Dom.removeClass(this.elSpeciesCustom, 'species-selected');
-			}
-			else {
-				this.speciesType = this.elSpeciesCustom.id;
-				this.elName.disabled = false;
-				this.elDesc.disabled = false;
-				this.speciesHO.minSlider.unlock();
-				this.speciesHO.maxSlider.unlock();
-				this.speciesConst.unlock();
-				this.speciesDecep.unlock();
-				this.speciesResearch.unlock();
-				this.speciesManagement.unlock();
-				this.speciesFarming.unlock();
-				this.speciesMining.unlock();
-				this.speciesScience.unlock();
-				this.speciesEnviro.unlock();
-				this.speciesPolitical.unlock();
-				this.speciesTrade.unlock();
-				this.speciesGrowth.unlock();
-				Dom.setStyle('speciesCreate', 'opacity', 1);
-				Dom.removeClass(this.elSpeciesHuman, 'species-selected');
-				Dom.addClass(this.elSpeciesCustom, 'species-selected');
-			}
-			if (data.template) {
-				this.elName.value = '';
-				this.elDesc.value = '';
-			}
-			else {
-				this.elName.value = data.name;
-				this.elDesc.value = data.description;
-			}
-			this.speciesHO.setOrbits(data.habitable_orbits.min, data.habitable_orbits.max, true, true);
+			this.elName.value = data.name;
+			this.elDesc.value = data.description;
+			this.speciesHO.setOrbits(data.min_orbit, data.max_orbit, true, true);
 			this.speciesConst.setAffinity(data.manufacturing_affinity,true,true);
 			this.speciesDecep.setAffinity(data.deception_affinity,true,true);
 			this.speciesResearch.setAffinity(data.research_affinity,true,true);
@@ -425,20 +361,11 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.speciesGrowth.setAffinity(data.growth_affinity,true,true);
 		},
 
-		selectHuman : function(e) {
-			if (e) {
-				Event.stopEvent(e);
-			}
-			this.setSpeciesData({human: true});
-		},
-		selectTemplate : function(data) {
-			data.template = true;
+		selectTemplate : function(index) {
+			var data = this.speciesTemplates[index];
 			this.setSpeciesData(data);
 		},
 		validateSpecies : function(data) {
-			if (data.human) {
-				return true;
-			}
 			if (data.affinity_total > 45) {
 				throw "You can only have a maximum of 45 points.";
 			}
@@ -469,7 +396,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		},
 		handleCreate : function() {
 			this.setMessage("");
-			var SpeciesServ = Game.Services.Species,
+			var EmpireServ = Game.Services.Empire,
 				data = this.getSpeciesData();
 			try {
 				if ( ! this.validateSpecies(data) ) {
@@ -480,43 +407,20 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				this.setMessage(e);
 				return;
 			}
-			if (data.human) {
-				SpeciesServ.set_human({empire_id: this.empireId},{
-					success : function(o) {
-						YAHOO.log(o, "info", "SetSpeciesHuman");
-						this._found();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "SetSpeciesHumanFailure");
-						this.setMessage(o.error.message);
-					},
-					timeout:Game.Timeout,
-					scope:this
-				});
-			}
-			else {
-				var ho = data.habitable_orbits;
-				data.habitable_orbits = [];
-				for(var i=ho.min; i<=ho.max; i++) {
-					data.habitable_orbits.push(i);
-				}
-				delete data.human;
-				delete data.affinity_total;
-				SpeciesServ.create({empire_id: this.empireId, params: data}, {
-					success : function(o) {
-						YAHOO.log(o, "info", "CreateSpecies");
-						this._found();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "CreateSpeciesFailure");
-						this.setMessage(o.error.message);
-					},
-					timeout:Game.Timeout,
-					scope:this
-				});
-			}
+			delete data.affinity_total;
+			EmpireServ.update_species({empire_id: this.empireId, params: data}, {
+				success : function(o) {
+					YAHOO.log(o, "info", "CreateSpecies");
+					this._found();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					YAHOO.log(o, "error", "CreateSpeciesFailure");
+					this.setMessage(o.error.message);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		},
 		handleCancel : function() {
 			this.hide();
@@ -548,9 +452,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				'	<div class="bd">',
 				'		<form name="speciesForm">',
 				'			<div id="speciesButtons">',
-				'				Species: ',
-				'				<button id="speciesHuman">Human</button>',
-				'				<span id="speciesCustom">Custom: </span>',
+				'				Presets: ',
 				'				<span id="speciesTemplates">',
 				'				</span>',
 				'			</div>',
@@ -657,7 +559,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		hide : function() {
 			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
-			this.selectHuman();
 		},
 	};
 	YAHOO.lang.augmentProto(CreateSpecies, Util.EventProvider);

@@ -247,7 +247,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				timeout:Game.Timeout,
 				scope:Lacuna.Profile
 			});
-			Game.Services.Species.view_stats({session_id:Game.GetSession("")},{
+			Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
 				success : function(o){
 					YAHOO.log(o, "info", "Profile.show.view_stats.success");
 					this.populateSpecies(o.result);
@@ -332,7 +332,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Habitable Orbits</label>',
-				'<span>', stat["habitable_orbits"].join(','), '</span>'
+				'<span>', stat.min_orbit,
+				stat.max_orbit > stat.min_orbit ? ' to '+ stat.max_orbit : '',
+				'</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
