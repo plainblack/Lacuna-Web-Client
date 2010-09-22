@@ -29,6 +29,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Lacuna.Pulser.Show();
 			
+			//get resources right away since they don't depend on anything
+			Game.GetResources();
+			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
 			var query = {};
@@ -65,7 +68,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				success:Lacuna.Game.Run,
 				failure:Lacuna.Game.Failure
 			});
-			Game.GetResources();
 		},
 		Failure : function(o){
 			YAHOO.log(o, "debug", "Game.Failure");
@@ -548,9 +550,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 
-		GetResources : function(callback) {
-			var EmpireServ = Game.Services.Empire,
-				session = Game.GetSession();
+		GetResources : function() {
 			Util.Connect.asyncRequest('GET', 'resources.json', {
 				success: function(o) {
 					YAHOO.log(o, "info", "GetResources.success");
