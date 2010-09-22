@@ -785,8 +785,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.archive_messages(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
-						//this.fireEvent("onRpc", o.result); //don't do this or it will update our message count again.  Eventual Consistency
 						this.archiveProcess(o.result);
+						this.fireEvent("onRpc", o.result);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
