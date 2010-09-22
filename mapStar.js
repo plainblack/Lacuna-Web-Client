@@ -486,7 +486,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				target = {star_id : oSelf.selectedStar.id};
 			}
 			
-			if(target && NotIsolationist(ship)) {
+			if(target && oSelf.NotIsolationist(ship)) {
 				Game.Services.Buildings.SpacePort.send_ship({
 					session_id:Game.GetSession(),
 					ship_id:ship.id,
