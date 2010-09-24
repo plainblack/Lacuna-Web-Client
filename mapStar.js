@@ -179,6 +179,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			</div>',
 				'			<div id="planetDetailRename"><ul>',
 				'				<li><label>New Planet Name: </label><input type="text" id="planetDetailNewName" maxlength="100" /></li>',
+				'				<li class="alert" id="planetDetailRenameMessage"></li>',
 				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button></li>',
 				'			</ul></div>',
 				'		</div>',
@@ -287,16 +288,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			});
 		},
 		Load : function() {
-			var cId = Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id;
-			if(!this.locationId) {
-				if(cId) {
-					var loc = Game.EmpireData.planets[cId];
-					if(loc) {
-						this.locationId = cId;
-						loc.x *= 1;
-						loc.y *= 1;
-						this.LoadGrid(loc);
-					}
+			var cId = Game.GetCurrentPlanet().id;
+			if(cId) {
+				var loc = Game.EmpireData.planets[cId];
+				if(loc) {
+					this.locationId = cId;
+					loc.x *= 1;
+					loc.y *= 1;
+					this.LoadGrid(loc);
 				}
 			}
 		},
@@ -309,7 +308,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				this.SetSize();
 								
 				var map = new Lacuna.Mapper.StarMap("starMap");
-				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
+				//map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
 				map.redraw();
@@ -754,6 +753,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					success : function(o){
 						YAHOO.log(o, "info", "MapStar.Rename.success");
 						if(o.result && this.selectedBody) {
+							Dom.get("planetDetailRenameMessage").innerHTML = ["Successfully renamed your planet from ", this.selectedBody.name," to ", newName, '.'].join('');
+							Lib.fadeOutElm("planetDetailRenameMessage");
 							Dom.get("planetDetailsName").innerHTML = newName;
 							Game.EmpireData.planets[this.selectedBody.id].name = newName;
 							Lacuna.Menu.update();

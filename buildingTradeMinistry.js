@@ -1243,12 +1243,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						
 						var msg = Dom.get("tradePushMessage");
 						msg.innerHTML = ["Successfully pushed to ", Lib.getSelectedOption(Dom.get("tradePushColony")).innerHTML, '.'].join('');
-						var a = new Util.Anim("tradePushMessage", {opacity:{from:1,to:0}}, 4);
-						a.onComplete.subscribe(function(){
-							msg.innerHTML = "";
-							Dom.setStyle(msg, "opacity", 1);
-						}, this, true);
-						a.animate();
+						Lib.fadeOutElm("tradePushMessage");
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){

@@ -62,7 +62,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 							YAHOO.log(o, "info", "WasteRecycling.Recycle.success");
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
-							this.work = this.result.building.work;
+							this.work = o.result.building.work;
 							if(this.recycleTab){
 								if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 									var ce = this.recycleTab.get("contentEl");
@@ -76,6 +76,9 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 									this.recycleWaterEl.value = "";
 									this.recycleEnergyEl.value = "";
 									this.recycleMessageEl.innerHTML = "";
+									this.totalWasteToRecycle = 0;
+									this.totalWasteToRecycleEl.innerHTML = "0";
+									this.totalTimeToRecycle.innerHTML = "";
 								}
 							}
 						},
@@ -226,9 +229,9 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 				cp = Game.GetCurrentPlanet(),
 				maxVal = cp.waste_stored <= this.recycle.max_recycle ? cp.waste_stored : this.recycle.max_recycle,
 				third = Math.floor(maxVal / 3),
-				ore = cp.ore_stored > third ? third : cp.ore_stored,
-				water = cp.water_stored > third ? third : cp.water_stored,
-				energy = cp.energy_stored > third ? third : cp.energy_stored;
+				ore = Math.floor(cp.ore_stored > third ? third : cp.ore_stored),
+				water = Math.floor(cp.water_stored > third ? third : cp.water_stored),
+				energy = Math.floor(cp.energy_stored > third ? third : cp.energy_stored);
 				
 			this.recycleOreEl.originalValue = ore; 
 			this.recycleOreEl.value = ore; 

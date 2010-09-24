@@ -232,6 +232,15 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return opt ? opt.value : null;
 		},
 		
+		fadeOutElm : function(id) {
+			var a = new Util.Anim(id, {opacity:{from:1,to:0}}, 4);
+			a.onComplete.subscribe(function(e, dur, arg){
+				Dom.get(arg).innerHTML = "";
+				Dom.setStyle(arg, "opacity", 1);
+			}, id);
+			a.animate();
+		},
+		
 		ResourceTypes : {
 			"energy":1,
 			"essentia":0,

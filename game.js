@@ -146,19 +146,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Menu.create();
 			//set our interval going for resource calcs since Logout clears it
 			Game.recTime = (new Date()).getTime();
-			Game.recInt = setInterval(Game.Tick, 1000);
+			Game.isRunning = 1;
+			//Game.recInt = setInterval(Game.Tick, 1000);
+			/* possible new pattern for game loop*/
+			(function GameLoop(){
+				if(Game.isRunning) {
+					Game.Tick();
+					setTimeout(GameLoop, 1000);
+				}
+			})();
 			//chat system
 			//Game.InitEnvolve();
-			/* possible new pattern for game loop
-			(function GameLoop(){
-				Game.Tick()
-				setTimeout(GameLoop, 1000);
-			})();*/
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//load the correct screen
-			var locationId = Cookie.getSub("lacuna","locationId"),
-				locationView = Cookie.getSub("lacuna","locationView");
+			var locationId = Game.GetCookie("locationId"),
+				locationView = Game.GetCookie("locationView");
 			if(!locationId) {
 				Lacuna.Menu.PlanetVisible();
 				Lacuna.MapPlanet.Load(Game.EmpireData.current_planet_id || Game.EmpireData.home_planet_id);
@@ -381,11 +384,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.MapVisible(false);
 				Lacuna.MapStar.MapVisible(true);
 				Lacuna.Menu.StarVisible();
-				//if map was already loaded locationId should exist so don't call load again
-				//Game.SetLocation("home", Lib.View.STAR);
-				if(!Lacuna.MapStar.locationId) {
-					Lacuna.MapStar.Load();
-				}
+				Lacuna.MapStar.Load();
 			}
 		},
 		onDestructClick : function() {
@@ -529,7 +528,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		GetSession : function(replace) {
 			if (! this._session) {
-				this._session = Cookie.getSub('lacuna', 'session');
+				this._session = Game.GetCookie('session');
 			}
 			return this._session || replace;
 		},
@@ -645,7 +644,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			});
 		},
 		Reset : function() {
-			clearInterval(Game.recInt);
+			//clearInterval(Game.recInt);
+			delete Game.isRunning;
 	
 			Cookie.remove("lacuna",{
 				domain: Game.domain
@@ -657,6 +657,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 
 		//Cookie helpers functions
+		GetCookie : function(key, defaultValue) {
+			var chip = Cookie.getSub("lacuna",key);
+			return chip || defaultValue;
+		},
 		SetCookie : function(key, value, expiresDate) {
 			var opts = { domain: Game.domain };
 			if(expiresDate) {

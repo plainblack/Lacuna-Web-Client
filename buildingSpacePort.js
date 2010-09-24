@@ -33,11 +33,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			SpacePort.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getDockTab(), this._getTravelTab(), this._getViewTab(), this._getForeignTab()];
+			return [this._getDockTab(), this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
 		},
 		_getDockTab : function() {
 			var ships = this.result.docked_ships;
-			this.dockTab = new YAHOO.widget.Tab({ label: "Docked Ships", content: [
+			this.dockTab = new YAHOO.widget.Tab({ label: "Docked", content: [
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul class="buildingDetailsDockedShips">',
@@ -62,7 +62,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.dockTab;
 		},
 		_getTravelTab : function() {
-			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling Ships", content: [
+			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">Type</li>',
@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.travelTab;
 		},
 		_getViewTab : function() {
-			this.viewShipsTab = new YAHOO.widget.Tab({ label: "View Ships", content: [
+			this.viewShipsTab = new YAHOO.widget.Tab({ label: "View", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
@@ -99,7 +99,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.viewShipsTab;
 		},
 		_getForeignTab : function() {
-			this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Foreign Ships Incoming", content: [
+			this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Foreign", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
@@ -115,6 +115,16 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.foreignShipsTab.subscribe("activeChange", this.getForeign, this, true);
 			
 			return this.foreignShipsTab;
+		},
+		_getSendTab : function() {
+			this.sendTab = new YAHOO.widget.Tab({ label: "Send", content: [
+				'<div>',
+				'To send ships you must visit the Star Map.  Click <img src="',Lib.AssetUrl, 'ui/s/star_map.png" style="height:22px;width:20px;" title="Star Map" />',
+				' in the top menu bar all the way to the left. Once in the Star Map clean a star, or a planet, to see what ships may be available to send.', 
+				'</div>'
+			].join('')});
+			
+			return this.sendTab;
 		},
 		
 		getTravel : function(e) {

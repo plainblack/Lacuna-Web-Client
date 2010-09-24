@@ -5,6 +5,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 (function(){
 	var Lang = YAHOO.lang,
 		Util = YAHOO.util,
+		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,

@@ -18,7 +18,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 	
 	Lang.extend(PlanetaryCommand, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getPlanetTab(), this._getAbandonTab()];
+			return [this._getPlanetTab(), this._getAbandonTab(), this._getRenameTab()];
 		},
 		_getPlanetTab : function() {
 			var planet = this.result.planet,
@@ -69,6 +69,18 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 			
 			return this.abandonTab;
 		},
+		_getRenameTab : function() {
+			this.renameTab = new YAHOO.widget.Tab({ label: "Rename", content: ['<div><ul>',
+			'	<li><label>Current Planet Name: </label><span id="commandPlanetCurrentName">',Game.GetCurrentPlanet().name,'</span></li>',
+			'	<li><label>New Planet Name: </label><input type="text" id="commandPlanetNewName" maxlength="100" /></li>',
+			'	<li class="alert" id="commandPlanetRenameMessage"></li>',
+			'	<li><button type="button" id="commandRename">Rename</button></li>',
+			'</ul></div>'].join('')});
+			
+			Event.on("commandRename", "click", this.Rename, this, true);
+			
+			return this.renameTab;
+		},
 		Abandon : function() {
 			var cp = Game.GetCurrentPlanet();
 			if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
@@ -94,6 +106,34 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 				scope:this
 			});
 			}
+		},
+		Rename : function() {
+			var newName = Dom.get("commandPlanetNewName").value,
+				planetId = Game.GetCurrentPlanet().id;
+			Game.Services.Body.rename({
+					session_id: Game.GetSession(""),
+					body_id:planetId,
+					name:newName
+				},{
+					success : function(o){
+						YAHOO.log(o, "info", "PlanetaryCommand.Rename.success");
+						if(o.result && planetId) {
+						
+							Dom.get("commandPlanetRenameMessage").innerHTML = ["Successfully renamed your planet from ", Game.EmpireData.planets[planetId].name," to ", newName, '.'].join('');
+							Lib.fadeOutElm("commandPlanetRenameMessage");
+							Dom.get("commandPlanetNewName").value = "";
+							Dom.get("commandPlanetCurrentName").innerHTML = newName;
+							Game.EmpireData.planets[planetId].name = newName;
+							Lacuna.Menu.update();
+						}
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "PlanetaryCommand.Rename.failure");
+					},
+					timeout:Game.Timeout,
+					scope:this
+				}
+			);
 		}
 	});
 	

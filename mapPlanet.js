@@ -315,6 +315,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var isQueueFull = this.queue_status.max == this.queue_status.current;
 				
 				list.innerHTML = "";
+				list.parentNode.scrollTop = 0;
 				
 				var frag = document.createDocumentFragment(),
 					li = document.createElement("li"),
@@ -540,7 +541,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
 				map.addTileData(oArgs.buildings);
 				map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
-				map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
+				//map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				
 				//draw what we got
 				map.redraw();
@@ -1013,7 +1014,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		QueueReload : function(building) {
 			if(building.pending_build) {
 				building.pending_build.seconds_remaining *= 1;
-				building.pending_build.seconds_remaining += 2; //I seem to be a head normally now
+				building.pending_build.seconds_remaining += 2; //Seem to be a head normally now
 				this.buildings[building.id] = building;
 				this._map.refreshTile(building);
 				

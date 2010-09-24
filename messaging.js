@@ -487,6 +487,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				messages = results.messages,
 				li = document.createElement("li"),
 				isTab = is || {};
+			
+			//reset selected
+			delete this.selectedAll;
+			this.select.innerHTML = "Select All";
 				
 			//clear list here	
 			Event.purgeElement(list, true);
@@ -591,6 +595,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.subject.innerHTML = msg.subject;
 				Event.purgeElement(this.body);
 				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';
+				this.body.parentNode.scrollTop = 0;
 				if(msg.attachments) {
 					this.body.appendChild(document.createElement("hr"));
 					if(msg.attachments.image) {
