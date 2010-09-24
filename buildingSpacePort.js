@@ -120,7 +120,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.sendTab = new YAHOO.widget.Tab({ label: "Send", content: [
 				'<div>',
 				'To send ships you must visit the Star Map.  Click <img src="',Lib.AssetUrl, 'ui/s/star_map.png" style="height:22px;width:20px;" title="Star Map" />',
-				' in the top menu bar all the way to the left. Once in the Star Map clean a star, or a planet, to see what ships may be available to send.', 
+				' in the top menu bar all the way to the left. Once in the Star Map click a star, or a planet, to see what ships may be available to send.', 
 				'</div>'
 			].join('')});
 			

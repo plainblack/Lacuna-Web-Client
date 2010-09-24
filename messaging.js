@@ -304,7 +304,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.createTo.SelectItems([{name:this.viewingMessage.from}]);
 				}
 				this.createSubject.value = (this.viewingMessage.forwarding ? "Fwd: " : "Re: ") + this.viewingMessage.subject;
-				this.createText.value = "\n\n***************\nOn " + Lib.formatServerDate(this.viewingMessage.date) + " " + this.viewingMessage.from + " wrote:\n" + this.viewingMessage.body;
+				this.createText.value = "\n\n--------------\nOn " + Lib.formatServerDate(this.viewingMessage.date) + " " + this.viewingMessage.from + " wrote:\n" + this.viewingMessage.body;
 			}
 			else {
 				this.createTo.ResetSelections();
@@ -593,9 +593,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.from.innerHTML = msg.from;
 				this.to.innerHTML = msg.to;
 				this.subject.innerHTML = msg.subject;
+				this.body.parentNode.scrollTop = 0;
 				Event.purgeElement(this.body);
 				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';
-				this.body.parentNode.scrollTop = 0;
 				if(msg.attachments) {
 					this.body.appendChild(document.createElement("hr"));
 					if(msg.attachments.image) {
