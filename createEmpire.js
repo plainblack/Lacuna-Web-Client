@@ -32,7 +32,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		'					<li class="empireFriendCode"><label for="empireFriendCode" title="If you don\'t have a friend invite code, this can be ignored.">Friend Invite Code</label><input type="text" id="empireFriendCode" /></li>',
 		'				</ul>',
 		'				<ul style="float:right">',
-		'					<li class="empireCaptcha"><span id="empireCaptchaBorder"><img alt="" width="300" height="80" src="" id="empireCaptchaImage" /></span><button id="empireRefreshCaptcha"><img alt="Refresh" src="'+Lib.AssetUrl+'ui/s/refresh.png" /></button</li>',
+		'					<li class="empireCaptcha"><span id="empireCaptchaBorder"><img alt="" width="300" height="80" src="" id="empireCaptchaImage" /></span><button id="empireRefreshCaptcha" type="button"><img alt="Refresh" src="'+Lib.AssetUrl+'ui/s/refresh.png" /></button></li>',
 		'					<li class="empireCaptcha"><span class="requiredField">* </span><label for="empireCaptcha">Answer: </label><input type="text" id="empireCaptcha" /></li>',
 		'					<li class="empireAgreeCheck"><span class="requiredField">* </span><input type="checkbox" id="empireAgreeTOS" /><label for="empireAgreeTOS">I agree to the <a href="http://www.lacunaexpanse.com/terms/" target="_blank">Terms of Service</a>.</label></li>',
 		'					<li class="empireAgreeCheck"><span class="requiredField">* </span><input type="checkbox" id="empireAgreeRules" /><label for="empireAgreeRules">I agree to abide by <a href="http://www.lacunaexpanse.com/rules/" target="_blank">the rules</a>.</label></li>',

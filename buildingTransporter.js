@@ -118,9 +118,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			
 			if(data.quantity > this.transport.max) {
 				Dom.get("transporterOneForOneMessage").innerHTML = ["Quantity must be less than ", this.transport.max, ", which is the maximum for this level transporter."].join('');
+				Lib.fadeOutElm("transporterOneForOneMessage");
 			}
 			else if(data.quantity < 0 || data.quantity > this.resources[data.have]*1) {
 				Dom.get("transporterOneForOneMessage").innerHTML = "Quantity must be greater than 0 and less than or equal to the resources you have on hand.";
+				Lib.fadeOutElm("transporterOneForOneMessage");
 			}
 			else {
 				this.service.trade_one_for_one(data, {

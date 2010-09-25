@@ -200,22 +200,23 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
 					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-					'		<img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" />',
+					'		<img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" class="shipImage" />',
 					'	</div>',
 					'	<div class="yui-u" style="width:67%">',
 					'		<span class="shipName">',Lib.Ships[shipName],'</span>: ',
 					'		<div class="shipDesc" style="display:none;">',Game.GetShipDesc(shipName),'</div>',
 					'		<div><label style="font-weight:bold;">Cost:</label>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></span><span>',ship.cost.food,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span><span>',ship.cost.ore,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span><span>',ship.cost.water,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span>',ship.cost.energy,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span>',ship.cost.waste,'</span></span>',
-					'			<span><span><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></span>',Lib.formatTime(ship.cost.seconds),'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" />',ship.cost.food,'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" />',ship.cost.ore,'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" />',ship.cost.water,'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" />',ship.cost.energy,'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" />',ship.cost.waste,'</span>',
+					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" />',Lib.formatTime(ship.cost.seconds),'</span>',
 					'		</div>',
 					'		<div><label style="font-weight:bold;">Attributes:</label>',
-					'			<span><label>Speed: </label><span>',ship.attributes.speed,'</span></span>',
-					'			<span><label>Hold Size: </label><span>',ship.attributes.hold_size,'</span></span>',
+					'			<span style="white-space:nowrap;"><label>Speed: </label>',ship.attributes.speed,'</span>',
+					'			<span style="white-space:nowrap;"><label>Hold Size: </label>',ship.attributes.hold_size,'</span>',
+					'			<span style="white-space:nowrap;"><label>Stealth: </label>',ship.attributes.stealth,'</span>',
 					'		</div>',
 					!ship.can ? reason : '',
 					'	</div>',
@@ -231,11 +232,12 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					
 				}
 				
-				Event.delegate(details, "click", this.ShipExpandDesc, "span.shipName");
+				Event.delegate(details, "click", this.ShipExpandDesc, ".shipName");
+				Event.delegate(details, "click", this.ShipExpandDesc, ".shipImage");
 			}
 		},
 		ShipExpandDesc : function(e, matchedEl, container) {
-			var desc = Sel.query('div.shipDesc', matchedEl.parentNode, true);
+			var desc = Sel.query('div.shipDesc', matchedEl.parentNode.parentNode, true);
 			if(desc) {
 				var dis = Dom.getStyle(desc, "display");
 				Dom.setStyle(desc, "display", dis == "none" ? "" : "none");

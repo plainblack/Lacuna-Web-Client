@@ -97,13 +97,17 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					if (result.welcome_message_id) {
 						var container = document.createElement('div');
 						container.id = 'welcomeMessage';
+						Dom.setStyle(container, "text-align", "justify");
 						document.body.insertBefore(container, document.body.firstChild);
 						var welcome = new YAHOO.widget.SimpleDialog(container, {
-							width: "300px",
+							width: "400px",
 							fixedcenter: true,
 							visible: false,
 							draggable: false,
-							text: "Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.",
+							text: ['Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.',
+								'<p style="margin:10px 0;">If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
+								'<p style="margin:10px 0;">For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;" /> button.</p>',
+								'<p style="margin:10px 0;">Thanks for playing!</p>'].join(''),
 							constraintoviewport: true,
 							modal: true,
 							close: false,
@@ -121,13 +125,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							this.show();
 						});
 						welcome.hideEvent.subscribe(function() {
-							Game.OverlayManager.remove(welcome);
-							this.destroy();
-							welcome = undefined;
-							container = undefined;
+							//let the current process complete before destroying
+							setTimeout(function(){
+								welcome.destroy();
+							},1);
 						});
 
-						Game.OverlayManager.register(welcome);
+						//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
 						welcome.render();
 					}
 				});
