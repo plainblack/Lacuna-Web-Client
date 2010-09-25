@@ -94,7 +94,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			var canTrain = spies.maximum - spies.current;
 			Dom.get("spiesCurrent").innerHTML = spies.current;
 			if (canTrain > 0) {
-				Dom.setStyle('spiesTrainOptions', 'visibility', 'visible');
+				Dom.setStyle('spiesTrainOptions', 'display', '');
 				var elNumSelect = Dom.get('spiesTrainNumber');
 				if (canTrain > 5) {
 					canTrain = 5;
@@ -111,7 +111,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				}
 			}
 			else {
-				Dom.setStyle('spiesTrainOptions', 'visibility', 'collapse');
+				Dom.setStyle('spiesTrainOptions', 'display', 'none');
 			}
 
 		},
