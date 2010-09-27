@@ -427,9 +427,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				li = document.createElement("li");
 			
 			details = elm.appendChild(c).appendChild(details);
-
-			var ul = document.createElement("ul"),
-				li = document.createElement("li");
 			
 			for(var i=0; i<ships.length; i++) {
 				var ship = ships[i],
@@ -457,7 +454,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'</div>'].join('');
 				
 				if(ship.task == "Docked") {
-					Event.on(Sel.query("button", nLi, true), "click", this.ShipSend, {Self:this,Ship:ship}, true);
+					Event.on(Sel.query("button", nLi, true), "click", this.ShipSend, {Self:this,Ship:ship,Line:nLi}, true);
 				}
 				
 				details.appendChild(nLi);
@@ -494,16 +491,16 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					success : function(o){
 						YAHOO.log(o, "info", "MapStar.ShipSend.send_ship.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
-						Game.OverlayManager.hideAll();
+						this.Self.fireEvent("onMapRpc", o.result);
+						this.Line.parentNode.removeChild(this.Line);
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "MapStar.ShipSend.send_ship.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.Self.fireEvent("onMapRpcFailed", o);
 					},
 					timeout:Game.Timeout,
-					scope:oSelf
+					scope:this
 				});
 			}
 		},

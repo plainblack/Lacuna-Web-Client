@@ -575,6 +575,16 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			this.updateTick();
 		},
+		updateElm : function(el, newVal, extra) {
+			var formatedVal = Lib.convertNumDisplay(newVal) + (extra || '');
+			if(el.innerHTML != formatedVal) {
+				var fromColor = el.currentValue && el.currentValue > newVal ? '#f00' : '#0f0';
+				el.currentValue = newVal;
+				el.innerHTML = formatedVal;
+				var a = new Util.ColorAnim(el, {color:{from:fromColor,to:'#fff'}}, 1.5);
+				a.animate();
+			}
+		},
 		updateTick : function() {
 			var ED = Game.EmpireData,
 				planets = ED.planets || {},
@@ -585,20 +595,20 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
 			
-				this.elFoodText.innerHTML = Lib.convertNumDisplay(cp.food_stored);
-				this.elFoodHour.innerHTML = Lib.convertNumDisplay(cp.food_hour) + '/hr';
-				this.elOreText.innerHTML = Lib.convertNumDisplay(cp.ore_stored);
-				this.elOreHour.innerHTML = Lib.convertNumDisplay(cp.ore_hour) + '/hr';
-				this.elWaterText.innerHTML = Lib.convertNumDisplay(cp.water_stored);
-				this.elWaterHour.innerHTML = Lib.convertNumDisplay(cp.water_hour) + '/hr';
-				this.elEnergyText.innerHTML = Lib.convertNumDisplay(cp.energy_stored);
-				this.elEnergyHour.innerHTML = Lib.convertNumDisplay(cp.energy_hour) + '/hr';
+				this.updateElm(this.elFoodText, cp.food_stored);
+				this.updateElm(this.elFoodHour, cp.food_hour, '/hr');
+				this.updateElm(this.elOreText, cp.ore_stored);
+				this.updateElm(this.elOreHour, cp.ore_hour, '/hr');
+				this.updateElm(this.elWaterText, cp.water_stored);
+				this.updateElm(this.elWaterHour, cp.water_hour, '/hr');
+				this.updateElm(this.elEnergyText, cp.energy_stored);
+				this.updateElm(this.elEnergyHour, cp.energy_hour, '/hr');
 				
-				this.elWasteText.innerHTML = Lib.convertNumDisplay(cp.waste_stored);
-				this.elWasteHour.innerHTML = Lib.convertNumDisplay(cp.waste_hour) + '/hr';
-				this.elHappyText.innerHTML = Lib.convertNumDisplay(cp.happiness);
-				this.elHappyHour.innerHTML = Lib.convertNumDisplay(cp.happiness_hour) + '/hr';
-				this.elPlotsText.innerHTML = cp.size*1 - cp.building_count*1;
+				this.updateElm(this.elWasteText, cp.waste_stored);
+				this.updateElm(this.elWasteHour, cp.waste_hour, '/hr');
+				this.updateElm(this.elHappyText, cp.happiness);
+				this.updateElm(this.elHappyHour, cp.happiness_hour, '/hr');
+				this.updateElm(this.elPlotsText, cp.size*1 - cp.building_count*1);
 			}
 			else {
 				this.elText.innerHTML = "Planet";

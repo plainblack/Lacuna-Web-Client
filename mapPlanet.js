@@ -314,8 +314,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 				var isQueueFull = this.queue_status.max == this.queue_status.current;
 				
-				list.innerHTML = "";
 				list.parentNode.scrollTop = 0;
+				list.innerHTML = "";
 				
 				var frag = document.createDocumentFragment(),
 					li = document.createElement("li"),
@@ -346,9 +346,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				names.sort();
 				
 				if ( names.length == 0 ) {
-					var nLi = li.cloneNode(false);
-					nLi.innerHTML = "No available buildings.";
-					list.appendChild(nLi);
+					var mLi = li.cloneNode(false);
+					mLi.innerHTML = "No available buildings.";
+					list.appendChild(mLi);
 				}
 				
 				for(var i=0; i<names.length; i++) {
@@ -440,6 +440,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		
 		_fireRpcSuccess : function(result){
+			/*if(result.building && result.building.work) {
+				this.buildings[result.building.id].work = result.building.work;
+				this._map.refreshTile(this.buildings[result.building.id]);
+			}*/
 			this.fireEvent("onMapRpc", result);
 		},
 		_fireRpcFailed : function(o){

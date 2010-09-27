@@ -146,7 +146,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				political_affinity: 1,
 				trade_affinity: 7,
 				growth_affinity : 2
-			},
+			}
 			
 		];
 		this.Dialog.render();
@@ -207,7 +207,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this._affinityTooltip = new YAHOO.widget.Tooltip('speciesAffinityTooltip', {
 				zIndex:10200,
 				xyoffset:[0,10],
-				context: Sel.query('.speciesAffinities label', 'speciesCreate'),
+				context: Sel.query('.speciesAffinities label', 'speciesCreate')
 			});
 		},
 		_createHabitableOrbits : function () {
@@ -559,7 +559,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		hide : function() {
 			Dom.replaceClass(this.elMessage, Lib.Styles.ALERT, Lib.Styles.HIDDEN);
 			this.Dialog.hide();
-		},
+		}
 	};
 	YAHOO.lang.augmentProto(CreateSpecies, Util.EventProvider);
 

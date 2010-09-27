@@ -454,9 +454,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					selectionMode:"single" 
 				} );
 				// Subscribe to events for row selection 
-				this.EmpireTable.subscribe("rowMouseoverEvent", this.EmpireTable.onEventHighlightRow); 
-				this.EmpireTable.subscribe("rowMouseoutEvent", this.EmpireTable.onEventUnhighlightRow); 
-				this.EmpireTable.subscribe("rowClickEvent", this.EmpireTable.onEventSelectRow); 			
+				this.EmpireTable.subscribe("rowMouseoverEvent", this.EmpireTable.onEventHighlightRow);
+				this.EmpireTable.subscribe("rowMouseoutEvent", this.EmpireTable.onEventUnhighlightRow);
+				this.EmpireTable.subscribe("rowClickEvent", this.EmpireTable.onEventSelectRow);
 				
 				this.EmpireTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
 					oPayload.totalRecords = oResponse.meta.totalRecords; 
@@ -491,7 +491,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.EmpireTable.set("generateRequest", function(oState, oSelf) {
 					// Set defaults
 					oState = oState || {pagination:null, sortedBy:null};
-					var sort = sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
+					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
 					
@@ -556,9 +556,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					selectionMode:"single" 
 				} );
 				// Subscribe to events for row selection 
-				this.ColonyTable.subscribe("rowMouseoverEvent", this.ColonyTable.onEventHighlightRow); 
-				this.ColonyTable.subscribe("rowMouseoutEvent", this.ColonyTable.onEventUnhighlightRow); 
-				this.ColonyTable.subscribe("rowClickEvent", this.ColonyTable.onEventSelectRow); 			
+				this.ColonyTable.subscribe("rowMouseoverEvent", this.ColonyTable.onEventHighlightRow);
+				this.ColonyTable.subscribe("rowMouseoutEvent", this.ColonyTable.onEventUnhighlightRow);
+				this.ColonyTable.subscribe("rowClickEvent", this.ColonyTable.onEventSelectRow);
 				
 				this.ColonyTable.requery = function() {
 					// Get the current state
@@ -589,7 +589,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.ColonyTable.set("generateRequest", function(oState, oSelf) {
 					// Set defaults
 					oState = oState || {pagination:null, sortedBy:null};
-					var sort = sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
+					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
 					
@@ -653,9 +653,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					selectionMode:"single" 
 				} );
 				// Subscribe to events for row selection 
-				this.SpyTable.subscribe("rowMouseoverEvent", this.SpyTable.onEventHighlightRow); 
-				this.SpyTable.subscribe("rowMouseoutEvent", this.SpyTable.onEventUnhighlightRow); 
-				this.SpyTable.subscribe("rowClickEvent", this.SpyTable.onEventSelectRow); 			
+				this.SpyTable.subscribe("rowMouseoverEvent", this.SpyTable.onEventHighlightRow);
+				this.SpyTable.subscribe("rowMouseoutEvent", this.SpyTable.onEventUnhighlightRow);
+				this.SpyTable.subscribe("rowClickEvent", this.SpyTable.onEventSelectRow);
 				
 				this.SpyTable.requery = function() {
 					// Get the current state
@@ -686,7 +686,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.SpyTable.set("generateRequest", function(oState, oSelf) {
 					// Set defaults
 					oState = oState || {pagination:null, sortedBy:null};
-					var sort = sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
+					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
 					
@@ -750,9 +750,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					selectionMode:"single" 
 				} );
 				// Subscribe to events for row selection 
-				this.WeeklyMedalTable.subscribe("rowMouseoverEvent", this.WeeklyMedalTable.onEventHighlightRow); 
-				this.WeeklyMedalTable.subscribe("rowMouseoutEvent", this.WeeklyMedalTable.onEventUnhighlightRow); 
-				this.WeeklyMedalTable.subscribe("rowClickEvent", this.WeeklyMedalTable.onEventSelectRow); 			
+				this.WeeklyMedalTable.subscribe("rowMouseoverEvent", this.WeeklyMedalTable.onEventHighlightRow);
+				this.WeeklyMedalTable.subscribe("rowMouseoutEvent", this.WeeklyMedalTable.onEventUnhighlightRow);
+				this.WeeklyMedalTable.subscribe("rowClickEvent", this.WeeklyMedalTable.onEventSelectRow);
 				
 				this.WeeklyMedalTable.requery = function() {
 					// Get the current state
@@ -783,7 +783,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.WeeklyMedalTable.set("generateRequest", function(oState, oSelf) {
 					// Set defaults
 					oState = oState || {pagination:null, sortedBy:null};
-					var sort = sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
+					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
 					

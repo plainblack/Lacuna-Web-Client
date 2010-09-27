@@ -51,7 +51,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'				</ul>',
 		'			</div>',
 		'		</div>',
-		'	</div>',
+		'	</div>'
 		].join('');
 		document.body.insertBefore(container, document.body.firstChild);
 		Dom.addClass(container, "nofooter");
@@ -77,9 +77,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			this.elCreate = Dom.get("loginCreate");
 			this.elReset = Dom.get("loginReset");
 			
-			Event.addListener(this.elCreate, "click", function(e){Event.stopEvent(e);this.createEmpire()}, this, true);
-			Event.addListener(this.elReset, "click", function(e){Event.stopEvent(e);this.resetPassword()}, this, true);
-			Event.addListener(this.elForm, "submit", function(e){Event.stopEvent(e);this.handleLogin()}, this, true);
+			Event.addListener(this.elCreate, "click", function(e){Event.stopEvent(e);this.createEmpire();}, this, true);
+			Event.addListener(this.elReset, "click", function(e){Event.stopEvent(e);this.resetPassword();}, this, true);
+			Event.addListener(this.elForm, "submit", function(e){Event.stopEvent(e);this.handleLogin();}, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		
@@ -240,8 +240,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			underlay:false,
 			zIndex:9999,
 			buttons:[
-				{text:"Send Reset Email", handler:function(){this.submit()}, isDefault: true},
-				{text:"Cancel", handler:function(){this.cancel()}},
+				{text:"Send Reset Email", handler:function(){this.submit();}, isDefault: true},
+				{text:"Cancel", handler:function(){this.cancel();}}
 			],
 			hideaftersubmit: false,
 			postmethod: "manual"
@@ -292,8 +292,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			underlay:false,
 			zIndex:9999,
 			buttons:[
-				{text:"Reset Password", handler:function(){this.submit()}, isDefault: true},
-				{text:"Cancel", handler:function(){this.cancel()}},
+				{text:"Reset Password", handler:function(){this.submit();}, isDefault: true},
+				{text:"Cancel", handler:function(){this.cancel();}}
 			],
 			hideaftersubmit: false,
 			postmethod: "manual"

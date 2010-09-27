@@ -34,24 +34,25 @@ if (!String.prototype.titleCaps) {
   
 	String.prototype.titleCaps = function(){
 		var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0;
-		
+		var fnUpper = function(all){
+				return (/[A-Za-z]\.[A-Za-z]/).test(all) ? all : String.upper(all);
+			},
+			fnPuntUpper = function(all, punct, word){
+				return punct + String.upper(word);
+			};
 		while (true) {
 			var m = split.exec(this);
 
 			parts.push( this.substring(index, m ? m.index : this.length)
-				.replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, function(all){
-					return /[A-Za-z]\.[A-Za-z]/.test(all) ? all : String.upper(all);
-				})
+				.replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, fnUpper)
 				.replace(RegExp("\\b" + String.small + "\\b", "ig"), String.lower)
-				.replace(RegExp("^" + String.punct + String.small + "\\b", "ig"), function(all, punct, word){
-					return punct + String.upper(word);
-				})
+				.replace(RegExp("^" + String.punct + String.small + "\\b", "ig"), fnPuntUpper)
 				.replace(RegExp("\\b" + String.small + String.punct + "$", "ig"), String.upper));
 			
 			index = split.lastIndex;
 			
-			if ( m ) parts.push( m[0] );
-			else break;
+			if ( m ) { parts.push( m[0] ); }
+			else { break; }
 		}
 		
 		return parts.join("").replace(/ V(s?)\. /ig, " v$1. ")
@@ -124,6 +125,10 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return Library.formatTime(totalMs / 1000);
 		},
 		formatTime : function(totalSeconds) {
+			if(totalSeconds < 0) {
+				return "";
+			}
+			
 			var secondsInDay = 60 * 60 * 24,
 				secondsInHour = 60 * 60,
 				day = Math.floor(totalSeconds / secondsInDay),

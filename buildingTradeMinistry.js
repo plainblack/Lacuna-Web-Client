@@ -435,7 +435,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			};
 			this.acceptVerify.getAnswer = function() {
 				return this.answer.value;
-			}
+			};
 			this.acceptVerify.render();
 			Game.OverlayManager.register(this.acceptVerify);
 		},
@@ -986,6 +986,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				nOpt, optGroup;
 				
 			if(elm) {
+				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
@@ -1000,6 +1001,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 									nOpt = opt.cloneNode(false);
 									nOpt.value = name;
 									nOpt.innerHTML = [name.titleCaps(), ' (', this.resources[name], ')'].join('');
+									nOpt.selected = selectedVal == name;
 									optGroup.appendChild(nOpt);
 								}
 							}
@@ -1010,6 +1012,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 							nOpt = opt.cloneNode(false);
 							nOpt.value = r;
 							nOpt.innerHTML = [r.titleCaps(), ' (', this.resources[r], ')'].join('');
+							nOpt.selected = selectedVal == r;
 							elm.appendChild(nOpt);
 						}
 					}
@@ -1022,6 +1025,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				nOpt;
 				
 			if(elm) {
+				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;
 				for(var x=0; x < this.glyphs.length; x++) {
 					var obj = this.glyphs[x];
@@ -1029,6 +1033,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					nOpt.Glyph = obj;
 					nOpt.value = obj.id;
 					nOpt.innerHTML = obj.type.titleCaps();
+					nOpt.selected = selectedVal == obj.id;
 					elm.appendChild(nOpt);
 				}
 			}
@@ -1039,6 +1044,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				nOpt;
 				
 			if(elm) {
+				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;	
 				for(var x=0; x < this.plans.length; x++) {
 					var obj = this.plans[x];
@@ -1046,6 +1052,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					nOpt.Plan = obj;
 					nOpt.value = obj.id;
 					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
+					nOpt.selected = selectedVal == obj.id;
 					elm.appendChild(nOpt);
 				}
 			}
@@ -1056,6 +1063,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				nOpt;
 				
 			if(elm) {
+				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;	
 				for(var x=0; x < this.ships.length; x++) {
 					var obj = this.ships[x];
@@ -1063,6 +1071,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					nOpt.Ship = obj;
 					nOpt.value = obj.id;
 					nOpt.innerHTML = [obj.name].join('');
+					nOpt.selected = selectedVal == obj.id;
 					elm.appendChild(nOpt);
 				}
 			}
@@ -1073,6 +1082,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				nOpt;
 				
 			if(elm) {
+				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;	
 				for(var x=0; x < this.prisoners.length; x++) {
 					var obj = this.prisoners[x];
@@ -1080,6 +1090,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					nOpt.Prisoner = obj;
 					nOpt.value = obj.id;
 					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
+					nOpt.selected = selectedVal == obj.id;
 					elm.appendChild(nOpt);
 				}
 			}

@@ -1268,7 +1268,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"description": "Returns a list of all ships",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 						/*

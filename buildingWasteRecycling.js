@@ -179,7 +179,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = '<label>Time to Recycle:</label>';
-			var span = nLi.appendChild(document.createElement("span"));
+			span = nLi.appendChild(document.createElement("span"));
 			span.innerHTML = 0;
 			ul.appendChild(nLi);
 			this.totalTimeToRecycle = span;
@@ -212,7 +212,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			ul.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
-			var btn = document.createElement("button");
+			btn = document.createElement("button");
 			btn.setAttribute("type", "button");
 			btn.innerHTML = "Recycle";
 			btn = nLi.appendChild(btn);

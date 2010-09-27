@@ -73,8 +73,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			this.elMessage = Dom.get("empireMessage");
 			this.elCaptchaImage = Dom.get("empireCaptchaImage");
 			this.elCaptcha = Dom.get("empireCaptcha");
-			Event.on(this.elCaptchaImage, 'load', function(){Dom.setStyle(this, 'visibility', 'inherit')} );
-			Event.on('empireRefreshCaptcha', 'click', function(e){Event.stopEvent(e);this.refreshCaptcha()}, this, true);
+			Event.on(this.elCaptchaImage, 'load', function(){Dom.setStyle(this, 'visibility', 'inherit');} );
+			Event.on('empireRefreshCaptcha', 'click', function(e){Event.stopEvent(e);this.refreshCaptcha();}, this, true);
 			
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
@@ -84,7 +84,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		
 		try{
 		this.initSpecies();
-		}catch(e){alert(e)};
+		}catch(e){alert(e);}
 	};
 	CreateEmpire.prototype = {
 		refreshCaptcha : function() {

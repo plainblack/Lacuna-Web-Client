@@ -103,10 +103,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				for (var i = canTrain; i < currentNum; i++) {
 					elNumSelect.removeChild(elNumSelect.lastChild);
 				}
-				for (var i = currentNum + 1; i <= canTrain; i++) {
+				for (var n = currentNum + 1; n <= canTrain; n++) {
 					var elOption = document.createElement('option');
-					elOption.value = i;
-					elOption.innerHTML = i;
+					elOption.value = n;
+					elOption.innerHTML = n;
 					elNumSelect.appendChild(elOption);
 				}
 			}

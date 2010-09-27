@@ -139,7 +139,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					Dom.addClass(nUl, "clearafter");
 
 					Dom.addClass(nLi,"platformLocation");
-					nLi.innerHTML = "<label>Asteroid:</label> " + obj.asteroid.name;
+					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -264,8 +264,8 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
+					if(details.parentNode.clientHeight > 280) {
+						Dom.setStyle(details.parentNode,"height","280px");
 						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					}
 				},10);

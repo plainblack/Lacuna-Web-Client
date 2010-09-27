@@ -1500,6 +1500,11 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .platformInfo .platformLocation {
 	width:250px;
 }
+.platformInfo .platformLocation img {
+	width:30px;
+	height:30px;
+	float:left;
+}
 .platformInfo .platformProduction {
 	width:200px;
 }
@@ -1507,7 +1512,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:200px;
 }
 .platformInfo .platformOre {
-	width:550px;
+	width:630px;
 }
 .platformInfo .platformOre  ul li{
 	float:left;
@@ -1515,6 +1520,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .platformInfo .platformAbandon {
 	width:100px;
+	float:right;
 }
 
 body.yui-skin-sam .yui-tt .bd {

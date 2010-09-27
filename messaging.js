@@ -227,10 +227,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			oTextboxList.doBeforeLoadData = function(sQuery, oResponse, oPayload){
 				var tq = decodeURIComponent(sQuery);
 				if(tq[0] == "@") {
-					switch(tq[1].toLowerCase()) {
-						case "a":
-							oResponse.results.push({name:"@ally"});
-							break;
+					if(tq[1].toLowerCase() == "a") {
+						oResponse.results.push({name:"@ally"});
 					}
 				}
 				return true;
@@ -728,12 +726,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			body = body.replace(/>/g,'&gt;');
 			body = body.replace(/\n/g,'<br />');
 			body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
-			body = body.replace(/{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)}/gi, function(str,icon){
+			body = body.replace(/\{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)\}/gi, function(str,icon){
 				var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
 				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
 			});
-			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/-]+)\]/gi,'<a href="$1">$1</a>');
-			body = body.replace(/{Empire\s+(\d+)\s+([^}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
+			body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
 			return body;
 		},
 		replyMessage : function(e) {

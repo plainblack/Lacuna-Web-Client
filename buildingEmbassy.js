@@ -268,7 +268,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"embassyAction");
-					var bbtn = document.createElement("button");
+					bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					bbtn.innerHTML = "Reject";
 					bbtn = nLi.appendChild(bbtn);
