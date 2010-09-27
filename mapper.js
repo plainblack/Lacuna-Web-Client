@@ -319,7 +319,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			
 			if(this.data && this.data.pending_build) {
 				this._createCounter();
-				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
+				var remaining = Math.round(this.data.pending_build.seconds_remaining);
+				if (remaining < 0) {
+					remaining = 0;
+				}
+				this.counter.innerHTML = Lib.formatTime(remaining);
 			}
 			else if(this.counter) {
 				this.counter.parentNode.removeChild(this.counter);
@@ -350,7 +354,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.data = obj.data;
 			if(this.data && this.data.pending_build && this.data.pending_build.seconds_remaining > 0.5) {
 				this._createCounter();
-				this.counter.innerHTML = Lib.formatTime(Math.round(this.data.pending_build.seconds_remaining));
+				var remaining = Math.round(this.data.pending_build.seconds_remaining);
+				if (remaining < 0) {
+					remaining = 0;
+				}
+				this.counter.innerHTML = Lib.formatTime(remaining);
 			}
 			else {
 				this.counter.parentNode.removeChild(this.counter);
