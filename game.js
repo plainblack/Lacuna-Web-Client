@@ -39,7 +39,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if (vars.length > 0) {
 				for (var i=0; i<vars.length; i++) {
 					var pair = vars[i].split("=");
-					query[pair[0]] = pair[1];
+					query[pair[0]] = decodeURIComponent(pair[1]);
 				}
 			}
 			window.location.hash = '';
