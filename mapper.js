@@ -625,8 +625,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				success:function() {
 					this.showTiles();
 				},
-				failure:function() {
-					this.showTiles();
+				failure:function(o) {
+					if(o.error.code == 1006) {
+						Game.Failure(o);
+					}
+					else {
+						this.showTiles();
+					}
 				},
 				scope:this
 			}, x1, x2, y1, y2);
@@ -1006,7 +1011,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					},
 					failure : function(o){
 						YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.failure");
-						callback.success.call(callback.scope || this, callback.argument);
+						if(callback.failure) {
+							callback.failure.call(callback.scope || this, o);
+						}
 						//this.currentRequest = undefined;
 					},
 					timeout:Game.Timeout,

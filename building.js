@@ -263,33 +263,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			});
 		},
 		
-		_getStorageTab : function() {
-			var fc = this.building.food_capacity*1,
-				oc = this.building.ore_capacity*1,
-				wc = this.building.water_capacity*1,
-				ec = this.building.energy_capacity*1,
-				sc = this.building.waste_capacity*1,
-				currentStorage = 0;
-				
-			if(fc != 0) {
-				currentStorage += fc;
-			}
-			if(oc != 0) {
-				currentStorage += oc;
-			}
-			if(wc != 0) {
-				currentStorage += wc;
-			}
-			if(ec != 0) {
-				currentStorage += ec;
-			}
-			if(sc != 0) {
-				currentStorage += sc;
-			}
-			
+		_getStorageTab : function() {			
 			var p = this.building.upgrade.production;
 			output = [
-				'<div style="margin-bottom:2px;padding-bottom:2px;border-bottom:1px solid #52acff;">Currently Used Storage: ',currentStorage,'/',fc+oc+wc+ec+sc,'</div>',
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul>',

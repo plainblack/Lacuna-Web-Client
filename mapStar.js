@@ -242,6 +242,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			this.planetDetails.renderEvent.subscribe(function(){
 				this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
+				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
 			}, this, true);
 			this.planetDetails.hideEvent.subscribe(function(){
@@ -338,6 +339,15 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					else if(tile.data.isPlanet) {
 						this.ShowPlanet(tile);
 					}
+				}
+			}
+		},
+		DetailsClick : function(e, matchedEl, container){
+			if(this.selectedBody) {
+				if(matchedEl.innerHTML == "View") {
+					var id = this.selectedBody.id;
+					this.planetDetails.hide();
+					this.fireEvent("onChangeToPlanetView", id);
 				}
 			}
 		},
