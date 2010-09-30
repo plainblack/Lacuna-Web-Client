@@ -190,12 +190,12 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					var addedEssentia = o.result.status.empire.essentia - currentEssentia;
 					alert('Redeemed code for '+addedEssentia+' essentia.');
 					this.elCode.value = '';
-					this.fireEvent('onRpc', o);
+					this.fireEvent('onRpc', o.result);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "EssentiaRedeem.show.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
+					this.fireEvent('onRpcFailed', o.result);
 				},
 				timeout:Game.Timeout,
 				scope:this

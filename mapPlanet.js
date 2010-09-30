@@ -792,8 +792,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					var remaining = 0;
 					if(newB.pending_build) {
 						remaining = newB.pending_build.seconds_remaining*1;
-					}
-					if(remaining != 0) {
 						this.QueueReload(newB);
 					}
 					else {
