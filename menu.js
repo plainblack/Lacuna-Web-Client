@@ -215,7 +215,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			supportImg.src = Lib.AssetUrl + 'ui/l/support.png';
 			supportImg.alt = supportImg.title = "Support";
 			supportClick.id = "userMenuSupport";
-			supportClick.href = "http://community.lacunaexpanse.com/forums/";
+			supportClick.href = "http://community.lacunaexpanse.com/forums";
 			supportClick.target = "_new";
 			Dom.addClass([support,supportClick], "support menuItem");
 			Dom.addClass(supportClick, "click");
