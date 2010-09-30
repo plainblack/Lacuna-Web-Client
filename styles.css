@@ -800,8 +800,12 @@ about
 	top: 8px;
 }
 
+.affinitiesLabel {
+	font-size: 150%;
+	padding: 0 80px;
+}
+
 .speciesPointTotal {
-	padding: 10px 0pt; 
 	font-size: 150%;
 }
 .speciesPointsValid { color:#00e000; }
