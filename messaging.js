@@ -761,8 +761,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.archive_messages(data, {
 				success : function(o){
 					YAHOO.log(o, "info", "Messaging.archiveMessage.success");
-					//this.fireEvent("onRpc", o.result); //don't do this or it will update our message count again.  Eventual Consistency
 					this.archiveProcess(o.result);
+					this.fireEvent("onRpc", o.result);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.archiveMessage.failure");
@@ -804,9 +804,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			Dom.batch(Sel.query("li.message", this.list), function(el){
 				if(results.success.indexOf(el.Message.id) >= 0) {
 					delete this.toArchive[el.Message.id];
-					Game.EmpireData.has_new_messages--;
-					if(Game.EmpireData.has_new_messages < 0) {
-						Game.EmpireData.has_new_messages = 0;
+					if (el.Message.has_read*1 == 0) {
+						Game.EmpireData.has_new_messages--;
+						if(Game.EmpireData.has_new_messages < 0) {
+							Game.EmpireData.has_new_messages = 0;
+						}
 					}
 					this.toArchiveCount--;
 					Event.purgeElement(el);
