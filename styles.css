@@ -237,7 +237,13 @@ dialogs
 #createEmpire li.requiredField {
 	text-align: center;
 }
-.facebookLogin .empirePassword .empireCaptcha {
+#createEmpire li.requiredField {
+	text-align: center;
+}
+.facebookLogin .empirePassword .requiredField {
+	display: none;
+}
+.facebookLogin .empireCaptcha {
 	display: none;
 }
 
