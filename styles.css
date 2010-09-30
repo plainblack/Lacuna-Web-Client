@@ -237,9 +237,6 @@ dialogs
 #createEmpire li.requiredField {
 	text-align: center;
 }
-#createEmpire li.requiredField {
-	text-align: center;
-}
 .facebookLogin .empirePassword .requiredField {
 	display: none;
 }
