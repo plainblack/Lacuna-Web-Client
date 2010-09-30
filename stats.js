@@ -467,9 +467,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					var oState = this.getState();
 					
 					// Reset record offset, if paginated
-					if(oState.pagination) {
-						oState.pagination.recordOffset = 0;
-					}
+					//if(oState.pagination) {
+					//	oState.pagination.recordOffset = 0;
+					//}
 			
 					// Get the request for the new state
 					var request = this.get("generateRequest")(oState, this);

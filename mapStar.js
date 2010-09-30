@@ -773,6 +773,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "MapStar.Rename.failure");
+						Dom.get("planetDetailRenameMessage").innerHTML = o.error.message;
+						Lib.fadeOutElm("planetDetailRenameMessage");
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -129,6 +129,8 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "PlanetaryCommand.Rename.failure");
+						Dom.get("commandPlanetRenameMessage").innerHTML = o.error.message;
+						Lib.fadeOutElm("commandPlanetRenameMessage");
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -120,6 +120,15 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 			}
 			Event.addListener(tblInput,"click", oSelf._onListTextboxClick, oSelf);
 		}
+		//correctly hide the container when mousing out
+		var mouseEnter = function(){
+				Event.on(this._elContent, "mouseleave", mouseLeave, this, true);
+			},
+			mouseLeave = function() {
+				Event.removeListener(this._elContent, "mouseleave", mouseLeave);
+				this._toggleContainer(false);
+			};
+		Event.on(this._elContent,"mouseenter", mouseEnter, oSelf, true);
 		//always add this listener
 		Event.addListener(tblListContainer,"click",oSelf._onListContainerClick,oSelf);
 
