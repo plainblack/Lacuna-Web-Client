@@ -1028,97 +1028,136 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/spaceport",
 
 				"services": {
+					"prepare_fetch_spies" : {
+						"description": "Gathers the information needed to call the fetch_spies method",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"on_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false},
+						],
+						"returns":{"type":"object"}
+						/*
+							{
+								"status" : { ... },
+								"ships" : [
+									{
+										"id" : "id-goes-here",
+										"name" : "CS4",
+										"hold_size" : 1100,
+										"speed" : 400,
+										"type" : "cargo_ship",
+										...
+									},
+									...
+								],
+								"spies" : [
+									{
+										"id" : "id-goes-here",
+										"level" : 12,
+										"name" : "Jack Bauer",
+										"assigned_to" : {
+										"body_id" : "id-goes-here",
+										"name" : "Earth"
+										},
+										...
+									},
+									...
+								]
+							}
+						*/
+					},
 					"fetch_spies" : {
-						"description": "Returns a list of all ships",
+						"description": "Sends a specified ship to fetch specified spies from on_body_id, and bring them back to to_body_id. See also prepare_fetch_spies",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false},
-							{"name":"spy_ids", "type":"array", "optional":false}
+							{"name":"on_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false},
+							{"name":"ship_id",    "type":"string", "optional":false},
+							{"name":"spy_ids",    "type":"array",  "optional":false}
 						],
 						"returns":{"type":"object"}
 						/*
-						 {
-							 "ship" : {
-								 "date_arrives" : "01 31 2010 13:09:05 +0600",
-							 },
-							 "status" : { ... }
-						 }
-						*/
-					},
-					"get_available_spy_ships" : {
-						"description": "Returns a list of ships capable of sending spies.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							 "status" : { ... },
-							 "ships" : [
-								 {
+							{
+								"ship" : {
 									"id" : "id-goes-here",
 									"name" : "CS4",
 									"hold_size" : 1100,
 									"speed" : 400,
-									"type" : "cargo_ship"
-								 },
-								 ...
-							 ]
-						 }
+									"type" : "cargo_ship",
+									"date_arrives" : "01 31 2010 13:09:05 +0600",
+									...
+								},
+								"status" : { ... }
+							}
 						*/
 					},
-					"get_available_spy_ships_for_fetch" : {
-						"description": "Returns a list of ships capable of retrieving spies.",
+					"prepare_send_spies" : {
+						"description": "Gathers the information needed to call the send_spies method.",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false}
+							{"name":"on_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false},
 						],
 						"returns":{"type":"object"}
 						/*
-						 {
-							 "status" : { ... },
-							 "ships" : [
-								 {
+							{
+								"status" : { ... },
+								"ships" : [
+									{
+										"id" : "id-goes-here",
+										"name" : "CS4",
+										"hold_size" : 1100,
+										"speed" : 400,
+										"type" : "cargo_ship",
+										...
+									},
+									...
+								],
+								"spies" : [
+									{
+										"id" : "id-goes-here",
+										"level" : 12,
+										"name" : "Jack Bauer",
+										"assigned_to" : {
+										"body_id" : "id-goes-here",
+										"name" : "Earth"
+										},
+										...
+									},
+									...
+								]
+							}
+						*/
+					},
+					"send_spies" : {
+						"description": "Sends one or more of spies to a planet using a selected ship. See also prepare_send_spies.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"on_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false},
+							{"name":"ship_id",    "type":"string", "optional":false},
+							{"name":"spy_ids",    "type":"array",  "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+							{
+								"ship" : {
 									"id" : "id-goes-here",
 									"name" : "CS4",
 									"hold_size" : 1100,
 									"speed" : 400,
-									"type" : "cargo_ship"
-								 },
-								 ...
-							 ]
-						 }
+									"type" : "cargo_ship",
+									"date_arrives" : "01 31 2010 13:09:05 +0600",
+									...
+								},
+								"spies_sent" : ["id-goes-here","id-goes-here","id-goes-here"],
+								"spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"],
+								"status" : { ... }
+							}
+						 * 
 						*/
 					},
-					"get_my_available_spies" : {
-						"description": "Returns a list of spies that are controlled by this empire and are on the specified body and are available for transport (assignment is Idle).",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"on_body_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-						   "spies" : [
-							  {
-								 "id" : "id-goes-here",
-								 "level" : 12,
-								 "name" : "Jack Bauer",
-								 "from" : {
-									"id" : "id-goes-here",
-									"name" : "Earth"
-								 },
-							  },
-							  ...
-						   ],
-						   "status" : { ... }
-						 }
 
-						*/
-					},
 					"get_ships_for" : {
 						"description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship.",
 						"parameters": [
@@ -1240,27 +1279,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 								   "name" : "Sol"
 								}
 							}  
-						 }
-						*/
-					},
-					"send_spies" : {
-						"description": "Returns a list of all ships",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"from_body_id", "type":"string", "optional":false},
-							{"name":"to_body", "type":"string", "optional":false},
-							{"name":"ship_id", "type":"string", "optional":false},
-							{"name":"spy_ids", "type":"array", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							 "ship" : {
-								 "date_arrives" : "01 31 2010 13:09:05 +0600",
-								 "spies_sent" : ["id-goes-here","id-goes-here","id-goes-here"],     # should be identical to "spy_ids"
-								 "spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"]  # should only contain something if you're cheating, or a spy dies/turns between RPC calls
-							 },
-							 "status" : { ... }
 						 }
 						*/
 					},

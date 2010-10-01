@@ -424,7 +424,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		},
 		handleCancel : function() {
 			this.hide();
-			this._empire.show(true);
+			this._empire.handleCancel();
 		},
 
 		_found : function() {
