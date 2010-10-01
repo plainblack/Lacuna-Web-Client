@@ -33,33 +33,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			SpacePort.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getDockTab(), this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
-		},
-		_getDockTab : function() {
-			var ships = this.result.docked_ships;
-			this.dockTab = new YAHOO.widget.Tab({ label: "Docked", content: [
-				'<div class="yui-g">',
-				'	<div class="yui-u first">',
-				'		<ul class="buildingDetailsDockedShips">',
-				'			<li><label>Probe</label><span class="buildingDetailsNum">',ships.probe,'</span></li>',
-				'			<li><label>Spy Pod</label><span class="buildingDetailsNum">',ships.spy_pod,'</span></li>',
-				'			<li><label>Smuggler Ship</label><span class="buildingDetailsNum">',ships.smuggler_ship,'</span></li>',
-				'			<li><label>Mining Platform Ship</label><span class="buildingDetailsNum">',ships.mining_platform_ship,'</span></li>',
-				'			<li><label>Cargo Ship</label><span class="buildingDetailsNum">',ships.cargo_ship,'</span></li>',
-				'		</ul>',
-				'	</div>',
-				'	<div class="yui-u">',
-				'		<ul class="buildingDetailsDockedShips">',
-				'			<li><label>Terraforming Platform Ship</label><span class="buildingDetailsNum">',ships.terraforming_platform_ship,'</span></li>',
-				'			<li><label>Gas Giant Settlement Platform Ship</label><span class="buildingDetailsNum">',ships.gas_giant_settlement_platform_ship,'</span></li>',
-				'			<li><label>Space Station</label><span class="buildingDetailsNum">',ships.space_station,'</span></li>',
-				'			<li><label>Colony Ship</label><span class="buildingDetailsNum">',ships.colony_ship,'</span></li>',
-				'		</ul>',
-				'	</div>',
-				'</div>'
-			].join('')});
-			
-			return this.dockTab;
+			return [this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
 		},
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [

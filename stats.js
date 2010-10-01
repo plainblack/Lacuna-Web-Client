@@ -403,8 +403,13 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			else {
 			
 				this.EmpireColumns = [
+					{key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
+						var oState = this.getState();
+						el.innerHTML = Math.floor(oState.pagination.recordOffset + this.rankCounter++);
+					}},
 					{key:"empire_name", label:"Empire"},
-					{key:"colony_count", label:"Colony"},
+					{key:"alliance_name", label:"Alliance"},
+					{key:"colony_count", label:"Colonies"},
 					{key:"population", label:"Pop"},
 					{key:"empire_size", label:"Empire Size"},
 					{key:"building_count", label:"Buildings"},
@@ -421,6 +426,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.EmpireData.responseSchema = {
 					resultsList : "result.empires",
 					fields : [	"empire_id","empire_name",
+								"alliance_id","alliance_name",
 								{key:"colony_count",parser:"number"},
 								{key:"population",parser:"number"},
 								{key:"empire_size",parser:"number"},
@@ -451,8 +457,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					dynamicData: true,
 					sortedBy : {key:"population", dir:YAHOO.widget.DataTable.CLASS_DSC},
 					paginator: new YAHOO.widget.Paginator({ rowsPerPage:25, containers:'statsEmpirePaginator' }),
-					selectionMode:"single" 
+					selectionMode:"single"
 				} );
+				this.EmpireTable.rankCounter = 1;
 				// Subscribe to events for row selection 
 				this.EmpireTable.subscribe("rowMouseoverEvent", this.EmpireTable.onEventHighlightRow);
 				this.EmpireTable.subscribe("rowMouseoutEvent", this.EmpireTable.onEventUnhighlightRow);
@@ -465,11 +472,6 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.EmpireTable.requery = function() {
 					// Get the current state
 					var oState = this.getState();
-					
-					// Reset record offset, if paginated
-					//if(oState.pagination) {
-					//	oState.pagination.recordOffset = 0;
-					//}
 			
 					// Get the request for the new state
 					var request = this.get("generateRequest")(oState, this);
@@ -494,6 +496,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
+						
+					oSelf.rankCounter = 1;
 					
 					return Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,

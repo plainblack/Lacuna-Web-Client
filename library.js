@@ -32,18 +32,24 @@ if (!String.prototype.titleCaps) {
 	String.small = "(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v[.]?|via|vs[.]?)";
 	String.punct = "([!\"#$%&'()*+,./:;<=>?@[\\\\\\]^_`{|}~-]*)";
   
-	String.prototype.titleCaps = function(){
-		var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0;
+	String.prototype.titleCaps = function(replaceVal, withVal){
+		var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0, processVal = this;
 		var fnUpper = function(all){
 				return (/[A-Za-z]\.[A-Za-z]/).test(all) ? all : String.upper(all);
 			},
 			fnPuntUpper = function(all, punct, word){
 				return punct + String.upper(word);
 			};
+			
+		if(replaceVal) {
+			var rg = new RegExp(replaceVal, 'g');
+			processVal = processVal.replace(rg, withVal || '');
+		}
+			
 		while (true) {
-			var m = split.exec(this);
+			var m = split.exec(processVal);
 
-			parts.push( this.substring(index, m ? m.index : this.length)
+			parts.push( processVal.substring(index, m ? m.index : processVal.length)
 				.replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, fnUpper)
 				.replace(RegExp("\\b" + String.small + "\\b", "ig"), String.lower)
 				.replace(RegExp("^" + String.punct + String.small + "\\b", "ig"), fnPuntUpper)

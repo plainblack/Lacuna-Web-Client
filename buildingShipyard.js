@@ -23,7 +23,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			return [this._getQueueTab(), this._getBuildTab()];
 		},
 		_getQueueTab : function() {
-			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", content: '<div><ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul><div id="shipsBuilding"></div></div>'});
+			var div = document.createElement("div");
+			div.innerHTML = '<div>You may subsidize the build queue for 1 essentia per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div><ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul><div id="shipsBuilding"></div>';
+			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
+		
+			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
 			queueTab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getQueue();
@@ -122,19 +126,22 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 		},
 		
 		ShipyardDisplay : function() {
-			var bq = this.ship_build_queue;
+			var bq = this.ship_build_queue,
+				div = Dom.get("shipsBuilding"),
+				divParent = div.parentNode,
+				ul = document.createElement("ul"),
+				li = document.createElement("li"),
+				now = new Date();
+				
+			this.resetQueue();
+			div = divParent.removeChild(div);
+			div.innerHTML = "";
+			
 			/*= {
 				number_of_ships_building: o.result.number_of_ships_building,
 				ships_building: o.result.ships_building
 			};*/
-			if(bq.ships_building && bq.ships_building.length > 0) {
-				var div = Dom.get("shipsBuilding"),
-					ul = document.createElement("ul"),
-					li = document.createElement("li"),
-					now = new Date();
-					
-				div.innerHTML = "";
-				
+			if(bq && bq.ships_building && bq.ships_building.length > 0) {
 				for(var i=0; i<bq.ships_building.length; i++) {
 					var bqo = bq.ships_building[i],
 						nUl = ul.cloneNode(false),
@@ -160,6 +167,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					this.addQueue(ncs, this.ShipyardQueue, nUl);
 				}
 			}
+			//add child back in
+			divParent.appendChild(div);
 		},
 		ShipyardQueue : function(remaining, elLine){
 			if(remaining <= 0) {
@@ -169,6 +178,31 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				Sel.query("li.shipQueueEach",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
 			}
 		},
+		SubsidizeBuildQueue : function() {
+			Lacuna.Pulser.Show();
+			
+			this.service.subsidize_build_queue({
+				session_id:Game.GetSession(),
+				building_id:this.building.id
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "Shipyard.SubsidizeBuildQueue.success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+
+					this.ship_build_queue = undefined;
+					this.ShipyardDisplay();
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Shipyard.SubsidizeBuildQueue.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		
 		ShipPopulate : function() {
 			var details = Dom.get("shipDetails");
 			

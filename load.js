@@ -5,8 +5,8 @@
 		p.className += ' hidden';
 	}
 	
-	var t = "2", host;
-	host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
+	var t = "VERSION";
+	var host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
 	var loader = new YAHOO.util.YUILoader({
 		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "MIN",

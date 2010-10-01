@@ -62,6 +62,23 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				this.type = 'password';
 			});
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
+			//species tab
+			this.tabView.getTab(2).subscribe("activeChange", function(e) {
+				if(e.newValue && !this.hasSpecies) {
+					Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
+						success : function(o){
+							YAHOO.log(o, "info", "Profile.show.view_stats.success");
+							this.populateSpecies(o.result);
+							this.hasSpecies = true;
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "Profile.show.view_stats.failure");
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
+				}
+			}, this, true);
 			this.tabView.set('activeIndex',0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
@@ -263,17 +280,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.show.view_profile.failure");
-				},
-				timeout:Game.Timeout,
-				scope:Lacuna.Profile
-			});
-			Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
-				success : function(o){
-					YAHOO.log(o, "info", "Profile.show.view_stats.success");
-					this.populateSpecies(o.result);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Profile.show.view_stats.failure");
 				},
 				timeout:Game.Timeout,
 				scope:Lacuna.Profile

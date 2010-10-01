@@ -228,19 +228,16 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			var btn = Event.getTarget(e),
 				cp = Game.GetCurrentPlanet(),
 				maxVal = cp.waste_stored <= this.recycle.max_recycle ? cp.waste_stored : this.recycle.max_recycle,
-				third = Math.floor(maxVal / 3),
-				ore = Math.floor(cp.ore_stored > third ? third : cp.ore_stored),
-				water = Math.floor(cp.water_stored > third ? third : cp.water_stored),
-				energy = Math.floor(cp.energy_stored > third ? third : cp.energy_stored);
+				third = Math.floor(maxVal / 3);
 				
-			this.recycleOreEl.originalValue = ore; 
-			this.recycleOreEl.value = ore; 
-			this.recycleWaterEl.originalValue = water;  
-			this.recycleWaterEl.value = water; 
-			this.recycleEnergyEl.originalValue = energy;  
-			this.recycleEnergyEl.value = energy; 
+			this.recycleOreEl.originalValue = third; 
+			this.recycleOreEl.value = third; 
+			this.recycleWaterEl.originalValue = third;  
+			this.recycleWaterEl.value = third; 
+			this.recycleEnergyEl.originalValue = third;  
+			this.recycleEnergyEl.value = third; 
 			
-			this.totalWasteToRecycle = ore + water + energy;
+			this.totalWasteToRecycle = third * 3;
 			this.totalWasteToRecycleEl.innerHTML = Lib.formatNumber(this.totalWasteToRecycle);
 			this.SetTime();
 		},
