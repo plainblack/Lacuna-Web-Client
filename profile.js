@@ -51,7 +51,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.species = Dom.get("profileSpecies");
 			this.notes = Dom.get("profileNotes");
 			this.sitter_password = Dom.get("profileSitterPassword");
-			this.current_password = Dom.get("profileCurrentPassword");
 			this.new_password = Dom.get("profileNewPassword");
 			this.confirm_password = Dom.get("profileConfirmPassword");
 			this.account_tab = Dom.get('detailsAccount');
@@ -141,7 +140,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'						<hr />',
 			'						<ul>',
 			'							<li style="text-align: center; margin-bottom: 2px;">Change Account Password:</li>',
-			'							<li><label>Current Password:<input id="profileCurrentPassword" type="password" /></label></li>',
 			'							<li><label>New Password:<input id="profileNewPassword" type="password" /></label></li>',
 			'							<li><label>Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
 			'						</ul>',
@@ -155,24 +153,17 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		},
 		handleUpdate : function() {
 			var updatesLeft = 1;
-			if (this.current_password.value != "") {
+			if (this.new_password.value != "") {
 				if (this.new_password.value != this.confirm_password.value) {
 					alert("Passwords don't match!");
 					this.tabView.set('activeIndex', 4);
 					this.confirm_password.focus();
 					return;
 				}
-				else if (this.new_password.value == "" && this.confirm_password.value == "") {
-					alert("Cannot set empty password!");
-					this.tabView.set('activeIndex', 4);
-					this.new_password.focus();
-					return;
-				}
 				else {
 					updatesLeft++;
 					Game.Services.Empire.change_password({
 							session_id:Game.GetSession(""),
-							current_password:this.current_password.value,
 							password1:this.new_password.value,
 							password2:this.confirm_password.value
 						},{
@@ -187,7 +178,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 							YAHOO.log(o, "error", "Profile.handleUpdate.password.failure");
 							alert(o.error.message);
 							this.tabView.set('activeIndex', 4);
-							this.current_password.focus();
+							this.new_password.focus();
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -237,40 +228,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				scope:this
 			});
 		},
-
-		handlePasswordUpdate : function () {
-			if (! Dom.hasClass(this.account_tab, 'password-changed')) {
-				this.hide();
-			}
-			else if (this.new_password.value != this.confirm_password.value) {
-				alert("Passwords don't match!");
-			}
-			else if (this.new_password.value == "") {
-				this.hide();
-			}
-			else if (this.current_password.value == "") {
-				this.hide();
-			}
-			else {
-				Game.Services.Empire.change_password({
-						session_id:Game.GetSession(""),
-						current_password:this.current_password.value,
-						password1:this.new_password.value,
-						password2:this.confirm_password.value
-					},{
-					success : function(o){
-						YAHOO.log(o, "info", "Profile.handlePasswordUpdate.success");
-						this.hide();
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Profile.handlePasswordUpdate.failure");
-					},
-					timeout:Game.Timeout,
-					scope:this
-				});
-			}
-		},
-		
 		show : function() {
 			//this is called out of scope so make sure to pass the correct scope in
 			Game.Services.Empire.view_profile({session_id:Game.GetSession("")},{
@@ -312,8 +269,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;
 			this.sitter_password.type = "password";
-			this.current_password.value =
-				this.new_password.value =
+			this.new_password.value =
 				this.confirm_password.value = "";
 			Dom.removeClass(this.account_tab, 'password-changed');
 	

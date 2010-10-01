@@ -388,7 +388,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var planetMenuTT = new YAHOO.widget.Tooltip("planetMenuTT", {
 				zIndex:1010,
 				xyoffset:[0,-10],
-				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver,this.elPlotsOver]
+				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver,this.elPlotsOver,this.elClick]
 			});
 			// Set the text for the tooltip just before we display it.
 			planetMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -678,6 +678,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 				case "planetMenuPlots":
 					output = [planet.size*1 - planet.building_count*1, ' Plots Available'];
+					break;
+				case "planetsClick":
+					output = ['Colonies'];
 					break;
 				default:
 					output = [];

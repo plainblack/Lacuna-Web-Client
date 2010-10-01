@@ -430,7 +430,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		_found : function() {
 			Lacuna.Pulser.Show();
 			var EmpireServ = Game.Services.Empire;
-			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey, invite_code:this.inviteCode}, {
+			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey}, {
 				success : function(o) {
 					YAHOO.log(o, "info", "CreateSpecies._found.success");
 					Lacuna.Pulser.Hide();
@@ -460,7 +460,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				'				<ul style="margin-top:5px; padding-top:5px; border-top:1px solid #52acff;">',
 				'					<li style="margin-bottom:3px;"><label for="speciesName">Species Name</label><input type="text" id="speciesName" maxlength="30" size="30" /></li>',
 				'					<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
-				'					<li><span class="affinitiesLabel">Affinities:</span><span id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</span></li>',
+				'					<li style="margin: 10px 0;"><span class="affinitiesLabel">Affinities:</span><span id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</span></li>',
 				'				</ul>',
 				'				<div class="yui-g speciesAffinities">',
 				'					<div class="yui-u first">',
@@ -549,9 +549,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		show : function(empire, inviteCode) {
+		show : function(empire) {
 			this.empireId = empire;
-			this.inviteCode = inviteCode;
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 			this.Dialog.center();

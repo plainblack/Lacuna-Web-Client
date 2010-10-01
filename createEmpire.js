@@ -111,7 +111,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			}
 			this.setMessage("");
 			if(this.savedEmpire && this.savedEmpire.name == this.elName.value) {
-				Game.SpeciesCreator.show(this.savedEmpire.id, this.elFriendCode.value);
+				Game.SpeciesCreator.show(this.savedEmpire.id);
 				this.hide(); //hide empire
 			}
 			else {
@@ -134,25 +134,34 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					data.password = this.elPass.value;
 					data.password1 = this.elPassConfirm.value;
 				}
+				if (this.elFriendCode.value.length > 0) {
+					data.invite_code = this.elFriendCode.value;
+				}
 				EmpireServ.create(data,{
 					success : function(o){
-							YAHOO.log(o, "info", "CreateEmpire");
+						YAHOO.log(o, "info", "CreateEmpire");
 						this.savedEmpire = data;
 						this.savedEmpire.id = o.result;
-						Game.SpeciesCreator.show(o.result, this.elFriendCode.value);
+						Game.SpeciesCreator.show(o.result);
 						Lacuna.Pulser.Hide();
 						this.hide(); //hide empire
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "CreateEmpireFailure");
 						this.setMessage(o.error.message);
+						Lacuna.Pulser.Hide();
 						if (o.error.code == 1014) {
 							this.captchaGUID = o.error.data.guid;
 							this.elCaptchaImage.src = o.error.data.url;
 							this.elCaptcha.value = '';
 							this.elCaptcha.focus();
 						}
-						Lacuna.Pulser.Hide();
+						else if (o.error.code == 1100) {
+							this.savedEmpire = data;
+							this.savedEmpire.id = o.error.data;
+							Game.SpeciesCreator.show(o.error.data.empire_id);
+							this.hide(); //hide empire
+						}
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -1,4 +1,14 @@
 (function(){
+	var l = window.location;
+	var query = {};
+	var vars = l.hash.substring(1).split('&');
+	if (vars.length > 0) {
+		for (var i=0; i<vars.length; i++) {
+			var pair = vars[i].split("=");
+			query[pair[0]] = decodeURIComponent(pair[1]);
+		}
+	}
+	l.hash = '';
 	
 	var p = document.getElementById("pulsing");
 	if(p.className.indexOf('hidden') < 0) {
@@ -240,7 +250,7 @@
 	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();		
-		YAHOO.lacuna.Game.Start();
+		YAHOO.lacuna.Game.Start(query);
 		progressLoaderC.parentNode.removeChild(progressLoaderC);
 	};
 	loader.onProgress = function(o) {
