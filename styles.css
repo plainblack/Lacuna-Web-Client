@@ -1487,17 +1487,20 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	cursor:pointer;
 }
 
-.tradeInfo .tradeOfferedDate {
+.tradeInfo .tradeEmpire{
 	width:180px;
+}
+.tradeInfo .tradeOfferedDate {
+	width:145px;
 }
 .tradeInfo .tradeAsking {
-	width:180px;
+	width:130px;
 }
 .tradeInfo .tradeOffer {
-	width:180px;
+	width:130px;
 }
 .tradeInfo .tradeAction {
-	width:100px;
+	width:75px;
 }
 
 .platformInfo .platformLocation {

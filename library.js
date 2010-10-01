@@ -67,7 +67,6 @@ if (!String.prototype.titleCaps) {
 	String.upper = function(word){
 	  return word.substr(0,1).toUpperCase() + word.substr(1);
 	};
-
 }
 	
 if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
@@ -209,6 +208,10 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		},
+		formatServerDateShortTime : function(oDate) {
+			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
+			return Util.Date.format(dt, {format:"%m/%d/%Y %I:%M%p"}, "en");
+		},
 		convertNumDisplay : function(number, always) {
 			if(number >= 1000000 || number <= -1000000) {
 				return (Math.floor(number/100000) / 10) + 'm';
@@ -264,19 +267,20 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			excavator:"Excavator",
 			fighter:"Fighter",
 			freighter:"Freighter",
-			gas_giant_settlement_platform_ship:"Gas Giant Platform",
-			mining_platform_ship:"Mining Platform",
+			gas_giant_settlement_platform_ship:"Gas Giant Settlement Platform Ship",
+			mining_platform_ship:"Mining Platform Ship",
 			observatory_seeker:"Observatory Seeker",
 			probe:"Probe",
 			scanner:"Scanner",
 			scow:"Scow",
 			security_ministry_seeker:"Security Ministry Seeker",
 			smuggler_ship:"Smuggler Ship",
+			snark:"Snark",
 			space_station:"Space Station",
 			spaceport_seeker:"Spaceport Seeker",
 			spy_pod:"Spy Pod",
 			spy_shuttle:"Spy Shuttle",
-			terraforming_platform_ship:"Terraforming Platform"
+			terraforming_platform_ship:"Terraforming Platform Ship"
 		}
 	};
 	

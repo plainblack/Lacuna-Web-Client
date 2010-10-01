@@ -155,7 +155,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span><span id="buildingDetailsOre" class="buildingDetailsNum">',this.building.ore_hour,'/hr</span></li>',
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span><span id="buildingDetailsWater" class="buildingDetailsNum">',this.building.water_hour,'/hr</span></li>',
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum">',this.building.energy_hour,'/hr</span></li>',
-				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Water" class="smallWaste" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum">',this.building.waste_hour,'/hr</span></li>',
+				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum">',this.building.waste_hour,'/hr</span></li>',
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum">',this.building.happiness_hour,'/hr</span></li>',
 				'				<li>', (this.building.pending_build) ? '<span class="alert">Unable to Demolish</span>' : '<button id="buildingDetailsDemolish" type="button">Demolish</button>' ,'</li>',
 				'			</ul>',

@@ -41,6 +41,12 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.country = Dom.get("profileCountry");
 			this.skype = Dom.get("profileSkype");
 			this.player_name = Dom.get("profilePlayerName");
+			this.skipFacebook = Dom.get("profileSkipFacebookWallPosts");
+			this.skipMedal = Dom.get("profileSkipMedal");
+			this.skipHappiness = Dom.get("profileSkipHappiness");
+			this.skipResource = Dom.get("profileSkipResource");
+			this.skipPollution = Dom.get("profileSkipPollution");
+			
 			this.medals = Dom.get("profileMedalsList");
 			this.species = Dom.get("profileSpecies");
 			this.notes = Dom.get("profileNotes");
@@ -88,6 +94,15 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><label>City:<input id="profileCity" /></label></li>',
 			'							<li><label>Country:<input id="profileCountry" /></label></li>',
 			'							<li><label>Skype:<input id="profileSkype" /></label></li>',
+			'							<li><hr /><div class="yui-g">',
+			'								<div class="yui-u first">',
+			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
+			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li></ul></div>',
+			'								<div class="yui-u">',
+			'									<ul><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
+			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
+			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li></ul></div>',
+			'							</div></li>',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsMedals">',
@@ -183,7 +198,12 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						player_name:this.player_name.value,
 						notes:this.notes.value,
 						sitter_password:this.sitter_password.value,
-						public_medals:publicMedals
+						public_medals:publicMedals,
+						skip_happiness_warnings:this.skipHappiness.checked ? 1 : 0,
+						skip_resource_warnings:this.skipResource.checked ? 1 : 0,
+						skip_pollution_warnings:this.skipPollution.checked ? 1 : 0,
+						skip_medal_messages:this.skipMedal.checked ? 1 : 0,
+						skip_facebook_wall_posts:this.skipFacebook.checked ? 1 : 0
 					}
 				},{
 				success : function(o){
@@ -276,6 +296,13 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.country.value = p.country;
 			this.skype.value = p.skype;
 			this.player_name.value = p.player_name;
+			
+			this.skipFacebook.checked = p.skip_facebook_wall_posts == "1";
+			this.skipMedal.checked = p.skip_medal_messages == "1";
+			this.skipHappiness.checked = p.skip_happiness_warnings == "1";
+			this.skipResource.checked = p.skip_resource_warnings == "1";
+			this.skipPollution.checked = p.skip_pollution_warnings == "1";
+			
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;
 			this.sitter_password.type = "password";

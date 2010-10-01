@@ -147,7 +147,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					Dom.addClass(nUl, "clearafter");
 
 					Dom.addClass(nLi,"shipQueueType");
-					nLi.innerHTML = Lib.Ships[bqo.type] || bqo.type;
+					nLi.innerHTML = Lib.Ships[bqo.type] || bqo.type; //bqo.type_human
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -203,7 +203,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					'		<img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" class="shipImage" />',
 					'	</div>',
 					'	<div class="yui-u" style="width:67%">',
-					'		<span class="shipName">',Lib.Ships[shipName] || shipName,'</span>: ',
+					'		<span class="shipName">',ship.type_human,'</span>: ',
 					'		<div class="shipDesc" style="display:none;">',Game.GetShipDesc(shipName),'</div>',
 					'		<div><label style="font-weight:bold;">Cost:</label>',
 					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" />',ship.cost.food,'</span>',

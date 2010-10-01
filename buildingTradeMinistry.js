@@ -141,6 +141,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		_getAvailTab : function() {
 			this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: ['<div>',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
+				'		<li class="tradeEmpire">Empire</li>',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
 				'		<li class="tradeAsking">Asking</li>',
 				'		<li class="tradeOffer">Offering</li>',
@@ -495,8 +496,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(nUl, "clearafter");
 
 					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"tradeEmpire");
+					nLi.innerHTML = trade.empire.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOfferedDate");
-					nLi.innerHTML = Lib.formatServerDate(trade.date_offered);
+					nLi.innerHTML = Lib.formatServerDateShortTime(trade.date_offered);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
