@@ -52,6 +52,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			else if (query.session_id) {
 				Game.SetSession(query.session_id);
 			}
+			else if (query.empire_id) {
+				Game.InitLogin();
+				Game.LoginDialog.initEmpireCreator();
+				Game.SpeciesCreator.show(query.empire_id);
+				return;
+			}
 			else if (!session) {
 				Game.DoLogin();
 				return;

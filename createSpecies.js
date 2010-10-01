@@ -430,7 +430,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		_found : function() {
 			Lacuna.Pulser.Show();
 			var EmpireServ = Game.Services.Empire;
-			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey, invite_code:this.inviteCode}, {
+			EmpireServ.found({empire_id: this.empireId, api_key:Lib.ApiKey}, {
 				success : function(o) {
 					YAHOO.log(o, "info", "CreateSpecies._found.success");
 					Lacuna.Pulser.Hide();
@@ -549,9 +549,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			Dom.replaceClass(this.elMessage, Lib.Styles.HIDDEN, Lib.Styles.ALERT);
 			this.elMessage.innerHTML = str;
 		},
-		show : function(empire, inviteCode) {
+		show : function(empire) {
 			this.empireId = empire;
-			this.inviteCode = inviteCode;
 			Game.OverlayManager.hideAll();
 			this.Dialog.show();
 			this.Dialog.center();

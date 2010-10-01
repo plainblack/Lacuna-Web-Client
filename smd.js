@@ -1956,8 +1956,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "create empire",
 					"parameters": {
 						name:{"type":"string", "optional":false},
-						password:{"type":"string", "optional":false},
-						password1:{"type":"string", "optional":false}
+						password:{"type":"string", "optional":true},
+						password1:{"type":"string", "optional":true},
+						captcha_guid:{"type":"string", "optional":true},
+						captcha_solution:{"type":"string", "optional":true},
+						email:{"type":"string", "optional":true},
+						facebook_uid:{"type":"string", "optional":true},
+						facebook_token:{"type":"string", "optional":true},
+						invite_code:{"type":"string", "optional":true}
 					},
 					"returns":{"type":"object"}
 				},
