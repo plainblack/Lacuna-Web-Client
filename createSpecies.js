@@ -460,7 +460,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				'				<ul style="margin-top:5px; padding-top:5px; border-top:1px solid #52acff;">',
 				'					<li style="margin-bottom:3px;"><label for="speciesName">Species Name</label><input type="text" id="speciesName" maxlength="30" size="30" /></li>',
 				'					<li><label for="speciesDesc">Description</label><textarea id="speciesDesc" cols="40" rows="4"></textarea></li>',
-				'					<li><span class="affinitiesLabel">Affinities:</span><span id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</span></li>',
+				'					<li style="margin: 10px 0;"><span class="affinitiesLabel">Affinities:</span><span id="speciesPointTotalLine" class="speciesPointTotal speciesPointsValid"><label>Points</label><span id="speciesPointTotal">0</span>/45</span></li>',
 				'				</ul>',
 				'				<div class="yui-g speciesAffinities">',
 				'					<div class="yui-u first">',
