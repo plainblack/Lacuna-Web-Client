@@ -20,7 +20,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		onTick : new Util.CustomEvent("onTick"),
 		OverlayManager : new YAHOO.widget.OverlayManager(),
 
-		Start : function() {
+		Start : function(query) {
 			var l = window.location;
 			Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
 			Game.domain = l.host || "lacunaexpanse.com";
@@ -28,22 +28,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Pulser = new Lacuna.Pulse();
 			}
 			Lacuna.Pulser.Show();
+			if (!query) {
+				query = {};
+			}
 			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
 			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
-			var query = {};
-			var vars = l.hash.substring(1).split('&');
-			if (vars.length > 0) {
-				for (var i=0; i<vars.length; i++) {
-					var pair = vars[i].split("=");
-					query[pair[0]] = decodeURIComponent(pair[1]);
-				}
-			}
-			window.location.hash = '';
-
 			var session = Game.GetSession();
 			if (query.reset_password) {
 				Game.InitLogin();
