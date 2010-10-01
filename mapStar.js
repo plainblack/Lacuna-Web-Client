@@ -19,6 +19,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		this.createEvent("onChangeToPlanetView");
 		
 		this._renameLabel = "Rename";
+		this._sendSpiesLabel = "Send Spies";
+		this._fetchSpiesLabel = "Fetch Spies";
 		
 		this._buildDetailsPanel();
 		this._buildPlanetDetailsPanel();
@@ -143,6 +145,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<ul class="yui-nav">',
 				'			<li><a href="#planetDetailOre"><em>Ore</em></a></li>',
 				'			<li><a href="#planetDetailRename"><em>',this._renameLabel,'</em></a></li>',
+				'			<li><a href="#planetDetailSendSpies"><em>',this._sendSpiesLabel,'</em></a></li>',
+				'			<li><a href="#planetDetailFetchSpies"><em>',this._fetchSpiesLabel,'</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content">',
 				'			<div id="planetDetailOre">',
@@ -182,6 +186,32 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'				<li class="alert" id="planetDetailRenameMessage"></li>',
 				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button></li>',
 				'			</ul></div>',
+				'			<div id="planetDetailSendSpies" style="height: 240px">',
+				'				<div class="planetDetailSelectSpies">',
+				'					<div class="planetDetailSpiesMessage"></div><button>Send</button>',
+				'					<ul class="planetDetailSpiesList">',
+				'					</ul>',
+				'				</div>',
+				'				<div class="planetDetailSelectSpyShip">',
+				'					<div class="planetDetailSpyShipHeader">',
+				'						<div class="planetDetailSpyShipMessage"></div><button>Back</button>',
+				'					</div>',
+				'					<ul class="planetDetailSpyShipList"></ul>',
+				'				</div>',
+				'			</div>',
+				'			<div id="planetDetailFetchSpies" style="height: 240px">',
+				'				<div class="planetDetailSelectSpies">',
+				'					<div class="planetDetailSpiesMessage"></div><button>Send</button>',
+				'					<ul class="planetDetailSpiesList"></ul>',
+				'				</div>',
+				'				<div class="planetDetailSelectSpyShip">',
+				'					<div class="planetDetailSpyShipHeader">',
+				'						<div class="planetDetailSpyShipMessage"></div><button>Back</button>',
+				'					</div>',
+				'					<ul class="planetDetailSpyShipList">',
+				'					</ul>',
+				'				</div>',
+				'			</div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -241,8 +271,39 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			};
 			
 			this.planetDetails.renderEvent.subscribe(function(){
-				this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
 				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
+				var tv = this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
+				var spyTabs = {
+					"planetDetailSendSpies" : 2,
+					"planetDetailFetchSpies" : 3
+				};
+				for (var tabId in spyTabs) if (spyTabs.hasOwnProperty(tabId)) {
+					var tab = tv.getTab(spyTabs[tabId]);
+					var tabEl = Dom.get(tabId);
+					tab.subscribe('beforeActiveChange', function(e, tabEl) {
+						if (e.newValue) {
+							this.ShowSpies(tabEl);
+						}
+					}, tabEl, this);
+					tabEl.elSpiesPane = Sel.query('.planetDetailSelectSpies', tabEl, true);
+					tabEl.elSpyShipsPane = Sel.query('.planetDetailSelectSpyShip', tabEl, true);
+					tabEl.elSendButton = Sel.query('.planetDetailSelectSpies button', tabEl, true);
+					tabEl.elSpiesList = Sel.query('.planetDetailSpiesList', tabEl, true);
+					tabEl.elSpyShipsList = Sel.query(".planetDetailSpyShipList", tabEl, true);
+					tabEl.elMessage = Sel.query('.planetDetailSpiesMessage', tabEl, true);
+					tabEl.elShipMessage = Sel.query('.planetDetailSpyShipMessage', tabEl, true);
+					Event.on(tabEl.elSendButton, "click", this.MoveSpies, tabEl, this);
+					Event.on(
+						Sel.query('.planetDetailSelectSpyShip button', tabEl, true),
+						"click", this.MoveSpiesCancel, tabEl, this
+					);
+					Event.delegate(tabEl, "click", this.MoveSpyShip,
+						".planetDetailSelectSpyShip ul button", this, true);
+					this.planetDetails.hideEvent.subscribe(function(){
+						delete this.availSpyShips;
+						delete this.availSpies;
+					}, tabEl, true);
+				}
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
 			}, this, true);
 			this.planetDetails.hideEvent.subscribe(function(){
@@ -741,6 +802,30 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					}
 				}
 			}
+			if(empire.alignment == "none" || empire.is_isolationist == "1" ){
+				var tabs = panel.tabView.get("tabs");
+				for(var nt = tabs.length; nt >= 0; nt--) {
+					var tab = panel.tabView.getTab(nt);
+					if(tab && tab.get("label") == this._sendSpiesLabel) {
+						panel.sendSpiesTab = tab;
+						panel.tabView.removeTab(tab);
+					}
+					else if(tab && tab.get("label") == this._fetchSpiesLabel) {
+						panel.fetchSpiesTab = tab;
+						panel.tabView.removeTab(tab);
+					}
+				}
+			}
+			else {
+				if(panel.sendSpiesTab) {
+					panel.tabView.addTab(panel.sendSpiesTab);
+					delete panel.sendSpiesTab;
+				}
+				if(panel.fetchSpiesTab) {
+					panel.tabView.addTab(panel.fetchSpiesTab);
+					delete panel.fetchSpiesTab;
+				}
+			}
 			
 			this.GetShips(panel,{body_id:body.id});
 			
@@ -760,7 +845,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					success : function(o){
 						YAHOO.log(o, "info", "MapStar.Rename.success");
 						if(o.result && this.selectedBody) {
-							Dom.get("planetDetailRenameMessage").innerHTML = ["Successfully renamed your planet from ", this.selectedBody.name," to ", newName, '.'].join('');
+							Dom.get("planetDetailRenameMessage").innerHTML = [
+								"Successfully renamed your planet from ",
+								this.selectedBody.name," to ", newName, '.'
+							].join('');
 							Lib.fadeOutElm("planetDetailRenameMessage");
 							Dom.get("planetDetailsName").innerHTML = newName;
 							Game.EmpireData.planets[this.selectedBody.id].name = newName;
@@ -780,6 +868,200 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					scope:this
 				}
 			);
+		},
+		ShowSpies : function(tab) {
+			Dom.setStyle(tab.elSpiesPane, 'display', 'block');
+			Dom.setStyle(tab.elSpyShipsPane, 'display', 'none');
+			if ( tab.availSpies && tab.availSpyShips ) {
+				return;
+			}
+			tab.elSpiesList.innerHTML = "";
+			tab.elSpyShipsList.innerHTML = "";
+			tab.elMessage.innerHTML = "";
+			Dom.setStyle(tab.elSendButton, 'visibility', 'collapse');
+			var rpc_count = 0;
+			Lacuna.Pulser.Show();
+			var method;
+			var data;
+			if ( tab.id == 'planetDetailSendSpies' ) {
+				method = 'prepare_send_spies';
+				data = {
+					session_id:Game.GetSession(),
+					on_body_id:Game.GetCurrentPlanet().id,
+					to_body_id:this.selectedBody.id
+				};
+			}
+			else {
+				method = 'prepare_fetch_spies';
+				data = {
+					session_id:Game.GetSession(),
+					on_body_id:this.selectedBody.id,
+					to_body_id:Game.GetCurrentPlanet().id
+				};
+			}
+
+			Game.Services.Buildings.SpacePort[method](data,{
+				success : function(o){
+					YAHOO.log(o, "info", "MapStar.ShowSpies."+method+".success");
+					this.fireEvent("onMapRpc", o.result);
+					Lacuna.Pulser.Hide();
+					tab.availSpyShips = o.result.ships;
+					tab.availSpies = o.result.spies;
+					this.populateSpies(tab);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapStar.ShowSpies."+method+".failure");
+					this.fireEvent("onMapRpcFailed", o);
+					Lacuna.Pulser.Hide();
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		populateSpies : function(tab) {
+			var list = tab.elSpiesList;
+			var spies = tab.availSpies;
+			var ships = tab.availSpyShips;
+			
+			if (spies.length == 0) {
+				tab.elMessage.innerHTML = 'No spies available.';
+				return;
+			}
+			var maxSpies = 0;
+			for (var i = 0; i < ships.length; i++) {
+				var ship = ships[i];
+				if (ship.type == "spy_pod") {
+					ship.max_spies = 1;
+				}
+				else if (ship.type == "spy_shuttle") {
+					ship.max_spies = 4;
+				}
+				else {
+					ship.max_spies = Math.floor(ship.hold_size / 350);
+				}
+				if (ship.max_spies > maxSpies) {
+					maxSpies = ship.max_spies;
+				}
+			}
+			if (maxSpies == 0) {
+				tab.elMessage.innerHTML = 'No ships available.';
+			}
+			else {
+				tab.elMessage.innerHTML = 'Select up to ' + maxSpies + ' spies to send:';
+				Dom.setStyle(tab.elSendButton, 'visibility', 'inherit');
+			}
+			tab.maxSpies = maxSpies;
+			
+			var li = document.createElement('li');
+			
+			for (var i = 0; i < spies.length; i++) {
+				var spy = spies[i];
+				var nLi = li.cloneNode(false);
+				nLi.innerHTML = [
+					'<div class="description"><div><strong>', spy.name, '</strong></div><div>Level ', spy.level,'</div></div>',
+					'<div class="attributes"><span class="attribute">Offense: ', spy.offense_rating, '</span><span class="attribute">Defense: ',spy.defense_rating,'</span></div>',
+					maxSpies == 0 ? '' : '<input type="checkbox" name="spyId" value="'+spy.id+'" />'
+				].join('');
+				list.appendChild(nLi);
+			}
+			
+		},
+		MoveSpies : function(e, tab) {
+			Event.stopEvent(e);
+			var spies = [];
+			var ships = tab.availSpyShips;
+			var list = tab.elSpyShipsList;
+			Dom.batch(tab.elSpiesList.getElementsByTagName('input'), function(el) {
+				if (el.checked) {
+					spies.push(el.value);
+				}
+			});
+			if (spies.length == 0) {
+				alert("You must select at least one spy to send!");
+				return;
+			}
+			if (spies.length > tab.maxSpies) {
+				alert("You don't have any ships large enough to send " + spies.length + " spies");
+				return;
+			}
+
+			tab.spiesToMove = spies;
+			list.innerHTML = '';
+			tab.elShipMessage.innerHTML = "Sending "+spies.length+" spies.  Select Ship:";
+
+			var li = document.createElement('li');
+			for (var i = 0; i < ships.length; i++) {
+				var ship = ships[i];
+				var usable = ship.max_spies >= spies.length;
+				var nLi = li.cloneNode(false);
+				nLi.innerHTML = [
+				'<div class="yui-gb" style="margin-bottom:2px;">',
+				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
+				'	</div>',
+				'	<div class="yui-u" style="width:78%">',
+				usable ? '		<button value="'+ship.id+'">Send Spies</button>' : '',
+				'		<div><strong>[',ship.type_human,'] ',ship.name,'</strong></div>',
+				'		<div><strong>Attributes:</strong>',
+				'			<span>Speed:<span>',ship.speed,'</span></span>',
+				'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+				'			<span>Max Spies:<span>',ship.max_spies,'</span></span>',
+				'		</div>',
+				'	</div>',
+				'</div>'
+				].join('');
+				list.appendChild(nLi);
+			}
+			Dom.setStyle(tab.elSpiesPane, 'display', 'none');
+			Dom.setStyle(tab.elSpyShipsPane, 'display', 'block');
+		},
+		MoveSpyShip : function(e, matchedEl, tab) {
+			Event.stopEvent(e);
+			Lacuna.Pulser.Show();
+			var shipId = matchedEl.value;
+			var spies = tab.spiesToMove;
+			var successMessage;
+			var method;
+			var data = {
+				session_id:Game.GetSession(),
+				spy_ids:spies,
+				ship_id:shipId
+			};
+			if ( tab.id == 'planetDetailSendSpies' ) {
+				successMessage = 'Spies sent!';
+				method = 'send_spies';
+				data.on_body_id = Game.GetCurrentPlanet().id;
+				data.to_body_id = this.selectedBody.id;
+			}
+			else {
+				successMessage = 'Spies fetched!';
+				method = 'fetch_spies';
+				data.on_body_id = this.selectedBody.id;
+				data.to_body_id = Game.GetCurrentPlanet().id;
+			}
+			Game.Services.Buildings.SpacePort[method](data, {
+				success : function(o){
+					YAHOO.log(o, "info", "MapStar.MoveSpyShip."+method+".success");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+					alert(successMessage + '  Arrival time: ' + Lib.formatServerDateShort(o.result.ship.date_arrives));
+					delete tab.availSpies;
+					delete tab.availSpyShips;
+					this.ShowSpies(tab);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "MapStar.MoveSpyShip."+method+".failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		MoveSpiesCancel : function(e, tab) {
+			Event.stopEvent(e);
+			Dom.setStyle(tab.elSpiesPane, 'display', 'block');
+			Dom.setStyle(tab.elSpyShipsPane, 'display', 'none');
 		}
 	};
 	Lang.augmentProto(MapStar, Util.EventProvider);

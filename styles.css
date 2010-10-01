@@ -800,8 +800,12 @@ about
 	top: 8px;
 }
 
+.affinitiesLabel {
+	font-size: 150%;
+	padding: 0 80px;
+}
+
 .speciesPointTotal {
-	padding: 10px 0pt; 
 	font-size: 150%;
 }
 .speciesPointsValid { color:#00e000; }
@@ -1061,6 +1065,59 @@ planet details
 #planetDetailRename label {
 	width:150px;
 }
+#planetDetailFetchSpies,
+#planetDetailSendSpies {
+	height: 240px;
+}
+.planetDetailSpiesMessage,
+.planetDetailSpyShipMessage {
+	height: 25px;
+	float: left;
+}
+.planetDetailSelectSpies button,
+.planetDetailSpyShipHeader button {
+	float: right;
+}
+.planetDetailSpiesList,
+.planetDetailSpyShipList {
+	overflow-y: auto;
+	clear: both;
+	border-top: 1px solid #52acff;
+	margin: 0 -6px 0 -7px;
+	height: 218px;
+}
+
+.planetDetailSpiesList li,
+.planetDetailSpyShipList li {
+	border-bottom: 1px solid #52acff;
+	padding: 5px;
+}
+.planetDetailSpyShipList li button {
+	float: right;
+}
+.planetDetailSpiesList li .description {
+	display: inline-block;
+}
+.planetDetailSpiesList li .attributes {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 10px;
+}
+.planetDetailSpiesList li .attributes .attribute {
+	white-space: nowrap;
+	margin: 0 5px;
+}
+.planetDetailSpiesList li input {
+	margin: 8px;
+	float: right;
+}
+.planetDetailSpiesList strong,
+.planetDetailSpyShipList strong {
+	font-weight: bold;
+}
+
+
+
 .smallImg {
 	display:inline-block;
 	width:25px; /*30px;*/
