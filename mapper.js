@@ -1262,10 +1262,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		var navEl = document.createElement('div');
 		navEl.className = 'mapiator_nav';
 		navEl.innerHTML = [
-			'<div class="mapiator_nav_up"></div>',
-			'<div class="mapiator_nav_right"></div>',
-			'<div class="mapiator_nav_down"></div>',
-			'<div class="mapiator_nav_left"></div>'
+			'<div class="mapiator_nav_up" title="Move Up"></div>',
+			'<div class="mapiator_nav_right" title="Move Right"></div>',
+			'<div class="mapiator_nav_down" title="Move Down"></div>',
+			'<div class="mapiator_nav_left" title="Move Left"></div>'
 		].join('');
 		map.mapDiv.appendChild(navEl);
 		var moveMap = function(e, o) {
@@ -1287,8 +1287,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				'		<img src="' + Lib.AssetUrl + 'ui/zoom_slider.png" />',
 				'	</div>',
 				'</div>',
-				'<div class="mapiator_zoom_in"></div>',
-				'<div class="mapiator_zoom_out"></div>'
+				'<div class="mapiator_zoom_in" title="Zoom In"></div>',
+				'<div class="mapiator_zoom_out" title="Zoom Out"></div>'
 			].join('');
 			map.mapDiv.appendChild(zoomEl);
 			Event.on(Sel.query(".mapiator_zoom_in", zoomEl, true), "click", map.zoomIn, map, true);
