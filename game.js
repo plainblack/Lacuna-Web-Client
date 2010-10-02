@@ -71,10 +71,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Failure : function(o){
 			YAHOO.log(o, "debug", "Game.Failure");
 			if(o.error.code == 1006) {
-				if(Game.isRunning) {
-					Game.Reset();
-					Game.DoLogin(o.error);
-				}
+				Game.Reset();
+				Game.DoLogin(o.error);
 			}
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
