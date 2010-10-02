@@ -74,6 +74,8 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		else {
 			tblInput = tblContainer.appendChild(tblInput); //append our input to the LI
 			Dom.addClass(tblInput, CSS_PREFIX + "InputSingle"); //add the control class to the Input
+		}
+		if(!oConfigs.multiSelect && oConfigs.minQueryLength == 0){
 			ddIcon = document.createElement("div");
 			ddIcon = Dom.insertAfter(ddIcon, tblInput);
 			Dom.addClass(ddIcon, CSS_PREFIX + "Icon");
