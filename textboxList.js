@@ -6,8 +6,9 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 // enclose everything in an anonymous function ...
 (function () {
 	// ... so that variables that you declare inside are local to the function and invisible outside
-	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
+	var Util = YAHOO.util,
+		Dom = Util.Dom,
+		Event = Util.Event,
 		Lang = YAHOO.lang,
 		Lib = YAHOO.lacuna.Library,
 		CSS_PREFIX = "TextboxList";
@@ -25,7 +26,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		
 		// Validate input element and get idPrefix from it's id
 		var idPrefix;
-		if(YAHOO.util.Dom.inDocument(elInput)) {
+		if(Dom.inDocument(elInput)) {
 			if(YAHOO.lang.isString(elInput)) {
 				idPrefix = elInput;
 				elInput = document.getElementById(elInput); //get dom object
@@ -40,7 +41,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		
 		//setup dom structure
 		//Dom.setStyle(elInput, "display", "none"); //hide starting input and use it for storage and form submits
-		var tblInput = YAHOO.util.Dom.get(elInput), //document.createElement("input"), 
+		var tblInput = Dom.get(elInput), //document.createElement("input"), 
 			tblContainer = document.createElement("div"),
 			tblAC = document.createElement("div"),
 			ddIcon, tblListContainer, tblList, tblListInputLine, tblIndicator;
@@ -97,9 +98,9 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		//call AutoComplete's constructor
 		TBL.superclass.constructor.call(this, tblInput, tblAC, oDataSource, oConfigs);
 		//setup extra events
-		this.dirtyEvent = new YAHOO.util.CustomEvent("dirty", this);
-		this.selectSingleEvent = new YAHOO.util.CustomEvent("selectSingle", this);
-		this.beforeDeleteEvent = new YAHOO.util.CustomEvent("beforeDelete", this);
+		this.dirtyEvent = new Util.CustomEvent("dirty", this);
+		this.selectSingleEvent = new Util.CustomEvent("selectSingle", this);
+		this.beforeDeleteEvent = new Util.CustomEvent("beforeDelete", this);
 
 		//assign private vars
 		this._elTblListContainer = tblListContainer;
@@ -298,49 +299,53 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 		* Selects single value.  Must override generateRequest to properly handle key unless the key is the what is the normally queried text
 		*/
 		Select : function(key) {
-			// Reset focus for a new interaction
-			this._bFocused = null;
-			//set single request flags
-			this._singleRequest = true;
-			this.dataSource._singleRequest = true;
-			//get request
-			var sRequest = this.generateRequest(key);
-			//if indicator show it
-			if(this.useIndicator) {
-				this.showIndicator();
+			if(key) {
+				// Reset focus for a new interaction
+				this._bFocused = null;
+				//set single request flags
+				this._singleRequest = true;
+				this.dataSource._singleRequest = true;
+				//get request
+				var sRequest = this.generateRequest(key);
+				//if indicator show it
+				if(this.useIndicator) {
+					this.showIndicator();
+				}
+				//send
+				this.dataSource.sendRequest(sRequest, {
+						success : this.handleResponseSingle,
+						failure : this.handleResponseSingle,
+						scope   : this,
+						argument: {
+							query: key
+						}
+				});
 			}
-			//send
-			this.dataSource.sendRequest(sRequest, {
-					success : this.handleResponseSingle,
-					failure : this.handleResponseSingle,
-					scope   : this,
-					argument: {
-						query: key
-					}
-			});
 		},
 		Queue : function(keys) {
-			// Reset focus for a new interaction
-			this._bFocused = null;
-			//set single request flags
-			this._singleRequest = true;
-			this.dataSource._singleRequest = true;
-			//get request
-			var sRequest = this.generateRequest("");
-			//if indicator show it
-			if(this.useIndicator) {
-				this.showIndicator();
+			if(Lang.isArray(keys) && keys.length > 0) {
+				// Reset focus for a new interaction
+				this._bFocused = null;
+				//set single request flags
+				this._singleRequest = true;
+				this.dataSource._singleRequest = true;
+				//get request
+				var sRequest = this.generateRequest("");
+				//if indicator show it
+				if(this.useIndicator) {
+					this.showIndicator();
+				}
+				//send
+				this.dataSource.sendRequest(sRequest, {
+						success : this.handleResponseSingle,
+						failure : this.handleResponseSingle,
+						scope   : this,
+						argument: {
+							query: "",
+							queue: keys
+						}
+				});
 			}
-			//send
-			this.dataSource.sendRequest(sRequest, {
-					success : this.handleResponseSingle,
-					failure : this.handleResponseSingle,
-					scope   : this,
-					argument: {
-						query: "",
-						queue: keys
-					}
-			});
 		},
 		/**
 		* overload populateList to handle single Select and use formatResultLabelKey instead of the first schema field
@@ -481,6 +486,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 			this.getInputEl().disabled = true;
 			this.disabled = true;
 			Dom.addClass(this.getInputEl(), CSS_PREFIX + "Disabled");
+			Dom.addClass(this._elTblContainer, CSS_PREFIX + "Disabled");
 			Dom.addClass(this._elTblListContainer, CSS_PREFIX + "Disabled");
 			for(var bitKey in this._oTblSelections) {
 				var bit = this._oTblSelections[bitKey];
@@ -494,6 +500,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 			this.getInputEl().disabled = false;
 			this.disabled = undefined;
 			Dom.removeClass(this.getInputEl(), CSS_PREFIX + "Disabled");
+			Dom.removeClass(this._elTblContainer, CSS_PREFIX + "Disabled");
 			Dom.removeClass(this._elTblListContainer, CSS_PREFIX + "Disabled");
 			for(var bitKey in this._oTblSelections) {
 				var bit = this._oTblSelections[bitKey];
@@ -502,6 +509,20 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 			if(this._elTblIcon) {
 				Dom.setStyle(this._elTblIcon, "display", "");
 			}
+		},
+		/**
+		* validity handlers
+		**/
+		setValid : function(isValid) {
+			this._isValid = isValid;
+			if (isValid) {
+				Dom.removeClass(this._elTblContainer, CSS_PREFIX + "Error");
+			} else {
+				Dom.addClass(this._elTblContainer, CSS_PREFIX + "Error");
+			}
+		},
+		isValid : function(){
+			return this._isValid;
 		},
 		/**
 		* show and hide animated indicator gif
@@ -575,7 +596,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 						this._updateDirty();
 						this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
 					}
-					this._toggleContainer(false);
+					//this._toggleContainer(false);
 				}
 				else {
 					var oData = this._createDataObject(elListItem._oResultData);
@@ -653,6 +674,10 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 				}
 				else {
 					isDirty = this._sOrigSingleSelection != this._oTblSingleSelection.Value;
+				}
+				//if it changes reset validity
+				if(isDirty) {
+					this.setValid(true);
 				}
 				this.dirtyEvent.fire(isDirty);
 			}

@@ -351,7 +351,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Find</div>',
 				'<div class="bd">',
-				'	<label for="',panelId,'Find">By Name:</label><input type="text" id="',panelId,'Find" />',
+				'	<label for="',panelId,'Find">By Star Name:</label><input type="text" id="',panelId,'Find" />',
 				'	<hr />',
 				'	<div>',
 				'		<label for="',panelId,'X">X:</label><input type="text" id="',panelId,'X" size="4" />',
@@ -413,7 +413,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							]
 						});
 				};
-				
+				oTextboxList.dirtyEvent.subscribe(function(event, isDirty, oSelf){
+					var star = this._oTblSingleSelection.Object;
+					oSelf.X.value = star.x;
+					oSelf.Y.value = star.y;
+				},this);
 				this.findStar = oTextboxList;
 			};
 			this.starFind.renderEvent.subscribe(function(){

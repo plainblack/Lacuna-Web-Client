@@ -139,7 +139,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		DoLogin : function(error) {
 			Dom.setStyle(document.body, 'background', 'url("'+Lib.AssetUrl+'star_system/field.png") repeat scroll 0 0 black');
 			this.InitLogin();
-			Game.OverlayManager.hideAll();
+			//Game.OverlayManager.hideAll(); //don't need this.  the show already hides everything if it needs to
 			Lacuna.Game.LoginDialog.show(error);
 			Lacuna.Menu.hide();
 			Lacuna.Pulser.Hide();

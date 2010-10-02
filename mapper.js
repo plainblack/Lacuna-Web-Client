@@ -1123,9 +1123,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.zoom = Game.GetCookie("planetZoom",0);
 			this._setTileSizeByZoom();
 		},
-		redraw : function() {
-			Mapper.PlanetMap.superclass.redraw.call(this);
-		},
 		setCenterToCommand : function() {
 			if(this.command) { // && this.tileLayer) {
 				this.setCenterTo(this.command.x, this.command.y);

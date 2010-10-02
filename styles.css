@@ -1785,7 +1785,7 @@ TextboxList
 .yui-skin-sam .TextboxList .TextboxListInput { border:0 none; position:static; width:1px; }
 .yui-skin-sam .TextboxList .TextboxListInputSingle { position:static; /*width:10em;*/ }
 
-.yui-skin-sam .TextboxList .TextboxListAutoComplete { width:10em; }
+/*.yui-skin-sam .TextboxList .TextboxListAutoComplete { width:10em; }*/
 .yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { overflow-y:scroll; height:100px; text-align:left; background-color:#52acff; }
 
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete { width:10em; }

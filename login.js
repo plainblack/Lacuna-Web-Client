@@ -130,20 +130,22 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			});
 		},
 		show : function(error) {
-			Game.OverlayManager.hideAll();
-			this.elForm.reset();
-			this.Dialog.show();
-			var str = Cookie.get("lacunaEmpireName");
-			if(str) {
-				this.elName.value = str;
-				this.elRemember.checked = true;
-				this.elPass.focus();
-			}
-			else {
-				this.elName.focus();
-			}
-			if(error) {
-				this.setMessage(error.message);
+			if(!this.Dialog.cfg.getProperty("visible")) {
+				Game.OverlayManager.hideAll();
+				this.elForm.reset();
+				this.Dialog.show();
+				var str = Cookie.get("lacunaEmpireName");
+				if(str) {
+					this.elName.value = str;
+					this.elRemember.checked = true;
+					this.elPass.focus();
+				}
+				else {
+					this.elName.focus();
+				}
+				if(error) {
+					this.setMessage(error.message);
+				}
 			}
 		},
 		hide : function() {
