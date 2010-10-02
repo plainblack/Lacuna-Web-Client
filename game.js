@@ -650,9 +650,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//clearInterval(Game.recInt);
 			delete Game.isRunning;
 	
-			Cookie.remove("lacuna",{
-				domain: Game.domain
-			});
+			Game.RemoveCookie("locationId");
+			Game.RemoveCookie("locationView");
 			Game.SetSession();
 			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
