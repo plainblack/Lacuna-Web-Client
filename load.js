@@ -349,12 +349,12 @@
 		firstFile = true,
 		progressLoaderC = document.createElement("div"),
 		progressLoader = progressLoaderC.appendChild(progressLoaderC.cloneNode(false));
-	var i = status.length;
-	while ( --i ) {
-		var j = Math.floor( Math.random() * ( i + 1 ) );
-		var tempi = status[i];
+	var s = status.length;
+	while ( --s ) {
+		var j = Math.floor( Math.random() * ( s + 1 ) );
+		var tempi = status[s];
 		var tempj = status[j];
-		status[i] = tempj;
+		status[s] = tempj;
 		status[j] = tempi;
 	}
 	

@@ -43,15 +43,20 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			}, this, true);
 			this.tabView.getTab(2).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.ColonyStats();
+					this.AllianceStats();
 				}
 			}, this, true);
 			this.tabView.getTab(3).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.SpyStats();
+					this.ColonyStats();
 				}
 			}, this, true);
 			this.tabView.getTab(4).subscribe("activeChange", function(e) {
+				if(e.newValue) {
+					this.SpyStats();
+				}
+			}, this, true);
+			this.tabView.getTab(5).subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.WeeklyMedalStats();
 				}
@@ -80,6 +85,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'			<ul class="yui-nav">',
 			'				<li><a href="#statsGeneral"><em>General</em></a></li>',
 			'				<li><a href="#statsEmpire"><em>Empires</em></a></li>',
+			'				<li><a href="#statsAlliance"><em>Alliances</em></a></li>',
 			'				<li><a href="#statsColony"><em>Colonies</em></a></li>',
 			'				<li><a href="#statsSpy"><em>Spies</em></a></li>',
 			'				<li><a href="#statsWeeklyMedal"><em>Weekly Medals</em></a></li>',
@@ -115,6 +121,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'					</div>',
 			'				</div>',
 			'				<div id="statsEmpire"><div id="statsEmpireTable"></div><div id="statsEmpirePaginator"></div></div>',
+			'				<div id="statsAlliance"><div id="statsAllianceTable"></div><div id="statsAlliancePaginator"></div></div>',
 			'				<div id="statsColony"><div id="statsColonyTable"></div></div>',
 			'				<div id="statsSpy"><div id="statsSpyTable"></div></div>',
 			'				<div id="statsWeeklyMedal"><div id="statsWeeklyMedalTable"></div></div>',
@@ -409,14 +416,14 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					}},
 					{key:"empire_name", label:"Empire"},
 					{key:"alliance_name", label:"Alliance"},
-					{key:"colony_count", label:"Colonies"},
-					{key:"population", label:"Pop"},
-					{key:"empire_size", label:"Empire Size"},
-					{key:"building_count", label:"Buildings"},
-					{key:"average_building_level", label:"Avg. Building Lvl"},
-					{key:"offense_success_rate", label:"Offense"},
-					{key:"defense_success_rate", label:"Defense"},
-					{key:"dirtiest", label:"Dirtiest"}
+					{key:"colony_count", label:"Colonies", formatter:"number"},
+					{key:"population", label:"Pop", formatter:"number"},
+					{key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
+					{key:"building_count", label:"Buildings", formatter:"number"},
+					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
+					{key:"offense_success_rate", label:"Offense", formatter:"number", sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:"number", sortable:true},
+					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
 				];
 				
 				this.EmpireData = new Util.XHRDataSource("/stats");
@@ -450,12 +457,12 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								"population",
+								"empire_size_rank",
 								1
 							]
 						}),
 					dynamicData: true,
-					sortedBy : {key:"population", dir:YAHOO.widget.DataTable.CLASS_DSC},
+					sortedBy : {key:"empire_size", dir:YAHOO.widget.DataTable.CLASS_DSC},
 					paginator: new YAHOO.widget.Paginator({ rowsPerPage:25, containers:'statsEmpirePaginator' }),
 					selectionMode:"single"
 				} );
@@ -505,7 +512,126 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								sort,
+								sort+'_rank',
+								page
+							]
+						});
+				});
+			}
+		},
+		AllianceStats : function(){
+			if(this.AllianceTable) {
+				this.AllianceTable.requery();
+			}
+			else {
+			
+				this.AllianceColumns = [
+					{key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
+						var oState = this.getState();
+						el.innerHTML = Math.floor(oState.pagination.recordOffset + this.rankCounter++);
+					}},
+					{key:"alliance_name", label:"Alliance"},
+					{key:"member_count", label:"Members", formatter:"number"},
+					{key:"influence", label:"Influence", formatter:"number"},
+					{key:"colony_count", label:"Colonies", formatter:"number"},
+					{key:"population", label:"Pop", formatter:"number"},
+					{key:"average_empire_size", label:"Avg. Empire Size", formatter:"number", sortable:true},
+					{key:"building_count", label:"Buildings", formatter:"number"},
+					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
+					{key:"offense_success_rate", label:"Offense", formatter:"number", sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:"number", sortable:true},
+					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
+				];
+
+				this.AllianceData = new Util.XHRDataSource("/stats");
+				this.AllianceData.connMethodPost = "POST";
+				this.AllianceData.maxCacheEntries = 2;
+				this.AllianceData.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+				this.AllianceData.responseSchema = {
+					resultsList : "result.alliances",
+					fields : [	"alliance_id","alliance_name",
+								{key:"member_count",parser:"number"},
+								{key:"space_station_count",parser:"number"},
+								{key:"influence",parser:"number"},
+								{key:"colony_count",parser:"number"},
+								{key:"population",parser:"number"},
+								{key:"average_empire_size",parser:"number"},
+								{key:"building_count",parser:"number"},
+								{key:"average_building_level",parser:"number"},
+								{key:"offense_success_rate",parser:"number"},
+								{key:"defense_success_rate",parser:"number"},
+								{key:"dirtiest",parser:"number"}
+							], 
+					metaFields: { 
+						totalRecords: "result.total_alliances" // Access to value in the server response 
+					} 
+				};
+				
+				this.AllianceTable = new YAHOO.widget.ScrollingDataTable("statsAllianceTable", this.AllianceColumns, this.AllianceData, {
+					width:"100%",
+					height:"375px",
+					initialRequest: Lang.JSON.stringify({
+							"id": YAHOO.rpc.Service._requestId++,
+							"method": "alliance_rank",
+							"jsonrpc": "2.0",
+							"params": [
+								Game.GetSession(""),
+								"average_empire_size_rank",
+								1
+							]
+						}),
+					dynamicData: true,
+					sortedBy : {key:"average_empire_size", dir:YAHOO.widget.DataTable.CLASS_DSC},
+					paginator: new YAHOO.widget.Paginator({ rowsPerPage:25, containers:'statsAlliancePaginator' }),
+					selectionMode:"single"
+				} );
+				this.AllianceTable.rankCounter = 1;
+				// Subscribe to events for row selection 
+				this.AllianceTable.subscribe("rowMouseoverEvent", this.AllianceTable.onEventHighlightRow);
+				this.AllianceTable.subscribe("rowMouseoutEvent", this.AllianceTable.onEventUnhighlightRow);
+				this.AllianceTable.subscribe("rowClickEvent", this.AllianceTable.onEventSelectRow);
+				
+				this.AllianceTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
+					oPayload.totalRecords = oResponse.meta.totalRecords; 
+					return oPayload; 
+				};
+				this.AllianceTable.requery = function() {
+					// Get the current state
+					var oState = this.getState();
+			
+					// Get the request for the new state
+					var request = this.get("generateRequest")(oState, this);
+					
+					// Purge selections
+					this.unselectAllRows();
+					this.unselectAllCells();
+					
+					// Get the new data from the server
+					var callback = {
+						success : this.onDataReturnSetRows,
+						failure : this.onDataReturnSetRows,
+						argument : oState, // Pass along the new state to the callback
+						scope : this
+					};
+					this._oDataSource.sendRequest(request, callback);
+				};
+				//overriding generateRequest to send the correct column name back
+				this.AllianceTable.set("generateRequest", function(oState, oSelf) {
+					// Set defaults
+					oState = oState || {pagination:null, sortedBy:null};
+					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
+						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
+						page = (oState.pagination) ? oState.pagination.page : 1;
+						
+					oSelf.rankCounter = 1;
+					
+					return Lang.JSON.stringify({
+							"id": YAHOO.rpc.Service._requestId++,
+							"method": "alliance_rank",
+							"jsonrpc": "2.0",
+							"params": [
+								Game.GetSession(""),
+								sort+'_rank',
 								page
 							]
 						});

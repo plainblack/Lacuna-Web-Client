@@ -24,6 +24,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		
 		this._buildDetailsPanel();
 		this._buildPlanetDetailsPanel();
+		this._buildFindPanel();
 	};
 	MapStar.prototype = {
 		_buildDetailsPanel : function() {
@@ -300,32 +301,36 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					"planetDetailSendSpies" : 2,
 					"planetDetailFetchSpies" : 3
 				};
-				for (var tabId in spyTabs) if (spyTabs.hasOwnProperty(tabId)) {
-					var tab = tv.getTab(spyTabs[tabId]);
-					var tabEl = Dom.get(tabId);
-					tab.subscribe('beforeActiveChange', function(e, tabEl) {
+				var tabChange = function(e, tabEl) {
 						if (e.newValue) {
 							this.ShowSpies(tabEl);
 						}
-					}, tabEl, this);
-					tabEl.elSpiesPane = Sel.query('.planetDetailSelectSpies', tabEl, true);
-					tabEl.elSpyShipsPane = Sel.query('.planetDetailSelectSpyShip', tabEl, true);
-					tabEl.elSendButton = Sel.query('.planetDetailSelectSpies button', tabEl, true);
-					tabEl.elSpiesList = Sel.query('.planetDetailSpiesList', tabEl, true);
-					tabEl.elSpyShipsList = Sel.query(".planetDetailSpyShipList", tabEl, true);
-					tabEl.elMessage = Sel.query('.planetDetailSpiesMessage', tabEl, true);
-					tabEl.elShipMessage = Sel.query('.planetDetailSpyShipMessage', tabEl, true);
-					Event.on(tabEl.elSendButton, "click", this.MoveSpies, tabEl, this);
-					Event.on(
-						Sel.query('.planetDetailSelectSpyShip button', tabEl, true),
-						"click", this.MoveSpiesCancel, tabEl, this
-					);
-					Event.delegate(tabEl, "click", this.MoveSpyShip,
-						".planetDetailSelectSpyShip ul button", this, true);
-					this.planetDetails.hideEvent.subscribe(function(){
+					},
+					hideEventFn = function(){
 						delete this.availSpyShips;
 						delete this.availSpies;
-					}, tabEl, true);
+					};
+				for (var tabId in spyTabs) {
+					if (spyTabs.hasOwnProperty(tabId)) {
+						var tab = tv.getTab(spyTabs[tabId]);
+						var tabEl = Dom.get(tabId);
+						tab.subscribe('beforeActiveChange', tabChange, tabEl, this);
+						tabEl.elSpiesPane = Sel.query('.planetDetailSelectSpies', tabEl, true);
+						tabEl.elSpyShipsPane = Sel.query('.planetDetailSelectSpyShip', tabEl, true);
+						tabEl.elSendButton = Sel.query('.planetDetailSelectSpies button', tabEl, true);
+						tabEl.elSpiesList = Sel.query('.planetDetailSpiesList', tabEl, true);
+						tabEl.elSpyShipsList = Sel.query(".planetDetailSpyShipList", tabEl, true);
+						tabEl.elMessage = Sel.query('.planetDetailSpiesMessage', tabEl, true);
+						tabEl.elShipMessage = Sel.query('.planetDetailSpyShipMessage', tabEl, true);
+						Event.on(tabEl.elSendButton, "click", this.MoveSpies, tabEl, this);
+						Event.on(
+							Sel.query('.planetDetailSelectSpyShip button', tabEl, true),
+							"click", this.MoveSpiesCancel, tabEl, this
+						);
+						Event.delegate(tabEl, "click", this.MoveSpyShip,
+							".planetDetailSelectSpyShip ul button", this, true);
+						this.planetDetails.hideEvent.subscribe(hideEventFn, tabEl, true);
+					}
 				}
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
 			}, this, true);
@@ -339,17 +344,99 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.planetDetails.render();
 			Game.OverlayManager.register(this.planetDetails);
 		},
+		_buildFindPanel : function() {
+			var panelId = "starFind";
+			
+			var panel = document.createElement("div");
+			panel.id = panelId;
+			panel.innerHTML = ['<div class="hd">Find</div>',
+				'<div class="bd">',
+				'	<label for="',panelId,'Find">By Name:</label><input type="text" id="',panelId,'Find" />',
+				'	<hr />',
+				'	<div>',
+				'		<label for="',panelId,'X">X:</label><input type="text" id="',panelId,'X" size="4" />',
+				'		<label for="',panelId,'Y">Y:</label><input type="text" id="',panelId,'Y" size="4" />',
+				'		<button type="button" id="',panelId,'Jump">Jump</button>',
+				'	</div>',
+				'</div>'].join('');
+			document.body.insertBefore(panel, document.body.firstChild);
+			Dom.addClass(panel, "nofooter");
+			
+			this.starFind = new YAHOO.widget.Panel(panelId, {
+				constraintoviewport:true,
+				visible:false,
+				draggable:true,
+				fixedcenter:false,
+				close:false,
+				underlay:false,
+				width:"300px",
+				zIndex:10005,
+				context:["footer","bl","tl", ["beforeShow", "windowResize"], [0,-5]]
+			});
+			this.starFind.createFind = function() {
+				var dataSource = new Util.XHRDataSource("/map");
+				dataSource.connMethodPost = "POST";
+				dataSource.maxCacheEntries = 2;
+				dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+				dataSource.responseSchema = {
+					resultsList : "result.stars",
+					fields : ["name","color","x","y"]
+				};
+				
+				var oTextboxList = new YAHOO.lacuna.TextboxList(this.findInput, dataSource, { //config options
+					maxResultsDisplayed: 25,
+					minQueryLength:3,
+					multiSelect:false,
+					forceSelection:false,
+					useIndicator:true
+				});
+				oTextboxList.formatResult = function(oResultData, sQuery, sResultMatch) {
+					return [
+						'<div class="yui-gf">',
+						'	<div class="yui-u first" style="background-color:black;">',
+						'		<img src="',Lib.AssetUrl,'star_map/',oResultData.color,'.png" alt="',oResultData,name,'" style="width:50px;height:50px;" />',
+						'	</div>',
+						'	<div class="yui-u">',
+						'		<div>',oResultData.name,'</div>',
+						'		<div>',oResultData.x,' : ',oResultData.y,'</div>',
+						'	</div>',
+						'</div>'].join("");
+				};
+				oTextboxList.generateRequest = function(sQuery){				
+					return Lang.JSON.stringify({
+							"id": YAHOO.rpc.Service._requestId++,
+							"method": "search_stars",
+							"jsonrpc": "2.0",
+							"params": [
+								Game.GetSession(""),
+								sQuery
+							]
+						});
+				};
+				
+				this.findStar = oTextboxList;
+			};
+			this.starFind.renderEvent.subscribe(function(){
+				this.starFind.findInput = Dom.get(panelId+"Find");
+				this.starFind.X = Dom.get(panelId+"X");
+				this.starFind.Y = Dom.get(panelId+"Y");
+				Event.on(panelId+"Jump", "click", this.FindJump, this, true);
+				this.starFind.createFind();
+			},this,true);
+			
+			this.starFind.render();
+		},
 		
 		IsVisible : function() {
 			return this._isVisible;
 		},
 		MapVisible : function(visible) {
-			/*if(visible) {
-				this.starJump.show();
+			if(visible) {
+				this.starFind.show();
 			}
 			else {
-				this.starJump.hide();
-			}*/
+				this.starFind.hide();
+			}
 			if(this._isVisible != visible) {
 				if(this._elGrid) {
 					this._isVisible = visible;
@@ -359,10 +446,18 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			}
 		},
 
+		FindJump : function() {
+			var x = this.starFind.X.value*1,
+				y = this.starFind.Y.value*1;
+				
+			if(Lang.isNumber(x) && Lang.isNumber(y)) {
+				this.Jump(x,y);
+			}
+		},
 		Jump : function(xC,yC) {
 			this.LoadGrid({
-				x:(xC-1),
-				y:(yC+1)
+				x:xC, //(xC-1),
+				y:yC //(yC+1)
 			});
 		},
 		Load : function() {
@@ -444,6 +539,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			}
 			this.MapVisible(false);
 		},
+	
 	
 		CreateShipsIncomingTab : function(panel) {
 			var ships = this.currentShips.incoming,
@@ -736,7 +832,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					
 					
 					//select 0 index tab unless we already selected a different one
-					if(!(panel.tabView.get("activeIndex") > 0)) {
+					if(panel.tabView.get("activeIndex") <= 0) {
 						panel.tabView.selectTab(0);
 					}
 
@@ -835,9 +931,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}
 			}
 			if(empire.alignment == "none" || empire.is_isolationist == "1" ){
-				var tabs = panel.tabView.get("tabs");
-				for(var nt = tabs.length; nt >= 0; nt--) {
-					var tab = panel.tabView.getTab(nt);
+				var sTabs = panel.tabView.get("tabs");
+				for(var snt = sTabs.length; snt >= 0; snt--) {
+					var tab = panel.tabView.getTab(snt);
 					if(tab && tab.get("label") == this._sendSpiesLabel) {
 						panel.sendSpiesTab = tab;
 						panel.tabView.removeTab(tab);
@@ -986,8 +1082,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			var li = document.createElement('li');
 			
-			for (var i = 0; i < spies.length; i++) {
-				var spy = spies[i];
+			for (var si = 0; si < spies.length; si++) {
+				var spy = spies[si];
 				var nLi = li.cloneNode(false);
 				nLi.innerHTML = [
 					'<div class="description"><div><strong>', spy.name, '</strong></div><div>Level ', spy.level,'</div></div>',

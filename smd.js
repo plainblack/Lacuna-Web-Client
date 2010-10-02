@@ -4,6 +4,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 (function(){
 	var smd = {
+		Alliance : {
+			"SMDVersion":"2.0",
+			"description": "Body",
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/body",
+
+			"services": {
+				"find" : {
+					"description": "Find an alliance by name. Returns a hash reference containing alliance ids and alliance names",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"name", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"view_profile" : {
+					"description": "Provides a list of the data that's publicly known about this alliance.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"alliance_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				}
+			}
+		},
 		Body : {
 			"SMDVersion":"2.0",
 			"description": "Body",
@@ -1041,7 +1067,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"on_body_id", "type":"string", "optional":false},
-							{"name":"to_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 						/*
@@ -1104,7 +1130,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"on_body_id", "type":"string", "optional":false},
-							{"name":"to_body_id", "type":"string", "optional":false},
+							{"name":"to_body_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 						/*
@@ -2431,80 +2457,51 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					*/
 				},
 
-				"get_stars_near_body" : {
-					"description": "Returns a list of 121 stars near a body, on the same z axis as the body. The list returned is the same as get_stars",
+				"get_star_by_name" : {
+					"description": "Retrieves info on a single star.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"body_id", "type":"string", "optional":false}
+						{"name":"name", "type":"string", "optional":false}
 					],
 					"returns":{"type":"object"}
 				},
 
-				"get_star_by_body" : {
-					"description": "Returns the details about a star",
+				"get_star_by_xy" : {
+					"description": "Retrieves info on a single star.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"body_id", "type":"string", "optional":false}
+						{"name":"x", "type":"number", "optional":false},
+						{"name":"y", "type":"number", "optional":false}
 					],
 					"returns":{"type":"object"}
 				},
-
-				"get_star_system" : {
-					"description": "Returns an array of bodies and a hash about the star itself. The data structure looks like:",
+				
+				"search_stars" : {
+					"description": "If you know a partial name of a star you can search for it. Returns up to 25 results. No body data is returned with this search.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"star_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-					/*
-						{
-							"star" : {
-								"id" : "a0f7f6e5-c58e-4b9d-994b-5838c2feabe8",
-								"name" : "Sol",
-								"color" : "yellow",
-								"x" : -39
-								"y" : 44,
-								"z" : 12,
-								"can_rename" : 1
-							},
-							"bodies" : {
-							   "f9fe8bd3-bd09-4dc2-ba20-cf4e3b69e63a" : {
-									"name" : "Mercury",
-									"orbit" : 1,
-									"image" : "p13",
-									"minerals" : {
-										"Gold" : 9239,
-										"Bauxite" : 1223
-									},
-									"water" : 100,
-									"empire" : {
-										"id" : "4d9553ab-e9e6-425d-a5e5-100428fb248c",
-										"name" : "The Martians"
-									}
-								}
-							},
-							"status" : {...}
-						}
-					*/
-				},
-
-				"get_star_system_by_body" : {
-					"description": "Returns the same output and throws the same errors as get_star_system, but locates the system based upon a body_id rather than a star_id.",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"body_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-				},
-
-				"rename_star" : {
-					"description": "Renames a star, provided it hasn't already been named. Returns a 1 on success.",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"star_id", "type":"string", "optional":false},
 						{"name":"name", "type":"string", "optional":false}
 					],
 					"returns":{"type":"number"}
+					/*
+					 { 
+						"stars" : [
+							{
+								"name"          : "Sol",
+								"color"         : "yellow",
+								"x"             : -41,
+								"y"             : 27
+							},
+							{
+								"name"          : "Minsol",
+								"color"         : "green",
+								"x"             : -42,
+								"y"             : 27
+							}
+						 ],
+						"status" : { ... }
+					 }
+					*/
 				}
 			}
 		},
