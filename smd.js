@@ -2241,7 +2241,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					"description": "Changes the empire password.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
-						{"name":"current_password", "type":"string", "optional":false},
 						{"name":"password1", "type":"string", "optional":false},
 						{"name":"password2", "type":"string", "optional":false}
 					],
