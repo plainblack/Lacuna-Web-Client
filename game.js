@@ -613,6 +613,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(desc) {
 					return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
 				}
+				else {
+					return '';
+				}
 			}
 		},
 		GetShipDesc : function(type) {

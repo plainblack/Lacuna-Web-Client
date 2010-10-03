@@ -186,6 +186,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 					].join('') : '',
+					'	<li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + ((this.building.level*1) - 1) + '</button></li>',
 				'			</ul>',
 				'		</div>',
 				'	</div>',
@@ -198,6 +199,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			if(!this.building.pending_build) {
 				Event.on("buildingDetailsDemolish", "click", this.Demolish, this, true);
 			}
+			Event.on("buildingDetailsDowngrade", "click", this.Downgrade, this, true);
 			
 			return this.productionTab;
 
@@ -218,6 +220,39 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Building.Demolish.failure");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpcFailed", o);
+					},
+					timeout:Game.Timeout,
+					scope:this,
+					target:this.building.url
+				});
+			}
+		},
+		Downgrade : function() {
+			if(confirm(['Are you sure you want to downgrade the level ',this.building.level,' ',this.building.name,'?'].join(''))) {
+				Lacuna.Pulser.Show();
+				Game.Services.Buildings.Generic.downgrade({
+					session_id:Game.GetSession(),
+					building_id:this.building.id
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "Building.Downgrade.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
+						
+						var b = this.building; //originally passed in building data from currentBuilding
+						b.id = o.result.building.id;
+						b.level = o.result.building.level;
+						b.pending_build = o.result.building.pending_build;
+						YAHOO.log(b, "info", "Building.Upgrade.success.building");
+						
+						this.reloadQueue(b);
+					
+						this.fireEvent("onHide");					
+					},
+					failure : function(o){
+						YAHOO.log(o, "error", "Building.Downgrade.failure");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpcFailed", o);
 					},

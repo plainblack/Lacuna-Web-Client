@@ -125,6 +125,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"downgrade" : {
+						"description": "Downgrades a building by one level and then returns view.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"view" : {
 						"description": "Retrieves the properties of the building.",
 						"parameters": [
