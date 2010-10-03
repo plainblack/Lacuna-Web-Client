@@ -184,58 +184,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Lacuna.Pulser.Hide();
 		},
-		/*InitEnvolve : function() {
-			if(!this.Envolve) {	
-				var container = document.createElement("div");
-				container.id = "envolveChat";
-				Dom.addClass(container, "nofooter");
-				Dom.addClass(container, Lib.Styles.HIDDEN);
-				container.innerHTML = [
-				'<div class="hd">Chat</div>',
-				'<div class="bd">',
-				'	<iframe src="https://',Game.domain,'/chat.html"></iframe>',
-				'</div>'
-				].join('');
-				document.body.appendChild(container, document.body.firstChild);
-				
-				this.Envolve = new YAHOO.widget.Panel("envolveChat", {
-					constraintoviewport:true,
-					fixedcenter:false,
-					visible:false,
-					draggable:true,
-					underlay:false,
-					modal:false,
-					close:true,
-					width:"450px",
-					zIndex:19999
-				});
-				this.Envolve.renderEvent.subscribe(function(){					
-					Dom.removeClass("envolveChat", Lib.Styles.HIDDEN);
-				}, this, true);
-				this.Envolve.render();
-				
-				var div = document.createElement("div");
-				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
-				Dom.setStyle(div, "position", "absolute");
-				Dom.setStyle(div, "bottom", "0");
-				Dom.setStyle(div, "left", "0");
-				Dom.setStyle(div, "width", "100%");
-				Dom.setStyle(div, "height", "25px");
-				Dom.setStyle(div, "background-color", "#0ba2f2");
-				Dom.setStyle(div, "color", "#1bb2f2");
-				Dom.setStyle(div, "font-family", "helvetica");
-				Dom.setStyle(div, "font-size", "20px");
-				Game._envolveContainer = document.body.appendChild(div);
-				
-				Event.on(Game._envolveContainer, "click", function(){
-					this.Envolve.show();
-				}, this, true);
-			}
-			return;
-			
+		InitEnvolve : function() {
 			if(!Game._envolveContainer) {
 				var div = document.createElement("div"),
-					iframe = document.createElement("iframe");
+					frm = document.createElement("form"),
+					fName = frm.appendChild(document.createElement("input")),
+					lName = frm.appendChild(document.createElement("input")),
+					s = document.createElement("script")
 					
 				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
 				Dom.setStyle(div, "position", "absolute");
@@ -249,43 +204,25 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Dom.setStyle(div, "font-size", "20px");
 				
 				Game._envolveContainer = document.body.appendChild(div);
-				
-				//iframe.innerHTML = [
-				//	'<html><body>',
-				//	'<script type="text/javascript">envoSn=2487</script>',
-				//	'<script type="text/javascript" src="http://d.envolve.com/env.nocache.js"></script>',
-				//	'<form><input type="hidden" id="EnvolveDesiredFirstName" value="',Game.EmpireData.name,'" />',
-				//	'<input type="hidden" id="EnvolveDesiredLastName" value=" " /></form>',
-				//	'</body></html>',
-				//].join('');
-				iframe.src = "https://" + Game.domain + "/chat.html";
-				
-				Game._envolveIframe = Game._envolveContainer.appendChild(iframe);
-				
-				//,
-				//	frm = document.createElement("form"),
-				//	fName = frm.appendChild(document.createElement("input")),
-				//	lName = frm.appendChild(document.createElement("input")),
-				//	s = document.createElement("script")
 					
-				//fName.setAttribute("type", "hidden");
-				//fName.id = "EnvolveDesiredFirstName";
-				//fName.value = Game.EmpireData.name;
+				fName.setAttribute("type", "hidden");
+				fName.id = "EnvolveDesiredFirstName";
+				fName.value = Game.EmpireData.name;
 				
-				//lName.setAttribute("type", "hidden");
-				//lName.id = "EnvolveDesiredLastName";
-				//lName.value = " ";
+				lName.setAttribute("type", "hidden");
+				lName.id = "EnvolveDesiredLastName";
+				lName.value = ".";
 				
-				//Game._envolveForm = document.body.appendChild(frm);
+				Game._envolveForm = document.body.appendChild(frm);
 					
-				//s.type = "text/javascript";
-				//s.src = "http://d.envolve.com/env.nocache.js";
-				//Game._envolveScript = document.body.appendChild(s);
+				s.type = "text/javascript";
+				s.src = "http://d.envolve.com/env.nocache.js";
+				Game._envolveScript = document.body.appendChild(s);
 			}
 			else if(Game._envolveContainer) {
 				Dom.setStyle(Game._envolveContainer, "display", "");
 			}
-		},*/
+		},
 		InitEvents : function() {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
