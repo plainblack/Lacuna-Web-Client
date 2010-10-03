@@ -119,8 +119,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//set start display
 				Dom.setStyle(this.display, "visibility", "hidden");
 				Event.delegate("messagingTabs", "click", this.tabClick, "li.tab", this, true);
-				Event.delegate(this.body, "click", function(e, el) { Event.stopEvent(e); }, "a.profile_link", this, true);
-// XXX actually show profile
 			}, this, true);
 			this.messagingPanel.hideEvent.subscribe(function(){
 				this.attachmentPanel.hide();
@@ -593,6 +591,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.subject.innerHTML = msg.subject;
 				this.body.parentNode.scrollTop = 0;
 				Event.purgeElement(this.body);
+				Event.delegate(this.body, "click", this.handleProfileLink, "a.profile_link", this, true);
+				Event.delegate(this.body, "click", this.handleStarmapLink, "a.starmap_link", this, true);
+				Event.delegate(this.body, "click", this.handlePlanetLink, "a.planet_link", this, true);
+				Event.delegate(this.body, "click", this.handleAllianceLink, "a.alliance_link", this, true);
 				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';
 				if(msg.attachments) {
 					this.body.appendChild(document.createElement("hr"));
@@ -731,8 +733,39 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
 			});
 			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
-			body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			// XXX body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
+			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
+			body = body.replace(/\{Planet\s+(\d+)\s+([^\}]+)}/gi,'<a class="planet_link" href="#$1">$2</a>');
+			// XXX body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+			body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
 			return body;
+		},
+		handleProfileLink : function(e, el) {
+			Event.stopEvent(e);
+			this.hide();
+			var res = el.href.match(/\#(\d+)$/)
+		},
+		handleStarmapLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/)
+			this.hide();
+			Lacuna.MapPlanet.MapVisible(false);
+			Lacuna.MapStar.MapVisible(true);
+			Lacuna.Menu.StarVisible();
+			Lacuna.MapStar.Jump(res[1]*1,res[2]*1);
+		},
+		handlePlanetLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(\d+)$/)
+			this.hide();
+			var planet = Game.EmpireData.planets[res[1]];
+			Game.PlanetJump(planet);
+		},
+		handleAllianceLink : function(e, el) {
+			Event.stopEvent(e);
+			this.hide();
+			var res = el.href.match(/\#(\d+)$/)
 		},
 		replyMessage : function(e) {
 			this.currentTab = this.create.id;
