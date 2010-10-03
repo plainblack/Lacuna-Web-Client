@@ -152,6 +152,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			YAHOO.log({xO:xO, x:x, yO:yO, y:y}, "info", "VisibleArea.centerLoc");
 			return [x,y];*/
 		},
+		centerLocPx : function() {
+			return [this.centerX, this.centerY];
+		},
 		reset : function() {
 			this.left = 0;
 			this.top = 0;
@@ -907,13 +910,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileLayer = new Mapper.TileLayer(this, Mapper.util.clone(this.visibleArea), this.Tile);
 		},
 		refresh : function() {
-			var vac = this.visibleArea.centerLoc();
+			var vac = this.visibleArea.centerLocPx();
 			
 			this._setTileSizeByZoom();
 			
 			this.redraw();
 			
-			this.setCenterTo(vac[0],vac[1]);
+			this.setCenterToPx(vac[0],vac[1]);
 		},
 		resize : function() {
 			this.width = this.mapDiv.offsetWidth;
@@ -944,6 +947,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					oy = locYmPx - otherHeight;
 				
 				this.moveByPx(ox * -1, oy * -1);*/
+			}
+		},
+		setCenterToPx : function(pX, pY) {
+			if(Lang.isNumber(pX) && Lang.isNumber(pY) && this.tileLayer) {
+				var otherWidth = this.visibleArea.centerX,
+					otherHeight = this.visibleArea.centerY,
+					ox = pX - otherWidth,
+					oy = pY - otherHeight;
+				
+				this.moveByPx(ox * -1, oy * -1);
 			}
 		},
 

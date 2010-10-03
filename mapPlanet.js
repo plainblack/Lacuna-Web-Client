@@ -587,7 +587,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._map.addTileData(oArgs.buildings);
 				this._map.refresh();
 			}
-			this.QueueBuidings(oArgs.buildings);
+			this.QueueBuildings(oArgs.buildings);
 			
 			Lacuna.Pulser.Hide();
 		},
@@ -1003,7 +1003,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 
-		QueueBuidings : function(buildings) {
+		QueueBuildings : function(buildings) {
 			for(var key in buildings) {
 				if(buildings.hasOwnProperty(key)){
 					var building = buildings[key];
@@ -1012,7 +1012,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						building.pending_build.seconds_remaining += 2; //I seem to be a head normally now
 						this.buildings[building.id] = building;
 						var ms = (building.pending_build.seconds_remaining * 1000);
-						YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueBuidings");
+						YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueBuildings");
 						Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
 					}
 				}
