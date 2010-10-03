@@ -564,7 +564,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		GetContainerEffect : function() {
-			return {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25};
+			return {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.5};
 		},
 		
 		Logout : function() {
