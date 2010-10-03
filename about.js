@@ -28,6 +28,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			fixedcenter:true,
 			visible:false,
 			draggable:true,
+			effect:Game.GetContainerEffect(),
 			underlay:false,
 			modal:true,
 			close:true,

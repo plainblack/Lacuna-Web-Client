@@ -30,6 +30,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 			buttons:[ { text:"Invite", handler:{fn:this.handleInvite, scope:this}, isDefault:true } ],
 			visible:false,
 			draggable:true,
+			effect:Game.GetContainerEffect(),
 			underlay:false,
 			modal:true,
 			close:true,

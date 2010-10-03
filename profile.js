@@ -27,6 +27,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			buttons:[ { text:"Update", handler:{fn:this.handleUpdate, scope:this}, isDefault:true } ],
 			visible:false,
 			draggable:true,
+			effect:Game.GetContainerEffect(),
 			underlay:false,
 			modal:true,
 			close:true,

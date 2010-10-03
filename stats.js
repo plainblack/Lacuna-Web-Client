@@ -25,6 +25,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			constraintoviewport:true,
 			visible:false,
 			draggable:true,
+			effect:Game.GetContainerEffect(),
 			underlay:false,
 			close:true,
 			width:"750px",

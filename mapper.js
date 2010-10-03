@@ -818,7 +818,44 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			delete this._pathsAndPolygons[p.id];
 		},
 		moveByTiles : function( x, y ) {
-			this.moveByPx( x * this.tileSizeInPx, y * this.tileSizeInPx);
+			var absX = Math.abs(x),
+				absY = Math.abs(y),
+				durMS = absX > absY ? this.tileSizeInPx * absX : this.tileSizeInPx * absY, //get the longest duration if we're moving both x and y
+				totalX = x * this.tileSizeInPx,
+				totalY = y * this.tileSizeInPx,
+				stepX = Math.round(totalX / durMS) || (x<0 ? -1 : 1), //put this in to cover the possibility of total/dur rounding to 0. 0 will 
+				stepY = Math.round(totalY / durMS) || (y<0 ? -1 : 1),
+				progX = 0, 
+				progY = 0, 
+				lastDuration = 0,
+				anim = new Util.Anim(undefined,undefined,durMS);
+				
+			anim.useSeconds = false; //keep everything in ms
+			anim.onTween.subscribe(function(type,data){
+				var completed = data[0].duration,
+					factor = completed - lastDuration,
+					moveX, moveY;
+				lastDuration = completed;
+				
+				if(Math.abs(progX) >= Math.abs(totalX)) {
+					moveX = 0;
+				}
+				else {
+					moveX = stepX*factor;
+					progX += moveX;
+				}
+				if(Math.abs(progY) >= Math.abs(totalY)) {
+					moveY = 0;
+				}
+				else {
+					moveY = stepY*factor;
+					progY += moveY;
+				}
+				
+				this.moveByPx(moveX, moveY);
+			}, this, true);
+			
+			anim.animate();
 		},
 		moveByPx : function( x,y ) {
 			var n = this.visibleArea.move( x*-1,y*-1 );
@@ -1265,13 +1302,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			'<div class="mapiator_nav_left" title="Move Left"></div>'
 		].join('');
 		map.mapDiv.appendChild(navEl);
-		var moveMap = function(e, o) {
+		var clickMoveMap = function(e, o) {
 			map.moveByTiles(o[0], o[1]);
 		};
-		Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", moveMap, [ 0, 1 ]);
-		Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", moveMap, [ 0, -1 ]);
-		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", moveMap, [ 1, 0 ]);
-		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", moveMap, [ -1, 0 ]);
+		Event.on(Sel.query(".mapiator_nav_up", navEl, true), "click", clickMoveMap, [ 0, 1 ]);
+		Event.on(Sel.query(".mapiator_nav_down", navEl, true), "click", clickMoveMap, [ 0, -1 ]);
+		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", clickMoveMap, [ 1, 0 ]);
+		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", clickMoveMap, [ -1, 0 ]);
 
 
 

@@ -54,6 +54,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 			buttons:[ { text:"Create", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this}}],
 			draggable:false,
+			effect:Game.GetContainerEffect(),
 			modal:true,
 			close:false,
 			width:"750px",

@@ -391,6 +391,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				constraintoviewport:true,
 				visible:false,
 				draggable:true,
+				effect:Game.GetContainerEffect(),
 				modal:true,
 				fixedcenter:true,
 				close:true,

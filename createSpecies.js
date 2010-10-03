@@ -31,6 +31,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			buttons:[ { text:"Found Empire", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this} } ],
 			draggable:true,
+			effect:Game.GetContainerEffect(),
 			modal:true,
 			close:false,
 			width:"735px",
