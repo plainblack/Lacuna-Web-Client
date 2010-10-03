@@ -523,6 +523,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this._isVisible = visible;
 					YAHOO.log(visible, "info", "MapPlanet.MapVisible");
 					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+					if (visible && this._map) {
+						this.Resize();
+					}
 				}
 				if(! visible) {
 					this.buildingDetails.hide();

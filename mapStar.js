@@ -446,6 +446,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					this._isVisible = visible;
 					YAHOO.log(visible, "info", "MapStar.MapVisible");
 					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+					if (visible) {
+						this.Resize();
+					}
 				}
 			}
 		},
