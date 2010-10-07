@@ -63,6 +63,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 							Lacuna.Pulser.Hide();
 							this.fireEvent("onMapRpc", o.result);
 							this.work = o.result.building.work;
+							this.updateBuildingTile(o.result.building);
 							if(this.recycleTab){
 								if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 									var ce = this.recycleTab.get("contentEl");

@@ -355,6 +355,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
 						this.work = o.result.building.work;
+						this.updateBuildingTile(o.result.building);
 						this.populateActiveSearch(o.result.building.work.seconds_remaining);
 					},
 					failure : function(o){

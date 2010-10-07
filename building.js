@@ -16,7 +16,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onMapRpc");
 		this.createEvent("onMapRpcFailed");
 		this.createEvent("onQueueAdd");
-		this.createEvent("onQueueReload");
 		this.createEvent("onQueueReset");
 		this.createEvent("onAddTab");
 		this.createEvent("onRemoveTab");
@@ -70,9 +69,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		addQueue : function(sec, func, elm, sc) {
 			this.fireEvent("onQueueAdd", {seconds:sec, fn:func, el:elm, scope:sc});
-		},
-		reloadQueue : function(building) {
-			this.fireEvent("onQueueReload", building);
 		},
 		resetQueue : function() {
 			this.fireEvent("onQueueReset");
@@ -247,7 +243,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						b.pending_build = o.result.building.pending_build;
 						YAHOO.log(b, "info", "Building.Upgrade.success.building");
 						
-						this.reloadQueue(b);
+						this.updateBuildingTile(b);
 					
 						this.fireEvent("onHide");					
 					},
@@ -283,7 +279,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					b.pending_build = o.result.building.pending_build;
 					YAHOO.log(b, "info", "Building.Upgrade.success.building");
 					
-					this.reloadQueue(b);
+					this.updateBuildingTile(b);
 					
 					this.fireEvent("onHide");
 				},

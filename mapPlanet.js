@@ -101,6 +101,19 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingDetails.isVisible = function() {
 				return this.cfg.getProperty("visible");
 			};
+			this.buildingDetails.resetDisplay = function(oSelf) {
+				this.resetQueue();
+				this.dataStore = {};
+				oSelf.currentBuilding = undefined;
+				if(oSelf.currentBuildingObj) {
+					oSelf.currentBuildingObj.destroy();
+					oSelf.currentBuildingObj = undefined;
+				}
+				if(oSelf.currentViewConnection) {
+					Lacuna.Pulser.Hide();
+					Util.Connect.abort(oSelf.currentViewConnection);
+				}
+			};
 			
 			this.buildingDetails.renderEvent.subscribe(function(){
 				this.img = Dom.get("buildingDetailsImg");
@@ -124,17 +137,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.dataStore = {};
 			});
 			this.buildingDetails.hideEvent.subscribe(function(){
-				this.buildingDetails.resetQueue();
-				this.buildingDetails.dataStore = {};
-				this.currentBuilding = undefined;
-				if(this.currentBuildingObj) {
-					this.currentBuildingObj.destroy();
-					this.currentBuildingObj = undefined;
-				}
-				if(this.currentViewConnection) {
-					Lacuna.Pulser.Hide();
-					Util.Connect.abort(this.currentViewConnection);
-				}
+				this.buildingDetails.resetDisplay(this);
 			}, this, true);
 			
 			this.buildingDetails.render();
@@ -148,6 +151,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.innerHTML = [
 				'<div class="hd">Builder</div>',
 				'	<div class="bd">',
+				'		<div>Building on X<span id="builderX"></span>:Y<span id="builderY"></span></div>',
 				'		<div id="builderMenu" class="yui-content" style="overflow:auto;height:420px;">',
 				'			<ul>',
 				'				<li class="builderMenuGroup">',
@@ -211,6 +215,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				context:["header","tr","br"]
 			});
 			this.buildingBuilder.renderEvent.subscribe(function(){
+				this.X = Dom.get("builderX");
+				this.Y = Dom.get("builderY");
 				this.menuView = Dom.get("builderMenu");
 				this.listView = Dom.get("builderListContainer");
 				this.buildingList = Dom.get("builderList");
@@ -230,17 +236,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Event.delegate(this.buildingList, "click", this.build, "img.buildingImage", this, true);
 			});
 			this.buildingBuilder.hideEvent.subscribe(function(){
-				if(this.currentBuildConnection) {
-					Lacuna.Pulser.Hide();
-					Util.Connect.abort(this.currentBuildConnection);
-				}
-				delete this.buildingBuilder.currentTile;
-				delete this.buildingBuilder.buildable;
+				this.buildingBuilder.resetDisplay(this);
 			}, this, true);
 			this.buildingBuilder.showEvent.subscribe(function() {
-				this.buildable = {};
-				Dom.setStyle(this.menuView, 'display', 'block');
-				Dom.setStyle(this.listView, 'display', 'none');
+				//this.buildable = {};
+				//Dom.setStyle(this.menuView, 'display', 'block');
+				//Dom.setStyle(this.listView, 'display', 'none');
 			});
 			this.buildingBuilder.clickBuildMenu = function (e, matchedEl, container) {
 				Event.preventDefault(e);
@@ -282,6 +283,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			};
 			this.buildingBuilder.setTile = function(tile) {
 				this.currentTile = tile;
+				this.X.innerHTML = tile.x;
+				this.Y.innerHTML = tile.y;
 			};
 			this.buildingBuilder.load = function(b, q, request) {
 				this.buildable[request.tag] = b; //store
@@ -292,12 +295,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.build = function(e, matchedEl, container) {
 				Lacuna.MapPlanet.Build(matchedEl.building, this.currentTile.x, this.currentTile.y);
 			};
-			this.buildingBuilder.resetDisplay = function(conn) {
-				if(conn) {
+			this.buildingBuilder.resetDisplay = function(oSelf) {
+				if(oSelf.currentBuildConnection) {
 					Lacuna.Pulser.Hide();
-					Util.Connect.abort(conn);
+					Util.Connect.abort(oSelf.currentBuildConnection);
 				}
-				delete this.buildable;
+				delete this.currentTile;
+				this.buildable = {};
+				Dom.setStyle(this.menuView, 'display', 'block');
+				Dom.setStyle(this.listView, 'display', 'none');
 			};
 			this.buildingBuilder.resetFilter = function() {
 				this.timeFilter.options[1].selected = 1;
@@ -456,8 +462,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.buildingDetails.addQueue(obj.seconds, obj.fn, obj.el, obj.scope);
 			}
 		},
-		_fireQueueReload : function(building) {
-			this.QueueReload(building);
+		_fireBuildingReload : function(building) {
+			this.ReloadBuilding(building);
 		},
 		_fireQueueReset : function() {
 			this.buildingDetails.resetQueue();
@@ -498,12 +504,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		_fireUpdateTile : function(building) {
 			if(building && building.id && building.name) {
-				building.efficiency = (building.efficiency || 100)*1;
-				if(building.efficiency == 100) {
-					delete building.repair_costs;
-				}
-				this.buildings[building.id] = building;
-				this._map.refreshTile(building);
+				this.ReloadBuilding(building);
 			}
 		},
 		_fireRemoveTile : function(building) {
@@ -529,7 +530,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this.Resize();
 					}
 				}
-				if(! visible) {
+				if(!visible) {
 					this.buildingDetails.hide();
 					this.buildingBuilder.hide();
 				}
@@ -540,6 +541,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildings = oArgs.buildings;
 			this.surfaceUrl = [Lib.AssetUrl,'planet_side/',oArgs.body.surface_image,'.jpg'].join('');
 			Dom.setStyle("buildingDetailsImgBkgd","background",['transparent url(',this.surfaceUrl,') no-repeat left top'].join(''));
+			//clean up numbers in buidlings
+			for(var key in this.buildings) {
+				if(this.buildings.hasOwnProperty(key)){
+					this.buildings[key] = this.CleanBuilding(this.buildings[key]);
+				}
+			}
+			//create/update map
 			if(!this._gridCreated) {
 				var planetMap = document.createElement("div");
 				planetMap.id = "planetMap";
@@ -548,10 +556,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.SetSize();
 				
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
-				map.addTileData(oArgs.buildings);
+				map.addTileData(this.buildings);
 				map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
 				//map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
-				
+				map.subscribe("onReloadTile", this.ReLoadTile, this, true);
 				//draw what we got
 				map.redraw();
 				//move to command
@@ -570,9 +578,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						else if (planet.size*1 > planet.building_count*1) {
 							this.BuilderView(tile);
 						}
-						else {
+						/*else {
 							alert("You've already reached the maximum number of buildings for this planet");
-						}
+						}*/
 					}
 				}, "div.planetMapTileActionContainer", this, true); //"button.planetMapTileActionButton"
 			}
@@ -584,10 +592,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this._map.reset();
 				this._map.setSurfaceUrl(this.surfaceUrl);
 				this._map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
-				this._map.addTileData(oArgs.buildings);
+				this._map.addTileData(this.buildings);
 				this._map.refresh();
 			}
-			this.QueueBuildings(oArgs.buildings);
 			
 			Lacuna.Pulser.Hide();
 		},
@@ -682,15 +689,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
 		BuilderView : function(tile) {
 			YAHOO.log(tile, "info", "BuilderView");
-
-			this.buildingBuilder.resetDisplay(this.currentBuildConnection);
 			
-			//Event.purgeElement(this.buildingBuilder.list);
-			//this.buildingBuilder.list.innerHTML = "";
-			//Event.purgeElement(this.buildingBuilder.unavailable);
-			//this.buildingBuilder.unavailable.innerHTML = "";
-			
-			Game.OverlayManager.hideAll();
+			Game.OverlayManager.hideAllBut(this.buildingBuilder.id);
+			this.buildingBuilder.resetDisplay(this);
 			this.buildingBuilder.setTile(tile);
 			this.buildingBuilder.show();
 		},
@@ -764,7 +765,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					YAHOO.log(b, "info", "MapPlanet.Build.success.building");
 					//this.UpdateCost(b.build.cost);
 					
-					this.QueueReload(b);
+					this.ReloadBuilding(b);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MapPlanet.Build.failure");
@@ -794,15 +795,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					newB.x = x;
 					newB.y = y;
 					newB.updated = (newB.level != this.buildings[newB.id].level);
-					var remaining = 0;
-					if(newB.pending_build) {
-						remaining = newB.pending_build.seconds_remaining*1;
-						this.QueueReload(newB);
-					}
-					else {
-						this.buildings[newB.id] = newB;
-						this._map.refreshTile(newB);
-					}
+					newB = this.CleanBuilding(newB);
+
+					this.buildings[newB.id] = newB;
+					this._map.refreshTile(newB);
+
 
 					if(callback && callback.success) {
 						callback.success.call(this, o.result, callback.url, x, y);
@@ -830,8 +827,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
 			Lacuna.Pulser.Show();
 			var panel = this.buildingDetails;
-			Game.OverlayManager.hideAll();
-			panel.hide(); //hide panel which removes existing info	
+			Game.OverlayManager.hideAllBut(panel.id);
+			panel.resetDisplay(this);
 			//clear values
 			panel.name.innerHTML = "Loading";
 			panel.img.src = this.surfaceUrl;
@@ -931,7 +928,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
 				classObj.subscribe("onMapRpcFailed", this._fireRpcFailed, this, true);
 				classObj.subscribe("onQueueAdd", this._fireQueueAdd, this, true);
-				classObj.subscribe("onQueueReload", this._fireQueueReload, this, true);
 				classObj.subscribe("onQueueReset", this._fireQueueReset, this, true);
 				classObj.subscribe("onAddTab", this._fireAddTab, this, true);
 				classObj.subscribe("onRemoveTab", this._fireRemoveTab, this, true);
@@ -1003,46 +999,30 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 
-		QueueBuildings : function(buildings) {
-			for(var key in buildings) {
-				if(buildings.hasOwnProperty(key)){
-					var building = buildings[key];
-					if(building.pending_build) {
-						building.pending_build.seconds_remaining *= 1;
-						building.pending_build.seconds_remaining += 2; //I seem to be a head normally now
-						this.buildings[building.id] = building;
-						var ms = (building.pending_build.seconds_remaining * 1000);
-						YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueBuildings");
-						Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
-					}
-				}
+		CleanBuilding : function(building) {
+			building.efficiency = (building.efficiency || 100)*1;
+			if(building.repair_costs && building.efficiency == 100) {
+				delete building.repair_costs;
 			}
-		},
-		QueueReload : function(building) {
 			if(building.pending_build) {
 				building.pending_build.seconds_remaining *= 1;
-				building.pending_build.seconds_remaining += 2; //Seem to be a head normally now
-				this.buildings[building.id] = building;
-				this._map.refreshTile(building);
-				
-				var ms = (building.pending_build.seconds_remaining * 1000);
-				YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.QueueReload");
-				Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
 			}
+			if(building.work) {
+				building.work.seconds_remaining *= 1;
+			}
+			return building;
 		},
-		QueueTick : function(id, ms) {
-			if(this.buildings) {
-				var building = this.buildings[id];
-				if(building) {
-					if(building.pending_build) {
-						building.pending_build.seconds_remaining = (ms / 1000);
-					}
-					else {
-						building.pending_build = {seconds_remaining : (ms / 1000)};
-					}
-					this._map.refreshTileCounter(building);
-				}
-			}
+		ReloadBuilding : function(building) {
+			YAHOO.log(building, "debug", "ReloadBuilding");
+
+			building = this.CleanBuilding(building);
+			this.buildings[building.id] = building;
+			this._map.refreshTile(building);
+			/*
+			var ms = (building.pending_build.seconds_remaining * 1000);
+			YAHOO.log({b:building, time:ms}, "debug", "MapPlanet.ReloadBuilding");
+			Game.QueueAdd(building.id, Lib.QueueTypes.PLANET, ms);
+			*/
 		}
 	};
 	Lang.augmentProto(MapPlanet, Util.EventProvider);

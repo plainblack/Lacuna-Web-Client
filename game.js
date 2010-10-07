@@ -32,6 +32,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				query = {};
 			}
 			
+			//add overlay manager functionality
+			Game.OverlayManager.hideAllBut = function(id) {
+				var overlays = this.overlays,
+					n = overlays.length,
+					i;
+
+				for (i = n - 1; i >= 0; i--) {
+					if(overlays[i].id != id) {
+						overlays[i].hide();
+					}
+				}
+			};
+			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
 			
@@ -227,7 +240,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//make sure we only subscribe once
 			if(!Lacuna.Game._hasRun) {
 				//only subscribe once.
-				Game.onTick.subscribe(Game.QueueProcess);
+				//Game.onTick.subscribe(Game.QueueProcess);
 				//this will be called on the first load and create menu
 				Lacuna.MapStar.subscribe("onMapRpc", Game.onRpc);
 				Lacuna.MapStar.subscribe("onMapRpcFailed", Game.Failure);

@@ -832,7 +832,7 @@ about
 /*#planetMap {
 	background: brown url('assets/planet_side/ground.png');
 }*/
-.planetMapTileCounter {
+.tileContainer div.planetMapTileCounter {
 	z-index: 2;
 	text-align: right;
 	font-size: 140%;
@@ -840,6 +840,20 @@ about
 	position: absolute;
 	left:0;
 	top:0;
+}
+.tileContainer div.planetMapTileCounterWork {
+	z-index: 2;
+	text-align: right;
+	vertical-align:middle;
+	color:orange;
+	font-size: 140%;
+	font-family: impact, san-serif;
+	position: absolute;
+	left:0;
+	top:0;
+}
+.tileContainer div {
+	color:white;
 }
 .planetMapEfficiencyBarContainer {
 	z-index: 2;
@@ -959,9 +973,6 @@ about
 }
 .mapiator_zoom_out {
 	top: 209px;
-}
-.tileContainer div {
-	color:white;
 }
 .coordTop {
 	position: absolute;

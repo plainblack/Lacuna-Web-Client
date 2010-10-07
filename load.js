@@ -20,7 +20,7 @@
 	var loader = new YAHOO.util.YUILoader({
 		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
 		filter: "RAW",
-		allowRollup: true,
+		allowRollup: false,
 		combine: false
 	});
 
@@ -76,7 +76,7 @@
 		name: "mapper",
 		type: "js",
 		fullpath: host + "mapper.js?" + t,
-		requires : ["animation","dom","dragdrop","event","selector"]
+		requires : ["animation","dom","dragdrop","game","selector"]
 	});
 	loader.addModule({
 		name: "mapStar",

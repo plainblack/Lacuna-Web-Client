@@ -168,7 +168,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 
 	
-	var Tile = function(x, y, z, ox, oy, map) {
+	var Tile = function(x, y, z, ox, oy, layer) {
 		this.z = z;
 		this.x = x;
 		this.y = y;
@@ -176,12 +176,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.origOffsetX = ox;
 		this.offsetY = oy;
 		this.origOffsetY = oy;
-		this.map = map;
-		this.tileSizeInPx = map.tileSizeInPx;
+		this.layer = layer;
+		this.map = layer.map;
+		this.tileSizeInPx = layer.map.tileSizeInPx;
 		
 		this.id = Tile.idFor(this.x,this.y,this.z);
 		this.domElement = document.createElement('div');
 		this.domElement.id = this.id;
+		
+		this.createEvent("onReload");
 		
 		this.refresh();
 		
@@ -216,7 +219,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		
 		appendToDom : function() {
-			return this.domElement && !this.blank && !Dom.inDocument(this.domElement);
+			if(this.domElement && !this.blank && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+				this.layer.tileContainer.appendChild(this.domElement);
+			}
+		},
+		destroy : function() {
+			this.unsubscribeAll();
+			this.remove();
+			delete this.domElement;
 		},
 		remove : function() {
 			if( this.domElement && this.domElement.parentNode) {
@@ -224,12 +234,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		}
 	};
+	Lang.augmentProto(Tile, Util.EventProvider);
 	Tile.idFor = function(x,y,z){
 		return 'tile_'+ x + '_' + y + '_' + z;
 	};
 	
-	Mapper.StarTile = function(x, y, z, ox, oy, map) {
-		Mapper.StarTile.superclass.constructor.call(this, x, y, z, ox, oy, map);
+	Mapper.StarTile = function(x, y, z, ox, oy, layer) {
+		Mapper.StarTile.superclass.constructor.call(this, x, y, z, ox, oy, layer);
 	};
 	Lang.extend(Mapper.StarTile, Tile, {
 		init : function() {
@@ -312,26 +323,27 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	});
 	
-	Mapper.PlanetTile = function(x, y, z, ox, oy, map) {
-		Mapper.PlanetTile.superclass.constructor.call(this, x, y, z, ox, oy, map);
+	Mapper.PlanetTile = function(x, y, z, ox, oy, layer) {
+		Mapper.PlanetTile.superclass.constructor.call(this, x, y, z, ox, oy, layer);
 	};
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
 			this.domElement.title = this.data ? this.data.name : "Ground";
 			this._createActionIcon();
 			
-			if(this.data && this.data.pending_build) {
+			this.startTick();
+			/*if(this.data && this.data.pending_build) {
 				this._createCounter();
 				var remaining = Math.round(this.data.pending_build.seconds_remaining);
 				if (remaining < 0) {
 					remaining = 0;
 				}
-				this.counter.innerHTML = Lib.formatTime(remaining);
+				this.counterBuild.innerHTML = Lib.formatTime(remaining);
 			}
-			else if(this.counter) {
-				this.counter.parentNode.removeChild(this.counter);
-				delete this.counter;
-			}
+			else if(this.counterBuild) {
+				this.counterBuild.parentNode.removeChild(this.counterBuild);
+				delete this.counterBuild;
+			}*/
 			
 			if(this.data && this.data.efficiency*1 < 100) {
 				this._createEfficiencyBar(this.data.efficiency*1);
@@ -347,7 +359,74 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.init();
 		},
 		appendToDom : function() {
-			return this.domElement;
+			if(this.domElement && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+				this.layer.tileContainer.appendChild(this.domElement);
+			}
+		},
+		remove : function() {
+			this.stopTick();
+			Mapper.PlanetTile.superclass.remove.call(this);
+		},
+		
+		startTick : function() {
+			if(this.data && !this.isTicking) {
+				var subTick;
+				if(this.data.pending_build && this.data.pending_build.seconds_remaining > 0.1) {
+					this._createBuildCounter();
+					subTick = true;
+				}
+				if(this.data.work && this.data.work.seconds_remaining > 0.1) {
+					this._createWorkCounter();
+					subTick = true;
+				}
+				if(subTick) {
+					this.isTicking = true;
+					Game.onTick.subscribe(this.tick, this, true);
+				}
+			}
+		},
+		stopTick : function() {
+			if(this.isTicking) {
+				Game.onTick.unsubscribe(this.tick, this);
+				delete this.isTicking;
+				
+				if(this.counterBuild) {
+					this.counterBuild.parentNode.removeChild(this.counterBuild);
+					delete this.counterBuild;
+				}
+				if(this.counterWork) {
+					this.counterWork.parentNode.removeChild(this.counterWork);
+					delete this.counterWork;
+				}
+			}
+		},
+		finishTick : function() {
+			this.stopTick();
+			this.fireEvent("onReload", this);
+		},
+		tick : function(e, oArgs) {
+			var tickSec = oArgs[0]/1000, hasUpgrade, hasWork;
+			if(this.data.pending_build) {
+				this.data.pending_build.seconds_remaining -= tickSec;
+				var remainingBuild = Math.round(this.data.pending_build.seconds_remaining);
+				if (remainingBuild < 0) {
+					remainingBuild = 0;
+				}
+				hasUpgrade = remainingBuild > 0;
+				this.counterBuild.innerHTML = Lib.formatTime(remainingBuild);
+			}
+			if(this.data.work) {
+				this.data.work.seconds_remaining -= tickSec;
+				var remainingWork = Math.round(this.data.work.seconds_remaining);
+				if (remainingWork < 0) {
+					remainingWork = 0;
+				}
+				hasWork = remainingWork > 0;
+				this.counterWork.innerHTML = Lib.formatTime(remainingWork);
+			}
+			if(!hasUpgrade && !hasWork) {
+				this.finishTick();
+			}
 		},
 		
 		refreshCounter : function() {
@@ -355,26 +434,43 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.blank = obj.blank;
 			this.url = obj.url;
 			this.data = obj.data;
+			//make sure we're ticking if we need too
+			this.startTick();
+			/*
+			if(!(this.data && this.data.pending_build && this.data.pending_build.seconds_remaining > 0.1)) {
+				this.counterBuild.parentNode.removeChild(this.counterBuild);
+				delete this.counterBuild;
+			}
 			if(this.data && this.data.pending_build && this.data.pending_build.seconds_remaining > 0.5) {
 				this._createCounter();
 				var remaining = Math.round(this.data.pending_build.seconds_remaining);
 				if (remaining < 0) {
 					remaining = 0;
 				}
-				this.counter.innerHTML = Lib.formatTime(remaining);
+				this.counterBuild.innerHTML = Lib.formatTime(remaining);
 			}
 			else {
-				this.counter.parentNode.removeChild(this.counter);
-				delete this.counter;
+				this.counterBuild.parentNode.removeChild(this.counterBuild);
+				delete this.counterBuild;
+			}
+			*/
+		},
+		_createBuildCounter : function() {
+			if(!this.counterBuild) {
+				var counterBuild = this.domElement.appendChild(document.createElement('div'));
+				Dom.addClass(counterBuild, "planetMapTileCounter");
+				Dom.setStyle(counterBuild, "width", this.tileSizeInPx + 'px');
+				Dom.setStyle(counterBuild, "height", this.tileSizeInPx + 'px');
+				this.counterBuild = counterBuild;
 			}
 		},
-		_createCounter : function() {
-			if(!this.counter) {
-				var counter = this.domElement.appendChild(document.createElement('div'));
-				Dom.addClass(counter, "planetMapTileCounter");
-				Dom.setStyle(counter, "width", this.tileSizeInPx + 'px');
-				Dom.setStyle(counter, "height", this.tileSizeInPx + 'px');
-				this.counter = counter;
+		_createWorkCounter : function() {
+			if(!this.counterWork) {
+				var counterWork = this.domElement.appendChild(document.createElement('div'));
+				Dom.addClass(counterWork, "planetMapTileCounterWork");
+				//Dom.setStyle(counterWork, "width", this.tileSizeInPx + 'px');
+				//Dom.setStyle(counterWork, "height", this.tileSizeInPx + 'px');
+				this.counterWork = counterWork;
 			}
 		},
 		_createActionIcon : function() {
@@ -612,6 +708,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		// s.backgroundColor = '#477';
 		this.tileContainer = map.movableContainer.appendChild( tileContainer );
 		
+		this.createEvent("onReloadTile");
+		
 		this.render();
 		
 	};
@@ -659,9 +757,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						if(tile.blank) {
 							tile.refresh();
 						}
-						if(tile.appendToDom()) {
-							this.tileContainer.appendChild( tile.domElement );	
-						}
+						tile.appendToDom();
+						tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+						tile.subscribe("onReload", this.onReloadTile, this, true);
 					}
 				}
 			}
@@ -674,27 +772,30 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
 					//from bottom to top (smaller to bigger)
 					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
-						var tile = this.findTile(xc,yc,this.map.zoom);
+						var tile = this.findTile(xc,yc,this.map.zoom), doSub;
 						if(!tile) {
 							var ox = (xc - this.baseTileLoc[0]) * this.map.tileSizeInPx;
 							var oy = ((yc * -1) - this.baseTileLoc[1]) * this.map.tileSizeInPx;
 							//var offsets = this.visibleArea.getOffsetFromCoords(xc, xy, this.baseTileCoords[0], this.baseTileCoords[1]);
-							tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this.map);
+							tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this);
 							this.tileCache[tile.id] = tile;
-							if(tile.appendToDom()) {
-								this.tileContainer.appendChild( tile.domElement );
-							}
+							tile.appendToDom();
+							doSub = true;
 						}
 						else if(refresh) {
 							tile.refresh();
+							doSub = true;
 						}
 						else {
 							if(tile.blank) {
 								tile.refresh();
 							}
-							if(tile.appendToDom()) {
-								this.tileContainer.appendChild( tile.domElement );	
-							}
+							tile.appendToDom();
+							doSub = true;
+						}
+						if(doSub) {
+							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+							tile.subscribe("onReload", this.onReloadTile, this, true);
 						}
 						tiles[tile.id] = tile;
 					}
@@ -703,6 +804,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.removeAllTilesNotContainedIn( tiles );
 				}
 			}
+		},
+		onReloadTile : function(tile) {
+			this.fireEvent("onReloadTile", tile);
 		},
 		render : function() {
 			var bounds = this.visibleArea.coordBounds(),
@@ -735,12 +839,21 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				}
 			}
 		},
+		deleteCache : function() {
+			for( var key in this.tileCache ){
+				if( this.tileCache.hasOwnProperty(key) ){
+					this.tileCache[key].destroy();
+				}
+			}
+		},
 		destroy : function() {
-			this.removeAllTilesNotContainedIn({});
+			this.unsubscribeAll();
+			this.deleteCache();
 			//this.map.movableContainer.removeChild( this.tileContainer );
 			Event.purgeElement(this.tileContainer);
 			this.tileContainer.parentNode.removeChild(this.tileContainer);
-			delete this["tileCache"];
+			delete this.tileContainer;
+			delete this.tileCache;
 		},
 		clear : function() {
 			this.removeAllTilesNotContainedIn({});
@@ -750,6 +863,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileCache = {};
 		}
 	};
+	Lang.augmentProto(Mapper.TileLayer, Util.EventProvider);
 
 	
 	
@@ -770,6 +884,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.tileCache = {};
 		this.bounds = {};
 		this.maxBounds = {};
+		
+		this.createEvent("onReloadTile");
 		
 		this.mapDiv = document.getElementById( divId );
 		this.mapDiv.style.overflow = "hidden";
@@ -908,6 +1024,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.tileLayer.destroy();		
 			}
 			this.tileLayer = new Mapper.TileLayer(this, Mapper.util.clone(this.visibleArea), this.Tile);
+			//pass through
+			this.tileLayer.subscribe("onReloadTile", function(tile){
+				this.fireEvent("onReloadTile",tile.data.id);
+			}, this, true); 
 		},
 		refresh : function() {
 			var vac = this.visibleArea.centerLocPx();
@@ -970,6 +1090,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		addTileData : function(aTiles) {
 		}
 	};
+	Lang.augmentProto(Map, Util.EventProvider);
 	
 	Mapper.StarMap = function( divId ) {
 		Mapper.StarMap.superclass.constructor.call(this, divId);
