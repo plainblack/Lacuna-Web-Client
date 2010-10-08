@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			</div>',
 				'		</div>',
 				'		<div id="messagingAnnouncement" class="panelTabContainer" style="display:none">',
-				'			<iframe id="announceFrame" style="width:100%;height:100%;background-color:white;border:0;" src="/announcement?session_id=',Game.GetSession(),'"></iframe>',
+				'			<iframe id="messagingAnnounceFrame" style="width:100%;height:100%;background-color:white;border:0;" src=""></iframe>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -257,6 +257,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					Dom.setStyle("messagingCreator", "display", "none");
 					Dom.setStyle("messagingReader", "display", "none");
 					Dom.setStyle("messagingAnnouncement", "display", "");
+					Dom.get("messagingAnnounceFrame").src = '/announcement?session_id='+Game.GetSession();
 					break;
 				default:
 					this.viewingMessage = null;

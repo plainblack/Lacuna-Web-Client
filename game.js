@@ -491,7 +491,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			});
 		},
 		GetSession : function(replace) {
-			if (! this._session) {
+			if (!this._session) {
 				this._session = Game.GetCookie('session');
 			}
 			return this._session || replace;
