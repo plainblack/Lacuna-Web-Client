@@ -108,6 +108,9 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 							expires: new Date(now.setFullYear(now.getFullYear() + 1))
 						});
 					}
+					else {
+						Cookie.remove("lacunaEmpireName");
+					}
 					this.elForm.reset();
 					this.fireEvent("onLoginSuccessful",o);
 					this.hide();
