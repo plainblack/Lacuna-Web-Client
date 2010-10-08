@@ -79,7 +79,7 @@
 	loader.addModule({
 		name: "createEmpire",
 		type: "js",
-		fullpath: host + "createEmpire.js?2",
+		fullpath: host + "createEmpire.js",
 		requires : ["createSpecies"]
 	});
 	loader.addModule({
