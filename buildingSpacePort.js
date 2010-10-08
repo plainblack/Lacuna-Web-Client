@@ -258,7 +258,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from.name;
+					nLi.innerHTML = ship.from ? ship.from.name : 'Unknown';
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -460,7 +460,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from ? ship.from.name : "";
+					nLi.innerHTML = ship.from ? ship.from.name : 'Unknown';
 					nUl.appendChild(nLi);
 
 					this.addQueue(sec, this.ForeignQueue, nUl);

@@ -18,6 +18,10 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		
 		this.service = Game.Services.Buildings.Trade;
 		
+		this.availableAcceptText = "Accept";
+		this.addTradeText = "Add Trade";
+		this.pushTradeText = "Send";
+		
 		this.createEvent("onLoadResources");
 		this.createEvent("onLoadGlyphs");
 		this.createEvent("onLoadPlans");
@@ -76,7 +80,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'	<li style="margin-bottom:10px;margin-top:5px;"><ul id="tradePushItems" style="border:1px solid #52ACFF" class="clearafter"><li style="float:left;margin:2px;"><label>Pushing:</label></li></ul></li>',
 				'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"></select></li>',
 				'	<li id="tradePushMessage" class="alert"></li>',
-				'	<li><button id="tradePushSend">Send</button></li>',
+				'	<li><button id="tradePushSend">',this.pushTradeText,'</button></li>',
 				'</ul>',
 			'</div>'].join('')});
 			
@@ -203,7 +207,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'<ul>',
 				'	<li style="margin: 5px 0;padding:2px;border:1px solid #52ACFF"><label style="font-weight:bold">Asking:</label><select id="tradeAddAskingName"></select>&nbsp;<label>Quantity:</label><input type="text" id="tradeAddAskingQuantity" /></li>',
 				'	<li id="tradeAddMessage" class="alert"></li>',
-				'	<li><button id="tradeAdd">Add Trade</button></li>',
+				'	<li><button id="tradeAdd">',this.addTradeText,'</button></li>',
 				'</ul>',
 			'</div>'].join('')});
 			
@@ -520,7 +524,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(nLi,"tradeAction");
 					var bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
-					bbtn.innerHTML = "Accept";
+					bbtn.innerHTML = this.availableAcceptText;
 					bbtn = nLi.appendChild(bbtn);
 					Event.on(bbtn, "click", this.AvailableAccept, {Self:this,Trade:trade,Line:nUl}, true);
 
@@ -970,7 +974,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					delete this.ships;
 					delete this.resources;
 					Dom.get("tradeAddResourceQuantity").value = "";
-					Dom.get("tradeAddAskingName").selectedIndex = -1;
+					//Dom.get("tradeAddAskingName").selectedIndex = -1;
 					Dom.get("tradeAddAskingQuantity").value = "";
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();

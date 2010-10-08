@@ -55,6 +55,7 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 						Event.purgeElement(ce);
 						ce.innerHTML = "";
 						this.work = o.result.building.work;
+						this.updateBuildingTile(o.result.building);
 						if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 							ce.appendChild(this.PartyGetTimeDisplay(o.result.party));
 							this.addQueue(this.work.seconds_remaining, this.PartyQueue, "partyTime");

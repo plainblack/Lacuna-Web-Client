@@ -201,7 +201,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				this.elName.value = "";
 				this.elDesc.value = "";
 				this.elEmail.value = "";
-				this.elFriendCode.value = "";
+				this.elFriendCode.value = Cookie.get("lacunaReferral") || "";
 				this.elPass.value = "";
 				this.elPassConfirm.value = "";
 				this.elAgreeTOS.checked = false;

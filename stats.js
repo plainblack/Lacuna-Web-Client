@@ -287,7 +287,6 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				'<li><label>Average University Level:</label>', Lib.formatNumber(data.average_university_level), '</li>',
 				'<li><label>Highest University Level:</label>', Lib.formatNumber(data.highest_university_level), '</li>',
 				'<li><label>Empires Using Essentia:</label>', Lib.formatNumber(data.essentia_using_count), '</li>',
-				'<li><label>Human Empires:</label>', Lib.formatNumber(data.human_count), '</li>',
 				'<li><label>Isolationist Empires:</label>', Lib.formatNumber(data.isolationist_count), '</li>',
 				'</ul>'
 			].join('');
@@ -533,9 +532,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					}},
 					{key:"alliance_name", label:"Alliance"},
 					{key:"member_count", label:"Members", formatter:"number"},
-					{key:"influence", label:"Influence", formatter:"number"},
 					{key:"colony_count", label:"Colonies", formatter:"number"},
 					{key:"population", label:"Pop", formatter:"number"},
+					{key:"influence", label:"Influence", formatter:"number"},
+					{key:"space_station_count", label:"Space Stations", formatter:"number"},
 					{key:"average_empire_size", label:"Avg. Empire Size", formatter:"number", sortable:true},
 					{key:"building_count", label:"Buildings", formatter:"number"},
 					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},

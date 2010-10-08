@@ -51,6 +51,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
 			var session = Game.GetSession();
+			if (query.ref_id) {
+				//if they came from someelse
+				Cookie.set("lacunaReferral", query.ref_id, {
+					domain: Game.domain,
+					expires: new Date(now.setFullYear(now.getFullYear() + 1))
+				});
+			}
+			
 			if (query.reset_password) {
 				Game.InitLogin();
 				Game.LoginDialog.resetPassword(query.reset_password);

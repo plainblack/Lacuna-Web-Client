@@ -577,7 +577,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<div class="buildingName">[',ship.type_human,'] ',ship.name,' - Arrives in: <span class="shipArrives">',Lib.formatTime(sec),'</span></div>',
 				'		<div><label style="font-weight:bold;">Details:</label>',
 				'			<span><span>Task:</span><span>',ship.task,'</span></span>',
-				'			<span><span>From:</span><span>',ship.from.name,'</span></span>',
+				'			<span><span>From:</span><span>',ship.from ? ship.from.name : 'Unknown','</span></span>',
 				'			<span><span>To:</span><span>',ship.to.name,'</span></span>',
 				'		</div>',
 				'		<div><label style="font-weight:bold;">Attributes:</label>',

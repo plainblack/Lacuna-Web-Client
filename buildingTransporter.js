@@ -16,6 +16,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		
 		this.transport = result.transport;
 		
+		this.availableAcceptText = "Accept For 1 Essentia";
+		this.addTradeText = "Add Trade For 1 Essentia";
+		this.pushTradeText = "Send For 2 Essentia";
+		
 		this.service = Game.Services.Buildings.Transporter;
 	};
 	
@@ -32,7 +36,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<li><label>Have:</label><select id="transporterOneForOneHave"></select></li>',
 				'	<li><label>Quantity:</label><input type="text" id="transporterOneForOneQuantity" /></li>',
 				'	<li id="transporterOneForOneMessage" class="alert"></li>',
-				'	<li><button id="transporterOneForOneTrade">Submit Trade</button></li>',
+				'	<li><button id="transporterOneForOneTrade">Submit Trade for 3 Essentia</button></li>',
 				'</ul>',
 			'</div>'].join('')});
 			
