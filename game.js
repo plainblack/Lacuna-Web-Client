@@ -51,9 +51,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
 			var session = Game.GetSession();
-			if (query.ref_id) {
+			if (query.referral) {
 				//if they came from someelse
-				Cookie.set("lacunaReferral", query.ref_id, {
+				var now = new Date();
+				Cookie.set("lacunaReferral", query.referral, {
 					domain: Game.domain,
 					expires: new Date(now.setFullYear(now.getFullYear() + 1))
 				});
@@ -384,8 +385,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(status.server) {
 					//add everything from status empire to game empire
 					Lang.augmentObject(Game.ServerData, status.server, true);
-					//calc time offset
-					//var sDt = Lib.
+					
+					if(status.server.announcement) {
+						Lacuna.Announce.show();
+					}
 				}
 				if(status.empire) {
 					//convert to numbers

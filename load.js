@@ -65,6 +65,12 @@
 		requires : ["container","event","game"]
 	});
 	loader.addModule({
+		name: "announce",
+		type: "js",
+		fullpath: host + "announce.js",
+		requires : ["container","game"]
+	});
+	loader.addModule({
 		name: "createSpecies",
 		type: "js",
 		fullpath: host + "createSpecies.js",
@@ -73,7 +79,7 @@
 	loader.addModule({
 		name: "createEmpire",
 		type: "js",
-		fullpath: host + "createEmpire.js",
+		fullpath: host + "createEmpire.js?2",
 		requires : ["createSpecies"]
 	});
 	loader.addModule({
@@ -257,7 +263,7 @@
 		fullpath: host + "menu.js",
 		requires : ["about","essentia","messaging","menu","profile","stats","invite"]
 	});
-	loader.require("gameMenu","logger","login","mapPlanet","mapStar");
+	loader.require("gameMenu","announce","logger","login","mapPlanet","mapStar");
 	loader.onSuccess = function(o) {
 		YAHOO.widget.Logger.enableBrowserConsole();		
 		YAHOO.lacuna.Game.Start(query);

@@ -4,6 +4,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 	
 (function(){
 	var Util = YAHOO.util,
+		Cookie = Util.Cookie,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Lacuna = YAHOO.lacuna,

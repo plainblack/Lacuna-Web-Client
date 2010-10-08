@@ -34,6 +34,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingInbox" class="tab"><a href="#"><em>Inbox</em></a></li>',
 				'		<li id="messagingSent" class="tab"><a href="#"><em>Sent</em></a></li>',
 				'		<li id="messagingArchive" class="tab"><a href="#"><em>Archive</em></a></li>',
+				'		<li id="messagingAnnounce" class="tab"><a href="#"><em>Announcement</em></a></li>',
 				'	</ul>',
 				'	<div class="yui-content">',
 				'		<div id="messagingCreator" class="panelTabContainer" style="display:none">',
@@ -69,6 +70,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'				</div>',
 				'			</div>',
 				'		</div>',
+				'		<div id="messagingAnnouncement" class="panelTabContainer" style="display:none">',
+				'			<iframe id="announceFrame" style="width:100%;height:100%;background-color:white;border:0;" src="/announcement?session_id=',Game.GetSession(),'"></iframe>',
+				'		</div>',
 				'	</div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -93,6 +97,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.inbox = Dom.get("messagingInbox");
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
+				this.announce = Dom.get("messagingAnnounce");
 				//list and display view
 				Event.on("messagingReply", "click", this.replyMessage, this, true);
 				Event.on("messagingReplyAll", "click", this.replyAllMessage, this, true);
@@ -240,16 +245,25 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.sent,this.archive], "selected");
+			Dom.removeClass([this.create,this.inbox,this.sent,this.archive,this.announce], "selected");
 			Dom.addClass(el, "selected");
-			if(el.id == this.create.id) {
-				Dom.setStyle("messagingCreator", "display", "");
-				Dom.setStyle("messagingReader", "display", "none");
-			}
-			else {
-				this.viewingMessage = null;
-				Dom.setStyle("messagingCreator", "display", "none");
-				Dom.setStyle("messagingReader", "display", "");
+			switch(el.id) {
+				case this.create.id:
+					Dom.setStyle("messagingCreator", "display", "");
+					Dom.setStyle("messagingReader", "display", "none");
+					Dom.setStyle("messagingAnnouncement", "display", "none");
+					break;
+				case this.announce.id:
+					Dom.setStyle("messagingCreator", "display", "none");
+					Dom.setStyle("messagingReader", "display", "none");
+					Dom.setStyle("messagingAnnouncement", "display", "");
+					break;
+				default:
+					this.viewingMessage = null;
+					Dom.setStyle("messagingCreator", "display", "none");
+					Dom.setStyle("messagingReader", "display", "");
+					Dom.setStyle("messagingAnnouncement", "display", "none");
+					break;
 			}
 			Dom.setStyle(this.display, "visibility", "hidden");
 			this.toArchive = {};
@@ -269,6 +283,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				case this.create.id:
 					Dom.setStyle(this.archiver,"display","none");
 					this.loadCreate(isAll);
+					break;
+				case this.announce.id:
+					this._setTab(this.announce);
 					break;
 				case this.sent.id:
 					Dom.setStyle(this.archiver,"display","none");
