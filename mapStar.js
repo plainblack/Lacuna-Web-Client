@@ -116,6 +116,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}
 				this.tabView.selectTab(0);
 			};
+			this.starDetails.resetDisplay = function(oSelf) {
+				delete oSelf.selectedStar;
+				this.resetQueue();
+				this.removeTabs();
+			};
 			
 			this.starDetails.renderEvent.subscribe(function(){
 				this.starDetails.tabView = new YAHOO.widget.TabView("starDetailTabs");
@@ -129,9 +134,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}, "button", this, true);*/
 			}, this, true);
 			this.starDetails.hideEvent.subscribe(function(){
-				delete this.selectedStar;
-				this.starDetails.resetQueue();
-				this.starDetails.removeTabs();
+				this.starDetails.resetDisplay(this);
 			}, this, true);
 			
 			this.starDetails.isStarPanel = true;
@@ -295,6 +298,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}
 				this.tabView.selectTab(0);
 			};
+			this.planetDetails.resetDisplay = function(oSelf) {
+				delete oSelf.selectedBody;
+				delete oSelf.selectedTile;
+				this.resetQueue();
+				this.removeTabs();
+			};
 			
 			this.planetDetails.renderEvent.subscribe(function(){
 				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
@@ -337,10 +346,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				Event.on("planetDetailRenameSubmit", "click", this.Rename, this, true);
 			}, this, true);
 			this.planetDetails.hideEvent.subscribe(function(){
-				delete this.selectedBody;
-				delete this.selectedTile;
-				this.planetDetails.resetQueue();
-				this.planetDetails.removeTabs();
+				this.planetDetails.resetDisplay(this);
 			}, this, true);
 			
 			this.planetDetails.render();
@@ -859,10 +865,13 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 		ShowStar : function(tile) {
 			//hide everything first so the hideEvents get run
-			Game.OverlayManager.hideAll();
+			Game.OverlayManager.hideAllBut(this.starDetails.id);
 			
 			var data = tile.data,
 				panel = this.starDetails;
+				
+			panel.resetDisplay(this);
+			
 			Dom.get("starDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',data.color,'.png" alt="',data.name,'" style="width:100px;height:100px;" />'].join('');
 			
 			Dom.get("starDetailsInfo").innerHTML = [
@@ -880,11 +889,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 		ShowPlanet : function(tile) {
 			//hide everything first so the hideEvents get run
-			Game.OverlayManager.hideAll();
+			Game.OverlayManager.hideAllBut(this.planetDetails.id);
 			
 			var body = tile.data,
 				panel = this.planetDetails,
 				empire = body.empire || {alignment:"none"};
+				
+			panel.resetDisplay(this);
+			
 			Dom.get("planetDetailsImg").innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',body.image,'.png" alt="',body.name,'" style="width:200px;height:200px;" />'].join('');
 			Dom.get("planetDetailsInfo").innerHTML = [
 				'<ul>',
