@@ -25,7 +25,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 		
 		this.Dialog = new YAHOO.widget.Dialog(this.id, {
 			constraintoviewport:false,
-			fixedcenter:true,
+			//fixedcenter:true,
 			postmethod:"none",
 			visible:false,
 			buttons:[ { text:"Found Empire", handler:{fn:this.handleCreate, scope:this}, isDefault:true },
@@ -44,7 +44,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.elName = Dom.get("speciesName");
 			this.elDesc = Dom.get("speciesDesc");
 			this.elTemplates = Dom.get("speciesTemplates");
-			this._createSliders();
 			Event.delegate(this.elTemplates, 'click', function(e, matchedEl) {
 				Event.stopEvent(e);
 				this.selectTemplate(matchedEl.TemplateIndex);
@@ -59,8 +58,10 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				Dom.addClass(tButton, 'speciesTemplate');
 				this.elTemplates.appendChild(tButton);
 			}
-			this.selectTemplate(0);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+			this._createSliders();
+			this._createTooltips();
+			this.selectTemplate(0);
 		}, this, true);
 		this.speciesTemplates = [
 			{
@@ -204,12 +205,18 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			this.speciesPolitical.subscribe('change', updateTotal, this, true);
 			this.speciesTrade.subscribe('change', updateTotal, this, true);
 			this.speciesGrowth.subscribe('change', updateTotal, this, true);
-
+		},
+		_createTooltips : function() {
 			this._affinityTooltip = new YAHOO.widget.Tooltip('speciesAffinityTooltip', {
-				zIndex:10200,
+				//iframe:true,
+				zIndex:1,
+				container:'speciesCreate',
 				xyoffset:[0,10],
 				context: Sel.query('.speciesAffinities label', 'speciesCreate')
 			});
+			//this._affinityTooltip.beforeShowEvent.subscribe(function(){
+			//	this.bringToTop();
+			//});
 		},
 		_createHabitableOrbits : function () {
 			var range = 180,

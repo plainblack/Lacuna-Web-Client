@@ -20,14 +20,13 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 		var container = document.createElement("div");
 		container.id = this.id;
 		Dom.addClass(container, Lib.Styles.HIDDEN);
+		Dom.addClass(container, "nofooter");
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
 		
-		this.Dialog = new YAHOO.widget.Dialog(this.id, {
+		this.Dialog = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
 			fixedcenter:true,
-			postmethod:"none",
-			buttons:[ { text:"Invite", handler:{fn:this.handleInvite, scope:this}, isDefault:true } ],
 			visible:false,
 			draggable:true,
 			effect:Game.GetContainerEffect(),
@@ -41,6 +40,9 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 			this.elFriendEmail = Dom.get("inviteFriendEmail");
 			this.elMessage = Dom.get("inviteMessage");
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+			Event.on("inviteButton", "click", this.handleInvite, this, true);
+			this.inviteGenerate = Dom.get("inviteGenerate");
+			Event.on(this.inviteGenerate, "click", this.handleGenerate, this, true);
 		}, this, true);
 
 		this.Dialog.render();
@@ -56,10 +58,14 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 			'				<li><label for="inviteFriendEmail">EMail:</label><input type="text" id="inviteFriendEmail"></li>',
 			'				<li><label for="inviteMessage">Message:</label></li>',
 			'				<li><textarea id="inviteMessage"></textarea></li>',
+			'				<li style="text-align:right;"><button id="inviteButton" type="button">Invite</button></li>',
 			'			</ul>',
 			'		</form>',
+			'		<hr />',
+			'		<p id="inviteGenerateDesc">You can also generate a URL you can post to your blog or email to your friends.</p>',
+			'		<button id="inviteGenerate" type="button">Generate URL</button>',
+			'		<span id="inviteGenerateMessage"></span>',
 			'	</div>',
-			'	<div class="ft"></div>'
 			].join('');
 		},
 		
@@ -87,6 +93,31 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "InviteFriend.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent('onRpcFailed', o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		handleGenerate : function (e) {
+			this.inviteGenerate.disabled = true;
+			
+			Lacuna.Pulser.Show();
+			Game.Services.Empire.get_invite_friend_url({
+				session_id:Game.GetSession("")
+			},{
+				success : function(o){
+					YAHOO.log(o, "info", "handleGenerate.success");
+					Lacuna.Pulser.Hide();
+					Dom.setStyle(this.inviteGenerate,"display","none");
+					Dom.get("inviteGenerateDesc").innerHTML = 'Pass this url around to invite your friends, readers, or strangers!';
+					Dom.get("inviteGenerateMessage").innerHTML = ['<a href="',o.result.referral_url,'" target="_new">',o.result.referral_url,'</a>'].join('');
+					this.fireEvent('onRpc', o);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "handleGenerate.failure");
+					this.inviteGenerate.disabled = false;
 					Lacuna.Pulser.Hide();
 					this.fireEvent('onRpcFailed', o);
 				},

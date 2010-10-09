@@ -139,7 +139,8 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		
 		_getProductionTab : function() {
-			var up = this.building.upgrade;
+			var up = this.building.upgrade,
+				currentLevel = this.building.level*1;
 				
 			this.productionTab = new YAHOO.widget.Tab({ label: "Production", content: [
 				'<div id="detailsProduction">',
@@ -182,7 +183,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 					].join('') : '',
-					'	<li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + ((this.building.level*1) - 1) + '</button></li>',
+				currentLevel == 1 ? '' : ' <li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + (currentLevel - 1) + '</button></li>',
 				'			</ul>',
 				'		</div>',
 				'	</div>',
@@ -195,7 +196,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			if(!this.building.pending_build) {
 				Event.on("buildingDetailsDemolish", "click", this.Demolish, this, true);
 			}
-			Event.on("buildingDetailsDowngrade", "click", this.Downgrade, this, true);
+			if(currentLevel > 1) {
+				Event.on("buildingDetailsDowngrade", "click", this.Downgrade, this, true);
+			}
 			
 			return this.productionTab;
 

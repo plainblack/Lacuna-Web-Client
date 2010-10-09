@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			</div>',
 				'		</div>',
 				'		<div id="messagingAnnouncement" class="panelTabContainer" style="display:none">',
-				'			<iframe id="messagingAnnounceFrame" style="width:100%;height:100%;background-color:white;border:0;" src=""></iframe>',
+				'			<iframe id="messagingAnnounceFrame" style="width:100%;height:300px;background-color:white;border:0;" src=""></iframe>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');

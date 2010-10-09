@@ -101,7 +101,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				//bookmarkClick = bookmark.cloneNode(false),
 				//bookmarkImg = bookmark.appendChild(document.createElement("img"));
 
-			changeImg.src = Lib.AssetUrl + 'ui/l/star_system.png';
+			changeImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
 			changeImg.alt = "Change";
 			changeClick.id = "userMenuChange";
 			Event.on(changeClick, "click", function() {

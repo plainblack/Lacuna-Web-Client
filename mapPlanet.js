@@ -329,7 +329,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					li = document.createElement("li"),
 					filterCount = 0,
 					names = [],
-					reason, br;
+					reason, br,
+					planet = Game.GetCurrentPlanet(),
+					isMaxPlots = planet.size*1 <= planet.building_count*1;
 				
 				for(var key in filters) {
 					if(filters.hasOwnProperty(key)){
@@ -365,7 +367,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						costs = bd.build.cost,
 						prod = bd.production,
 						isLater = bd.build.tags.indexOf('Later') > -1,
-						isPlan = bd.build.tags.indexOf('Plan') > -1;
+						isPlan = bd.build.tags.indexOf('Plan') > -1,
+						isNotBuildable = (isLater || isQueueFull || (isMaxPlots && !isPlan));
 						
 					bd.name = names[i];
 					
@@ -424,15 +427,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'			</tr>',
 					'		</table>',
 					'		<div style="margin-top: 5px; text-align: center; padding-left: 20px; height: 30px">',
-					(isLater || isQueueFull) ? '' : '			<button style="width: 100px; height: 30px; font-size: 12pt">Build</button>',
+					isNotBuildable ? '' : '			<button style="width: 100px; height: 30px; font-size: 12pt">Build</button>',
 					'			<img class="smallTime" style="margin-left: ',
-					(isLater || isQueueFull) ? '120px' : '20px',
+					isNotBuildable ? '120px' : '20px',
 					'; vertical-align: middle" src="',Lib.AssetUrl,'ui/s/time.png" />',Lib.formatTime(costs.time),' sec',
 					'		</div>',
 					'	</div>',
 					'</div>'].join('');
 					
-					if(!isLater && !isQueueFull) {
+					if(!isNotBuildable) {
 						Sel.query("button", nLi, true).building = bd;
 						Sel.query("img.buildingImage", nLi, true).building = bd;
 					}
@@ -575,7 +578,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						if(tile && tile.data) {
 							this.DetailsView(tile);
 						}
-						else if (planet.size*1 > planet.building_count*1) {
+						else { //if(planet.size*1 > planet.building_count*1) {
 							this.BuilderView(tile);
 						}
 						/*else {

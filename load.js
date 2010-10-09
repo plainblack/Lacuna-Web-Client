@@ -37,7 +37,7 @@
 	loader.addModule({
 		name: "smd",
 		type: "js",
-		fullpath: host + "smd.js",
+		fullpath: host + "smd.js?1",
 		requires : ["yahoo"]
 	});
 	loader.addModule({
@@ -67,13 +67,13 @@
 	loader.addModule({
 		name: "announce",
 		type: "js",
-		fullpath: host + "announce.js",
+		fullpath: host + "announce.js?1",
 		requires : ["container","game"]
 	});
 	loader.addModule({
 		name: "createSpecies",
 		type: "js",
-		fullpath: host + "createSpecies.js",
+		fullpath: host + "createSpecies.js?1",
 		requires : ["dragdrop","game","slider"]
 	});
 	loader.addModule({
@@ -103,7 +103,7 @@
 	loader.addModule({
 		name: "building",
 		type: "js",
-		fullpath: host + "building.js",
+		fullpath: host + "building.js?1",
 		requires : ["game","paginator","selector","tabview"]
 	});
 	loader.addModule({
@@ -187,7 +187,7 @@
 	loader.addModule({
 		name: "spaceport",
 		type: "js",
-		fullpath: host + "buildingSpacePort.js",
+		fullpath: host + "buildingSpacePort.js?1",
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -211,7 +211,7 @@
 	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
-		fullpath: host + "mapPlanet.js",
+		fullpath: host + "mapPlanet.js?1",
 		requires : ["archaeology","development","embassy","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
@@ -223,7 +223,7 @@
 	loader.addModule({
 		name: "messaging",
 		type: "js",
-		fullpath: host + "messaging.js",
+		fullpath: host + "messaging.js?1",
 		requires : ["datasource","event-delegate","game","paginator","textboxList"]
 	});
 	loader.addModule({
@@ -235,7 +235,7 @@
 	loader.addModule({
 		name: "invite",
 		type: "js",
-		fullpath: host + "invite.js",
+		fullpath: host + "invite.js?1",
 		requires : ["container","game"]
 	});
 	loader.addModule({

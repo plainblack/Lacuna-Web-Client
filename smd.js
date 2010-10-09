@@ -2290,6 +2290,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						{"name":"message", "type":"string", "optional":true}
 					],
 					"returns":{"type":"object"}
+				},
+				"get_invite_friend_url" : {
+					"description": "Returns a URL that can be pasted into a blog, forum, or whatever to invite friends.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
 				}
 			}
 		},

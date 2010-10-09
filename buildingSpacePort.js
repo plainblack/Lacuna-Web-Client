@@ -349,6 +349,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Dom.addClass(nLi,"shipName");
 					nLi.innerHTML = ship.name;
 					nUl.appendChild(nLi);
+					Event.on(nLi, "click", this.ShipName, {Self:this,Ship:ship,el:nLi}, true);
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipTask");
@@ -417,6 +418,74 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 	 
 			// Update the Paginator's state
 			this.viewPager.setState(newState);
+		},
+		ShipName : function() {
+			this.el.innerHTML = "";
+			
+			var inp = document.createElement("input"),
+				bSave = document.createElement("button"),
+				bCancel = bSave.cloneNode(false);
+			inp.type = "text";
+			inp.value = this.Ship.name;
+			this.Input = inp;
+			bSave.setAttribute("type", "button");
+			bSave.innerHTML = "Save";
+			Event.on(bSave,"click",this.Self.ShipNameSave,this,true);
+			bCancel.setAttribute("type", "button");
+			bCancel.innerHTML = "Cancel";
+			Event.on(bCancel,"click",this.Self.ShipNameClear,this,true);
+						
+			Event.removeListener(this.el, "click");		
+				
+			this.el.appendChild(inp);
+			this.el.appendChild(document.createElement("br"));
+			this.el.appendChild(bSave);
+			this.el.appendChild(bCancel);
+		},
+		ShipNameSave : function(e) {
+			Event.stopEvent(e);
+			Lacuna.Pulser.Show();
+			var newName = this.Input.value;
+			
+			this.Self.service.name_ship({
+				session_id:Game.GetSession(),
+				building_id:this.Self.building.id,
+				ship_id:this.Ship.id,
+				name:newName
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "SpacePort.ShipNameSave.success");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpc", o.result);
+					delete this.Self.shipsView;
+					this.Ship.name = newName;
+					if(this.Input) {
+						this.Input.value = newName;
+					}
+					this.Self.ShipNameClear.call(this);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "SpacePort.ShipNameSave.failure");
+					Lacuna.Pulser.Hide();
+					this.Self.fireEvent("onMapRpcFailed", o);
+					if(this.Input) {
+						this.Input.value = this.Ship.name;
+					}
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		ShipNameClear : function(e) {
+			if(e) { Event.stopEvent(e); }
+			if(this.Input) {
+				delete this.Input;
+			}
+			if(this.el) {
+				Event.purgeElement(this.el);
+				this.el.innerHTML = this.Ship.name;
+				Event.on(this.el, "click", this.Self.ShipName, this, true);
+			}
 		},
 		
 		ForeignPopulate : function() {

@@ -29,7 +29,7 @@ if (typeof YAHOO.lacuna.Announce == "undefined" || !YAHOO.lacuna.Announce) {
 			underlay:false,
 			modal:false,
 			close:true,
-			width:"450px",
+			width:"350px",
 			zIndex:19999,
 			context:["header","tr","br", ["beforeShow", "windowResize"], [0,20]]
 		});
@@ -45,7 +45,7 @@ if (typeof YAHOO.lacuna.Announce == "undefined" || !YAHOO.lacuna.Announce) {
 			return [
 			'	<div class="hd">Announcements</div>',
 			'	<div class="bd">',
-			'		<iframe id="announceFrame" style="width:100%;height:100%;background-color:white;border:0;"></iframe>',
+			'		<iframe id="announceFrame" style="width:100%;height:200px;background-color:white;border:0;"></iframe>',
 			'	</div>'
 			].join('');
 		},

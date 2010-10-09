@@ -1598,7 +1598,12 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 body.yui-skin-sam .yui-tt .bd {
-	background-color:#52acff;
+	-moz-border-radius:0 0 0 0;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-top-left-radius: 0;
+	border-radius:0 0 0 0;
+	border-width: 0;
+	background:#52acff;
 	border-color:#429cef #328cdf #328cdf;
 }
 
