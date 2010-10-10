@@ -219,7 +219,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				useIndicator:true
 			});
 			oTextboxList.generateRequest = function(sQuery){				
-				return Lang.JSON.stringify({
+				var s = Lang.JSON.stringify({
 						"id": YAHOO.rpc.Service._requestId++,
 						"method": "find",
 						"jsonrpc": "2.0",
@@ -228,6 +228,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 							sQuery
 						]
 					});
+				return s.replace(/%20/g, ' ');
 			};
 			oTextboxList.doBeforeLoadData = function(sQuery, oResponse, oPayload){
 				var tq = decodeURIComponent(sQuery);

@@ -412,7 +412,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						'</div>'].join("");
 				};
 				oTextboxList.generateRequest = function(sQuery){				
-					return Lang.JSON.stringify({
+					var s = Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "search_stars",
 							"jsonrpc": "2.0",
@@ -421,6 +421,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 								sQuery
 							]
 						});
+					return s.replace(/%20/g, ' ');
 				};
 				oTextboxList.dirtyEvent.subscribe(function(event, isDirty, oSelf){
 					var star = this._oTblSingleSelection.Object;

@@ -155,7 +155,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				useIndicator:true
 			});
 			oTextboxList.generateRequest = function(sQuery){				
-				return Lang.JSON.stringify({
+				var s = Lang.JSON.stringify({
 						"id": YAHOO.rpc.Service._requestId++,
 						"method": "find",
 						"jsonrpc": "2.0",
@@ -164,6 +164,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 							sQuery
 						]
 					});
+				return s.replace(/%20/g, ' ');
 			};
 			
 			this.embassySendTo = oTextboxList;
