@@ -613,20 +613,20 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			else {
 				this.elText.innerHTML = "Planet";
 			
-				this.elFoodText.innerHTML = "-";
-				this.elFoodHour.innerHTML = "-";
-				this.elOreText.innerHTML = "-";
-				this.elOreHour.innerHTML = "-";
-				this.elWaterText.innerHTML = "-";
-				this.elWaterHour.innerHTML = "-";
-				this.elEnergyText.innerHTML = "-";
-				this.elEnergyHour.innerHTML = "-";
+				this.elFoodText.innerHTML = "0";
+				this.elFoodHour.innerHTML = "0";
+				this.elOreText.innerHTML = "0";
+				this.elOreHour.innerHTML = "0";
+				this.elWaterText.innerHTML = "0";
+				this.elWaterHour.innerHTML = "0";
+				this.elEnergyText.innerHTML = "0";
+				this.elEnergyHour.innerHTML = "0";
 				
-				this.elWasteText.innerHTML = "-";
-				this.elWasteHour.innerHTML = "-";
-				this.elHappyText.innerHTML = "-";
-				this.elHappyHour.innerHTML = "-";
-				this.elPlotsText.innerHTML = "-";
+				this.elWasteText.innerHTML = "0";
+				this.elWasteHour.innerHTML = "0";
+				this.elHappyText.innerHTML = "0";
+				this.elHappyHour.innerHTML = "0";
+				this.elPlotsText.innerHTML = "0";
 			}
 		},
 		menuClick : function(p_sType, p_aArgs, planet){

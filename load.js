@@ -23,6 +23,9 @@
 		allowRollup: true,
 		combine: false
 	});
+	var urlBuilder = function(file) {
+		return host + file;
+	};
 /** END */
 /** DEBUG */
 	var host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
@@ -32,235 +35,238 @@
 		allowRollup: false,
 		combine: false
 	});
+	var urlBuilder = function(file) {
+		return host + file + '?1';
+	};
 /** END */
 
 	loader.addModule({
 		name: "smd",
 		type: "js",
-		fullpath: host + "smd.js",
+		fullpath: urlBuilder("smd.js"),
 		requires : ["yahoo"]
 	});
 	loader.addModule({
 		name: "rpc",
 		type: "js",
-		fullpath: host + "rpc.js",
+		fullpath: urlBuilder("rpc.js"),
 		requires : ["yahoo","dom","connection","get","json"]
 	});
 	loader.addModule({
 		name: "library",
 		type: "js",
-		fullpath: host + "library.js",
+		fullpath: urlBuilder("library.js"),
 		requires : ["yahoo","dom"]
 	});
 	loader.addModule({
 		name: "game",
 		type: "js",
-		fullpath: host + "game.js",
+		fullpath: urlBuilder("game.js"),
 		requires : ["event","cookie","library","pulse","rpc","smd"]
 	});
 	loader.addModule({
 		name: "about",
 		type: "js",
-		fullpath: host + "about.js",
+		fullpath: urlBuilder("about.js"),
 		requires : ["container","event","game"]
 	});
 	loader.addModule({
 		name: "announce",
 		type: "js",
-		fullpath: host + "announce.js",
+		fullpath: urlBuilder("announce.js"),
 		requires : ["container","game"]
 	});
 	loader.addModule({
 		name: "createSpecies",
 		type: "js",
-		fullpath: host + "createSpecies.js",
+		fullpath: urlBuilder("createSpecies.js"),
 		requires : ["dragdrop","game","slider"]
 	});
 	loader.addModule({
 		name: "createEmpire",
 		type: "js",
-		fullpath: host + "createEmpire.js",
+		fullpath: urlBuilder("createEmpire.js"),
 		requires : ["createSpecies"]
 	});
 	loader.addModule({
 		name: "login",
 		type: "js",
-		fullpath: host + "login.js",
+		fullpath: urlBuilder("login.js"),
 		requires : ["container","createEmpire","game"]
 	});
 	loader.addModule({
 		name: "mapper",
 		type: "js",
-		fullpath: host + "mapper.js",
+		fullpath: urlBuilder("mapper.js"),
 		requires : ["animation","dom","dragdrop","game","selector"]
 	});
 	loader.addModule({
 		name: "mapStar",
 		type: "js",
-		fullpath: host + "mapStar.js",
+		fullpath: urlBuilder("mapStar.js"),
 		requires : ["event-delegate","game","mapper","selector"]
 	});
 	loader.addModule({
 		name: "building",
 		type: "js",
-		fullpath: host + "building.js",
+		fullpath: urlBuilder("building.js"),
 		requires : ["game","paginator","selector","tabview"]
 	});
 	loader.addModule({
 		name: "archaeology",
 		type: "js",
-		fullpath: host + "buildingArchaeology.js",
+		fullpath: urlBuilder("buildingArchaeology.js"),
 		requires : ["animation","building","dragdrop"]
 	});
 	loader.addModule({
 		name: "development",
 		type: "js",
-		fullpath: host + "buildingDevelopment.js",
+		fullpath: urlBuilder("buildingDevelopment.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "embassy",
 		type: "js",
-		fullpath: host + "buildingEmbassy.js",
+		fullpath: urlBuilder("buildingEmbassy.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "foodreserve",
 		type: "js",
-		fullpath: host + "buildingFoodReserve.js",
+		fullpath: urlBuilder("buildingFoodReserve.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "intelligence",
 		type: "js",
-		fullpath: host + "buildingIntelligence.js",
+		fullpath: urlBuilder("buildingIntelligence.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "miningministry",
 		type: "js",
-		fullpath: host + "buildingMiningMinistry.js",
+		fullpath: urlBuilder("buildingMiningMinistry.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "network19",
 		type: "js",
-		fullpath: host + "buildingNetwork19.js",
+		fullpath: urlBuilder("buildingNetwork19.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "observatory",
 		type: "js",
-		fullpath: host + "buildingObservatory.js",
+		fullpath: urlBuilder("buildingObservatory.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "orestorage",
 		type: "js",
-		fullpath: host + "buildingOreStorage.js",
+		fullpath: urlBuilder("buildingOreStorage.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "park",
 		type: "js",
-		fullpath: host + "buildingPark.js",
+		fullpath: urlBuilder("buildingPark.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "planetarycommand",
 		type: "js",
-		fullpath: host + "buildingPlanetaryCommand.js",
+		fullpath: urlBuilder("buildingPlanetaryCommand.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "security",
 		type: "js",
-		fullpath: host + "buildingSecurity.js",
+		fullpath: urlBuilder("buildingSecurity.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "shipyard",
 		type: "js",
-		fullpath: host + "buildingShipyard.js",
+		fullpath: urlBuilder("buildingShipyard.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "spaceport",
 		type: "js",
-		fullpath: host + "buildingSpacePort.js",
+		fullpath: urlBuilder("buildingSpacePort.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "trade",
 		type: "js",
-		fullpath: host + "buildingTradeMinistry.js",
+		fullpath: urlBuilder("buildingTradeMinistry.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "transporter",
 		type: "js",
-		fullpath: host + "buildingTransporter.js",
+		fullpath: urlBuilder("buildingTransporter.js"),
 		requires : ["building","trade"]
 	});
 	loader.addModule({
 		name: "wasterecycling",
 		type: "js",
-		fullpath: host + "buildingWasteRecycling.js",
+		fullpath: urlBuilder("buildingWasteRecycling.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
-		fullpath: host + "mapPlanet.js",
+		fullpath: urlBuilder("mapPlanet.js"),
 		requires : ["archaeology","development","embassy","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",
 		type: "js",
-		fullpath: host + "textboxList.js",
+		fullpath: urlBuilder("textboxList.js"),
 		requires : ["autocomplete","library"]
 	});
 	loader.addModule({
 		name: "messaging",
 		type: "js",
-		fullpath: host + "messaging.js",
+		fullpath: urlBuilder("messaging.js"),
 		requires : ["datasource","event-delegate","game","paginator","textboxList"]
 	});
 	loader.addModule({
 		name: "essentia",
 		type: "js",
-		fullpath: host + "essentia.js",
+		fullpath: urlBuilder("essentia.js"),
 		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
 		name: "invite",
 		type: "js",
-		fullpath: host + "invite.js",
+		fullpath: urlBuilder("invite.js"),
 		requires : ["container","game"]
 	});
 	loader.addModule({
 		name: "profile",
 		type: "js",
-		fullpath: host + "profile.js",
+		fullpath: urlBuilder("profile.js"),
 		requires : ["container","game","tabview"]
 	});
 	loader.addModule({
 		name: "stats",
 		type: "js",
-		fullpath: host + "stats.js",
+		fullpath: urlBuilder("stats.js"),
 		requires : ["container","datasource","datatable","game","selector","tabview"]
 	});
 	loader.addModule({
 		name: "pulse",
 		type: "js",
-		fullpath: host + "pulse.js",
+		fullpath: urlBuilder("pulse.js"),
 		requires : ["container","dom","event"]
 	});
 	/*add after requirements*/
 	loader.addModule({
 		name: "gameMenu",
 		type: "js",
-		fullpath: host + "menu.js",
+		fullpath: urlBuilder("menu.js"),
 		requires : ["about","essentia","messaging","menu","profile","stats","invite"]
 	});
 	loader.require("gameMenu","announce","logger","login","mapPlanet","mapStar");

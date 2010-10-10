@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							this.probes = o.result.stars;
 							this.pager = new Pager({
 								rowsPerPage : 25,
-								totalRecords: o.result.stars.length,
+								totalRecords: o.result.star_count*1,
 								containers  : 'probePaginator',
 								template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
 								alwaysVisible : false
@@ -123,6 +123,14 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 					Event.delegate(nLi, "click", this.ProbeJump, "div.probeAction", this, true);
 					Event.delegate(nLi, "click", this.ProbeAbandon, "div.probeDelete", this, true);
 				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(probeDetails.parentNode.clientHeight > 290) {
+						Dom.setStyle(probeDetails.parentNode,"height","290px");
+						Dom.setStyle(probeDetails.parentNode,"overflow-y","auto");
+					}
+				},10);
 			}
 		},
 		ProbesHandlePagination : function(newState) {
@@ -137,6 +145,8 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					this.probes = o.result.stars;
+					// Update the Paginator's state
+					this.pager.setState(newState);
 					this.ProbesDisplay();
 				},
 				failure : function(o){
@@ -147,9 +157,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 				timeout:Game.Timeout,
 				scope:this
 			});
-	 
-			// Update the Paginator's state
-			this.buildingDetails.pager.setState(newState);
 		},
 		ProbeAbandon : function(e, matchedEl, container) {
 			if(container.Star) {

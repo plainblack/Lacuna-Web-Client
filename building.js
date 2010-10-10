@@ -22,6 +22,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		this.createEvent("onSelectTab");
 		this.createEvent("onReloadTabs");
 		this.createEvent("onUpdateTile");
+		this.createEvent("onUpdateMap");
 		this.createEvent("onRemoveTile");
 		this.createEvent("onHide");
 		//for internal use

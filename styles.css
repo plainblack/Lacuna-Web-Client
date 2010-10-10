@@ -654,12 +654,14 @@ about
 #messagingArchiver {
 	background-color:#52ACFF;
 }
-#messagingPaginator, #statsEmpirePaginator {
+/*#messagingPaginator, #statsEmpirePaginator*/
+body.yui-skin-sam .yui-pg-container {
 	background-color:white;
 	margin:0px;
 	border:1px solid #52acff;
 }
-#messagingPaginator .yui-pg-current-page, #statsEmpirePaginator  .yui-pg-current-page{
+/*#messagingPaginator .yui-pg-current-page, #statsEmpirePaginator  .yui-pg-current-page*/
+body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	color: #000;
 }
 #messagingDisplay {

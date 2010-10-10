@@ -24,7 +24,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 		},
 		_getQueueTab : function() {
 			var div = document.createElement("div");
-			div.innerHTML = '<div>You may subsidize the build queue for 1 essentia per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div><ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul><div id="shipsBuilding"></div>';
+			div.innerHTML = ['<div>You may subsidize the build queue for 1 essentia per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
+				'<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
+				'<div id="shipsBuilding"></div>'].join('');
 			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
 		
 			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });

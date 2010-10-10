@@ -7,7 +7,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
-		Pager = YAHOO.widget.Paginator,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
@@ -510,6 +509,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.ReloadBuilding(building);
 			}
 		},
+		_fireUpdateMap : function() {
+			this.Refresh();
+		},
 		_fireRemoveTile : function(building) {
 			if(building && building.id) {
 				delete this.buildings[building.id];
@@ -937,6 +939,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				classObj.subscribe("onSelectTab", this._fireSelectTab, this, true);
 				classObj.subscribe("onReloadTabs", this._fireReloadTabs, this, true);
 				classObj.subscribe("onUpdateTile", this._fireUpdateTile, this, true);
+				classObj.subscribe("onUpdateMap", this._fireUpdateMap, this, true);
 				classObj.subscribe("onRemoveTile", this._fireRemoveTile, this, true);
 				classObj.subscribe("onHide", this._fireHide, this, true);
 			}

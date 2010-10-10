@@ -229,7 +229,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 				return Math.floor(number);
 			}
 			else {
-				return Math.floor(number) || "-";
+				return Math.floor(number) || "0";
 			}
 		},
 		

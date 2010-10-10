@@ -113,8 +113,8 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 						this.removeTab(this.queueTab);
 					}
 					
-					//remove all tile timers
-					Game.QueueResetPlanet();
+					//refresh map
+					this.fireEvent("onUpdateMap");
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Development.DevSubsidize.failure");
