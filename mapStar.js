@@ -716,7 +716,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			}
 		},
 		NotIsolationist : function(ship) {
-			if(Game.EmpireData.is_isolationist == "1" && ship.type == "colony_ship") {
+			if(Game.EmpireData.is_isolationist == "1" && (ship.type == "colony_ship" || ship.type == "short_range_colony_ship")) {
 				return confirm("If you colonize another planet you will no longer be considered an Isolationist and you will be open to attack.  Are you sure you want to do this?");
 			}
 			return true;

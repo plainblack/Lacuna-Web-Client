@@ -184,7 +184,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 					].join('') : '',
-				currentLevel == 1 ? '' : ' <li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + (currentLevel - 1) + '</button></li>',
+				currentLevel <= 1 ? '' : ' <li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + (currentLevel - 1) + '</button></li>',
 				'			</ul>',
 				'		</div>',
 				'	</div>',

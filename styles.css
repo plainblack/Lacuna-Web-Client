@@ -845,14 +845,14 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 }
 .tileContainer div.planetMapTileCounterWork {
 	z-index: 2;
-	text-align: right;
+	text-align: left;
 	vertical-align:middle;
 	color:orange;
 	font-size: 140%;
 	font-family: impact, san-serif;
 	position: absolute;
 	left:0;
-	top:0;
+	bottom:0;
 }
 .tileContainer div {
 	color:white;
