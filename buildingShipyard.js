@@ -154,7 +154,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					Dom.addClass(nUl, "clearafter");
 
 					Dom.addClass(nLi,"shipQueueType");
-					nLi.innerHTML = bqo.type_human
+					nLi.innerHTML = bqo.type_human;
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);

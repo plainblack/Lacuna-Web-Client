@@ -212,7 +212,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					frm = document.createElement("form"),
 					fName = frm.appendChild(document.createElement("input")),
 					lName = frm.appendChild(document.createElement("input")),
-					s = document.createElement("script")
+					s = document.createElement("script");
 					
 				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
 				Dom.setStyle(div, "position", "absolute");

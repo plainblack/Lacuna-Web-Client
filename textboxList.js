@@ -268,11 +268,11 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 				this._populateList(sQuery, oResponse, oPayload);
 
 				//get all list items
-				var allListItemEls = this._elList.childNodes,
+				var elListItem, allListItemEls = this._elList.childNodes,
 					queue = (oPayload && oPayload.queue) ? oPayload.queue : null;
 				if(queue) {
 					for(var i=0; i<allListItemEls.length; i++) {
-						var elListItem = allListItemEls[i];
+						elListItem = allListItemEls[i];
 						if(elListItem._oResultData && queue.indexOf(String(elListItem._oResultData.Id)) >= 0) {
 							this._selectItem(elListItem);
 						}
@@ -280,7 +280,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 				}
 				else {
 					//get first
-					var elListItem = allListItemEls[0];
+					elListItem = allListItemEls[0];
 					//select it
 					this._selectItem(elListItem);
 				}
