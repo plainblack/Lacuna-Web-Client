@@ -65,7 +65,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 			'		<p id="inviteGenerateDesc">You can also generate a URL you can post to your blog or email to your friends.</p>',
 			'		<button id="inviteGenerate" type="button">Generate URL</button>',
 			'		<span id="inviteGenerateMessage"></span>',
-			'	</div>',
+			'	</div>'
 			].join('');
 		},
 		

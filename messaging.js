@@ -765,11 +765,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		handleProfileLink : function(e, el) {
 			Event.stopEvent(e);
 			this.hide();
-			var res = el.href.match(/\#(\d+)$/)
+			var res = el.href.match(/\#(\d+)$/);
 		},
 		handleStarmapLink : function(e, el) {
 			Event.stopEvent(e);
-			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/)
+			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/);
 			this.hide();
 			Lacuna.MapPlanet.MapVisible(false);
 			Lacuna.MapStar.MapVisible(true);
@@ -778,7 +778,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		handlePlanetLink : function(e, el) {
 			Event.stopEvent(e);
-			var res = el.href.match(/\#(\d+)$/)
+			var res = el.href.match(/\#(\d+)$/);
 			this.hide();
 			var planet = Game.EmpireData.planets[res[1]];
 			Game.PlanetJump(planet);
@@ -786,7 +786,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		handleAllianceLink : function(e, el) {
 			Event.stopEvent(e);
 			this.hide();
-			var res = el.href.match(/\#(\d+)$/)
+			var res = el.href.match(/\#(\d+)$/);
 		},
 		replyMessage : function(e) {
 			this.currentTab = this.create.id;

@@ -893,6 +893,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			Game.OverlayManager.hideAllBut(this.planetDetails.id);
 			
 			var body = tile.data,
+				tab, tabs,
 				panel = this.planetDetails,
 				empire = body.empire || {alignment:"none"};
 				
@@ -943,9 +944,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				Dom.get("planetDetailNewName").value = "";
 			}
 			else {
-				var tabs = panel.tabView.get("tabs");
+				tabs = panel.tabView.get("tabs");
 				for(var nt=0; nt<tabs.length; nt++) {
-					var tab = panel.tabView.getTab(nt);
+					tab = panel.tabView.getTab(nt);
 					if(tab && tab.get("label") == this._renameLabel) {
 						panel.renameTab = tab;
 						panel.tabView.removeTab(tab);
@@ -954,9 +955,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}
 			}
 			if(empire.alignment == "none" || empire.is_isolationist == "1" ){
-				var sTabs = panel.tabView.get("tabs");
-				for(var snt = sTabs.length; snt >= 0; snt--) {
-					var tab = panel.tabView.getTab(snt);
+				tabs = panel.tabView.get("tabs");
+				for(var snt = tabs.length; snt >= 0; snt--) {
+					tab = panel.tabView.getTab(snt);
 					if(tab && tab.get("label") == this._sendSpiesLabel) {
 						panel.sendSpiesTab = tab;
 						panel.tabView.removeTab(tab);

@@ -212,7 +212,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					frm = document.createElement("form"),
 					fName = frm.appendChild(document.createElement("input")),
 					lName = frm.appendChild(document.createElement("input")),
-					s = document.createElement("script")
+					s = document.createElement("script");
 					
 				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
 				Dom.setStyle(div, "position", "absolute");
@@ -352,7 +352,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		onDestructClick : function() {
 			YAHOO.log("onDestructClick", "debug", "Game");
 
-			Lacuna.Pulser.Show();	
 			var ED = Game.EmpireData,
 				EmpireServ = Game.Services.Empire,
 				session = Game.GetSession(),
@@ -360,10 +359,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(ED.self_destruct_active*1 === 1) {
 				func = EmpireServ.disable_self_destruct;
 			}
-			else {
+			else if (confirm("Are you certain you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.")) {
 				func = EmpireServ.enable_self_destruct;
 			}
+			else {
+				return;
+			}
 			
+			Lacuna.Pulser.Show();
 			func({session_id:session},{
 				success : function(o){
 					Game.ProcessStatus(o.result.status);
