@@ -81,7 +81,10 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			this.fireEvent("onRemoveTab", tab);
 		},
 		updateBuildingTile : function(building) {
-			this.fireEvent("onUpdateTile", building);
+			//always updated url when doing this since some returns don't have the url
+			building.url = this.building.url;
+			this.building = building;
+			this.fireEvent("onUpdateTile", this.building);
 		},
 		removeBuildingTile : function(building) {
 			this.fireEvent("onRemoveTile", building);

@@ -871,6 +871,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"} // status
+					},
+					"subsidize_party" : {
+						"description": "Will spend 2 essentia to complete the current party immediately. Returns view.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"} // status
 					}
 				}
 			},

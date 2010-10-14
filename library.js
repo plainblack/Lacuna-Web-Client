@@ -219,16 +219,24 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return Util.Date.format(dt, {format:"%m/%d/%Y %I:%M%p"}, "en");
 		},
 		convertNumDisplay : function(number, always) {
-			if(number >= 1000000 || number <= -1000000) {
+			if(number >= 100000000 || number <= -100000000) {
+				//101m
+				return Math.floor(number/1000000) + 'm';
+			}
+			else if(number >= 1000000 || number <= -1000000) {
+				//75.3m
 				return (Math.floor(number/100000) / 10) + 'm';
 			}
 			else if(number >= 10000 || number <= -10000) {
+				//123k
 				return Math.floor(number/1000) + 'k';
 			}
 			else if(always) {
+				//8765
 				return Math.floor(number);
 			}
 			else {
+				//8765
 				return Math.floor(number) || "0";
 			}
 		},

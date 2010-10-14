@@ -557,25 +557,25 @@ SHINEY
 }
 
 /* header menu */
-.change { left:10px; }
-.inbox { left:70px; }
-.profile { left:130px; }
-.essentia { left:190px; line-height:45px; }
-.destruct { left:290px; }
-.invite { right:310px; }
-.tutorial { right:250px; }
-.support { right:190px; }
-.stats { right:130px; }
-.about { right:70px; }
-.logout { right:10px; }
+.change { left:0px; }
+.inbox { left:60px; }
+.profile { left:120px; }
+.essentia { left:180px; line-height:45px; }
+.destruct { left:280px; }
+.invite { right:300px; }
+.tutorial { right:240px; }
+.support { right:180px; }
+.stats { right:120px; }
+.about { right:60px; }
+.logout { right:0px; }
 /* footer menu */
-.food { left:10px; }
-.ore { left:110px; }
-.water { left:210px; }
-.energy { left:310px; }
-.waste { right:210px; }
-#footer .happiness { right:110px; }
-.plots  { right:10px; line-height:45px; }
+.food { left:0px; }
+.ore { left:100px; }
+.water { left:200px; }
+.energy { left:300px; }
+.waste { right:200px; }
+#footer .happiness { right:100px; }
+.plots  { right:0px; line-height:45px; }
 
 #header .click, #footer .click { z-index:1003; cursor:pointer; }
 
