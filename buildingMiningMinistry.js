@@ -98,7 +98,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				output.push('You have no ships servicing your platforms.');
 			}
 			else if(capacity == 0) {
-				output.push('Production has stopped for some reason.');
+				output.push('You are producing an insignificant amount of ore. Add more platforms or upgrade your Mining Ministry.');
 			}
 			else if(capacity > 100) {
 				output.push('You are producing more than your ships can handle. Add more ship to bring the value closer to 100.');
