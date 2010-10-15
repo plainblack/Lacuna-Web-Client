@@ -84,6 +84,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 		Abandon : function() {
 			var cp = Game.GetCurrentPlanet();
 			if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
+				Lacuna.Pulser.Show();
 				Game.Services.Body.abandon({
 					session_id:Game.GetSession(""),
 					body_id:cp.id

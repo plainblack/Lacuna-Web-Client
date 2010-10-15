@@ -51,7 +51,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			Event.on('essentiaRedeemButton', 'click', this.redeemClick, this, true);
 			Event.on("essentiaPurchaseButton", "click", function(e){
 				Event.stopEvent(e);
-				window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=0,scrollbars=0,height=550,width=600,directories=0");
+				window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0");
 			});
 			Game.onTick.subscribe(function(){
 				this.elEssentiaAmount.innerHTML = Game.EmpireData.essentia;

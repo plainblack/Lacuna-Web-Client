@@ -581,6 +581,36 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			Entertainment : {
+				"SMDVersion":"2.0",
+				"description": "Entertainment",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/entertainment",
+				
+				"services": {
+					"get_lottery_voting_options" : {
+						"description": "This is the starting point to a voting lottery system. The user can vote on a site once and only once per day and each vote enters him/her into a lottery. At the end of the day a lottery ticket will be drawn, and a winner will be chosen to receive 10 essentia. Every vote is equal, but the more votes you have the greater your odds of winning.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"options" : [
+								{
+									"name" : "Some Site",
+									"url" : "http://www.somesite.com/vote?id=44"
+								},
+								...
+							],
+							"status" : { ... }
+						 }
+						*/
+					}
+				}
+			},
 			Intelligence : {
 				"SMDVersion":"2.0",
 				"description": "Intelligence",

@@ -257,6 +257,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		
 		getGlyphs : function(force) {
 			if(force || !this.glyphs) {
+				Lacuna.Pulser.Show();
 				this.service.get_glyphs({
 						session_id: Game.GetSession(""),
 						building_id: this.building.id
@@ -281,6 +282,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getPlans : function(force) {
 			if(force || !this.plans) {
+				Lacuna.Pulser.Show();
 				this.service.get_plans({
 						session_id: Game.GetSession(""),
 						building_id: this.building.id
@@ -305,6 +307,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getPrisoners : function(force) {
 			if(force || !this.prisoners) {
+				Lacuna.Pulser.Show();
 				this.service.get_prisoners({
 						session_id: Game.GetSession(""),
 						building_id: this.building.id
@@ -329,6 +332,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getShips : function(force) {
 			if(force || !this.ships) {
+				Lacuna.Pulser.Show();
 				this.service.get_ships({
 						session_id: Game.GetSession(""),
 						building_id: this.building.id
@@ -353,6 +357,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getStoredResources : function(force) {
 			if(force || !this.resources) {
+				Lacuna.Pulser.Show();
 				this.service.get_stored_resources({
 						session_id: Game.GetSession(""),
 						building_id: this.building.id
@@ -580,7 +585,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.Self.acceptVerify.load(this);
 		},
 		AvailableAcceptVerified : function() {
-				
+			Lacuna.Pulser.Show();
 			this.Self.service.accept_trade({
 				session_id:Game.GetSession(""),
 				building_id:this.Self.building.id,
@@ -739,6 +744,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		MineWithdraw : function() {
 			if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask_description, ' and offering ', this.Trade.offer_description,'?'].join(''))) {
+				Lacuna.Pulser.Show();
 				this.Self.service.withdraw_trade({
 					session_id:Game.GetSession(""),
 					building_id:this.Self.building.id,
@@ -777,6 +783,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				
 			if(elm) {
 				elm.options.length = 0;
+				elm.innerHTML = "";
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
 						var resource = Lib.ResourceTypes[r];
@@ -964,6 +971,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					break;
 			}
 			
+			Lacuna.Pulser.Show();
 			this.service.add_trade(data, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.add_trade.success");
@@ -999,6 +1007,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			if(elm) {
 				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;
+				elm.innerHTML = "";
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
 						var resource = Lib.ResourceTypes[r];
@@ -1239,7 +1248,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			}
 			else {
 				Dom.get("tradePushMessage").innerHTML = "";
-				
+				Lacuna.Pulser.Show();
 				this.service.push_items(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.Push.success");
