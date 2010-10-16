@@ -640,7 +640,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				anchor.appendChild(num);
 			}
 			this.xCoords = this.containerDiv.appendChild(anchor);
-			if(!YAHOO.env.ua.ie) {
+			if(!YAHOO.env.ua.ie && !YAHOO.env.ua.gecko) {
 				this.xAnimOff = new Util.Anim(this.xCoords, {opacity:{to:0.3}}, 10); 
 				this.xAnimOn = new Util.Anim(this.xCoords, {opacity:{to:1.0}}, 0.2);
 				this.hasAnim = 1;
@@ -673,7 +673,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				anchor.appendChild(num);
 			}
 			this.yCoords = this.containerDiv.appendChild(anchor);
-			if(!YAHOO.env.ua.ie) {
+			if(!YAHOO.env.ua.ie && !YAHOO.env.ua.gecko) {
 				this.yAnimOff = new Util.Anim(this.yCoords, {opacity:{to:0.3}}, 10); 
 				this.yAnimOn = new Util.Anim(this.yCoords, {opacity:{to:1.0}}, 0.2); 
 				this.hasAnim = 1;
@@ -1468,7 +1468,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Mapper.TraditionalController.prototype = {
 		setZoomDisplay : function(zoom) {
-			if(this.zoomSlider) {
+			if(this.zoomSlider && this.zoomSlider.getZoom() != zoom) {
 				this.zoomSlider.setZoom(zoom);
 			}
 		},

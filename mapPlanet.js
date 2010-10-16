@@ -530,7 +530,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				if(this._elGrid) {
 					this._isVisible = visible;
 					YAHOO.log(visible, "info", "MapPlanet.MapVisible");
-					Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+					if(visible) {
+						if(!Dom.inDocument(this._elGrid)) {
+							document.getElementById("content").appendChild(this._elGrid);
+						}
+						//Dom.setStyle(this._elGrid, "display", visible ? "" : "none");
+					}
+					else {
+						this._elGrid = this._elGrid.parentNode.removeChild(this._elGrid);
+					}
 					if (visible && this._map) {
 						this.Resize();
 					}
