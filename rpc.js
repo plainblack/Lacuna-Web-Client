@@ -51,12 +51,12 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 				var envelope = YAHOO.rpc.Envelope[method.envelope || smd.envelope];
 				var callback = {
 					success: function(o) {
-						YAHOO.log(o, "debug", "RPC.SUCCESS");
+						//YAHOO.log(o, "debug", "RPC.SUCCESS");
 						var results = envelope.deserialize(o);
 						opts.success.call(opts.scope || self, results);
 					},
 					failure: function(o) {
-						YAHOO.log(o, "debug", "RPC.FAILURE");
+						//YAHOO.log(o, "debug", "RPC.FAILURE");
 						if(Lang.isFunction(opts.failure) ) {
 							var results;
 							try {
@@ -145,14 +145,14 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 				};
 				var serialized = envelope.serialize(smd, method, params);
 				Lang.augmentObject(r, serialized, true);
-
-				return YAHOO.rpc.Transport[r.transport].call(self, r ); 
+				
+				return YAHOO.rpc.Transport[r.transport].call(self, r); 
 			};
-
+		
 			func.name = serviceName;
 			func.description = method.description;
 			func._parameters = method.parameters;
-
+			
 			return func;
 		},
 	   
@@ -207,7 +207,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 							this.process(callback);
 						}
 						catch(ex) {
-							YAHOO.log(ex);
+							//YAHOO.log(ex);
 							if( Lang.isFunction(callback.failure) ) {
 								callback.failure.call(callback.scope || this, {error: ex});
 							}
