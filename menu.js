@@ -154,9 +154,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			destructImg.alt = destructImg.title = "Destruct";
 			destructClick.id = "userMenuDestruct";
 			Event.on(destructClick, "click", function() {
-				if(confirm("Are you sure you want to enable Self Destruct on your colony?")) {
-					this.fireEvent("onDestructClick");
-				}
+				this.fireEvent("onDestructClick");
 			}, this, true);
 			Dom.addClass([destruct,destructClick], "destruct menuItem");
 			Dom.addClass(destructClick, "click");
