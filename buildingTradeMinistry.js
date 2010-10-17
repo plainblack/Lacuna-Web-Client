@@ -409,6 +409,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				zIndex:10000,
 				context:["header","tl","bl"]
 			});
+
 			this.acceptVerify.renderEvent.subscribe(function(){
 				this.message = Dom.get(panelId+"message");
 				this.captcha = Dom.get(panelId+"captcha");

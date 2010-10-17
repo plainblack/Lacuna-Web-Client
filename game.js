@@ -44,6 +44,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				}
 			};
+			Game.escListener = new Util.KeyListener(document, { keys:27 }, { fn:Game.OverlayManager.hideAll, scope:Game.OverlayManager, correctScope:true } );
 			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
@@ -184,6 +185,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//Game.InitEnvolve();
 			//init event subscribtions if we need to
 			Game.InitEvents();
+			//enable esc handler
+			Game.escListener.enable();
 			//load the correct screen
 			var locationId = Game.GetCookie("locationId"),
 				locationView = Game.GetCookie("locationView");
@@ -591,7 +594,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		GetContainerEffect : function() {
-			return {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.5};
+			if(Game.GetCookie("disableDialogAnim","0") == "1") {
+				return;
+			}
+			else {
+				return {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.5};
+			}
 		},
 		
 		Logout : function() {
@@ -619,6 +627,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Reset : function() {
 			//clearInterval(Game.recInt);
 			delete Game.isRunning;
+			//disable esc handler
+			Game.escListener.disable();
 	
 			Game.RemoveCookie("locationId");
 			Game.RemoveCookie("locationView");

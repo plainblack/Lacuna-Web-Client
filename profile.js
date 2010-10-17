@@ -47,6 +47,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness = Dom.get("profileSkipHappiness");
 			this.skipResource = Dom.get("profileSkipResource");
 			this.skipPollution = Dom.get("profileSkipPollution");
+			this.stopAnim = Dom.get("profileDisableDialogAnim");
 			
 			this.medals = Dom.get("profileMedalsList");
 			this.species = Dom.get("profileSpecies");
@@ -114,7 +115,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><hr /><div class="yui-g">',
 			'								<div class="yui-u first">',
 			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
-			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li></ul></div>',
+			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li>',
+			'									<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li></ul></div>',
 			'								<div class="yui-u">',
 			'									<ul><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
@@ -195,6 +197,21 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				}
 			}
 			
+			if(Game.GetCookie("disableDialogAnim","0") != (this.stopAnim.checked ? "1" : "0")) {
+				var newEffect;
+				if(this.stopAnim.checked) {
+					Game.SetCookie("disableDialogAnim","1");
+				}
+				else {
+					Game.RemoveCookie("disableDialogAnim");
+					newEffect = Game.GetContainerEffect();
+				}
+				var cs = Game.OverlayManager.overlays;
+				for(var i=0; i<cs.length; i++) {
+					cs[i].cfg.setProperty("effect",newEffect);
+				}
+			}
+			
 			Game.Services.Empire.edit_profile({
 					session_id:Game.GetSession(""),
 					profile:{
@@ -266,6 +283,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness.checked = p.skip_happiness_warnings == "1";
 			this.skipResource.checked = p.skip_resource_warnings == "1";
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
+			this.stopAnim.checked = Game.GetCookie("disableDialogAnim","0") == "1";
 			
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;

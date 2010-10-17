@@ -44,7 +44,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 											
 			var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
 				'<div>',
-				'	<div class="shipHeader">There are <span id="shipDocksAvailable">0</span> docks available for new ships.</div>',
+				'	<div class="shipHeader" id="shipDocksAvailable"></div>',
 				/*'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipType">Type</li>',
 				'		<li class="shipCost">Cost</li>',
@@ -79,14 +79,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						YAHOO.log(o, "info", "Shipyard.getBuild.get_buildable.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
-						var sda = Dom.get("shipDocksAvailable");
-						if(sda) {
-							sda.innerHTML = o.result.docks_available;
-						}
 						this.ships = {
 							buildable: o.result.buildable,
 							docks_available: o.result.docks_available
 						};
+						this.SetDocksAvailableMessage();
 						this.ShipPopulate();
 					},
 					failure : function(o){
@@ -205,6 +202,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			});
 		},
 		
+		SetDocksAvailableMessage : function() {
+			var sda = Dom.get("shipDocksAvailable");
+			if(sda) {
+				if(this.ships.docks_available) {
+					sda.innerHTML = 'There are ' + this.ships.docks_available + ' docks available for new ships.';
+				}
+				else {
+					sda.innerHTML = 'You have no docks available.  Do you still have a Space Port?';
+				}
+			}
+		},
 		ShipPopulate : function() {
 			var details = Dom.get("shipDetails");
 			
@@ -212,7 +220,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				var ships = this.ships.buildable,
 					//ul = document.createElement("ul"),
 					li = document.createElement("li"),
-					shipNames = [];
+					shipNames = [],
+					defReason = !this.ships.docks_available ? "No docks available at Space Port." : undefined;
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
@@ -231,7 +240,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						reason="";
 					
 					if(ship.reason) {						
-						reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason)+'</div>';
+						reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
 					}
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
@@ -300,10 +309,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					if(this.Self.ships.docks_available < 0) {
 						this.Self.ships.docks_available = 0;
 					}
-					var sda = Dom.get("shipDocksAvailable");
-					if(sda) {
-						sda.innerHTML = this.Self.ships.docks_available;
-					}
+					this.Self.SetDocksAvailableMessage();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Shipyard.ShipBuild.failure");

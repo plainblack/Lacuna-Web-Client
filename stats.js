@@ -646,6 +646,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			else {
 			
 				this.ColonyColumns = [
+					{key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
+						el.innerHTML = this.rankCounter++;
+					}},
 					{key:"empire_name", label:"Empire"},
 					{key:"planet_name", label:"Colony"},
 					{key:"population", label:"Pop"},
@@ -686,6 +689,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					sortedBy : {key:"population", dir:YAHOO.widget.DataTable.CLASS_DSC},
 					selectionMode:"single" 
 				} );
+				this.ColonyTable.rankCounter = 1;
 				// Subscribe to events for row selection 
 				this.ColonyTable.subscribe("rowMouseoverEvent", this.ColonyTable.onEventHighlightRow);
 				this.ColonyTable.subscribe("rowMouseoutEvent", this.ColonyTable.onEventUnhighlightRow);
@@ -723,6 +727,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
+						
+					oSelf.rankCounter = 1;
 					
 					return Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
@@ -743,9 +749,14 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			else {
 			
 				this.SpyColumns = [
+					{key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
+						el.innerHTML = this.rankCounter++;
+					}},
 					{key:"empire_name", label:"Empire"},
 					{key:"spy_name", label:"Spy"},
-					{key:"age", label:"Age"},
+					{key:"age", label:"Age",formatter:function(el, oRecord, oColumn, oData) {
+						el.innerHTML = Lib.formatTime(oData);
+					}},
 					{key:"level", label:"Level"},
 					{key:"success_rate", label:"Success Rate"},
 					{key:"dirtiest", label:"Dirtiest"}
@@ -783,6 +794,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					sortedBy : {key:"level", dir:YAHOO.widget.DataTable.CLASS_DSC},
 					selectionMode:"single" 
 				} );
+				this.SpyTable.rankCounter = 1;
 				// Subscribe to events for row selection 
 				this.SpyTable.subscribe("rowMouseoverEvent", this.SpyTable.onEventHighlightRow);
 				this.SpyTable.subscribe("rowMouseoutEvent", this.SpyTable.onEventUnhighlightRow);
@@ -820,6 +832,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey()),
 						dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc",
 						page = (oState.pagination) ? oState.pagination.page : 1;
+						
+					oSelf.rankCounter = 1;
 					
 					return Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,

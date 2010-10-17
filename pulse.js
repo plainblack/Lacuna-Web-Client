@@ -9,7 +9,7 @@ if (typeof YAHOO.lacuna.Pulse == "undefined" || !YAHOO.lacuna.Pulse) {
 			close:false,
 			underlay:"none",
 			draggable:false, 
-			effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.2},
+			//effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.2},
 			modal:false,
 			visible:false,
 			width:"100px"
