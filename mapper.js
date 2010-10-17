@@ -1157,9 +1157,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					y2 : y2
 				};
 				//YAHOO.log(data, "debug", "StarMap.getTileData.requestData");
+				Lacuna.Pulser.Show();
 				Game.Services.Map.get_stars(data,{
 					success : function(o){
 						//YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.success");
+						Lacuna.Pulser.Hide();
 						if(o && o.result) {
 							Game.ProcessStatus(o.result.status);
 							this.addTileData(o.result.stars);							
@@ -1168,6 +1170,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					},
 					failure : function(o){
 						//YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.failure");
+						Lacuna.Pulser.Hide();
 						if(callback.failure) {
 							callback.failure.call(callback.scope || this, o);
 						}
