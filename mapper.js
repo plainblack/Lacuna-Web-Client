@@ -1103,6 +1103,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				case -1:
 					this.setTileSizeInPx(50);
 					break;
+				case -2:
+					this.setTileSizeInPx(35);
+					break;
 				default:
 					this.setTileSizeInPx(75);
 					break;
@@ -1110,7 +1113,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		init : function() {
 			this.maxZoom = 2;
-			this.minZoom = -1;
+			this.minZoom = -2;
 			
 			var mapSize = Game.ServerData.star_map_size;
 			this.maxBounds = {x1Left:mapSize.x[0],x2Right:mapSize.x[1],y1Top:mapSize.y[1],y2Bottom:mapSize.y[0]};
