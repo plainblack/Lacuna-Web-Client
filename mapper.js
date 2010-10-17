@@ -1015,14 +1015,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.fireEvent("onReloadTile",tile.data.id);
 			}, this, true); 
 		},
-		refresh : function() {
-			var vac = this.visibleArea.centerLocPx();
-			
+		refresh : function(isZoom) {
+			//store location before we redraw
+			var vac = isZoom ? this.visibleArea.centerLoc() : this.visibleArea.centerLocPx();
+			//set tile size
 			this._setTileSizeByZoom();
-			
+			//draw
 			this.redraw();
-			
-			this.setCenterToPx(vac[0],vac[1]);
+			//reset location after draw
+			if(isZoom) {
+				this.setCenterTo(vac[0],vac[1]);
+			}
+			else {
+				this.setCenterToPx(vac[0],vac[1]);
+			}
 		},
 		resize : function() {
 			this.width = this.mapDiv.offsetWidth;
@@ -1426,8 +1432,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", clickMoveMap, [ 1, 0 ]);
 		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", clickMoveMap, [ -1, 0 ]);
 
-
-
 		if((map.maxZoom - map.minZoom) != 0) {
 			var zoomEl = document.createElement('div');
 			zoomEl.className = 'mapiator_zoom';
@@ -1464,10 +1468,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			zoomSlider.setZoom(map.zoom);
 			zoomSlider.subscribe("change", function () {
 				map.setZoomLevel( this.getZoom() );
-				map.refresh();
+				map.refresh(true);
 			});
 			this.zoomSlider = zoomSlider;
 		}
+		
 	};
 	Mapper.TraditionalController.prototype = {
 		setZoomDisplay : function(zoom) {
