@@ -38,7 +38,6 @@ if (typeof YAHOO.lacuna.Announce == "undefined" || !YAHOO.lacuna.Announce) {
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 		}, this, true);
 		this.Panel.render();
-		Game.OverlayManager.register(this.Panel);
 	};
 	Announce.prototype = {
 		_getHtml : function() {
