@@ -64,7 +64,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.createRight();
 
 			var userMenuTT = new YAHOO.widget.Tooltip("userMenuTT", {
-				zIndex:1010,
+				zIndex:41010,
 				xyoffset:[0,10],
 				context:[this.elChangeClick,"userMenuProfile",this.elInboxClick,this.elEssentiaClick,this.elDestructClick,"userMenuInvite", "userMenuTutorial","userMenuSupport","userMenuStats","userMenuAbout","userMenuLogout"]
 			});
@@ -388,7 +388,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.createRight();
 
 			var planetMenuTT = new YAHOO.widget.Tooltip("planetMenuTT", {
-				zIndex:1010,
+				zIndex:41011,
 				xyoffset:[0,-10],
 				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver,this.elPlotsOver,this.elClick]
 			});
