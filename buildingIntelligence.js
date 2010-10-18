@@ -63,21 +63,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 		_getSpiesTab : function() {
 			this.spiesTab = new YAHOO.widget.Tab({ label: "Spies", content: [
 				'<div>',
-				/*'	<ul class="spiesHeader spyInfo clearafter">',
-				'		<li class="spyName">Name</li>',
-				'		<li class="spyAssignedTo">Assigned To</li>',
-				'		<li class="spyAvailableWhen">Available When</li>',
-				'		<li class="spyAssignment">Assignment</li>',
-				'		<li class="spyOffense">Offense</li>',
-				'		<li class="spyDefense">Defense</li>',
-				'		<li class="spyLevel">Level</li>',
-				'		<li class="spyIntel">Intel</li>',
-				'		<li class="spyMayhem">Mayhem</li>',
-				'		<li class="spyPolitics">Politics</li>',
-				'		<li class="spyTheft">Theft</li>',
-				'		<li class="spyBurn">Burn</li>',
-				'	</ul>',*/
-				'	<div>', // style="height:300px;overflow-y:auto;"
+				'	<p id="spiesSubsidizeOffer" style="display:none;">You may subsidize training for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per spy. <button type="button" id="spiesSubsidize">Subsidize</button></p>',
+				'	<div>',
 				'		<div id="spiesDetails">',
 				'		</div>',
 				'	</div>',
@@ -85,6 +72,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				'</div>'
 			].join('')});
 			this.spiesTab.subscribe("activeChange", this.spiesView, this, true);
+
+			Event.on("spiesSubsidize", "click", this.Subsidize, this, true);
 					
 			return this.spiesTab;
 		},
@@ -160,7 +149,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					assign = this.spies.possible_assignments,
 					div = document.createElement("div"),
 					ul = document.createElement("ul"),
-					li = document.createElement("li");
+					li = document.createElement("li"),
+					isTraining;
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
@@ -223,6 +213,9 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					}
 					else {
 						nLi.innerHTML = spy.assignment;
+						if(!isTraining) {
+							isTraining = spy.assignment == "Training";
+						}
 					}
 					nUl.appendChild(nLi);
 					//***
@@ -288,6 +281,16 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					
 					Event.on(bbtn, "click", this.SpyBurn, {Self:this,Spy:spy,Line:nDiv}, true);
 				}
+				
+				if(isTraining) {
+					Dom.get("spiesSubsidize").disabled = false;
+					Dom.setStyle("spiesSubsidizeOffer", "display", "");
+				}
+				else {
+					Dom.get("spiesSubsidize").disabled = true;
+					Dom.setStyle("spiesSubsidizeOffer", "display", "none");
+				}
+				
 				//wait for tab to display first
 				setTimeout(function() {
 					if(details.parentNode.clientHeight > 300) {
@@ -507,6 +510,30 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					scope:this
 				});
 			}
+		},
+		Subsidize : function(e) {
+			Lacuna.Pulser.Show();
+			Dom.get("spiesSubsidize").disabled = true;
+			
+			this.service.subsidize_training({
+				session_id:Game.GetSession(),
+				building_id:this.building.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+
+					delete this.spies;
+					this.spiesView({newValue:1});
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					Dom.get("spiesSubsidize").disabled = false;
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		}
 		
 	});

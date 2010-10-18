@@ -28,7 +28,7 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				div.appendChild(this.PartyGetDisplay());
 			}
 			else if(this.result.party.seconds_remaining*1 > 0) {
-				div.innerHTML = ['<p>You will get ',Lib.formatNumber(this.result.party.happiness),' happiness from your party!'].join('');
+				div.innerHTML = [].join('');
 				div.appendChild(this.PartyGetTimeDisplay(this.result.party));
 				this.addQueue(this.result.party.seconds_remaining, this.PartyQueue, "partyTime");
 			}
@@ -49,27 +49,10 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 					YAHOO.log(o, "info", "Park.Party.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
+					this.work = o.result.building.work;
+					this.updateBuildingTile(o.result.building);
 					
-					if(this.partyTab) {
-						var ce = this.partyTab.get("contentEl");
-						Event.purgeElement(ce);
-						ce.innerHTML = "";
-						this.work = o.result.building.work;
-						this.updateBuildingTile(o.result.building);
-						if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
-							ce.appendChild(this.PartyGetTimeDisplay(o.result.party));
-							this.addQueue(this.work.seconds_remaining, this.PartyQueue, "partyTime");
-						}
-						else if(o.result.party && o.result.party.can_throw) {
-							ce.appendChild(this.PartyGetDisplay());
-						}
-						else {
-							this.removeTab(this.partyTab);
-						}
-					}
-					
-					//remove all tile timers
-					Game.QueueResetPlanet();
+					this.UpdatePartyTab(o.result.party);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Park.Party.failure");
@@ -80,6 +63,23 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				scope:this
 			});	
 		},
+		UpdatePartyTab : function(party) {
+			if(this.partyTab) {
+				var ce = this.partyTab.get("contentEl");
+				Event.purgeElement(ce);
+				ce.innerHTML = "";
+				if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
+					ce.appendChild(this.PartyGetTimeDisplay(party));
+					this.addQueue(this.work.seconds_remaining, this.PartyQueue, "partyTime");
+				}
+				else if(party && party.can_throw) {
+					ce.appendChild(this.PartyGetDisplay());
+				}
+				else {
+					ce.innerHTML = "<p>You need at least 10,000 food to throw a party.</p>";
+				}
+			}
+		},
 		PartyGetDisplay : function() {
 			var btn = document.createElement("button");
 			btn.setAttribute("type", "button");
@@ -88,10 +88,13 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 			return btn;
 		},
 		PartyGetTimeDisplay : function(party) {
-			var div = document.createElement("div");
-			div.innerHTML = ['<span>Party time remaining: </span><span id="partyTime">',Lib.formatTime(party.seconds_remaining),'</span>'].join('');
-					
-			return div;
+			var ul = document.createElement("ul");
+			ul.innerHTML = ['<li>You will get ',Lib.formatNumber(party.happiness),' happiness from your party!</li>',
+				'<li>Party time remaining: <span id="partyTime">',Lib.formatTime(party.seconds_remaining),'</span></li>',
+				'<li>You may subsidize the party for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
+				'<li><button type="button" id="parkSubsidize">Subsidize</button></li>'].join('');
+			Event.on("parkSubsidize", "click", this.Subsidize, this, true);
+			return ul;
 		},
 		PartyQueue : function(remaining, el){
 			if(remaining <= 0) {
@@ -103,6 +106,33 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 			else {
 				Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
 			}
+		},
+		Subsidize : function(e) {
+			Lacuna.Pulser.Show();
+			Dom.get("parkSubsidize").disabled = true;
+			
+			this.service.subsidize_party({
+				session_id:Game.GetSession(),
+				building_id:this.building.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+
+					delete this.work;
+					this.updateBuildingTile(o.result.building);
+					this.resetQueue();
+					
+					this.UpdatePartyTab(o.result.party);
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					Dom.get("parkSubsidize").disabled = false;
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		}
 		
 	});

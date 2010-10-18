@@ -24,7 +24,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 		},
 		_getQueueTab : function() {
 			var div = document.createElement("div");
-			div.innerHTML = ['<div>You may subsidize the build queue for 1 essentia per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
+			div.innerHTML = ['<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
 				'<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
 				'<div id="shipsBuilding"></div>'].join('');
 			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
@@ -126,48 +126,51 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 		
 		ShipyardDisplay : function() {
 			var bq = this.ship_build_queue,
-				div = Dom.get("shipsBuilding"),
-				divParent = div.parentNode,
-				ul = document.createElement("ul"),
-				li = document.createElement("li"),
-				now = new Date();
+				div = Dom.get("shipsBuilding");
+
+			if(div) {
+				var divParent = div.parentNode,
+					ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					now = new Date();
+					
+				this.resetQueue();
+				div = divParent.removeChild(div);
+				div.innerHTML = "";
 				
-			this.resetQueue();
-			div = divParent.removeChild(div);
-			div.innerHTML = "";
-			
-			/*= {
-				number_of_ships_building: o.result.number_of_ships_building,
-				ships_building: o.result.ships_building
-			};*/
-			if(bq && bq.ships_building && bq.ships_building.length > 0) {
-				for(var i=0; i<bq.ships_building.length; i++) {
-					var bqo = bq.ships_building[i],
-						nUl = ul.cloneNode(false),
-						nLi = li.cloneNode(false),
-						ncs = (Lib.parseServerDate(bqo.date_completed).getTime() - now.getTime()) / 1000;
-					
-					nUl.Build = bqo;
-					
-					Dom.addClass(nUl, "shipQueue");
-					Dom.addClass(nUl, "clearafter");
+				/*= {
+					number_of_ships_building: o.result.number_of_ships_building,
+					ships_building: o.result.ships_building
+				};*/
+				if(bq && bq.ships_building && bq.ships_building.length > 0) {
+					for(var i=0; i<bq.ships_building.length; i++) {
+						var bqo = bq.ships_building[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false),
+							ncs = (Lib.parseServerDate(bqo.date_completed).getTime() - now.getTime()) / 1000;
+						
+						nUl.Build = bqo;
+						
+						Dom.addClass(nUl, "shipQueue");
+						Dom.addClass(nUl, "clearafter");
 
-					Dom.addClass(nLi,"shipQueueType");
-					nLi.innerHTML = bqo.type_human;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipQueueEach");
-					nLi.innerHTML = Lib.formatTime(ncs);
-					nUl.appendChild(nLi);
+						Dom.addClass(nLi,"shipQueueType");
+						nLi.innerHTML = bqo.type_human;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"shipQueueEach");
+						nLi.innerHTML = Lib.formatTime(ncs);
+						nUl.appendChild(nLi);
 
-					div.appendChild(nUl);
-					
-					this.addQueue(ncs, this.ShipyardQueue, nUl);
+						div.appendChild(nUl);
+						
+						this.addQueue(ncs, this.ShipyardQueue, nUl);
+					}
 				}
+				//add child back in
+				divParent.appendChild(div);
 			}
-			//add child back in
-			divParent.appendChild(div);
 		},
 		ShipyardQueue : function(remaining, elLine){
 			if(remaining <= 0) {

@@ -116,7 +116,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'								<div class="yui-u first">',
 			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
 			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li>',
-			'									<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li></ul></div>',
+			'									<li style="display:none;"><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li></ul></div>',
 			'								<div class="yui-u">',
 			'									<ul><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',

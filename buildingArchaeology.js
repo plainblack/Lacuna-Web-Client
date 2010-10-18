@@ -128,10 +128,17 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		},
 		_getSearchTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "Search", content: [
-				'<div class="archaeologySearchContainer">',
+				'<div id="archaeologySearchContainer">',
 				'	<ul>',
 				'		<li>Search Ore:<select id="archaeologyOre"></select></li>',
 				'		<li><button type="button" id="archaeologySearch">Search</button></li>',
+				'	</ul>',
+				'</div>',
+				'<div id="archaeologyWorkingContainer">',
+				'	<ul>',
+				'		<li>Time left on current search: <span id="archaeologySearchTime"></span></li>',
+				'		<li>You may subsidize the search for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
+				'		<li><button type="button" id="archaeologySearchSubsidize">Subsidize</button></li>',
 				'	</ul>',
 				'</div>'
 			].join('')});
@@ -143,6 +150,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			
 			this.searchTab = tab;
 			Event.on("archaeologySearch", "click", this.searchForGlyph, this, true);
+			Event.on("archaeologySearchSubsidize", "click", this.Subsidize, this, true);
 			
 			return tab;
 		},
@@ -179,6 +187,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		populateSearch : function() {
 			var sel = Dom.get("archaeologyOre");
 			if(sel && this.ore){
+				sel.options.length = 0;
 				var opt = document.createElement("option");
 				for(var oKey in this.ore) {
 					if(this.ore.hasOwnProperty(oKey)) {
@@ -191,9 +200,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			}
 		},
 		populateActiveSearch : function(seconds_remaining) {
-			var ce = this.searchTab.get("contentEl");
-			Event.purgeElement(ce);
-			ce.innerHTML = 'Time left on current search: <span id="archaeologySearchTime"></span>';
 			this.addQueue(seconds_remaining, this.searchQueue, "archaeologySearchTime");
 		},
 		searchQueue : function(remaining, el){
@@ -264,9 +270,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		
 		checkIfWorking : function() {
 			if(this.work && this.work.seconds_remaining) {
+				Dom.setStyle("archaeologySearchContainer", "display", "none");
+				Dom.setStyle("archaeologyWorkingContainer", "display", "");
 				this.populateActiveSearch(this.work.seconds_remaining);
 			}
 			else {
+				Dom.setStyle("archaeologySearchContainer", "display", "");
+				Dom.setStyle("archaeologyWorkingContainer", "display", "none");
 				this.getOres();
 			}
 		},
@@ -356,7 +366,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onMapRpc", o.result);
 						this.work = o.result.building.work;
 						this.updateBuildingTile(o.result.building);
-						this.populateActiveSearch(o.result.building.work.seconds_remaining);
+						this.checkIfWorking();
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.searchForGlyph.failure");
@@ -367,6 +377,32 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					scope:this
 				});
 			}
+		},
+		Subsidize : function() {
+			Lacuna.Pulser.Show();
+			
+			this.service.subsidize_search({
+				session_id:Game.GetSession(),
+				building_id:this.building.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpc", o.result);
+
+					delete this.work;
+					delete this.ore;
+					this.updateBuildingTile(o.result.building);
+					this.resetQueue();
+					Dom.get("archaeologySearchTime").innerHTML = "";
+					this.checkIfWorking();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					this.fireEvent("onMapRpcFailed", o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		}
 	});
 	
