@@ -1038,7 +1038,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			tab.elSpiesList.innerHTML = "";
 			tab.elSpyShipsList.innerHTML = "";
 			tab.elMessage.innerHTML = "";
-			Dom.setStyle(tab.elSendButton, 'visibility', 'collapse');
+			Dom.setStyle(tab.elSendButton, 'display', 'none');
 			var rpc_count = 0;
 			Lacuna.Pulser.Show();
 			var method;
@@ -1108,7 +1108,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			}
 			else {
 				tab.elMessage.innerHTML = 'Select up to ' + maxSpies + ' spies to send:';
-				Dom.setStyle(tab.elSendButton, 'visibility', 'inherit');
+				Dom.setStyle(tab.elSendButton, 'display', 'inline');
 			}
 			tab.maxSpies = maxSpies;
 			
