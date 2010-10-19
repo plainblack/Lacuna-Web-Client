@@ -184,20 +184,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 						}
 						break;
 					case 1013:
-						if(reason.length == 2) {
-							output = reason[1];
-						}
-						else if(Lang.isArray(reason[2])){
-							if(reason[1].indexOf("Goldilox") < 0) {
-								output = [reason[1], ' Requires ', reason[2].join(' level ')].join('');
-							}
-							else {
-								output = [reason[1], ' Orbits Allowed: ', reason[2].join(', ')].join('');
-							}
-						}
-						else {
-							output = [reason[1], ' Requires level ', reason[2]].join('');
-						}
+						output = reason[1];
 						break;
 					default:
 						output = defReason || reason[1];
