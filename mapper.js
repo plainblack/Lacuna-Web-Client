@@ -799,9 +799,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						tiles[tile.id] = tile;
 					}
 				}
-				if(!this.map.keepTilesOutOfBounds) {
-					this.removeAllTilesNotContainedIn( tiles );
-				}
+				//if(!this.map.keepTilesOutOfBounds) {
+				//	this.removeAllTilesNotContainedIn( tiles );
+				//}
 			}
 		},
 		onReloadTile : function(tile) {
@@ -970,22 +970,17 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
 			this.movableContainer.move( x,y );
 			this.coordLayer.move( x*-1,y*-1 );
-			
+			/*
 			this.diffX += x;
 			this.diffY += y;
-			//this.centerX -= x;
-			//this.centerY += y;
-			var checkTileSize = this.tileSizeInPx; //Math.floor(this.tileSizeInPx * .75); //load the tiles a bit early
+
+			var checkTileSize = this.tileSizeInPx;
 			if( Math.abs(this.diffX) > checkTileSize || Math.abs(this.diffY) > checkTileSize) {
-				//YAHOO.log([checkTileSize, this.diffX, this.diffY], "info", "Map.moveByPx");
 				//reset diff's
 				this.diffX = this.diffY = 0;
 				this.tileLayer.render();
-				
-				/*if(!this.IE) {
-					this.canvasTileLayer.showTiles();
-				}*/
 			}
+			*/
 			return {"x":x,"y":y};
 		},
 		setZoomLevel : function( level ) {
@@ -1267,6 +1262,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				case -1:
 					this.setTileSizeInPx(100);
 					break;
+				case -2:
+					this.setTileSizeInPx(75);
+					break;
 				default:
 					this.setTileSizeInPx(200);
 					break;
@@ -1274,7 +1272,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		init : function() {
 			this.maxZoom = 2;
-			this.minZoom = -1;
+			this.minZoom = -2;
 			
 			this.bounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
 			this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
