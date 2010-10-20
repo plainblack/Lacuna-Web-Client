@@ -210,19 +210,19 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
 				'					<div class="planetDetailSpyShipHeader">',
-				'						<div class="planetDetailSpyShipMessage"></div><button>Back</button>',
+				'						<div class="planetDetailSpyShipMessage">Sending <span class="count"></span> spies.  Select Ship:</div><button>Back</button>',
 				'					</div>',
 				'					<ul class="planetDetailSpyShipList"></ul>',
 				'				</div>',
 				'			</div>',
 				'			<div id="planetDetailFetchSpies" style="height: 240px">',
 				'				<div class="planetDetailSelectSpies">',
-				'					<div class="planetDetailSpiesMessage"></div><button>Send</button>',
+				'					<div class="planetDetailSpiesMessage"></div><button>Fetch</button>',
 				'					<ul class="planetDetailSpiesList"></ul>',
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
 				'					<div class="planetDetailSpyShipHeader">',
-				'						<div class="planetDetailSpyShipMessage"></div><button>Back</button>',
+				'						<div class="planetDetailSpyShipMessage">Fetching <span class="count"></span> spies.  Select Ship:</div><button>Back</button>',
 				'					</div>',
 				'					<ul class="planetDetailSpyShipList">',
 				'					</ul>',
@@ -332,7 +332,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						tabEl.elSpiesList = Sel.query('.planetDetailSpiesList', tabEl, true);
 						tabEl.elSpyShipsList = Sel.query(".planetDetailSpyShipList", tabEl, true);
 						tabEl.elMessage = Sel.query('.planetDetailSpiesMessage', tabEl, true);
-						tabEl.elShipMessage = Sel.query('.planetDetailSpyShipMessage', tabEl, true);
+						tabEl.elShipMessageCount = Sel.query('.planetDetailSpyShipMessage span.count', tabEl, true);
 						Event.on(tabEl.elSendButton, "click", this.MoveSpies, tabEl, this);
 						Event.on(
 							Sel.query('.planetDetailSelectSpyShip button', tabEl, true),
@@ -1082,6 +1082,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var list = tab.elSpiesList;
 			var spies = tab.availSpies;
 			var ships = tab.availSpyShips;
+			var verb = tab.id == 'planetDetailSendSpies' ? 'send' : 'fetch';
 			
 			if (spies.length == 0) {
 				tab.elMessage.innerHTML = 'No spies available.';
@@ -1107,7 +1108,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				tab.elMessage.innerHTML = 'No ships available.';
 			}
 			else {
-				tab.elMessage.innerHTML = 'Select up to ' + maxSpies + ' spies to send:';
+				tab.elMessage.innerHTML = 'Select up to ' + maxSpies + ' spies to ' + verb + ':';
 				Dom.setStyle(tab.elSendButton, 'display', 'inline');
 			}
 			tab.maxSpies = maxSpies;
@@ -1131,23 +1132,24 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var spies = [];
 			var ships = tab.availSpyShips;
 			var list = tab.elSpyShipsList;
+			var verb = tab.id == 'planetDetailSendSpies' ? 'send' : 'fetch';
 			Dom.batch(tab.elSpiesList.getElementsByTagName('input'), function(el) {
 				if (el.checked) {
 					spies.push(el.value);
 				}
 			});
 			if (spies.length == 0) {
-				alert("You must select at least one spy to send!");
+				alert("You must select at least one spy to "+verb+"!");
 				return;
 			}
 			if (spies.length > tab.maxSpies) {
-				alert("You don't have any ships large enough to send " + spies.length + " spies");
+				alert("You don't have any ships large enough to "+verb+" " + spies.length + " spies.");
 				return;
 			}
 
 			tab.spiesToMove = spies;
 			list.innerHTML = '';
-			tab.elShipMessage.innerHTML = "Sending "+spies.length+" spies.  Select Ship:";
+			tab.elShipMessageCount.innerHTML = spies.length;
 
 			var li = document.createElement('li');
 			for (var i = 0; i < ships.length; i++) {
@@ -1160,7 +1162,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 				'	</div>',
 				'	<div class="yui-u" style="width:78%">',
-				usable ? '		<button value="'+ship.id+'">Send Spies</button>' : '',
+				usable ? '		<button value="'+ship.id+'">'+verb.charAt(0).toUpperCase()+verb.slice(1)+' Spies</button>' : '',
 				'		<div><strong>[',ship.type_human,'] ',ship.name,'</strong></div>',
 				'		<div><strong>Attributes:</strong>',
 				'			<span>Speed:<span>',ship.speed,'</span></span>',
