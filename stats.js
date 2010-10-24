@@ -471,6 +471,31 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.EmpireTable.subscribe("rowMouseoverEvent", this.EmpireTable.onEventHighlightRow);
 				this.EmpireTable.subscribe("rowMouseoutEvent", this.EmpireTable.onEventUnhighlightRow);
 				this.EmpireTable.subscribe("rowClickEvent", this.EmpireTable.onEventSelectRow);
+				this.EmpireTable.subscribe("cellMouseoverEvent", this.EmpireTable.onEventHighlightCell);
+				this.EmpireTable.subscribe("cellHighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name" || oArgs.key == "alliance_name") {
+						Dom.setStyle(oArgs.el, "cursor", "help");
+					}
+				}); 
+				this.EmpireTable.subscribe("cellMouseoutEvent", this.EmpireTable.onEventUnhighlightCell);
+				this.EmpireTable.subscribe("cellUnhighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name" || oArgs.key == "alliance_name") {
+						Dom.setStyle(oArgs.el, "cursor", "auto");
+					}
+				});
+				this.EmpireTable.subscribe("cellClickEvent", function(ev) {
+					var target = Event.getTarget(ev),
+						column = this.getColumn(target),
+						record;
+					if (column.key == "empire_name") {
+						record = this.getRecord(target);
+						Lacuna.Info.Empire.Load(record.getData("empire_id"));
+					} 
+					else if (column.key == "alliance_name") {
+						record = this.getRecord(target);
+						Lacuna.Info.Alliance.Load(record.getData("alliance_id"));
+					}
+				});
 				
 				this.EmpireTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
 					oPayload.totalRecords = oResponse.meta.totalRecords; 
@@ -591,6 +616,26 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.AllianceTable.subscribe("rowMouseoverEvent", this.AllianceTable.onEventHighlightRow);
 				this.AllianceTable.subscribe("rowMouseoutEvent", this.AllianceTable.onEventUnhighlightRow);
 				this.AllianceTable.subscribe("rowClickEvent", this.AllianceTable.onEventSelectRow);
+				this.AllianceTable.subscribe("cellMouseoverEvent", this.AllianceTable.onEventHighlightCell);
+				this.AllianceTable.subscribe("cellHighlightEvent", function(oArgs) {
+					if (oArgs.key == "alliance_name") {
+						Dom.setStyle(oArgs.el, "cursor", "help");
+					}
+				}); 
+				this.AllianceTable.subscribe("cellMouseoutEvent", this.AllianceTable.onEventUnhighlightCell);
+				this.AllianceTable.subscribe("cellUnhighlightEvent", function(oArgs) {
+					if (oArgs.key == "alliance_name") {
+						Dom.setStyle(oArgs.el, "cursor", "auto");
+					}
+				});
+				this.AllianceTable.subscribe("cellClickEvent", function(ev) {
+					var target = Event.getTarget(ev),
+						column = this.getColumn(target);
+					if (column.key == "alliance_name") {
+						var record = this.getRecord(target);
+						Lacuna.Info.Alliance.Load(record.getData("alliance_id"));
+					}
+				});
 				
 				this.AllianceTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
 					oPayload.totalRecords = oResponse.meta.totalRecords; 
@@ -694,6 +739,26 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.ColonyTable.subscribe("rowMouseoverEvent", this.ColonyTable.onEventHighlightRow);
 				this.ColonyTable.subscribe("rowMouseoutEvent", this.ColonyTable.onEventUnhighlightRow);
 				this.ColonyTable.subscribe("rowClickEvent", this.ColonyTable.onEventSelectRow);
+				this.ColonyTable.subscribe("cellMouseoverEvent", this.ColonyTable.onEventHighlightCell);
+				this.ColonyTable.subscribe("cellHighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "help");
+					}
+				}); 
+				this.ColonyTable.subscribe("cellMouseoutEvent", this.ColonyTable.onEventUnhighlightCell);
+				this.ColonyTable.subscribe("cellUnhighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "auto");
+					}
+				});
+				this.ColonyTable.subscribe("cellClickEvent", function(ev) {
+					var target = Event.getTarget(ev),
+						column = this.getColumn(target);
+					if (column.key == "empire_name") {
+						var record = this.getRecord(target);
+						Lacuna.Info.Empire.Load(record.getData("empire_id"));
+					}
+				});
 				
 				this.ColonyTable.requery = function() {
 					// Get the current state
@@ -799,6 +864,26 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.SpyTable.subscribe("rowMouseoverEvent", this.SpyTable.onEventHighlightRow);
 				this.SpyTable.subscribe("rowMouseoutEvent", this.SpyTable.onEventUnhighlightRow);
 				this.SpyTable.subscribe("rowClickEvent", this.SpyTable.onEventSelectRow);
+				this.SpyTable.subscribe("cellMouseoverEvent", this.SpyTable.onEventHighlightCell);
+				this.SpyTable.subscribe("cellHighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "help");
+					}
+				}); 
+				this.SpyTable.subscribe("cellMouseoutEvent", this.SpyTable.onEventUnhighlightCell);
+				this.SpyTable.subscribe("cellUnhighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "auto");
+					}
+				});
+				this.SpyTable.subscribe("cellClickEvent", function(ev) {
+					var target = Event.getTarget(ev),
+						column = this.getColumn(target);
+					if (column.key == "empire_name") {
+						var record = this.getRecord(target);
+						Lacuna.Info.Empire.Load(record.getData("empire_id"));
+					}
+				});
 				
 				this.SpyTable.requery = function() {
 					// Get the current state
@@ -898,6 +983,26 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				this.WeeklyMedalTable.subscribe("rowMouseoverEvent", this.WeeklyMedalTable.onEventHighlightRow);
 				this.WeeklyMedalTable.subscribe("rowMouseoutEvent", this.WeeklyMedalTable.onEventUnhighlightRow);
 				this.WeeklyMedalTable.subscribe("rowClickEvent", this.WeeklyMedalTable.onEventSelectRow);
+				this.WeeklyMedalTable.subscribe("cellMouseoverEvent", this.WeeklyMedalTable.onEventHighlightCell);
+				this.WeeklyMedalTable.subscribe("cellHighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "help");
+					}
+				}); 
+				this.WeeklyMedalTable.subscribe("cellMouseoutEvent", this.WeeklyMedalTable.onEventUnhighlightCell);
+				this.WeeklyMedalTable.subscribe("cellUnhighlightEvent", function(oArgs) {
+					if (oArgs.key == "empire_name") {
+						Dom.setStyle(oArgs.el, "cursor", "auto");
+					}
+				});
+				this.WeeklyMedalTable.subscribe("cellClickEvent", function(ev) {
+					var target = Event.getTarget(ev),
+						column = this.getColumn(target);
+					if (column.key == "empire_name") {
+						var record = this.getRecord(target);
+						Lacuna.Info.Empire.Load(record.getData("empire_id"));
+					}
+				});
 				
 				this.WeeklyMedalTable.requery = function() {
 					// Get the current state
