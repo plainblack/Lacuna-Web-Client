@@ -913,6 +913,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li id="planetDetailsName">',body.name,'</li>',
 				'	<li><label>Type: </label>',body.type,'</li>',
 				'	<li><label>Empire: </label><span id="planetDetailsEmpire">',empire.name,'</span></li>',
+				empire.id ? ('<li><label>Isolationist: </label>'+(empire.is_isolationist=="1" ? 'Yes' : 'No')+'</li>') : '',
 				'	<li><label>Water: </label>',body.water,'</li>',
 				'	<li><label>Planet Size:</label>',body.size,'</li>',
 				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',

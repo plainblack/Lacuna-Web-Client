@@ -631,9 +631,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				if (x >= xMin && x <= xMax) {
 					num.innerHTML = x;
 					Dom.setStyle(num, "width", size);
+					Dom.addClass(num, "coordX"+pxSize);
 				}
 				else {
 					Dom.setStyle(num, "width", (pxSize * 3) + "px");
+					Dom.addClass(num, "coordX"+(pxSize * 3));
 				}
 				Dom.addClass(num, "coordX");
 				Dom.setStyle(num, "left", (x * pxSize) + "px");
@@ -664,9 +666,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					num.innerHTML = y;
 					Dom.setStyle(num, "height", sizeLeft);
 					Dom.setStyle(num, "padding-top", thrdTxt);
+					Dom.addClass(num, "coordY"+sizeLeft);
 				}
 				else {
 					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");
+					Dom.addClass(num, "coordY"+(pxSize * 3));
 				}
 				Dom.addClass(num, "coordY");
 				Dom.setStyle(num, "top", (y * negPxSize) + "px");

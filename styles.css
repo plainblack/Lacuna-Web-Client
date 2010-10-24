@@ -1026,6 +1026,16 @@ Info dialogs for Empire and Alliance
 	left: 0;
 }
 
+.coordX50, .coordY50 {
+	font-size:85%;
+}
+.coordX35, .coordY35 {
+	font-size:75%;
+}
+.coordX20, .coordY20 {
+	font-size:65%;
+}
+
 .tile .planetMapTileActionContainer {
 	visibility: hidden;
 }
