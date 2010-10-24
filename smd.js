@@ -9,7 +9,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 			"description": "Body",
 			"envelope":"JSON-RPC-2.0",
 			"transport":"POST",
-			"target":"/body",
+			"target":"/alliance",
 
 			"services": {
 				"find" : {
@@ -1487,7 +1487,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"offer", "type":"object", "optional":false},
-							{"name":"ask", "type":"object", "optional":false}
+							{"name":"ask", "type":"object", "optional":false},
+							{"name":"options", "type":"object", "optional":true}
 						],
 						/*
 					* add_trade ( session_id, building_id, offer, ask )
@@ -1503,6 +1504,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						  o ask
 								+ type = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
 								+ quantity 
+						 o options
+								+ ship_id
 						*/
 						"returns":{"type":"object"}
 						/*
@@ -1618,7 +1621,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"trade_id", "type":"string", "optional":false},
 							{"name":"captcha_guid", "type":"string", "optional":false},
-							{"name":"captcha_solution", "type":"string", "optional":false}
+							{"name":"captcha_solution", "type":"string", "optional":false},
+							{"name":"options", "type":"object", "optional":true}
 						],
 						"returns":{"type":"object"}
 					},
@@ -1711,7 +1715,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"target_id", "type":"string", "optional":false},
-							{"name":"items", "type":"object", "optional":false}
+							{"name":"items", "type":"object", "optional":false},
+							{"name":"options", "type":"object", "optional":true}
 						],
 						/*
 							items array of objects
@@ -1727,10 +1732,22 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"type" : "glyph",
 									"glyph_id" : "id-goes-here"
 								 }
+							options
+								+ ship_id
+								+ stay (if == 1 then it will stay on planet if there is an available dock)
 						*/
 						"returns":{"type":"object"}
 						/*
 						*/
+					},
+					"get_trade_ships" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target_body_id", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},

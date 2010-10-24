@@ -536,7 +536,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.OverlayManager.hideAll();
 			Lacuna.MapPlanet.MapVisible(false);
 			Lacuna.MapStar.MapVisible(true);
-			Lacuna.Menu.StarVisible(true);
+			Lacuna.Menu.StarVisible();
 			Lacuna.MapStar.Jump(star.x*1, star.y*1);
 		},
 		PlanetJump : function(planet) {
@@ -594,7 +594,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 		},
 		GetContainerEffect : function() {
-			if(Game.GetCookie("disableDialogAnim","0") == "1") {
+			if(Game.GetCookieSettings("disableDialogAnim","0") == "1") {
 				return;
 			}
 			else {
@@ -661,6 +661,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.SetCookie("locationView", view);
 		},
 
+		//using a more permanent cookie
+		GetCookieSettings : function(key, defaultValue) {
+			var chip = Cookie.getSub("lacunaSettings",key);
+			return chip || defaultValue;
+		},
+		SetCookieSettings : function(key, value) {
+			var now = new Date(), 
+				opts = { 
+					domain: Game.domain,
+					expires: new Date(now.setFullYear(now.getFullYear() + 1)) 
+				};
+			Cookie.setSub("lacunaSettings", key, value, opts);
+		},
+		RemoveCookieSettings : function(key) {
+			Cookie.removeSub("lacunaSettings", key, { domain: Game.domain });
+		},
+		
 		//Tick related
 		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,

@@ -73,7 +73,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.viewShipsTab;
 		},
 		_getForeignTab : function() {
-			this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Foreign", content: [
+			this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Incoming", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
@@ -258,7 +258,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from ? ship.from.name : 'Unknown';
+					nLi.innerHTML = ship.from.name;
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -529,7 +529,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from ? ship.from.name : 'Unknown';
+					nLi.innerHTML = ship.from && ship.from.name ? ship.from.name : 'Unknown';
 					nUl.appendChild(nLi);
 
 					this.addQueue(sec, this.ForeignQueue, nUl);

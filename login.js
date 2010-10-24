@@ -100,9 +100,6 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					
 					if(this.elRemember.checked) {
 						var now = new Date();
-						 //** REMOVE THIS!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						Cookie.remove("lacunaEmpireName");
-						 //** REMOVE THIS!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 						Cookie.set("lacunaEmpireName", this.elName.value, {
 							domain: Game.domain,
 							expires: new Date(now.setFullYear(now.getFullYear() + 1))

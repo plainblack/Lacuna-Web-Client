@@ -275,7 +275,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 			if(confirm(["Are you sure you want to Abandon the mining platform at  ",this.Platform.asteroid.name,"?"].join(''))) {
 				Lacuna.Pulser.Show();
 				
-				this.service.abandon_platform({
+				this.Self.service.abandon_platform({
 					session_id:Game.GetSession(),
 					building_id:this.Self.building.id,
 					platform_id:this.Platform.id

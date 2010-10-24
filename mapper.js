@@ -799,9 +799,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						tiles[tile.id] = tile;
 					}
 				}
-				//if(!this.map.keepTilesOutOfBounds) {
-				//	this.removeAllTilesNotContainedIn( tiles );
-				//}
+				/*if(!this.map.keepTilesOutOfBounds) {
+					this.removeAllTilesNotContainedIn( tiles );
+				}*/
 			}
 		},
 		onReloadTile : function(tile) {
@@ -1087,7 +1087,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.StarMap, Map, {
 		_setTileSizeByZoom : function() {
-			Game.SetCookie("starZoom", this.zoom);
+			Game.SetCookieSettings("starZoom", this.zoom);
 			switch(this.zoom){
 				case 2:
 					this.setTileSizeInPx(150);
@@ -1101,6 +1101,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				case -2:
 					this.setTileSizeInPx(35);
 					break;
+				case -3:
+					this.setTileSizeInPx(20);
+					break;
 				default:
 					this.setTileSizeInPx(75);
 					break;
@@ -1108,7 +1111,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		init : function() {
 			this.maxZoom = 2;
-			this.minZoom = -2;
+			this.minZoom = -3;
 			
 			var mapSize = Game.ServerData.star_map_size;
 			this.maxBounds = {x1Left:mapSize.x[0],x2Right:mapSize.x[1],y1Top:mapSize.y[1],y2Bottom:mapSize.y[0]};
@@ -1116,7 +1119,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 			this.Tile = Mapper.StarTile;
 			
-			this.zoom = Game.GetCookie("starZoom",0);
+			this.zoom = Game.GetCookieSettings("starZoom",0);
 			this._setTileSizeByZoom();
 		},
 		getTile : function(x, y){
@@ -1251,7 +1254,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.extend(Mapper.PlanetMap, Map, {
 		_setTileSizeByZoom : function() {
-			Game.SetCookie("planetZoom", this.zoom);
+			Game.SetCookieSettings("planetZoom", this.zoom);
 			switch(this.zoom){
 				case 2:
 					this.setTileSizeInPx(400);
@@ -1280,7 +1283,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.Tile = Mapper.PlanetTile;
 			this.keepTilesOutOfBounds = true;
 			
-			this.zoom = Game.GetCookie("planetZoom",0);
+			this.zoom = Game.GetCookieSettings("planetZoom",0);
 			this._setTileSizeByZoom();
 		},
 		setCenterToCommand : function() {
@@ -1310,6 +1313,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						imgSize = "300/";
 						break;
 					case -1:
+						imgSize = "100/";
+						break;
+					case -2:
 						imgSize = "100/";
 						break;
 				}

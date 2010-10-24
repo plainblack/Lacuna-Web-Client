@@ -509,6 +509,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeEmpire");
 					nLi.innerHTML = trade.empire.name;
+					Event.on(nLi, "click", this.EmpireProfile, trade.empire);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -618,6 +619,9 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				timeout:Game.Timeout,
 				scope:this
 			});
+		},
+		EmpireProfile : function(e, empire) {
+			Lacuna.Info.Empire.Load(empire.id);
 		},
 		
 		//View Mine

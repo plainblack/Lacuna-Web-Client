@@ -47,7 +47,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness = Dom.get("profileSkipHappiness");
 			this.skipResource = Dom.get("profileSkipResource");
 			this.skipPollution = Dom.get("profileSkipPollution");
-			this.stopAnim = Dom.get("profileDisableDialogAnim");
 			
 			this.medals = Dom.get("profileMedalsList");
 			this.species = Dom.get("profileSpecies");
@@ -62,6 +61,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			Event.on(this.sitter_password, 'blur', function() {
 				this.type = 'password';
 			});
+			
+			this.stopAnim = Dom.get("profileDisableDialogAnim");
+			
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			//species tab
 			this.tabView.getTab(2).subscribe("activeChange", function(e) {
@@ -103,6 +105,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'					<li><a href="#detailsSpecies"><em>Species</em></a></li>',
 			'					<li><a href="#detailsNotes"><em>Notes</em></a></li>',
 			'					<li><a href="#detailsAccount"><em>Account</em></a></li>',
+			'					<li><a href="#detailsBrowser"><em>Browser</em></a></li>',
 			'				</ul>',
 			'				<div class="yui-content" style="padding:0;">',
 			'					<div id="detailsPlayer">',
@@ -115,8 +118,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><hr /><div class="yui-g">',
 			'								<div class="yui-u first">',
 			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
-			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li>',
-			'									<li style="display:none;"><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li></ul></div>',
+			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li></ul></div>',
 			'								<div class="yui-u">',
 			'									<ul><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
@@ -145,6 +147,11 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li style="text-align: center; margin-bottom: 2px;">Change Account Password:</li>',
 			'							<li><label>New Password:<input id="profileNewPassword" type="password" /></label></li>',
 			'							<li><label>Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
+			'						</ul>',
+			'					</div>',
+			'					<div id="detailsBrowser">',
+			'						<ul>',
+			'							<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -197,13 +204,13 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				}
 			}
 			
-			if(Game.GetCookie("disableDialogAnim","0") != (this.stopAnim.checked ? "1" : "0")) {
+			if(Game.GetCookieSettings("disableDialogAnim","0") != (this.stopAnim.checked ? "1" : "0")) {
 				var newEffect;
 				if(this.stopAnim.checked) {
-					Game.SetCookie("disableDialogAnim","1");
+					Game.SetCookieSettings("disableDialogAnim","1");
 				}
 				else {
-					Game.RemoveCookie("disableDialogAnim");
+					Game.RemoveCookieSettings("disableDialogAnim");
 					newEffect = Game.GetContainerEffect();
 				}
 				var cs = Game.OverlayManager.overlays;
@@ -283,7 +290,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness.checked = p.skip_happiness_warnings == "1";
 			this.skipResource.checked = p.skip_resource_warnings == "1";
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
-			this.stopAnim.checked = Game.GetCookie("disableDialogAnim","0") == "1";
+			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;

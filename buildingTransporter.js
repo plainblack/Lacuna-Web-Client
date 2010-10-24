@@ -15,6 +15,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		Transporter.superclass.constructor.call(this, result);
 		
 		this.transport = result.transport;
+		var p = document.createElement("p");
+		p.innerHTML = "Transporter has a maximum capacity of " + this.transport.max + " at this level.";
+		Dom.setStyle(p, "margin-top", "5px");
+		Dom.setStyle(p, "font-style", "italic");
+		Dom.get("buildingDetailsDesc").appendChild(p);
 		
 		this.availableAcceptText = "Accept For 1 Essentia";
 		this.addTradeText = "Add Trade For 1 Essentia";

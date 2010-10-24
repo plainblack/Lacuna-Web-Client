@@ -690,6 +690,11 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	padding:2px 5px;
 }
 
+#messagingFrom, #messagingTo {
+	text-decoration:underline;
+	cursor:pointer;
+}
+
 #messagingBody #attachmentImage {
 	border-color:transparent;
 	border-style:none;
@@ -814,6 +819,14 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 .speciesPointsInvalid { color:#f00; }
 .speciesPointsLow { color:#ff0 ; }
 
+/*
+Info dialogs for Empire and Alliance
+*/
+#infoEmpire label , #infoAlliance label {
+	display:inline-block;
+	width:100px;
+	font-weight:bold;
+}
 
 /*
 * Star Map
@@ -1559,6 +1572,8 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 
 .tradeInfo .tradeEmpire{
 	width:180px;
+	text-decoration:underline;
+	cursor:pointer;
 }
 .tradeInfo .tradeOfferedDate {
 	width:145px;
@@ -1658,9 +1673,7 @@ PROFILE
 	display:inline-block;
 	width:250px;
 }
-#detailsAccount,
-#detailsPlayer,
-#detailsNotes {
+#detailsAccount, #detailsPlayer, #detailsNotes, #detailsBrowser {
 	padding : 5px;
 }
 #profileNotes {

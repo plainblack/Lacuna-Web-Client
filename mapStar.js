@@ -903,7 +903,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var body = tile.data,
 				tab, tabs,
 				panel = this.planetDetails,
-				empire = body.empire || {alignment:"none"};
+				empire = body.empire || {alignment:"none", name:""};
 				
 			panel.resetDisplay(this);
 			
@@ -912,7 +912,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'<ul>',
 				'	<li id="planetDetailsName">',body.name,'</li>',
 				'	<li><label>Type: </label>',body.type,'</li>',
-				'	<li><label>Empire: </label>',(body.empire && body.empire.name ? body.empire.name : "None"),'</li>',
+				'	<li><label>Empire: </label><span id="planetDetailsEmpire">',empire.name,'</span></li>',
 				'	<li><label>Water: </label>',body.water,'</li>',
 				'	<li><label>Planet Size:</label>',body.size,'</li>',
 				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
@@ -942,6 +942,19 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			Dom.get("planetDetailsTrona").innerHTML = body.ore.trona;
 			Dom.get("planetDetailsUraninite").innerHTML = body.ore.uraninite;
 			Dom.get("planetDetailsZircon").innerHTML = body.ore.zircon;
+			
+			if(empire.id) {
+				Dom.setStyle("planetDetailsEmpire", "cursor", "pointer");
+				Dom.setStyle("planetDetailsEmpire", "text-decoration", "underline");
+				Event.on("planetDetailsEmpire", "click", function(){
+					Lacuna.Info.Empire.Load(this.id);
+				}, empire, true);
+			}
+			else {
+				Dom.setStyle("planetDetailsEmpire", "cursor", "normal");
+				Dom.setStyle("planetDetailsEmpire", "text-decoration", "none");
+				Event.removeListener("planetDetailsEmpire", "click");
+			}
 			
 			if(empire.alignment == "self"){
 				if(panel.renameTab) {
