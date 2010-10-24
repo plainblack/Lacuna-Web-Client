@@ -628,6 +628,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"embassyEmpire");
 					nLi.innerHTML = obj.name;
+					Event.on(nLi, "click", this.EmpireInfo, obj.empire_id);
 					nUl.appendChild(nLi);
 
 					if(this.isLeader) {
@@ -658,6 +659,9 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					}
 				},10);
 			}
+		},
+		EmpireInfo : function(e, id) {
+			Lacuna.Info.Empire.Load(id);
 		},
 		MembersExpel : function() {
 			if(confirm(['Are you sure you want to expel ', this.Member.name,' from the alliance?'].join(''))) {

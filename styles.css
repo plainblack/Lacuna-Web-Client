@@ -1417,6 +1417,8 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .embassyInfo .embassyEmpire {
 	width:200px;
+	text-decoration:underline;
+	cursor:pointer;
 }
 .embassyInfo .embassyMessage {
 	width:250px;

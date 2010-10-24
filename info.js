@@ -43,6 +43,8 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					this.memberList = Dom.get(this.id+'Members');
 					this.memberCount = Dom.get(this.id+'MemberCount');
 					
+					Event.delegate(this.memberList, "click", this.EmpireInfo, "a.profile_link", this, true);
+					
 					Dom.removeClass(this.id, Lib.Styles.HIDDEN);
 				}, this, true);
 				this.Panel.render();
@@ -91,7 +93,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 						if(member.id == profile.leader_id) {
 							this.leader.innerHTML = member.name;
 						}
-						memberArray = memberArray.concat(['<li><label>',m+1,'</label><span>',member.name,'</span></li>']);
+						memberArray = memberArray.concat(['<li><label>',m+1,'</label><a class="profile_link" style="text-decoration:underline;cursor:pointer;" href="#',member.id,'">',member.name,'</a></li>']);
 					}
 					
 					this.memberList.innerHTML = memberArray.join('');
@@ -106,7 +108,12 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 				timeout:Game.Timeout,
 				scope:this
 			});
-		}
+		},
+		EmpireInfo : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(\d+)$/);
+			Lacuna.Info.Empire.Load(res[1]);
+		},
 	};
 	
 	var Empire = function(){
@@ -121,10 +128,12 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 				container.innerHTML = this._getHtml();
 				document.body.insertBefore(container, document.body.firstChild);
 				
-				this.Panel = new YAHOO.widget.Panel(this.id, {
+				this.Panel = new YAHOO.widget.Dialog(this.id, {
 					constraintoviewport:true,
 					visible:false,
 					draggable:true,
+					postmethod:"none",
+					buttons:[{ text:"Send Message", handler:{fn:this.sendMessage, scope:this}, isDefault:true }],
 					effect:Game.GetContainerEffect(),
 					underlay:false,
 					modal:false,
@@ -139,6 +148,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					this.desc = Dom.get(this.id+"Desc");
 					this.species = Dom.get(this.id+"Species");
 					this.alliance = Dom.get(this.id+"Alliance");
+					this.colonyCount = Dom.get(this.id+"ColonyCount");
 					this.founded = Dom.get(this.id+"Founded");
 					this.login = Dom.get(this.id+"Login");
 					
@@ -154,6 +164,9 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					this.tabView = new YAHOO.widget.TabView(this.id+"Tabs");
 					this.tabView.set('activeIndex',0);
 					Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+				}, this, true);
+				this.Panel.hideEvent.subscribe(function(){
+					delete this.currentEmpire;
 				}, this, true);
 				this.Panel.render();
 				Game.OverlayManager.register(this.Panel);
@@ -178,6 +191,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 			'						<li><label>Description:</label><span id="',this.id,'Desc"></span></li>',
 			'						<li><label>Species:</label><span id="',this.id,'Species"></span></li>',
 			'						<li><label>Alliance:</label><span id="',this.id,'Alliance" style="text-decoration:underline;cursor:pointer;"></span></li>',
+			'						<li><label>Colonies:</label><span id="',this.id,'ColonyCount"></span></li>',
 			'						<li><label>Founded:</label><span id="',this.id,'Founded"></span></li>',
 			'						<li><label>Last Login:</label><span id="',this.id,'Login"></span></li>',
 			'				</div>',
@@ -211,11 +225,13 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 				success:function(o){
 					Lacuna.Pulser.Hide();
 					var profile = o.result.profile;
+					this.currentEmpire = profile;
 					this.empire.innerHTML = profile.name;
 					this.status.innerHTML = profile.status_message;
 					this.desc.innerHTML = profile.description;
 					this.species.innerHTML = profile.species;
 					this.alliance.innerHTML = profile.alliance ? profile.alliance.name : '';
+					this.colonyCount.innerHTML = profile.colony_count;
 					this.founded.innerHTML = Lib.formatServerDateShort(profile.date_founded);
 					this.login.innerHTML = Lib.formatServerDateShort(profile.last_login);
 					
@@ -226,7 +242,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					this.playerName.innerHTML = profile.player_name;
 					this.city.innerHTML = profile.city;
 					this.country.innerHTML = profile.country;
-					this.skype.innerHTML = profile.skype;
+					this.skype.innerHTML = profile.skype ? ['<a href="callto:',profile.skype,'">',profile.skype,'</a>'].join('') : '';
 					
 					var medalArray = [];
 					for(var medalId in profile.medals) {
@@ -274,6 +290,11 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 				timeout:Game.Timeout,
 				scope:this
 			});
+		},
+		sendMessage : function() {
+			if(this.currentEmpire) {
+				Lacuna.Messaging.sendTo(this.currentEmpire.name);
+			}
 		}
 	};
 	

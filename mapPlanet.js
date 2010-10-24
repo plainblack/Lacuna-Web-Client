@@ -56,7 +56,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				effect:Game.GetContainerEffect(),
 				fixedcenter:false,
 				close:true,
-				width:"700px",
+				width:"800px",
 				underlay:false,
 				zIndex:9995,
 				context:["header","tl","bl"]

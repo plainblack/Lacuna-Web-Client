@@ -31,7 +31,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			underlay:false,
 			modal:true,
 			close:true,
-			width:"450px",
+			width:"500px",
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){

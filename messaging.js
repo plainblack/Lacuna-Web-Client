@@ -902,6 +902,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			this.loadTab();
 			this.fireEvent("onShow");
 		},
+		sendTo : function(empireName) {
+			Game.OverlayManager.hideAll();
+			this.messagingPanel.show();
+			this.currentTab = this.create.id;
+			this.loadTab();
+			this.createTo.SelectItems([{name:empireName}]);
+			this.fireEvent("onShow");
+		},
 		showMessage : function(msg) {
 			Game.OverlayManager.hideAll();
 			this.messagingPanel.show();
