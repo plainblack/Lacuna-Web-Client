@@ -627,7 +627,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.MapPlanet.Reset();
 			
 			//do this last since we don't control the code
-			if(logoutCommand) {
+			if(logoutCommand && window.env_executeCommand) {
 				YAHOO.log("Chat logout of session", "debug", "Reset");
 				window.env_executeCommand(logoutCommand);
 			}
