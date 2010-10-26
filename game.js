@@ -213,6 +213,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		InitChat : function() {
 			var loginCommand = Game.GetCookie("chatLogin");
 			if(loginCommand) {
+				YAHOO.log("Chat login to existing session", "debug", "InitChat");
 				window.env_executeCommand(loginCommand);
 			}
 			else {
@@ -221,6 +222,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						Game.SetCookie("chatLogin", o.result.login_command);
 						Game.SetCookie("chatLogout", o.result.logout_command);
 						if(window.env_executeCommand) {
+							YAHOO.log(o, "debug", "Chat.get_commands.success");
 							window.env_executeCommand(o.result.login_command);
 						}
 					},
@@ -626,6 +628,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			//do this last since we don't control the code
 			if(logoutCommand) {
+				YAHOO.log("Chat logout of session", "debug", "Reset");
 				window.env_executeCommand(logoutCommand);
 			}
 		},
