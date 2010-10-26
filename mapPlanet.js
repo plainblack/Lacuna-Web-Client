@@ -568,7 +568,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.MapVisible(true); //needs to be visible before we set sizing and  map
 				this.SetSize();
 				
-				var map = new Lacuna.Mapper.PlanetMap("planetMap", this.surfaceUrl);
+				var map = new Lacuna.Mapper.PlanetMap("planetMap", {surfaceUrl:this.surfaceUrl});
 				map.addTileData(this.buildings);
 				map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
 				//map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';

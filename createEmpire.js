@@ -56,7 +56,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this}}],
 			draggable:false,
 			effect:Game.GetContainerEffect(),
-			modal:true,
+			modal:false,
 			close:false,
 			width:"750px",
 			underlay:false,

@@ -857,7 +857,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
 	
 	
-	var Map = function( divId ) {
+	var Map = function( divId, options ) {
 		var IE='\v'=='v'; // detect IE
 		this.IE = IE;
 		
@@ -1085,8 +1085,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.augmentProto(Map, Util.EventProvider);
 	
-	Mapper.StarMap = function( divId ) {
-		Mapper.StarMap.superclass.constructor.call(this, divId);
+	Mapper.StarMap = function( divId, options ) {
+		Mapper.StarMap.superclass.constructor.call(this, divId, options);
 		Dom.setStyle(this.mapDiv, 'background-image', 'url("'+Lib.AssetUrl+'star_system/field.png")');
 	};
 	Lang.extend(Mapper.StarMap, Map, {
@@ -1252,9 +1252,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 	});
 	
-	Mapper.PlanetMap = function( divId, surfaceUrl ) {
+	Mapper.PlanetMap = function( divId, options ) {
 		Mapper.PlanetMap.superclass.constructor.call(this, divId);
-		this.setSurfaceUrl(surfaceUrl);
+		this.setSurfaceUrl(options.surfaceUrl);
 	};
 	Lang.extend(Mapper.PlanetMap, Map, {
 		_setTileSizeByZoom : function() {

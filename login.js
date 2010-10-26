@@ -62,7 +62,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			visible:false,
 			draggable:false,
 			effect:Game.GetContainerEffect(),
-			modal:true,
+			modal:false,
 			close:false,
 			width:"650px",
 			underlay:false,

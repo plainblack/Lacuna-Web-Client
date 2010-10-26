@@ -32,7 +32,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				{ text:"Cancel", handler:{fn:this.handleCancel, scope:this} } ],
 			draggable:true,
 			effect:Game.GetContainerEffect(),
-			modal:true,
+			modal:false,
 			close:false,
 			width:"735px",
 			underlay:false,

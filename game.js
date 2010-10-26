@@ -111,6 +111,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
 					Game.RemoveCookie("locationId");
 					Game.RemoveCookie("locationView");
+					
 					//store empire data
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
@@ -182,7 +183,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			})();
 			//chat system
-			//Game.InitEnvolve();
+			Game.InitChat();
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//enable esc handler
@@ -209,43 +210,24 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			Lacuna.Pulser.Hide();
 		},
-		InitEnvolve : function() {
-			if(!Game._envolveContainer) {
-				var div = document.createElement("div"),
-					frm = document.createElement("form"),
-					fName = frm.appendChild(document.createElement("input")),
-					lName = frm.appendChild(document.createElement("input")),
-					s = document.createElement("script");
-					
-				div.innerHTML = "Join in game chat, and talk with the other players who are online right now...";
-				Dom.setStyle(div, "position", "absolute");
-				Dom.setStyle(div, "bottom", "0");
-				Dom.setStyle(div, "left", "0");
-				Dom.setStyle(div, "width", "100%");
-				Dom.setStyle(div, "height", "25px");
-				Dom.setStyle(div, "background-color", "#0ba2f2");
-				Dom.setStyle(div, "color", "#1bb2f2");
-				Dom.setStyle(div, "font-family", "helvetica");
-				Dom.setStyle(div, "font-size", "20px");
-				
-				Game._envolveContainer = document.body.appendChild(div);
-					
-				fName.setAttribute("type", "hidden");
-				fName.id = "EnvolveDesiredFirstName";
-				fName.value = Game.EmpireData.name;
-				
-				lName.setAttribute("type", "hidden");
-				lName.id = "EnvolveDesiredLastName";
-				lName.value = ".";
-				
-				Game._envolveForm = document.body.appendChild(frm);
-					
-				s.type = "text/javascript";
-				s.src = "http://d.envolve.com/env.nocache.js";
-				Game._envolveScript = document.body.appendChild(s);
+		InitChat : function() {
+			var loginCommand = Game.GetCookie("chatLogin");
+			if(loginCommand) {
+				window.env_executeCommand(loginCommand);
 			}
-			else if(Game._envolveContainer) {
-				Dom.setStyle(Game._envolveContainer, "display", "");
+			else {
+				Game.Services.Chat.get_commands({session_id:Game.GetSession()},{
+					success : function(o){
+						Game.SetCookie("chatLogin", o.result.login_command);
+						Game.SetCookie("chatLogout", o.result.logout_command);
+						if(window.env_executeCommand) {
+							window.env_executeCommand(o.result.login_command);
+						}
+					},
+					failure : function(o){
+						YAHOO.log(o, "debug", "Chat.get_commands.failure");
+					}
+				});
 			}
 		},
 		InitEvents : function() {
@@ -629,13 +611,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			delete Game.isRunning;
 			//disable esc handler
 			Game.escListener.disable();
+			
+			var logoutCommand = Game.GetCookie("chatLogout");
 	
 			Game.RemoveCookie("locationId");
 			Game.RemoveCookie("locationView");
+			Game.RemoveCookie("chatLogin");
+			Game.RemoveCookie("chatLogout");
+			
 			Game.SetSession();
 			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();
+			
+			//do this last since we don't control the code
+			if(logoutCommand) {
+				window.env_executeCommand(logoutCommand);
+			}
 		},
 
 		//Cookie helpers functions
