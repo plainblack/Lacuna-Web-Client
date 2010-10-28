@@ -59,7 +59,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 						success : function(o){
 							YAHOO.log(o, "info", "MiningMinistry.view_platforms.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.platforms = { 
 								max_platforms:o.result.max_platforms,
 								platforms:o.result.platforms
@@ -70,7 +70,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 						failure : function(o){
 							YAHOO.log(o, "error", "MiningMinistry.view_platforms.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -140,6 +140,9 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 
 					Dom.addClass(nLi,"platformLocation");
 					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
+					Event.on(nLi, "click", function(){
+						Game.StarJump(obj);
+					}, obj, true);
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -309,7 +312,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				success : function(o){
 					YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsView.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.ships = o.result.ships;
 					
 					this.MiningMinistryShipsPopulate();
@@ -317,7 +320,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				failure : function(o){
 					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsView.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -411,14 +414,14 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				success : function(o){
 					YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsAdd.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsAdd.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this.Self
@@ -435,14 +438,14 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				success : function(o){
 					YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsRemove.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsRemove.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this.Self

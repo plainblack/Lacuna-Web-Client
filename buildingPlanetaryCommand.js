@@ -91,7 +91,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 				}, {
 				success : function(o){
 					YAHOO.log(o, "info", "PlanetaryCommand.abandon.success");
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 
 					Game.PlanetJump(); //jumps to home planet if nothing passed in
 					
@@ -101,7 +101,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					Lacuna.Pulser.Hide();
 					YAHOO.log(o, "error", "PlanetaryCommand.abandon.failure");
 					
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

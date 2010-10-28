@@ -77,7 +77,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						success : function(o){
 							YAHOO.log(o, "info", "Security.Security.view_prisoners.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.prisoners = o.result.prisoners;
 							this.pagerPrisoners = new Pager({
 								rowsPerPage : 25,
@@ -95,7 +95,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						failure : function(o){
 							YAHOO.log(o, "error", "Security.Security.view_prisoners.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -184,14 +184,14 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Security.PrisonersHandlePagination.view_prisoners.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.prisoners = o.result.prisoners;
 					this.PrisonersPopulate();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Security.PrisonersHandlePagination.view_prisoners.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -273,7 +273,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						success : function(o){
 							YAHOO.log(o, "info", "Security.Security.view_foreign_spies.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.spies = o.result.spies;
 							this.pagerSpies = new Pager({
 								rowsPerPage : 25,
@@ -291,7 +291,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						failure : function(o){
 							YAHOO.log(o, "error", "Security.Security.view_foreign_spies.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -360,14 +360,14 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Security.SpyHandlePagination.view_foreign_spies.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.spies = o.result.spies;
 					this.SpyPopulate();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Security.SpyHandlePagination.view_foreign_spies.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

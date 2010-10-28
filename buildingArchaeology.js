@@ -288,7 +288,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					success : function(o){
 						YAHOO.log(o, "info", "Archaeology.getOres.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.ore = o.result.ore;
 						
 						this.populateSearch();
@@ -296,7 +296,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.getOres.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -310,7 +310,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					success : function(o){
 						YAHOO.log(o, "info", "Archaeology.getGlyphs.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.glyphs = o.result.glyphs;
 						
 						this.populateView();
@@ -318,7 +318,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.getGlyphs.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -338,14 +338,14 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
 					alert("You have found a " + o.result.item_name + "!");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					delete this.glyphs;
 					this.getGlyphs();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Archaeology.assembleGlyph.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -363,15 +363,15 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					success : function(o){
 						YAHOO.log(o, "info", "Archaeology.searchForGlyph.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
-						this.work = o.result.building.work;
-						this.updateBuildingTile(o.result.building);
+						this.rpcSuccess(o);
+						//this.work = o.result.building.work;
+						//this.updateBuildingTile(o.result.building);
 						this.checkIfWorking();
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Archaeology.searchForGlyph.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -387,7 +387,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			}, {
 				success : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 
 					delete this.work;
 					delete this.ore;
@@ -398,7 +398,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				},
 				failure : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

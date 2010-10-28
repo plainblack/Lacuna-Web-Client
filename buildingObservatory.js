@@ -53,7 +53,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 						success : function(o){
 							YAHOO.log(o, "info", "Observatory.get_probed_stars.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.ProbeInfoDisplay(o.result);
 							this.probes = o.result.stars;
 							this.pager = new Pager({
@@ -72,7 +72,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 						failure : function(o){
 							YAHOO.log(o, "error", "Observatory.get_probed_stars.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -143,7 +143,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 				success : function(o){
 					YAHOO.log(o, "info", "Observatory.ProbesHandlePagination.get_probed_stars.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.probes = o.result.stars;
 					// Update the Paginator's state
 					this.pager.setState(newState);
@@ -152,7 +152,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 				failure : function(o){
 					YAHOO.log(o, "error", "Observatory.ProbesHandlePagination.get_probed_stars.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -170,7 +170,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 						success : function(o){
 							YAHOO.log(o, "info", "Observatory.ProbeAction.abandon_probe.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							Event.purgeElement(container);
 							container.parentNode.removeChild(container);
 							this.probes = null;
@@ -178,7 +178,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 						failure : function(o){
 							YAHOO.log(o, "error", "Observatory.ProbeAction.abandon_probe.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this

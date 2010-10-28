@@ -57,7 +57,7 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "Network19.NewsCoverage.restrict_coverage.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					Dom.get("newsCoverageText").innerHTML = isRestrict ? 'Coverage is currently restricted' : 'News is flowing freely';
 					target.innerHTML = isRestrict ? 'Open Coverage' : 'Restrict Coverage';
@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "Network19.NewsCoverage.restrict_coverage.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 					target.disabled = false;
 				},
 				timeout:Game.Timeout,
@@ -79,7 +79,7 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "Network19.NewsGet.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					var news = o.result.news,
 						newsFeed = Dom.get("newsFeed");
@@ -119,7 +119,7 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "Network19.NewsGet.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

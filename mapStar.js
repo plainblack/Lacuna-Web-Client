@@ -110,6 +110,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var rt = this.removeableTabs;
 				if(rt && rt.length > 0) {
 					for(var n=0; n<rt.length; n++) {
+						Event.purgeElement(rt[n].get("contentEl"));
 						this.tabView.removeTab(rt[n]);
 					}
 					delete this.removeableTabs;
@@ -789,7 +790,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				details = elm.cloneNode(false);
 				
 			elm.innerHTML = [
-				'<ul class="shipHeader shipInfo clearafter">',
+				'<ul class="shipHeader clearafter">',
 				'	<li class="shipName">From Empire</li>',
 				'</ul>'
 			].join('');
@@ -805,12 +806,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					nLi = li.cloneNode(false);
 					
 				nUl.Ship = ship;
-				Dom.addClass(nUl, "shipInfo");
 				Dom.addClass(nUl, "clearafter");
 				
 				nLi = li.cloneNode(false);
 				Dom.addClass(nLi,"shipName");
 				nLi.innerHTML = ship.empire_name;
+				Event.on(nLi, "click", function(e, id){
+					Lacuna.Info.Empire.Load(id);
+				}, ship.empire_id);
 				nUl.appendChild(nLi);
 				
 				details.appendChild(nUl);

@@ -1591,10 +1591,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:145px;
 }
 .tradeInfo .tradeAsking {
-	width:130px;
+	width:170px;
 }
 .tradeInfo .tradeOffer {
-	width:130px;
+	width:170px;
 }
 .tradeInfo .tradeAction {
 	width:75px;
@@ -1602,6 +1602,8 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 
 .platformInfo .platformLocation {
 	width:250px;
+	text-decoration:underline;
+	cursor:pointer;
 }
 .platformInfo .platformLocation img {
 	width:30px;

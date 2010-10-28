@@ -61,9 +61,9 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						success : function(o){
 							YAHOO.log(o, "info", "WasteRecycling.Recycle.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
-							this.work = o.result.building.work;
-							this.updateBuildingTile(o.result.building);
+							this.rpcSuccess(o);
+							//this.work = o.result.building.work;
+							//this.updateBuildingTile(o.result.building);
 							if(this.recycleTab){
 								if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
 									var ce = this.recycleTab.get("contentEl");
@@ -86,7 +86,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						failure : function(o){
 							YAHOO.log(o, "error", "WasteRecycling.Recycle.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -344,7 +344,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 				success : function(o){
 					YAHOO.log(o, "info", "WasteRecycling.RecycleSubsidize.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					this.resetQueue();
 
@@ -358,7 +358,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 				failure : function(o){
 					YAHOO.log(o, "error", "WasteRecycling.RecycleSubsidize.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

@@ -109,7 +109,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_ships_travelling.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.shipsTraveling = {
 								number_of_ships_travelling: o.result.number_of_ships_travelling,
 								ships_travelling: o.result.ships_travelling
@@ -130,7 +130,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						failure : function(o){
 							YAHOO.log(o, "error", "SpacePort.view_ships_travelling.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -149,7 +149,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.shipsView = {
 								number_of_ships: o.result.number_of_ships,
 								ships: o.result.ships
@@ -170,7 +170,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						failure : function(o){
 							YAHOO.log(o, "error", "SpacePort.view_all_ships.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -189,7 +189,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.shipsForeign = {
 								number_of_ships: o.result.number_of_ships,
 								ships: o.result.ships
@@ -210,7 +210,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						failure : function(o){
 							YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -291,7 +291,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.ShipHandlePagination.view_ships_travelling.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.shipsTraveling = {
 						number_of_ships_travelling: o.result.number_of_ships_travelling,
 						ships_travelling: o.result.ships_travelling
@@ -301,7 +301,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "SpacePort.ShipHandlePagination.view_ships_travelling.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -400,7 +400,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_ships.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.shipsView = {
 						number_of_ships: o.result.number_of_ships,
 						ships: o.result.ships
@@ -410,7 +410,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "SpacePort.ViewHandlePagination.view_all_ships.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -557,7 +557,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.shipsForeign = {
 						number_of_ships: o.result.number_of_ships,
 						ships: o.result.ships
@@ -567,7 +567,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

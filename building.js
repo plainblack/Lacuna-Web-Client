@@ -68,6 +68,27 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			//overrideable function for child classes that have their own tabs
 			//** Must return nothing or an array of tabs **
 		},
+		
+		/*
+		Event Helpers
+		*/
+		rpcSuccess : function(o) {
+			this.fireEvent("onMapRpc", o.result);
+			if(o.result.building) {
+				//if we suddenly have work update the tile to add the tile.  if we don't have work update the tile to remove the timer
+				if((this.building.work && !o.result.building.work) || (!this.building.work && o.result.building.work)) {
+					this.updateBuildingTile(o.result.building);
+				}
+				this.building = o.result.building
+				this.work = this.building.work;
+			}
+			else {
+				delete this.work;
+			}
+		},
+		rpcFailure : function(o) {
+			this.fireEvent("onMapRpcFailed", o);
+		},
 		addQueue : function(sec, func, elm, sc) {
 			this.fireEvent("onQueueAdd", {seconds:sec, fn:func, el:elm, scope:sc});
 		},
@@ -114,7 +135,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Building.Repair.repair.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					if(this.repairTab) {
 						Event.removeListener("repair", "click");
 						this.removeTab(this.repairTab);
@@ -133,7 +154,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				failure : function(o){
 					YAHOO.log(o, "error", "Building.Repair.repair.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 					target.disabled = false;
 				},
 				target:this.building.url,
@@ -217,14 +238,14 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Demolish.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.removeBuildingTile(this.building);
 						this.fireEvent("onHide");					
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Building.Demolish.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this,
@@ -242,7 +263,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Downgrade.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						var b = this.building; //originally passed in building data from currentBuilding
 						b.id = o.result.building.id;
@@ -257,7 +278,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					failure : function(o){
 						YAHOO.log(o, "error", "Building.Downgrade.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this,
@@ -278,7 +299,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Building.Upgrade.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					var b = building; //originally passed in building data from currentBuilding
 					b.id = o.result.building.id;
@@ -293,7 +314,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				failure : function(o){
 					YAHOO.log(o, "error", "Building.Upgrade.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this,

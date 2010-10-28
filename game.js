@@ -214,7 +214,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			var loginCommand = Game.GetCookie("chatLogin");
 			if(loginCommand) {
 				YAHOO.log("Chat login to existing session", "debug", "InitChat");
-				window.env_executeCommand(loginCommand);
+				if(window.env_executeCommand) {
+					window.env_executeCommand(loginCommand);
+				}
 			}
 			else {
 				Game.Services.Chat.get_commands({session_id:Game.GetSession()},{

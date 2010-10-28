@@ -32,13 +32,13 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 				this.service.get_lottery_voting_options({session_id:Game.GetSession(),building_id:this.building.id}, {
 					success : function(o){
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						this.LotteryPopulate(o.result.options);
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

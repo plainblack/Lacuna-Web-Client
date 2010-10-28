@@ -264,7 +264,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.getGlyphs.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.glyphs = o.result.glyphs;
 						this.fireEvent("onLoadGlyphs");
 						Lacuna.Pulser.Hide();
@@ -273,7 +273,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.getGlyphs.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -289,7 +289,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.getPlans.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.plans = o.result.plans;
 						this.fireEvent("onLoadPlans");
 						Lacuna.Pulser.Hide();
@@ -298,7 +298,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.getPlans.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -314,7 +314,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.getPrisoners.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.prisoners = o.result.prisoners;
 						this.fireEvent("onLoadPrisoners");
 						Lacuna.Pulser.Hide();
@@ -323,7 +323,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.getPrisoners.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -339,7 +339,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.getShips.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.ships = o.result.ships;
 						this.fireEvent("onLoadShips");
 						Lacuna.Pulser.Hide();
@@ -348,7 +348,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.getShips.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -364,7 +364,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},{
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.getStoredResources.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.resources = o.result.resources;
 						this.fireEvent("onLoadResources");
 						Lacuna.Pulser.Hide();
@@ -373,7 +373,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.getStoredResources.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -458,7 +458,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.view_available_trades.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						delete o.result.status; //get rid of status after we process it, since it's big
 						this.availableTrades = o.result; //store: trades=[], trade_count = 1, page_number=1,  captcha = {guid, url}
@@ -479,7 +479,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					failure : function(o){
 						YAHOO.log(o, "error", "Trade.view_available_trades.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -560,7 +560,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.view_available_trades.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					delete o.result.status; //get rid of status after we process it, since it's big
 					this.availableTrades = o.result; //store: trades=[], trade_count = 1, page_number=1,  captcha = {guid, url}
@@ -570,7 +570,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				failure : function(o){
 					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -632,7 +632,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.view_my_trades.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						delete o.result.status; //get rid of status after we process it, since it's big
 						this.mineTrades = o.result; //store: trades=[], trade_count = 1, page_number=1
@@ -653,7 +653,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					failure : function(o){
 						YAHOO.log(o, "error", "Trade.view_my_trades.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -728,7 +728,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.view_available_trades.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					delete o.result.status; //get rid of status after we process it, since it's big
 					this.mineTrades = o.result; //store: trades=[], trade_count = 1, page_number=1
@@ -738,7 +738,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				failure : function(o){
 					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -980,7 +980,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.service.add_trade(data, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.add_trade.success");
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					delete this.glyphs;
 					delete this.plans;
 					delete this.prisoners;
@@ -996,7 +996,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Lacuna.Pulser.Hide();
 					YAHOO.log(o, "error", "Trade.add_trade.failure");
 					
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -1257,7 +1257,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				this.service.push_items(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.Push.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						for(var n=0; n<lis.length; n++) {
 							if(lis[n].Object) {
@@ -1286,7 +1286,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.Push.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

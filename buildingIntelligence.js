@@ -112,7 +112,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						success : function(o){
 							YAHOO.log(o, "info", "Intelligence.Intelligence.view_spies.success");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							this.spies = o.result;
 							this.pager = new Pager({
 								rowsPerPage : 25,
@@ -130,7 +130,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						failure : function(o){
 							YAHOO.log(o, "error", "Intelligence.Intelligence.view_spies.failure");
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpcFailed", o);
+							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -316,14 +316,14 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				success : function(o){
 					YAHOO.log(o, "info", "Intelligence.SpyHandlePagination.view_spies.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.spies = o.result;
 					this.SpyPopulate();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyHandlePagination.view_spies.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -491,7 +491,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					success : function(o){
 						YAHOO.log(o, "info", "Intelligence.SpyTrain.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						var trained = o.result.trained*1;
 						if(trained > 0) {
 							this.spies = undefined;
@@ -504,7 +504,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					failure : function(o){
 						YAHOO.log(o, "error", "Intelligence.SpyTrain.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -521,7 +521,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			}, {
 				success : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 
 					delete this.spies;
 					this.spiesView({newValue:1});
@@ -529,7 +529,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				failure : function(o){
 					Lacuna.Pulser.Hide();
 					Dom.get("spiesSubsidize").disabled = false;
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

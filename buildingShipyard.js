@@ -78,7 +78,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Shipyard.getBuild.get_buildable.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.ships = {
 							buildable: o.result.buildable,
 							docks_available: o.result.docks_available
@@ -89,7 +89,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					failure : function(o){
 						YAHOO.log(o, "error", "Shipyard.getBuild.get_buildable.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -106,14 +106,14 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Shipyard.getQueue.view_build_queue.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.ship_build_queue = o.result;
 						this.ShipyardDisplay();
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Shipyard.getQueue.view_build_queue.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -190,7 +190,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Shipyard.SubsidizeBuildQueue.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 
 					this.ship_build_queue = undefined;
 					this.ShipyardDisplay();
@@ -198,7 +198,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				failure : function(o){
 					YAHOO.log(o, "error", "Shipyard.SubsidizeBuildQueue.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

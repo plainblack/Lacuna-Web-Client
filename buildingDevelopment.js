@@ -106,7 +106,7 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 					Lacuna.Pulser.Hide();
 					var e = Game.EmpireData.essentia*1;
 					Game.EmpireData.essentia = e - o.result.essentia_spent*1;
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					
 					if(this.queueTab) {
 						Event.purgeElement(this.queueTab.get("contentEl"));
@@ -119,7 +119,7 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 				failure : function(o){
 					YAHOO.log(o, "error", "Development.DevSubsidize.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

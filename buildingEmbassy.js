@@ -185,7 +185,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				this.service.create_alliance(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.CreateAlliance.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						this.alliance = o.result.alliance;
 						this.isLeader = this.alliance && this.alliance.leader_id == Game.EmpireData.id;
 						Dom.get("embassyCreateMessage").innerHTML = "";
@@ -201,7 +201,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Embassy.CreateAlliance.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -217,7 +217,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.get_my_invites.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						this.invites = o.result.invites;
 						
@@ -226,7 +226,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					failure : function(o){
 						YAHOO.log(o, "error", "Embassy.get_my_invites.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -380,7 +380,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Embassy.update_alliance.success");
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					Dom.get("embassyAllianceMessage").innerHTML = "Updated alliance info.";
 					var a = new Util.Anim(Dom.get("embassyAllianceMessage"), {opacity:{from:1,to:0}}, 3);
 					a.onComplete.subscribe(function(){
@@ -394,7 +394,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					Lacuna.Pulser.Hide();
 					YAHOO.log(o, "error", "Embassy.update_alliance.failure");
 					
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -409,7 +409,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.leave_alliance.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						delete this.alliance;
 						this.removeTab(this.allianceTab);
 						this.removeTab(this.memberTab);
@@ -423,7 +423,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Embassy.leave_alliance.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -438,7 +438,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.dissolve_alliance.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						delete this.alliance;
 						this.removeTab(this.allianceTab);
 						this.removeTab(this.memberTab);
@@ -452,7 +452,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Embassy.dissolve_alliance.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -472,7 +472,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.get_pending_invites.success");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						this.pendingInvites = o.result.invites;
 						
@@ -481,7 +481,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					failure : function(o){
 						YAHOO.log(o, "error", "Embassy.get_pending_invites.failure");
 						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -584,7 +584,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.send_invite.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						
 						this.embassySendTo.ResetSelections();
 						Dom.get("embassySendMessage").value = "";
@@ -596,7 +596,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Embassy.send_invite.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

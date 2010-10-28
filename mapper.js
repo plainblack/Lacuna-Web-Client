@@ -1123,7 +1123,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		
 			this.Tile = Mapper.StarTile;
 			
-			this.zoom = Game.GetCookieSettings("starZoom",0);
+			this.zoom = Game.GetCookieSettings("starZoom",0)*1;
 			this._setTileSizeByZoom();
 		},
 		getTile : function(x, y){
@@ -1287,7 +1287,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.Tile = Mapper.PlanetTile;
 			this.keepTilesOutOfBounds = true;
 			
-			this.zoom = Game.GetCookieSettings("planetZoom",0);
+			this.zoom = Game.GetCookieSettings("planetZoom",0)*1;
 			this._setTileSizeByZoom();
 		},
 		setCenterToCommand : function() {

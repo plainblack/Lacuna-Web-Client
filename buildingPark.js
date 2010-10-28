@@ -48,16 +48,16 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				success : function(o){
 					YAHOO.log(o, "info", "Park.Party.success");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
-					this.work = o.result.building.work;
-					this.updateBuildingTile(o.result.building);
+					this.rpcSuccess(o);
+					//this.work = o.result.building.work;
+					//this.updateBuildingTile(o.result.building);
 					
 					this.UpdatePartyTab(o.result.party);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Park.Party.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -117,10 +117,10 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 			}, {
 				success : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 
-					delete this.work;
-					this.updateBuildingTile(o.result.building);
+					//delete this.work;
+					//this.updateBuildingTile(o.result.building);
 					this.resetQueue();
 					
 					this.UpdatePartyTab(o.result.party);
@@ -128,7 +128,7 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				failure : function(o){
 					Lacuna.Pulser.Hide();
 					Dom.get("parkSubsidize").disabled = false;
-					this.fireEvent("onMapRpcFailed", o);
+					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

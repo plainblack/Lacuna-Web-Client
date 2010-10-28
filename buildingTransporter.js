@@ -137,7 +137,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				this.service.trade_one_for_one(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Transporter.Trade.success");
-						this.fireEvent("onMapRpc", o.result);
+						this.rpcSuccess(o);
 						Dom.get("transporterOneForOneHave").selectedIndex = -1;
 						Dom.get("transporterOneForOneWant").selectedIndex = -1;
 						Dom.get("transporterOneForOneQuantity").value = "";
@@ -148,7 +148,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Transporter.Trade.failure");
 						
-						this.fireEvent("onMapRpcFailed", o);
+						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
