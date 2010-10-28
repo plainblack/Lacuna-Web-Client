@@ -111,6 +111,9 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 			}
 			return output.join('');
 		},
+		platformClick : function(){
+			Game.StarJump(this);
+		},
 		MiningMinistryPlatforms : function() {
 			var platforms = this.platforms.platforms,
 				details = Dom.get("platformDetails");
@@ -140,9 +143,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 
 					Dom.addClass(nLi,"platformLocation");
 					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
-					Event.on(nLi, "click", function(){
-						Game.StarJump(obj);
-					}, obj, true);
+					Event.on(nLi, "click", this.platformClick, obj, true);
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);

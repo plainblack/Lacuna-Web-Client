@@ -614,7 +614,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.viewingMessage = msg;
 				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
 				this.from.innerHTML = ['<a class="profile_link" href="#',msg.from_id,'">',msg.from,'</a>'].join('');
-				this.to.innerHTML = ['<a class="profile_link" href="#',msg.to_id,'">',msg.to,'</a>'].join('');;
+				this.to.innerHTML = ['<a class="profile_link" href="#',msg.to_id,'">',msg.to,'</a>'].join('');
 				this.subject.innerHTML = msg.subject;
 				this.body.parentNode.scrollTop = 0;
 				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';

@@ -79,7 +79,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				if((this.building.work && !o.result.building.work) || (!this.building.work && o.result.building.work)) {
 					this.updateBuildingTile(o.result.building);
 				}
-				this.building = o.result.building
+				this.building = o.result.building;
 				this.work = this.building.work;
 			}
 			else {

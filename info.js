@@ -113,7 +113,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 			Event.stopEvent(e);
 			var res = el.href.match(/\#(\d+)$/);
 			Lacuna.Info.Empire.Load(res[1]);
-		},
+		}
 	};
 	
 	var Empire = function(){
