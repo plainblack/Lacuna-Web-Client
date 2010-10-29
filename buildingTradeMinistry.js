@@ -461,7 +461,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				oSelf.Self.service.get_trade_ships({
 					session_id: Game.GetSession(""),
 					building_id: oSelf.Self.building.id,
-					target_body_id: oSelf.Trade.body_id.id
+					target_body_id: oSelf.Trade.body.id
 				},{
 					success : function(o){
 						this.rpcSuccess(o);
