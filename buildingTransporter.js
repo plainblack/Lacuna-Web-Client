@@ -7,6 +7,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
+		Sel = Util.Selector,
+		Pager = YAHOO.widget.Paginator,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
@@ -26,9 +28,92 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		this.pushTradeText = "Send For 2 Essentia";
 		
 		this.service = Game.Services.Buildings.Transporter;
+		
+		this.createEvent("onLoadResources");
+		this.createEvent("onLoadGlyphs");
+		this.createEvent("onLoadPlans");
+		this.createEvent("onLoadShips");
+		this.createEvent("onLoadPrisoners");
+		
+		this.subscribe("onLoad", function() {
+			this.getStoredResources();
+			this.mine.subscribe("activeChange", this.getMine, this, true);
+			this.avail.subscribe("activeChange", this.getAvailable, this, true);
+			this.push.subscribe("activeChange", function(e) {
+				if(e.newValue && !this.pushTabView) {
+					this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
+					this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getGlyphs();
+						}
+					},this,true);
+					this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getPlans();
+						}
+					},this,true);
+					this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getShips();
+						}
+					},this,true);
+					this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getPrisoners();
+						}
+					},this,true);
+					
+					this.pushTabView.selectTab(0);
+				}
+			},this,true);
+			this.add.subscribe("activeChange", function(e) {
+				if(e.newValue && !this.addTabView) {
+					this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
+					this.addTabView.getTab(0).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getStoredResources();
+						}
+					},this,true);
+					this.addTabView.getTab(1).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getGlyphs();
+						}
+					},this,true);
+					this.addTabView.getTab(2).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getPlans();
+						}
+					},this,true);
+					this.addTabView.getTab(3).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getPrisoners();
+						}
+					},this,true);
+					this.addTabView.getTab(4).subscribe("activeChange", function(e) {
+						if(e.newValue) {
+							this.getShips();
+						}
+					},this,true);
+					
+					this.addTabView.selectTab(0);
+				}
+			},this,true);
+		}, this, true);
 	};
 	
-	Lang.extend(Transporter, Lacuna.buildings.Trade, {
+	Lang.extend(Transporter, Lacuna.buildings.Building, {
+		destroy : function() {
+			if(this.availablePager) {
+				this.availablePager.destroy();
+			}
+			if(this.minePage) {
+				this.minePage.destroy();
+			}
+			if(this.acceptVerify) {
+				this.acceptVerify.destroy();
+			}
+			Transporter.superclass.destroy.call(this);
+		},
 		getChildTabs : function() {
 			this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
 			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
