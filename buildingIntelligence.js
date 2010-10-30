@@ -353,7 +353,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				success : function(o){
 					YAHOO.log(o, "info", "Intelligence.SpyAssign.success");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.rpcSuccess(o);
 					delete this.Self.spies;
 					var mission = o.result.mission;
 					this.Assign.ResultText.innerHTML = "Mission " + mission.result + (
@@ -373,7 +373,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Self.rpcFailure(o);
 					this.Assign.selectedIndex = this.Assign.defaultIndex;
 				},
 				timeout:Game.Timeout,
@@ -392,7 +392,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					success : function(o){
 						YAHOO.log(o, "info", "Intelligence.SpyBurn.success");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var spies = this.Self.spies.spies;
 						for(var i=0; i<spies.length; i++) {
 							if(spies[i].id == this.Spy.id) {
@@ -406,7 +406,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					failure : function(o){
 						YAHOO.log(o, "error", "Intelligence.SpyBurn.failure");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -450,7 +450,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				success : function(o){
 					YAHOO.log(o, "info", "Intelligence.SpyNameSave.success");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.rpcSuccess(o);
 					this.Self.spies = undefined;
 					this.Spy.name = newName;
 					if(this.Input) {
@@ -461,7 +461,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyNameSave.failure");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Self.rpcFailure(o);
 					if(this.Input) {
 						this.Input.value = this.Spy.name;
 					}

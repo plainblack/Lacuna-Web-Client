@@ -14,11 +14,13 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
 	var PlanetaryCommand = function(result){
 		PlanetaryCommand.superclass.constructor.call(this, result);
+		
+		this.service = Game.Services.Buildings.PlanetaryCommand;
 	};
 	
 	Lang.extend(PlanetaryCommand, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getPlanetTab(), this._getAbandonTab(), this._getRenameTab()];
+			return [this._getPlanetTab(), this._getAbandonTab(), this._getRenameTab(), this._getPlanTab()];
 		},
 		_getPlanetTab : function() {
 			var planet = this.result.planet,
@@ -81,6 +83,42 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 			
 			return this.renameTab;
 		},
+		_getPlanTab : function() {
+			this.planTab = new YAHOO.widget.Tab({ label: "Plans", content: [
+				'<ul class="plan planHeader clearafter"><li class="planName">Name</li><li class="planLevel">Level</li><li class="planExtra">Extra Level</li></ul>',
+				'<div>',
+				'	<div id="planDetails">',
+				'	</div>',
+				'</div>'
+			].join('')});
+			this.planTab.subscribe("activeChange", function(e) {
+				if(e.newValue) {
+					if(!this.plans) {
+						Lacuna.Pulser.Show();
+						this.service.view_plans({session_id:Game.GetSession(),building_id:this.building.id}, {
+							success : function(o){
+								Lacuna.Pulser.Hide();
+								this.rpcSuccess(o);
+								this.plans = o.result.plans;
+								
+								this.PlanPopulate();
+							},
+							failure : function(o){
+								Lacuna.Pulser.Hide();
+								this.rpcFailure(o);
+							},
+							timeout:Game.Timeout,
+							scope:this
+						});
+					}
+					else {
+						this.PlanPopulate();
+					}
+				}
+			}, this, true);
+				
+			return this.planTab;
+		},
 		Abandon : function() {
 			var cp = Game.GetCurrentPlanet();
 			if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
@@ -137,6 +175,59 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					scope:this
 				}
 			);
+		},
+		PlanPopulate : function(){
+			var div = Dom.get("planDetails");
+			if(div) {
+				var divParent = div.parentNode,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+					
+				div = divParent.removeChild(div);
+				
+				if(this.plans.length > 0) {
+					div.innerHTML = "";
+
+					for(var i=0; i<this.plans.length; i++) {
+						var plan = this.plans[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+						
+						Dom.addClass(nUl, "plan");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"planName");
+						nLi.innerHTML = plan.name;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"planLevel");
+						nLi.innerHTML = plan.level;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"planExtra");
+						nLi.innerHTML = plan.extra_build_level;
+						nUl.appendChild(nLi);
+
+						div.appendChild(nUl);
+					}
+				}
+				else {
+					div.innerHTML = "No Plans currently available on this planet.";
+				}
+				
+				//add child back in
+				divParent.appendChild(div);
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					if(divParent.clientHeight > 300) {
+						Dom.setStyle(divParent,"height","300px");
+						Dom.setStyle(divParent,"overflow-y","auto");
+					}
+				},10);
+			}
 		}
 	});
 	

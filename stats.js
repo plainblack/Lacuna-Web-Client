@@ -354,7 +354,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				
 			for(var bt in data.types) {
 				if(data.types.hasOwnProperty(bt)) {
-					output.push(['<li><label class="statsSubHeader">',Lib.Ships[bt],'</label>',
+					output.push(['<li><label class="statsSubHeader">',bt.titleCaps("_"," "),'</label>',
 					'	<ul style="display:none;">',
 					'	<li><label>Total:</label>', Lib.formatNumber(data.types[bt].count), '</li>',
 					'	<li><label>Smallest Hold Size:</label>', Lib.formatNumber(data.types[bt].smallest_hold_size), '</li>',
@@ -422,8 +422,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					{key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
 					{key:"building_count", label:"Buildings", formatter:"number"},
 					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
-					{key:"offense_success_rate", label:"Offense", formatter:"number", sortable:true},
-					{key:"defense_success_rate", label:"Defense", formatter:"number", sortable:true},
+					{key:"offense_success_rate", label:"Offense", formatter:"percent", sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:"percent", sortable:true},
 					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
 				];
 				
@@ -655,8 +655,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					{key:"average_empire_size", label:"Avg. Empire Size", formatter:"number", sortable:true},
 					{key:"building_count", label:"Buildings", formatter:"number"},
 					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
-					{key:"offense_success_rate", label:"Offense", formatter:"number", sortable:true},
-					{key:"defense_success_rate", label:"Defense", formatter:"number", sortable:true},
+					{key:"offense_success_rate", label:"Offense", formatter:"percent", sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:"percent", sortable:true},
 					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
 				];
 
@@ -1003,7 +1003,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 						el.innerHTML = Lib.formatTime(oData);
 					}},
 					{key:"level", label:"Level"},
-					{key:"success_rate", label:"Success Rate"},
+					{key:"success_rate", label:"Success Rate", formatter:"percent"},
 					{key:"dirtiest", label:"Dirtiest"}
 				];
 				

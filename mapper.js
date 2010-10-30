@@ -325,6 +325,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	
 	Mapper.PlanetTile = function(x, y, z, ox, oy, layer) {
 		Mapper.PlanetTile.superclass.constructor.call(this, x, y, z, ox, oy, layer);
+		Dom.addClass(this.domElement, "tile"+ this.tileSizeInPx);
 	};
 	Lang.extend(Mapper.PlanetTile, Tile, {
 		init : function() {
@@ -1270,7 +1271,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.setTileSizeInPx(100);
 					break;
 				case -2:
-					this.setTileSizeInPx(75);
+					this.setTileSizeInPx(50);
 					break;
 				default:
 					this.setTileSizeInPx(200);
@@ -1320,7 +1321,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						imgSize = "100/";
 						break;
 					case -2:
-						imgSize = "100/";
+						imgSize = "50/";
 						break;
 				}
 				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',imgSize,building.image,'.png'].join('')};

@@ -917,6 +917,33 @@ Info dialogs for Empire and Alliance
 .plots-full .planetMapTileActionButton {
 	background: transparent url('assets/ui/l/build-no.png');
 }
+
+.tileContainer .tile50  div.planetMapTileCounter {
+	font-family: san-serif;
+	font-size: 100%;
+}
+.tileContainer .tile50  div.planetMapTileCounterWork {
+	font-family: san-serif;
+	font-size: 100%;
+}
+.tile50 .planetMapTileActionContainer {
+	font-size: 100%;
+}
+.tile50 .planetMapTileActionLevel, .tile50 .planetMapTileActionButton {
+	width:29px;
+	height:22px;
+	margin:-12px auto 0;
+}
+.tile50 .planetMapTileActionLevel {
+	font-size:15pt;
+}
+.tile50 .planetMapTileActionButton {
+	background: transparent url('assets/ui/s/build.png');
+}
+.plots-full .tile50 .planetMapTileActionButton {
+	background: transparent url('assets/ui/s/build-no.png');
+}
+
 .mapiator_nav {
 	background: url(assets/ui/zoom.png);
 	position:absolute;
@@ -1345,11 +1372,11 @@ planet details
 }
 
 /* shared display headers */
-.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader {
+.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader, .planHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .platformInfo li , .archaeologyGlyphInfo li {
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .platformInfo li , .archaeologyGlyphInfo li, .plan li{
 	float:left;
 }
 
@@ -1424,6 +1451,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:250px;
 }
 .embassyInfo .embassyAction {
+	width:100px;
+}
+
+.plan li {
 	width:100px;
 }
 

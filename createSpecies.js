@@ -214,9 +214,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 				xyoffset:[0,10],
 				context: Sel.query('.speciesAffinities label', 'speciesCreate')
 			});
-			//this._affinityTooltip.beforeShowEvent.subscribe(function(){
-			//	this.bringToTop();
-			//});
 		},
 		_createHabitableOrbits : function () {
 			var range = 180,
@@ -302,7 +299,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 			slider.key = container;
 			YAHOO.lang.augmentObject(slider, {
 				getAffinity : function() {
-					return this.getValue() / tickSize + 1;
+					return Math.round(this.getValue() / tickSize + 1);
 				},
 				setAffinity : function(affinity, skipAnim, force, silent) {
 					var value = (affinity - 1) * tickSize;

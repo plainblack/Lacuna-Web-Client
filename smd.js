@@ -928,6 +928,38 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			PlanetaryCommand : {
+				"SMDVersion":"2.0",
+				"description": "Planetary Command",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/planetarycommand",
+
+				"services": {
+					"view_plans" : {
+						"description": "Returns a list of all the plans you've collected through various means.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"plans" : [
+								{
+								   "name" : "Malcud Fungus Farm",
+								   "level" : 1,
+								   "extra_build_level" : 5
+								},
+								...
+							]
+						 }
+						*/
+					},
+				}
+			},
 			Recycler : {
 				"SMDVersion":"2.0",
 				"description": "Waste Recycler",
@@ -2506,7 +2538,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 		},
 		Map : {
 			"SMDVersion":"2.0",
-			"description": "SMD service demonstration",
+			"description": "",
 
 			"envelope":"JSON-RPC-2.0",
 			"transport":"POST",

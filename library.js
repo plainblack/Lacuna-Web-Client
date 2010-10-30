@@ -80,7 +80,8 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 (function(){
 	var Util = YAHOO.util,
 		Lang = YAHOO.lang,
-		Dom = Util.Dom;
+		Dom = Util.Dom,
+		assetUrl = window.lacuna_s3_base_url + 'assets/';
 
 	var xPad=function (x, pad, r) {
 		if(typeof r === 'undefined') {
@@ -91,7 +92,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		}
 		return x.toString();
 	};
-	var assetUrl = window.lacuna_s3_base_url + 'assets/';
+
 	var Library = {
 		ApiKey : "53137d8f-3544-4118-9001-b0acbec70b3d",
 		AssetUrl : assetUrl,
