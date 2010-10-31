@@ -83,7 +83,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 						ms = Lib.parseServerDate(ship.date_arrives) - (new Date());
 					if(ms > 0) {
 						i++;
-						arr = arr.concat(['<li>',i, ': ', Lib.formatMillisecondTime(ms),'</li>']);
+						arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> ', Lib.formatMillisecondTime(ms),'</li>']);
 					}
 				}
 			}
@@ -96,6 +96,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				Game.onTick.unsubscribe(this._updating);
 				delete this.subscribed;
 				this.incomingShips = {};
+				this.Hide();
 			}
 		},
 		Load : function(planet) {
