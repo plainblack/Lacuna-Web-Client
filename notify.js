@@ -59,7 +59,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		_getHtml : function() {
 			return [
 			'	<div class="hd">Alerts</div>',
-			'	<div class="bd" style="background:#FFD800;color:#000;">',
+			'	<div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
 			'		<ul id="notifyList">',
 			'		</ul>',
 			'	</div>'
@@ -83,7 +83,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 						ms = Lib.parseServerDate(ship.date_arrives) - (new Date());
 					if(ms > 0) {
 						i++;
-						arr = arr.concat(['<li>',s+1, ': ', Lib.formatMillisecondTime(ms),'</li>']);
+						arr = arr.concat(['<li>',i, ': ', Lib.formatMillisecondTime(ms),'</li>']);
 					}
 				}
 			}
