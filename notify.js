@@ -66,12 +66,9 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			].join('');
 		},
 		_updating : function() {
-			var list = this.Display.notifyList,
-				parent = list.parentNode;
-			list = parent.removeChild(list);
+			var list = this.Display.notifyList;
 			
-			var planetShips = this.incomingShips[this.planetId], 
-				p = Game.EmpireData.planets[this.planetId],
+			var planetShips = this.incomingShips[this.planetId] || [], 
 				arr = [],
 				i = 0;
 			if(planetShips.length === 0) {
@@ -89,8 +86,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			}
 			
 			list.innerHTML = arr.join('');
-
-			parent.appendChild(list);
 			
 			if(i == 0) {
 				Game.onTick.unsubscribe(this._updating);

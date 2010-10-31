@@ -322,6 +322,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			YAHOO.log("onChangeClick", "debug", "Game");
 			Game.OverlayManager.hideAll();
 			if(Lacuna.MapStar.IsVisible() || Lacuna.Menu.IsStarVisible()) {
+				Game.PlanetJump(Game.GetCurrentPlanet());
+				/*
 				Lacuna.MapStar.MapVisible(false);
 				Lacuna.MapPlanet.MapVisible(true);
 				Lacuna.Menu.PlanetVisible();
@@ -330,6 +332,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					planetId = ED.current_planet_id || ED.home_planet_id;
 				Game.SetLocation(planetId, Lib.View.PLANET);
 				Lacuna.MapPlanet.Load(planetId);
+				*/
 			}
 			else if(Lacuna.MapPlanet.IsVisible() || Lacuna.Menu.IsPlanetVisible()) {
 				Lacuna.MapPlanet.MapVisible(false);
@@ -630,6 +633,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.EmpireData = {};
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();
+			Lacuna.Notify.Hide();
 			
 			//do this last since we don't control the code
 			if(logoutCommand && window.env_executeCommand) {
