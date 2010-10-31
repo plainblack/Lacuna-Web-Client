@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_getHtml : function() {
 			return [
-			'	<div class="hd" style="display:none;">Alerts</div>',
+			'	<div class="hd">Alerts</div>',
 			'	<div class="bd" style="background:#FFD800;color:#000;">',
 			'		<ul id="notifyList">',
 			'		</ul>',
