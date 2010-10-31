@@ -32,7 +32,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					close:false,
 					underlay:false,
 					modal:false,
-					width:"350px",
+					width:"180px",
 					context:["header","tr","br", ["beforeShow", "windowResize"], [0,40]]
 				});
 				this.Display.renderEvent.subscribe(function(){
@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_getHtml : function() {
 			return [
-			'	<div class="hd">Alerts</div>',
+			'	<div class="hd" style="background:transparent;">Incoming Ships!</div>',
 			'	<div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
 			'		<ul id="notifyList">',
 			'		</ul>',
@@ -72,7 +72,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			
 			var planetShips = this.incomingShips[this.planetId], 
 				p = Game.EmpireData.planets[this.planetId],
-				arr = ['<li style="border-bottom:1px solid #52ACFF;font-weight:bold;">Incoming Ships To ',p.name,'!</li>'],
+				arr = [],
 				i = 0;
 			if(planetShips.length === 0) {
 				arr = arr.concat(['<li>None</li>']);
