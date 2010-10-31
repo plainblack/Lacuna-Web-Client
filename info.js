@@ -97,9 +97,6 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					}
 					
 					this.memberList.innerHTML = memberArray.join('');
-					
-					this.Panel.show();
-					this.Panel.bringToTop();
 				},
 				failure:function(o){
 					Lacuna.Pulser.Hide();

@@ -455,6 +455,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					if(planet.needs_surface_refresh && planet.needs_surface_refresh*1 === 1) {
 						Lacuna.MapPlanet.Refresh();
 					}
+					
+					Lacuna.Notify.Load(planet);
 				}
 				if(doMenuUpdate) {
 					Lacuna.Menu.update();
@@ -532,13 +534,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			//make sure we have found a planet to look at
 			if(planet) {
+				Game.OverlayManager.hideAll();
 				Game.EmpireData.current_planet_id = planet.id;
 				Lacuna.Menu.PlanetMenu.elText.innerHTML = [planet.image ? '<img src="'+Lib.AssetUrl+'star_system/'+planet.image+'.png" class="menuPlanetThumb" />' : '', planet.name].join('');
 				Game.SetLocation(planet.id, Lib.View.PLANET);
 			
 				Lacuna.MapStar.MapVisible(false);
 				Lacuna.Menu.PlanetVisible();
-				Lacuna.MapPlanet.Load(planet.id);
+				Lacuna.MapPlanet.Load(planet.id, true);
 			}
 		},
 
@@ -579,12 +582,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			}
 		},
-		GetContainerEffect : function() {
+		GetContainerEffect : function(effect) {
 			if(Game.GetCookieSettings("disableDialogAnim","0") == "1") {
 				return;
 			}
 			else {
-				return {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.5};
+				return effect || {effect:YAHOO.widget.ContainerEffect.FADE,duration:0.5};
 			}
 		},
 		

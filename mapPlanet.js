@@ -611,8 +611,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			Lacuna.Pulser.Hide();
 		},
-		Load : function(planetId) {
+		Load : function(planetId, showNotify) {
 			Lacuna.Pulser.Show();
+			if(showNotify) {
+				Lacuna.Notify.Show(planetId);
+			}
+			else {
+				Lacuna.Notify.Hide();
+			}
 			this.locationId = planetId;
 			this.ReLoad();
 		},
@@ -668,12 +674,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		ReLoadTile : function(id) {
-			YAHOO.log(this._isVisible, "info", "MapPlanet.ReLoadTile._isVisible");
+			//YAHOO.log(this._isVisible, "info", "MapPlanet.ReLoadTile._isVisible");
 			if(this._isVisible && id) {
-				YAHOO.log(id, "info", "MapPlanet.ReLoadTile.id");
+				//YAHOO.log(id, "info", "MapPlanet.ReLoadTile.id");
 				var building = this.buildings[id];
 				if(building) {
-					YAHOO.log(building, "info", "MapPlanet.ReLoadTile.building");
+					//YAHOO.log(building, "info", "MapPlanet.ReLoadTile.building");
 					
 					this.ViewData(id, building.url, {
 						url:building.url

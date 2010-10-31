@@ -75,15 +75,15 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		rpcSuccess : function(o) {
 			this.fireEvent("onMapRpc", o.result);
 			if(o.result.building) {
+				this.work = this.building.work;
 				//if we suddenly have work update the tile to add the tile.  if we don't have work update the tile to remove the timer
 				if((this.building.work && !o.result.building.work) || (!this.building.work && o.result.building.work)) {
 					this.updateBuildingTile(o.result.building);
 				}
-				this.building = o.result.building;
-				this.work = this.building.work;
-			}
-			else {
-				delete this.work;
+				else {
+					o.result.building.url = this.building.url;
+					this.building = o.result.building;
+				}
 			}
 		},
 		rpcFailure : function(o) {
