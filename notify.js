@@ -29,7 +29,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					visible:false,
 					draggable:true,
 					effect:Game.GetContainerEffect(),
-					close:true,
+					close:false,
 					underlay:false,
 					modal:false,
 					width:"350px",
@@ -58,7 +58,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_getHtml : function() {
 			return [
-			'	<div class="hd">Alerts</div>',
+			'	<div class="hd" style="display:none;">Alerts</div>',
 			'	<div class="bd" style="background:#FFD800;color:#000;">',
 			'		<ul id="notifyList">',
 			'		</ul>',
@@ -83,7 +83,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 						ms = Lib.parseServerDate(ship.date_arrives) - (new Date());
 					if(ms > 0) {
 						i++;
-						arr = arr.concat(['<li>',Lib.formatMillisecondTime(ms),'</li>']);
+						arr = arr.concat(['<li>',s+1, ': ', Lib.formatMillisecondTime(ms),'</li>']);
 					}
 				}
 			}
