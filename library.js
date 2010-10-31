@@ -172,24 +172,29 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		parseReason : function(reason, defReason) {
 			var output = "";
 			if(reason) {
-				switch(reason[0]) {
-					case 1011:
-						output = [reason[1], ' Requires more ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
-						break;
-					case 1012:
-						if(reason[2]) {
-							output = [reason[1], ' Requires higher production of ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
-						}
-						else {
+				if(Lang.isArray(reason)) {
+					switch(reason[0]) {
+						case 1011:
+							output = [reason[1], ' Requires more ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
+							break;
+						case 1012:
+							if(reason[2]) {
+								output = [reason[1], ' Requires higher production of ', (Lang.isArray(reason[2]) ? reason[2].join(', ') : reason[2])].join('');
+							}
+							else {
+								output = reason[1];
+							}
+							break;
+						case 1013:
 							output = reason[1];
-						}
-						break;
-					case 1013:
-						output = reason[1];
-						break;
-					default:
-						output = defReason || reason[1];
-						break;
+							break;
+						default:
+							output = defReason || reason[1];
+							break;
+					}
+				}
+				else {
+					output = defReason || reason;
 				}
 			}
 			return output;
