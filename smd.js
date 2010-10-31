@@ -957,7 +957,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							]
 						 }
 						*/
-					},
+					}
 				}
 			},
 			Recycler : {

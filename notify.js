@@ -62,7 +62,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			'	<div class="bd" style="background:#FFD800;color:#000;">',
 			'		<ul id="notifyList">',
 			'		</ul>',
-			'	</div>',
+			'	</div>'
 			].join('');
 		},
 		_updating : function() {
