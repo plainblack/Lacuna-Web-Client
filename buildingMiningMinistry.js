@@ -287,7 +287,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					success : function(o){
 						YAHOO.log(o, "info", "MiningMinistry.MiningMinistryPlatformAbandon.success");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var platforms = this.Self.platforms.platforms;
 						for(var i=0; i<platforms.length; i++) {
 							if(platforms[i].id == this.Platform.id) {
@@ -300,7 +300,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					failure : function(o){
 						YAHOO.log(o, "error", "MiningMinistry.MiningMinistryPlatformAbandon.failure");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -456,7 +456,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.ShipNameSave.success");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.rpcSuccess(o);
 					delete this.Self.shipsView;
 					this.Ship.name = newName;
 					if(this.Input) {
@@ -467,7 +467,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					YAHOO.log(o, "error", "SpacePort.ShipNameSave.failure");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Self.rpcFailure(o);
 					if(this.Input) {
 						this.Input.value = this.Ship.name;
 					}
@@ -597,7 +597,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					success : function(o){
 						YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var ships = this.Self.shipsView.ships;
 						for(var i=0; i<ships.length; i++) {
 							if(ships[i].id == this.Ship.id) {
@@ -610,7 +610,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					failure : function(o){
 						YAHOO.log(o, "error", "SpacePort.ShipScuttle.failure");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

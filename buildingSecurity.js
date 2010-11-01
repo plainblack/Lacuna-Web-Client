@@ -212,7 +212,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Security.PrisonersExecute.success");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var prisoners = this.Self.prisoners;
 						for(var i=0; i<prisoners.length; i++) {
 							if(prisoners[i].id == this.Prisoner.id) {
@@ -225,7 +225,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					failure : function(o){
 						YAHOO.log(o, "error", "Security.PrisonersExecute.failure");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -244,7 +244,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Security.PrisonersRelease.success");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var prisoners = this.Self.prisoners;
 						for(var i=0; i<prisoners.length; i++) {
 							if(prisoners[i].id == this.Prisoner.id) {
@@ -257,7 +257,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					failure : function(o){
 						YAHOO.log(o, "error", "Security.PrisonersRelease.failure");
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

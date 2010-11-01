@@ -303,7 +303,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Shipyard.ShipBuild.success");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.rpcSuccess(o);
 					//this.Self.UpdateCost(this.Ship.cost);
 					this.Self.ship_build_queue = o.result;
 					this.Self.ShipyardDisplay();
@@ -317,7 +317,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				failure : function(o){
 					YAHOO.log(o, "error", "Shipyard.ShipBuild.failure");
 					Lacuna.Pulser.Hide();
-					this.Self.fireEvent("onMapRpcFailed", o);
+					this.Self.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

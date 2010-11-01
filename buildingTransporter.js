@@ -789,7 +789,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.accept_trade.success");
-					this.Self.fireEvent("onMapRpc", o.result);
+					this.Self.rpcSuccess(o);
 					this.Self.acceptVerify.hide();
 					//force get the new availabe list after accepting so we get a new captcha
 					this.Self.getAvailable({newValue:true});
@@ -805,7 +805,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.Self.acceptVerify.setError(o.error.message);
 					}
 					else {					
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					}
 				},
 				timeout:Game.Timeout,
@@ -949,7 +949,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.withdraw_trade.success");
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
 						var trades = this.Self.mineTrades.trades;
 						for(var i=0; i<trades.length; i++) {
 							if(trades[i].id == this.Trade.id) {
@@ -964,7 +964,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Trade.withdraw_trade.failure");
 						
-						this.Self.fireEvent("onMapRpcFailed", o);
+						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
