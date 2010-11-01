@@ -814,11 +814,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					newB.x = x;
 					newB.y = y;
 					newB.updated = (newB.level != this.buildings[newB.id].level);
-					newB = this.CleanBuilding(newB);
-
+					this.ReloadBuilding(newB);
+					/*newB = this.CleanBuilding(newB);
 					this.buildings[newB.id] = newB;
 					this._map.refreshTile(newB);
-
+					*/
 
 					if(callback && callback.success) {
 						callback.success.call(this, o.result, callback.url, x, y);

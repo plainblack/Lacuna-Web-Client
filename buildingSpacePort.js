@@ -39,7 +39,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
-				'		<li class="shipTypeImage">Type</li>',
+				'		<li class="shipTypeImage">&nbsp;</li>',
+				'		<li class="shipName">Name</li>',
 				'		<li class="shipArrives">Arrives</li>',
 				'		<li class="shipFrom">From</li>',
 				'		<li class="shipTo">To</li>',
@@ -252,6 +253,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = ship.name;
+					nUl.appendChild(nLi);
+					Event.on(nLi, "click", this.ShipName, {Self:this,Ship:ship,el:nLi}, true);
+
+					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipArrives");
 					nLi.innerHTML = Lib.formatTime(sec);
 					nUl.appendChild(nLi);
@@ -419,6 +426,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			// Update the Paginator's state
 			this.viewPager.setState(newState);
 		},
+		
 		ShipName : function() {
 			this.el.innerHTML = "";
 			

@@ -1455,6 +1455,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .plan li {
 	width:100px;
 }
+.plan li.planName {
+	width:200px;
+}
 
 .probeInfo .probeStar {
 	width:200px;

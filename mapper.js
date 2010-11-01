@@ -370,17 +370,28 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		
 		startTick : function() {
-			if(this.data && !this.isTicking) {
+			if(this.data) {
 				var subTick;
-				if(this.data.pending_build && this.data.pending_build.seconds_remaining > 0.1) {
+				
+				if(this.data.pending_build && this.data.pending_build.seconds_remaining > 0) {
 					this._createBuildCounter();
 					subTick = true;
 				}
-				if(this.data.work && this.data.work.seconds_remaining > 0.1) {
+				else if(this.counterBuild) {
+					this.counterBuild.parentNode.removeChild(this.counterBuild);
+					delete this.counterBuild;
+				}
+				
+				if(this.data.work && this.data.work.seconds_remaining > 0) {
 					this._createWorkCounter();
 					subTick = true;
 				}
-				if(subTick) {
+				else if(this.counterWork){
+					this.counterWork.parentNode.removeChild(this.counterWork);
+					delete this.counterWork;
+				}
+				
+				if(subTick && !this.isTicking) {
 					this.isTicking = true;
 					Game.onTick.subscribe(this.tick, this, true);
 				}

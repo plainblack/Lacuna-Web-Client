@@ -273,7 +273,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Downgrade.success");
 						Lacuna.Pulser.Hide();
-						this.rpcSuccess(o);
+						this.fireEvent("onMapRpc", o.result);
 						
 						var b = this.building; //originally passed in building data from currentBuilding
 						b.id = o.result.building.id;
@@ -309,7 +309,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				success : function(o){
 					YAHOO.log(o, "info", "Building.Upgrade.success");
 					Lacuna.Pulser.Hide();
-					this.rpcSuccess(o);
+					this.fireEvent("onMapRpc", o.result);
 					
 					var b = building; //originally passed in building data from currentBuilding
 					b.id = o.result.building.id;
