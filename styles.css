@@ -361,6 +361,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	position:absolute;
 	padding-top:5px;
 	text-align:left;
+	overflow: hidden;
 }
 #header .menuItem {
 	text-align:center;
@@ -379,6 +380,15 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 }
 #footer .menuItem {
 	width:100px;
+} 
+#footer .ore.menuItem {
+	width: 94px;
+} 
+#footer .water.menuItem {
+	width: 91px;
+} 
+#footer .energy.menuItem {
+	width: 76px;
 } 
 #header .essentia{
 	width:110px;
@@ -571,8 +581,8 @@ SHINEY
 /* footer menu */
 .food { left:0px; }
 .ore { left:100px; }
-.water { left:200px; }
-.energy { left:300px; }
+.water { left:194px; }
+.energy { left:285px; }
 .waste { right:200px; }
 #footer .happiness { right:100px; }
 .plots  { right:0px; line-height:45px; }
