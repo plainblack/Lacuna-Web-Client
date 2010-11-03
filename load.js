@@ -18,7 +18,7 @@
 /** BUILD
 	var host = '**CODEROOT';
 	var loader = new YAHOO.util.YUILoader({
-		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
+		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/",
 		filter: "MIN",
 		allowRollup: true,
 		combine: false
@@ -30,7 +30,7 @@
 /** DEBUG */
 	var host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
 	var loader = new YAHOO.util.YUILoader({
-		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.1/build/",
+		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/",
 		filter: "RAW",
 		allowRollup: false,
 		combine: false
