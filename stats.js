@@ -629,10 +629,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 						"params": [
 							Game.GetSession(""),
 							state.sortedBy+"_rank",
-							sQuery
+							decodeURIComponent(sQuery)
 						]
 					});
-				return s.replace(/%20/g, ' ');
+				return s;
 			};
 			oTextboxList.itemSelectEvent.subscribe(function(e, oArgs) {
 				oArgs[0]._elTextbox.value = "";

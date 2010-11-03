@@ -163,10 +163,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						"jsonrpc": "2.0",
 						"params": [
 							Game.GetSession(""),
-							sQuery
+							decodeURIComponent(sQuery)
 						]
 					});
-				return s.replace(/%20/g, ' ');
+				return s;
 			};
 			
 			this.embassySendTo = oTextboxList;

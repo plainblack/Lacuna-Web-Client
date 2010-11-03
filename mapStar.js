@@ -419,10 +419,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								sQuery
+								decodeURIComponent(sQuery)
 							]
 						});
-					return s.replace(/%20/g, ' ');
+					return s;
 				};
 				oTextboxList.dirtyEvent.subscribe(function(event, isDirty, oSelf){
 					var star = this._oTblSingleSelection.Object;

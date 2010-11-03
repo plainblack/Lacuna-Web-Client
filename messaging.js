@@ -218,17 +218,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				formatResultColumnKeys:["name"],
 				useIndicator:true
 			});
-			oTextboxList.generateRequest = function(sQuery){				
+			oTextboxList.generateRequest = function(sQuery){
 				var s = Lang.JSON.stringify({
 						"id": YAHOO.rpc.Service._requestId++,
 						"method": "find",
 						"jsonrpc": "2.0",
 						"params": [
 							Game.GetSession(""),
-							sQuery
+							decodeURIComponent(sQuery)
 						]
 					});
-				return s.replace(/%20/g, ' ');
+				return s;
 			};
 			oTextboxList.doBeforeLoadData = function(sQuery, oResponse, oPayload){
 				var tq = decodeURIComponent(sQuery);
