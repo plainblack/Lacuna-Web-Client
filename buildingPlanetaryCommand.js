@@ -20,7 +20,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 	
 	Lang.extend(PlanetaryCommand, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getPlanetTab(), this._getAbandonTab(), this._getRenameTab(), this._getPlanTab()];
+			if(this.building.level > 0) {
+				return [this._getPlanetTab(), this._getAbandonTab(), this._getRenameTab(), this._getPlanTab()];
+			}
 		},
 		_getPlanetTab : function() {
 			var planet = this.result.planet,

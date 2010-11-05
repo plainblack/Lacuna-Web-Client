@@ -403,6 +403,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			].join('');
 		},
 		
+		formatPercent : function(el, oRecord, oColumn, oData) {
+			el.innerHTML = Util.Number.format(Math.round(oData*100),{thousandsSeparator:",",suffix:"%"});
+		},
 		EmpireStats : function(){
 			if(this.EmpireTable) {
 				this.EmpireTable.requery();
@@ -422,8 +425,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					{key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
 					{key:"building_count", label:"Buildings", formatter:"number"},
 					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
-					{key:"offense_success_rate", label:"Offense", formatter:"percent", sortable:true},
-					{key:"defense_success_rate", label:"Defense", formatter:"percent", sortable:true},
+					{key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
 					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
 				];
 				
@@ -655,8 +658,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					{key:"average_empire_size", label:"Avg. Empire Size", formatter:"number", sortable:true},
 					{key:"building_count", label:"Buildings", formatter:"number"},
 					{key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
-					{key:"offense_success_rate", label:"Offense", formatter:"percent", sortable:true},
-					{key:"defense_success_rate", label:"Defense", formatter:"percent", sortable:true},
+					{key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
+					{key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
 					{key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
 				];
 
@@ -1003,7 +1006,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 						el.innerHTML = Lib.formatTime(oData);
 					}},
 					{key:"level", label:"Level"},
-					{key:"success_rate", label:"Success Rate", formatter:"percent"},
+					{key:"success_rate", label:"Success Rate", formatter:this.formatPercent},
 					{key:"dirtiest", label:"Dirtiest"}
 				];
 				

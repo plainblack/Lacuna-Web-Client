@@ -932,6 +932,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/spaceport":
 					classObj = new Lacuna.buildings.SpacePort(result);
 					break;
+				case "/templeofthedrajilites":
+					classObj = new Lacuna.buildings.TempleOfTheDrajilites(result);
+					break;
 				case "/trade":
 					classObj = new Lacuna.buildings.Trade(result);
 					break;

@@ -20,7 +20,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 	
 	Lang.extend(Shipyard, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getQueueTab(), this._getBuildTab()];
+			if(this.building.level > 0) {
+				return [this._getQueueTab(), this._getBuildTab()];
+			}
 		},
 		_getQueueTab : function() {
 			var div = document.createElement("div");

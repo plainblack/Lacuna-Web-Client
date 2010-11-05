@@ -598,7 +598,7 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 						this._updateDirty();
 						this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
 					}
-					//this._toggleContainer(false);
+					this._toggleContainer(false);
 				}
 				else {
 					var oData = this._createDataObject(elListItem._oResultData);

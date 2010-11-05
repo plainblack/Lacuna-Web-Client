@@ -33,7 +33,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			SpacePort.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
+			if(this.building.level > 0) {
+				return [this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
+			}
 		},
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [

@@ -63,6 +63,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			});
 			
 			this.stopAnim = Dom.get("profileDisableDialogAnim");
+			this.showLevels = Dom.get("profileShowBuildingLevels");
 			
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			//species tab
@@ -152,6 +153,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'					<div id="detailsBrowser">',
 			'						<ul>',
 			'							<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li>',
+			'							<li><input id="profileShowBuildingLevels" type="checkbox" /> Always Show Building Levels</li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -216,6 +218,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				var cs = Game.OverlayManager.overlays;
 				for(var i=0; i<cs.length; i++) {
 					cs[i].cfg.setProperty("effect",newEffect);
+				}
+			}
+			if(Game.GetCookieSettings("showLevels","0") != (this.showLevels.checked ? "1" : "0")) {
+				if(this.showLevels.checked) {
+					Game.SetCookieSettings("showLevels","1");
+				}
+				else {
+					Game.RemoveCookieSettings("showLevels");
+				}
+				var levels = Sel.query("#planetMap .tileContainer .planetMapTileActionLevel");
+				for(var n=0; n<levels.length; n++) {
+					Dom.setStyle(levels[n].parentNode, "visibility", this.showLevels.checked ? "visible" : "");
 				}
 			}
 			
@@ -291,6 +305,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipResource.checked = p.skip_resource_warnings == "1";
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
+			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
 			
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;

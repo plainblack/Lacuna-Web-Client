@@ -10,7 +10,9 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
 	
 	YAHOO.lang.extend(OreStorage, YAHOO.lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getOreTab()];
+			if(this.building.level > 0) {
+				return [this._getOreTab()];
+			}
 		},
 		_getOreTab : function() {
 			var stored = this.result.ore_stored;

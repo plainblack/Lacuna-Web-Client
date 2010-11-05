@@ -9,7 +9,9 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
 	
 	YAHOO.lang.extend(FoodReserve, YAHOO.lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getFoodTab()];
+			if(this.building.level > 0) {
+				return [this._getFoodTab()];
+			}
 		},
 		_getFoodTab : function() {
 			var stored = this.result.food_stored;

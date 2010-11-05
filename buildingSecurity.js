@@ -30,7 +30,9 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 			Security.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getPrisonersTab(), this._getSpiesTab()];
+			if(this.building.level > 0) {
+				return [this._getPrisonersTab(), this._getSpiesTab()];
+			}
 		},
 		_getPrisonersTab : function() {
 			var spies = this.result.spies;

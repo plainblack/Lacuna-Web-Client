@@ -27,7 +27,9 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			Intelligence.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getTrainTab(), this._getSpiesTab()];
+			if(this.building.level > 0) {
+				return [this._getTrainTab(), this._getSpiesTab()];
+			}
 		},
 		_getTrainTab : function() {
 			var spies = this.result.spies;

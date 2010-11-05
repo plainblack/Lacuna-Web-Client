@@ -500,6 +500,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				Dom.setStyle(div, "width", this.tileSizeInPx + 'px');
 				Dom.setStyle(div, "height", Math.round(this.tileSizeInPx/2) + 'px');
 				if(this.data) {
+					if(Game.GetCookieSettings("showLevels", "0") == "1") {
+						Dom.setStyle(div, "visibility", "visible");
+					}
 					div.innerHTML = ['<div class="planetMapTileActionLevel">',this.data.level,'</div>'].join('');
 				}
 				else {

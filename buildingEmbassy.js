@@ -24,15 +24,17 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 	
 	Lang.extend(Embassy, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			if(this.alliance) {
-				var tabs =  [this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
-				if(this.isLeader) {
-					tabs.push(this._getSendTab());
+			if(this.building.level > 0) {
+				if(this.alliance) {
+					var tabs =  [this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
+					if(this.isLeader) {
+						tabs.push(this._getSendTab());
+					}
+					return tabs;
 				}
-				return tabs;
-			}
-			else {
-				return [this._getCreateTab(),this._getInvitesTab()];
+				else {
+					return [this._getCreateTab(),this._getInvitesTab()];
+				}
 			}
 		},
 		_getAllianceTab : function() {

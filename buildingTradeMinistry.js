@@ -120,8 +120,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			Trade.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
-			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			if(this.building.level > 0) {
+				this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
+				return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			}
+			else {
+				return [];
+			}
 		},
 		_getPushTab : function() {
 			this.push = new YAHOO.widget.Tab({ label: "Push", content: [

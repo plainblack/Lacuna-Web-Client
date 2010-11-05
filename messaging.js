@@ -138,8 +138,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			
 			var panel = document.createElement("div");
 			panel.id = panelId;
-			panel.innerHTML = ['<div class="hd">Attachment</div>',
-				'<div class="bd" style="height:500px;overflow:auto;">',
+			panel.innerHTML = ['<div class="hd">Map</div>',
+				'<div class="bd" style="height:550px;overflow:auto;">',
 				'	<div id="attachmentMap">',
 				'	</div>',
 				'</div>'].join('');
@@ -155,7 +155,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				modal:true,
 				close:true,
 				underlay:false,
-				width:"700px",
+				width:"575px",
 				zIndex:10000
 			});
 			this.attachmentPanel.renderEvent.subscribe(function(){
@@ -168,7 +168,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.map.innerHTML = "";
 
 				if(map) {
-					Dom.setStyle(this.map, "background", ['url("',Lib.AssetUrl,'planet_side/',map.surface,'.jpg") repeat scroll 0 0 black'].join(''));
+					Dom.setStyle(this.map, "background", ['url("',Lib.AssetUrl,'planet_side/',(map.surface||map.surface_image),'.jpg") repeat scroll 0 0 black'].join(''));
 					
 					var tiles = {},
 						tbody = [];
@@ -183,7 +183,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						for(var y=5; y>= -5; y--) {
 							tbody.push('<div class="attachmentMapTile">');
 							if(tiles[x] && tiles[x][y]) {
-								tbody.push(['<img src="',Lib.AssetUrl,'planet_side/100/',tiles[x][y],'.png" style="width:100px;height:100px;" />'].join(''));
+								tbody.push(['<img src="',Lib.AssetUrl,'planet_side/50/',tiles[x][y],'.png" style="width:50px;height:50px;" />'].join(''));
 							}
 							tbody.push('</div>');
 						}
@@ -755,11 +755,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
 			});
 			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
-			body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
 			//body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
 			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
-			body = body.replace(/\{Planet\s+(\d+)\s+([^\}]+)}/gi,'<a class="planet_link" href="#$1">$2</a>');
-			body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+			body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="planet_link" href="#$1">$2</a>');
+			body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="alliance_link" href="#$1">$2</a>');
 			//body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
 			return body;
 		},

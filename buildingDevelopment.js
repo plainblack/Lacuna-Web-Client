@@ -20,7 +20,7 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 	
 	Lang.extend(Development, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			if(this.result.build_queue && this.result.build_queue.length > 0) {
+			if(this.building.level > 0 && this.result.build_queue && this.result.build_queue.length > 0) {
 				return [this._getQueueTab()];
 			}
 		},

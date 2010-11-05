@@ -24,21 +24,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 	};
 	UserMenu.prototype = {
 		create : function() {
-			/*var userMenu = new YAHOO.widget.Menu(this.id, { 
+			var userMenu = new YAHOO.widget.Menu(this.id, { 
 				zindex: 1006, 
 				shadow:false, 
-				context:[this.clickId, "tl", "bl",[9, -10]]
+				context:[this.clickId, "tl", "bl",[11, -14]]
 			});
-			userMenu.addItems([{ text: "Essentia", id: "ess", onclick: { fn: Lacuna.Essentia.show } }
-			]);
-			userMenu.addItems([{ text: "Profile", id: "up", onclick: { fn: Lacuna.Profile.show } },
-				{ text: "Stats", id: "us", onclick: { fn: Lacuna.Stats.show } },
-				{ text: "About", id: "ua", onclick: { fn: Lacuna.Menu.UserMenu.showAbout } },
-				{ text: "Logout", id: "ul", onclick: { fn: Game.Logout } }
+			userMenu.addItems([{ text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_new" },
+				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_new" }
 			]);
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
-					this.align("tl","bl",[9, -10]);
+					this.align("tl","bl",[11, -14]);
 				}
 			});
 			userMenu.render();
@@ -52,13 +48,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				Event.stopEvent(ev);
 			}, userMenu, true);
 			
-			this.Menu = userMenu;*/
+			this.Menu = userMenu;
 			Dom.removeClass(this.container, Lib.Styles.HIDDEN);
-			
-			/*var arrow = document.createElement("div");
-			arrow.id = "usersArrow";
-			var uc = Dom.get("usersCenter");
-			uc.insertBefore(arrow, uc.firstChild);*/
 			
 			this.createLeft();
 			this.createRight();

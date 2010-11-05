@@ -1505,6 +1505,31 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			TempleOfTheDrajilites : {
+				"SMDVersion":"2.0",
+				"description": "Temple Of The Drajilites",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/templeofthedrajilites",
+
+				"services": {
+					"list_planets" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						]
+					},
+					"view_planet" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"planet_id", "type":"string", "optional":false}
+						]
+					},
+				}
+			},
 			Trade : {
 				"SMDVersion":"2.0",
 				"description": "Trade",

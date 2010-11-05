@@ -203,6 +203,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "templeofthedrajilites",
+		type: "js",
+		fullpath: urlBuilder("buildingTempleOfTheDrajilites.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "trade",
 		type: "js",
 		fullpath: urlBuilder("buildingTradeMinistry.js"),
@@ -224,7 +230,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
-		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

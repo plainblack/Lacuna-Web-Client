@@ -17,11 +17,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		Transporter.superclass.constructor.call(this, result);
 		
 		this.transport = result.transport;
-		var p = document.createElement("p");
-		p.innerHTML = "Transporter has a maximum capacity of " + this.transport.max + " at this level.";
-		Dom.setStyle(p, "margin-top", "5px");
-		Dom.setStyle(p, "font-style", "italic");
-		Dom.get("buildingDetailsDesc").appendChild(p);
 		
 		this.availableAcceptText = "Accept For 1 Essentia";
 		this.addTradeText = "Add Trade For 1 Essentia";
@@ -35,70 +30,78 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		this.createEvent("onLoadShips");
 		this.createEvent("onLoadPrisoners");
 		
-		this.subscribe("onLoad", function() {
-			this.getStoredResources();
-			this.mine.subscribe("activeChange", this.getMine, this, true);
-			this.avail.subscribe("activeChange", this.getAvailable, this, true);
-			this.push.subscribe("activeChange", function(e) {
-				if(e.newValue && !this.pushTabView) {
-					this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
-					this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getGlyphs();
-						}
-					},this,true);
-					this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPlans();
-						}
-					},this,true);
-					this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getShips();
-						}
-					},this,true);
-					this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPrisoners();
-						}
-					},this,true);
-					
-					this.pushTabView.selectTab(0);
-				}
-			},this,true);
-			this.add.subscribe("activeChange", function(e) {
-				if(e.newValue && !this.addTabView) {
-					this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
-					this.addTabView.getTab(0).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getStoredResources();
-						}
-					},this,true);
-					this.addTabView.getTab(1).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getGlyphs();
-						}
-					},this,true);
-					this.addTabView.getTab(2).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPlans();
-						}
-					},this,true);
-					this.addTabView.getTab(3).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPrisoners();
-						}
-					},this,true);
-					this.addTabView.getTab(4).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getShips();
-						}
-					},this,true);
-					
-					this.addTabView.selectTab(0);
-				}
-			},this,true);
-		}, this, true);
+		if(this.building.level > 0) {
+			var p = document.createElement("p");
+			p.innerHTML = "Transporter has a maximum capacity of " + this.transport.max + " at this level.";
+			Dom.setStyle(p, "margin-top", "5px");
+			Dom.setStyle(p, "font-style", "italic");
+			Dom.get("buildingDetailsDesc").appendChild(p);
+		
+			this.subscribe("onLoad", function() {
+				this.getStoredResources();
+				this.mine.subscribe("activeChange", this.getMine, this, true);
+				this.avail.subscribe("activeChange", this.getAvailable, this, true);
+				this.push.subscribe("activeChange", function(e) {
+					if(e.newValue && !this.pushTabView) {
+						this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
+						this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getGlyphs();
+							}
+						},this,true);
+						this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPlans();
+							}
+						},this,true);
+						this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getShips();
+							}
+						},this,true);
+						this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPrisoners();
+							}
+						},this,true);
+						
+						this.pushTabView.selectTab(0);
+					}
+				},this,true);
+				this.add.subscribe("activeChange", function(e) {
+					if(e.newValue && !this.addTabView) {
+						this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
+						this.addTabView.getTab(0).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getStoredResources();
+							}
+						},this,true);
+						this.addTabView.getTab(1).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getGlyphs();
+							}
+						},this,true);
+						this.addTabView.getTab(2).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPlans();
+							}
+						},this,true);
+						this.addTabView.getTab(3).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPrisoners();
+							}
+						},this,true);
+						this.addTabView.getTab(4).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getShips();
+							}
+						},this,true);
+						
+						this.addTabView.selectTab(0);
+					}
+				},this,true);
+			}, this, true);
+		}
 	};
 	
 	Lang.extend(Transporter, Lacuna.buildings.Building, {
@@ -115,8 +118,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			Transporter.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
-			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			if(this.building.level > 0) {
+				this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
+				return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			}
 		},
 		_getOneForOneTab : function() {
 			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div>',

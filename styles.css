@@ -542,7 +542,7 @@ SHINEY
 #userClick {
 	top:0;
 	z-index:1005;
-	/*cursor:pointer;*/
+	cursor:pointer;
 }
 #planetsClick {
 	bottom:0;
@@ -550,12 +550,12 @@ SHINEY
 	cursor:pointer;
 }
 #usersArrow {
-	/*width: 100%; 
+	width: 100%; 
 	height: 100%; 
 	background: url("assets/ui/down.png") no-repeat scroll center 55px transparent;
 	position:absolute;
 	top:0;
-	left:0;*/
+	left:0;
 }
 #planetsArrow {
 	width: 100%; 
@@ -722,13 +722,13 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 #attachmentMap {
 	border-collapse:collapse;
 	border:0;
-	width:1100px;
-	height:1100px;
+	width:550px;
+	height:550px;
 }
 #attachmentMap  .attachmentMapTile {
 	float:left;
-	width:100px;
-	height:100px;
+	width:50px;
+	height:50px;
 	overflow:hidden;
 }
 
@@ -1384,7 +1384,7 @@ planet details
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .platformInfo li , .archaeologyGlyphInfo li, .plan li{
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .archaeologyGlyphInfo li, .plan li{
 	float:left;
 }
 
@@ -1467,6 +1467,15 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .plan li.planName {
 	width:200px;
+}
+
+.planetDisplay {
+	width:350px;
+	border:1px solid black;
+	background-color:#52ACFF;
+	margin:2px;
+	padding:5px;
+	cursor:pointer;
 }
 
 .probeInfo .probeStar {
