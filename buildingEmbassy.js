@@ -19,22 +19,22 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 		this.alliance = result.alliance_status;
 		this.isLeader = this.alliance && this.alliance.leader_id == Game.EmpireData.id;
 		
-		this.subscribe("onLoad", this.MembersPopulate, this, true);
+		if(this.building.level > 0) {
+			this.subscribe("onLoad", this.MembersPopulate, this, true);
+		}
 	};
 	
 	Lang.extend(Embassy, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			if(this.building.level > 0) {
-				if(this.alliance) {
-					var tabs =  [this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
-					if(this.isLeader) {
-						tabs.push(this._getSendTab());
-					}
-					return tabs;
+			if(this.alliance) {
+				var tabs =  [this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
+				if(this.isLeader) {
+					tabs.push(this._getSendTab());
 				}
-				else {
-					return [this._getCreateTab(),this._getInvitesTab()];
-				}
+				return tabs;
+			}
+			else {
+				return [this._getCreateTab(),this._getInvitesTab()];
 			}
 		},
 		_getAllianceTab : function() {

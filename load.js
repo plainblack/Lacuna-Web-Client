@@ -155,6 +155,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "missioncommand",
+		type: "js",
+		fullpath: urlBuilder("buildingMissionCommand.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "network19",
 		type: "js",
 		fullpath: urlBuilder("buildingNetwork19.js"),
@@ -230,7 +236,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
-		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","miningministry","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

@@ -118,10 +118,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			Transporter.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			if(this.building.level > 0) {
-				this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
-				return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
-			}
+			this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
+			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getOneForOneTab : function() {
 			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div>',

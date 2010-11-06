@@ -19,9 +19,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 	
 	Lang.extend(MiningMinistry, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			if(this.building.level > 0) {
-				return [this._getPlatformTab(), this._getShipsTab()];
-			}
+			return [this._getPlatformTab(), this._getShipsTab()];
 		},
 		_getPlatformTab : function() {
 			this.platformTab = new YAHOO.widget.Tab({ label: "Platforms", content: [

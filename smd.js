@@ -819,6 +819,33 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			MissionCommand : {
+				"SMDVersion":"2.0",
+				"description": "Mission Command",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/missioncommand",
+
+				"services": {
+					"get_missions" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"complete_mission" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"mission_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Network19 : {
 				"SMDVersion":"2.0",
 				"description": "Network19",

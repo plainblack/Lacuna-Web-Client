@@ -20,9 +20,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 	
 	Lang.extend(Shipyard, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			if(this.building.level > 0) {
-				return [this._getQueueTab(), this._getBuildTab()];
-			}
+			return [this._getQueueTab(), this._getBuildTab()];
 		},
 		_getQueueTab : function() {
 			var div = document.createElement("div");
@@ -46,16 +44,12 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 											
 			var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
 				'<div>',
-				'	<div class="shipHeader" id="shipDocksAvailable"></div>',
-				/*'	<ul class="shipHeader shipInfo clearafter">',
-				'		<li class="shipType">Type</li>',
-				'		<li class="shipCost">Cost</li>',
-				'		<li class="shipAttributes">Attributes</li>',
-				'		<li class="shipBuild">Build</li>',
-				'	</ul>',
-				'	<div id="shipDetails">',
-				'	</div>',*/
-				'	<div style="height:300px;overflow:auto;">',
+				'	<div class="clearafter" style="font-weight:bold;">',
+				'		<span id="shipDocksAvailable" style="float:left;"></span>',
+				'		<span style="float:right;"><select id="shipBuildView"><option value="All">All</option><option value="Now" selected="selected">Now</option><option value="Later">Later</option></select></span>',
+				'	</div>',
+				'	<div id="shipBuildMessage" class="error"></div>',
+				'	<div style="height:300px;overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
 				'		<ul id="shipDetails">',
 				'		</ul>',
 				'	</div>',
@@ -67,6 +61,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					this.getBuild();
 				}
 			}, this, true);
+			
+			Event.on("shipBuildView", "change", this.ShipPopulate, this, true);
 					
 			this.buildTab = buildTab;
 			
@@ -207,6 +203,13 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			});
 		},
 		
+		SetBuildMessage : function(message) {
+			var msg = Dom.get("shipBuildMessage");
+			if(msg) {
+				msg.innerHTML = message;
+				Lib.fadeOutElm("shipBuildMessage");
+			}
+		},
 		SetDocksAvailableMessage : function() {
 			var sda = Dom.get("shipDocksAvailable");
 			if(sda) {
@@ -223,9 +226,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			
 			if(details) {
 				var ships = this.ships.buildable,
-					//ul = document.createElement("ul"),
 					li = document.createElement("li"),
 					shipNames = [],
+					filter = Lib.getSelectedOptionValue("shipBuildView"),
 					defReason = !this.ships.docks_available ? "No docks available at Space Port." : undefined;
 					
 				Event.purgeElement(details);
@@ -233,7 +236,15 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						
 				for(var shipType in ships) {
 					if(ships.hasOwnProperty(shipType)) {
-						shipNames.push(shipType);
+						if(filter == "All") {
+							shipNames.push(shipType);
+						}
+						else if(filter == "Now" && ships[shipType].can) {
+							shipNames.push(shipType);
+						}
+						else if(filter == "Later" && !ships[shipType].can) {
+							shipNames.push(shipType);
+						}
 					}
 				}
 				shipNames.sort();
@@ -306,7 +317,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					YAHOO.log(o, "info", "Shipyard.ShipBuild.success");
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
-					//this.Self.UpdateCost(this.Ship.cost);
+
 					this.Self.ship_build_queue = o.result;
 					this.Self.ShipyardDisplay();
 					
@@ -315,6 +326,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						this.Self.ships.docks_available = 0;
 					}
 					this.Self.SetDocksAvailableMessage();
+					this.Self.SetBuildMessage("Successfully started building " + this.Ship.type_human + ".");
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Shipyard.ShipBuild.failure");

@@ -50,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			}
 			else {
 				var tabs = [this._getProductionTab()],
-					childTabs = this.getChildTabs();
+					childTabs = this.building.level > 0 ? this.getChildTabs() : null;
 					
 				if(childTabs && Lang.isArray(childTabs)) {
 					tabs = tabs.concat(childTabs);

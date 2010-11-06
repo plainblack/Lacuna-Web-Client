@@ -86,11 +86,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(mb) {
 				var tileSize = this._map.tileSizeInPx,
 					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize,
-					maxBoundsHeight = (mb.y2Bottom - mb.y1Top) * tileSize,
+					maxBoundsHeight = (mb.y1Top - mb.y2Bottom) * tileSize,
 					extraSpace = 30 + Math.ceil(tileSize / 2);
 					
 				if(maxWidth > maxBoundsWidth) {
-					maxWidth = maxBoundsWidth;
+					maxWidth = maxBoundsWidth + (extraSpace*2);
+				}
+				if(maxHeight > maxBoundsHeight) {
+					maxHeight = maxBoundsHeight + (extraSpace*2);
 				}
 				var	cb = this.calcCoordBounds(this.left + mx + extraSpace, this.top + my + extraSpace, this.left + mx + maxWidth - extraSpace, this.top + my + maxHeight - extraSpace);
 				//if out of bounds, only move to max
@@ -681,7 +684,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					num.innerHTML = y;
 					Dom.setStyle(num, "height", sizeLeft);
 					Dom.setStyle(num, "padding-top", thrdTxt);
-					Dom.addClass(num, "coordY"+sizeLeft);
+					Dom.addClass(num, "coordY"+pxSize);
 				}
 				else {
 					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");

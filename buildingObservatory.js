@@ -27,9 +27,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 			Observatory.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			if(this.building.level > 0) {
-				return [this._getProbesTab()];
-			}
+			return [this._getProbesTab()];
 		},
 		_getProbesTab : function() {
 			this.probesTab = new YAHOO.widget.Tab({ label: "Probes", content: [

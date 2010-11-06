@@ -1,0 +1,180 @@
+YAHOO.namespace("lacuna.buildings");
+
+if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna.buildings.MissionCommand) {
+	
+(function(){
+	var Lang = YAHOO.lang,
+		Util = YAHOO.util,
+		Dom = Util.Dom,
+		Event = Util.Event,
+		Sel = Util.Selector,
+		Lacuna = YAHOO.lacuna,
+		Game = Lacuna.Game,
+		Lib = Lacuna.Library;
+
+	var MissionCommand = function(result){
+		MissionCommand.superclass.constructor.call(this, result);
+		
+		this.service = Game.Services.Buildings.MissionCommand;
+	};
+	
+	Lang.extend(MissionCommand, Lacuna.buildings.Building, {
+		getChildTabs : function() {
+			return [this._getMissionTab()];
+		},
+		_getMissionTab : function() {
+			this.missionTab = new YAHOO.widget.Tab({ label: "Missions", content: [
+				'<div>',
+				'	<div class="missionsHeader"></div>',
+				'	<div style="height:300px;overflow:auto;">',
+				'		<ul id="missionsAvailable">',
+				'		</ul>',
+				'	</div>',
+				'</div>'
+			].join('')});
+			this.missionTab.subscribe("activeChange", function(e) {
+				if(e.newValue) {
+					this.getMissions();
+				}
+			}, this, true);
+			return this.missionTab;
+		},
+		getMissions : function() {
+			if(!this.missions) {
+				Lacuna.Pulser.Show();
+				this.service.get_missions({session_id:Game.GetSession(),building_id:this.building.id}, {
+					success : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcSuccess(o);
+						this.missions = o.result.missions;
+						this.displayMissions();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcFailure(o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+			else {
+				this.displayMissions();
+			}
+		},
+		displayMissions : function() {
+			var missions = this.missions,
+				ul = Dom.get("missionsAvailable");
+
+			if(ul) {
+				var ulParent = ul.parentNode,
+					li = document.createElement("li");
+					
+				ul = ulParent.removeChild(ul);
+				ul.innerHTML = "";
+				/*
+				{
+					"id" : "id-goes-here",
+					"max_university_level" : 12,
+					"date_posted" : "01 31 2010 13:09:05 +0600",
+					"name" : "The Big Mission",
+					"description" : "Do the big thing and make it go.",
+					"objectives" : [
+					  "1500 apple",
+					  "Kill a spy",
+					  "Destroy a ship"
+					],
+					"rewards" : [
+						"1 essentia"
+					]
+				}
+				*/
+				if(missions && missions.length > 0) {
+					for(var i=0; i<missions.length; i++) {
+						var ms = missions[i],
+							nLi = li.cloneNode(false);
+						Dom.addClass(nLi, "mission");
+						nLi.innerHTML = ['<div class="yui-ge" style="margin-bottom:2px;">',
+						'	<div class="yui-u first">',
+						'		<span class="missionName">',ms.name,'</span>: ',
+						'		<span class="missionPosted"> - Posted: ',Lib.formatServerDate(ms.date_posted),'</span>',
+						'		<span class="missionUniversity"> - Max University: ',ms.max_university_level,'</span>',
+						'		<div class="missionDesc" style="display:none;">',ms.description,'</div>',
+						'		<div><label style="font-weight:bold;">Objectives:</label>',
+						this.parseObjectives(ms.objectives),
+						'		</div>',
+						'		<div><label style="font-weight:bold;">Rewards:</label>',
+						this.parseRewards(ms.rewards),
+						'		</div>',
+						'	</div>',
+						'	<div class="yui-u">',
+						'		<button type="button">Complete</button>',
+						'	</div>',
+						'</div>'].join('');
+						Event.on(Sel.query("button", nLi, true), "click", this.completeMission, {Self:this,Mission:ms,Line:nLi}, true);
+
+						ul.appendChild(nLi);
+					}
+					
+					Event.delegate(ul, "click", this.expandDesc, ".missionName");
+				}
+				//add child back in
+				ulParent.appendChild(ul);
+			}
+		},
+		parseObjectives : function(arr) {
+			var lst = ['<ol class="missionList">'];
+			for(var n=0; n<arr.length; n++) {
+				lst[lst.length] = '<li>';
+				lst[lst.length] = arr[n];
+				lst[lst.length] = '</li>';
+			}
+			lst[lst.length] = '</ol>';
+			return lst.join('');
+		},
+		parseRewards : function(arr) {
+			var lst = ['<ol class="missionList">'];
+			for(var n=0; n<arr.length; n++) {
+				lst[lst.length] = '<li>';
+				lst[lst.length] = arr[n];
+				lst[lst.length] = '</li>';
+			}
+			lst[lst.length] = '</ol>';
+			return lst.join('');
+		},
+		expandDesc : function(e, matchedEl, container) {
+			var desc = Sel.query('div.missionDesc', matchedEl.parentNode, true);
+			if(desc) {
+				var dis = Dom.getStyle(desc, "display");
+				Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
+			}
+		},
+		completeMission : function() {
+			Lacuna.Pulser.Show();
+			this.Self.service.complete_mission({
+				session_id:Game.GetSession(),
+				building_id:this.Self.building.id,
+				mission_id:this.Mission.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+
+					this.Self.missions = undefined;
+					this.Self.getMissions();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcFailure(o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		}
+	});
+	
+	YAHOO.lacuna.buildings.MissionCommand = MissionCommand;
+
+})();
+YAHOO.register("MissionCommand", YAHOO.lacuna.buildings.MissionCommand, {version: "1", build: "0"}); 
+
+}
