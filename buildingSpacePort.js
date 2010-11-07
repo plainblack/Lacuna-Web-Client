@@ -63,6 +63,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipTask">Task</li>',
 				'		<li class="shipSpeed">Speed</li>',
 				'		<li class="shipHold">Hold Size</li>',
+				'		<li class="shipHold">Stealth</li>',
 				'	</ul>',
 				'	<div><div id="shipsViewDetails"></div></div>',
 				'	<div id="shipsViewPaginator"></div>',
@@ -371,6 +372,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipHold");
 					nLi.innerHTML = ship.hold_size;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipHold");
+					nLi.innerHTML = ship.stealth;
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
