@@ -448,7 +448,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 								{key:"dirtiest",parser:"number"}
 							], 
 					metaFields: { 
-						totalRecords: "result.total_empires" // Access to value in the server response 
+						totalRecords: "result.total_empires", // Access to value in the server response 
+						pageNumber: "result.page_number"
 					} 
 				};
 				
@@ -461,8 +462,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								"empire_size_rank",
-								1
+								"empire_size_rank"
 							]
 						}),
 					dynamicData: true,
@@ -509,6 +509,11 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				
 				this.EmpireTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
 					oPayload.totalRecords = oResponse.meta.totalRecords; 
+					var pn = oResponse.meta.pageNumber-1;
+					oPayload.pagination = {
+						rowsPerPage:25,
+						recordOffset:(pn*25)
+					}
 					return oPayload; 
 				};
 				this.EmpireTable.requery = function() {
@@ -683,7 +688,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 								{key:"dirtiest",parser:"number"}
 							], 
 					metaFields: { 
-						totalRecords: "result.total_alliances" // Access to value in the server response 
+						totalRecords: "result.total_alliances", // Access to value in the server response 
+						pageNumber: "result.page_number"
 					} 
 				};
 				
@@ -696,8 +702,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								"average_empire_size_rank",
-								1
+								"average_empire_size_rank"
 							]
 						}),
 					dynamicData: true,
@@ -738,7 +743,12 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 				});
 				
 				this.AllianceTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
-					oPayload.totalRecords = oResponse.meta.totalRecords; 
+					oPayload.totalRecords = oResponse.meta.totalRecords;
+					var pn = oResponse.meta.pageNumber-1;
+					oPayload.pagination = {
+						rowsPerPage:25,
+						recordOffset:(pn*25)
+					}
 					return oPayload; 
 				};
 				this.AllianceTable.requery = function() {

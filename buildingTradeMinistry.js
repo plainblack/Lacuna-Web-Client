@@ -1040,6 +1040,9 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				ask: {
 					type:Lib.getSelectedOptionValue("tradeAddAskingName"),
 					quantity:qVal
+				},
+				options: {
+					ship_id:Lib.getSelectedOptionValue("tradeAddShip")
 				}
 			};
 			

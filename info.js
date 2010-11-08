@@ -288,7 +288,8 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 				scope:this
 			});
 		},
-		sendMessage : function() {
+		sendMessage : function(e) {
+			Event.stopEvent(e);
 			if(this.currentEmpire) {
 				Lacuna.Messaging.sendTo(this.currentEmpire.name);
 			}

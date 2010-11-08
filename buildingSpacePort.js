@@ -38,17 +38,27 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
 				'<div>',
+				'	<div style="height:300px;overflow:auto;margin-top:2px;">',
+				'		<ul id="shipDetails">',
+				'		</ul>',
+				'	</div>',
+				'	<div id="shipsPaginator"></div>',
+				'</div>'
+			].join('')});
+			/*
+			
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
 				'		<li class="shipName">Name</li>',
 				'		<li class="shipArrives">Arrives</li>',
 				'		<li class="shipFrom">From</li>',
 				'		<li class="shipTo">To</li>',
+				'		<li class="shipSpeed">Speed</li>',
+				'		<li class="shipHold">Hold Size</li>',
+				'		<li class="shipHold">Stealth</li>',
 				'	</ul>',
 				'	<div><div id="shipDetails"></div></div>',
-				'	<div id="shipsPaginator"></div>',
-				'</div>'
-			].join('')});
+			*/
 			//subscribe after adding so active doesn't fire
 			this.travelTab.subscribe("activeChange", this.getTravel, this, true);
 			
@@ -65,7 +75,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipHold">Hold Size</li>',
 				'		<li class="shipHold">Stealth</li>',
 				'	</ul>',
-				'	<div><div id="shipsViewDetails"></div></div>',
+				'	<div style="height:300px;overflow:auto;"><div id="shipsViewDetails"></div></div>',
 				'	<div id="shipsViewPaginator"></div>',
 				'</div>'
 			].join('')});
@@ -225,68 +235,53 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		},
 		
 		SpacePortPopulate : function() {
-			var details = Dom.get("shipDetails");
-			
+			var ships = this.shipsTraveling.ships_travelling,
+				details = Dom.get("shipDetails");
+
 			if(details) {
-				var ships = this.shipsTraveling.ships_travelling,
-					ul = document.createElement("ul"),
-					li = document.createElement("li");
-					
-				Event.purgeElement(details);
-				details.innerHTML = "";
+				var parentEl = details.parentNode,
+					li = document.createElement("li"),
+					now = new Date();
 				
-				var now = new Date();
+				Event.purgeElement(details);
+				details = parentEl.removeChild(details);
+				details.innerHTML = "";
 				
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
-						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false),
 						sec = (Lib.parseServerDate(ship.date_arrives).getTime() - now.getTime()) / 1000;
-						
-					nUl.Ship = ship;
-					Dom.addClass(nUl, "shipInfo");
-					Dom.addClass(nUl, "clearafter");
-
-					Dom.addClass(nLi,"shipTypeImage");
-					Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
-					Dom.setStyle(nLi, "text-align", "center");
-					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
-					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipName");
-					nLi.innerHTML = ship.name;
-					nUl.appendChild(nLi);
-					Event.on(nLi, "click", this.ShipName, {Self:this,Ship:ship,el:nLi}, true);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipArrives");
-					nLi.innerHTML = Lib.formatTime(sec);
-					nUl.appendChild(nLi);
 					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from.name;
-					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"shipTo");
-					nLi.innerHTML = ship.to.name;
-					nUl.appendChild(nLi);
-
-					this.addQueue(sec, this.SpacePortQueue, nUl);
-								
-					details.appendChild(nUl);
+					nLi.innerHTML = ['<div class="yui-gf" style="margin-bottom:2px;">',
+					'	<div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />',
+					'	</div>',
+					'	<div class="yui-u" style="width:83%">',
+					'		<span class="shipName">',ship.name,'</span>: ',
+					'		<div><label style="font-weight:bold;">Travel:</label>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">Arrives: </label><span class="shipArrives">',Lib.formatTime(sec),'</span></span>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="shipFrom">',ship.from.name,'</span></span>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="shipTo">',ship.to.name,'</span></span>',
+					'		</div>',
+					'		<div><label style="font-weight:bold;">Attributes:</label>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.speed,'</span>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.hold_size,'</span>',
+					'			<span style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.stealth,'</span>',
+					'		</div>',
+					'	</div>',
+					'</div>'].join('');
+					var sn = Sel.query("span.shipName",nLi,true);
+					Event.on(sn, "click", this.ShipName, {Self:this,Ship:ship,el:sn}, true);
+					//Event.on(Sel.query("span.shipFrom",nLi,true), "click", this.EmpireProfile, ship.from);
+					//Event.on(Sel.query("span.shipTo",nLi,true), "click", this.EmpireProfile, ship.to);
 					
+					this.addQueue(sec, this.SpacePortQueue, nLi);
+					
+					details.appendChild(nLi);
 				}
-				
-				//wait for tab to display first
-				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
-				},10);
+
+				//add child back in
+				parentEl.appendChild(details);
 			}
 		},
 		ShipHandlePagination : function(newState) {
@@ -323,7 +318,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				elLine.parentNode.removeChild(elLine);
 			}
 			else {
-				Sel.query("li.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				Sel.query("span.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
 			}
 		},
 		
@@ -393,14 +388,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					details.appendChild(nUl);
 					
 				}
-				
-				//wait for tab to display first
-				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
-				},10);
 			}
 		},
 		ViewHandlePagination : function(newState) {
@@ -472,6 +459,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
 					delete this.Self.shipsView;
+					delete this.Self.shipsTraveling;
 					this.Ship.name = newName;
 					if(this.Input) {
 						this.Input.value = newName;
@@ -543,7 +531,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipFrom");
-					nLi.innerHTML = ship.from && ship.from.name ? ship.from.name : 'Unknown';
+					if(ship.from && ship.from.name) {
+						if(ship.from.empire && ship.from.empire.name) {
+							nLi.innerHTML = ship.from.name + ' <span style="cursor:pointer;">[' + ship.from.empire.name + ']</span>';
+							Event.on(nLi, "click", this.EmpireProfile, ship.from.empire);
+						}
+						else {
+							nLi.innerHTML = ship.from.name;
+						}
+					}
+					else {
+						nLi.innerHTML = 'Unknown'
+					}
 					nUl.appendChild(nLi);
 
 					this.addQueue(sec, this.ForeignQueue, nUl);
@@ -599,6 +598,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			}
 		},
 		
+		EmpireProfile : function(e, empire) {
+			Lacuna.Info.Empire.Load(empire.id);
+		},
 		ShipScuttle : function() {
 			if(confirm(["Are you sure you want to Scuttle ",this.Ship.name,"?"].join(''))) {
 				Lacuna.Pulser.Show();
