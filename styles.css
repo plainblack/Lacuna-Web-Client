@@ -1217,10 +1217,10 @@ planet details
 .buildingStats th {
 	font-weight: bold;
 }
-.buildingDesc, .shipDesc, .missionDesc  {
+.buildingDesc, .shipDesc, .missionDesc, .missionPosted, .missionUniversity  {
 	font-size:85%;
 }
-.shipDesc , .missionDesc {
+.shipDesc  {
 	border-bottom:1px solid #52acff;
 }
 .buildingDesc a {
@@ -1384,7 +1384,7 @@ planet details
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .archaeologyGlyphInfo li, .plan li, .mission li {
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .archaeologyGlyphInfo li, .plan li {
 	float:left;
 }
 
@@ -1822,19 +1822,23 @@ ul.statsSubList, ul.statsSubList ul {
 .missionList {
 	display:inline-block;
 	vertical-align:top;
+	margin-left:20px;
 }
 .missionList li {
-	list-style:decimal inside none;
-	margin-left:5px;
-	font-size:90%;
+	list-style:square outside none;
+	font-size:85%;
 }
 .mission {
 	border-bottom:1px solid #52acff;
+	padding-bottom:5px;
+	margin-bottom:2px;
 }
 .missionName {
-	cursor:pointer;
-	text-decoration:underline;
 	font-weight:bold;
+	font-size:115%;
+}
+.missionDesc {
+	padding:5px;
 }
 
 /*

@@ -93,29 +93,31 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						var ms = missions[i],
 							nLi = li.cloneNode(false);
 						Dom.addClass(nLi, "mission");
-						nLi.innerHTML = ['<div class="yui-ge" style="margin-bottom:2px;">',
+						nLi.innerHTML = ['<div class="yui-ge">',
 						'	<div class="yui-u first">',
-						'		<span class="missionName">',ms.name,'</span>: ',
-						'		<span class="missionPosted"> - Posted: ',Lib.formatServerDate(ms.date_posted),'</span>',
-						'		<span class="missionUniversity"> - Max University: ',ms.max_university_level,'</span>',
-						'		<div class="missionDesc" style="display:none;">',ms.description,'</div>',
-						'		<div><label style="font-weight:bold;">Objectives:</label>',
-						this.parseObjectives(ms.objectives),
-						'		</div>',
-						'		<div><label style="font-weight:bold;">Rewards:</label>',
-						this.parseRewards(ms.rewards),
-						'		</div>',
+						'		<div class="missionName">',ms.name,'</div>',
+						'		<div class="missionPosted">Posted: ',Lib.formatServerDate(ms.date_posted),'</div>',
+						'		<div class="missionUniversity">Max University: ',ms.max_university_level,'</div>',
 						'	</div>',
 						'	<div class="yui-u">',
 						'		<button type="button">Complete</button>',
 						'	</div>',
-						'</div>'].join('');
+						'</div>',
+						'<div class="missionDesc">',ms.description,'</div>',
+						'<div class="yui-g">',
+						'	<div class="yui-u first">',
+						'		<div><label style="font-weight:bold;">Objectives:</label></div>',
+						this.parseObjectives(ms.objectives),
+						'	</div>',
+						'	<div class="yui-u">',
+						'		<div><label style="font-weight:bold;">Rewards:</label></div>',
+						this.parseRewards(ms.rewards),
+						'	</div>',
+						'</div>',].join('');
 						Event.on(Sel.query("button", nLi, true), "click", this.completeMission, {Self:this,Mission:ms,Line:nLi}, true);
 
 						ul.appendChild(nLi);
 					}
-					
-					Event.delegate(ul, "click", this.expandDesc, ".missionName");
 				}
 				//add child back in
 				ulParent.appendChild(ul);
@@ -140,13 +142,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 			}
 			lst[lst.length] = '</ol>';
 			return lst.join('');
-		},
-		expandDesc : function(e, matchedEl, container) {
-			var desc = Sel.query('div.missionDesc', matchedEl.parentNode, true);
-			if(desc) {
-				var dis = Dom.getStyle(desc, "display");
-				Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
-			}
 		},
 		completeMission : function() {
 			Lacuna.Pulser.Show();
