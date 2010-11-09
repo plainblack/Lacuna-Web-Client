@@ -541,7 +541,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						}
 					}
 					else {
-						nLi.innerHTML = 'Unknown'
+						nLi.innerHTML = 'Unknown';
 					}
 					nUl.appendChild(nLi);
 

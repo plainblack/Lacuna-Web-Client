@@ -513,7 +513,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					oPayload.pagination = {
 						rowsPerPage:25,
 						recordOffset:(pn*25)
-					}
+					};
 					return oPayload; 
 				};
 				this.EmpireTable.requery = function() {
@@ -748,7 +748,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					oPayload.pagination = {
 						rowsPerPage:25,
 						recordOffset:(pn*25)
-					}
+					};
 					return oPayload; 
 				};
 				this.AllianceTable.requery = function() {

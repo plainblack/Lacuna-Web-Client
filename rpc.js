@@ -263,7 +263,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 		"JSONP": function(r) {
 			r.callbackParamName = r.callbackParamName || "callback";
 			var fctName = encodeURIComponent("YAHOO.rpc.Transport.JSONP.jsonpCallback"+YAHOO.rpc.Transport.jsonp_id);
-			YAHOO.rpc.Transport["JSONP"]["jsonpCallback"+YAHOO.rpc.Transport.jsonp_id] = function(results) {
+			YAHOO.rpc.Transport.JSONP["jsonpCallback"+YAHOO.rpc.Transport.jsonp_id] = function(results) {
 				if(Lang.isObject(r.callback) && Lang.isFunction(r.callback.success)) {
 					r.callback.success.call(r.callback.scope || this, results);
 				}

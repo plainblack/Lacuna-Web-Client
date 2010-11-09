@@ -216,8 +216,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					newEffect = Game.GetContainerEffect();
 				}
 				var cs = Game.OverlayManager.overlays;
-				for(var i=0; i<cs.length; i++) {
-					cs[i].cfg.setProperty("effect",newEffect);
+				for(var m=0; m<cs.length; m++) {
+					cs[m].cfg.setProperty("effect",newEffect);
 				}
 			}
 			if(Game.GetCookieSettings("showLevels","0") != (this.showLevels.checked ? "1" : "0")) {
@@ -348,14 +348,14 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			var nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Name</label>',
-				'<span>', stat["name"], '</span>'
+				'<span>', stat.name, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Description</label>',
-				'<span>', stat["description"], '</span>'
+				'<span>', stat.description, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
@@ -371,77 +371,77 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Manufacturing</label>',
-				'<span>', stat["manufacturing_affinity"], '</span>'
+				'<span>', stat.manufacturing_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Deception</label>',
-				'<span>', stat["deception_affinity"], '</span>'
+				'<span>', stat.deception_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Research</label>',
-				'<span>', stat["research_affinity"], '</span>'
+				'<span>', stat.research_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Management</label>',
-				'<span>', stat["management_affinity"], '</span>'
+				'<span>', stat.management_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Farming</label>',
-				'<span>', stat["farming_affinity"], '</span>'
+				'<span>', stat.farming_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Mining</label>',
-				'<span>', stat["mining_affinity"], '</span>'
+				'<span>', stat.mining_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Science</label>',
-				'<span>', stat["science_affinity"], '</span>'
+				'<span>', stat.science_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Environmental</label>',
-				'<span>', stat["environmental_affinity"], '</span>'
+				'<span>', stat.environmental_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Political</label>',
-				'<span>', stat["political_affinity"], '</span>'
+				'<span>', stat.political_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Trade</label>',
-				'<span>', stat["trade_affinity"], '</span>'
+				'<span>', stat.trade_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
 			nLi.innerHTML = [
 				'<label>Growth</label>',
-				'<span>', stat["growth_affinity"], '</span>'
+				'<span>', stat.growth_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
 			

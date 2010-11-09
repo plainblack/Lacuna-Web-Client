@@ -1554,7 +1554,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"planet_id", "type":"string", "optional":false}
 						]
-					},
+					}
 				}
 			},
 			Trade : {
