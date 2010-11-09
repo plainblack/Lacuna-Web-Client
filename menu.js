@@ -599,7 +599,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				this.updateElm(this.elWasteHour, cp.waste_hour, '/hr');
 				this.updateElm(this.elHappyText, cp.happiness);
 				this.updateElm(this.elHappyHour, cp.happiness_hour, '/hr');
-				this.updateElm(this.elPlotsText, cp.size*1 - cp.building_count*1);
+				this.updateElm(this.elPlotsText, cp.plots_available*1);
 			}
 			else {
 				this.elText.innerHTML = "Planet";
@@ -669,7 +669,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					output = ['<div><strong>Happiness</strong></div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(planet.happiness_hour),'/hr</div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(Math.round(planet.happiness)),'</div>'];
 					break;
 				case "planetMenuPlots":
-					output = [planet.size*1 - planet.building_count*1, ' Plots Available'];
+					output = [planet.plots_available*1, ' Plots Available'];
 					break;
 				case "planetsClick":
 					output = ['Colonies'];

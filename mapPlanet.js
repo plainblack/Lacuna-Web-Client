@@ -330,7 +330,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					names = [],
 					reason, br,
 					planet = Game.GetCurrentPlanet(),
-					isMaxPlots = planet.size*1 <= planet.building_count*1;
+					isMaxPlots = planet.plots_available*1 === 0;
 				
 				for(var key in filters) {
 					if(filters.hasOwnProperty(key)){
@@ -570,7 +570,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				var map = new Lacuna.Mapper.PlanetMap("planetMap", {surfaceUrl:this.surfaceUrl});
 				map.addTileData(this.buildings);
-				map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
+				map.setPlotsAvailable(oArgs.status.body.plots_available*1);
 				//map.imgUrlLoc = Lib.AssetUrl + 'ui/mapiator/';
 				map.subscribe("onReloadTile", this.ReLoadTile, this, true);
 				//draw what we got
@@ -604,7 +604,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 				this._map.reset();
 				this._map.setSurfaceUrl(this.surfaceUrl);
-				this._map.setPlotsAvailable(oArgs.status.body.size*1 - oArgs.status.body.building_count*1);
+				this._map.setPlotsAvailable(oArgs.status.body.plots_available*1);
 				this._map.addTileData(this.buildings);
 				this._map.refresh();
 			}
@@ -635,7 +635,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						YAHOO.log(o, "info", "MapPlanet.Refresh");
 						this.fireEvent("onMapRpc", o.result);
 						var planet = Game.GetCurrentPlanet();
-						this._map.setPlotsAvailable(planet.size*1 - planet.building_count*1);
+						this._map.setPlotsAvailable(planet.plots_available*1);
 						this._map.addTileData(o.result.buildings);
 						this._map.refresh();
 					},
