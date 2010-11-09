@@ -670,7 +670,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				this.Self.service.expel_member({
 					session_id:Game.GetSession(""),
 					building_id:this.Self.building.id,
-					empire_id:this.Member.id,
+					empire_id:this.Member.empire_id,
 					message:(Sel.query('.embassyMembersMessage', this.Line, true).value || "")
 				}, {
 					success : function(o){
@@ -696,7 +696,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				this.Self.service.assign_alliance_leader({
 					session_id:Game.GetSession(""),
 					building_id:this.Self.building.id,
-					new_leader_id:this.Member.id
+					new_leader_id:this.Member.empire_id
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Embassy.assign_alliance_leader.success");
