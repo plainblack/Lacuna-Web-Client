@@ -113,7 +113,7 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						'		<div><label style="font-weight:bold;">Rewards:</label></div>',
 						this.parseRewards(ms.rewards),
 						'	</div>',
-						'</div>',].join('');
+						'</div>'].join('');
 						Event.on(Sel.query("button", nLi, true), "click", this.completeMission, {Self:this,Mission:ms,Line:nLi}, true);
 
 						ul.appendChild(nLi);
