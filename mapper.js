@@ -1488,13 +1488,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				zoomSize,
 				zoomScale
 			);
-			zoomSlider.setZoom = function(zoom) {
-				this.setValue((map.maxZoom - zoom) * zoomScale);
+			zoomSlider.setZoom = function(zoom, skipAnim, force, silent) {
+				this.setValue((map.maxZoom - zoom) * zoomScale, skipAnim, force, silent);
 			};
 			zoomSlider.getZoom = function() {
 				return map.maxZoom - this.getValue() / zoomScale;
 			};
-			zoomSlider.setZoom(map.zoom);
+			zoomSlider.setZoom(map.zoom, true, true, true);
 			zoomSlider.subscribe("change", function () {
 				map.setZoomLevel( this.getZoom() );
 				map.refresh(true);
