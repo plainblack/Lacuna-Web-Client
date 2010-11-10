@@ -32,20 +32,20 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			}
 			else if(this.result.recycle.seconds_remaining) {
 				this.recycleTab = new YAHOO.widget.Tab({label: "Recycle", contentEl: this.RecycleGetTimeDisplay(this.result.recycle)});
-				this.addQueue(this.result.recycle.seconds_remaining, this.RecycleQueue, "recycleTime");
+				this.addQueue(this.result.recycle.seconds_remaining, this.RecycleQueue, "recycleTime", this);
 			}
 					
 			return this.recycleTab;
 		},
 		
-		Recycle : function(e) {
+		Recycle : function(e, options) {
 			var planet = Game.GetCurrentPlanet();
 			if(planet) {
 				var ore = this.recycleOreEl.value*1,
 					water = this.recycleWaterEl.value*1,
 					energy = this.recycleEnergyEl.value*1,
 					total = ore + water + energy,
-					useE = this.recycleUseEssentiaEl ? this.recycleUseEssentiaEl.selectedIndex || 0 : 0;
+					useE = options ? options.instant : 0;
 				if(total > planet.waste_stored) {
 					this.recycleMessageEl.innerHTML = "Can only recycle waste you have stored.";
 				}
@@ -64,24 +64,19 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 							YAHOO.log(o, "info", "WasteRecycling.Recycle.success");
 							Lacuna.Pulser.Hide();
 							this.rpcSuccess(o);
-							//this.work = o.result.building.work;
+							this.work = o.result.building.work;
 							//this.updateBuildingTile(o.result.building);
 							if(this.recycleTab){
+								var ce = this.recycleTab.get("contentEl");
+								Event.purgeElement(ce);
+								ce.innerHTML = "";
 								if(this.work && this.work.seconds_remaining && this.work.seconds_remaining*1 > 0) {
-									var ce = this.recycleTab.get("contentEl");
-									Event.purgeElement(ce);
-									ce.innerHTML = "";
 									ce.appendChild(this.RecycleGetTimeDisplay(o.result.recycle, water, ore, energy));
-									this.addQueue(this.work.seconds_remaining, this.RecycleQueue, "recycleTime");
+									this.addQueue(this.work.seconds_remaining, this.RecycleQueue, "recycleTime", this);
 								}
 								else {
-									this.recycleOreEl.value = "";
-									this.recycleWaterEl.value = "";
-									this.recycleEnergyEl.value = "";
-									this.recycleMessageEl.innerHTML = "";
-									this.totalWasteToRecycle = 0;
-									this.totalWasteToRecycleEl.innerHTML = "0";
-									this.totalTimeToRecycle.innerHTML = "";
+									ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
+									this.recycleMessageEl.innerHTML = "Successfully recycled " + total + " waste.";
 								}
 							}
 						},
@@ -152,6 +147,12 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			btn.resourceType = "water";
 			btn = nLi.appendChild(btn);
 			Event.on(btn, "click", this.MaxValue, this, true);
+			
+			btn = document.createElement("button");
+			btn.setAttribute("type","button");
+			btn.innerHTML = "Distribute Evenly";
+			btn = nLi.appendChild(btn);
+			Event.on(btn, "click", this.Distribute, this, true);
 			ul.appendChild(nLi);
 			
 			nLi = li.cloneNode(false);
@@ -180,67 +181,61 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			this.totalWasteToRecycle = 0;
 			this.totalWasteToRecycleEl = span;
 			
-			nLi = li.cloneNode(false);
-			nLi.innerHTML = '<label>Time to Recycle:</label>';
-			span = nLi.appendChild(document.createElement("span"));
+			var div = document.createElement("div");
+			Dom.addClass(div, 'recycleTab');
+			div.appendChild(ul);
+			
+			var fieldset;
+			var form = document.createElement('form');
+			fieldset = document.createElement('fieldset');
+			fieldset.innerHTML = '<legend>Recycle</legend>';
+			var label = fieldset.appendChild(document.createElement('label'));
+			label.innerHTML = 'Time to Recycle: ';
+			span = label.appendChild(document.createElement("span"));
 			span.innerHTML = 0;
-			ul.appendChild(nLi);
 			this.totalTimeToRecycle = span;
-			
-			nLi = li.cloneNode(false);
-			btn = document.createElement("button");
-			btn.setAttribute("type","button");
-			btn.innerHTML = "Distribute Evenly";
-			btn = nLi.appendChild(btn);
-			Event.on(btn, "click", this.Distribute, this, true);
-			ul.appendChild(nLi);
-			
-			if(Game.EmpireData.essentia != "") {
-				nLi = li.cloneNode(false);
-				nLi.innerHTML = '<label>Spend 2 Essentia to recycle immediately?</label>';
-				var select = document.createElement("select"),
-					optA = select.appendChild(document.createElement("option")),
-					optB = select.appendChild(document.createElement("option"));
-				optA.value = "0";
-				optA.innerHTML = "No";
-				optB.value = "1";
-				optB.innerHTML = "Yes";
-				select = nLi.appendChild(select);
-				this.recycleUseEssentiaEl = select;
-				ul.appendChild(nLi);
-			}
-			
-			nLi = li.cloneNode(false);
-			this.recycleMessageEl = nLi;
-			ul.appendChild(nLi);
-			
-			nLi = li.cloneNode(false);
 			btn = document.createElement("button");
 			btn.setAttribute("type", "button");
 			btn.innerHTML = "Recycle";
-			btn = nLi.appendChild(btn);
+			btn = fieldset.appendChild(btn);
 			Event.on(btn, "click", this.Recycle, this, true);
-			ul.appendChild(nLi);
+			form.appendChild(fieldset);
+
+			if(Game.EmpireData.essentia*1 >= 2) {
+				fieldset = document.createElement('fieldset');
+				fieldset.innerHTML = '<legend>Instant Recycle</legend><label>Cost to recycle:<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" title="Essentia" /></span>2</label>';
+				btn = document.createElement("button");
+				btn.setAttribute("type", "button");
+				btn.innerHTML = "Recycle Instantly";
+				btn = fieldset.appendChild(btn);
+				Event.on(btn, "click", this.Recycle, {instant : true}, this);
+				form.appendChild(fieldset);
+			}
 			
-			var div = document.createElement("div");
-			div.appendChild(ul);
+			div.appendChild(form);
+			
+			this.recycleMessageEl = div.appendChild(document.createElement('div'));
 			
 			return div;
 		},
 		Distribute : function(e) {
 			var btn = Event.getTarget(e),
 				cp = Game.GetCurrentPlanet(),
-				maxVal = cp.waste_stored <= this.recycle.max_recycle ? cp.waste_stored : this.recycle.max_recycle,
-				third = Math.floor(maxVal / 3);
+				maxVal = cp.waste_stored <= this.recycle.max_recycle ? cp.waste_stored : this.recycle.max_recycle;
+				third = Math.round(maxVal / 3);
 				
-			this.recycleOreEl.originalValue = third; 
-			this.recycleOreEl.value = third; 
-			this.recycleWaterEl.originalValue = third;  
-			this.recycleWaterEl.value = third; 
-			this.recycleEnergyEl.originalValue = third;  
-			this.recycleEnergyEl.value = third; 
+			this.recycleOreEl.originalValue = third;
+			this.recycleOreEl.value = third;
 			
-			this.totalWasteToRecycle = third * 3;
+			third = Math.round( (maxVal - third) / 2 );
+			this.recycleWaterEl.originalValue = third;
+			this.recycleWaterEl.value = third;
+			
+			third = maxVal - third - this.recycleOreEl.value;
+			this.recycleEnergyEl.originalValue = third;
+			this.recycleEnergyEl.value = third;
+			
+			this.totalWasteToRecycle = maxVal;
 			this.totalWasteToRecycleEl.innerHTML = Lib.formatNumber(this.totalWasteToRecycle);
 			this.SetTime();
 		},
@@ -314,28 +309,27 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			return div;
 		},
 		RecycleQueue : function(remaining, el){
-			if(remaining <= 0) {
-				var span = Dom.get(el),
-					p = span.parentNode;
-				p.removeChild(span);
-				p.innerHTML = "No recycling jobs running.";
+			el = Dom.get(el);
+			if (! el) {
+				return;
 			}
-			else {
-				Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
+			if (remaining < 0 ) {
+				remaining = 0;
+			}
+			el.innerHTML = Lib.formatTime(Math.round(remaining));
+			if(Math.round(remaining) == 0) {
+				if(this.recycleTab){
+					var ce = this.recycleTab.get("contentEl");
+					Event.purgeElement(ce);
+					ce.innerHTML = "";
+					ce.appendChild(this.RecycleGetDisplay(this.result.recycle));
+				}
 			}
 		},
 		RecycleValueChange : function(e){
-			var input = Event.getTarget(e),
-				val = input.value*1;
-			if(Lang.isNumber(val)){
-				this.totalWasteToRecycle = this.totalWasteToRecycle - input.originalValue + val;
-				this.totalWasteToRecycleEl.innerHTML = Lib.formatNumber(this.totalWasteToRecycle);
-				this.SetTime();
-				input.originalValue = val;
-			}
-			else {
-				input.value = input.originalValue;
-			}
+			this.totalWasteToRecycle = this.recycleOreEl.value * 1 + this.recycleWaterEl.value*1 + this.recycleEnergyEl.value*1;
+			this.totalWasteToRecycleEl.innerHTML = Lib.formatNumber(this.totalWasteToRecycle);
+			this.SetTime();
 		},
 		RecycleSubsidize : function() {
 			Lacuna.Pulser.Show();

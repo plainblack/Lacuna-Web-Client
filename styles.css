@@ -1462,6 +1462,23 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 }
 
+.recycleTab fieldset {
+	border: 1px solid #52acff;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+	width: 200px;
+	margin: 10px;
+}
+.recycleTab fieldset legend {
+	color: #fff;
+	padding: 0 5px;
+}
+.recycleTab fieldset label {
+	height: 22px;
+	display: block;
+}
+
 .plan li {
 	width:100px;
 }
