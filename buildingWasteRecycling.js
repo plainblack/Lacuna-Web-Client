@@ -190,7 +190,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			fieldset = document.createElement('fieldset');
 			fieldset.innerHTML = '<legend>Recycle</legend>';
 			var label = fieldset.appendChild(document.createElement('label'));
-			label.innerHTML = 'Time to Recycle: ';
+			label.innerHTML = 'Time to Recycle:<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/time.png" class="smallTime" title="Time" /></span>';
 			span = label.appendChild(document.createElement("span"));
 			span.innerHTML = 0;
 			this.totalTimeToRecycle = span;
