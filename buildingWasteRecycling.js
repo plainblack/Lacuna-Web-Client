@@ -118,7 +118,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			input = document.createElement("input");
 			input.id = "recycleOreAmount";
 			input.type = "text";
-			input.originalValue = 0;
 			input.value = 0;
 			input = nLi.appendChild(input);
 			Event.on(input, "change", this.RecycleValueChange, this, true);
@@ -136,7 +135,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			input = document.createElement("input");
 			input.id = "recycleWaterAmount";
 			input.type = "text";
-			input.originalValue = 0;
 			input.value = 0;
 			input = nLi.appendChild(input);
 			Event.on(input, "change", this.RecycleValueChange, this, true);
@@ -160,7 +158,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			input = document.createElement("input");
 			input.id = "recycleEnergyAmount";
 			input.type = "text";
-			input.originalValue = 0;
 			input.value = 0;
 			input = nLi.appendChild(input);
 			Event.on(input, "change", this.RecycleValueChange, this, true);
@@ -224,15 +221,12 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 				maxVal = cp.waste_stored <= this.recycle.max_recycle ? cp.waste_stored : this.recycle.max_recycle;
 				third = Math.round(maxVal / 3);
 				
-			this.recycleOreEl.originalValue = third;
 			this.recycleOreEl.value = third;
 			
 			third = Math.round( (maxVal - third) / 2 );
-			this.recycleWaterEl.originalValue = third;
 			this.recycleWaterEl.value = third;
 			
-			third = maxVal - third - this.recycleOreEl.value;
-			this.recycleEnergyEl.originalValue = third;
+			third = Math.floor(maxVal - third - this.recycleOreEl.value);
 			this.recycleEnergyEl.value = third;
 			
 			this.totalWasteToRecycle = maxVal;
@@ -249,31 +243,22 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 				case "ore":
 					origVal = this.recycleOreEl.value*1;
 					newVal = Math.round(cp.waste_stored > this.recycle.max_recycle ? this.recycle.max_recycle : cp.waste_stored); 
-					this.recycleOreEl.originalValue = newVal; 
 					this.recycleOreEl.value = newVal;
-					this.recycleWaterEl.originalValue = 0;  
 					this.recycleWaterEl.value = 0;
-					this.recycleEnergyEl.originalValue = 0;   
 					this.recycleEnergyEl.value = 0;
 					break;
 				case "water":
 					origVal = this.recycleWaterEl.value*1;
 					newVal = Math.round(cp.waste_stored > this.recycle.max_recycle ? this.recycle.max_recycle : cp.waste_stored);  
-					this.recycleWaterEl.originalValue = newVal;  
 					this.recycleWaterEl.value = newVal;
-					this.recycleOreEl.originalValue = 0; 
 					this.recycleOreEl.value = 0;
-					this.recycleEnergyEl.originalValue = 0;   
 					this.recycleEnergyEl.value = 0;
 					break;
 				case "energy":
 					origVal = this.recycleEnergyEl.value*1;
 					newVal = Math.round(cp.waste_stored > this.recycle.max_recycle ? this.recycle.max_recycle : cp.waste_stored); 
-					this.recycleEnergyEl.originalValue = newVal;   
 					this.recycleEnergyEl.value = newVal;
-					this.recycleOreEl.originalValue = 0; 
 					this.recycleOreEl.value = 0;
-					this.recycleWaterEl.originalValue = 0;  
 					this.recycleWaterEl.value = 0;
 					break;
 			}
