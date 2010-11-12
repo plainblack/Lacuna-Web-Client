@@ -743,14 +743,17 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	text-align: right;
 }
 #invite li input {
-	width: 322px;
+	width: 347px;
 }
 #invite li textarea {
-	width: 400px;
+	width: 425px;
 	height: 150px;
 }
 #inviteMessage {
 	margin-top: 3px;
+}
+#inviteGenerateLink {
+	width: 425px;
 }
 
 /*
