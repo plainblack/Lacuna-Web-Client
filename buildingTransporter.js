@@ -205,30 +205,34 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			'</div>'].join('')});
 			
 			this.push.subscribe("activeChange", function(e) {
-				if(e.newValue && !this.pushTabView) {
-					this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
-					this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getGlyphs();
-						}
-					},this,true);
-					this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPlans();
-						}
-					},this,true);
-					this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getShips();
-						}
-					},this,true);
-					this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPrisoners();
-						}
-					},this,true);
-					
-					this.pushTabView.selectTab(0);
+				if(e.newValue) {
+					if(!this.pushTabView) {
+						this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
+						this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getGlyphs();
+							}
+						},this,true);
+						this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPlans();
+							}
+						},this,true);
+						this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getShips();
+							}
+						},this,true);
+						this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPrisoners();
+							}
+						},this,true);
+						this.pushTabView.selectTab(0);
+					}
+					else {
+						this.pushTabView.selectTab(this.pushTabView.get('activeIndex'));
+					}
 				}
 			},this,true);
 
@@ -332,35 +336,39 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			'</div>'].join('')});
 			
 			this.add.subscribe("activeChange", function(e) {
-				if(e.newValue && !this.addTabView) {
-					this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
-					this.addTabView.getTab(0).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getStoredResources();
-						}
-					},this,true);
-					this.addTabView.getTab(1).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getGlyphs();
-						}
-					},this,true);
-					this.addTabView.getTab(2).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPlans();
-						}
-					},this,true);
-					this.addTabView.getTab(3).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getPrisoners();
-						}
-					},this,true);
-					this.addTabView.getTab(4).subscribe("activeChange", function(e) {
-						if(e.newValue) {
-							this.getShips();
-						}
-					},this,true);
-					
-					this.addTabView.selectTab(0);
+				if(e.newValue) {
+					if (!this.addTabView) {
+						this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
+						this.addTabView.getTab(0).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getStoredResources();
+							}
+						},this,true);
+						this.addTabView.getTab(1).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getGlyphs();
+							}
+						},this,true);
+						this.addTabView.getTab(2).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPlans();
+							}
+						},this,true);
+						this.addTabView.getTab(3).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getPrisoners();
+							}
+						},this,true);
+						this.addTabView.getTab(4).subscribe("activeChange", function(e) {
+							if(e.newValue) {
+								this.getShips();
+							}
+						},this,true);
+						this.addTabView.selectTab(0);
+					}
+					else {
+						this.addTabView.selectTab(this.addTabView.get('activeIndex'));
+					}
 				}
 			},this,true);
 			

@@ -63,8 +63,10 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 									this.getPrisoners();
 								}
 							},this,true);
-							
 							this.pushTabView.selectTab(0);
+						}
+						else {
+							this.pushTabView.selectTab(this.pushTabView.get('activeIndex'));
 						}
 					}
 				},this,true);
@@ -101,6 +103,9 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 							},this,true);
 							
 							this.addTabView.selectTab(0);
+						}
+						else {
+							this.addTabView.selectTab(this.addTabView.get('activeIndex'));
 						}
 					}
 				},this,true);
