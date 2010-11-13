@@ -39,67 +39,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		
 			this.subscribe("onLoad", function() {
 				this.getStoredResources();
-				this.mine.subscribe("activeChange", this.getMine, this, true);
-				this.avail.subscribe("activeChange", this.getAvailable, this, true);
-				this.push.subscribe("activeChange", function(e) {
-					if(e.newValue && !this.pushTabView) {
-						this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
-						this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getGlyphs();
-							}
-						},this,true);
-						this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPlans();
-							}
-						},this,true);
-						this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getShips();
-							}
-						},this,true);
-						this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPrisoners();
-							}
-						},this,true);
-						
-						this.pushTabView.selectTab(0);
-					}
-				},this,true);
-				this.add.subscribe("activeChange", function(e) {
-					if(e.newValue && !this.addTabView) {
-						this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
-						this.addTabView.getTab(0).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getStoredResources();
-							}
-						},this,true);
-						this.addTabView.getTab(1).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getGlyphs();
-							}
-						},this,true);
-						this.addTabView.getTab(2).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPlans();
-							}
-						},this,true);
-						this.addTabView.getTab(3).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPrisoners();
-							}
-						},this,true);
-						this.addTabView.getTab(4).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getShips();
-							}
-						},this,true);
-						
-						this.addTabView.selectTab(0);
-					}
-				},this,true);
 			}, this, true);
 		}
 	};
