@@ -129,9 +129,12 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		_getSearchTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "Search", content: [
 				'<div id="archaeologySearchContainer">',
-				'	<ul>',
+				'	<ul id="archaeologySearchForm">',
 				'		<li>Search Ore:<select id="archaeologyOre"></select></li>',
 				'		<li><button type="button" id="archaeologySearch">Search</button></li>',
+				'	</ul>',
+				'	<ul id="archaeologySearchNone" style="display: none">',
+				'		<li>Not enough ore available to search.</li>',
 				'	</ul>',
 				'</div>',
 				'<div id="archaeologyWorkingContainer">',
@@ -196,6 +199,14 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						nOpt.innerHTML = [oKey, ' (', this.ore[oKey], ')'].join('');
 						sel.appendChild(nOpt);
 					}
+				}
+				if (sel.options.length > 0) {
+					Dom.setStyle("archaeologySearchForm", "display", "");
+					Dom.setStyle("archaeologySearchNone", "display", "none");
+				}
+				else {
+					Dom.setStyle("archaeologySearchForm", "display", "none");
+					Dom.setStyle("archaeologySearchNone", "display", "");
 				}
 			}
 		},
