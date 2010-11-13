@@ -1028,8 +1028,20 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				
 			if(elm) {
 				elm.options.length = 0;
-				for(var x=0; x < this.glyphs.length; x++) {
-					var obj = this.glyphs[x];
+				var glyphs = this.glyphs.slice(0);
+				glyphs.sort(function(a,b) {
+					if (a.type > b.type) {
+						return 1;
+					}
+					else if (a.type < b.type) {
+						return -1;
+					}
+					else {
+						return 0;
+					}
+				});
+				for(var x=0; x < glyphs.length; x++) {
+					var obj = glyphs[x];
 					nOpt = opt.cloneNode(false);
 					nOpt.Glyph = obj;
 					nOpt.value = obj.id;
@@ -1255,8 +1267,20 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			if(elm) {
 				var selectedVal = Lib.getSelectedOptionValue(elm);
 				elm.options.length = 0;
-				for(var x=0; x < this.glyphs.length; x++) {
-					var obj = this.glyphs[x];
+				var glyphs = this.glyphs.slice(0);
+				glyphs.sort(function(a,b) {
+					if (a.type > b.type) {
+						return 1;
+					}
+					else if (a.type < b.type) {
+						return -1;
+					}
+					else {
+						return 0;
+					}
+				});
+				for(var x=0; x < glyphs.length; x++) {
+					var obj = glyphs[x];
 					nOpt = opt.cloneNode(false);
 					nOpt.Glyph = obj;
 					nOpt.value = obj.id;
