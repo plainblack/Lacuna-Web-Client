@@ -397,21 +397,25 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				foodOver = food.cloneNode(false),
 				foodImg = food.appendChild(document.createElement("img")),
 				foodTxt = food.appendChild(document.createElement("span")),
+				foodPercent = food.appendChild(document.createElement("div")),
 				foodHr = food.appendChild(document.createElement("span")),
 				ore = document.createElement("div"),
 				oreOver = ore.cloneNode(false),
 				oreImg = ore.appendChild(document.createElement("img")),
 				oreTxt = ore.appendChild(document.createElement("span")),
+				orePercent = ore.appendChild(document.createElement("div")),
 				oreHr = ore.appendChild(document.createElement("span")),
 				water = document.createElement("div"),
 				waterOver = water.cloneNode(false),
 				waterImg = water.appendChild(document.createElement("img")),
 				waterTxt = water.appendChild(document.createElement("span")),
+				waterPercent = water.appendChild(document.createElement("div")),
 				waterHr = water.appendChild(document.createElement("span")),
 				energy = document.createElement("div"),
 				energyOver = energy.cloneNode(false),
 				energyImg = energy.appendChild(document.createElement("img")),
 				energyTxt = energy.appendChild(document.createElement("span")),
+				energyPercent = energy.appendChild(document.createElement("div")),
 				energyHr = energy.appendChild(document.createElement("span"));
 			
 			foodImg.src = Lib.AssetUrl + 'ui/l/food.png';
@@ -450,21 +454,36 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(energyTxt, "stored");
 			Dom.addClass(energyHr, "perHr");
 			
+			Dom.addClass([foodPercent,orePercent,waterPercent,energyPercent], 'menuPercent');
+			foodPercent = foodPercent.appendChild(document.createElement('div'));
+			orePercent = orePercent.appendChild(document.createElement('div'));
+			waterPercent = waterPercent.appendChild(document.createElement('div'));
+			energyPercent = energyPercent.appendChild(document.createElement('div'));
+			Dom.addClass([foodPercent,orePercent,waterPercent,energyPercent], 'menuPercentInner');
+			foodPercent.innerHTML = '&nbsp;';
+			orePercent.innerHTML = '&nbsp;';
+			waterPercent.innerHTML = '&nbsp;';
+			energyPercent.innerHTML = '&nbsp;';
+			
 			this.elFood = this.container.appendChild(food);
 			this.elFoodOver = this.container.appendChild(foodOver);
 			this.elFoodText = foodTxt;
+			this.elFoodPercent = foodPercent;
 			this.elFoodHour = foodHr;
 			this.elOre = this.container.appendChild(ore);
 			this.elOreOver = this.container.appendChild(oreOver);
 			this.elOreText = oreTxt;
+			this.elOrePercent = orePercent;
 			this.elOreHour = oreHr;
 			this.elWater = this.container.appendChild(water);
 			this.elWaterOver = this.container.appendChild(waterOver);
 			this.elWaterText = waterTxt;
+			this.elWaterPercent = waterPercent;
 			this.elWaterHour = waterHr;
 			this.elEnergy = this.container.appendChild(energy);
 			this.elEnergyOver = this.container.appendChild(energyOver);
 			this.elEnergyText = energyTxt;
+			this.elEnergyPercent = energyPercent;
 			this.elEnergyHour = energyHr;
 		},
 		createRight : function() {
@@ -472,6 +491,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				wasteOver = waste.cloneNode(false),
 				wasteImg = waste.appendChild(document.createElement("img")),
 				wasteTxt = waste.appendChild(document.createElement("span")),
+				wastePercent = waste.appendChild(document.createElement("div")),
 				wasteHr = waste.appendChild(document.createElement("span")),
 				happy = document.createElement("div"),
 				happyOver = happy.cloneNode(false),
@@ -491,6 +511,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(wasteOver, "click");
 			Dom.addClass(wasteTxt, "stored");
 			Dom.addClass(wasteHr, "perHr");
+			Dom.addClass(wastePercent, 'menuPercent');
+			wastePercent = wastePercent.appendChild(document.createElement('div'));
+			Dom.addClass(wastePercent, 'menuPercentInner');
+			wastePercent.innerHTML = '&nbsp;';
 			
 			happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
 			happyImg.alt = happyImg.title = "Happiness";
@@ -512,6 +536,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.elWaste = this.container.appendChild(waste);
 			this.elWasteOver = this.container.appendChild(wasteOver);
 			this.elWasteText = wasteTxt;
+			this.elWastePercent = wastePercent;
 			this.elWasteHour = wasteHr;
 			this.elHappy = this.container.appendChild(happy);
 			this.elHappyOver = this.container.appendChild(happyOver);
@@ -585,18 +610,23 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
-			
+				var percentColor;
 				this.updateElm(this.elFoodText, cp.food_stored);
 				this.updateElm(this.elFoodHour, cp.food_hour, '/hr');
+				this.updatePercent(this.elFoodPercent, cp.food_stored/cp.food_capacity);
 				this.updateElm(this.elOreText, cp.ore_stored);
 				this.updateElm(this.elOreHour, cp.ore_hour, '/hr');
+				this.updatePercent(this.elOrePercent, cp.ore_stored/cp.ore_capacity);
 				this.updateElm(this.elWaterText, cp.water_stored);
 				this.updateElm(this.elWaterHour, cp.water_hour, '/hr');
+				this.updatePercent(this.elWaterPercent, cp.water_stored/cp.water_capacity);
 				this.updateElm(this.elEnergyText, cp.energy_stored);
 				this.updateElm(this.elEnergyHour, cp.energy_hour, '/hr');
+				this.updatePercent(this.elEnergyPercent, cp.energy_stored/cp.energy_capacity);
 				
 				this.updateElm(this.elWasteText, cp.waste_stored);
 				this.updateElm(this.elWasteHour, cp.waste_hour, '/hr');
+				this.updatePercent(this.elWastePercent, cp.waste_stored/cp.waste_capacity);
 				this.updateElm(this.elHappyText, cp.happiness);
 				this.updateElm(this.elHappyHour, cp.happiness_hour, '/hr');
 				this.updateElm(this.elPlotsText, cp.plots_available*1);
@@ -606,19 +636,39 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 				this.elFoodText.innerHTML = "0";
 				this.elFoodHour.innerHTML = "0";
+				Dom.setStyle(this.elFoodPercent, 'width', 0);
 				this.elOreText.innerHTML = "0";
 				this.elOreHour.innerHTML = "0";
+				Dom.setStyle(this.elOrePercent, 'width', 0);
 				this.elWaterText.innerHTML = "0";
 				this.elWaterHour.innerHTML = "0";
+				Dom.setStyle(this.elWaterPercent, 'width', 0);
 				this.elEnergyText.innerHTML = "0";
 				this.elEnergyHour.innerHTML = "0";
+				Dom.setStyle(this.elEnergyPercent, 'width', 0);
 				
 				this.elWasteText.innerHTML = "0";
 				this.elWasteHour.innerHTML = "0";
+				Dom.setStyle(this.elWastePercent, 'width', 0);
 				this.elHappyText.innerHTML = "0";
 				this.elHappyHour.innerHTML = "0";
 				this.elPlotsText.innerHTML = "0";
 			}
+		},
+		updatePercent : function(el, perc) {
+			Dom.setStyle(el, 'width', (Math.round(perc*10000)/100) + '%');
+
+			var colorPercent;
+			if (perc < 0.8) {
+				colorPercent = 0;
+			}
+			else {
+				colorPercent = 5 * perc - 4;
+			}
+			
+			var color = 'rgb(255,'+Math.round(255 - 127 * colorPercent)+','+Math.round(255 - 255 * colorPercent) + ')';
+			Dom.setStyle(el, 'background-color', color);
+			Dom.setStyle(el.parentNode, 'border-color', color);
 		},
 		menuClick : function(p_sType, p_aArgs, planet){
 			Lacuna.Menu.PlanetMenu.Menu.hide();

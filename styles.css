@@ -471,7 +471,6 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	float:left;
 	font-size:150%;
 	margin-left:2px;
-	margin-top:2px;
 	width:53px;
 	overflow:hidden;
 	/*font-size:25px;
@@ -482,7 +481,6 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	float:left;
 	font-size:110%;
 	margin-left:2px;
-	margin-top:2px;
 	width:53px;
 	overflow:hidden;
 }
@@ -576,7 +574,7 @@ SHINEY
 .tutorial { right:240px; }
 .support { right:180px; }
 .stats { right:120px; }
-.about { right:60px; }
+.about { right:60px; overflow: visible }
 .logout { right:0px; }
 /* footer menu */
 .food { left:0px; }
@@ -588,6 +586,18 @@ SHINEY
 .plots  { right:0px; line-height:45px; }
 
 #header .click, #footer .click { z-index:1003; cursor:pointer; }
+
+.menuPercent {
+	height: 5px;
+	border: 1px solid #ffffff;
+	float: left;
+	margin-left: 2px;
+	width: 48px;
+}
+.menuPercentInner {
+	background-color: #ffffff;
+	height: 5px;
+}
 
 /*
 about
