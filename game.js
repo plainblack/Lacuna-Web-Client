@@ -100,6 +100,37 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
 			}
+			else {
+				var container = document.createElement('div');
+				container.id = 'internalErrorMessage';
+				document.body.insertBefore(container, document.body.firstChild);
+				var internalError = new YAHOO.widget.SimpleDialog(container, {
+					width: "500px",
+					fixedcenter: true,
+					visible: false,
+					draggable: false,
+					text: ['An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.',
+						'<textarea style="width: 100%; height: 300px;" id="internalErrorMessageText" readonly="readonly" onclick="this.select()"></textarea>'
+						].join(''),
+					constraintoviewport: true,
+					modal: true,
+					close: false,
+					zindex: 20000,
+					buttons: [
+						{ text:"Close", handler:function() { this.hide(); } }
+					]
+				});
+				internalError.renderEvent.subscribe(function() {
+					Dom.get('internalErrorMessageText').value = o.error.data;
+					this.show();
+				});
+				internalError.hideEvent.subscribe(function() {
+					setTimeout(function(){
+						internalError.destroy();
+					},1);
+				});
+				internalError.render();
+			}
 		},
 		InitLogin : function(error) {
 			if(!Lacuna.Game.LoginDialog) {
