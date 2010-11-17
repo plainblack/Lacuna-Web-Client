@@ -610,23 +610,22 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			
 			if(cp) {
 				//this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
-				var percentColor;
 				this.updateElm(this.elFoodText, cp.food_stored);
 				this.updateElm(this.elFoodHour, cp.food_hour, '/hr');
-				this.updatePercent(this.elFoodPercent, cp.food_stored/cp.food_capacity);
+				this.updatePercent(this.elFoodPercent, cp.food_stored/cp.food_capacity||0);
 				this.updateElm(this.elOreText, cp.ore_stored);
 				this.updateElm(this.elOreHour, cp.ore_hour, '/hr');
-				this.updatePercent(this.elOrePercent, cp.ore_stored/cp.ore_capacity);
+				this.updatePercent(this.elOrePercent, cp.ore_stored/cp.ore_capacity||0);
 				this.updateElm(this.elWaterText, cp.water_stored);
 				this.updateElm(this.elWaterHour, cp.water_hour, '/hr');
-				this.updatePercent(this.elWaterPercent, cp.water_stored/cp.water_capacity);
+				this.updatePercent(this.elWaterPercent, cp.water_stored/cp.water_capacity||0);
 				this.updateElm(this.elEnergyText, cp.energy_stored);
 				this.updateElm(this.elEnergyHour, cp.energy_hour, '/hr');
-				this.updatePercent(this.elEnergyPercent, cp.energy_stored/cp.energy_capacity);
+				this.updatePercent(this.elEnergyPercent, cp.energy_stored/cp.energy_capacity||0);
 				
 				this.updateElm(this.elWasteText, cp.waste_stored);
 				this.updateElm(this.elWasteHour, cp.waste_hour, '/hr');
-				this.updatePercent(this.elWastePercent, cp.waste_stored/cp.waste_capacity);
+				this.updatePercent(this.elWastePercent, cp.waste_stored/cp.waste_capacity||0);
 				this.updateElm(this.elHappyText, cp.happiness);
 				this.updateElm(this.elHappyHour, cp.happiness_hour, '/hr');
 				this.updateElm(this.elPlotsText, cp.plots_available*1);
