@@ -1330,6 +1330,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						var elm = Event.getTarget(e),
 							item = elm.parentNode;
 						this.updatePushCargo(item.Object.quantity * -1);
+						item.innerHTML = ''; // work around IE crash
 						item.parentNode.removeChild(item);
 					}, this, true);
 					item.Object = {type:opt.value, quantity:qVal};
@@ -1352,6 +1353,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.glyphSize*-1);
+						item.innerHTML = ''; // work around IE crash
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {glyph_id:opt.value, type:"glyph"};
@@ -1374,6 +1376,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.planSize*-1);
+						item.innerHTML = ''; // work around IE crash
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {plan_id:opt.value, type:"plan"};
@@ -1396,6 +1399,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.shipSize*-1);
+						item.innerHTML = ''; // work around IE crash
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {ship_id:opt.value, type:"ship"};
@@ -1418,6 +1422,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.spySize*-1);
+						item.innerHTML = ''; // work around IE crash
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {prisoner_id:opt.value, type:"prisoner"};
