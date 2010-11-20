@@ -713,6 +713,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			LibraryOfJith : {
+				"SMDVersion":"2.0",
+				"description": "Library Of Jith",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/libraryofjith",
+
+				"services": {
+					"research_species" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"empire_id", "type":"string", "optional":false}
+						]
+					}
+				}
+			},
 			Mining : {
 				"SMDVersion":"2.0",
 				"description": "Mining Ministry",
@@ -1544,7 +1562,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"description": "",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"string", "optional":true}
 						]
 					},
 					"view_planet" : {

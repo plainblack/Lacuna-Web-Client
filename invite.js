@@ -43,7 +43,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 			Event.on("inviteButton", "click", this.handleInvite, this, true);
 			this.inviteGenerate = Dom.get("inviteGenerate");
 			Event.on(this.inviteGenerate, "click", this.handleGenerate, this, true);
-			Event.on("inviteGenerateLink", "click", function(){ this.select() });
+			Event.on("inviteGenerateLink", "click", function(){ this.select(); });
 		}, this, true);
 
 		this.Dialog.render();

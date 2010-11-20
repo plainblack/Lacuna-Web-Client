@@ -333,8 +333,8 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		},
 		
 		_getStorageTab : function() {			
-			var p = this.building.upgrade.production;
-			output = [
+			var p = this.building.upgrade.production,
+				output = [
 				'<div class="yui-g">',
 				'	<div class="yui-u first">',
 				'		<ul>',

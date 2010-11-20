@@ -36,7 +36,7 @@
 		combine: false
 	});
 	var urlBuilder = function(file) {
-		return host + file + '?1';
+		return host + file + '?2';
 	};
 /** END */
 
@@ -149,6 +149,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "libraryofjith",
+		type: "js",
+		fullpath: urlBuilder("buildingLibraryOfJith.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "miningministry",
 		type: "js",
 		fullpath: urlBuilder("buildingMiningMinistry.js"),
@@ -236,7 +242,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
-		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","libraryofjith","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",

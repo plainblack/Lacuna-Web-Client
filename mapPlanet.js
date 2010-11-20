@@ -905,6 +905,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/intelligence":
 					classObj = new Lacuna.buildings.Intelligence(result);
 					break;
+				case "/libraryofjith":
+					classObj = new Lacuna.buildings.LibraryOfJith(result);
+					break;
 				case "/miningministry":
 					classObj = new Lacuna.buildings.MiningMinistry(result);
 					break;

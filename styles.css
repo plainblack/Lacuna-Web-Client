@@ -1871,6 +1871,12 @@ ul.statsSubList, ul.statsSubList ul {
 	padding:5px;
 }
 
+#lojDetails li label {
+	display:inline-block;
+	width:130px;
+	font-weight:bold;
+}
+
 /*
 TextboxList
 */
