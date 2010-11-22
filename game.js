@@ -23,7 +23,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Start : function(query) {
 			var l = window.location;
 			Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
-			Game.domain = l.host || "lacunaexpanse.com";
+			Game.domain = l.hostname || "lacunaexpanse.com";
 			if(!Lacuna.Pulser) {
 				Lacuna.Pulser = new Lacuna.Pulse();
 			}
