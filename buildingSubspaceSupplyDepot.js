@@ -47,7 +47,6 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 			Game.onTick.subscribe(this.UpdateQueueTime, this, true);
 			var tab = new YAHOO.widget.Tab({ label: "Transmit Resources", contentEl: div });
 			tab.subscribe("activeChange", function(e) {
-				try{
 				var buildQueueTotal = 0;
 				if(e.newValue) {
 					var buildings = Lacuna.MapPlanet.buildings;
@@ -63,13 +62,11 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 				this.queueStartTime = new Date();
 				this.buildQueueTotal = buildQueueTotal;
 				this.UpdateQueueTime();
-			}catch(e){alert(e)}
 			}, this, true);
 			
 			return tab;
 		},
 		UpdateQueueTime : function(e) {
-			try{
 			if (! this.queueStartTime) {
 				return;
 			}
@@ -84,7 +81,6 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 				Dom.get('subspaceCompleteBuildQueue').disabled = false;
 			}
 			Dom.get('subspaceQueueTime').innerHTML = Lib.formatTime(timeLeft);
-			}catch(e){alert(e)}
 		},
 		Transmit : function(e, opt) {
 			var btn = Event.getTarget(e);
