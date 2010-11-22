@@ -27,9 +27,9 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 			return [this._getTab()];
 		},
 		_getTab : function() {
-			this.libraryTab = new YAHOO.widget.Tab({ label: "Library", content: [
+			this.libraryTab = new YAHOO.widget.Tab({ label: "Species Library", content: [
 					'<div>',
-					'	<div><label for="lojFindEmpire">Lookup Empire Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="lojFindEmpire" /></div></div>',
+					'	<div><label for="lojFindEmpire">Lookup by Empire Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="lojFindEmpire" /></div></div>',
 					'	<ul id="lojDetails" style="margin-top:5px;">',
 					'	</ul>',
 					'</div>'
@@ -95,13 +95,8 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 		},
 		speciesDisplay : function(stat) {			 
 			this.species.innerHTML = [
-				'<li style="border-bottom:1px solid #52ACFF;"><label>Species</label></li>',
-				'<li>',
-				'	<label>Name:</label><span>', stat.name, '</span>',
-				'</li>',
-				'<li>',
-				'	<label>Description:</label><span>', stat.description, '</span>',
-				'</li>',
+				'<li style="border-bottom:1px solid #52ACFF;font-size:120%;"><label>',stat.name,'</label></li>',
+				'<li style="padding-bottom:5px;">', stat.description, '</li>',
 				'<li>',
 				'	<label>Habitable Orbits:</label><span>', stat.min_orbit, stat.max_orbit > stat.min_orbit ? ' to '+ stat.max_orbit : '','</span>',
 				'</li>',

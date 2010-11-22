@@ -175,12 +175,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						
 					for(var t=0; t<map.buildings.length; t++) {
 						var b = map.buildings[t];
-						if(!tiles[b.x]) { tiles[b.x] = {}; }
-						tiles[b.x][b.y] = b.image;
+						if(!tiles[b.y]) { tiles[b.y] = {}; }
+						tiles[b.y][b.x] = b.image;
 					}
 					
-					for(var x=-5; x<= 5; x++) {
-						for(var y=5; y>= -5; y--) {
+					for(var x=5; x >= -5; x--) {
+						for(var y=-5; y <= 5; y++) {
 							tbody.push('<div class="attachmentMapTile">');
 							if(tiles[x] && tiles[x][y]) {
 								tbody.push(['<img src="',Lib.AssetUrl,'planet_side/50/',tiles[x][y],'.png" style="width:50px;height:50px;" />'].join(''));

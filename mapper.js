@@ -170,6 +170,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	};
 
+
 	
 	var Tile = function(x, y, z, ox, oy, layer) {
 		this.z = z;
@@ -543,6 +544,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	});
 	
+
 	
 	Mapper.CoordLayer = function(map) {
 		this.map = map;
@@ -703,7 +705,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		}
 	};
 
-	Mapper.TileLayer = function(map, visibleArea, TileConstructor){
+	
+	
+	var TileLayer = function(map, visibleArea, TileConstructor){
 		this.tileCache = {};
 		// tile layer expects map.movableContainer to be at the upper left corner of
 		// the visibleArea on creation		
@@ -734,11 +738,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.render();
 		
 	};
-	Mapper.TileLayer.prototype = {
+	TileLayer.prototype = {
 		findTile : function(x,y,zoom){
-			if(this.tileCache) {
-				return this.tileCache[Tile.idFor(x,y,zoom)];
-			}
+			//if(this.tileCache) {}
+			return this.tileCache[Tile.idFor(x,y,zoom)];
 		},
 		findTileById : function(id) {
 			return this.tileCache[id];
@@ -766,66 +769,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				scope:this
 			}, x1, x2, y1, y2);
 		},
-		_showCachedTiles : function() {
-			var bounds = this.visibleArea.coordBounds();
-			
-			//from left to right (smaller to bigger)
-			for(var xc=bounds.x1; xc <= bounds.x2; xc++){
-				//from bottom to top (smaller to bigger)
-				for(var yc=bounds.y2; yc <= bounds.y1; yc++){
-					var tile = this.findTile(xc,yc,this.map.zoom);
-					if(tile) {
-						if(tile.blank) {
-							tile.refresh();
-						}
-						tile.appendToDom();
-						tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
-						tile.subscribe("onReload", this.onReloadTile, this, true);
-					}
-				}
-			}
-		},
-		showTiles : function(refresh) {
-			if(this.tileCache) {
-				var bounds = this.map instanceof Mapper.PlanetMap ? {x1:this.map.maxBounds.x1Left,x2:this.map.maxBounds.x2Right,y1:this.map.maxBounds.y1Top,y2:this.map.maxBounds.y2Bottom} : this.visibleArea.coordBounds();
-				var tiles = {};
-				//from left to right (smaller to bigger)
-				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
-					//from bottom to top (smaller to bigger)
-					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
-						var tile = this.findTile(xc,yc,this.map.zoom), doSub;
-						if(!tile) {
-							var ox = (xc - this.baseTileLoc[0]) * this.map.tileSizeInPx;
-							var oy = ((yc * -1) - this.baseTileLoc[1]) * this.map.tileSizeInPx;
-							//var offsets = this.visibleArea.getOffsetFromCoords(xc, xy, this.baseTileCoords[0], this.baseTileCoords[1]);
-							tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this);
-							this.tileCache[tile.id] = tile;
-							tile.appendToDom();
-							doSub = true;
-						}
-						else if(refresh) {
-							tile.refresh();
-							doSub = true;
-						}
-						else {
-							if(tile.blank) {
-								tile.refresh();
-							}
-							tile.appendToDom();
-							doSub = true;
-						}
-						if(doSub) {
-							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
-							tile.subscribe("onReload", this.onReloadTile, this, true);
-						}
-						tiles[tile.id] = tile;
-					}
-				}
-				/*if(!this.map.keepTilesOutOfBounds) {
-					this.removeAllTilesNotContainedIn( tiles );
-				}*/
-			}
-		},
+
 		onReloadTile : function(tile) {
 			this.fireEvent("onReloadTile", tile);
 		},
@@ -871,9 +815,142 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.tileCache = {};
 		}
 	};
-	Lang.augmentProto(Mapper.TileLayer, Util.EventProvider);
-
+	Lang.augmentProto(TileLayer, Util.EventProvider);
 	
+	Mapper.StarTileLayer = function(map, visibleArea, TileConstructor) {
+		Mapper.StarTileLayer.superclass.constructor.call(this, map, visibleArea, TileConstructor);
+	};
+	Lang.extend(Mapper.StarTileLayer, TileLayer, {
+		_showCachedTiles : function() {
+			if(this.tileCache) {
+				var bounds = this.visibleArea.coordBounds();
+				
+				//from left to right (smaller to bigger)
+				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
+					//from bottom to top (smaller to bigger)
+					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
+						var tile = this.findTile(xc,yc,this.map.zoom);
+						if(tile) {
+							if(tile.blank) {
+								tile.refresh();
+							}
+							tile.appendToDom();
+							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+							tile.subscribe("onReload", this.onReloadTile, this, true);
+						}
+					}
+				}
+			}
+		},
+		showTiles : function(refresh) {
+			if(this.tileCache) {
+				var bounds = this.visibleArea.coordBounds();
+				var tiles = {};
+				//from left to right (smaller to bigger)
+				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
+					//from bottom to top (smaller to bigger)
+					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
+						var tile = this.findTile(xc,yc,this.map.zoom), doSub;
+						if(!tile) {
+							var ox = (xc - this.baseTileLoc[0]) * this.map.tileSizeInPx;
+							var oy = ((yc * -1) - this.baseTileLoc[1]) * this.map.tileSizeInPx;
+							//var offsets = this.visibleArea.getOffsetFromCoords(xc, xy, this.baseTileCoords[0], this.baseTileCoords[1]);
+							tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this);
+							this.tileCache[tile.id] = tile;
+							tile.appendToDom();
+							doSub = true;
+						}
+						else if(refresh) {
+							tile.refresh();
+							doSub = true;
+						}
+						else {
+							if(tile.blank) {
+								tile.refresh();
+							}
+							tile.appendToDom();
+							doSub = true;
+						}
+						if(doSub) {
+							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+							tile.subscribe("onReload", this.onReloadTile, this, true);
+						}
+						tiles[tile.id] = tile;
+					}
+				}
+				this.removeAllTilesNotContainedIn( tiles );
+			}
+		}
+	});
+	
+	Mapper.PlanetTileLayer = function(map, visibleArea, TileConstructor) {
+		this.bounds = {x1:map.maxBounds.x1Left,x2:map.maxBounds.x2Right,y1:map.maxBounds.y1Top,y2:map.maxBounds.y2Bottom};
+		
+		Mapper.PlanetTileLayer.superclass.constructor.call(this, map, visibleArea, TileConstructor);
+	};
+	Lang.extend(Mapper.PlanetTileLayer, TileLayer, {
+		_showCachedTiles : function() {
+			if(this.tileCache) {
+				var bounds = this.bounds;
+				
+				//from left to right (smaller to bigger)
+				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
+					//from bottom to top (smaller to bigger)
+					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
+						var tile = this.findTile(xc,yc,this.map.zoom);
+						if(tile) {
+							if(tile.blank) {
+								tile.refresh();
+							}
+							tile.appendToDom();
+							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+							tile.subscribe("onReload", this.onReloadTile, this, true);
+						}
+					}
+				}
+			}
+		},
+		showTiles : function(refresh) {
+			if(this.tileCache) {
+				var bounds = this.bounds;
+				var tiles = {};
+				//from left to right (smaller to bigger)
+				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
+					//from bottom to top (smaller to bigger)
+					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
+						var tile = this.findTile(xc,yc,this.map.zoom), doSub;
+						if(!tile) {
+							var ox = (xc - this.baseTileLoc[0]) * this.map.tileSizeInPx;
+							var oy = ((yc * -1) - this.baseTileLoc[1]) * this.map.tileSizeInPx;
+							//var offsets = this.visibleArea.getOffsetFromCoords(xc, xy, this.baseTileCoords[0], this.baseTileCoords[1]);
+							tile = new this.TileConstructor(xc, yc, this.map.zoom, ox, oy, this);
+							this.tileCache[tile.id] = tile;
+							tile.appendToDom();
+							doSub = true;
+						}
+						else if(refresh) {
+							tile.refresh();
+							doSub = true;
+						}
+						else {
+							if(tile.blank) {
+								tile.refresh();
+							}
+							tile.appendToDom();
+							doSub = true;
+						}
+						if(doSub) {
+							tile.unsubscribeAll(); //so we don't get multiple subs on the same tile
+							tile.subscribe("onReload", this.onReloadTile, this, true);
+						}
+						tiles[tile.id] = tile;
+					}
+				}
+			}
+		}
+	});
+
+
 	
 	var Map = function( divId, options ) {
 		var IE='\v'=='v'; // detect IE
@@ -1026,7 +1103,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if( this.tileLayer ) {
 				this.tileLayer.destroy();		
 			}
-			this.tileLayer = new Mapper.TileLayer(this, Mapper.util.clone(this.visibleArea), this.Tile);
+			this.tileLayer = new this.TileLayer(this, Mapper.util.clone(this.visibleArea), this.Tile);
 			//pass through
 			this.tileLayer.subscribe("onReloadTile", function(tile){
 				this.fireEvent("onReloadTile",tile.data.id);
@@ -1140,6 +1217,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.requestQueue = [];
 		
 			this.Tile = Mapper.StarTile;
+			this.TileLayer = Mapper.StarTileLayer;
 			
 			this.zoom = Game.GetCookieSettings("starZoom",0)*1;
 			this._setTileSizeByZoom();
@@ -1237,6 +1315,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},*/
 		addTileData : function(aStars) {
 			//var startZoomLevel = 0;
+			var cp = Game.GetCurrentPlanet();
+			
 			for(var i=0; i<aStars.length; i++) {
 				var star = aStars[i];
 				star.isStar = true;
@@ -1245,7 +1325,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				}
 				this.tileCache[star.x][star.y] = star;
 
-				if(star.bodies) {
+				if(star.bodies) { // && cp.star_id == star.id) {
 					for(var bKey in star.bodies){
 						if(star.bodies.hasOwnProperty(bKey)){
 							var body = star.bodies[bKey];
@@ -1303,7 +1383,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
 		
 			this.Tile = Mapper.PlanetTile;
-			this.keepTilesOutOfBounds = true;
+			this.TileLayer = Mapper.PlanetTileLayer;
 			
 			this.zoom = Game.GetCookieSettings("planetZoom",0)*1;
 			this._setTileSizeByZoom();

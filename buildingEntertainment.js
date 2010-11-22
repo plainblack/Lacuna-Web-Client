@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 			return [this._getLotteryTab()];
 		},
 		_getLotteryTab : function() {
-			var tab = new YAHOO.widget.Tab({ label: "Lottery", content: ['<p id="entertainmentLotteryMessage">Welcome to the Lacuna Lottery! Get entered in the Expanse\'s daily lottery for 10 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />. Each link clicked below gives you one extra chance to win! Links will be removed after voting and return tomorrow.</p><div><ul id="entertainmentLotteryList"></ul></div>'].join('')});
+			var tab = new YAHOO.widget.Tab({ label: "Lottery", content: ['<p id="entertainmentLotteryMessage">Welcome to the Lacuna Lottery! Get entered in the Expanse\'s daily lottery for a chance to win 10 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />! Each link clicked below gives you one extra chance to win. Links will be removed after voting and return tomorrow.</p><div><ul id="entertainmentLotteryList"></ul></div>'].join('')});
 			tab.subscribe("activeChange", this.LotteryView, this, true);
 			return tab;
 		},

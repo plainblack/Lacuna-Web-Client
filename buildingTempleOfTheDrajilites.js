@@ -34,6 +34,7 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 			this.planetsTab = new YAHOO.widget.Tab({ label: "Planets", content: [
 					'<div>',
 					'	<div><label for="planetsDetailsStarFind">Lookup Star Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="planetsDetailsStarFind" /></div> or <button type="button" id="planetsDetailsCurrentStar">Go To Current Star</button></div>',
+					'	<div id="planetsDetailsMessage"></div>',
 					'	<div class="clearafter">',
 					'		<ul id="planetsDetails" class="planetsInfo">',
 					'		</ul>',
@@ -110,7 +111,13 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 				},
 				failure : function(o){
 					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
+					//this.rpcFailure(o);
+					var msg = Dom.get("planetsDetailsMessage"),
+						planetsDetails = Dom.get("planetsDetails");
+					
+					msg.innerHTML = o.error.message;
+					Event.purgeElement(planetsDetails);
+					planetsDetails.innerHTML = "";
 				},
 				timeout:Game.Timeout,
 				scope:this
