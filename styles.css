@@ -1537,6 +1537,19 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	display: block;
 }
 
+.capitolEmpireRenameTab fieldset {
+	border: 1px solid #52acff;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+	width: 220px;
+	margin: 10px;
+}
+.capitolEmpireRenameTab fieldset legend {
+	color: #fff;
+	padding: 0 5px;
+}
+
 .plan li {
 	width:100px;
 }

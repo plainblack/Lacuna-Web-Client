@@ -245,6 +245,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					
 				}
 			},
+			Capitol : {
+				"SMDVersion":"2.0",
+				"description": "Capitol",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/capitol",
+				
+				"services": {
+					"rename_empire" : {
+						"description": "Spend some essentia to rename your empire.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Development : {
 				"SMDVersion":"2.0",
 				"description": "Development Ministry",

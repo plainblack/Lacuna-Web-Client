@@ -891,6 +891,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/archaeology":
 					classObj = new Lacuna.buildings.Archaeology(result);
 					break;
+				case "/capitol":
+					classObj = new Lacuna.buildings.Capitol(result);
+					break;
 				case "/development":
 					classObj = new Lacuna.buildings.Development(result);
 					break;

@@ -125,6 +125,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "capitol",
+		type: "js",
+		fullpath: urlBuilder("buildingCapitol.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "embassy",
 		type: "js",
 		fullpath: urlBuilder("buildingEmbassy.js"),
@@ -254,7 +260,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
-		requires : ["archaeology","development","embassy","entertainment","foodreserve","hallsofvrbansk","intelligence","libraryofjith","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","subspacesupplydepot","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","capitol","development","embassy","entertainment","foodreserve","hallsofvrbansk","intelligence","libraryofjith","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","subspacesupplydepot","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",
