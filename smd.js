@@ -1550,6 +1550,56 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			SubspaceSupplyDepot : {
+				"SMDVersion":"2.0",
+				"description": "Subspace Supply Depot",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/subspacesupplydepot",
+				
+				"services": {
+					"transmit_food" : {
+						"description": "Convert 3600 seconds into 3600 food.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"transmit_energy" : {
+						"description": "Convert 3600 seconds into 3600 energy.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"transmit_ore" : {
+						"description": "Convert 3600 seconds into 3600 ore.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"transmit_water" : {
+						"description": "Convert 3600 seconds into 3600 water.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"complete_build_queue" : {
+						"description": "Trade seconds for build queue time.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			TempleOfTheDrajilites : {
 				"SMDVersion":"2.0",
 				"description": "Temple Of The Drajilites",

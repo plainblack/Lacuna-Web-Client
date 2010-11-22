@@ -1441,6 +1441,14 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	color:black;
 }
 
+.subspaceTransmit {
+	width: 175px;
+	margin: 10px 5px;
+}
+#subspaceCompleteBuildQueue {
+	width: 300px;
+}
+
 .buildQueue .buildQueueName {
 	width:200px;
 }
