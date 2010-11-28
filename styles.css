@@ -1482,6 +1482,25 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .embassyInfo .embassyAction {
 	width:100px;
 }
+.embassyStash fieldset {
+	border: 1px solid #52acff;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+	width: 355px;
+	margin: 5px;
+	vertical-align:top;
+}
+.embassyStash fieldset legend {
+	color: #fff;
+	padding: 0 5px;
+	font-weight:bold;
+}
+.embassyStash fieldset label {
+	display:inline-block;
+	width:75px;
+}
+
 
 .recycleTab fieldset {
 	border: 1px solid #52acff;
@@ -1654,7 +1673,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:150px;
 }
 
-#tradePushItems .tradeItem {
+.tradeItem {
 	float:left;
 	width:200px;
 	border:1px solid black;

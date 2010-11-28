@@ -626,7 +626,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						imgDiv.id = "attachmentImage";
 						if(img.link) {
 							imgDiv.innerHTML = [
-								'<a href="',img.link,'" title="',img.title,'" target="_new"><img src="',img.url,'" alt="',img.title,'" title="',img.title,'" /></a>'
+								'<a href="',img.link,'" title="',img.title,'" target="_blank"><img src="',img.url,'" alt="',img.title,'" title="',img.title,'" /></a>'
 							].join('');
 						}
 						else {
@@ -640,7 +640,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 							lnkDiv = this.body.appendChild(document.createElement("div"));
 						lnkDiv.id = "attachmentLink";
 						lnkDiv.innerHTML = [
-							'<a href="',lnk.url,'" title="',lnk.label,'" target="_new">',lnk.label,'</a>'
+							'<a href="',lnk.url,'" title="',lnk.label,'" target="_blank">',lnk.label,'</a>'
 						].join('');
 					}
 					if(msg.attachments.table) {
@@ -904,6 +904,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		sendTo : function(empireName) {
 			Game.OverlayManager.hideAll();
+			delete this.viewingMessage;
 			this.messagingPanel.show();
 			this.currentTab = this.create.id;
 			this.loadTab();

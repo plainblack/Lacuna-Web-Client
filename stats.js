@@ -516,9 +516,14 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					};
 					return oPayload; 
 				};
-				this.EmpireTable.requery = function() {
+				this.EmpireTable.requery = function(page) {
 					// Get the current state
 					var oState = this.getState();
+					
+					if(Lang.isNumber(page)) {
+						oState.pagination.recordOffset = (page-1)*25;
+						oState.pagination.page = page;
+					}
 			
 					// Get the request for the new state
 					var request = this.get("generateRequest")(oState, this);
@@ -751,9 +756,14 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					};
 					return oPayload; 
 				};
-				this.AllianceTable.requery = function() {
+				this.AllianceTable.requery = function(page) {
 					// Get the current state
 					var oState = this.getState();
+					
+					if(Lang.isNumber(page)) {
+						oState.pagination.recordOffset = (page-1)*25;
+						oState.pagination.page = page;
+					}
 			
 					// Get the request for the new state
 					var request = this.get("generateRequest")(oState, this);
@@ -1251,9 +1261,15 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 		},
 		hide : function() {
 			this.Panel.hide();
+		},
+		Reset : function() {
+			if(this.AllianceTable) {
+				this.AllianceTable.requery(1);
+			}
+			if(this.EmpireTable) {
+				this.EmpireTable.requery(1);
+			}
 		}
-		
-		
 	};
 	
 	Lacuna.Stats = new Stats();

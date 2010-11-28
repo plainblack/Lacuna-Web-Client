@@ -586,6 +586,33 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							"get_alliance_status" : { ... },
 						 }
 						*/
+					},
+					"view_stash" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"donate_to_stash" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"donation", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"exchange_with_stash" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"donation", "type":"string", "optional":false},
+							{"name":"request", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},

@@ -63,7 +63,7 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 					for(var i=0; i<options.length; i++) {
 						var vote = options[i],
 							nLi = li.cloneNode(false);
-						nLi.innerHTML = ['<a href="',vote.url,'" target="_new">',vote.name,'</a>'].join('');
+						nLi.innerHTML = ['<a href="',vote.url,'" target="_blank">',vote.name,'</a>'].join('');
 						Event.on(nLi, "click", this.LotteryVoted, this);
 						details.appendChild(nLi);
 					}

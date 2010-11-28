@@ -52,7 +52,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 		'			</div>',
 		'		</div>',
 		'		<div style="border-top:1px solid #52ACFF;padding:15px 5px;text-align:center;">',
-		'			New to the Lacuna Expanse?  Want to find out more before signing up? <a href="http://www.lacunaexpanse.com" target="_new">Click here.</a>',
+		'			New to the Lacuna Expanse?  Want to find out more before signing up? <a href="http://www.lacunaexpanse.com" target="_blank">Click here.</a>',
 		'		</div>',
 		'	</div>'
 		].join('');

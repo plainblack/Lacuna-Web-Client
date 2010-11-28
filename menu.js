@@ -29,12 +29,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				shadow:false, 
 				context:[this.clickId, "tl", "bl",[11, -14]]
 			});
-			userMenu.addItems([{ text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_new" },
-				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_new" }
+			userMenu.addItems([{ text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_blank" },
+				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" }
 			]);
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
 					this.align("tl","bl",[11, -14]);
+					//this.bringToTop();
 				}
 			});
 			userMenu.render();
@@ -199,7 +200,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			tutorialImg.alt = tutorialImg.title = "Tutorial";
 			tutorialClick.id = "userMenuTutorial";
 			tutorialClick.href = "http://www.lacunaexpanse.com/tutorial";
-			tutorialClick.target = "_new";
+			tutorialClick.target = "_blank";
 			Dom.addClass([tutorial,tutorialClick], "tutorial menuItem");
 			Dom.addClass(tutorialClick, "click");
 			
@@ -207,7 +208,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			supportImg.alt = supportImg.title = "Support";
 			supportClick.id = "userMenuSupport";
 			supportClick.href = "http://community.lacunaexpanse.com/forums";
-			supportClick.target = "_new";
+			supportClick.target = "_blank";
 			Dom.addClass([support,supportClick], "support menuItem");
 			Dom.addClass(supportClick, "click");
 			
@@ -355,6 +356,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			planetMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
 					this.align("bl","tl",[9, 10]);
+					//this.bringToTop();
 				}
 			});
 			planetMenu.render();
@@ -379,7 +381,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			var planetMenuTT = new YAHOO.widget.Tooltip("planetMenuTT", {
 				zIndex:41011,
 				xyoffset:[0,-10],
-				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver,this.elPlotsOver,this.elClick]
+				context:[this.elFoodOver,this.elOreOver,this.elWaterOver,this.elEnergyOver,this.elWasteOver,this.elHappyOver,this.elPlotsOver]
 			});
 			// Set the text for the tooltip just before we display it.
 			planetMenuTT.contextTriggerEvent.subscribe(function(type, args) {
@@ -719,9 +721,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 					break;
 				case "planetMenuPlots":
 					output = [planet.plots_available*1, ' Plots Available'];
-					break;
-				case "planetsClick":
-					output = ['Colonies'];
 					break;
 				default:
 					output = [];

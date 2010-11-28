@@ -601,7 +601,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(Game.Resources && Game.Resources.buildings) {
 				var desc = Game.Resources.buildings[url];
 				if(desc) {
-					return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+					return [desc.description,' <a href="',desc.wiki,'" target="_blank">More Information on Wiki</a>'].join('');
 				}
 				else {
 					return '';
@@ -612,7 +612,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(Game.Resources && Game.Resources.ships) {
 				var desc = Game.Resources.ships[type];
 				if(desc) {
-					return [desc.description,' <a href="',desc.wiki,'" target="_new">More Information on Wiki</a>'].join('');
+					return [desc.description,' <a href="',desc.wiki,'" target="_blank">More Information on Wiki</a>'].join('');
 				}
 			}
 		},
@@ -662,6 +662,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			Game.SetSession();
 			Game.EmpireData = {};
+			Lacuna.Stats.Reset();
 			Lacuna.MapStar.Reset();
 			Lacuna.MapPlanet.Reset();
 			Lacuna.Notify.Hide();
