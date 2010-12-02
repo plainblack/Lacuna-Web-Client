@@ -497,7 +497,20 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				var ships = this.shipsForeign.ships,
 					ul = document.createElement("ul"),
 					li = document.createElement("li");
-					
+				
+				ships = ships.slice(0);
+				ships.sort(function(a,b) {
+					if (a.date_arrives > b.date_arrives) {
+						return 1;
+					}
+					else if (a.date_arrives < b.arrives) {
+						return -1;
+					}
+					else {
+						return 0;
+					}
+				});
+				
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				

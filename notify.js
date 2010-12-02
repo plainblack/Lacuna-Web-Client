@@ -98,6 +98,19 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			var incoming = planet.incoming_foreign_ships || [],
 				planetShips = this.incomingShips[planet.id] || [];
 			
+			incoming = incoming.slice(0);
+			incoming.sort(function(a,b) {
+				if (a.date_arrives > b.date_arrives) {
+					return 1;
+				}
+				else if (a.date_arrives < b.arrives) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
+			});
+			
 			if(planetShips.length != incoming.length) {
 				this._createDisplay();
 				this.incomingShips[planet.id] = incoming;
