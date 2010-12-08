@@ -107,6 +107,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.timestamp = Dom.get("messagingTimestamp");
 				this.from = Dom.get("messagingFrom");
 				this.to = Dom.get("messagingTo");
+				this.recipients = Dom.get("messagingRecipients");
 				this.subject = Dom.get("messagingSubject");
 				this.body = Dom.get("messagingBody");
 				this.display = Dom.get("messagingDisplay");
@@ -615,6 +616,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
 				this.from.innerHTML = ['<a class="profile_link" href="#',msg.from_id,'">',msg.from,'</a>'].join('');
 				this.to.innerHTML = ['<a class="profile_link" href="#',msg.to_id,'">',msg.to,'</a>'].join('');
+
+                if(msg.recipients.length > 1) {
+                    var rec = msg.recipients;
+                    recDiv = this.to.parentNode.appendChild(document.createElement("div"));
+                    recDiv.id = "recipientsList";
+                    recDiv.innerHTML = ['<label>Recipients:</label><span id="messagingRecipients">',msg.recipients.join(", "),'</span>'].join('');
+                }
+
 				this.subject.innerHTML = msg.subject;
 				this.body.parentNode.scrollTop = 0;
 				this.body.innerHTML = msg.body ? this.formatBody(msg.body) : '';
