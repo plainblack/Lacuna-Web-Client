@@ -657,8 +657,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			}
 		},
 		updatePercent : function(el, perc) {
+			if (perc > 1) {
+				perc = 1;
+			}
 			Dom.setStyle(el, 'width', (Math.round(perc*10000)/100) + '%');
-
+			
 			var colorPercent;
 			if (perc < 0.8) {
 				colorPercent = 0;
