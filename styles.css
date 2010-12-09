@@ -708,7 +708,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	padding:2px 5px;
 }
 
-#messagingFrom, #messagingTo {
+#messagingFrom a, #messagingTo a {
 	text-decoration:underline;
 	cursor:pointer;
 }
