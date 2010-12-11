@@ -25,9 +25,14 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 	};
 	
 	Lang.extend(Embassy, Lacuna.buildings.Building, {
+		/*destroy : function() {
+			Event.removeListener(document, "mouseup", this.StashMouseUp);
+			
+			Embassy.superclass.destroy.call(this);
+		},*/
 		getChildTabs : function() {
 			if(this.alliance) {
-				var tabs =  [this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
+				var tabs =  [this._getStashTab(),this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
 				if(this.isLeader) {
 					tabs.push(this._getSendTab());
 				}
@@ -60,7 +65,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				'	<ul>',
 				'		<li><label>Founded: </label>', Lib.formatServerDate(this.alliance.date_created),'</li>',
 				'		<li><label>Description: </label>', this.alliance.description,'</li>',
-				'		<li><label>Forums: </label>', this.alliance.forum_uri ? ['<a href="',this.alliance.forum_uri,'" target="_new">View</a>'].join('') : '','</li>',
+				'		<li><label>Forums: </label>', this.alliance.forum_uri ? ['<a href="',this.alliance.forum_uri,'" target="_blank">View</a>'].join('') : '','</li>',
 				'		<li><label>Announcements: </label>', this.alliance.announcements ? this.alliance.announcements.replace('\n','<br />') : "",'</li>',
 				'	</ul>',
 				'	<hr /><div>',
@@ -137,6 +142,53 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			
 			return this.sendTab;
 		},
+		_getStashTab : function() {
+			this.stashTab = new YAHOO.widget.Tab({ label: "Stash", content: [
+			'<div id="embassyStashAnnounce"></div>',
+			'<div class="embassyStash yui-g">',
+			'	<div class="yui-g first">',
+			'		<div class="yui-u first">',
+			'			<legend>On Planet</legend>',
+			'			<div class="embassyContainers"><ul id="embassyStashOnPlanet"></ul></div>',
+			'		</div>',
+			'		<div class="yui-u">',
+			'			<legend>Donate</legend>',
+			'			<div class="embassyContainers"><ul id="embassyStashToDonate"></ul></div>',
+			'			<div>Total:<span id="embassyTotalDonate">0</span></div>',
+			'		</div>',
+			'	</div>',
+			'	<div class="yui-g">',
+			'		<div class="yui-u first">',
+			'			<legend>Exchange</legend>',
+			'			<div class="embassyContainers"><ul id="embassyStashToExchange"></ul></div>',
+			'			<div>Total:<span id="embassyTotalExchange">0</span></div>',
+			'		</div>',
+			'		<div class="yui-u">',
+			'			<legend>In Stash</legend>',
+			'			<div class="embassyContainers"><ul id="embassyStashInStash"></ul></div>',
+			'		</div>',
+			'	</div>',
+			'</div>',
+			'<div style="text-align: center;">',
+			'	<div id="embassyStashMessage" class="alert"></div>',
+			'	<button type="button" id="embassyStashSubmit">Exchange</button>',
+			'</div>'].join('')});
+			
+			this.stashTab.subscribe("activeChange", this.getStash, this, true);
+			
+			Event.on("embassyStashSubmit", "click", this.StashSubmit, this, true);
+			
+			Event.delegate("embassyStashOnPlanet", "click", this.StashDonateAdd, "button", this, true);
+			Event.delegate("embassyStashToDonate", "click", this.StashDonateRemove, "button", this, true);
+
+			Event.delegate("embassyStashInStash", "click", this.StashExchangeAdd, "button", this, true);
+			Event.delegate("embassyStashToExchange", "click", this.StashExchangeRemove, "button", this, true);
+			
+            //Event.on(document, "mouseup", this.StashMouseUp, this, true);
+			
+			return this.stashTab;
+		},
+		
 		_createSendToSelect : function() {
 			var dataSource = new Util.XHRDataSource("/empire");
 			dataSource.connMethodPost = "POST";
@@ -170,6 +222,336 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			};
 			
 			this.embassySendTo = oTextboxList;
+		},
+		
+		//Stash 
+		getStash : function(e) {
+			if(e.newValue) {
+				Lacuna.Pulser.Show();
+				this.service.view_stash({session_id:Game.GetSession(),building_id:this.building.id}, {
+					success : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcSuccess(o);
+						
+						delete o.result.status;
+						this.stash = o.result;
+						
+						this.StashPopulate();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcFailure(o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+		},
+		StashPopulate : function() {
+			/*		
+			"stash" : {"gold" : 4500},
+			"stored" : {"energy" : 40000},
+			"max_exchange_size" : 30000,
+			"exchanges_remaining_today" : 1
+			*/
+			var stash = this.stash || {}, 
+				onPlanet = Dom.get("embassyStashOnPlanet"),
+				inStash = Dom.get("embassyStashInStash"),
+				announce = Dom.get("embassyStashAnnounce"),
+				li = document.createElement("li"), nLi, ul,
+				r,x,resource,name;
+				
+			if(announce) {
+				announce.innerHTML = ['You can exchange at most ', Lib.formatNumber(stash.max_exchange_size), ' resources and you have ', stash.exchanges_remaining_today, ' exchange(s) remaining today.'].join('');
+			}
+				
+			if(onPlanet) {
+				onPlanet.innerHTML = "";
+				
+				for(r in Lib.ResourceTypes) {
+					if(Lib.ResourceTypes.hasOwnProperty(r)) {
+						resource = Lib.ResourceTypes[r];
+						if(Lang.isArray(resource)) {
+							for(x=0; x < resource.length; x++) {
+								name = resource[x];
+								if(stash.stored[name]) {
+									nLi = li.cloneNode(false);
+									nLi.Stash = {type:name,quantity:stash.stored[name]*1};
+									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stored[name], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+									onPlanet.appendChild(nLi);
+								}
+							}
+						}
+						else if(stash.stored[r] && resource) {
+							nLi = li.cloneNode(false);
+							nLi.Stash = {type:r,quantity:stash.stored[r]*1};
+							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stored[r], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+							
+							onPlanet.appendChild(nLi);
+						}
+					}
+				}
+			}
+			if(inStash && stash.stash) {
+				inStash.innerHTML = "";				
+				for(r in Lib.ResourceTypes) {
+					if(Lib.ResourceTypes.hasOwnProperty(r)) {
+						resource = Lib.ResourceTypes[r];
+						if(Lang.isArray(resource)) {
+							for(x=0; x < resource.length; x++) {
+								name = resource[x];
+								if(stash.stash[name]) {
+									nLi = li.cloneNode(false);
+									nLi.Stash = {type:name,quantity:stash.stash[name]*1};
+									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stash[name], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+									inStash.appendChild(nLi);
+								}
+							}
+						}
+						else if(stash.stash[r] && resource) {
+							nLi = li.cloneNode(false);
+							nLi.Stash = {type:r,quantity:stash.stash[r]*1};
+							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stash[r], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+							
+							inStash.appendChild(nLi);
+						}
+					}
+				}
+			}
+		},
+		StashDonateAdd : function(e, matchedEl, container){
+			var quantity = Lib.getSelectedOptionValue(matchedEl.previousSibling)*1,
+				li = matchedEl.parentNode,
+				c = Dom.get("embassyStashToDonate");
+			if(quantity && c) {
+				var id = "stashResource-" + li.Stash.type,
+					exists = Sel.query("#"+id, c);
+				if(exists.length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					if(quantity > li.Stash.quantity) {
+						quantity = li.Stash.quantity;
+					}
+					Dom.addClass(item, "stashItem");
+					Dom.addClass(del, "stashDelete");
+					Event.on(del, "click", function(e){
+						var ed = Event.getTarget(e),
+							ep = ed.parentNode;
+						this.updateStashDonate(ep.Object.quantity * -1);
+						Event.purgeElement(ep);
+						ep.parentNode.removeChild(ep);
+					}, this, true);
+					item.Object = {type:li.Stash.type, quantity:quantity};
+					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">-</button>'].join('');
+					c.appendChild(item);
+					this.updateStashDonate(quantity);
+				}
+				else {
+					var found = exists[0],
+						newTotal = found.Object.quantity + quantity,
+						diff = quantity,
+						lq = Sel.query(".quantity", found, true);
+					if(newTotal > li.Stash.quantity) {
+						newTotal = li.Stash.quantity;
+						diff = newTotal - found.Object.quantity;
+					}
+					lq.innerHTML = newTotal;
+					found.Object.quantity = newTotal;
+					this.updateStashDonate(diff);
+				}
+			}
+		},
+		StashDonateRemove : function(e, matchedEl, container){
+			var quantity = Lib.getSelectedOptionValue(matchedEl.previousSibling)*1,
+				li = matchedEl.parentNode.parentNode;
+			if(quantity) {
+				var newTotal = li.Object.quantity - quantity,
+					diff = quantity*-1,
+					lq = Sel.query(".quantity", li, true);;
+				if(newTotal < 0) {
+					newTotal = 0;
+					diff = li.Object.quantity*-1;
+				}
+				
+				if(newTotal == 0) {
+					this.updateStashDonate(li.Object.quantity * -1);
+					Event.purgeElement(li);
+					li.parentNode.removeChild(li);
+				}
+				else {
+					lq.innerHTML = newTotal;
+					li.Object.quantity = newTotal;
+					this.updateStashDonate(diff);
+				}
+			}
+		},
+		StashExchangeAdd : function(e, matchedEl, container){
+			var quantity = Lib.getSelectedOptionValue(matchedEl.previousSibling)*1,
+				li = matchedEl.parentNode,
+				c = Dom.get("embassyStashToExchange");
+			if(quantity && c) {
+				var id = "stashResource-" + li.Stash.type,
+					exists = Sel.query("#"+id, c);
+				if(exists.length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					if(quantity > li.Stash.quantity) {
+						quantity = li.Stash.quantity;
+					}
+					Dom.addClass(item, "stashItem");
+					Dom.addClass(del, "stashDelete");
+					Event.on(del, "click", function(e){
+						var ed = Event.getTarget(e),
+							ep = ed.parentNode;
+						this.updateStashExchange(ep.Object.quantity * -1);
+						Event.purgeElement(ep);
+						ep.parentNode.removeChild(ep);
+					}, this, true);
+					item.Object = {type:li.Stash.type, quantity:quantity};
+					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option>1000</option><option>10000</option></select><button type="button">-</button>'].join('');
+					c.appendChild(item);
+					this.updateStashExchange(quantity);
+				}
+				else {
+					var found = exists[0],
+						newTotal = found.Object.quantity + quantity,
+						diff = quantity,
+						lq = Sel.query(".quantity", found, true);
+					if(newTotal > li.Stash.quantity) {
+						newTotal = li.Stash.quantity;
+						diff = newTotal - found.Object.quantity;
+					}
+					lq.innerHTML = newTotal;
+					found.Object.quantity = newTotal;
+					this.updateStashExchange(diff);
+				}
+			}
+		},
+		StashExchangeRemove : function(e, matchedEl, container){
+			var quantity = Lib.getSelectedOptionValue(matchedEl.previousSibling)*1,
+				li = matchedEl.parentNode.parentNode;
+			if(quantity) {
+				var newTotal = li.Object.quantity - quantity,
+					diff = quantity,
+					lq = Sel.query(".quantity", li, true);;
+				if(newTotal < 0) {
+					newTotal = 0;
+					diff = li.Object.quantity;
+				}
+				
+				if(newTotal == 0) {
+					this.updateStashExchange(li.Object.quantity * -1);
+					Event.purgeElement(li);
+					li.parentNode.removeChild(li);
+				}
+				else {
+					lq.innerHTML = newTotal;
+					li.Object.quantity = newTotal;
+					this.updateStashExchange(diff);
+				}
+			}
+		},
+		updateStashDonate : function(byVal) {
+			var c = Dom.get("embassyTotalDonate"),
+				cv = c.innerHTML*1;
+			c.innerHTML = cv + byVal;
+		},
+		updateStashExchange : function(byVal) {
+			var c = Dom.get("embassyTotalExchange"),
+				cv = c.innerHTML*1;
+			c.innerHTML = cv + byVal;
+		},
+		StashSubmit : function() {
+			var data = {
+					session_id: Game.GetSession(""),
+					building_id: this.building.id
+				},
+				toDonateLis = Sel.query("li","embassyStashToDonate"),
+				toExchangeLis = Sel.query("li","embassyStashToExchange"),
+				donateItems = {}, donateTotal = 0,
+				exchangeItems = {}, exchangeTotal = 0,
+				n, obj, 
+				serviceFunc;
+				
+			for(n=0; n<toDonateLis.length; n++) {
+				obj = toDonateLis[n].Object;
+				if(obj) {
+					donateItems[obj.type] = obj.quantity
+					donateTotal += obj.quantity;
+				}
+			}
+			for(n=0; n<toExchangeLis.length; n++) {
+				obj = toExchangeLis[n].Object;
+				if(obj) {
+					exchangeItems[obj.type] = obj.quantity
+					exchangeTotal += obj.quantity;
+				}
+			}
+			
+			data.donation = donateItems;
+
+			if(donateTotal == 0) {
+				Dom.get("embassyStashMessage").innerHTML = "Must add items to donate to Stash.";
+			}
+			else if(exchangeTotal > 0 && donateTotal > this.stash.max_exchange_size) {
+				Dom.get("embassyStashMessage").innerHTML = ['You are only able to exchange ', this.stash.max_exchange_size, ' resources from the stash.'].join('');
+			}
+			else if(exchangeTotal > 0 && donateTotal != exchangeTotal) {
+				Dom.get("embassyStashMessage").innerHTML = 'Total amount of resources receiving from stash must be equal to the amount donating.';
+			}
+			else {
+			
+				if(exchangeTotal > 0) {
+					data.request = exchangeItems;
+					serviceFunc = this.service.exchange_with_stash;
+				}
+				else {
+					serviceFunc = this.service.donate_to_stash;
+				}
+			
+				Dom.get("embassyStashMessage").innerHTML = "";
+				Lacuna.Pulser.Show();
+				serviceFunc(data, {
+					success : function(o){
+						this.rpcSuccess(o);
+						
+						for(var n=0; n<toDonateLis.length; n++) {
+							if(toDonateLis[n].Object) {
+								Event.purgeElement(toDonateLis[n]);
+								toDonateLis[n].parentNode.removeChild(toDonateLis[n]);
+							}
+						}
+						for(var n=0; n<toExchangeLis.length; n++) {
+							if(toExchangeLis[n].Object) {
+								Event.purgeElement(toExchangeLis[n]);
+								toExchangeLis[n].parentNode.removeChild(toExchangeLis[n]);
+							}
+						}
+						Dom.get("embassyTotalDonate").innerHTML = "0";
+						Dom.get("embassyTotalExchange").innerHTML = "0";
+						
+						Dom.get("embassyStashMessage").innerHTML = "Successfully donated. ";
+						Lib.fadeOutElm("embassyStashMessage");
+						
+						delete o.result.status;
+						this.stash = o.result;
+						this.StashPopulate();
+						
+						Lacuna.Pulser.Hide();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						
+						this.rpcFailure(o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		
 		//Create

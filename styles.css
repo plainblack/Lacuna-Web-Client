@@ -1482,23 +1482,41 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .embassyInfo .embassyAction {
 	width:100px;
 }
-.embassyStash fieldset {
-	border: 1px solid #52acff;
-	padding: 5px;
-	display: inline-block;
-	text-align: center;
-	width: 355px;
-	margin: 5px;
-	vertical-align:top;
-}
-.embassyStash fieldset legend {
+.embassyStash legend {
 	color: #fff;
 	padding: 0 5px;
 	font-weight:bold;
 }
-.embassyStash fieldset label {
+.embassyContainers {
+	height:200px;
+	overflow-y:auto;
+	border:1px solid #52ACFF;
+}
+.embassyContainers .stashName {
 	display:inline-block;
-	width:75px;
+	width:150px;
+	overflow:hidden;
+}
+.embassyContainers li {
+	background-color:#52ACFF;
+	border:1px solid black;
+	margin:1px;
+	padding:1px 2px;
+	font-size:80%;
+}
+.embassyContainers li button {
+	padding:1px;
+}
+.stashItem {
+	position:relative;
+}
+.stashItem .stashDelete {
+	background:url("assets/ui/close.png") no-repeat scroll center center transparent;
+	height:11px;
+	width:11px;
+	position: absolute;
+	right: 0pt;
+	cursor:pointer;
 }
 
 

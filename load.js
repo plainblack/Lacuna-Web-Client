@@ -36,7 +36,7 @@
 		combine: false
 	});
 	var urlBuilder = function(file) {
-		return host + file + '?2';
+		return host + file + '?3';
 	};
 /** END */
 
@@ -140,6 +140,12 @@
 		name: "foodreserve",
 		type: "js",
 		fullpath: urlBuilder("buildingFoodReserve.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "hallsofvrbansk",
+		type: "js",
+		fullpath: urlBuilder("buildingHallsOfVrbansk.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -248,7 +254,7 @@
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
-		requires : ["archaeology","development","embassy","entertainment","foodreserve","intelligence","libraryofjith","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","subspacesupplydepot","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
+		requires : ["archaeology","development","embassy","entertainment","foodreserve","hallsofvrbansk","intelligence","libraryofjith","miningministry","missioncommand","network19","observatory","orestorage","park","planetarycommand","security","shipyard","spaceport","subspacesupplydepot","templeofthedrajilites","trade","transporter","wasterecycling","event-delegate","event-mouseenter","mapper","selector"]
 	});
 	loader.addModule({
 		name: "textboxList",
