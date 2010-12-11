@@ -636,7 +636,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this.fireEvent("onMapRpc", o.result);
 						var planet = Game.GetCurrentPlanet();
 						this._map.setPlotsAvailable(planet.plots_available*1);
-						this._map.addTileData(o.result.buildings);
+						this._map.addTileData(o.result.buildings, true);
 						this._map.refresh();
 					},
 					failure : function(o){
@@ -864,6 +864,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			Event.purgeElement(panel.upgradeProdUl);
 			panel.upgradeProdUl.innerHTML = "";*/
 			
+			panel.tabView.set('activeTab',null);
 			while(panel.tabView.get("tabs").length > 0){
 				var tab = panel.tabView.getTab(0);
 				Event.purgeElement(tab.get("contentEl"));

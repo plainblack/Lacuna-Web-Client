@@ -171,7 +171,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			'</div>',
 			'<div style="text-align: center;">',
 			'	<div id="embassyStashMessage" class="alert"></div>',
-			'	<button type="button" id="embassyStashSubmit">Exchange</button>',
+			'	<button type="button" id="embassyStashSubmit">Transfer</button>',
 			'</div>'].join('')});
 			
 			this.stashTab.subscribe("activeChange", this.getStash, this, true);
@@ -262,7 +262,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				r,x,resource,name;
 				
 			if(announce) {
-				announce.innerHTML = ['You can exchange at most ', Lib.formatNumber(stash.max_exchange_size), ' resources and you have ', stash.exchanges_remaining_today, ' exchange(s) remaining today.'].join('');
+				announce.innerHTML = ['Donations are unlimited. You can exchange at most ', Lib.formatNumber(stash.max_exchange_size), ' resources and you have ', stash.exchanges_remaining_today, ' exchange(s) remaining today.'].join('');
 			}
 				
 			if(onPlanet) {
@@ -497,11 +497,14 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			if(donateTotal == 0) {
 				Dom.get("embassyStashMessage").innerHTML = "Must add items to donate to Stash.";
 			}
+			else if(exchangeTotal > 0 && this.stash.exchanges_remaining_today <= 0) {
+				Dom.get("embassyStashMessage").innerHTML = 'You have already used up the amount of stash exchanges you can perform in a single day.';
+			}
 			else if(exchangeTotal > 0 && donateTotal > this.stash.max_exchange_size) {
-				Dom.get("embassyStashMessage").innerHTML = ['You are only able to exchange ', this.stash.max_exchange_size, ' resources from the stash.'].join('');
+				Dom.get("embassyStashMessage").innerHTML = ['You are only able to transfer ', this.stash.max_exchange_size, ' resources from the stash.'].join('');
 			}
 			else if(exchangeTotal > 0 && donateTotal != exchangeTotal) {
-				Dom.get("embassyStashMessage").innerHTML = 'Total amount of resources receiving from stash must be equal to the amount donating.';
+				Dom.get("embassyStashMessage").innerHTML = 'Total amount of resources transfered from stash must be equal to the amount donating.';
 			}
 			else {
 			

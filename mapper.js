@@ -1449,8 +1449,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		//don't update bounds on plant.  We have all data at start
 		/*updateBounds : function(oTile) {
 		},*/
-		addTileData : function(oTiles) {
-			var startZoomLevel = 0;
+		addTileData : function(oTiles, filterOutDeleted) {
+			var startZoomLevel = 0,
+				newTileCache = {};
 			for(var tKey in oTiles) {
 				if(oTiles.hasOwnProperty(tKey)){
 					var tile = oTiles[tKey];
@@ -1460,12 +1461,23 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						this.command.x *= 1;
 						this.command.y *= 1;
 					}
-					if(!this.tileCache[tile.x]) {
-						this.tileCache[tile.x] = {};
+					if(!newTileCache[tile.x]) {
+						newTileCache[tile.x] = {};
 					}
-					this.tileCache[tile.x][tile.y] = tile;
+					newTileCache[tile.x][tile.y] = tile;
 				}
 			}
+			if(filterOutDeleted) {
+				for(var x in this.tileCache) {
+					for(var y in this.tileCache[x]) {
+						if(!newTileCache[x] || !newTileCache[x][y]) {
+							this.removeTile(x,y);
+						}
+					}
+				}
+			}
+			this.tileCache = newTileCache;
+			
 			return startZoomLevel;
 		},
 		addSingleTileData : function(oBuilding) {

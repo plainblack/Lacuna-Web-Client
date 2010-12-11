@@ -36,26 +36,28 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 				
 			this.tab.subscribe("activeChange", this.getUpgradable, this, true);
 			
-			Event.on("hovSacrifice", "click", this.Sacrifice, true, false);
+			Event.on("hovSacrifice", "click", this.Sacrifice, this, true);
 					
 			return this.tab;
 		},
 
-		getUpgradable : function(id) {
-			Lacuna.Pulser.Show();
-			this.service.get_upgradable_buildings({session_id:Game.GetSession(),building_id:this.building.id}, {
-				success : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcSuccess(o);
-					this.Display(o.result.buildings);
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
+		getUpgradable : function(e) {
+			if(e.newValue) {
+				Lacuna.Pulser.Show();
+				this.service.get_upgradable_buildings({session_id:Game.GetSession(),building_id:this.building.id}, {
+					success : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcSuccess(o);
+						this.Display(o.result.buildings);
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcFailure(o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
 		},
 		Display : function(buildings) {
 			if(buildings.length == 0) {
@@ -70,17 +72,33 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 					opt = document.createElement("option"),
 					nOpt;
 					
-				for(var n=0; n < buildings.length; n++) {
-					nOpt = opt.cloneNode(false);
-					nOpt.Building = buildings[n];
-					nOpt.value = nOpt.Building.id;
-					nOpt.innerHTML = nOpt.Building.name + ' - Level ' + nOpt.Building.level;
-					sel.appendChild(nOpt);
+				if(sel) {
+					for(var n=0; n < buildings.length; n++) {
+						nOpt = opt.cloneNode(false);
+						nOpt.Building = buildings[n];
+						nOpt.value = nOpt.Building.id;
+						nOpt.innerHTML = nOpt.Building.name + ' - Level ' + nOpt.Building.level;
+						sel.appendChild(nOpt);
+					}
 				}
 			}
 		},
 		Sacrifice : function() {			 
-			var buildingId = Lib.getSelectedOptionValue("hovAvailableBuildings");
+			var upgradeBuildingId = Lib.getSelectedOptionValue("hovAvailableBuildings");
+			Lacuna.Pulser.Show();
+			this.service.sacrifice_to_upgrade({session_id:Game.GetSession(),building_id:this.building.id,upgrade_building_id:upgradeBuildingId}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					this.fireEvent("onHide");
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					this.rpcFailure(o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		}
 		
 	});
