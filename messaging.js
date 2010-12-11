@@ -46,11 +46,18 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			</div>',
 				'		</div>',
 				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
+				'			<div id="messagingArchiver">',
+				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'				<button id="messagingSelectAll" type="button">Select All</button>',
+                '               <select id="inboxTag">',
+                '                   <option value="Correspondence">Inbox</option>',
+                '                   <option value="Alert">Alerts</option>',
+                '                   <option value="Intelligence">Intel</option>',
+                '                   <option value="Medal">Medals</option>',
+                '                   <option value="Tutorial">Tutorial</option>',
+                '               </select>',
+				'			</div>',
 				'			<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
-				'				<div id="messagingArchiver">',
-				'					<button id="messagingArchiveSelected" type="button">Archive</button>',
-				'					<button id="messagingSelectAll" type="button">Select All</button>',
-				'				</div>',
 				'				<div id="messagingPaginator">',
 				'				</div>',
 				'				<ul id="messagingList"></ul>',
@@ -90,11 +97,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				width:"700px",
 				zIndex:9999
 			});
-			
 			this.messagingPanel.renderEvent.subscribe(function(){
 				//tabs
 				this.create = Dom.get("messagingCreate");
 				this.inbox = Dom.get("messagingInbox");
+                this.inboxTag = Dom.get("inboxTag");
+                this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+                Event.on("inboxTag", "change", this.updateTag, this, true);
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
 				this.announce = Dom.get("messagingAnnounce");
@@ -246,7 +255,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.sent,this.archive,this.announce], "selected");
+			Dom.removeClass([this.create,this.inbox,this.alerts,this.intel,this.medals,this.tutorial,this.sent,this.archive,this.announce], "selected");
 			Dom.addClass(el, "selected");
 			switch(el.id) {
 				case this.create.id:
@@ -330,14 +339,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 			this._setTab(this.create);
 		},
+        updateTag : function() {
+            this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+            this.loadInboxMessages();
+        },
 		loadInboxMessages : function() {
 			this._setTab(this.inbox);
 			if(this.pager) {this.pager.destroy();}
-			
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Game.GetSession(""),
-					options:{page_number: 1}
+					options:{page_number: 1, tags: [this.tag]}
 				};
 			InboxServ.view_inbox(data, {
 				success : function(o){
@@ -435,7 +447,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Game.GetSession(""),
-					options:{page_number: newState.page}
+					options:{page_number: newState.page, tags: [this.tag]}
 				};
 			InboxServ.view_inbox(data, {
 				success : function(o){
