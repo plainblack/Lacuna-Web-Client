@@ -981,7 +981,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.coordLayer = new Mapper.CoordLayer(this);
 		
 		var ua = navigator.userAgent;
-		if(ua.match(/iPhone/i) || ua.match(/iPod/i)) {
+		if(ua.match(/iPhone|iPod|iPad/i)) {
 			this.controller = new Mapper.iPhoneController( this );
 		}
 		else {
