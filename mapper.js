@@ -1180,6 +1180,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	};
 	Lang.augmentProto(Map, Util.EventProvider);
 	
+	var MAX_STAR_AREA = 900;
 	Mapper.StarMap = function( divId, options ) {
 		Mapper.StarMap.superclass.constructor.call(this, divId, options);
 		Dom.setStyle(this.mapDiv, 'background-image', 'url("'+Lib.AssetUrl+'star_system/field.png")');
@@ -1242,7 +1243,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			var xDiff = Math.abs(x2-x1),
 				yDiff = Math.abs(y2-y1);
 				
-			if((xDiff * yDiff) > 400) { //if out of bounds split and try again
+			if((xDiff * yDiff) > MAX_STAR_AREA) { //if out of bounds split and try again
 				var half;
 				if(xDiff > 0) { //make sure x diff isn't zero so we can split it in half, other wise use Y axis
 					half = Math.floor(xDiff/2);

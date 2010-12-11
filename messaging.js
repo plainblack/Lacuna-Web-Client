@@ -50,7 +50,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
                 '               <select id="inboxTag">',
-                '                   <option value="Correspondence">Inbox</option>',
+                '                   <option value="">Inbox</option>',
+                '                   <option value="Correspondence">Correspondence</option>',
                 '                   <option value="Alert">Alerts</option>',
                 '                   <option value="Intelligence">Intel</option>',
                 '                   <option value="Medal">Medals</option>',
@@ -349,8 +350,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Game.GetSession(""),
-					options:{page_number: 1, tags: [this.tag]}
+					options:{page_number: 1}
 				};
+			if(this.tag) {
+				data.options.tags = [this.tag];
+			}
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
