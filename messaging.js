@@ -94,7 +94,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				width:"700px",
 				zIndex:9999
 			});
-			
+			this.tab2tag = {
+                messagingInbox : 'Correspondence',
+                messagingAlerts : 'Alert',
+                messagingIntel : 'Intelligence',
+                messagingMedals : 'Medal',
+                messagingTutorial : 'Tutorial',
+            };
 			this.messagingPanel.renderEvent.subscribe(function(){
 				//tabs
 				this.create = Dom.get("messagingCreate");
