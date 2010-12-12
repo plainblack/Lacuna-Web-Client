@@ -193,7 +193,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span id="buildingDetailsEnergy" class="buildingDetailsNum">',this.building.energy_hour,'/hr</span></li>',
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span id="buildingDetailsWaste" class="buildingDetailsNum">',this.building.waste_hour,'/hr</span></li>',
 				'				<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></span><span id="buildingDetailsHappiness" class="buildingDetailsNum">',this.building.happiness_hour,'/hr</span></li>',
-				'				<li>', (this.building.pending_build) ? '<span class="alert">Unable to Demolish</span>' : '<button id="buildingDetailsDemolish" type="button">Demolish</button>' ,'</li>',
+				'				<li><button id="buildingDetailsDemolish" type="button">Demolish</button></li>',
 				'			</ul>',
 				'		</div>',
 				'		<div class="yui-u">',
@@ -229,11 +229,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				'</div>'
 				].join('')});
 			
+			Event.on("buildingDetailsDemolish", "click", this.Demolish, this, true);
 			if(up.can) {
 				Event.on("buildingDetailsUpgrade", "click", this.Upgrade, this, true);
-			}
-			if(!this.building.pending_build) {
-				Event.on("buildingDetailsDemolish", "click", this.Demolish, this, true);
 			}
 			if(currentLevel > 1) {
 				Event.on("buildingDetailsDowngrade", "click", this.Downgrade, this, true);
