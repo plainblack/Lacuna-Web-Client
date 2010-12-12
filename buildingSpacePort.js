@@ -67,6 +67,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		_getViewTab : function() {
 			this.viewShipsTab = new YAHOO.widget.Tab({ label: "View", content: [
 				'<div>',
+				'	<div id="shipsCount"></div>',	
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
 				'		<li class="shipName">Name</li>',
@@ -328,10 +329,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			if(details) {
 				var ships = this.shipsView.ships,
 					ul = document.createElement("ul"),
-					li = document.createElement("li");
-					
+					li = document.createElement("li"),
+					info = Dom.get("shipsCount");
 				Event.purgeElement(details);
 				details.innerHTML = "";
+
+                                if(this.result.max_ships > 0) {
+                                        info.innerHTML = ['This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
+                                }               
 								
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
