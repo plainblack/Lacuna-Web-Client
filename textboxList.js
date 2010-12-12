@@ -221,10 +221,12 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 			for(var i = 0; i < items.length; i++) {
 				var oData = this._createDataObject(items[i]);
 				if(oData.Value) {
-					this._aOrigSelections.push(oData.Value);
 					var bit = this._createBit(oData);
-					this._sPastSelections = bit._value;
-					this._oTblSelections[bit._value] = bit;
+					if(bit) {
+						this._aOrigSelections.push(oData.Value);
+						this._sPastSelections = bit._value;
+						this._oTblSelections[bit._value] = bit;
+					}
 				}
 			}
 			
