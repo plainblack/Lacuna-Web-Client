@@ -529,7 +529,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			if(this._isVisible != visible) {
 				if(this._elGrid) {
 					this._isVisible = visible;
-					YAHOO.log(visible, "info", "MapPlanet.MapVisible");
+					//YAHOO.log(visible, "info", "MapPlanet.MapVisible");
 					if(visible) {
 						if(!Dom.inDocument(this._elGrid)) {
 							document.getElementById("content").appendChild(this._elGrid);
@@ -550,7 +550,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}
 		},
 		Mapper : function(oArgs) {
-			YAHOO.log(oArgs.buildings, "debug", "Mapper");
+			//YAHOO.log(oArgs.buildings, "debug", "Mapper");
 			this.buildings = oArgs.buildings;
 			this.surfaceUrl = [Lib.AssetUrl,'planet_side/',oArgs.body.surface_image,'.jpg'].join('');
 			Dom.setStyle("buildingDetailsImgBkgd","background",['transparent url(',this.surfaceUrl,') no-repeat left top'].join(''));
@@ -632,7 +632,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				BodyServ.get_buildings(data,{
 					success : function(o){
-						YAHOO.log(o, "info", "MapPlanet.Refresh");
+						//YAHOO.log(o, "info", "MapPlanet.Refresh");
 						this.fireEvent("onMapRpc", o.result);
 						var planet = Game.GetCurrentPlanet();
 						this._map.setPlotsAvailable(planet.plots_available*1);
@@ -640,7 +640,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this._map.refresh();
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "MapPlanet.Refresh.FAILED");
+						//YAHOO.log(o, "error", "MapPlanet.Refresh.FAILED");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpcFailed", o);
 					},
@@ -659,12 +659,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				BodyServ.get_buildings(data,{
 					success : function(o){
-						YAHOO.log(o, "info", "MapPlanet.ReLoad");
+						//YAHOO.log(o, "info", "MapPlanet.ReLoad");
 						this.fireEvent("onMapRpc", o.result);
 						this.Mapper(o.result);
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
+						//YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpcFailed", o);
 					},
@@ -707,7 +707,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 
 		BuilderView : function(tile) {
-			YAHOO.log(tile, "info", "BuilderView");
+			//YAHOO.log(tile, "info", "BuilderView");
 			
 			Game.OverlayManager.hideAllBut(this.buildingBuilder.id);
 			this.buildingBuilder.resetDisplay(this);
@@ -719,14 +719,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.currentBuildConnection = Game.Services.Body.get_buildable(data,{
 				success : function(o){
 					delete this.currentBuildConnection;
-					YAHOO.log(o, "info", "MapPlanet.BuilderGet.success");
+					//YAHOO.log(o, "info", "MapPlanet.BuilderGet.success");
 					this.fireEvent("onMapRpc", o.result);
 					
 					this.BuilderProcess(o.result, data);
 				},
 				failure : function(o){
 					delete this.currentBuildConnection;
-					YAHOO.log(o, "error", "MapPlanet.BuilderGet.failure");
+					//YAHOO.log(o, "error", "MapPlanet.BuilderGet.failure");
 					this.fireEvent("onMapRpcFailed", o);
 					Lacuna.Pulser.Hide();
 				},
@@ -770,7 +770,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			BuildingServ.build(data,{
 				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.Build.success");
+					//YAHOO.log(o, "info", "MapPlanet.Build.success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					this.buildingBuilder.hide();
@@ -781,13 +781,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					b.pending_build = o.result.building.pending_build;
 					b.x = x;
 					b.y = y;
-					YAHOO.log(b, "info", "MapPlanet.Build.success.building");
+					//YAHOO.log(b, "info", "MapPlanet.Build.success.building");
 					//this.UpdateCost(b.build.cost);
 					
 					this.ReloadBuilding(b);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "MapPlanet.Build.failure");
+					//YAHOO.log(o, "error", "MapPlanet.Build.failure");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpcFailed", o);
 					this.buildingBuilder.hide();
@@ -807,7 +807,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			return BuildingServ.view(data,{
 				success : function(o){
-					YAHOO.log(o, "info", "MapPlanet.ViewData.success");
+					//YAHOO.log(o, "info", "MapPlanet.ViewData.success");
 					this.fireEvent("onMapRpc", o.result);
 					var newB = o.result.building;
 					newB.url = callback.url;
@@ -827,7 +827,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				},
 				failure : function(o){
 					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "MapPlanet.ViewData.failure");
+					//YAHOO.log(o, "error", "MapPlanet.ViewData.failure");
 					
 					if(callback && callback.failure) {
 						callback.failure.call(this, o, callback.url, x, y);
@@ -842,7 +842,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			});
 		},
 		DetailsView : function(tile) {
-			YAHOO.log(tile, "info", "DetailsView");
+			//YAHOO.log(tile, "info", "DetailsView");
 
 			Lacuna.Pulser.Show();
 			var panel = this.buildingDetails;
@@ -1052,7 +1052,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			return building;
 		},
 		ReloadBuilding : function(building) {
-			YAHOO.log(building, "debug", "ReloadBuilding");
+			//YAHOO.log(building, "debug", "ReloadBuilding");
 
 			building = this.CleanBuilding(building);
 			this.buildings[building.id] = building;

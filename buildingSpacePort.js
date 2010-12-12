@@ -331,12 +331,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					ul = document.createElement("ul"),
 					li = document.createElement("li"),
 					info = Dom.get("shipsCount");
+					
 				Event.purgeElement(details);
 				details.innerHTML = "";
 
-                                if(this.result.max_ships > 0) {
-                                        info.innerHTML = ['This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
-                                }               
+				if(info && this.result.max_ships > 0) {
+					info.innerHTML = ['This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
+				}               
 								
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
