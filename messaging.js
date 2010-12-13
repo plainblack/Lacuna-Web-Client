@@ -451,8 +451,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var InboxServ = Game.Services.Inbox,
 				data = {
 					session_id: Game.GetSession(""),
-					options:{page_number: newState.page, tags: [this.tag]}
+					options:{page_number: newState.page}
 				};
+			if(this.tag) {
+				data.options.tags = [this.tag];
+			}
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
