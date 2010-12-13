@@ -10,7 +10,8 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
-		Lib = Lacuna.Library;
+		Lib = Lacuna.Library,
+		stashSel = '<select><option value="1">1</option><option value="10">10</option><option value="100">100</option><option value="1000" selected="selected">1000</option><option value="10000">10000</option></select>';
 
 	var Embassy = function(result){
 		Embassy.superclass.constructor.call(this, result);
@@ -277,7 +278,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 								if(stash.stored[name]) {
 									nLi = li.cloneNode(false);
 									nLi.Stash = {type:name,quantity:stash.stored[name]*1};
-									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stored[name], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stored[name], '</label>)</span> ', stashSel, '<button type="button">+</button>'].join('');
 									onPlanet.appendChild(nLi);
 								}
 							}
@@ -285,7 +286,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						else if(stash.stored[r] && resource) {
 							nLi = li.cloneNode(false);
 							nLi.Stash = {type:r,quantity:stash.stored[r]*1};
-							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stored[r], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stored[r], '</label>)</span> ', stashSel, '<button type="button">+</button>'].join('');
 							
 							onPlanet.appendChild(nLi);
 						}
@@ -303,7 +304,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 								if(stash.stash[name]) {
 									nLi = li.cloneNode(false);
 									nLi.Stash = {type:name,quantity:stash.stash[name]*1};
-									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stash[name], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+									nLi.innerHTML = ['<span class="stashName">',name.titleCaps(), ' (<label class="quantity">', stash.stash[name], '</label>)</span> ', stashSel, '<button type="button">+</button>'].join('');
 									inStash.appendChild(nLi);
 								}
 							}
@@ -311,7 +312,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						else if(stash.stash[r] && resource) {
 							nLi = li.cloneNode(false);
 							nLi.Stash = {type:r,quantity:stash.stash[r]*1};
-							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stash[r], '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">+</button>'].join('');
+							nLi.innerHTML = ['<span class="stashName">',r.titleCaps(), ' (<label class="quantity">', stash.stash[r], '</label>)</span> ', stashSel, '<button type="button">+</button>'].join('');
 							
 							inStash.appendChild(nLi);
 						}
@@ -344,7 +345,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						ep.parentNode.removeChild(ep);
 					}, this, true);
 					item.Object = {type:li.Stash.type, quantity:quantity};
-					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">-</button>'].join('');
+					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> ', stashSel, '<button type="button">-</button>'].join('');
 					c.appendChild(item);
 					this.updateStashDonate(quantity);
 				}
@@ -412,7 +413,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						ep.parentNode.removeChild(ep);
 					}, this, true);
 					item.Object = {type:li.Stash.type, quantity:quantity};
-					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <select><option>1</option><option>10</option><option>100</option><option selected="selected">1000</option><option>10000</option></select><button type="button">-</button>'].join('');
+					content.innerHTML = ['<span class="stashName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> ', stashSel, '<button type="button">-</button>'].join('');
 					c.appendChild(item);
 					this.updateStashExchange(quantity);
 				}
