@@ -574,6 +574,19 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				details = document.createElement("ul"),
 				li = document.createElement("li");
 			
+			ships = ships.slice(0);
+			ships.sort(function(a,b) {
+				if (a.date_arrives > b.date_arrives) {
+					return 1;
+				}
+				else if (a.date_arrives < b.arrives) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
+			});
+
 			details = elm.appendChild(c).appendChild(details);
 			
 			var now = new Date();
