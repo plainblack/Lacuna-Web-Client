@@ -370,7 +370,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			if(quantity) {
 				var newTotal = li.Object.quantity - quantity,
 					diff = quantity*-1,
-					lq = Sel.query(".quantity", li, true);;
+					lq = Sel.query(".quantity", li, true);
 				if(newTotal < 0) {
 					newTotal = 0;
 					diff = li.Object.quantity*-1;
@@ -438,7 +438,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			if(quantity) {
 				var newTotal = li.Object.quantity - quantity,
 					diff = quantity,
-					lq = Sel.query(".quantity", li, true);;
+					lq = Sel.query(".quantity", li, true);
 				if(newTotal < 0) {
 					newTotal = 0;
 					diff = li.Object.quantity;
@@ -481,14 +481,14 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			for(n=0; n<toDonateLis.length; n++) {
 				obj = toDonateLis[n].Object;
 				if(obj) {
-					donateItems[obj.type] = obj.quantity
+					donateItems[obj.type] = obj.quantity;
 					donateTotal += obj.quantity;
 				}
 			}
 			for(n=0; n<toExchangeLis.length; n++) {
 				obj = toExchangeLis[n].Object;
 				if(obj) {
-					exchangeItems[obj.type] = obj.quantity
+					exchangeItems[obj.type] = obj.quantity;
 					exchangeTotal += obj.quantity;
 				}
 			}
@@ -522,14 +522,15 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				serviceFunc(data, {
 					success : function(o){
 						this.rpcSuccess(o);
+						var n;
 						
-						for(var n=0; n<toDonateLis.length; n++) {
+						for(n=0; n<toDonateLis.length; n++) {
 							if(toDonateLis[n].Object) {
 								Event.purgeElement(toDonateLis[n]);
 								toDonateLis[n].parentNode.removeChild(toDonateLis[n]);
 							}
 						}
-						for(var n=0; n<toExchangeLis.length; n++) {
+						for(n=0; n<toExchangeLis.length; n++) {
 							if(toExchangeLis[n].Object) {
 								Event.purgeElement(toExchangeLis[n]);
 								toExchangeLis[n].parentNode.removeChild(toExchangeLis[n]);
