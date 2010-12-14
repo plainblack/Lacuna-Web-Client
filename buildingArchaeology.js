@@ -258,7 +258,20 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				}
 				
 				var li = document.createElement("li");
-				
+		
+				glyphs.slice(0);
+				glyphs.sort(function(a,b) {
+					if(a.type > b.type) {
+						return 1;
+					}
+					else if(a.type < b.type) {
+						return -1;
+					}
+					else {
+						return 0;
+					}
+				});
+
 				for(var i=0; i<glyphs.length; i++) {
 					var obj = glyphs[i],
 						nLi = li.cloneNode(false);
