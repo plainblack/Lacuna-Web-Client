@@ -509,7 +509,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					if (a.date_arrives > b.date_arrives) {
 						return 1;
 					}
-					else if (a.date_arrives < b.arrives) {
+					else if (a.date_arrives < b.date_arrives) {
 						return -1;
 					}
 					else {
