@@ -908,9 +908,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'</ul>'
 			].join('');
 			
+			this.selectedStar = data;
+			
 			this.GetShips(panel,{star_id:data.id});
 			
-			this.selectedStar = data;
 			panel.show();
 		},
 		ShowPlanet : function(tile) {
@@ -1187,13 +1188,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var ship = ships[i];
 				var usable = ship.max_spies >= spies.length;
 				var nLi = li.cloneNode(false);
+				nLi.shipId = ship.id;
 				nLi.innerHTML = [
 				'<div class="yui-gb" style="margin-bottom:2px;">',
 				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 				'	</div>',
 				'	<div class="yui-u" style="width:78%">',
-				usable ? '		<button value="'+ship.id+'">'+verb.charAt(0).toUpperCase()+verb.slice(1)+' Spies</button>' : '',
+				usable ? '		<button type="button">'+verb.charAt(0).toUpperCase()+verb.slice(1)+' Spies</button>' : '',
 				'		<div><strong>[',ship.type_human,'] ',ship.name,'</strong></div>',
 				'		<div><strong>Attributes:</strong>',
 				'			<span>Speed:<span>',ship.speed,'</span></span>',
@@ -1211,30 +1213,28 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		MoveSpyShip : function(e, matchedEl, tab) {
 			Event.stopEvent(e);
 			Lacuna.Pulser.Show();
-			var shipId = matchedEl.value;
-			var spies = tab.spiesToMove;
-			var successMessage;
-			var method;
-			var data = {
-				session_id:Game.GetSession(),
-				spy_ids:spies,
-				ship_id:shipId
-			};
+			var shipId = matchedEl.parentNode.parentNode.parentNode.shipId,
+				spies = tab.spiesToMove,
+				data = {
+					session_id:Game.GetSession(),
+					spy_ids:spies,
+					ship_id:shipId
+				},
+				successMessage, method;
 			if ( tab.id == 'planetDetailSendSpies' ) {
 				successMessage = 'Spies sent!';
-				method = 'send_spies';
+				method = Game.Services.Buildings.SpacePort.send_spies;
 				data.on_body_id = Game.GetCurrentPlanet().id;
 				data.to_body_id = this.selectedBody.id;
 			}
 			else {
 				successMessage = 'Spies fetched!';
-				method = 'fetch_spies';
+				method = Game.Services.Buildings.SpacePort.fetch_spies;
 				data.on_body_id = this.selectedBody.id;
 				data.to_body_id = Game.GetCurrentPlanet().id;
 			}
-			Game.Services.Buildings.SpacePort[method](data, {
+			method(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "MapStar.MoveSpyShip."+method+".success");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					alert(successMessage + '  Arrival time: ' + Lib.formatServerDateShort(o.result.ship.date_arrives));
@@ -1243,7 +1243,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					this.ShowSpies(tab);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.MoveSpyShip."+method+".failure");
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpcFailed", o);
 				},

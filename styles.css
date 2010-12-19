@@ -171,7 +171,9 @@ body.yui-skin-sam .yui-panel hr {
 dialogs
 */
 #login label, #createEmpire label, #createSpecies label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 }
 #login label {
 	width:140px;
@@ -227,7 +229,9 @@ dialogs
 
 #resetPasswordEmail label,
 #resetPasswordKey label {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:130px;
 }
 
@@ -257,7 +261,9 @@ dialogs
 	vertical-align: middle;
 }
 #empireCaptchaBorder {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	border: 1px solid #000;
 	width: 300px;
 	height: 80px;
@@ -293,7 +299,9 @@ dialogs
 }
 #createSpecies li label {
 	width:140px;
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
 	padding-right:5px;
 	vertical-align:top;
@@ -353,7 +361,9 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	height:35px;
 }
 .menuItem {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	height:54px; /* 1 less than height of bar */
 	color:#fff; /*#ddd;*/
 	min-width:55px;
@@ -690,7 +700,9 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 }
 #messagingDisplay label , #messagingCreator label{
 	background-color:#D2D2D2;
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	font-weight:bold;
 	width:75px;
 	color:#000;
@@ -747,7 +759,9 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
  */
 
 #invite li label {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width: 70px;
 	padding-right: 5px;
 	text-align: right;
@@ -770,7 +784,9 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 * Species creator
 */
 .speciesSlider_bg {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	position: relative;
 	background: url("assets/ui/tickbar.png") -11px 5px no-repeat;
 	height: 28px;
@@ -780,7 +796,9 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 
 #speciesHO_min,
 #speciesHO_max {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	position: absolute;
 	top: 0px;
 }
@@ -844,7 +862,9 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 Info dialogs for Empire and Alliance
 */
 #infoEmpire label , #infoAlliance label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:100px;
 	font-weight:bold;
 }
@@ -1017,6 +1037,7 @@ Info dialogs for Empire and Alliance
 	position: absolute;
 	cursor: pointer;
 	top: 50px;
+	left:0px;
 	width: 20px;
 	height: 150px;
 }
@@ -1143,7 +1164,9 @@ planet details
 }
 #planetDetailsInfo label , #planetDetailOre label {
 	font-weight:bold;
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:100px;
 }
 #planetDetailRename label {
@@ -1176,14 +1199,21 @@ planet details
 	border-bottom: 1px solid #52acff;
 	padding: 5px;
 }
+/*.planetDetailSpiesList li {
+	position:fixed;
+}*/
 .planetDetailSpyShipList li button {
 	float: right;
 }
 .planetDetailSpiesList li .description {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 }
 .planetDetailSpiesList li .attributes {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	vertical-align: top;
 	margin-left: 10px;
 }
@@ -1192,8 +1222,9 @@ planet details
 	margin: 0 5px;
 }
 .planetDetailSpiesList li input {
-	margin: 8px;
-	float: right;
+	margin: 8px 8px 0;
+	position:absolute;
+	right:0px;
 }
 .planetDetailSpiesList strong,
 .planetDetailSpyShipList strong {
@@ -1203,13 +1234,17 @@ planet details
 
 
 .smallImg {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:25px; /*30px;*/
 	vertical-align:middle;
 	text-align:center;
 }
 .buildingDetailsNum { 
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
 	width:80px;
 }
@@ -1257,7 +1292,9 @@ planet details
 	text-align: center;
 }
 #builderMenu .builderMenuGroup li {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 }
 #builderMenu .builderMenuGroup em,
 #builderMenu .builderMenuGroup a {
@@ -1290,26 +1327,36 @@ planet details
 	border-top: 2px solid #52acff;
 }*/
 .buildingDetailsExtra label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:75px;
 }
 .buildingDetailsExtra .buildingDetailsPC li label{
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:125px;
 }
 .buildingDetailsDockedShips label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:185px;
 }
 .pcStored, .pcCapacity, .pcPerHour  {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
 }
 .pcStored { width:60px; }
 .pcCapacity { width:65px; }
 .pcPerHour { width:40px; }
 .pcSlash {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:center;
 	width:15px;
 }
@@ -1487,30 +1534,32 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	padding: 0 5px;
 	font-weight:bold;
 }
-.embassyContainers {
+.embassyContainers, .tradeContainers {
 	height:200px;
 	overflow-y:auto;
 	border:1px solid #52ACFF;
 }
-.embassyContainers .stashName {
-	display:inline-block;
+.embassyContainers .stashName, .tradeContainers .tradeName, .tradeContainers .tradeResourceName {
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:150px;
 	overflow:hidden;
 }
-.embassyContainers li {
+.embassyContainers li, .tradeContainers  li{
 	background-color:#52ACFF;
 	border:1px solid black;
 	margin:1px;
 	padding:1px 2px;
 	font-size:80%;
 }
-.embassyContainers li button {
+.embassyContainers li button, .tradeContainers  li button {
 	padding:1px;
 }
-.stashItem {
+.stashItem , .tradeItem{
 	position:relative;
 }
-.stashItem .stashDelete {
+.stashItem .stashDelete, .tradeItem .tradeDelete {
 	background:url("assets/ui/close.png") no-repeat scroll center center transparent;
 	height:11px;
 	width:11px;
@@ -1519,11 +1568,30 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	cursor:pointer;
 }
 
+.tradeContainers  .tradeName {
+	width:320px;
+}
+.tradeContainers .tradeResourceName {
+	width:240px;
+}
+
+.accordian {
+	cursor:pointer;
+	background-color: gray;
+	border-color: white;
+	border-style: solid;
+	border-width: 1px 1px 0;
+	font-weight: bold;
+	padding: 4px;
+}
+
 
 .recycleTab fieldset {
 	border: 1px solid #52acff;
 	padding: 5px;
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align: center;
 	width: 220px;
 	margin: 10px;
@@ -1540,7 +1608,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .capitolEmpireRenameTab fieldset {
 	border: 1px solid #52acff;
 	padding: 5px;
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align: center;
 	width: 220px;
 	margin: 10px;
@@ -1704,23 +1774,6 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:150px;
 }
 
-.tradeItem {
-	float:left;
-	width:200px;
-	border:1px solid black;
-	background-color:#52ACFF;
-	margin:2px;
-	position:relative;
-}
-.tradeItem .tradeDelete {
-	background:url("assets/ui/close.png") no-repeat scroll center center transparent;
-	height:11px;
-	width:11px;
-	position: absolute;
-	right: 0pt;
-	cursor:pointer;
-}
-
 .tradeInfo .tradeEmpire{
 	width:180px;
 	text-decoration:underline;
@@ -1786,7 +1839,9 @@ PROFILE
 	margin-bottom:5px;
 }
 #profileDetails label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:75px;
 }
 #profileDescription {
@@ -1819,7 +1874,9 @@ PROFILE
 }
 
 #profileSpecies label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:125px;
 	vertical-align:top;
 	font-weight:bold;
@@ -1837,7 +1894,9 @@ PROFILE
 }
 #detailsAccount label,
 #detailsPlayer label {
-	display: inline-block;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width: 350px;
 	text-align: right;
 }
@@ -1910,7 +1969,9 @@ ul.statsSubList, ul.statsSubList ul {
 }*/
 
 .missionList {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	vertical-align:top;
 	margin-left:20px;
 }
@@ -1932,7 +1993,9 @@ ul.statsSubList, ul.statsSubList ul {
 }
 
 #lojDetails li label {
-	display:inline-block;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:130px;
 	font-weight:bold;
 }

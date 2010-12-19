@@ -185,8 +185,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			Event.delegate("embassyStashInStash", "click", this.StashExchangeAdd, "button", this, true);
 			Event.delegate("embassyStashToExchange", "click", this.StashExchangeRemove, "button", this, true);
 			
-            //Event.on(document, "mouseup", this.StashMouseUp, this, true);
-			
 			return this.stashTab;
 		},
 		

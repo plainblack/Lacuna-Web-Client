@@ -100,7 +100,8 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						'		<div class="missionUniversity">Max University: ',ms.max_university_level,'</div>',
 						'	</div>',
 						'	<div class="yui-u">',
-						'		<button type="button">Complete</button>',
+						'		<button type="button" class="missionComplete">Complete</button>',
+						'		<button type="button" class="missionSkip">Skip</button>',
 						'	</div>',
 						'</div>',
 						'<div class="missionDesc">',ms.description,'</div>',
@@ -114,7 +115,8 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						this.parseRewards(ms.rewards),
 						'	</div>',
 						'</div>'].join('');
-						Event.on(Sel.query("button", nLi, true), "click", this.completeMission, {Self:this,Mission:ms,Line:nLi}, true);
+						Event.on(Sel.query("button.missionComplete", nLi, true), "click", this.completeMission, {Self:this,Mission:ms,Line:nLi}, true);
+						Event.on(Sel.query("button.missionSkip", nLi, true), "click", this.skipMission, {Self:this,Mission:ms,Line:nLi}, true);
 
 						ul.appendChild(nLi);
 					}
@@ -146,6 +148,28 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 		completeMission : function() {
 			Lacuna.Pulser.Show();
 			this.Self.service.complete_mission({
+				session_id:Game.GetSession(),
+				building_id:this.Self.building.id,
+				mission_id:this.Mission.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+
+					this.Self.missions = undefined;
+					this.Self.getMissions();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcFailure(o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
+		skipMission : function() {
+			Lacuna.Pulser.Show();
+			this.Self.service.skip_mission({
 				session_id:Game.GetSession(),
 				building_id:this.Self.building.id,
 				mission_id:this.Mission.id

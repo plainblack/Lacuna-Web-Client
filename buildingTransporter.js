@@ -1185,6 +1185,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 								if(this.resources[name]) {
 									nOpt = opt.cloneNode(false);
 									nOpt.value = name;
+									nOpt.totalAvailable = this.resources[name];
 									nOpt.innerHTML = [name.titleCaps(), ' (', this.resources[name], ')'].join('');
 									nOpt.selected = selectedVal == name;
 									optGroup.appendChild(nOpt);
@@ -1196,6 +1197,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						else if(this.resources[r] && resource) {
 							nOpt = opt.cloneNode(false);
 							nOpt.value = r;
+							nOpt.totalAvailable = this.resources[r];
 							nOpt.innerHTML = [r.titleCaps(), ' (', this.resources[r], ')'].join('');
 							nOpt.selected = selectedVal == r;
 							elm.appendChild(nOpt);
@@ -1311,25 +1313,28 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					Dom.get("tradePushResourceMessage").innerHTML = "";
 				}
 				
-				var item = document.createElement("li"),
-					del = item.appendChild(document.createElement("div")),
+				var id = "tradeResource-" + opt.value,
+					found = Sel.query("#"+id, c),
+					item, del, content;
+				if(found.length == 0) {
+					item = document.createElement("li");
+					item.id = id;
+					del = item.appendChild(document.createElement("div"));
 					content = item.appendChild(document.createElement("div"));
-				item.id = "tradeResource-" + opt.value;
-                if(Sel.query("#"+item.id, c).length == 0) {
                     Dom.addClass(item, "tradeItem");
                     Dom.addClass(del, "tradeDelete");
                     Event.on(del, "click", function(e){
                         var elm = Event.getTarget(e),
-                            item = elm.parentNode;
-                        this.updatePushCargo(item.Object.quantity * -1);
-                        item.innerHTML = ''; // work around IE crash
-                        item.parentNode.removeChild(item);
+                            i = elm.parentNode;
+                        this.updatePushCargo(i.Object.quantity * -1);
+						Event.purgeElement(i);
+                        i.parentNode.removeChild(i);
                     }, this, true);
                     item.Object = {type:opt.value, quantity:qVal};
                     c.appendChild(item);
                 }
 				else {
-					item = Sel.query("#"+item.id, c)[0];
+					item = found[0];
 					content = item.childNodes[1];
 					item.Object.quantity += qVal;
 				}

@@ -934,6 +934,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"mission_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
+					},
+					"skip_mission" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"mission_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},
@@ -1707,39 +1716,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				"target":"/trade",
 
 				"services": {
-					"add_trade" : {
-						"description": "Queues a trade for others to see. In addition to anything offered in your trade, setting up the trade will cost you 1 essentia.",
+					"add_to_market" : {
+						"description": "",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"offer", "type":"object", "optional":false},
-							{"name":"ask", "type":"object", "optional":false},
+							{"name":"ask", "type":"number", "optional":false},
 							{"name":"options", "type":"object", "optional":true}
 						],
-						/*
-					* add_trade ( session_id, building_id, offer, ask )
-						  o session_id
-						  o building_id
-						  o offer
-								+ type
-								+ quantity
-								+ ship_id
-								+ glyph_id
-								+ prisoner_id
-								+ plan_id 
-						  o ask
-								+ type = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
-								+ quantity 
-						 o options
-								+ ship_id
-						*/
 						"returns":{"type":"object"}
-						/*
-						 {
-							"trade_id" : "id-goes-here",
-							"status" : { ... },
-						 }
-						*/
 					},
 					"get_ships" : {
 						"description": "Returns a list of ships that may be traded. Used with the add_trade method.",
@@ -1831,6 +1817,192 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+					"withdraw_from_market" : {
+						"description": "Remove a trade that you have offered and collect the items up for trade.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"accept_from_market" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false},
+							{"name":"captcha_guid", "type":"string", "optional":false},
+							{"name":"captcha_solution", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_market" : {
+						"description": "Displays a list of trades available at the present time.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true},
+							{"name":"filter", "type":"string", "optional":true} //food ore water waste energy glyph prisoner ship plan
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"trades" : [
+								{
+									"date_offered" : "01 31 2010 13:09:05 +0600",
+									"id" : "id-goes-here",
+									"ask_type" : "bauxite",
+									"ask_quantity" : 10000,
+									"ask_description" : "10000 Bauxite",
+									"offer_type" : "prisoner",
+									"offer_quantity" : 1,
+									"offer_description" : "Spy Named Jack Bauer (Level: 21)"
+								},
+								...
+							],
+							"trade_count" : 1047,
+							"page_number" : 1,
+							"captcha" : {
+								"guid" : "id-goes-here",
+								"url" : "https://url.to.image.goes.here/captcha.png"
+							},
+							"status" : { ... }
+						 }
+						*/
+					},
+					"view_my_market" : {
+						"description": "Displays a list of trades the current user has posted.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"trades" : [
+								{
+									"date_offered" : "01 31 2010 13:09:05 +0600",
+									"id" : "id-goes-here",
+									"ask_type" : "bauxite",
+									"ask_quantity" : 10000,
+									"ask_description" : "10000 Bauxite",
+									"offer_type" : "prisoner",
+									"offer_quantity" : 1,
+									"offer_description" : "Spy Named Jack Bauer (Level: 21)"
+								},
+								...
+							],
+							"trade_count" : 17,
+							"page_number" : 1,
+							"status" : { ... }
+						 }
+						*/
+					},
+					"get_trade_ships" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target_body_id", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_stored_resources" : {
+						"description": "Returns a list of the resources you have stored to make it easier to identify what you want to trade.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"cargo_space_used_each" : 100,
+							"resources" : {
+									"water" : 14000,
+									"waste" : 393,
+									"bauxite" : 47,
+									"cheese" : 1193,
+									...
+							}
+						 }
+						*/
+					},
+					"push_items" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target_id", "type":"string", "optional":false},
+							{"name":"items", "type":"object", "optional":false},
+							{"name":"options", "type":"object", "optional":true}
+						],
+						/*
+							items array of objects
+								resouce format = {
+									"type" : "bauxite", //allowed = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
+									"quantity" : 10000
+								 }
+								 plan format =  {
+									"type" : "plan",
+									"plan_id" : "id-goes-here"
+								 }
+								 glyph format =  {
+									"type" : "glyph",
+									"glyph_id" : "id-goes-here"
+								 }
+							options
+								+ ship_id
+								+ stay (if == 1 then it will stay on planet if there is an available dock)
+						*/
+						"returns":{"type":"object"}
+						/*
+						*/
+					},
+					"report_abuse" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					
+					"add_trade" : {
+						"description": "Queues a trade for others to see. In addition to anything offered in your trade, setting up the trade will cost you 1 essentia.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"offer", "type":"object", "optional":false},
+							{"name":"ask", "type":"object", "optional":false},
+							{"name":"options", "type":"object", "optional":true}
+						],
+						/*
+					* add_trade ( session_id, building_id, offer, ask )
+						  o session_id
+						  o building_id
+						  o offer
+								+ type
+								+ quantity
+								+ ship_id
+								+ glyph_id
+								+ prisoner_id
+								+ plan_id 
+						  o ask
+								+ type = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
+								+ quantity 
+						*/
+						"returns":{"type":"object"}
+						/*
+						 {
+							"trade_id" : "id-goes-here",
+							"status" : { ... },
+						 }
+						*/
+					},
 					"withdraw_trade" : {
 						"description": "Remove a trade that you have offered and collect the items up for trade.",
 						"parameters": [
@@ -1913,67 +2085,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							"status" : { ... }
 						 }
 						*/
-					},
-					"get_stored_resources" : {
-						"description": "Returns a list of the resources you have stored to make it easier to identify what you want to trade.",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-						/*
-						 {
-							"status" : { ... },
-							"cargo_space_used_each" : 100,
-							"resources" : {
-									"water" : 14000,
-									"waste" : 393,
-									"bauxite" : 47,
-									"cheese" : 1193,
-									...
-							}
-						 }
-						*/
-					},
-					"push_items" : {
-						"description": "",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"target_id", "type":"string", "optional":false},
-							{"name":"items", "type":"object", "optional":false},
-							{"name":"options", "type":"object", "optional":true}
-						],
-						/*
-							items array of objects
-								resouce format = {
-									"type" : "bauxite", //allowed = water, energy, waste, essentia, bean, lapis, potato, apple, root, corn, cider, wheat, bread, soup, chip, pie, pancake, milk, meal, algae, syrup, fungus, burger, shake, beetle, rutile, chromite, chalcopyrite, galena, gold, uraninite, bauxite, goethite, halite, gypsum, trona, kerogen, methane, anthracite, sulfur, zircon, monazite, fluorite, beryl, or magnetite
-									"quantity" : 10000
-								 }
-								 plan format =  {
-									"type" : "plan",
-									"plan_id" : "id-goes-here"
-								 }
-								 glyph format =  {
-									"type" : "glyph",
-									"glyph_id" : "id-goes-here"
-								 }
-							options
-								+ ship_id
-								+ stay (if == 1 then it will stay on planet if there is an available dock)
-						*/
-						"returns":{"type":"object"}
-						/*
-						*/
-					},
-					"get_trade_ships" : {
-						"description": "",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"target_body_id", "type":"string", "optional":true}
-						],
-						"returns":{"type":"object"}
 					}
 				}
 			},
