@@ -1336,13 +1336,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					item.Object = {type:opt.value, quantity:qVal};
 					c.appendChild(item);
 				}
-                else {
-                    item = Sel.query("#"+item.id, c)[0];
-                    content = item.childNodes[1];
-                    item.Object.quantity += qVal;
-                }
-                content.innerHTML = [opt.value.titleCaps(), ' (', item.Object.quantity, ')'].join('');
-                this.updatePushCargo(qVal);
+				else {
+					item = Sel.query("#"+item.id, c)[0];
+					content = item.childNodes[1];
+					item.Object.quantity += qVal;
+				}
+				content.innerHTML = [opt.value.titleCaps(), ' (', item.Object.quantity, ')'].join('');
+				this.updatePushCargo(qVal);
 			}
 		},
 		PushAddGlyph : function(){
