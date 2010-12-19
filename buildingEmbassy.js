@@ -437,7 +437,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				li = matchedEl.parentNode.parentNode;
 			if(quantity) {
 				var newTotal = li.Object.quantity - quantity,
-					diff = quantity,
+					diff = quantity*-1,
 					lq = Sel.query(".quantity", li, true);
 				if(newTotal < 0) {
 					newTotal = 0;

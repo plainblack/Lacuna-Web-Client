@@ -23,6 +23,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		Dom.addClass(container, Lib.Styles.HIDDEN);
 		container.innerHTML = this._getHtml();
 		document.body.insertBefore(container, document.body.firstChild);
+		Dom.addClass(container, "nofooter");
 		
 		this.Dialog = new YAHOO.widget.Panel(this.id, {
 			constraintoviewport:true,
@@ -134,17 +135,32 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'					</div>',
 			'					<div id="essentiaGetMore">',
 			'						<button id="essentiaPurchaseButton">Purchase Essentia</button>',
-			'						<hr >',
+			'						<hr />',
 			'						<div>',
 			'							<label>Redeem Essentia Code:<br /><input id="essentiaRedeemCode" /></label>',
 			'							<button id="essentiaRedeemButton">Redeem</button>',
 			'						</div>',
+			/*'						<hr />',
+			'						<p>Give the gift of Essentia. Simply choose the amount you want, and pay for at it at PayPal with a credit card, or with your PayPal account. You\'ll then receive an email with an essentia code that can be redeemed in the game.</p>',
+			'						<form action="https://www.paypal.com/cgi-bin/webscr" method="post">',
+			'						<input type="hidden" name="cmd" value="_s-xclick">',
+			'						<input type="hidden" name="hosted_button_id" value="X66S44RDHKKS8">',
+			'						<p style="margin: 10px 0;"><input type="hidden" name="on0" value="Buy an Essentia Code">Buy an Essentia Code: <select name="os0">',
+			'						<option value="30 Essentia">30 Essentia $2.99</option>',
+			'						<option value="100 Essentia">100 Essentia $5.99</option>',
+			'						<option value="200 Essentia">200 Essentia $9.99</option>',
+			'						<option value="600 Essentia">600 Essentia $24.99</option>',
+			'						<option value="1300 Essentia">1300 Essentia $49.99</option>',
+			'						</select></p>',
+			'						<input type="hidden" name="currency_code" value="USD">',
+			'						<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">',
+			'						<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">',
+			'						</form>',*/
 			'					</div>',
 			'				</div>',
 			'			</div>',
 			'		</form>',
 			'	</div>',
-			'	<div class="ft"></div>'
 			].join('');
 		},
 		
