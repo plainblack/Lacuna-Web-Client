@@ -103,7 +103,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				if (a.date_arrives > b.date_arrives) {
 					return 1;
 				}
-				else if (a.date_arrives < b.arrives) {
+				else if (a.date_arrives < b.date_arrives) {
 					return -1;
 				}
 				else {

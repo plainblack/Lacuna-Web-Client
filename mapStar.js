@@ -579,7 +579,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				if (a.date_arrives > b.date_arrives) {
 					return 1;
 				}
-				else if (a.date_arrives < b.arrives) {
+				else if (a.date_arrives < b.date_arrives) {
 					return -1;
 				}
 				else {
