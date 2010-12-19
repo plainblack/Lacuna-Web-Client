@@ -24,6 +24,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		
 		this.service = Game.Services.Buildings.Transporter;
 		
+		this.shipSize = 50000;
+		this.planSize = 10000;
+		this.spySize = 350;
+		this.glyphSize = 100;
+
 		this.createEvent("onLoadResources");
 		this.createEvent("onLoadGlyphs");
 		this.createEvent("onLoadPlans");
@@ -137,6 +142,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'</div>',
 				'<ul>',
 				'	<li style="margin-bottom:10px;margin-top:5px;"><ul id="tradePushItems" style="border:1px solid #52ACFF" class="clearafter"><li style="float:left;margin:2px;"><label>Pushing:</label></li></ul></li>',
+				'	<li style=""><label>Total Cargo:</label><span id="tradePushCargo">0</span></li>',
 				'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"></select></li>',
 				'	<li id="tradePushMessage" class="alert"></li>',
 				'	<li><button id="tradePushSend">',this.pushTradeText,'</button></li>',
@@ -1286,6 +1292,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				}
 			}
 		},
+		updatePushCargo : function(byVal) {
+			var c = Dom.get("tradePushCargo"),
+				cv = c.innerHTML*1;
+			c.innerHTML = cv + byVal;
+		},
 		PushAddResource : function(){
 			var opt = Lib.getSelectedOption("tradePushResourceName"),
 				c = Dom.get("tradePushItems"),
@@ -1307,10 +1318,17 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				if(Sel.query("#"+item.id, c).length == 0) {
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					Event.on(del, "click", function(e){
+						var elm = Event.getTarget(e),
+							item = elm.parentNode;
+						this.updatePushCargo(item.Object.quantity * -1);
+						item.innerHTML = ''; // work around IE crash
+						item.parentNode.removeChild(item);
+					}, this, true);
 					item.Object = {type:opt.value, quantity:qVal};
 					content.innerHTML = [opt.value.titleCaps(), ' (', q.value, ')'].join('');
 					c.appendChild(item);
+					this.updatePushCargo(qVal);
 				}
 			}
 		},
@@ -1325,10 +1343,15 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				if(Sel.query("#"+item.id, c).length == 0) {
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					Event.on(del, "click", function(){ 
+						this.updatePushCargo(this.glyphSize*-1);
+						item.innerHTML = ''; // work around IE crash
+						item.parentNode.removeChild(item); 
+					}, this, true);
 					item.Object = {glyph_id:opt.value, type:"glyph"};
 					content.innerHTML = opt.innerHTML;
 					c.appendChild(item);
+					this.updatePushCargo(this.glyphSize);
 				}
 			}
 		},
@@ -1343,10 +1366,15 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				if(Sel.query("#"+item.id, c).length == 0) {
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					Event.on(del, "click", function(){ 
+						this.updatePushCargo(this.planSize*-1);
+						item.innerHTML = ''; // work around IE crash
+						item.parentNode.removeChild(item); 
+					}, this, true);
 					item.Object = {plan_id:opt.value, type:"plan"};
 					content.innerHTML = opt.innerHTML;
 					c.appendChild(item);
+					this.updatePushCargo(this.planSize);
 				}
 			}
 		},
@@ -1361,10 +1389,15 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				if(Sel.query("#"+item.id, c).length == 0) {
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					Event.on(del, "click", function(){ 
+						this.updatePushCargo(this.shipSize*-1);
+						item.innerHTML = ''; // work around IE crash
+						item.parentNode.removeChild(item); 
+					}, this, true);
 					item.Object = {ship_id:opt.value, type:"ship"};
 					content.innerHTML = opt.innerHTML;
 					c.appendChild(item);
+					this.updatePushCargo(this.shipSize);
 				}
 			}
 		},
@@ -1379,10 +1412,15 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				if(Sel.query("#"+item.id, c).length == 0) {
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ this.parentNode.removeChild(this); }, item, true);
+					Event.on(del, "click", function(){ 
+						this.updatePushCargo(this.spySize*-1);
+						item.innerHTML = ''; // work around IE crash
+						item.parentNode.removeChild(item); 
+					}, this, true);
 					item.Object = {prisoner_id:opt.value, type:"prisoner"};
 					content.innerHTML = opt.innerHTML;
 					c.appendChild(item);
+					this.updatePushCargo(this.spySize);
 				}
 			}
 		},
@@ -1432,6 +1470,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 							}
 						}
 						Dom.get("tradePushResourceQuantity").value = "";
+						Dom.get("tradePushCargo").innerHTML = "";
 						
 						if(hasResources) {
 							this.getStoredResources(true);
