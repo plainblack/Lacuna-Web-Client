@@ -1334,10 +1334,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						item.parentNode.removeChild(item);
 					}, this, true);
 					item.Object = {type:opt.value, quantity:qVal};
-					content.innerHTML = [opt.value.titleCaps(), ' (', q.value, ')'].join('');
 					c.appendChild(item);
-					this.updatePushCargo(qVal);
 				}
+                else {
+                    item = Sel.query("#"+item.id, c)[0];
+                    content = item.childNodes[1];
+                    item.Object.quantity += qVal;
+                }
+                content.innerHTML = [opt.value.titleCaps(), ' (', item.Object.quantity, ')'].join('');
+                this.updatePushCargo(qVal);
 			}
 		},
 		PushAddGlyph : function(){

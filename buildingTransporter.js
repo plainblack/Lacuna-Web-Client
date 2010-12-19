@@ -1315,21 +1315,27 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					del = item.appendChild(document.createElement("div")),
 					content = item.appendChild(document.createElement("div"));
 				item.id = "tradeResource-" + opt.value;
-				if(Sel.query("#"+item.id, c).length == 0) {
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(e){
-						var elm = Event.getTarget(e),
-							item = elm.parentNode;
-						this.updatePushCargo(item.Object.quantity * -1);
-						item.innerHTML = ''; // work around IE crash
-						item.parentNode.removeChild(item);
-					}, this, true);
-					item.Object = {type:opt.value, quantity:qVal};
-					content.innerHTML = [opt.value.titleCaps(), ' (', q.value, ')'].join('');
-					c.appendChild(item);
-					this.updatePushCargo(qVal);
-				}
+                if(Sel.query("#"+item.id, c).length == 0) {
+                    Dom.addClass(item, "tradeItem");
+                    Dom.addClass(del, "tradeDelete");
+                    Event.on(del, "click", function(e){
+                        var elm = Event.getTarget(e),
+                            item = elm.parentNode;
+                        this.updatePushCargo(item.Object.quantity * -1);
+                        item.innerHTML = ''; // work around IE crash
+                        item.parentNode.removeChild(item);
+                    }, this, true);
+                    item.Object = {type:opt.value, quantity:qVal};
+                    c.appendChild(item);
+                }
+                else {
+                    item = Sel.query("#"+item.id, c)[0];
+                    content = item.childNodes[1];
+                    item.Object.quantity += qVal;
+                }
+                content.innerHTML = [opt.value.titleCaps(), ' (', item.Object.quantity, ')'].join('');
+                this.updatePushCargo(qVal);
+
 			}
 		},
 		PushAddGlyph : function(){
