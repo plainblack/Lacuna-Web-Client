@@ -613,6 +613,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<span>Speed:<span>',ship.speed,'</span></span>',
 				'			<span>Hold Size:<span>',ship.hold_size,'</span></span>',
 				'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+				'			<span>Combat:<span>',ship.combat,'</span></span>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -674,6 +675,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					'			<span>Speed:<span>',ship.speed,'</span></span>,',
 					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>,',
 					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+					'			<span>Combat:<span>',ship.combat,'</span></span>',
 					'		</div>',
 					'	</div>',
 					'	<div class="yui-u" style="width:8%">',
@@ -777,6 +779,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					'			<span>Speed:<span>',ship.speed,'</span></span>,',
 					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>,',
 					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+					'			<span>Combat:<span>',ship.combat,'</span></span>',
 					'		</div>',
 					'		<div style="font-style:italic;">',Lib.parseReason(ships[i].reason),'</div>',
 					'	</div>',
@@ -1123,17 +1126,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var maxSpies = 0;
 			for (var i = 0; i < ships.length; i++) {
 				var ship = ships[i];
-				if (ship.type == "spy_pod") {
-					ship.max_spies = 1;
-				}
-				else if (ship.type == "spy_shuttle") {
-					ship.max_spies = 4;
-				}
-				else {
-					ship.max_spies = Math.floor(ship.hold_size / 350);
-				}
-				if (ship.max_spies > maxSpies) {
-					maxSpies = ship.max_spies;
+				if (ship.max_occupants > maxSpies) {
+					maxSpies = ship.max_occupants;
 				}
 			}
 			if (maxSpies == 0) {
@@ -1186,7 +1180,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var li = document.createElement('li');
 			for (var i = 0; i < ships.length; i++) {
 				var ship = ships[i];
-				var usable = ship.max_spies >= spies.length;
+				var usable = ship.max_occupants >= spies.length;
 				var nLi = li.cloneNode(false);
 				nLi.shipId = ship.id;
 				nLi.innerHTML = [
@@ -1200,7 +1194,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<div><strong>Attributes:</strong>',
 				'			<span>Speed:<span>',ship.speed,'</span></span>',
 				'			<span>Stealth:<span>',ship.stealth,'</span></span>',
-				'			<span>Max Spies:<span>',ship.max_spies,'</span></span>',
+				'			<span>Max Spies:<span>',ship.max_occupants,'</span></span>',
 				'		</div>',
 				'	</div>',
 				'</div>'

@@ -253,10 +253,18 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					var shipName = shipNames[i],
 						ship = ships[shipName],
 						nLi = li.cloneNode(false),
-						reason="";
+						reason="", attributes = [];
 					
 					if(ship.reason) {						
 						reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
+					}
+					
+					for(var a in ship.attributes) {
+						attributes[attributes.length] = '<span style="white-space:nowrap;margin-left:10px;"><label style="font-style:italic">';
+						attributes[attributes.length] = a.titleCaps('_',' ');
+						attributes[attributes.length] = ': </label>';
+						attributes[attributes.length] = ship.attributes[a];
+						attributes[attributes.length] = '</span>';
 					}
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
@@ -274,11 +282,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" />',ship.cost.waste,'</span>',
 					'			<span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" />',Lib.formatTime(ship.cost.seconds),'</span>',
 					'		</div>',
-					'		<div><label style="font-weight:bold;">Attributes:</label>',
-					'			<span style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.attributes.speed,'</span>',
-					'			<span style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.attributes.hold_size,'</span>',
-					'			<span style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.attributes.stealth,'</span>',
-					'		</div>',
+					'		<div><label style="font-weight:bold;">Attributes:</label>',attributes.join(''),'</div>',
 					!ship.can ? reason : '',
 					'	</div>',
 					'	<div class="yui-u" style="width:8%">',

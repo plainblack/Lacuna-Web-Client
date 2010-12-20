@@ -259,7 +259,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				
 				var li = document.createElement("li");
 		
-				glyphs.slice(0);
+				//glyphs.slice(0);
 				glyphs.sort(function(a,b) {
 					if(a.type > b.type) {
 						return 1;

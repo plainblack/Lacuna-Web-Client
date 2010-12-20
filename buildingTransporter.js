@@ -44,6 +44,114 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		
 			this.subscribe("onLoad", function() {
 				this.getStoredResources();
+				this.mine.subscribe("activeChange", this.getMine, this, true);
+				this.avail.subscribe("activeChange", this.getAvailable, this, true);
+				this.push.subscribe("activeChange", function(e) {
+					if(e.newValue) {
+						if(!this.tradePushSubbed) {
+							Event.on("tradePushResources", "click", function(){
+								if(Dom.getStyle("tradePushResourceName", "display") == "none") {
+									Dom.setStyle("tradePushResourceName", "display", "block");
+									this.getStoredResources();
+								}
+								else {
+									Dom.setStyle("tradePushResourceName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradePushGlpyhs", "click", function(){
+								if(Dom.getStyle("tradePushGlyphName", "display") == "none") {
+									Dom.setStyle("tradePushGlyphName", "display", "block");
+									this.getGlyphs();
+								}
+								else {
+									Dom.setStyle("tradePushGlyphName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradePushPlans", "click", function(){
+								if(Dom.getStyle("tradePushPlanName", "display") == "none") {
+									Dom.setStyle("tradePushPlanName", "display", "block");
+									this.getPlans();
+								}
+								else {
+									Dom.setStyle("tradePushPlanName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradePushShips", "click", function(){
+								if(Dom.getStyle("tradePushShipName", "display") == "none") {
+									Dom.setStyle("tradePushShipName", "display", "block");
+									this.getShips();
+								}
+								else {
+									Dom.setStyle("tradePushShipName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradePushPrisoners", "click", function(){
+								if(Dom.getStyle("tradePushPrisonerName", "display") == "none") {
+									Dom.setStyle("tradePushPrisonerName", "display", "block");
+									this.getPrisoners();
+								}
+								else {
+									Dom.setStyle("tradePushPrisonerName", "display", "none");
+								}
+							}, this, true);
+						}
+						
+						this.tradePushSubbed = 1;
+					}
+				},this,true);
+				this.add.subscribe("activeChange", function(e) {
+					if(e.newValue) {
+						if(!this.tradeAddSubbed) {
+							Event.on("tradeAddResources", "click", function(){
+								if(Dom.getStyle("tradeAddResourceName", "display") == "none") {
+									Dom.setStyle("tradeAddResourceName", "display", "block");
+									this.getStoredResources();
+								}
+								else {
+									Dom.setStyle("tradeAddResourceName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradeAddGlpyhs", "click", function(){
+								if(Dom.getStyle("tradeAddGlyphName", "display") == "none") {
+									Dom.setStyle("tradeAddGlyphName", "display", "block");
+									this.getGlyphs();
+								}
+								else {
+									Dom.setStyle("tradeAddGlyphName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradeAddPlans", "click", function(){
+								if(Dom.getStyle("tradeAddPlanName", "display") == "none") {
+									Dom.setStyle("tradeAddPlanName", "display", "block");
+									this.getPlans();
+								}
+								else {
+									Dom.setStyle("tradeAddPlanName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradeAddShips", "click", function(){
+								if(Dom.getStyle("tradeAddShipName", "display") == "none") {
+									Dom.setStyle("tradeAddShipName", "display", "block");
+									this.getShips();
+								}
+								else {
+									Dom.setStyle("tradeAddShipName", "display", "none");
+								}
+							}, this, true);
+							Event.on("tradeAddPrisoners", "click", function(){
+								if(Dom.getStyle("tradeAddPrisonerName", "display") == "none") {
+									Dom.setStyle("tradeAddPrisonerName", "display", "block");
+									this.getPrisoners();
+								}
+								else {
+									Dom.setStyle("tradeAddPrisonerName", "display", "none");
+								}
+							}, this, true);
+						}
+						
+						this.tradeAddSubbed = 1;
+					}
+				},this,true);
 			}, this, true);
 		}
 	};
@@ -113,73 +221,29 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			return this.oneForOne;
 		},
 		_getPushTab : function() {
-			this.push = new YAHOO.widget.Tab({ label: "Push", content: ['<div>',
-				'<div id="tradePushTabs" class="yui-navset">',
-				'	<ul class="yui-nav">',
-				'		<li><a href="#"><em>Resource</em></a></li>',
-				'		<li><a href="#"><em>Glyph</em></a></li>',
-				'		<li><a href="#"><em>Plan</em></a></li>',
-				'		<li><a href="#"><em>Ship</em></a></li>',
-				'		<li><a href="#"><em>Prisoner</em></a></li>',
-				'	</ul>',
-				'	<div class="yui-content">',
-				'		<div>',
-				'			<label>Type:</label><select id="tradePushResourceName"></select>&nbsp;<label>Quantity:</label><input type="text" id="tradePushResourceQuantity" /><button id="tradePushResourceAdd">Add</button><span id="tradePushResourceMessage"></span>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradePushGlyphName"></select><button id="tradePushGlyphAdd">Add</button>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradePushPlanName"></select><button id="tradePushPlanAdd">Add</button>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradePushShipName"></select><button id="tradePushShipAdd">Add</button>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradePushPrisonerName"></select><button id="tradePushPrisonerAdd">Add</button>',
-				'		</div>',
-				'	</div>',
-				'</div>',
-				'<ul>',
-				'	<li style="margin-bottom:10px;margin-top:5px;"><ul id="tradePushItems" style="border:1px solid #52ACFF" class="clearafter"><li style="float:left;margin:2px;"><label>Pushing:</label></li></ul></li>',
-				'	<li style=""><label>Total Cargo:</label><span id="tradePushCargo">0</span></li>',
-				'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"></select></li>',
-				'	<li id="tradePushMessage" class="alert"></li>',
-				'	<li><button id="tradePushSend">',this.pushTradeText,'</button></li>',
-				'</ul>',
-			'</div>'].join('')});
-			
-			this.push.subscribe("activeChange", function(e) {
-				if(e.newValue) {
-					if(!this.pushTabView) {
-						this.pushTabView = new YAHOO.widget.TabView("tradePushTabs");
-						this.pushTabView.getTab(1).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getGlyphs();
-							}
-						},this,true);
-						this.pushTabView.getTab(2).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPlans();
-							}
-						},this,true);
-						this.pushTabView.getTab(3).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getShips();
-							}
-						},this,true);
-						this.pushTabView.getTab(4).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPrisoners();
-							}
-						},this,true);
-						this.pushTabView.selectTab(0);
-					}
-					else {
-						this.pushTabView.selectTab(this.pushTabView.get('activeIndex'));
-					}
-				}
-			},this,true);
+			this.push = new YAHOO.widget.Tab({ label: "Push", content: [
+			'<div class="tradeStash yui-g">',
+			'	<div class="yui-u first">',
+			'		<legend>On Planet</legend>',
+			'		<div class="tradeContainers">',
+			'			<div><div id="tradePushResources" class="accordian">Resources</div><ul id="tradePushResourceName"></ul></div>',
+			'			<div><div id="tradePushGlpyhs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
+			'			<div><div id="tradePushPlans" class="accordian">Plans</div><ul id="tradePushPlanName" style="display:none;"></ul></div>',
+			'			<div><div id="tradePushShips" class="accordian">Ships</div><ul id="tradePushShipName" style="display:none;"></ul></div>',
+			'			<div><div id="tradePushPrisoners" class="accordian">Prisoners</div><ul id="tradePushPrisonerName" style="display:none;"></ul></div>',
+			'		</div>',
+			'	</div>',
+			'	<div class="yui-u">',
+			'		<legend>To Push</legend>',
+			'		<div class="tradeContainers"><ul id="tradePushItems"></ul></div>',
+			'	</div>',
+			'</div>',
+			'<ul style="margin-top:5px;">',
+			'	<li style=""><label>Total Cargo:</label><span id="tradePushCargo">0</span></li>',
+			'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"></select></li>',
+			'	<li id="tradePushMessage" class="alert"></li>',
+			'	<li><button id="tradePushSend">',this.pushTradeText,'</button></li>',
+			'</ul>'].join('')});
 
 			this.subscribe("onLoadResources", this.populatePushResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populatePushGlyphName, this, true);
@@ -202,11 +266,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				}
 			});
 			
-			Event.on("tradePushResourceAdd", "click", this.PushAddResource, this, true);
-			Event.on("tradePushGlyphAdd", "click", this.PushAddGlyph, this, true);
-			Event.on("tradePushPlanAdd", "click", this.PushAddPlan, this, true);
-			Event.on("tradePushShipAdd", "click", this.PushAddShip, this, true);
-			Event.on("tradePushPrisonerAdd", "click", this.PushAddPrisoner, this, true);
+			Event.delegate("tradePushResourceName", "click", this.PushAddResource, "button", this, true);
+			Event.delegate("tradePushGlyphName", "click", this.PushAddGlyph, "button", this, true);
+			Event.delegate("tradePushPlanName", "click", this.PushAddPlan, "button", this, true);
+			Event.delegate("tradePushShipName", "click", this.PushAddShip, "button", this, true);
+			Event.delegate("tradePushPrisonerName", "click", this.PushAddPrisoner, "button", this, true);
+			
+			Event.delegate("tradePushItems", "click", this.PushRemove, "button", this, true);
+			
 			Event.on("tradePushSend", "click", this.Push, this, true);
 			
 			return this.push;
@@ -245,77 +312,29 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			return this.mine;
 		},
 		_getAddTab : function() {
-			this.add = new YAHOO.widget.Tab({ label: "Add Trade", content: ['<div>',
-				'<div style="margin-bottom:5px;">You many only select one thing (glyph, plan, prisoner, resource, ship) to offer</div>',
-				'<div id="tradeAddTabs" class="yui-navset">',
-				'	<ul class="yui-nav">',
-				'		<li><a href="#"><em>Resource</em></a></li>',
-				'		<li><a href="#"><em>Glyph</em></a></li>',
-				'		<li><a href="#"><em>Plan</em></a></li>',
-				'		<li><a href="#"><em>Prisoner</em></a></li>',
-				'		<li><a href="#"><em>Ship</em></a></li>',
-				'	</ul>',
-				'	<div class="yui-content">',
-				'		<div>',
-				'			<label>Type:</label><select id="tradeAddResourceName"></select>&nbsp;<label>Quantity:</label><input type="text" id="tradeAddResourceQuantity" /></span>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradeAddGlyphName"></select>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradeAddPlanName"></select>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradeAddPrisonerName"></select>',
-				'		</div>',
-				'		<div>',
-				'			<label>Name:</label><select id="tradeAddShipName"></select>',
-				'		</div>',
-				'	</div>',
-				'</div>',
-				'<ul>',
-				'	<li style="margin: 5px 0;padding:2px;border:1px solid #52ACFF"><label style="font-weight:bold">Asking:</label><select id="tradeAddAskingName"></select>&nbsp;<label>Quantity:</label><input type="text" id="tradeAddAskingQuantity" /></li>',
-				'	<li id="tradeAddMessage" class="alert"></li>',
-				'	<li><button id="tradeAdd">',this.addTradeText,'</button></li>',
-				'</ul>',
-			'</div>'].join('')});
-			
-			this.add.subscribe("activeChange", function(e) {
-				if(e.newValue) {
-					if (!this.addTabView) {
-						this.addTabView = new YAHOO.widget.TabView("tradeAddTabs");
-						this.addTabView.getTab(0).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getStoredResources();
-							}
-						},this,true);
-						this.addTabView.getTab(1).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getGlyphs();
-							}
-						},this,true);
-						this.addTabView.getTab(2).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPlans();
-							}
-						},this,true);
-						this.addTabView.getTab(3).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getPrisoners();
-							}
-						},this,true);
-						this.addTabView.getTab(4).subscribe("activeChange", function(e) {
-							if(e.newValue) {
-								this.getShips();
-							}
-						},this,true);
-						this.addTabView.selectTab(0);
-					}
-					else {
-						this.addTabView.selectTab(this.addTabView.get('activeIndex'));
-					}
-				}
-			},this,true);
+			this.add = new YAHOO.widget.Tab({ label: "Add Trade", content: [
+			'<div class="tradeStash yui-g">',
+			'	<div class="yui-u first">',
+			'		<legend>On Planet</legend>',
+			'		<div class="tradeContainers">',
+			'			<div><div id="tradeAddResources" class="accordian">Resources</div><ul id="tradeAddResourceName"></ul></div>',
+			'			<div><div id="tradeAddGlpyhs" class="accordian">Glyphs</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
+			'			<div><div id="tradeAddPlans" class="accordian">Plans</div><ul id="tradeAddPlanName" style="display:none;"></ul></div>',
+			'			<div><div id="tradeAddShips" class="accordian">Ships</div><ul id="tradeAddShipName" style="display:none;"></ul></div>',
+			'			<div><div id="tradeAddPrisoners" class="accordian">Prisoners</div><ul id="tradeAddPrisonerName" style="display:none;"></ul></div>',
+			'		</div>',
+			'	</div>',
+			'	<div class="yui-u">',
+			'		<legend>To Add</legend>',
+			'		<div class="tradeContainers"><ul id="tradeAddItems"></ul></div>',
+			'	</div>',
+			'</div>',
+			'<ul style="margin-top:5px;">',
+			'	<li style=""><label>Total Cargo:</label><span id="tradeAddCargo">0</span></li>',
+			'	<li style="margin: 5px 0;"><label style="font-weight:bold">Asking Essentia:</label><input type="text" id="tradeAddAskingQuantity" /></li>',
+			'	<li id="tradeAddMessage" class="alert"></li>',
+			'	<li><button id="tradeAdd">',this.addTradeText,'</button></li>',
+			'</ul>'].join('')});
 			
 			this.subscribe("onLoadResources", this.populateAddResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populateAddGlyphName, this, true);
@@ -323,7 +342,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.subscribe("onLoadPrisoners", this.populateAddPrisonerName, this, true);
 			this.subscribe("onLoadShips", this.populateAddShipName, this, true);
 			
-			Event.onAvailable("tradeAddAskingName", this.populateAddAskingName, this, true);
+			Event.delegate("tradeAddResourceName", "click", this.AddResource, "button", this, true);
+			Event.delegate("tradeAddGlyphName", "click", this.AddGlyph, "button", this, true);
+			Event.delegate("tradeAddPlanName", "click", this.AddPlan, "button", this, true);
+			Event.delegate("tradeAddShipName", "click", this.AddShip, "button", this, true);
+			Event.delegate("tradeAddPrisonerName", "click", this.AddPrisoner, "button", this, true);
+			
+			Event.delegate("tradeAddItems", "click", this.AddRemove, "button", this, true);
+			
 			Event.on("tradeAdd", "click", this.AddTrade, this, true);
 			return this.add;
 		},
@@ -411,15 +437,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getGlyphs.success");
 						this.rpcSuccess(o);
 						this.glyphs = o.result.glyphs;
+						this.glyphSize = o.result.cargo_space_used_each;
 						this.fireEvent("onLoadGlyphs");
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getGlyphs.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -436,15 +461,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getPlans.success");
 						this.rpcSuccess(o);
 						this.plans = o.result.plans;
+						this.planSize = o.result.cargo_space_used_each;
 						this.fireEvent("onLoadPlans");
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getPlans.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -461,15 +485,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getPrisoners.success");
 						this.rpcSuccess(o);
 						this.prisoners = o.result.prisoners;
+						this.spySize = o.result.cargo_space_used_each;
 						this.fireEvent("onLoadPrisoners");
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getPrisoners.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -486,15 +509,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getShips.success");
 						this.rpcSuccess(o);
 						this.ships = o.result.ships;
+						this.shipSize = o.result.cargo_space_used_each;
 						this.fireEvent("onLoadShips");
 						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getShips.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -511,7 +533,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getStoredResources.success");
 						this.rpcSuccess(o);
 						this.resources = o.result.resources;
 						this.fireEvent("onLoadResources");
@@ -519,7 +540,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getStoredResources.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -931,36 +951,29 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		//Add trade
 		populateAddResourceName : function() {
 			var elm = Dom.get("tradeAddResourceName"),
-				opt = document.createElement("option"),
-				nOpt, optGroup;
+				li = document.createElement("li"), nLi, x, r, name, resource;
 				
 			if(elm) {
-				elm.options.length = 0;
 				elm.innerHTML = "";
-				for(var r in Lib.ResourceTypes) {
+				for(r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
-						var resource = Lib.ResourceTypes[r];
+						resource = Lib.ResourceTypes[r];
 						if(Lang.isArray(resource)) {
-							optGroup = document.createElement("optgroup");
-							optGroup.label = r.titleCaps();
-							
-							for(var x=0; x < resource.length; x++) {
-								var name = resource[x];
+							for(x=0; x < resource.length; x++) {
+								name = resource[x];
 								if(this.resources[name]) {
-									nOpt = opt.cloneNode(false);
-									nOpt.value = name;
-									nOpt.innerHTML = [name.titleCaps(), ' (', this.resources[name], ')'].join('');
-									optGroup.appendChild(nOpt);
+									nLi = li.cloneNode(false);
+									nLi.Resource = {type:name,quantity:this.resources[name]*1};
+									nLi.innerHTML = ['<span class="tradeResourceName">',name.titleCaps(), ' (<label class="quantity">', this.resources[name], '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+									elm.appendChild(nLi);
 								}
 							}
-							
-							elm.appendChild(optGroup);
 						}
-						else if(this.resources[r]) {
-							nOpt = opt.cloneNode(false);
-							nOpt.value = r;
-							nOpt.innerHTML = [r.titleCaps(), ' (', this.resources[r], ')'].join('');
-							elm.appendChild(nOpt);
+						else if(this.resources[r] && resource) {
+							nLi = li.cloneNode(false);
+							nLi.Resource = {type:r,quantity:this.resources[r]*1};
+							nLi.innerHTML = ['<span class="tradeResourceName">',r.titleCaps(), ' (<label class="quantity">', this.resources[r], '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+							elm.appendChild(nLi);
 						}
 					}
 				}
@@ -968,118 +981,293 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		populateAddGlyphName : function() {
 			var elm = Dom.get("tradeAddGlyphName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				elm.options.length = 0;
-				var glyphs = this.glyphs.slice(0);
-				glyphs.sort(function(a,b) {
-					if (a.type > b.type) {
-						return 1;
+				elm.innerHTML = "";
+				if(this.glyphs.length > 0) {
+					var glyphs = this.glyphs.sort(function(a,b) {
+						if (a.type > b.type) {
+							return 1;
+						}
+						else if (a.type < b.type) {
+							return -1;
+						}
+						else {
+							return 0;
+						}
+					});
+					
+					for(var x=0; x < glyphs.length; x++) {
+						var obj = glyphs[x];
+						nLi = li.cloneNode(false);
+						nLi.Glyph = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.type.titleCaps(), '</span> <button type="button">+</button>'].join('');
+						elm.appendChild(nLi);
 					}
-					else if (a.type < b.type) {
-						return -1;
-					}
-					else {
-						return 0;
-					}
-				});
-				for(var x=0; x < glyphs.length; x++) {
-					var obj = glyphs[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Glyph = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = obj.type.titleCaps();
-					elm.appendChild(nOpt);
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Glyphs Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
 		populateAddPlanName : function() {
 			var elm = Dom.get("tradeAddPlanName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				elm.options.length = 0;	
-				for(var x=0; x < this.plans.length; x++) {
-					var obj = this.plans[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Plan = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
-					elm.appendChild(nOpt);
+				elm.innerHTML = "";
+				if(this.plans.length > 0) {
+					for(var x=0; x < this.plans.length; x++) {
+						var obj = this.plans[x];
+						nLi = li.cloneNode(false);
+						nLi.Plan = obj;
+						if(obj.extra_build_level) {
+							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '+', obj.extra_build_level, '</span> <button type="button">+</button>'].join('');
+						}
+						else {
+							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
+						}
+						elm.appendChild(nLi);
+					}
 				}
-			}
-		},
-		populateAddPrisonerName : function() {
-			var elm = Dom.get("tradeAddPrisonerName"),
-				opt = document.createElement("option"),
-				nOpt;
-				
-			if(elm) {
-				elm.options.length = 0;	
-				for(var x=0; x < this.prisoners.length; x++) {
-					var obj = this.prisoners[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Prisoner = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name, ' (', obj.level, ')'].join('');
-					elm.appendChild(nOpt);
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Plans Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
 		populateAddShipName : function() {
 			var elm = Dom.get("tradeAddShipName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				elm.options.length = 0;	
-				for(var x=0; x < this.ships.length; x++) {
-					var obj = this.ships[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Ship = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name, ' (', Lib.Ships[obj.type], ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, ')'].join('');
-					elm.appendChild(nOpt);
+				elm.innerHTML = "";
+				if(this.ships.length > 0) {
+					for(var x=0; x < this.ships.length; x++) {
+						var obj = this.ships[x];
+						nLi = li.cloneNode(false);
+						nLi.Ship = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, '</span> <button type="button">+</button>'].join('');
+						elm.appendChild(nLi);
+					}
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Ships Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
-		populateAddAskingName : function() {
-			var elm = Dom.get("tradeAddAskingName"),
-				opt = document.createElement("option"),
-				nOpt, optGroup;
+		populateAddPrisonerName : function() {
+			var elm = Dom.get("tradeAddPrisonerName"),
+				li = document.createElement("li"), nLi;
 				
-			for(var r in Lib.ResourceTypes) {
-				if(Lib.ResourceTypes.hasOwnProperty(r)) {
-					var resource = Lib.ResourceTypes[r];
-					if(Lang.isArray(resource)) {
-						optGroup = document.createElement("optgroup");
-						optGroup.label = r.titleCaps();
-						
-						for(var x=0; x < resource.length; x++) {
-							nOpt = opt.cloneNode(false);
-							nOpt.value = resource[x];
-							nOpt.innerHTML = resource[x].titleCaps();
-							optGroup.appendChild(nOpt);
-						}
-						
-						elm.appendChild(optGroup);
+			if(elm) {
+				elm.innerHTML = "";
+				if(this.prisoners.length > 0) {
+					for(var x=0; x < this.prisoners.length; x++) {
+						var obj = this.prisoners[x];
+						nLi = li.cloneNode(false);
+						nLi.Prisoner = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
+						nLi.selected = selectedVal == obj.id;
+						elm.appendChild(nLi);
 					}
-					else {
-						nOpt = opt.cloneNode(false);
-						nOpt.value = r;
-						nOpt.innerHTML = r.titleCaps();
-						elm.appendChild(nOpt);
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Prisoners Available";
+					elm.appendChild(nLi);
+				}
+			}
+		},
+		updateAddCargo : function(byVal) {
+			var c = Dom.get("tradeAddCargo"),
+				cv = c.innerHTML*1;
+			c.innerHTML = cv + byVal;
+		},
+		AddResource : function(e, matchedEl, container){
+			var quantity = matchedEl.previousSibling.value*1,
+				li = matchedEl.parentNode,
+				c = Dom.get("tradeAddItems");
+			if(quantity && c) {
+				var id = "addResource-" + li.Resource.type,
+					exists = Sel.query("#"+id, c);
+				if(exists.length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					if(quantity > li.Resource.quantity) {
+						quantity = li.Resource.quantity;
 					}
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(e){
+						var ed = Event.getTarget(e),
+							ep = ed.parentNode;
+						this.updateAddCargo(ep.Object.quantity * -1);
+						Event.purgeElement(ep);
+						ep.parentNode.removeChild(ep);
+					}, this, true);
+					item.Object = {type:li.Resource.type, quantity:quantity};
+					content.innerHTML = ['<span class="tradeResourceName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
+					c.appendChild(item);
+					this.updateAddCargo(quantity);
+				}
+				else {
+					var found = exists[0],
+						newTotal = found.Object.quantity + quantity,
+						diff = quantity,
+						lq = Sel.query(".quantity", found, true),
+						inp = Sel.query("input", found, true);
+					if(newTotal > li.Resource.quantity) {
+						newTotal = li.Resource.quantity;
+						diff = newTotal - found.Object.quantity;
+					}
+					if(inp) {
+						inp.value = diff;
+					}
+					lq.innerHTML = newTotal;
+					found.Object.quantity = newTotal;
+					this.updateAddCargo(diff);
+				}
+			}
+		},
+		AddGlyph : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
+				c = Dom.get("tradeAddItems");
+			if(li && c) {
+				var gId = li.Glyph.id,
+					id = "addGlyph-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ 
+						this.updateAddCargo(this.glyphSize*-1);
+						Event.purgeElement(item);
+						item.parentNode.removeChild(item); 
+					}, this, true);
+					item.Object = {glyph_id:gId, type:"glyph"};
+					content.innerHTML = li.Glyph.type.titleCaps();
+					c.appendChild(item);
+					this.updateAddCargo(this.glyphSize);
+				}
+			}
+		},
+		AddPlan : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
+				c = Dom.get("tradeAddItems");
+			if(li && c) {
+				var gId = li.Plan.id,
+					id = "addPlan-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ 
+						this.updateAddCargo(this.planSize*-1);
+						Event.purgeElement(item);
+						item.parentNode.removeChild(item); 
+					}, this, true);
+					item.Object = {plan_id:gId, type:"plan"};
+					content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
+					c.appendChild(item);
+					this.updateAddCargo(this.planSize);
+				}
+			}
+		},
+		AddShip : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
+				c = Dom.get("tradeAddItems");
+			if(li && c) {
+				var obj = li.Ship,
+					gId = obj.id,
+					id = "addShip-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ 
+						this.updateAddCargo(this.shipSize*-1);
+						Event.purgeElement(item);
+						item.parentNode.removeChild(item); 
+					}, this, true);
+					item.Object = {ship_id:gId, type:"ship"};
+					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
+					c.appendChild(item);
+					this.updateAddCargo(this.shipSize);
+				}
+			}
+		},
+		AddPrisoner : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
+				c = Dom.get("tradeAddItems");
+			if(li && c) {
+				var obj = li.Prisoner,
+					gId = obj.id,
+					id = "addPrisoner-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(){ 
+						this.updateAddCargo(this.spySize*-1);
+						Event.purgeElement(item);
+						item.parentNode.removeChild(item); 
+					}, this, true);
+					item.Object = {prisoner_id:gId, type:"prisoner"};
+					content.innerHTML = [obj.name, ' ', obj.level].join('');
+					c.appendChild(item);
+					this.updateAddCargo(this.spySize);
+				}
+			}
+		},
+		AddRemove : function(e, matchedEl, container){
+			var quantity = matchedEl.previousSibling.value*1,
+				li = matchedEl.parentNode.parentNode;
+			if(quantity) {
+				var newTotal = li.Object.quantity - quantity,
+					diff = quantity*-1,
+					lq = Sel.query(".quantity", li, true);
+				if(newTotal < 0) {
+					newTotal = 0;
+					diff = li.Object.quantity*-1;
+				}
+				
+				if(newTotal == 0) {
+					this.updateAddCargo(li.Object.quantity * -1);
+					Event.purgeElement(li);
+					li.parentNode.removeChild(li);
+				}
+				else {
+					lq.innerHTML = newTotal;
+					li.Object.quantity = newTotal;
+					this.updateAddCargo(diff);
 				}
 			}
 		},
 		AddTrade : function() {
 			var qVal = Dom.get("tradeAddAskingQuantity").value*1;
 			if(!Lang.isNumber(qVal) || qVal <= 0) {
-				Dom.get("tradeAddMessage").innerHTML = "Quantity of asking resource must be a number and greater than 0";
+				Dom.get("tradeAddMessage").innerHTML = "Quantity of asking essentia must be a number and greater than 0";
 				return;
 			}
 			else {
@@ -1087,68 +1275,31 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			}
 				
 			var data = {
-				session_id:Game.GetSession(""),
-				building_id:this.building.id,
-				ask: {
-					type:Lib.getSelectedOptionValue("tradeAddAskingName"),
-					quantity:qVal
+					session_id:Game.GetSession(""),
+					building_id:this.building.id,
+					offer: [],
+					ask: qVal
+				},
+				lis = Sel.query("li","tradeAddItems");
+				
+			for(n=0; n<lis.length; n++) {
+				obj = lis[n].Object;
+				if(obj) {
+					data.offer[data.offer.length] = obj;
 				}
-			};
-			
-			switch(this.addTabView.get("activeIndex")) {
-				case 1:
-					data.offer = {
-						type:"glyph",
-						glyph_id:Lib.getSelectedOptionValue("tradeAddGlyphName")
-					};
-					break;
-				case 2:
-					data.offer = {
-						type:"plan",
-						plan_id:Lib.getSelectedOptionValue("tradeAddPlanName")
-					};
-					break;
-				case 3:
-					data.offer = {
-						type:"prisoner",
-						prisoner_id:Lib.getSelectedOptionValue("tradeAddPrisonerName")
-					};
-					break;
-				case 4:
-					data.offer = {
-						type:"ship",
-						ship_id:Lib.getSelectedOptionValue("tradeAddShipName")
-					};
-					break;
-				default:
-					var offerQVal = Dom.get("tradeAddResourceQuantity").value*1;
-					if(!Lang.isNumber(offerQVal) || offerQVal <= 0) {
-						Dom.get("tradeAddMessage").innerHTML = "Quantity of offering resource must be a number and greater than 0";
-						return;
-					}
-					else {
-						Dom.get("tradeAddMessage").innerHTML = "";
-					}
-					data.offer = {
-						type:Lib.getSelectedOptionValue("tradeAddResourceName"),
-						quantity:offerQVal
-					};
-					break;
 			}
 			
 			Lacuna.Pulser.Show();
-			this.service.add_trade(data, {
+			this.service.add_to_market(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "Trade.add_trade.success");
 					this.rpcSuccess(o);
 					delete this.glyphs;
 					delete this.plans;
 					delete this.prisoners;
 					delete this.ships;
 					delete this.resources;
-					Dom.get("tradeAddResourceQuantity").value = "";
-					//Dom.get("tradeAddAskingName").selectedIndex = -1;
 					Dom.get("tradeAddAskingQuantity").value = "";
+					Dom.get("tradeAddCargo").innerHTML = "";
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
@@ -1166,41 +1317,29 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		//Push Resources
 		populatePushResourceName : function() {
 			var elm = Dom.get("tradePushResourceName"),
-				opt = document.createElement("option"),
-				nOpt, optGroup;
+				li = document.createElement("li"), nLi, x, r, name, resource;
 				
 			if(elm) {
-				var selectedVal = Lib.getSelectedOptionValue(elm);
-				elm.options.length = 0;
 				elm.innerHTML = "";
-				for(var r in Lib.ResourceTypes) {
+				for(r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
-						var resource = Lib.ResourceTypes[r];
+						resource = Lib.ResourceTypes[r];
 						if(Lang.isArray(resource)) {
-							optGroup = document.createElement("optgroup");
-							optGroup.label = r.titleCaps();
-							
-							for(var x=0; x < resource.length; x++) {
-								var name = resource[x];
+							for(x=0; x < resource.length; x++) {
+								name = resource[x];
 								if(this.resources[name]) {
-									nOpt = opt.cloneNode(false);
-									nOpt.value = name;
-									nOpt.totalAvailable = this.resources[name];
-									nOpt.innerHTML = [name.titleCaps(), ' (', this.resources[name], ')'].join('');
-									nOpt.selected = selectedVal == name;
-									optGroup.appendChild(nOpt);
+									nLi = li.cloneNode(false);
+									nLi.Resource = {type:name,quantity:this.resources[name]*1};
+									nLi.innerHTML = ['<span class="tradeResourceName">',name.titleCaps(), ' (<label class="quantity">', this.resources[name], '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+									elm.appendChild(nLi);
 								}
 							}
-							
-							elm.appendChild(optGroup);
 						}
 						else if(this.resources[r] && resource) {
-							nOpt = opt.cloneNode(false);
-							nOpt.value = r;
-							nOpt.totalAvailable = this.resources[r];
-							nOpt.innerHTML = [r.titleCaps(), ' (', this.resources[r], ')'].join('');
-							nOpt.selected = selectedVal == r;
-							elm.appendChild(nOpt);
+							nLi = li.cloneNode(false);
+							nLi.Resource = {type:r,quantity:this.resources[r]*1};
+							nLi.innerHTML = ['<span class="tradeResourceName">',r.titleCaps(), ' (<label class="quantity">', this.resources[r], '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+							elm.appendChild(nLi);
 						}
 					}
 				}
@@ -1208,89 +1347,107 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		populatePushGlyphName : function() {
 			var elm = Dom.get("tradePushGlyphName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				var selectedVal = Lib.getSelectedOptionValue(elm);
-				elm.options.length = 0;
-				var glyphs = this.glyphs.slice(0);
-				glyphs.sort(function(a,b) {
-					if (a.type > b.type) {
-						return 1;
+				elm.innerHTML = "";
+				if(this.glyphs.length > 0) {
+					var glyphs = this.glyphs.sort(function(a,b) {
+						if (a.type > b.type) {
+							return 1;
+						}
+						else if (a.type < b.type) {
+							return -1;
+						}
+						else {
+							return 0;
+						}
+					});
+					
+					for(var x=0; x < glyphs.length; x++) {
+						var obj = glyphs[x];
+						nLi = li.cloneNode(false);
+						nLi.Glyph = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.type.titleCaps(), '</span> <button type="button">+</button>'].join('');
+						elm.appendChild(nLi);
 					}
-					else if (a.type < b.type) {
-						return -1;
-					}
-					else {
-						return 0;
-					}
-				});
-				for(var x=0; x < glyphs.length; x++) {
-					var obj = glyphs[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Glyph = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = obj.type.titleCaps();
-					nOpt.selected = selectedVal == obj.id;
-					elm.appendChild(nOpt);
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Glyphs Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
 		populatePushPlanName : function() {
 			var elm = Dom.get("tradePushPlanName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				var selectedVal = Lib.getSelectedOptionValue(elm);
-				elm.options.length = 0;	
-				for(var x=0; x < this.plans.length; x++) {
-					var obj = this.plans[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Plan = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
-					nOpt.selected = selectedVal == obj.id;
-					elm.appendChild(nOpt);
+				elm.innerHTML = "";
+				if(this.plans.length > 0) {
+					for(var x=0; x < this.plans.length; x++) {
+						var obj = this.plans[x];
+						nLi = li.cloneNode(false);
+						nLi.Plan = obj;
+						if(obj.extra_build_level) {
+							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '+', obj.extra_build_level, '</span> <button type="button">+</button>'].join('');
+						}
+						else {
+							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
+						}
+						elm.appendChild(nLi);
+					}
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Plans Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
 		populatePushShipName : function() {
 			var elm = Dom.get("tradePushShipName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				var selectedVal = Lib.getSelectedOptionValue(elm);
-				elm.options.length = 0;	
-				for(var x=0; x < this.ships.length; x++) {
-					var obj = this.ships[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Ship = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name].join('');
-					nOpt.selected = selectedVal == obj.id;
-					elm.appendChild(nOpt);
+				elm.innerHTML = "";
+				if(this.ships.length > 0) {
+					for(var x=0; x < this.ships.length; x++) {
+						var obj = this.ships[x];
+						nLi = li.cloneNode(false);
+						nLi.Ship = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, '</span> <button type="button">+</button>'].join('');
+						elm.appendChild(nLi);
+					}
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Ships Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
 		populatePushPrisonerName : function() {
 			var elm = Dom.get("tradePushPrisonerName"),
-				opt = document.createElement("option"),
-				nOpt;
+				li = document.createElement("li"), nLi;
 				
 			if(elm) {
-				var selectedVal = Lib.getSelectedOptionValue(elm);
-				elm.options.length = 0;	
-				for(var x=0; x < this.prisoners.length; x++) {
-					var obj = this.prisoners[x];
-					nOpt = opt.cloneNode(false);
-					nOpt.Prisoner = obj;
-					nOpt.value = obj.id;
-					nOpt.innerHTML = [obj.name, ' ', obj.level].join('');
-					nOpt.selected = selectedVal == obj.id;
-					elm.appendChild(nOpt);
+				elm.innerHTML = "";
+				if(this.prisoners.length > 0) {
+					for(var x=0; x < this.prisoners.length; x++) {
+						var obj = this.prisoners[x];
+						nLi = li.cloneNode(false);
+						nLi.Prisoner = obj;
+						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
+						nLi.selected = selectedVal == obj.id;
+						elm.appendChild(nLi);
+					}
+				}
+				else {
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = "No Prisoners Available";
+					elm.appendChild(nLi);
 				}
 			}
 		},
@@ -1299,138 +1456,177 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				cv = c.innerHTML*1;
 			c.innerHTML = cv + byVal;
 		},
-		PushAddResource : function(){
-			var opt = Lib.getSelectedOption("tradePushResourceName"),
-				c = Dom.get("tradePushItems"),
-				q = Dom.get("tradePushResourceQuantity");
-			if(opt && c && q) {
-				var qVal = q.value*1;
-				if(!Lang.isNumber(qVal) || qVal <= 0) {
-					Dom.get("tradePushResourceMessage").innerHTML = "Quantity of resource must be a number and greater than 0";
-					return;
-				}
-				else {
-					Dom.get("tradePushResourceMessage").innerHTML = "";
-				}
-				
-				var id = "tradeResource-" + opt.value,
-					found = Sel.query("#"+id, c),
-					item, del, content;
-				if(found.length == 0) {
-					item = document.createElement("li");
+		PushAddResource : function(e, matchedEl, container){
+			var quantity = matchedEl.previousSibling.value*1,
+				li = matchedEl.parentNode,
+				c = Dom.get("tradePushItems");
+			if(quantity && c) {
+				var id = "pushResource-" + li.Resource.type,
+					exists = Sel.query("#"+id, c);
+				if(exists.length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
 					item.id = id;
-					del = item.appendChild(document.createElement("div"));
-					content = item.appendChild(document.createElement("div"));
-                    Dom.addClass(item, "tradeItem");
-                    Dom.addClass(del, "tradeDelete");
-                    Event.on(del, "click", function(e){
-                        var elm = Event.getTarget(e),
-                            i = elm.parentNode;
-                        this.updatePushCargo(i.Object.quantity * -1);
-						Event.purgeElement(i);
-                        i.parentNode.removeChild(i);
-                    }, this, true);
-                    item.Object = {type:opt.value, quantity:qVal};
-                    c.appendChild(item);
-                }
-				else {
-					item = found[0];
-					content = item.childNodes[1];
-					item.Object.quantity += qVal;
+					if(quantity > li.Resource.quantity) {
+						quantity = li.Resource.quantity;
+					}
+					Dom.addClass(item, "tradeItem");
+					Dom.addClass(del, "tradeDelete");
+					Event.on(del, "click", function(e){
+						var ed = Event.getTarget(e),
+							ep = ed.parentNode;
+						this.updatePushCargo(ep.Object.quantity * -1);
+						Event.purgeElement(ep);
+						ep.parentNode.removeChild(ep);
+					}, this, true);
+					item.Object = {type:li.Resource.type, quantity:quantity};
+					content.innerHTML = ['<span class="tradeResourceName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
+					c.appendChild(item);
+					this.updatePushCargo(quantity);
 				}
-				content.innerHTML = [opt.value.titleCaps(), ' (', item.Object.quantity, ')'].join('');
-				this.updatePushCargo(qVal);
+				else {
+					var found = exists[0],
+						newTotal = found.Object.quantity + quantity,
+						diff = quantity,
+						lq = Sel.query(".quantity", found, true),
+						inp = Sel.query("input", found, true);
+					if(newTotal > li.Resource.quantity) {
+						newTotal = li.Resource.quantity;
+						diff = newTotal - found.Object.quantity;
+					}
+					if(inp) {
+						inp.value = diff;
+					}
+					lq.innerHTML = newTotal;
+					found.Object.quantity = newTotal;
+					this.updatePushCargo(diff);
+				}
 			}
 		},
-		PushAddGlyph : function(){
-			var opt = Lib.getSelectedOption("tradePushGlyphName"),
+		PushAddGlyph : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
 				c = Dom.get("tradePushItems");
-			if(opt && c) {
-				var item = document.createElement("li"),
-					del = item.appendChild(document.createElement("div")),
-					content = item.appendChild(document.createElement("div"));
-				item.id = "tradeGlyph-" + opt.value;
-				if(Sel.query("#"+item.id, c).length == 0) {
+			if(li && c) {
+				var gId = li.Glyph.id,
+					id = "pushGlyph-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.glyphSize*-1);
-						item.innerHTML = ''; // work around IE crash
+						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {glyph_id:opt.value, type:"glyph"};
-					content.innerHTML = opt.innerHTML;
+					item.Object = {glyph_id:gId, type:"glyph"};
+					content.innerHTML = li.Glyph.type.titleCaps();
 					c.appendChild(item);
 					this.updatePushCargo(this.glyphSize);
 				}
 			}
 		},
-		PushAddPlan : function(){
-			var opt = Lib.getSelectedOption("tradePushPlanName"),
+		PushAddPlan : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
 				c = Dom.get("tradePushItems");
-			if(opt && c) {
-				var item = document.createElement("li"),
-					del = item.appendChild(document.createElement("div")),
-					content = item.appendChild(document.createElement("div"));
-				item.id = "tradePlan-" + opt.value;
-				if(Sel.query("#"+item.id, c).length == 0) {
+			if(li && c) {
+				var gId = li.Plan.id,
+					id = "pushPlan-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.planSize*-1);
-						item.innerHTML = ''; // work around IE crash
+						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {plan_id:opt.value, type:"plan"};
-					content.innerHTML = opt.innerHTML;
+					item.Object = {plan_id:gId, type:"plan"};
+					content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
 					c.appendChild(item);
 					this.updatePushCargo(this.planSize);
 				}
 			}
 		},
-		PushAddShip : function(){
-			var opt = Lib.getSelectedOption("tradePushShipName"),
+		PushAddShip : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
 				c = Dom.get("tradePushItems");
-			if(opt && c) {
-				var item = document.createElement("li"),
-					del = item.appendChild(document.createElement("div")),
-					content = item.appendChild(document.createElement("div"));
-				item.id = "tradeShip-" + opt.value;
-				if(Sel.query("#"+item.id, c).length == 0) {
+			if(li && c) {
+				var obj = li.Ship,
+					gId = obj.id,
+					id = "pushShip-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.shipSize*-1);
-						item.innerHTML = ''; // work around IE crash
+						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {ship_id:opt.value, type:"ship"};
-					content.innerHTML = opt.innerHTML;
+					item.Object = {ship_id:gId, type:"ship"};
+					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
 					c.appendChild(item);
 					this.updatePushCargo(this.shipSize);
 				}
 			}
 		},
-		PushAddPrisoner : function(){
-			var opt = Lib.getSelectedOption("tradePushPrisonerName"),
+		PushAddPrisoner : function(e, matchedEl, container){
+			var li = matchedEl.parentNode,
 				c = Dom.get("tradePushItems");
-			if(opt && c) {
-				var item = document.createElement("li"),
-					del = item.appendChild(document.createElement("div")),
-					content = item.appendChild(document.createElement("div"));
-				item.id = "tradePrisoner-" + opt.value;
-				if(Sel.query("#"+item.id, c).length == 0) {
+			if(li && c) {
+				var obj = li.Prisoner,
+					gId = obj.id,
+					id = "pushPrisoner-" + gId;
+				if(Sel.query("#"+id, c).length == 0) {
+					var item = document.createElement("li"),
+						del = item.appendChild(document.createElement("div")),
+						content = item.appendChild(document.createElement("div"));
+					item.id = id;
 					Dom.addClass(item, "tradeItem");
 					Dom.addClass(del, "tradeDelete");
 					Event.on(del, "click", function(){ 
 						this.updatePushCargo(this.spySize*-1);
-						item.innerHTML = ''; // work around IE crash
+						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {prisoner_id:opt.value, type:"prisoner"};
-					content.innerHTML = opt.innerHTML;
+					item.Object = {prisoner_id:gId, type:"prisoner"};
+					content.innerHTML = [obj.name, ' ', obj.level].join('');
 					c.appendChild(item);
 					this.updatePushCargo(this.spySize);
+				}
+			}
+		},
+		PushRemove : function(e, matchedEl, container){
+			var quantity = matchedEl.previousSibling.value*1,
+				li = matchedEl.parentNode.parentNode;
+			if(quantity) {
+				var newTotal = li.Object.quantity - quantity,
+					diff = quantity*-1,
+					lq = Sel.query(".quantity", li, true);
+				if(newTotal < 0) {
+					newTotal = 0;
+					diff = li.Object.quantity*-1;
+				}
+				
+				if(newTotal == 0) {
+					this.updatePushCargo(li.Object.quantity * -1);
+					Event.purgeElement(li);
+					li.parentNode.removeChild(li);
+				}
+				else {
+					lq.innerHTML = newTotal;
+					li.Object.quantity = newTotal;
+					this.updatePushCargo(diff);
 				}
 			}
 		},
@@ -1470,7 +1666,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				Lacuna.Pulser.Show();
 				this.service.push_items(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.Push.success");
 						this.rpcSuccess(o);
 						
 						for(var n=0; n<lis.length; n++) {
@@ -1479,7 +1674,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 								lis[n].parentNode.removeChild(lis[n]);
 							}
 						}
-						Dom.get("tradePushResourceQuantity").value = "";
+
 						Dom.get("tradePushCargo").innerHTML = "";
 						
 						if(hasResources) {
@@ -1508,6 +1703,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				});
 			}
 		}
+	
 	});
 	
 	Lacuna.buildings.Transporter = Transporter;
