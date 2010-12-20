@@ -1328,7 +1328,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					delete this.ships;
 					delete this.resources;
 					Dom.get("tradeAddAskingQuantity").value = "";
-					Dom.get("tradeAddCargo").innerHTML = "";
+					Dom.get("tradeAddCargo").innerHTML = "0";
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
@@ -1704,7 +1704,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 							}
 						}
 
-						Dom.get("tradePushCargo").innerHTML = "";
+						Dom.get("tradePushCargo").innerHTML = "0";
 						
 						if(hasResources) {
 							this.getStoredResources(true);

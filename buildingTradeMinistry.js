@@ -447,7 +447,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'		<div id="tradeAcceptVerifymessage"></div>',
 				'		<div id="tradeAcceptVerifycaptcha" style="margin:5px 0;"></div>',
 				'		<label for="tradeAcceptVerifyanswer">Answer:</label><input type="text" id="tradeAcceptVerifyanswer" />',
-				'	</div><hr />',
+				'	</div>',
 				'	<div id="tradeAcceptVerifyerror" class="alert" style="text-align:right;"></div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -1262,8 +1262,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					delete this.prisoners;
 					delete this.ships;
 					delete this.resources;
+					for(var i=0; i<lis.length; i++) {
+						if(lis[i].Object) {
+							Event.purgeElement(lis[i]);
+							lis[i].parentNode.removeChild(lis[i]);
+						}
+					}
 					Dom.get("tradeAddAskingQuantity").value = "";
-					Dom.get("tradeAddCargo").innerHTML = "";
+					Dom.get("tradeAddCargo").innerHTML = "0";
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
@@ -1676,14 +1682,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					success : function(o){
 						this.rpcSuccess(o);
 						
-						for(var n=0; n<lis.length; n++) {
-							if(lis[n].Object) {
-								Event.purgeElement(lis[n]);
-								lis[n].parentNode.removeChild(lis[n]);
+						for(var i=0; i<lis.length; i++) {
+							if(lis[i].Object) {
+								Event.purgeElement(lis[i]);
+								lis[i].parentNode.removeChild(lis[i]);
 							}
 						}
 
-						Dom.get("tradePushCargo").innerHTML = "";
+						Dom.get("tradePushCargo").innerHTML = "0";
 						
 						if(hasResources) {
 							this.getStoredResources(true);

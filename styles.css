@@ -1978,6 +1978,7 @@ ul.statsSubList, ul.statsSubList ul {
 .missionList li , .inlineList li {
 	list-style:square outside none;
 	font-size:85%;
+	float:none;
 }
 .mission {
 	border-bottom:1px solid #52acff;
