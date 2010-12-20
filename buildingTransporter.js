@@ -287,7 +287,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeEmpire">Empire</li>',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Essentia</li>',
+				'		<li class="tradeAsking">Cost</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAccept"></li>',
 				'	</ul>',
@@ -303,7 +303,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div class="myTrades">',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Essentia</li>',
+				'		<li class="tradeAsking">Cost</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAccept"></li>',
 				'	</ul>',
@@ -689,12 +689,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOfferedDate");
-					nLi.innerHTML = Lib.formatServerDateShortTime(trade.date_offered);
+					nLi.innerHTML = Lib.formatServerDateTimeShort(trade.date_offered);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAsking");
-					nLi.innerHTML = trade.ask;
+					nLi.innerHTML = [trade.ask,'<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />'].join('');
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -716,7 +716,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					var bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					Dom.addClass(bbtn, "reportAbuse");
-					bbtn.innerHTML = "Report";
+					bbtn.innerHTML = "Spam";
 					bbtn = nLi.appendChild(bbtn);
 					Event.on(bbtn, "click", this.AvailableReport, {Self:this,Trade:trade,Line:nUl}, true);
 					nUl.appendChild(nLi);
@@ -895,7 +895,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAsking");
-					nLi.innerHTML = trade.ask;
+					nLi.innerHTML = [trade.ask,'<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />'].join('');
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);

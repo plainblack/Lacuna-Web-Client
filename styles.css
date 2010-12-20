@@ -1529,7 +1529,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .embassyInfo .embassyAction {
 	width:100px;
 }
-.embassyStash legend {
+.embassyStash legend, .tradeStash legend {
 	color: #fff;
 	padding: 0 5px;
 	font-weight:bold;
@@ -1780,13 +1780,19 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	cursor:pointer;
 }
 .tradeInfo .tradeOfferedDate {
+	width:115px;
+}
+.myTrades .tradeInfo .tradeOfferedDate {
 	width:185px;
 }
 .tradeInfo .tradeAsking {
 	width:75px;
 }
+.tradeInfo .tradeAsking img {
+	vertical-align:top;
+}
 .tradeInfo .tradeOffer {
-	width:170px;
+	width:240px;
 }
 .myTrades .tradeInfo .tradeOffer {
 	width:400px;
