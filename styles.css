@@ -1783,7 +1783,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:185px;
 }
 .tradeInfo .tradeAsking {
-	width:170px;
+	width:75px;
 }
 .tradeInfo .tradeOffer {
 	width:170px;
@@ -1968,14 +1968,14 @@ ul.statsSubList, ul.statsSubList ul {
 	background-color:#ddd;
 }*/
 
-.missionList {
+.missionList , .inlineList {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	vertical-align:top;
 	margin-left:20px;
 }
-.missionList li {
+.missionList li , .inlineList li {
 	list-style:square outside none;
 	font-size:85%;
 }

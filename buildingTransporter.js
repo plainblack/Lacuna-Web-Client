@@ -290,8 +290,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<div><div id="tradeAvailableDetails"></div></div>',
 				'	<div id="tradeAvailablePaginator"></div>',
 				'</div>'].join('')});
-				
-			this.avail.subscribe("activeChange", this.getAvailable, this, true);
 			
 			return this.avail;
 		},
@@ -306,8 +304,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<div><div id="tradeMineDetails"></div></div>',
 				'	<div id="tradeMinePaginator"></div>',
 				'</div>'].join('')});
-				
-			this.mine.subscribe("activeChange", this.getMine, this, true);
 			
 			return this.mine;
 		},
@@ -325,7 +321,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			'		</div>',
 			'	</div>',
 			'	<div class="yui-u">',
-			'		<legend>To Add</legend>',
+			'		<legend>To Offer</legend>',
 			'		<div class="tradeContainers"><ul id="tradeAddItems"></ul></div>',
 			'	</div>',
 			'</div>',
@@ -595,7 +591,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
 					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
 				
-				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask_description, '</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer_description,'</span>.'].join('');
+				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
 				this.setCaptcha(captcha.url);
 				
 				this.show();
@@ -622,7 +618,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		getAvailable : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
-				this.service.view_available_trades({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+				this.service.view_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.view_available_trades.success");
 						Lacuna.Pulser.Hide();
@@ -687,12 +683,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAsking");
-					nLi.innerHTML = trade.ask_description;
+					nLi.innerHTML = trade.ask;
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOffer");
-					nLi.innerHTML = trade.offer_description;
+					nLi.innerHTML = Lib.formatInlineList(trade.offer);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -702,7 +698,16 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					bbtn.innerHTML = this.availableAcceptText;
 					bbtn = nLi.appendChild(bbtn);
 					Event.on(bbtn, "click", this.AvailableAccept, {Self:this,Trade:trade,Line:nUl}, true);
+					nUl.appendChild(nLi);
 
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"tradeAction");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					Dom.addClass(bbtn, "reportAbuse");
+					bbtn.innerHTML = "Report";
+					bbtn = nLi.appendChild(bbtn);
+					Event.on(bbtn, "click", this.AvailableReport, {Self:this,Trade:trade,Line:nUl}, true);
 					nUl.appendChild(nLi);
 								
 					details.appendChild(nUl);
@@ -756,7 +761,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		AvailableAcceptVerified : function() {
 			Lacuna.Pulser.Show();
-			this.Self.service.accept_trade({
+			this.Self.service.accept_from_market({
 				session_id:Game.GetSession(""),
 				building_id:this.Self.building.id,
 				trade_id:this.Trade.id,
@@ -788,6 +793,30 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				scope:this
 			});
 		},
+		AvailableReport : function() {
+			Lacuna.Pulser.Show();
+			this.Self.service.report_abuse({
+				session_id:Game.GetSession(""),
+				building_id:this.Self.building.id,
+				trade_id:this.Trade.id
+			}, {
+				success : function(o){
+					var btn = Sel.query(".reportAbuse",this.Line, true);
+					if(btn) {
+						Event.purgeElement(btn);
+						btn.parentNode.removeChild(btn);
+					}
+					this.Self.rpcSuccess(o);
+					Lacuna.Pulser.Hide();
+				},
+				failure : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcFailure(o);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
+		},
 		EmpireProfile : function(e, empire) {
 			Lacuna.Info.Empire.Load(empire.id);
 		},
@@ -796,7 +825,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		getMine : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
-				this.service.view_my_trades({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+				this.service.view_my_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.view_my_trades.success");
 						Lacuna.Pulser.Hide();
@@ -855,12 +884,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAsking");
-					nLi.innerHTML = trade.ask_description;
+					nLi.innerHTML = trade.ask;
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOffer");
-					nLi.innerHTML = trade.offer_description;
+					nLi.innerHTML = Lib.formatInlineList(trade.offer);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -916,9 +945,9 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.minePage.setState(newState);
 		},
 		MineWithdraw : function() {
-			if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask_description, ' and offering ', this.Trade.offer_description,'?'].join(''))) {
+			if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask, ' essentia and offering ', this.Trade.offer.join(', '),'?'].join(''))) {
 				Lacuna.Pulser.Show();
-				this.Self.service.withdraw_trade({
+				this.Self.service.withdraw_from_market({
 					session_id:Game.GetSession(""),
 					building_id:this.Self.building.id,
 					trade_id:this.Trade.id
