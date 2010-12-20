@@ -128,9 +128,8 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		},
 		
 		formatInlineList : function(stringArray) {
-			var offering = [];
-			offering[0] = '<ul class="inlineList">';
-			for(var n=0; n<trade.offer.length; n++) {
+			var offering = ['<ul class="inlineList">'];
+			for(var n=0; n<stringArray.length; n++) {
 				offering[offering.length] = '<li>';
 				offering[offering.length] = stringArray[n];
 				offering[offering.length] = '</li>';
