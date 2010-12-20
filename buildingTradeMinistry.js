@@ -236,7 +236,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeEmpire">Empire</li>',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Asking</li>',
+				'		<li class="tradeAsking">Essentia</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAction"></li>',
 				'		<li class="tradeAction"></li>',
@@ -251,7 +251,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div>',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Asking</li>',
+				'		<li class="tradeAsking">Essentia</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAction"></li>',
 				'	</ul>',
@@ -448,7 +448,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'		<div id="tradeAcceptVerifycaptcha" style="margin:5px 0;"></div>',
 				'		<label for="tradeAcceptVerifyanswer">Answer:</label><input type="text" id="tradeAcceptVerifyanswer" />',
 				'	</div><hr />',
-				'	<div style="margin:5px 0;padding:2px;"><label>Select Ship to retrieve trade:</label><select id="tradeAcceptVerifyShip"></select></div>',
 				'	<div id="tradeAcceptVerifyerror" class="alert" style="text-align:right;"></div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
@@ -468,7 +467,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			});
 
 			this.acceptVerify.renderEvent.subscribe(function(){
-				this.ship = Dom.get("tradeAcceptVerifyShip");
 				this.message = Dom.get("tradeAcceptVerifymessage");
 				this.captcha = Dom.get("tradeAcceptVerifycaptcha");
 				this.answer = Dom.get("tradeAcceptVerifyanswer");
@@ -485,50 +483,10 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
 					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
 				
-				this.getShips(oSelf);
 				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, ' essentia</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
 				this.setCaptcha(captcha.url);
 				
 				this.show();
-			};
-			this.acceptVerify.getShips = function(oSelf) {
-				Lacuna.Pulser.Show();
-				
-				oSelf.Self.service.get_trade_ships({
-					session_id: Game.GetSession(""),
-					building_id: oSelf.Self.building.id,
-					target_body_id: oSelf.Trade.body.id
-				},{
-					success : function(o){
-						this.rpcSuccess(o);
-						
-						var elm = Dom.get("tradeAcceptVerifyShip"),
-							opt = document.createElement("option"),
-							ships = o.result.ships,
-							nOpt;
-							
-						if(elm && ships) {
-							var selectedVal = Lib.getSelectedOptionValue(elm);
-							elm.options.length = 0;	
-							for(var x=0; x < ships.length; x++) {
-								var obj = ships[x];
-								nOpt = opt.cloneNode(false);
-								nOpt.value = obj.id;
-								nOpt.innerHTML = [obj.name, ' (', obj.type_human, ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, ')'].join('');
-								nOpt.selected = selectedVal == obj.id;
-								elm.appendChild(nOpt);
-							}
-						}
-						
-						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
-					scope:oSelf.Self
-				});
 			};
 			this.acceptVerify.setCaptcha = function(url) {
 				this.captcha.innerHTML = ['<img src="', url, '" alt="Loading captcha.  If it does not appear please cancel the trade and try again." />'].join('');
@@ -546,9 +504,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.acceptVerify.getAnswer = function() {
 				return this.answer.value;
 			};
-			this.acceptVerify.getSelectedShipId = function() {
-				return Lib.getSelectedOptionValue(this.ship);
-			};
+
 			this.acceptVerify.render();
 			Game.OverlayManager.register(this.acceptVerify);
 		},
@@ -883,7 +839,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.minePage.setState(newState);
 		},
 		MineWithdraw : function() {
-			if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask_description, ' and offering ', this.Trade.offer.join(', '),'?'].join(''))) {
+			if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask, ' essentia and offering ', this.Trade.offer.join(', '),'?'].join(''))) {
 				Lacuna.Pulser.Show();
 				this.Self.service.withdraw_from_market({
 					session_id:Game.GetSession(""),

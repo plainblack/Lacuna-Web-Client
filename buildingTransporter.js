@@ -283,7 +283,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeEmpire">Empire</li>',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Asking</li>',
+				'		<li class="tradeAsking">Essentia</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAccept"></li>',
 				'	</ul>',
@@ -297,7 +297,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div>',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
-				'		<li class="tradeAsking">Asking</li>',
+				'		<li class="tradeAsking">Essentia</li>',
 				'		<li class="tradeOffer">Offering</li>',
 				'		<li class="tradeAccept"></li>',
 				'	</ul>',
@@ -591,7 +591,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
 					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
 				
-				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
+				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> essentia and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
 				this.setCaptcha(captcha.url);
 				
 				this.show();
