@@ -279,7 +279,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			return this.push;
 		},
 		_getAvailTab : function() {
-			this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: ['<div>',
+			this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
+				'<div>',
+				'	<div style="border-bottom: 1px solid #52ACFF; padding-bottom: 5px; margin-bottom: 5px;"><label>Filter:</label><select id="tradeFilter"><option value="">All</option><option value="energy">Energy</option><option value="food">Food</option><option value="ore">Ore</option>',
+				'	<option value="water">Water</option><option value="waste">Waste</option><option value="glyph">Glyph</option><option value="prisoner">Prisoner</option>',
+				'	<option value="ship">Ship</option><option value="plan">Plan</option></select></div>',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeEmpire">Empire</li>',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
@@ -290,11 +294,13 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'	<div><div id="tradeAvailableDetails"></div></div>',
 				'	<div id="tradeAvailablePaginator"></div>',
 				'</div>'].join('')});
+				
+			Event.on("tradeFilter", "change", function(e) { this.getAvailable({newValue:true}); }, this, true);
 			
 			return this.avail;
 		},
 		_getMineTab : function() {
-			this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div>',
+			this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div class="myTrades">',
 				'	<ul class="tradeHeader tradeInfo clearafter">',
 				'		<li class="tradeOfferedDate">Offered Date</li>',
 				'		<li class="tradeAsking">Essentia</li>',
@@ -618,7 +624,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		getAvailable : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
-				this.service.view_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+				var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:1},
+					selVal = Lib.getSelectedOptionValue("tradeFilter");
+				if(selVal) {
+					data.filter = selVal;
+				}
+				this.service.view_market(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Trade.view_available_trades.success");
 						Lacuna.Pulser.Hide();

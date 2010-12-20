@@ -1788,6 +1788,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .tradeInfo .tradeOffer {
 	width:170px;
 }
+.myTrades .tradeInfo .tradeOffer {
+	width:400px;
+}
 .tradeInfo .tradeAction {
 	width:75px;
 }
