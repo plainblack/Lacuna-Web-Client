@@ -1338,6 +1338,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					delete this.prisoners;
 					delete this.ships;
 					delete this.resources;
+					for(var i=0; i<lis.length; i++) {
+						if(lis[i].Object) {
+							Event.purgeElement(lis[i]);
+							lis[i].parentNode.removeChild(lis[i]);
+						}
+					}
 					Dom.get("tradeAddAskingQuantity").value = "";
 					Dom.get("tradeAddCargo").innerHTML = "0";
 					this.fireEvent("onSelectTab", this.mineTabIndex);
