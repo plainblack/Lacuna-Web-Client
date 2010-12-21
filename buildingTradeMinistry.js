@@ -170,7 +170,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
 			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
-		_getPushTab : function() {			
+		_getPushTab : function() {
 			this.push = new YAHOO.widget.Tab({ label: "Push", content: [
 			'<div class="tradeStash yui-g">',
 			'	<div class="yui-u first">',
@@ -264,7 +264,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				'	<div><div id="tradeMineDetails"></div></div>',
 				'	<div id="tradeMinePaginator"></div>',
 				'</div>'].join('')});
-				
+			
 			return this.mine;
 		},
 		_getAddTab : function() {
@@ -319,7 +319,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getGlyphs.success");
 						this.rpcSuccess(o);
 						this.glyphs = o.result.glyphs;
 						this.glyphSize = o.result.cargo_space_used_each;
@@ -328,7 +327,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getGlyphs.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -345,7 +343,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getPlans.success");
 						this.rpcSuccess(o);
 						this.plans = o.result.plans;
 						this.planSize = o.result.cargo_space_used_each;
@@ -354,7 +351,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getPlans.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -371,7 +367,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getPrisoners.success");
 						this.rpcSuccess(o);
 						this.prisoners = o.result.prisoners;
 						this.spySize = o.result.cargo_space_used_each;
@@ -380,7 +375,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getPrisoners.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -397,7 +391,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getShips.success");
 						this.rpcSuccess(o);
 						this.ships = o.result.ships;
 						this.shipSize = o.result.cargo_space_used_each;
@@ -406,7 +399,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getShips.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -423,7 +415,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						building_id: this.building.id
 					},{
 					success : function(o){
-						YAHOO.log(o, "info", "Trade.getStoredResources.success");
 						this.rpcSuccess(o);
 						this.resources = o.result.resources;
 						this.fireEvent("onLoadResources");
@@ -431,7 +422,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.getStoredResources.failure");
 						
 						this.rpcFailure(o);
 					},
@@ -447,7 +437,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			
 			var panel = document.createElement("div");
 			panel.id = panelId;
-			panel.innerHTML = ['<div class="hd">Continue</div>',
+			panel.innerHTML = ['<div class="hd">Verify</div>',
 				'<div class="bd">',
 				'	<div style="margin:5px 0;padding:2px;">',
 				'		<div id="tradeAcceptVerifymessage"></div>',
@@ -489,7 +479,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
 					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
 				
-				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, ' essentia</span> and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
+				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> essentia and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
 				this.setCaptcha(captcha.url);
 				
 				this.show();

@@ -15,20 +15,21 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 	var Transporter = function(result){
 		Transporter.superclass.constructor.call(this, result);
-		
+
 		this.transport = result.transport;
+		this.service = Game.Services.Buildings.Transporter;
 		
 		this.availableAcceptText = "Accept For 1 Essentia";
 		this.addTradeText = "Add Trade For 1 Essentia";
 		this.pushTradeText = "Send For 2 Essentia";
 		
-		this.service = Game.Services.Buildings.Transporter;
 		
+		//defaults.  Values are updated to server numbers during get_* calls
 		this.shipSize = 50000;
 		this.planSize = 10000;
 		this.spySize = 350;
 		this.glyphSize = 100;
-
+		
 		this.createEvent("onLoadResources");
 		this.createEvent("onLoadGlyphs");
 		this.createEvent("onLoadPlans");
@@ -289,7 +290,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'		<li class="tradeOfferedDate">Offered Date</li>',
 				'		<li class="tradeAsking">Cost</li>',
 				'		<li class="tradeOffer">Offering</li>',
-				'		<li class="tradeAccept"></li>',
+				'		<li class="tradeAction"></li>',
+				'		<li class="tradeAction"></li>',
 				'	</ul>',
 				'	<div><div id="tradeAvailableDetails"></div></div>',
 				'	<div id="tradeAvailablePaginator"></div>',
@@ -305,7 +307,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				'		<li class="tradeOfferedDate">Offered Date</li>',
 				'		<li class="tradeAsking">Cost</li>',
 				'		<li class="tradeOffer">Offering</li>',
-				'		<li class="tradeAccept"></li>',
+				'		<li class="tradeAction"></li>',
 				'	</ul>',
 				'	<div><div id="tradeMineDetails"></div></div>',
 				'	<div id="tradeMinePaginator"></div>',
@@ -559,10 +561,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Verify</div>',
 				'<div class="bd">',
-				'	<div id="',panelId,'message"></div>',
-				'	<div id="',panelId,'captcha" style="margin:5px 0;"></div>',
-				'	<label for="',panelId,'answer">Answer:</label><input type="text" id="',panelId,'answer" />',
-				'	<div id="',panelId,'error" class="alert" style="text-align:right;"></div>',
+				'	<div style="margin:5px 0;padding:2px;">',
+				'		<div id="tradeAcceptVerifymessage"></div>',
+				'		<div id="tradeAcceptVerifycaptcha" style="margin:5px 0;"></div>',
+				'		<label for="tradeAcceptVerifyanswer">Answer:</label><input type="text" id="tradeAcceptVerifyanswer" />',
+				'	</div>',
+				'	<div id="tradeAcceptVerifyerror" class="alert" style="text-align:right;"></div>',
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			
@@ -581,10 +585,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			});
 
 			this.acceptVerify.renderEvent.subscribe(function(){
-				this.message = Dom.get(panelId+"message");
-				this.captcha = Dom.get(panelId+"captcha");
-				this.answer = Dom.get(panelId+"answer");
-				this.error = Dom.get(panelId+"error");
+				this.message = Dom.get("tradeAcceptVerifymessage");
+				this.captcha = Dom.get("tradeAcceptVerifycaptcha");
+				this.answer = Dom.get("tradeAcceptVerifyanswer");
+				this.error = Dom.get("tradeAcceptVerifyerror");
 			});
 			this.acceptVerify.hideEvent.subscribe(function(){
 				this.message.innerHTML = "";
@@ -618,6 +622,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.acceptVerify.getAnswer = function() {
 				return this.answer.value;
 			};
+
 			this.acceptVerify.render();
 			Game.OverlayManager.register(this.acceptVerify);
 		},
@@ -736,7 +741,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		AvailableHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
-			this.service.view_available_trades({
+			this.service.view_market({
 				session_id:Game.GetSession(),
 				building_id:this.building.id,
 				page_number:newState.page
@@ -831,6 +836,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		EmpireProfile : function(e, empire) {
 			Lacuna.Info.Empire.Load(empire.id);
 		},
+		
 		
 		//View Mine
 		getMine : function(e) {
@@ -928,7 +934,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		MineHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
-			this.service.view_my_trades({
+			this.service.view_my_market({
 				session_id:Game.GetSession(),
 				building_id:this.building.id,
 				page_number:newState.page
@@ -1175,6 +1181,9 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					found.Object.quantity = newTotal;
 					this.updateAddCargo(diff);
+					
+					var a = new Util.ColorAnim(lq, {color:{from:'#0f0',to:'#fff'}}, 1.5);
+					a.animate();
 				}
 			}
 		},
@@ -1301,6 +1310,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updateAddCargo(diff);
+					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
+					a.animate();
 				}
 			}
 		},
@@ -1547,6 +1558,9 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					found.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
+					
+					var a = new Util.ColorAnim(lq, {color:{from:'#0f0',to:'#fff'}}, 1.5);
+					a.animate();
 				}
 			}
 		},
@@ -1673,6 +1687,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
+					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
+					a.animate();
 				}
 			}
 		},
@@ -1714,10 +1730,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					success : function(o){
 						this.rpcSuccess(o);
 						
-						for(var n=0; n<lis.length; n++) {
-							if(lis[n].Object) {
-								Event.purgeElement(lis[n]);
-								lis[n].parentNode.removeChild(lis[n]);
+						for(var i=0; i<lis.length; i++) {
+							if(lis[i].Object) {
+								Event.purgeElement(lis[i]);
+								lis[i].parentNode.removeChild(lis[i]);
 							}
 						}
 
