@@ -619,11 +619,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		AvailableHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
-			this.service.view_market({
-				session_id:Game.GetSession(),
-				building_id:this.building.id,
-				page_number:newState.page
-			}, {
+			var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:newState.page},
+				selVal = Lib.getSelectedOptionValue("tradeFilter");
+			if(selVal) {
+				data.filter = selVal;
+			}
+			this.service.view_market(data, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.view_available_trades.success");
 					Lacuna.Pulser.Hide();

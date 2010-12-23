@@ -1200,7 +1200,7 @@ planet details
 	padding: 5px;
 }
 /*.planetDetailSpiesList li {
-	position:fixed;
+	position:relative;
 }*/
 .planetDetailSpyShipList li button {
 	float: right;
@@ -1222,9 +1222,7 @@ planet details
 	margin: 0 5px;
 }
 .planetDetailSpiesList li input {
-	margin: 8px 8px 0;
-	position:absolute;
-	right:0px;
+	float:right;
 }
 .planetDetailSpiesList strong,
 .planetDetailSpyShipList strong {

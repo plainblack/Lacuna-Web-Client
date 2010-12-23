@@ -598,7 +598,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					
 				nLi.Ship = ship;
 				
-				nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
+				nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
 				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 				'	</div>',
@@ -661,7 +661,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						nLi = li.cloneNode(false);
 						
 					nLi.Ship = ship;
-					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
+					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
 					'	<div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
 					'	</div>',
@@ -766,7 +766,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						nLi = li.cloneNode(false);
 						
 					nLi.Ship = ship;
-					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
+					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
 					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 					'	</div>',
@@ -1142,12 +1142,18 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			var li = document.createElement('li');
 			
 			for (var si = 0; si < spies.length; si++) {
-				var spy = spies[si];
-				var nLi = li.cloneNode(false);
+				var spy = spies[si],
+					nLi = li.cloneNode(false);
 				nLi.innerHTML = [
-					'<div class="description"><div><strong>', spy.name, '</strong></div><div>Level ', spy.level,'</div></div>',
-					'<div class="attributes"><span class="attribute">Offense: ', spy.offense_rating, '</span><span class="attribute">Defense: ',spy.defense_rating,'</span></div>',
-					maxSpies == 0 ? '' : '<input type="checkbox" name="spyId" value="'+spy.id+'" />'
+				'<div class="yui-gd" style="margin-bottom:2px;">',
+				'	<div class="yui-u first description">',
+				'		<div><strong>', spy.name, '</strong></div><div>Level ', spy.level,'</div>',
+				'	</div>',
+				'	<div class="yui-u">',
+				maxSpies == 0 ? '' : '<input type="checkbox" name="spyId" value="'+spy.id+'" />',
+				'		<div class="attributes"><span class="attribute">Offense: ', spy.offense_rating, '</span><span class="attribute">Defense: ',spy.defense_rating,'</span></div>',
+				'	</div>',
+				'</div>'
 				].join('');
 				list.appendChild(nLi);
 			}
@@ -1184,7 +1190,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var nLi = li.cloneNode(false);
 				nLi.shipId = ship.id;
 				nLi.innerHTML = [
-				'<div class="yui-gb" style="margin-bottom:2px;">',
+				'<div class="yui-gd" style="margin-bottom:2px;">',
 				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 				'	</div>',

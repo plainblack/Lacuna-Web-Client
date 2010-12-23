@@ -364,6 +364,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				nOpt, optGroup;
 				
 			if(elm) {
+				elm.options.length = 0;
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
 						var resource = Lib.ResourceTypes[r];
@@ -741,11 +742,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 		},
 		AvailableHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
-			this.service.view_market({
-				session_id:Game.GetSession(),
-				building_id:this.building.id,
-				page_number:newState.page
-			}, {
+			var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:newState.page},
+				selVal = Lib.getSelectedOptionValue("tradeFilter");
+			if(selVal) {
+				data.filter = selVal;
+			}
+			this.service.view_market(data, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.view_available_trades.success");
 					Lacuna.Pulser.Hide();
