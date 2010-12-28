@@ -170,6 +170,22 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			}
 			Transporter.superclass.destroy.call(this);
 		},
+        greenToWhite : function(El) {
+            var a = new Util.ColorAnim(El, {color:{from:'#0f0',to:'#fff'}}, 1.5);
+            a.animate();
+        },
+        redToWhite : function(El) {
+            var a = new Util.ColorAnim(El, {color:{from:'#f00',to:'#fff'}}, 1.5);
+            a.animate();
+        },
+        autoColor : function(El, Val) {
+            if(Val > 0) {
+                this.greenToWhite(El);
+            }
+            else if(Val < 0) {
+                this.redToWhite(El);
+            }
+        },
 		getChildTabs : function() {
 			this.mineTabIndex = 4; //array location plus 1 since Production tab is always first
 			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
@@ -1137,6 +1153,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			var c = Dom.get("tradeAddCargo"),
 				cv = c.innerHTML*1;
 			c.innerHTML = cv + byVal;
+            this.autoColor(c, byVal);
 		},
 		AddResource : function(e, matchedEl, container){
 			var quantity = matchedEl.previousSibling.value*1,
@@ -1166,6 +1183,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					content.innerHTML = ['<span class="tradeResourceName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
 					c.appendChild(item);
 					this.updateAddCargo(quantity);
+                    this.redToWhite(li);
 				}
 				else {
 					var found = exists[0],
@@ -1183,9 +1201,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					found.Object.quantity = newTotal;
 					this.updateAddCargo(diff);
-					
-					var a = new Util.ColorAnim(lq, {color:{from:'#0f0',to:'#fff'}}, 1.5);
-					a.animate();
+                    this.greenToWhite(lq);
 				}
 			}
 		},
@@ -1312,8 +1328,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updateAddCargo(diff);
-					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
-					a.animate();
+                    this.redToWhite(lq);
 				}
 			}
 		},
@@ -1514,6 +1529,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			var c = Dom.get("tradePushCargo"),
 				cv = c.innerHTML*1;
 			c.innerHTML = cv + byVal;
+            this.autoColor(c, byVal);
 		},
 		PushAddResource : function(e, matchedEl, container){
 			var quantity = matchedEl.previousSibling.value*1,
@@ -1560,9 +1576,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					found.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
-					
-					var a = new Util.ColorAnim(lq, {color:{from:'#0f0',to:'#fff'}}, 1.5);
-					a.animate();
+                    this.greenToWhite(lq);
 				}
 			}
 		},
@@ -1689,8 +1703,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
-					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
-					a.animate();
+                    this.redToWhite(lq);
 				}
 			}
 		},
