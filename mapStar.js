@@ -64,7 +64,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				underlay:false,
 				width:"500px",
 				zIndex:9995,
-				context:["header","tr","br", ["beforeShow", "windowResize"], [0,40]]
+				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
 			});
 			this.starDetails.addQueue = function(seconds, queueFn, elm, sc) {
 				this.queue = this.queue || [];
@@ -247,7 +247,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				underlay:false,
 				width:"500px",
 				zIndex:9995,
-				context:["header","tr","br", ["beforeShow", "windowResize"], [0,20]]
+				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
 			});
 			this.planetDetails.addQueue = function(seconds, queueFn, elm, sc) {
 				this.queue = this.queue || [];
