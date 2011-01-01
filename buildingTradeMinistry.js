@@ -190,7 +190,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'</div>',
 			'<ul style="margin-top:5px;">',
 			'	<li style=""><label>Total Cargo:</label><span id="tradePushCargo">0</span></li>',
-			'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"></select></li>',
+			'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"><option value="" selected>&nbsp;</option></select></li>',
 			'	<li style="margin-bottom:5px;"><label>With Ship:</label><select id="tradePushShip"></select></li>',
 			'	<li style="margin-bottom:5px;"><label>Stay at Colony:</label><input type="checkbox" id="tradePushStay" /></li>',
 			'	<li id="tradePushMessage" class="alert"></li>',
@@ -208,6 +208,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					planets = Game.EmpireData.planets,
 					cp = Game.GetCurrentPlanet(),
 					nOpt;
+                planets = Lib.planetarySort(planets);
 				for(var pId in planets) {
 					if(planets.hasOwnProperty(pId) && pId != cp.id){
 						nOpt = opt.cloneNode(false);
