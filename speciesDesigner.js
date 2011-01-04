@@ -237,42 +237,30 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				_highlight : Sel.query('.speciesHO_highlight', this.container, true),
 				// A method to update the status and update the highlight
 				updateHighlight : function () {
-				try{
 					var delta = this.maxVal - this.minVal;
 					Dom.setStyle(this._highlight,'left', (this.minVal - 5) + 'px');
 					Dom.setStyle(this._highlight,'width', Math.max(delta + 27,0) + 'px');
-				}catch(e){alert(e)}
 				},
 				getMinOrbit : function() {
-				try{
 					return Math.round((this.minVal - 14) / tickSize) + 1;
-				}catch(e){alert(e)}
 				},
 				getMaxOrbit : function() {
-				try{
 					return Math.round((this.maxVal + 14) / tickSize) + 1;
-				}catch(e){alert(e)}
 				},
 				setMinOrbit : function(orbit, skipAnim, force, silent) {
-				try{
 					var value = (orbit - 1) * tickSize + 14;
 					this.setMinValue(value, skipAnim, force, silent);
 					return orbit;
-				}catch(e){alert(e)}
 				},
 				setMaxOrbit : function(orbit, skipAnim, force, silent) {
-				try{
 					var value = (orbit - 1) * tickSize - 14;
 					this.setMaxValue(value, skipAnim, force, silent);
 					return orbit;
-				}catch(e){alert(e)}
 				},
 				setOrbits : function(minOrbit, maxOrbit, skipAnim, force, silent) {
-				try{
 					var min = (minOrbit - 1) * tickSize + 14;
 					var max = (maxOrbit - 1) * tickSize - 14;
 					this.setValues(min, max, skipAnim, force, silent);
-				}catch(e){alert(e)}
 				}
 			},true);
 			// Attach the highlight method to the slider's change event
@@ -281,10 +269,8 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 			slider.updateHighlight();
 
 			var updateUI = function () {
-				try{
 				from.innerHTML = this.getMinOrbit();
 				to.innerHTML = this.getMaxOrbit();
-				}catch(e){alert(e)}
 			};
 			slider.subscribe('ready', updateUI);
 			slider.subscribe('change', updateUI);

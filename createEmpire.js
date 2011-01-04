@@ -84,9 +84,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
 		
-		try{
 		this.initSpecies();
-		}catch(e){YAHOO.log(e);}
 	};
 	CreateEmpire.prototype = {
 		refreshCaptcha : function() {
