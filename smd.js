@@ -2480,6 +2480,21 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"string"}
 				},
+				"redefine_species_limits" : {
+					"description": "Defines the extra limits placed upon a user that want's to redefine their species.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"redefine_species" : {
+					"description": "Allows a user to spend essentia and redefine their species affinities, name, and description. This can only be used after the empire has been founded.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"params", "type":"object", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
 				"view_species_stats" : {
 					"description": "Returns a list of the stats associated with an empire's species as it was originally created.",
 					"parameters": [

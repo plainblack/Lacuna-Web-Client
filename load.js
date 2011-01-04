@@ -77,10 +77,16 @@
 		requires : ["container","game"]
 	});
 	loader.addModule({
+		name: "speciesDesigner",
+		type: "js",
+		fullpath: urlBuilder("speciesDesigner.js"),
+		requires : ["dragdrop","game","slider"]
+	});
+	loader.addModule({
 		name: "createSpecies",
 		type: "js",
 		fullpath: urlBuilder("createSpecies.js"),
-		requires : ["dragdrop","game","slider"]
+		requires : ["game","speciesDesigner"]
 	});
 	loader.addModule({
 		name: "createEmpire",
@@ -319,7 +325,7 @@
 		name: "profile",
 		type: "js",
 		fullpath: urlBuilder("profile.js"),
-		requires : ["container","game","tabview"]
+		requires : ["container","game","tabview","speciesDesigner"]
 	});
 	loader.addModule({
 		name: "stats",

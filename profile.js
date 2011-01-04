@@ -13,6 +13,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		Lib = Lacuna.Library;
 		
 	var Profile = function() {
+		this.createEvent("onRpc");
+		this.createEvent("onRpcFailed");
 		this.id = "profile";
 		
 		var container = document.createElement("div");
@@ -67,16 +69,40 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			//species tab
+			this.hasSpecies = false;
 			this.tabView.getTab(2).subscribe("activeChange", function(e) {
 				if(e.newValue && !this.hasSpecies) {
+					this.hasSpecies = true;
+					var requests = 0;
 					Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
 						success : function(o){
 							YAHOO.log(o, "info", "Profile.show.view_stats.success");
-							this.populateSpecies(o.result);
-							this.hasSpecies = true;
+							this.fireEvent('onRpc', o.result);
+							this.speciesStats = o.result.species;
+							requests++;
+							if (requests == 2) {
+								this.populateSpecies();
+							}
 						},
 						failure : function(o){
 							YAHOO.log(o, "error", "Profile.show.view_stats.failure");
+						},
+						timeout:Game.Timeout,
+						scope:this
+					});
+					Game.Services.Empire.redefine_species_limits({session_id:Game.GetSession("")},{
+						success : function(o){
+							YAHOO.log(o, "info", "Profile.redefine_species_limits.success");
+							this.fireEvent('onRpc', o.result);
+							this.speciesRedefineLimits = o.result;
+							requests++;
+							if (requests == 2) {
+								this.populateSpecies();
+							}
+						},
+						failure : function(o){
+							YAHOO.log(o, "error", "Profile.redefine_species_limits.failure");
+							this.fireEvent('onRpcFailed', o.result);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -88,6 +114,45 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		}, this, true);
 		this.Dialog.render();
 		Game.OverlayManager.register(this.Dialog);
+
+		this.speciesId = 'profileSpeciesRedefine';
+		var speciesContainer = document.createElement("div");
+		speciesContainer.id = this.speciesId;
+		Dom.addClass(speciesContainer, Lib.Styles.HIDDEN);
+		speciesContainer.innerHTML = [
+			'	<div class="hd">Redefine Species</div>',
+			'	<div class="bd">',
+			'		<form name="profileSpeciesRedefineForm">',
+			'			<div id="profileSpeciesDesigner"></div>',
+			'			<div id="profileSpeciesMessage" class="hidden"></div>',
+			'		</form>',
+			'	</div>',
+			'	<div class="ft"></div>'
+		].join('');
+		document.body.insertBefore(speciesContainer, document.body.firstChild);
+		this.SpeciesDialog = new YAHOO.widget.Dialog(this.speciesId, {
+			constraintoviewport:true,
+			postmethod:"none",
+			buttons:[
+				{ text:' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update', handler: { fn: this.redefineSpecies, scope:this }, isDefault:true },
+				{ text:"Cancel", handler: { fn: function() { this.hide() } } }
+			],
+			visible:false,
+			draggable:true,
+			effect:Game.GetContainerEffect(),
+			underlay:false,
+			modal:true,
+			close:true,
+			width:"735px",
+			zIndex:99999
+		});
+		this.SpeciesDialog.renderEvent.subscribe(function(){
+			this.SpeciesDesigner = new Lacuna.SpeciesDesigner();
+			this.SpeciesDesigner.render('profileSpeciesDesigner');
+			Dom.removeClass(this.speciesId, Lib.Styles.HIDDEN);
+		}, this, true);
+		this.SpeciesDialog.render();
+		Game.OverlayManager.register(this.SpeciesDialog);
 	};
 	Profile.prototype = {
 		_getHtml : function() {
@@ -339,11 +404,10 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 			this.Dialog.center();
 		},
-		populateSpecies : function(results) {
-			var stat = results.species,
-				frag = document.createDocumentFragment(),
+		populateSpecies : function() {
+			var frag = document.createDocumentFragment(),
 				li = document.createElement('li');
-			 
+			stat = this.speciesStats;
 			
 			var nLi = li.cloneNode(false);
 			nLi.innerHTML = [
@@ -444,11 +508,68 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				'<span>', stat.growth_affinity, '</span>'
 			].join('');
 			frag.appendChild(nLi);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi, 'profileSpeciesRedefineButton');
+			var redefineButton = document.createElement('button');
+			redefineButton.innerHTML = [
+				this.speciesRedefineLimits.essentia_cost,
+				' <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> Redefine Species',
+			].join('');
+			nLi.appendChild(redefineButton);
+			frag.appendChild(nLi);
+
+			Event.on(redefineButton, 'click', this.showSpeciesRedefine, this, true);
 			
 			this.species.innerHTML = "";
 			this.species.appendChild(frag);
+		},
+		showSpeciesRedefine : function(e) {
+			Event.stopEvent(e);
+			if (this.speciesRedefineLimits.can) {
+				this.Dialog.hide();
+				this.SpeciesDesigner.setSpeciesData(this.speciesStats);
+				if (this.SpeciesDesigner.needsExpert(this.speciesStats)) {
+					this.SpeciesDesigner.setExpert()
+				}
+				this.SpeciesDesigner.setSpeciesLocks(this.speciesRedefineLimits);
+				this.SpeciesDialog.getButtons()[0].innerHTML = this.speciesRedefineLimits.essentia_cost+
+				' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update',
+				this.SpeciesDialog.show();
+			}
+			else {
+				alert("Can't redefine species: " + this.speciesRedefineLimits.reason);
+			}
+		},
+		redefineSpecies : function() {
+			var data = this.SpeciesDesigner.getSpeciesData();
+			try {
+				if ( ! this.SpeciesDesigner.validateSpecies(data) ) {
+					return;
+				}
+			}
+			catch (e) {
+				alert(e);
+				return;
+			}
+			Lacuna.Pulser.Show();
+			Game.Services.Empire.redefine_species({session_id:Game.GetSession(""), params:data},{
+				success : function(o){
+					YAHOO.log(o, "info", "Profile.redefine_species.success");
+					Lacuna.Pulser.Hide();
+					this.hasSpecies = false;
+					this.SpeciesDialog.hide();
+					this.fireEvent('onRpc', o.result);
+				},
+				failure : function(o){
+					YAHOO.log(o, "error", "Profile.redefine_species.failure");
+					Lacuna.Pulser.Hide();
+					this.fireEvent('onRpcFailed', o.result);
+				},
+				timeout:Game.Timeout,
+				scope:this
+			});
 		}
-		
 	};
 	Lang.augmentProto(Profile, Util.EventProvider);
 			

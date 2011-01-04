@@ -170,7 +170,7 @@ body.yui-skin-sam .yui-panel hr {
 /*
 dialogs
 */
-#login label, #createEmpire label, #createSpecies label {
+#login label, #createEmpire label, .speciesCreate label {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
@@ -282,7 +282,7 @@ dialogs
 #createEmpire .empireAgreeCheck label {
 	width: auto;
 }
-#speciesAffinityTooltip {
+.speciesAffinityTooltip {
 	z-index:20000 !important;
 }
 
@@ -291,13 +291,16 @@ dialogs
 #createEmpire textarea { width:224px; }
 #createEmpire li { margin-bottom:3px; }
 
-#createSpecies input[type="text"] {
+.profileSpeciesRedefineButton {
+	text-align: center;
+}
+.speciesCreate input[type="text"] {
 	width:250px;
 }
-#createSpecies textarea {
+.speciesCreate textarea {
 	width:253px;
 }
-#createSpecies li label {
+.speciesCreate li label {
 	width:140px;
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
@@ -306,7 +309,7 @@ dialogs
 	padding-right:5px;
 	vertical-align:top;
 }
-#createSpecies .speciesAffinities li label {
+.speciesCreate .speciesAffinities li label {
 	vertical-align:middle;
 }
 /*
@@ -794,19 +797,19 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	top: 5px;
 }
 
-#speciesHO_min,
-#speciesHO_max {
+.speciesHO_min,
+.speciesHO_max {
 	display: inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	position: absolute;
 	top: 0px;
 }
-#speciesHO_min {
+.speciesHO_min {
 	left: -7px;
 }
 
-#speciesHO_max {
+.speciesHO_max {
 	left: 7px;
 }
 
@@ -819,7 +822,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	bottom: 2px;
 }
 
-#speciesHO_highlight {
+.speciesHO_highlight {
 	position: absolute;
 	background: green;
 	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
@@ -828,19 +831,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	height: 13px;
 	width: 188px;
 }
-#speciesHO_max_thumb,
-#speciesHO_min_thumb,
-#speciesConst_thumb,
-#speciesDecep_thumb,
-#speciesResearch_thumb,
-#speciesManagement_thumb,
-#speciesFarming_thumb,
-#speciesMining_thumb,
-#speciesScience_thumb,
-#speciesEnviro_thumb,
-#speciesPolitical_thumb,
-#speciesTrade_thumb,
-#speciesGrowth_thumb  {
+.speciesSliderThumb {
 	position: absolute;
 	cursor: default;
 	top: 8px;
@@ -851,7 +842,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	padding: 0 80px;
 }
 
-.speciesPointTotal {
+.speciesPointLine {
 	font-size: 150%;
 }
 .speciesPointsValid { color:#00e000; }

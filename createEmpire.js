@@ -86,7 +86,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 		
 		try{
 		this.initSpecies();
-		}catch(e){alert(e);}
+		}catch(e){YAHOO.log(e);}
 	};
 	CreateEmpire.prototype = {
 		refreshCaptcha : function() {
