@@ -166,22 +166,22 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			}
 			Trade.superclass.destroy.call(this);
 		},
-        greenToWhite : function(El) {
-            var a = new Util.ColorAnim(El, {color:{from:'#0f0',to:'#fff'}}, 1.5);
-            a.animate();
-        },
+		greenToWhite : function(El) {
+			var a = new Util.ColorAnim(El, {color:{from:'#0f0',to:'#fff'}}, 1.5);
+			a.animate();
+		},
         redToWhite : function(El) {
-            var a = new Util.ColorAnim(El, {color:{from:'#f00',to:'#fff'}}, 1.5);
-            a.animate();
-        },
-        autoColor : function(El, Val) {
-            if(Val > 0) {
-                this.greenToWhite(El);
-            }
-            else if(Val < 0) {
-                this.redToWhite(El);
-            }
-        },
+			var a = new Util.ColorAnim(El, {color:{from:'#f00',to:'#fff'}}, 1.5);
+			a.animate();
+		},
+		autoColor : function(El, Val) {
+			if(Val > 0) {
+				this.greenToWhite(El);
+			}
+			else if(Val < 0) {
+				this.redToWhite(El);
+			}
+		},
 		getChildTabs : function() {
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
 			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
@@ -1068,7 +1068,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			var c = Dom.get("tradeAddCargo"),
 				cv = c.innerHTML*1;
 			c.innerHTML = cv + byVal;
-            this.autoColor(c, byVal);
+			this.autoColor(c, byVal);
 		},
 		AddResource : function(e, matchedEl, container){
 			var quantity = matchedEl.previousSibling.value*1,
@@ -1242,7 +1242,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updateAddCargo(diff);
-                    this.redToWhite(lq);
+					this.redToWhite(lq);
 				}
 			}
 		},
@@ -1486,7 +1486,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			var c = Dom.get("tradePushCargo"),
 				cv = c.innerHTML*1;
 			c.innerHTML = cv + byVal;
-            this.autoColor(c, byVal);
+			this.autoColor(c, byVal);
 		},
 		PushAddResource : function(e, matchedEl, container){
 			var quantity = matchedEl.previousSibling.value*1,
@@ -1660,7 +1660,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
-                    this.redToWhite(lq);
+					this.redToWhite(lq);
 				}
 			}
 		},
