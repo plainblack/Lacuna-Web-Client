@@ -64,7 +64,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				underlay:false,
 				width:"500px",
 				zIndex:9995,
-				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
+				context:["header","tl","bl"]
 			});
 			this.starDetails.addQueue = function(seconds, queueFn, elm, sc) {
 				this.queue = this.queue || [];
