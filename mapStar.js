@@ -634,12 +634,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			panel.addTab(new YAHOO.widget.Tab({ label: "Incoming", contentEl:elm }));
 		},
 		ArrivesQueue : function(remaining, elLine){
+			var arrTime;
 			if(remaining <= 0) {
-				elLine.parentNode.removeChild(elLine);
+				arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
 			}
 			else {
-				Sel.query(".shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				arrTime = Lib.formatTime(Math.round(remaining));
 			}
+			Sel.query(".shipArrives",elLine,true).innerHTML = arrTime;
 		},
 		
 		PopulateShipsSendTab : function(panel) {
