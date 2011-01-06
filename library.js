@@ -168,16 +168,24 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return Util.Number.format(num,{thousandsSeparator:","});
 		},
 		parseServerDate : function(strDate) {
-			var pieces = strDate.split(' '), //[day, month, year, hr:min:sec, timez]
+			//"23 03 2010 01:20:11 +0000"
+			var pieces = strDate.split(' '), //[day month year hr:min:sec timez]
 				time = pieces[3].split(':');
 			//year, month, day, hours, minutes, seconds
-			var dt = new Date(pieces[2]*1,(pieces[1]*1)-1,pieces[0]*1,time[0]*1,time[1]*1,time[2]*1,0), //construct date
+			/*var dt = new Date(pieces[2]*1,(pieces[1]*1)-1,pieces[0]*1,time[0]*1,time[1]*1,time[2]*1,0), //construct date
 				msTime = dt.getTime(), //get dt in milliseconds
 				offset = dt.getTimezoneOffset() * 60000, //get locale offset in milliseconds
 				correctTime = msTime - offset, //subtract from UTC server time
 				cd = new Date(correctTime);
-			return cd;
-			//"23 03 2010 01:20:11 +0000"
+			return cd;*/
+			var dt = new Date();
+			dt.setUTCFullYear(pieces[2]*1);
+			dt.setUTCMonth((pieces[1]*1)-1);
+			dt.setUTCDate(pieces[0]*1);
+			dt.setUTCHours(time[0]*1);
+			dt.setUTCMinutes(time[1]*1);
+			dt.setUTCSeconds(time[2]*1);
+			return dt;
 		},
 		parseReason : function(reason, defReason) {
 			var output = "";
