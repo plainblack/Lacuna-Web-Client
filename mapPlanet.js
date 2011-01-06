@@ -237,11 +237,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.hideEvent.subscribe(function(){
 				this.buildingBuilder.resetDisplay(this);
 			}, this, true);
-			this.buildingBuilder.showEvent.subscribe(function() {
+			//this.buildingBuilder.showEvent.subscribe(function() {
 				//this.buildable = {};
 				//Dom.setStyle(this.menuView, 'display', 'block');
 				//Dom.setStyle(this.listView, 'display', 'none');
-			});
+			//});
 			this.buildingBuilder.clickBuildMenu = function (e, matchedEl, container) {
 				Event.preventDefault(e);
 				var frag = matchedEl.href.split("#")[1];

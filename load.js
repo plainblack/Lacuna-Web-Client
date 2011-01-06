@@ -36,7 +36,7 @@
 		combine: false
 	});
 	var urlBuilder = function(file) {
-		return host + file + '?3';
+		return host + file + '?4';
 	};
 /** END */
 
