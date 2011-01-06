@@ -171,12 +171,14 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			}
 		},
 		ShipyardQueue : function(remaining, elLine){
+			var compTime;
 			if(remaining <= 0) {
-				elLine.parentNode.removeChild(elLine);
+				compTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
 			}
 			else {
-				Sel.query("li.shipQueueEach",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				compTime = Lib.formatTime(Math.round(remaining));
 			}
+			Sel.query("li.shipQueueEach",elLine,true).innerHTML = compTime;
 		},
 		SubsidizeBuildQueue : function() {
 			Lacuna.Pulser.Show();

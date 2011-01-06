@@ -244,7 +244,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				var parentEl = details.parentNode,
 					li = document.createElement("li"),
 					now = new Date();
-				
+
 				Event.purgeElement(details);
 				details = parentEl.removeChild(details);
 				details.innerHTML = "";
@@ -317,12 +317,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.shipsPager.setState(newState);
 		},
 		SpacePortQueue : function(remaining, elLine){
+			var arrTime;
 			if(remaining <= 0) {
-				elLine.parentNode.removeChild(elLine);
+				arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
 			}
 			else {
-				Sel.query("span.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				arrTime = Lib.formatTime(Math.round(remaining));
 			}
+			Sel.query("span.shipArrives",elLine,true).innerHTML = arrTime;
 		},
 		
 		ViewPopulate : function() {
@@ -616,12 +618,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.foreignPager.setState(newState);
 		},
 		ForeignQueue : function(remaining, elLine){
+			var arrTime;
 			if(remaining <= 0) {
-				elLine.parentNode.removeChild(elLine);
+				arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
 			}
 			else {
-				Sel.query("li.shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				arrTime = Lib.formatTime(Math.round(remaining));
 			}
+			Sel.query("li.shipArrives",elLine,true).innerHTML = arrTime;
 		},
 		
 		EmpireProfile : function(e, empire) {
