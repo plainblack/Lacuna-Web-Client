@@ -61,7 +61,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				zIndex:9995,
 				context:["header","tl","bl"]
 			});
-			
 			this.buildingDetails.addQueue = function(seconds, queueFn, elm, sc) {
 				this.queue = this.queue || [];
 				//check if the queue is empty and store
@@ -98,6 +97,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.queue = [];
 			};
 			this.buildingDetails.isVisible = function() {
+				var size = Game.GetSize();
+				if(size.h <= 600) {
+					Dom.addClass(panel, 'small');
+				}
 				return this.cfg.getProperty("visible");
 			};
 			this.buildingDetails.resetDisplay = function(oSelf) {

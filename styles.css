@@ -19,7 +19,7 @@ body {
 	left: 0;
 	right: 0;
 	text-align:left;
-	min-width: 1050px;
+	/*min-width: 1050px;*/
 	/*min-height: 768px;*/
 	overflow: hidden;
 }
@@ -52,7 +52,7 @@ button, input[type="submit"], input[type="button"] {
 	height:55px;
 	position:fixed;
 	width: 100%;
-	min-width: 1050px;
+	/*min-width: 1050px;*/
 	background-color:#52acff;
 	font-family:impact, sans-serif;
 }
@@ -1230,6 +1230,12 @@ planet details
 	vertical-align:middle;
 	text-align:center;
 }
+
+.small {
+	zoom: 50%; 
+	-moz-transform: scale(0.5);
+}
+
 .buildingDetailsNum { 
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/

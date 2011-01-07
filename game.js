@@ -545,6 +545,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				height = document.documentElement.clientHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight;
 			return {w:width,h:height};
 		},
+		GetViewport : function() {
+			return {w:YAHOO.util.Dom.getViewportWidth(),h:YAHOO.util.Dom.getViewportHeight()};
+		},
 		Resize : function() {
 			if(Lacuna.MapStar.IsVisible()) {
 				Lacuna.MapStar.Resize();
