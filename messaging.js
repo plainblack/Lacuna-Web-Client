@@ -613,7 +613,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					"recipients" : ["John Stewart"]
 				},
 			*/
-				var dt = new Date(msg.date);
 				
 				Dom.setStyle(this.display, "visibility", "");
 				
