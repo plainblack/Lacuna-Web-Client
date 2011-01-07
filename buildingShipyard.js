@@ -55,7 +55,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				'	</div>',
 				'</div>'
 			].join('')});
-			
+
 			buildTab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getBuild();
@@ -63,12 +63,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			}, this, true);
 			
 			Event.on("shipBuildView", "change", this.ShipPopulate, this, true);
-					
+
 			this.buildTab = buildTab;
 			
 			return buildTab;
 		},
-		
 		getBuild : function() {
 			if(!this.ships) {
 				Lacuna.Pulser.Show();
@@ -121,7 +120,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				this.ShipyardDisplay();
 			}
 		},
-		
 		ShipyardDisplay : function() {
 			var bq = this.ship_build_queue,
 				div = Dom.get("shipsBuilding");
@@ -130,8 +128,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				var divParent = div.parentNode,
 					ul = document.createElement("ul"),
 					li = document.createElement("li"),
-					now = new Date();
-					
+					serverTime = Lib.parseServerDate(Game.ServerData.time);
+
 				this.resetQueue();
 				div = divParent.removeChild(div);
 				div.innerHTML = "";
@@ -145,7 +143,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						var bqo = bq.ships_building[i],
 							nUl = ul.cloneNode(false),
 							nLi = li.cloneNode(false),
-							ncs = (Lib.parseServerDate(bqo.date_completed).getTime() - now.getTime()) / 1000;
+							ncs = (Lib.parseServerDate(bqo.date_completed).getTime() - serverTime.getTime()) / 1000;
 						
 						nUl.Build = bqo;
 						

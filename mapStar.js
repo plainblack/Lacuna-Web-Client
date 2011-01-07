@@ -589,12 +589,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 			details = elm.appendChild(c).appendChild(details);
 			
-			var now = new Date();
+			var serverTime = Lib.parseServerDate(Game.ServerData.time);
 			
 			for(var i=0; i<ships.length; i++) {
 				var ship = ships[i],
 					nLi = li.cloneNode(false),
-					sec = (Lib.parseServerDate(ship.date_arrives).getTime() - now.getTime()) / 1000;
+					sec = (Lib.parseServerDate(ship.date_arrives).getTime() - serverTime.getTime()) / 1000;
 					
 				nLi.Ship = ship;
 				
