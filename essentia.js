@@ -292,7 +292,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			timers[el.id] = function() {
 				if(sDate) {
 					var tDate = Lib.parseServerDate(sDate),
-						cDate = new Date(),
+						cDate = Lib.parseServerDate(Game.ServerData.time),
 						tTime = tDate.getTime(),
 						cTime = cDate.getTime(),
 						diffTime = tTime - cTime;

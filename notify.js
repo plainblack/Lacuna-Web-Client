@@ -77,11 +77,16 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			else {
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
-						ms = Lib.parseServerDate(ship.date_arrives) - (new Date());
+						ms = Lib.parseServerDate(ship.date_arrives) - Lib.parseServerDate(Game.ServerData.time),
+						arrTime;
+					i++;
 					if(ms > 0) {
-						i++;
-						arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> ', Lib.formatMillisecondTime(ms),'</li>']);
+						arrTime = Lib.formatMillisecondTime(ms);
 					}
+					else {
+						arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
+					}
+					arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> ', arrTime,'</li>']);
 				}
 			}
 			

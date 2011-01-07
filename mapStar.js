@@ -589,12 +589,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 			details = elm.appendChild(c).appendChild(details);
 			
-			var now = new Date();
+			var serverTime = Lib.parseServerDate(Game.ServerData.time);
 			
 			for(var i=0; i<ships.length; i++) {
 				var ship = ships[i],
 					nLi = li.cloneNode(false),
-					sec = (Lib.parseServerDate(ship.date_arrives).getTime() - now.getTime()) / 1000;
+					sec = (Lib.parseServerDate(ship.date_arrives).getTime() - serverTime.getTime()) / 1000;
 					
 				nLi.Ship = ship;
 				
@@ -634,12 +634,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			panel.addTab(new YAHOO.widget.Tab({ label: "Incoming", contentEl:elm }));
 		},
 		ArrivesQueue : function(remaining, elLine){
+			var arrTime;
 			if(remaining <= 0) {
-				elLine.parentNode.removeChild(elLine);
+				arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
 			}
 			else {
-				Sel.query(".shipArrives",elLine,true).innerHTML = Lib.formatTime(Math.round(remaining));
+				arrTime = Lib.formatTime(Math.round(remaining));
 			}
+			Sel.query(".shipArrives",elLine,true).innerHTML = arrTime;
 		},
 		
 		PopulateShipsSendTab : function(panel) {
