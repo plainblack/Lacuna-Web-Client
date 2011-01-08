@@ -322,7 +322,7 @@ menu
 	width:315px;
 }
 #users, #planets {
-	font-size:16pt;
+	font-size:180%;
 	text-decoration:none;
 }
 #users {
@@ -388,7 +388,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	top: 26px;
 	left: 31px;
 	width: 21px;
-	font-size: 11pt;
+	font-size: 55%;
 	text-align: center;
 }
 #footer .menuItem {
@@ -939,7 +939,7 @@ Info dialogs for Empire and Alliance
 	text-align:center;
 }
 .planetMapTileActionLevel {
-	font-size:25pt;
+	font-size:190%;
 	font-weight:bold;
 	color:white;
 }
@@ -967,7 +967,7 @@ Info dialogs for Empire and Alliance
 	margin:-12px auto 0;
 }
 .tile50 .planetMapTileActionLevel {
-	font-size:15pt;
+	font-size:120%;
 }
 .tile50 .planetMapTileActionButton {
 	background: transparent url('assets/ui/s/build.png');
@@ -1674,13 +1674,13 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:200px;
 }
 .spyInfo .spyAvailableWhen {
-	width:170px;
+	width:270px;
 }
 .spyInfo .spyAssignment {
 	width:340px;
 }
 .spyInfo .spyAssignment select {
-	width:210px;
+	width:325px;
 	margin-right: 5px;
 }
 .spyInfo .spyAssignResult a {

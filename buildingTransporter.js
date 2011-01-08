@@ -1122,7 +1122,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						nLi = li.cloneNode(false);
 						nLi.Prisoner = obj;
 						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
-						nLi.selected = selectedVal == obj.id;
 						elm.appendChild(nLi);
 					}
 				}
@@ -1499,7 +1498,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						nLi = li.cloneNode(false);
 						nLi.Prisoner = obj;
 						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
-						nLi.selected = selectedVal == obj.id;
 						elm.appendChild(nLi);
 					}
 				}

@@ -600,7 +600,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				
 				nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
 				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
+				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:75px;height:75px;" />',
 				'	</div>',
 				'	<div class="yui-u" style="width:75%">',
 				'		<div class="buildingName">[',ship.type_human,'] ',ship.name,' - Arrives in: <span class="shipArrives">',Lib.formatTime(sec),'</span></div>',
@@ -614,6 +614,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<span>Hold Size:<span>',ship.hold_size,'</span></span>',
 				'			<span>Stealth:<span>',ship.stealth,'</span></span>',
 				'			<span>Combat:<span>',ship.combat,'</span></span>',
+				'		</div>',
+				'		<div><label style="font-weight:bold;">Payload:</label> ',
+				ship.payload.join(', '),
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');

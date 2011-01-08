@@ -999,7 +999,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						nLi = li.cloneNode(false);
 						nLi.Prisoner = obj;
 						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
-						nLi.selected = selectedVal == obj.id;
 						elm.appendChild(nLi);
 					}
 				}
@@ -1417,7 +1416,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						nLi = li.cloneNode(false);
 						nLi.Prisoner = obj;
 						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
-						nLi.selected = selectedVal == obj.id;
 						elm.appendChild(nLi);
 					}
 				}

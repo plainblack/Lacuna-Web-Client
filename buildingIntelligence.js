@@ -146,7 +146,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			var details = Dom.get("spiesDetails");
 			if(details) {
 				var spies = this.spies.spies,
-					assign = this.spies.possible_assignments,
 					div = document.createElement("div"),
 					ul = document.createElement("ul"),
 					li = document.createElement("li"),
@@ -159,6 +158,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						
 				for(var i=0; i<spies.length; i++) {
 					var spy = spies[i],
+						assign = spy.possible_assignments,
 						nDiv = div.cloneNode(false),
 						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false);
@@ -183,9 +183,11 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							opt = document.createElement("option"),
 							btn = document.createElement("button");
 						for(var a=0; a<assign.length; a++) {
+							var job = assign[a];
 							nOpt = opt.cloneNode(false);
-							nOpt.value = nOpt.innerHTML = assign[a];
-							if(spy.assignment == nOpt.value) { nOpt.selected = true; sel.currentAssign = nOpt.value; }
+							nOpt.value = job.task;
+							nOpt.innerHTML = [job.task, ' - Skill: ', job.skill.titleCaps('_',''), ' - Recovery: ', Lib.formatTime(job.recovery)].join('');
+							if(spy.assignment == job.task) { nOpt.selected = true; sel.currentAssign = job.task; }
 							sel.appendChild(nOpt);
 						}
 						Event.on(sel, "change", this.SpyAssignChange);
@@ -195,7 +197,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						btn.setAttribute("type", "button");
 						btn.innerHTML = "Assign";
 						Dom.setStyle(btn,"display","none");
-						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id}, true);
+						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nUl}, true);
 						sel.Button = nLi.appendChild(btn);
 						
 						var result = document.createElement("div");
@@ -206,7 +208,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						var result_link = document.createElement("a");
 						result_link.href = "#";
 						result_link.innerHTML = "View Report";
-						Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id}, true);
+						Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
 						Dom.setStyle(result_link, "display", "none");
 						sel.ResultLink = result.appendChild(result_link);
 						sel.Results = nLi.appendChild(result);
