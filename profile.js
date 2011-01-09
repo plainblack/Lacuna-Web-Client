@@ -156,6 +156,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 	};
 	Profile.prototype = {
 		_getHtml : function() {
+			var pHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			return [
 			'	<div class="hd">Profile</div>',
 			'	<div class="bd">',
@@ -194,11 +195,11 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'					</div>',
 			'					<div id="detailsMedals">',
 			'						<div>Select the medals to display on your profile :</div>',
-			'						<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
+			'						<ul id="profileMedalsList" style="height:', pHt, 'px;width:425px;overflow:auto;">',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsSpecies">',
-			'						<ul id="profileSpecies">',
+			'						<ul id="profileSpecies" style="height:', pHt, 'px;overflow:auto;">',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsNotes">',

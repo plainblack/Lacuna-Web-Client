@@ -24,7 +24,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 	Messaging.prototype = {
 		_buildPanel : function() {
 			var panelId = "messagingPanel";
-			
+			var size = Game.GetViewport();
+			var mHt = size.h >= 600 ? 400 : 200;
+			var dHt = size.h >= 600 ? 369 : 169;
+			var rows = size.h >= 600 ? 20 : 10;
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
@@ -42,7 +45,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
 				'			<div class="messagingCreatorC"><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
 				'			<div class="messagingCreatorC" id="messagingCreateBody">',
-				'				<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
+				'				<textarea id="messagingCreateText" cols="80" rows="',rows,'"></textarea>',
 				'			</div>',
 				'		</div>',
 				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
@@ -58,7 +61,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '                   <option value="Tutorial">Tutorial</option>',
                 '               </select>',
 				'			</div>',
-				'			<div class="yui-u first" style="height: 400px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
+				'			<div class="yui-u first" style="height:',mHt,'px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'				<div id="messagingPaginator">',
 				'				</div>',
 				'				<ul id="messagingList"></ul>',
@@ -69,7 +72,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<button id="messagingForward" type="button">Forward</button>',
 				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
 				'				</div>',
-				'				<div style="height:369px;overflow:auto;">',
+				'				<div style="height:',dHt,'px;overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
 				'					<div><label>From:</label><span id="messagingFrom"></span></div>',
 				'					<div><label>To:</label><span id="messagingTo"></span></div>',

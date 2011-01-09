@@ -22,7 +22,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 	MapPlanet.prototype = {
 		_buildDetailsPanel : function() {
 			var panelId = "buildingDetails";
-			
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Details</div>',
@@ -48,7 +47,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'</div>'].join('');
 			document.body.insertBefore(panel, document.body.firstChild);
 			Dom.addClass(panel, "nofooter");
-			
+
 			this.buildingDetails = new YAHOO.widget.Panel(panelId, {
 				constraintoviewport:true,
 				visible:false,
@@ -97,10 +96,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				this.queue = [];
 			};
 			this.buildingDetails.isVisible = function() {
-				var size = Game.GetSize();
-				if(size.h <= 600) {
-					Dom.addClass(panel, 'small');
-				}
 				return this.cfg.getProperty("visible");
 			};
 			this.buildingDetails.resetDisplay = function(oSelf) {
@@ -150,11 +145,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			var panel = document.createElement("div");
 			panel.id = panelId;
+			var bM = Game.GetViewport().h >= 600 ? 420 : 210;
 			panel.innerHTML = [
 				'<div class="hd">Builder</div>',
 				'	<div class="bd">',
 				'		<div>Building on X<span id="builderX"></span>:Y<span id="builderY"></span></div>',
-				'		<div id="builderMenu" class="yui-content" style="overflow:auto;height:420px;">',
+				'		<div id="builderMenu" class="yui-content" style="overflow:auto;height:', bM, 'px;">',
 				'			<ul>',
 				'				<li class="builderMenuGroup">',
 				'					<em>Resources</em>',
@@ -197,7 +193,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'				</div>',
 				'				<a href="#" id="builderBuildLink">Build</a><span id="builderFilterTrail"> &gt; <a href="#Resources" class="buildMenuLink">Resources</a> &gt; <span class="buildMenuLink">Ore</span></span>',
 				'			</div>',
-				'			<div class="yui-content" style="overflow:auto;height:420px;"><ul id="builderList"></ul></div>',
+				'			<div class="yui-content" style="overflow:auto;height:', bM, 'px;"><ul id="builderList"></ul></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -392,7 +388,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							}
 						}
 					}
-					
+
 					nLi.innerHTML = [
 					'<div class="yui-gb" style="padding-bottom: 2px; margin-bottom:2px; border-bottom: 1px solid #52acff;">',
 					'	<div class="yui-u first" style="width:200px;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center">',

@@ -171,11 +171,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getPushTab : function() {
+			var tHt = Game.GetViewport().h >= 600 ? 240 : 120;
 			this.push = new YAHOO.widget.Tab({ label: "Push", content: [
 			'<div class="tradeStash yui-g">',
 			'	<div class="yui-u first">',
 			'		<legend>On Planet</legend>',
-			'		<div class="tradeContainers">',
+			'		<div class="tradeContainers" style="height:',tHt,'px">',
 			'			<div><div id="tradePushResources" class="accordian">Resources</div><ul id="tradePushResourceName"></ul></div>',
 			'			<div><div id="tradePushGlpyhs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
 			'			<div><div id="tradePushPlans" class="accordian">Plans</div><ul id="tradePushPlanName" style="display:none;"></ul></div>',
@@ -185,7 +186,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	</div>',
 			'	<div class="yui-u">',
 			'		<legend>To Push</legend>',
-			'		<div class="tradeContainers"><ul id="tradePushItems"></ul></div>',
+			'		<div class="tradeContainers" style="height:',tHt,'px"><ul id="tradePushItems"></ul></div>',
 			'	</div>',
 			'</div>',
 			'<ul style="margin-top:5px;">',
@@ -268,11 +269,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			return this.mine;
 		},
 		_getAddTab : function() {
+			var tHt = Game.GetViewport().h >= 600 ? 240 : 120;
 			this.add = new YAHOO.widget.Tab({ label: "Add Trade", content: [
 			'<div class="tradeStash yui-g">',
 			'	<div class="yui-u first">',
 			'		<legend>On Planet</legend>',
-			'		<div class="tradeContainers">',
+			'		<div class="tradeContainers" style="height:',tHt,'px">',
 			'			<div><div id="tradeAddResources" class="accordian">Resources</div><ul id="tradeAddResourceName"></ul></div>',
 			'			<div><div id="tradeAddGlpyhs" class="accordian">Glyphs</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddPlans" class="accordian">Plans</div><ul id="tradeAddPlanName" style="display:none;"></ul></div>',
@@ -282,7 +284,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	</div>',
 			'	<div class="yui-u">',
 			'		<legend>To Offer</legend>',
-			'		<div class="tradeContainers"><ul id="tradeAddItems"></ul></div>',
+			'		<div class="tradeContainers" style="height:',tHt,'px"><ul id="tradeAddItems"></ul></div>',
 			'	</div>',
 			'</div>',
 			'<ul style="margin-top:5px;">',
@@ -610,8 +612,9 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
+					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
+					if(details.parentNode.clientHeight > dHt) {
+						Dom.setStyle(details.parentNode,"height",dHt + "px");
 						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					}
 				},10);
@@ -804,8 +807,9 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
+					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
+					if(details.parentNode.clientHeight > dHt) {
+						Dom.setStyle(details.parentNode,"height",dHt + "px");
 						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					}
 				},10);

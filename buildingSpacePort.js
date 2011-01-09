@@ -36,9 +36,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return [this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab()];
 		},
 		_getTravelTab : function() {
+			var sHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
 				'<div>',
-				'	<div style="height:300px;overflow:auto;margin-top:2px;">',
+				'	<div style="height:', sHt, 'px;overflow:auto;margin-top:2px;">',
 				'		<ul id="shipDetails">',
 				'		</ul>',
 				'	</div>',
@@ -65,6 +66,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.travelTab;
 		},
 		_getViewTab : function() {
+			var sHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			this.viewShipsTab = new YAHOO.widget.Tab({ label: "View", content: [
 				'<div>',
 				'	<div id="shipsCount"></div>',	
@@ -77,7 +79,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipHold">Stealth</li>',
 				'		<li class="shipHold">Combat</li>',
 				'	</ul>',
-				'	<div style="height:300px;overflow:auto;"><div id="shipsViewDetails"></div></div>',
+				'	<div style="height:', sHt, 'px;overflow:auto;"><div id="shipsViewDetails"></div></div>',
 				'	<div id="shipsViewPaginator"></div>',
 				'</div>'
 			].join('')});
@@ -579,8 +581,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
+					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
+					if(details.parentNode.clientHeight > dHt) {
+						Dom.setStyle(details.parentNode,"height",dHt + "px");
 						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					}
 				},10);

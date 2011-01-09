@@ -149,7 +149,7 @@ body.yui-skin-sam .container-close {
 	width:23px;
 }
 body.yui-skin-sam .yui-panel hr {
-	margin: 10px 0 12px;
+	margin: 10px 0 10px;
 	height: 0px;
 	border: none;
 	border-top: 1px solid rgb(82, 172, 255);
@@ -1165,7 +1165,6 @@ planet details
 }
 #planetDetailFetchSpies,
 #planetDetailSendSpies {
-	height: 240px;
 }
 .planetDetailSpiesMessage,
 .planetDetailSpyShipMessage {
@@ -1182,7 +1181,6 @@ planet details
 	clear: both;
 	border-top: 1px solid #52acff;
 	margin: 0 -6px 0 -7px;
-	height: 218px;
 }
 
 .planetDetailSpiesList li,
@@ -1229,11 +1227,6 @@ planet details
 	width:25px; /*30px;*/
 	vertical-align:middle;
 	text-align:center;
-}
-
-.small {
-	zoom: 50%; 
-	-moz-transform: scale(0.5);
 }
 
 .buildingDetailsNum { 
@@ -1462,7 +1455,6 @@ div.archaeologySlots {
 ul.archaeologyGlyphInfo {
 	position:relative;
 	width:510px;
-	height:175px;
 	border:1px solid #FFD800;
 	margin:0;
 	padding:0;
@@ -1530,7 +1522,6 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	font-weight:bold;
 }
 .embassyContainers, .tradeContainers {
-	height:200px;
 	overflow-y:auto;
 	border:1px solid #52ACFF;
 }
