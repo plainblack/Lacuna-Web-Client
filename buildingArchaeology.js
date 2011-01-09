@@ -286,6 +286,17 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						'</div>'
 					].join('');
 					
+					Event.on(nLi, "dblclick", function(ev) { 
+						var id = this.parentNode.id;
+						var destCont;
+						if (id == "archaeologyGlyphDetails") {
+							destCont = Dom.get("archaeologyGlyphCombine");
+						}
+						else if (id == "archaeologyGlyphCombine") {
+							destCont = Dom.get("archaeologyGlyphDetails");
+						}
+						destCont.appendChild(this);
+					});
 					nLi = details.appendChild(nLi);
 					nLi.DD = new DDList(nLi);
 				}
