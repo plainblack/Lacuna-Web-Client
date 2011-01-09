@@ -1455,6 +1455,7 @@ div.archaeologySlots {
 ul.archaeologyGlyphInfo {
 	position:relative;
 	width:510px;
+	height:175px;
 	border:1px solid #FFD800;
 	margin:0;
 	padding:0;

@@ -158,26 +158,28 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			return tab;
 		},
 		_getViewTab : function() {
-			var aHt = Game.GetViewport().h >= 600 ? 175 : 75;
 			var tab = new YAHOO.widget.Tab({ label: "View Glyphs", content: [
 				'<div class="clearafter">',
 				'	<div class="archaeologySlots">',
 				'		<label>Available Glyphs</label>',
-				'		<ul id="archaeologyGlyphDetails" class="archaeologyGlyphInfo" style="height:', aHt, 'px">',
+				'		<ul id="archaeologyGlyphDetails" class="archaeologyGlyphInfo">',
 				'		</ul>',
 				'	</div>',
 				'	<div class="archaeologySlots">',
 				'		<label>Combine Glyphs</label>',
-				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo" style="height:', aHt, 'px">',
+				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
 				'		</ul>',
-				'		<div><button type="button" id="archaeologyCombine">Combine</button></div>',
 				'	</div>',
-				'</div>'
+				'</div><button type="button" id="archaeologyCombine">Combine</button>',
 			].join('')});
 			tab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getGlyphs();
 				}
+				var Ht = Game.GetSize().h - 180;
+				var tC = Dom.get('archaeologyGlyphDetails').parentNode.parentNode;
+				Dom.setStyle(tC, 'height', Ht + 'px');
+				Dom.setStyle(tC, 'overflow-y', 'auto');
 			}, this, true);
 			
 			Event.onAvailable("archaeologyCombine", function(e){
@@ -273,10 +275,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					}
 				});
 
-				var size = Game.GetViewport();
-				var iH = size.h >= 600 ? 150 : 50;
-				var iW = size.h >=600 ? 119 : 39;
-				var cW = size.h >=600 ? 119 : 82;	
 				for(var i=0; i<glyphs.length; i++) {
 					var obj = glyphs[i],
 						nLi = li.cloneNode(false);
@@ -285,9 +283,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					Dom.addClass(nLi,"archaeologyGlyph");
 					
 					nLi.innerHTML = [
-						'<div class="archaeologyGlyphContainer" style="width:',cW,'px;">',
+						'<div class="archaeologyGlyphContainer">',
 						'	<div class="archaeologyGlyphHeader">',obj.type,'</div>',
-						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:',iW,'px;height:',iH,'px;" />', //"width:158px;height:200px;"
+						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:119px;height:150px;" />', //"width:158px;height:200px;"
 						'</div>'
 					].join('');
 					
