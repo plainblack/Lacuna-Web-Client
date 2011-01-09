@@ -126,8 +126,9 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(probeDetails.parentNode.clientHeight > 290) {
-						Dom.setStyle(probeDetails.parentNode,"height","290px");
+					var pHt = Game.GetViewport().h >= 600 ? 290 : 145;
+					if(probeDetails.parentNode.clientHeight > pHt) {
+						Dom.setStyle(probeDetails.parentNode,"height",pHt + "px");
 						Dom.setStyle(probeDetails.parentNode,"overflow-y","auto");
 					}
 				},10);

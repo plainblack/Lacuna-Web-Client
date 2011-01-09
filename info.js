@@ -170,6 +170,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 			}
 		},
 		_getHtml : function() {
+			var cHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			return [
 			'	<div class="hd">Empire</div>',
 			'	<div class="bd">',
@@ -193,11 +194,11 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 			'						<li><label>Last Login:</label><span id="',this.id,'Login"></span></li>',
 			'				</div>',
 			'				<div>',
-			'					<ul id="',this.id,'ColoniesList" style="height:300px;width:425px;overflow:auto;">',
+			'					<ul id="',this.id,'ColoniesList" style="height:',cHt,'px;width:425px;overflow:auto;">',
 			'					</ul>',
 			'				</div>',
 			'				<div>',
-			'					<ul id="',this.id,'MedalsList" style="height:300px;width:425px;overflow:auto;">',
+			'					<ul id="',this.id,'MedalsList" style="height:',cHt,'px;width:425px;overflow:auto;">',
 			'					</ul>',
 			'				</div>',
 			'				<div>',

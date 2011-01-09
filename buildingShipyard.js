@@ -23,10 +23,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			return [this._getQueueTab(), this._getBuildTab()];
 		},
 		_getQueueTab : function() {
+			var bHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			var div = document.createElement("div");
 			div.innerHTML = ['<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
 				'<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
-				'<div id="shipsBuilding"></div>'].join('');
+                '<div style="height:', bHt, 'px;overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
 			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
 		
 			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
@@ -41,7 +42,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			return queueTab;
 		},
 		_getBuildTab : function() {
-											
+			var bHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
 				'<div>',
 				'	<div class="clearafter" style="font-weight:bold;">',
@@ -49,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				'		<span style="float:right;"><select id="shipBuildView"><option value="All">All</option><option value="Now" selected="selected">Now</option><option value="Later">Later</option></select></span>',
 				'	</div>',
 				'	<div id="shipBuildMessage" class="error"></div>',
-				'	<div style="height:300px;overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
+				'	<div style="height:',bHt,'px;overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
 				'		<ul id="shipDetails">',
 				'		</ul>',
 				'	</div>',

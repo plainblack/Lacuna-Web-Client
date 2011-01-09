@@ -23,10 +23,11 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 			return [this._getMissionTab()];
 		},
 		_getMissionTab : function() {
+			var mHt = Game.GetViewport().h >= 600 ? 300 : 150;
 			this.missionTab = new YAHOO.widget.Tab({ label: "Missions", content: [
 				'<div>',
 				'	<div class="missionsHeader"></div>',
-				'	<div style="height:300px;overflow:auto;">',
+				'	<div style="height:', mHt, 'px;overflow:auto;">',
 				'		<ul id="missionsAvailable">',
 				'		</ul>',
 				'	</div>',

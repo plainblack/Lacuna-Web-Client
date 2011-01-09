@@ -27,10 +27,11 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 			return [this._getTab()];
 		},
 		_getTab : function() {
+			var lHt = Game.GetViewport >= 600 ? 300 : 150;
 			this.libraryTab = new YAHOO.widget.Tab({ label: "Species Library", content: [
 					'<div>',
 					'	<div><label for="lojFindEmpire">Lookup by Empire Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="lojFindEmpire" /></div></div>',
-					'	<ul id="lojDetails" style="margin-top:5px;">',
+					'	<ul id="lojDetails" style="margin-top:5px;height:',lHt,'px;overflow:auto;">',
 					'	</ul>',
 					'</div>'
 				].join('')});

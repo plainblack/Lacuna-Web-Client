@@ -79,6 +79,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 	};
 	Stats.prototype = {
 		_getHtml : function() {
+			var size = Game.GetViewport();
+			var oHt = size.h >= 600 ? 450 : 300;
+			var sHt = size.h >= 600 ? 440 : 290;
 			return [
 			'	<div class="hd">Universe Stats</div>',
 			'	<div class="bd">',			
@@ -91,7 +94,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'				<li><a href="#statsSpy"><em>Spies</em></a></li>',
 			'				<li><a href="#statsWeeklyMedal"><em>Weekly Medals</em></a></li>',
 			'			</ul>',
-			'			<div class="yui-content" style="height:450px; overflow:auto;">',
+			'			<div class="yui-content" style="height:',oHt,'px; overflow:auto;">',
 			'				<div id="statsGeneral">',
 			'					<div id="statsGeneralTabs" class="yui-navset">',
 			'						<ul class="yui-nav">',
@@ -103,7 +106,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'							<li><a href="#statsGeneralSpies"><em>Spies</em></a></li>',
 			'							<li><a href="#statsGeneralStars"><em>Stars</em></a></li>',
 			'						</ul>',
-			'						<div class="yui-content" style="height:440px; overflow:auto;">',
+			'						<div class="yui-content" style="height:',sHt,'px; overflow:auto;">',
 			'							<div id="statsGeneralBodies">',
 			'							</div>',
 			'							<div id="statsGeneralBuildings">',
@@ -452,10 +455,11 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 						pageNumber: "result.page_number"
 					} 
 				};
-				
+
+				var eHt = Game.GetViewport().h >= 600 ? 375 : 225;
 				this.EmpireTable = new YAHOO.widget.ScrollingDataTable("statsEmpireTable", this.EmpireColumns, this.EmpireData, {
 					width:"100%",
-					height:"375px",
+					height:eHt + "px",
 					initialRequest: Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "empire_rank",
@@ -698,9 +702,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					} 
 				};
 				
+				var aHt = Game.GetViewport().h >= 600 ? 375 : 225;
 				this.AllianceTable = new YAHOO.widget.ScrollingDataTable("statsAllianceTable", this.AllianceColumns, this.AllianceData, {
 					width:"100%",
-					height:"375px",
+					height:aHt + "px",
 					initialRequest: Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "alliance_rank",
@@ -921,9 +926,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							]
 				};
 				
+				var cHt = Game.GetViewport().h >= 600 ? 410 : 270;
 				this.ColonyTable = new YAHOO.widget.ScrollingDataTable("statsColonyTable", this.ColonyColumns, this.ColonyData, {
 					width:"100%",
-					height:"410px",
+					height:cHt + "px",
 					initialRequest: Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "colony_rank",
@@ -1046,9 +1052,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							]
 				};
 				
+				var sHt = Game.GetViewport().h >= 600 ? 410 : 270;
 				this.SpyTable = new YAHOO.widget.ScrollingDataTable("statsSpyTable", this.SpyColumns, this.SpyData, {
 					width:"100%",
-					height:"410px",
+					height:sHt + "px",
 					initialRequest: Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "spy_rank",
@@ -1168,9 +1175,10 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					} 
 				};
 				
+				var wHt = Game.GetViewport().h >= 600 ? 410 : 270;
 				this.WeeklyMedalTable = new YAHOO.widget.ScrollingDataTable("statsWeeklyMedalTable", this.WeeklyMedalColumns, this.WeeklyMedalData, {
 					width:"100%",
-					height:"410px",
+					height:wHt + "px",
 					initialRequest: Lang.JSON.stringify({
 							"id": YAHOO.rpc.Service._requestId++,
 							"method": "weekly_medal_winners",
