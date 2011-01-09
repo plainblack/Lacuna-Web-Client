@@ -171,12 +171,11 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getPushTab : function() {
-			var tHt = Game.GetViewport().h >= 600 ? 240 : 120;
 			this.push = new YAHOO.widget.Tab({ label: "Push", content: [
-			'<div class="tradeStash yui-g">',
+			'<div id="pHt"><div class="tradeStash yui-g">',
 			'	<div class="yui-u first">',
 			'		<legend>On Planet</legend>',
-			'		<div class="tradeContainers" style="height:',tHt,'px">',
+			'		<div class="tradeContainers">',
 			'			<div><div id="tradePushResources" class="accordian">Resources</div><ul id="tradePushResourceName"></ul></div>',
 			'			<div><div id="tradePushGlpyhs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
 			'			<div><div id="tradePushPlans" class="accordian">Plans</div><ul id="tradePushPlanName" style="display:none;"></ul></div>',
@@ -186,7 +185,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	</div>',
 			'	<div class="yui-u">',
 			'		<legend>To Push</legend>',
-			'		<div class="tradeContainers" style="height:',tHt,'px"><ul id="tradePushItems"></ul></div>',
+			'		<div class="tradeContainers"><ul id="tradePushItems"></ul></div>',
 			'	</div>',
 			'</div>',
 			'<ul style="margin-top:5px;">',
@@ -195,8 +194,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	<li style="margin-bottom:5px;"><label>With Ship:</label><select id="tradePushShip"></select></li>',
 			'	<li style="margin-bottom:5px;"><label>Stay at Colony:</label><input type="checkbox" id="tradePushStay" /></li>',
 			'	<li id="tradePushMessage" class="alert"></li>',
-			'	<li><button id="tradePushSend">',this.pushTradeText,'</button></li>',
-			'</ul>'].join('')});
+			'</ul></div><button id="tradePushSend">',this.pushTradeText,'</button>'].join('')});
 
 			this.subscribe("onLoadResources", this.populatePushResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populatePushGlyphName, this, true);
@@ -269,12 +267,11 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			return this.mine;
 		},
 		_getAddTab : function() {
-			var tHt = Game.GetViewport().h >= 600 ? 240 : 120;
 			this.add = new YAHOO.widget.Tab({ label: "Add Trade", content: [
-			'<div class="tradeStash yui-g">',
+			'<div id="aHt"><div class="tradeStash yui-g">',
 			'	<div class="yui-u first">',
 			'		<legend>On Planet</legend>',
-			'		<div class="tradeContainers" style="height:',tHt,'px">',
+			'		<div class="tradeContainers">',
 			'			<div><div id="tradeAddResources" class="accordian">Resources</div><ul id="tradeAddResourceName"></ul></div>',
 			'			<div><div id="tradeAddGlpyhs" class="accordian">Glyphs</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddPlans" class="accordian">Plans</div><ul id="tradeAddPlanName" style="display:none;"></ul></div>',
@@ -284,7 +281,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	</div>',
 			'	<div class="yui-u">',
 			'		<legend>To Offer</legend>',
-			'		<div class="tradeContainers" style="height:',tHt,'px"><ul id="tradeAddItems"></ul></div>',
+			'		<div class="tradeContainers"><ul id="tradeAddItems"></ul></div>',
 			'	</div>',
 			'</div>',
 			'<ul style="margin-top:5px;">',
@@ -292,8 +289,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'	<li style="margin: 5px 0;"><label style="font-weight:bold">Asking Essentia:</label><input type="text" id="tradeAddAskingQuantity" /></li>',
 			'	<li style="margin-bottom:5px;"><label>With Ship:</label><select id="tradeAddShip"></select></li>',
 			'	<li id="tradeAddMessage" class="alert"></li>',
-			'	<li><button id="tradeAdd">',this.addTradeText,'</button></li>',
-			'</ul>'].join('')});
+			'</ul></div><button id="tradeAdd">',this.addTradeText,'</button>'].join('')});
 			
 			this.subscribe("onLoadResources", this.populateAddResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populateAddGlyphName, this, true);
@@ -609,14 +605,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					details.appendChild(nUl);
 					
 				}
-				
 				//wait for tab to display first
 				setTimeout(function() {
-					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-					if(details.parentNode.clientHeight > dHt) {
-						Dom.setStyle(details.parentNode,"height",dHt + "px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 240;
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -766,7 +760,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					
 				Event.purgeElement(details);
 				details.innerHTML = "";
-								
+
 				for(var i=0; i<trades.length; i++) {
 					var trade = trades[i],
 						nUl = ul.cloneNode(false),
@@ -804,14 +798,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					details.appendChild(nUl);
 					
 				}
-				
 				//wait for tab to display first
 				setTimeout(function() {
-					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-					if(details.parentNode.clientHeight > dHt) {
-						Dom.setStyle(details.parentNode,"height",dHt + "px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 185;
+					var tC = elm.parentNode.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -907,6 +899,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					}
 				}
 			}
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
+				var aHt = Dom.get('aHt');
+				Dom.setStyle(aHt,"height",Ht + "px");
+				Dom.setStyle(aHt,"overflow-y","auto");
+			},10);
 		},
 		populateAddGlyphName : function() {
 			var elm = Dom.get("tradeAddGlyphName"),
@@ -1324,6 +1323,13 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					}
 				}
 			}
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
+				var pHt = Dom.get('pHt');
+				Dom.setStyle(pHt,"height",Ht + "px");
+				Dom.setStyle(pHt,"overflow-y","auto");
+			},10);
 		},
 		populatePushGlyphName : function() {
 			var elm = Dom.get("tradePushGlyphName"),
