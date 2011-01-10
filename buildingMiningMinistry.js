@@ -268,10 +268,10 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 280) {
-						Dom.setStyle(details.parentNode,"height","280px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 210;
+					if(Ht > 280) { Ht = 280; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -397,10 +397,10 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 175;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},

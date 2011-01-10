@@ -169,14 +169,18 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				'		<label>Combine Glyphs</label>',
 				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
 				'		</ul>',
-				'		<div><button type="button" id="archaeologyCombine">Combine</button></div>',
 				'	</div>',
-				'</div>'
+				'</div><button type="button" id="archaeologyCombine">Combine</button>',
 			].join('')});
 			tab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getGlyphs();
 				}
+				var Ht = Game.GetSize().h - 180;
+				if(Ht > 442) { Ht = 442; }
+				var tC = Dom.get('archaeologyGlyphDetails').parentNode.parentNode;
+				Dom.setStyle(tC, 'height', Ht + 'px');
+				Dom.setStyle(tC, 'overflow-y', 'auto');
 			}, this, true);
 			
 			Event.onAvailable("archaeologyCombine", function(e){

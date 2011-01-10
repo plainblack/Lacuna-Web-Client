@@ -38,7 +38,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
 				'<div>',
-				'	<div style="height:300px;overflow:auto;margin-top:2px;">',
+				'	<div style="overflow:auto;margin-top:2px;">',
 				'		<ul id="shipDetails">',
 				'		</ul>',
 				'	</div>',
@@ -77,7 +77,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'		<li class="shipHold">Stealth</li>',
 				'		<li class="shipHold">Combat</li>',
 				'	</ul>',
-				'	<div style="height:300px;overflow:auto;"><div id="shipsViewDetails"></div></div>',
+				'	<div style="overflow:auto;"><div id="shipsViewDetails"></div></div>',
 				'	<div id="shipsViewPaginator"></div>',
 				'</div>'
 			].join('')});
@@ -297,6 +297,15 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
 				//add child back in
 				parentEl.appendChild(details);
+
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 170;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
 			}
 		},
 		ShipHandlePagination : function(newState) {
@@ -415,6 +424,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					details.appendChild(nUl);
 					
 				}
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 220;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
 			}
 		},
 		ViewHandlePagination : function(newState) {
@@ -542,7 +559,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				details.innerHTML = "";
 				
 				var serverTime = Lib.parseServerDate(Game.ServerData.time);
-				
+
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
 						nUl = ul.cloneNode(false),
@@ -593,10 +610,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 180;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
 				},10);
 			}
 		},

@@ -145,7 +145,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 		_buildPlanetDetailsPanel : function() {
 			var panelId = "planetDetails";
-			
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Details</div>',
@@ -203,10 +202,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'				<li class="alert" id="planetDetailRenameMessage"></li>',
 				'				<li><button type="button" id="planetDetailRenameSubmit">Rename</button></li>',
 				'			</ul></div>',
-				'			<div id="planetDetailSendSpies" style="height: 240px">',
+				'			<div id="planetDetailSendSpies">',
 				'				<div class="planetDetailSelectSpies">',
 				'					<div class="planetDetailSpiesMessage"></div><button>Send</button>',
-				'					<ul class="planetDetailSpiesList">',
+				'					<ul id="sHt" class="planetDetailSpiesList">',
 				'					</ul>',
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
@@ -216,10 +215,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'					<ul class="planetDetailSpyShipList"></ul>',
 				'				</div>',
 				'			</div>',
-				'			<div id="planetDetailFetchSpies" style="height: 240px">',
+				'			<div id="planetDetailFetchSpies">',
 				'				<div class="planetDetailSelectSpies">',
 				'					<div class="planetDetailSpiesMessage"></div><button>Fetch</button>',
-				'					<ul class="planetDetailSpiesList"></ul>',
+				'					<ul id="fHt" class="planetDetailSpiesList"></ul>',
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
 				'					<div class="planetDetailSpyShipHeader">',
@@ -628,10 +627,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						
 			//wait for tab to display first
 			setTimeout(function() {
-				if(details.parentNode.clientHeight > 240) {
-					Dom.setStyle(details.parentNode,"height","240px");
-					Dom.setStyle(details.parentNode,"overflow-y","auto");
-				}
+				var Ht = Game.GetSize().h - 240;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(details.parentNode,"height",Ht + "px");
+				Dom.setStyle(details.parentNode,"overflow-y","auto");
 			},10);
 			
 			panel.addTab(new YAHOO.widget.Tab({ label: "Incoming", contentEl:elm }));
@@ -699,10 +698,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							
 			//wait for tab to display first
 			setTimeout(function() {
-				if(detailsParent.clientHeight > 240) {
-					Dom.setStyle(detailsParent,"height","240px");
-					Dom.setStyle(detailsParent,"overflow-y","auto");
-				}
+				var Ht = Game.GetSize().h - 240;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(detailsParent,"height",Ht + "px");
+				Dom.setStyle(detailsParent,"overflow-y","auto");
 			},10);
 		},
 		ShipSend : function() {
@@ -797,10 +796,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			//wait for tab to display first
 			setTimeout(function() {
-				if(detailsParent.clientHeight > 240) {
-					Dom.setStyle(detailsParent,"height","240px");
-					Dom.setStyle(detailsParent,"overflow-y","auto");
-				}
+				var Ht = Game.GetSize().h - 240;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(detailsParent,"height",Ht + "px");
+				Dom.setStyle(detailsParent,"overflow-y","auto");
 			},10);
 			
 		},
@@ -843,10 +842,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			//wait for tab to display first
 			setTimeout(function() {
-				if(details.parentNode.clientHeight > 240) {
-					Dom.setStyle(details.parentNode,"height","240px");
-					Dom.setStyle(details.parentNode,"overflow-y","auto");
-				}
+				var Ht = Game.GetSize().h - 240;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(details.parentNode,"height",Ht + "px");
+				Dom.setStyle(details.parentNode,"overflow-y","auto");
 			},10);
 			
 			panel.addTab(new YAHOO.widget.Tab({ label: "Mining", contentEl:elm }));
@@ -1163,6 +1162,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				list.appendChild(nLi);
 			}
 			
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 260;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(Dom.get('sHt'),'height',Ht + 'px');
+				Dom.setStyle(Dom.get('fHt'),'height',Ht + 'px');
+			},10);
 		},
 		MoveSpies : function(e, tab) {
 			Event.stopEvent(e);
