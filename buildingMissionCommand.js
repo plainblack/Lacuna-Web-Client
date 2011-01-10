@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 			this.missionTab = new YAHOO.widget.Tab({ label: "Missions", content: [
 				'<div>',
 				'	<div class="missionsHeader"></div>',
-				'	<div style="height:300px;overflow:auto;">',
+				'	<div id="missionsHt" style="overflow:auto;">',
 				'		<ul id="missionsAvailable">',
 				'		</ul>',
 				'	</div>',
@@ -35,6 +35,9 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 			this.missionTab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getMissions();
+					var mHt = Game.GetSize().h - 150;
+					if(mHt > 300) { mHt = 300; }
+					Dom.setStyle(Dom.get('missionsHt'), 'height', mHt + 'px');
 				}
 			}, this, true);
 			return this.missionTab;

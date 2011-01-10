@@ -149,7 +149,7 @@ body.yui-skin-sam .container-close {
 	width:23px;
 }
 body.yui-skin-sam .yui-panel hr {
-	margin: 10px 0 12px;
+	margin: 10px 0 10px;
 	height: 0px;
 	border: none;
 	border-top: 1px solid rgb(82, 172, 255);
@@ -1183,7 +1183,6 @@ planet details
 }
 #planetDetailFetchSpies,
 #planetDetailSendSpies {
-	height: 240px;
 }
 .planetDetailSpiesMessage,
 .planetDetailSpyShipMessage {
@@ -1200,7 +1199,6 @@ planet details
 	clear: both;
 	border-top: 1px solid #52acff;
 	margin: 0 -6px 0 -7px;
-	height: 218px;
 }
 
 .planetDetailSpiesList li,
@@ -1248,6 +1246,7 @@ planet details
 	vertical-align:middle;
 	text-align:center;
 }
+
 .buildingDetailsNum { 
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
@@ -1580,7 +1579,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:320px;
 }
 .tradeContainers .tradeResourceName {
-	width:240px;
+	width:230px;
 }
 
 .accordian {

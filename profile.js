@@ -175,7 +175,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'				</ul>',
 			'				<div class="yui-content" style="padding:0;">',
 			'					<div id="detailsPlayer">',
-			'						<ul id="profilePlayer">',
+			'						<ul id="profilePlayer" style="overflow:auto">',
 			'							<li><label>Name:<input id="profilePlayerName" /></label></li>',
 			'							<li><label title="Your email is used to recover your password if it is lost, and to send you any unused essentia if you cancel your account.">Email:<input id="profileEmail" /></label></li>',
 			'							<li><label>City:<input id="profileCity" /></label></li>',
@@ -194,11 +194,11 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'					</div>',
 			'					<div id="detailsMedals">',
 			'						<div>Select the medals to display on your profile :</div>',
-			'						<ul id="profileMedalsList" style="height:300px;width:425px;overflow:auto;">',
+			'						<ul id="profileMedalsList" style="overflow:auto;">',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsSpecies">',
-			'						<ul id="profileSpecies">',
+			'						<ul id="profileSpecies" style="overflow:auto;">',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsNotes">',
@@ -401,6 +401,11 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 			this.medals.innerHTML = "";
 			this.medals.appendChild(frag);
+
+			var Ht = Game.GetSize().h - 195;
+			Dom.setStyle(Dom.get('profilePlayer'), 'height', Ht + 'px')
+			Dom.setStyle(this.notes, 'height', Ht + 'px')
+			Dom.setStyle(this.medals, 'height', Ht + 'px')
 			
 			this.Dialog.center();
 		},
@@ -523,6 +528,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 			this.species.innerHTML = "";
 			this.species.appendChild(frag);
+			var Ht = Game.GetSize().h - 180;
+			if(Ht > 300) { Ht = 300; }
+			Dom.setStyle(this.species, 'height', Ht + 'px')
 		},
 		showSpeciesRedefine : function(e) {
 			Event.stopEvent(e);

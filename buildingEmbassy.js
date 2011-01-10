@@ -51,7 +51,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				'		<li><label>Founded: </label>', Lib.formatServerDate(this.alliance.date_created),'</li>',
 				'		<li><label>Description: </label><input type="text" id="embassyAllianceDesc" value="', this.alliance.description,'" size="50" /></li>',
 				'		<li><label>Forums: </label><input type="text" id="embassyAllianceForums" value="', this.alliance.forum_uri,'" size="50" /></li>',
-				'		<li><label>Announcements: </label><textarea id="embassyAllianceAnnoucements" rows="5" cols="80">', this.alliance.announcements,'</textarea></li>',
+				'		<li><label>Announcements: </label><textarea id="embassyAllianceAnnoucements" rows="2" cols="80">', this.alliance.announcements,'</textarea></li>',
 				'		<li id="embassyAllianceMessage"></li>',
 				'		<li><button type="button" id="embassyAllianceUpdate">Save</button></li>',
 				'	</ul>',
@@ -70,7 +70,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				'		<li><label>Announcements: </label>', this.alliance.announcements ? this.alliance.announcements.replace('\n','<br />') : "",'</li>',
 				'	</ul>',
 				'	<hr /><div>',
-				'		<textarea id="embassyAllianceLeaveReason" rows="5" cols="80"></textarea>',
+				'		<textarea id="embassyAllianceLeaveReason" rows="3" cols="80"></textarea>',
 				'		<button type="button" id="embassyAllianceLeave">Leave Alliance</button>',
 				'	</div>',
 				'</div>'].join('');
@@ -124,7 +124,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			this.sendTab = new YAHOO.widget.Tab({ label: "Send Invites", content: ['<div>',
 			'	<ul>',
 			'		<li>Invite: <span style="width:200px;display:inline-block;"><input id="embassySendTo" type="text" /></span></li>',
-			'		<li>Message: <textarea id="embassySendMessage" rows="2" cols="80"></textarea></li>',
+			'		<li>Message: <textarea id="embassySendMessage" rows="1" cols="80"></textarea></li>',
 			'		<li><button type="button" id="embassySendInvite">Send Invite</button></li>',
 			'	</ul>',
 			'	<hr />',
@@ -150,23 +150,23 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			'	<div class="yui-g first">',
 			'		<div class="yui-u first">',
 			'			<legend>On Planet</legend>',
-			'			<div class="embassyContainers"><ul id="embassyStashOnPlanet"></ul></div>',
+			'			<div class="embassyContainers" id="sopHt"><ul id="embassyStashOnPlanet"></ul></div>',
 			'		</div>',
 			'		<div class="yui-u">',
 			'			<legend>Donate</legend>',
-			'			<div class="embassyContainers"><ul id="embassyStashToDonate"></ul></div>',
+			'			<div class="embassyContainers" id="stdHt"><ul id="embassyStashToDonate"></ul></div>',
 			'			<div>Total:<span id="embassyTotalDonate">0</span></div>',
 			'		</div>',
 			'	</div>',
 			'	<div class="yui-g">',
 			'		<div class="yui-u first">',
 			'			<legend>Exchange</legend>',
-			'			<div class="embassyContainers"><ul id="embassyStashToExchange"></ul></div>',
+			'			<div class="embassyContainers" id="steHt"><ul id="embassyStashToExchange"></ul></div>',
 			'			<div>Total:<span id="embassyTotalExchange">0</span></div>',
 			'		</div>',
 			'		<div class="yui-u">',
 			'			<legend>In Stash</legend>',
-			'			<div class="embassyContainers"><ul id="embassyStashInStash"></ul></div>',
+			'			<div class="embassyContainers" id="sisHt"><ul id="embassyStashInStash"></ul></div>',
 			'		</div>',
 			'	</div>',
 			'</div>',
@@ -317,6 +317,13 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					}
 				}
 			}
+			var Ht = Game.GetSize().h - 245;
+			if(Ht > 200) { Ht = 200; }
+			Dom.setStyle(Dom.get('sopHt'), 'height', Ht + 'px');
+			Dom.setStyle(Dom.get('stdHt'), 'height', Ht + 'px');
+			Dom.setStyle(Dom.get('steHt'), 'height', Ht + 'px');
+			Dom.setStyle(Dom.get('sisHt'), 'height', Ht + 'px');
+
 		},
 		StashDonateAdd : function(e, matchedEl, container){
 			var quantity = Lib.getSelectedOptionValue(matchedEl.previousSibling)*1,
@@ -622,7 +629,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 		},
 		InvitesPopulate : function() {
 			var details = Dom.get("embassyInvitesDetails");
-			
 			if(details) {
 				var invites = this.invites,
 					ul = document.createElement("ul"),
@@ -674,10 +680,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 170;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -877,7 +883,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 		},
 		PendingPopulate : function() {
 			var details = Dom.get("embassySendDetails");
-			
 			if(details) {
 				var pendingInvites = this.pendingInvites,
 					ul = document.createElement("ul"),
@@ -920,10 +925,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 290;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -994,7 +999,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 		//Members 
 		MembersPopulate : function() {
 			var details = Dom.get("embassyMemberDetails");
-			
 			if(details && this.alliance) {
 				var members = this.alliance.members,
 					ul = document.createElement("ul"),
@@ -1040,10 +1044,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					if(details.parentNode.clientHeight > 300) {
-						Dom.setStyle(details.parentNode,"height","300px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 170;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},

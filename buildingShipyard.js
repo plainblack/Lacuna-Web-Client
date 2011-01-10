@@ -26,14 +26,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			var div = document.createElement("div");
 			div.innerHTML = ['<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
 				'<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
-				'<div id="shipsBuilding"></div>'].join('');
+                '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
 			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
 		
 			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
 			queueTab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getQueue();
-				}
+					var Ht = Game.GetSize().h - 210;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(Dom.get('qHt'),'height',Ht + 'px');
+					}
 			}, this, true);
 					
 			this.queueTab = queueTab;
@@ -41,7 +44,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			return queueTab;
 		},
 		_getBuildTab : function() {
-											
 			var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
 				'<div>',
 				'	<div class="clearafter" style="font-weight:bold;">',
@@ -49,7 +51,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				'		<span style="float:right;"><select id="shipBuildView"><option value="All">All</option><option value="Now" selected="selected">Now</option><option value="Later">Later</option></select></span>',
 				'	</div>',
 				'	<div id="shipBuildMessage" class="error"></div>',
-				'	<div style="height:300px;overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
+				'	<div id="bHt" style="overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
 				'		<ul id="shipDetails">',
 				'		</ul>',
 				'	</div>',
@@ -59,6 +61,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			buildTab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getBuild();
+					var Ht = Game.GetSize().h - 190;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(Dom.get('bHt'),'height',Ht + 'px');
 				}
 			}, this, true);
 			

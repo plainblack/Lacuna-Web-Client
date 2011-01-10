@@ -178,14 +178,18 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				'		<label>Combine Glyphs</label>',
 				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
 				'		</ul>',
-				'		<div><button type="button" id="archaeologyCombine">Combine</button></div>',
 				'	</div>',
-				'</div>'
+				'</div><button type="button" id="archaeologyCombine">Combine</button>',
 			].join('')});
 			tab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
 					this.getGlyphs();
 				}
+				var Ht = Game.GetSize().h - 180;
+				if(Ht > 442) { Ht = 442; }
+				var tC = Dom.get('archaeologyGlyphDetails').parentNode.parentNode;
+				Dom.setStyle(tC, 'height', Ht + 'px');
+				Dom.setStyle(tC, 'overflow-y', 'auto');
 			}, this, true);
 			
 			Event.onAvailable("archaeologyCombine", function(e){
@@ -204,7 +208,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			if(sel && this.ore){
 				sel.options.length = 0;
 				var opt = document.createElement("option");
-				for(var oKey in this.ore) {
+                var ore = Array();
+                for(var oKey in this.ore) {
+                    ore.push(oKey);
+                }
+                ore = ore.sort();
+                for(var i=0; i<ore.length; i++) {
+                    var oKey = ore[i];
 					if(this.ore.hasOwnProperty(oKey)) {
 						var nOpt = opt.cloneNode(false);
 						nOpt.value = oKey;

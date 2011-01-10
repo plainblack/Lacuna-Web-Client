@@ -30,7 +30,7 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 			this.libraryTab = new YAHOO.widget.Tab({ label: "Species Library", content: [
 					'<div>',
 					'	<div><label for="lojFindEmpire">Lookup by Empire Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="lojFindEmpire" /></div></div>',
-					'	<ul id="lojDetails" style="margin-top:5px;">',
+					'	<ul id="lojDetails" style="margin-top:5px;overflow-y:auto;">',
 					'	</ul>',
 					'</div>'
 				].join('')});
@@ -93,7 +93,7 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 				scope:this
 			});
 		},
-		speciesDisplay : function(stat) {			 
+		speciesDisplay : function(stat) {
 			this.species.innerHTML = [
 				'<li style="border-bottom:1px solid #52ACFF;font-size:120%;"><label>',stat.name,'</label></li>',
 				'<li style="padding-bottom:5px;">', stat.description, '</li>',
@@ -134,6 +134,15 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 				'	<label>Growth:</label><span>', stat.growth_affinity, '</span>',
 				'</li>'
 			].join('');
+
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
+				if(Ht > 300) { Ht = 300; }
+				var tC = Dom.get('lojDetails');	
+				Dom.setStyle(tC,"height",Ht + "px");
+				Dom.setStyle(tC,"overflow-y","auto");
+			},10);
 		}
 		
 	});
