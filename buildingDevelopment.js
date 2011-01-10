@@ -113,6 +113,9 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 						this.removeTab(this.queueTab);
 					}
 					
+					//close buildingDetails
+					this.fireEvent("onHide");
+
 					//refresh map
 					this.fireEvent("onUpdateMap");
 				},
