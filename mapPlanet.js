@@ -145,12 +145,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			var panel = document.createElement("div");
 			panel.id = panelId;
-			var bM = Game.GetViewport().h >= 600 ? 420 : 210;
 			panel.innerHTML = [
 				'<div class="hd">Builder</div>',
 				'	<div class="bd">',
 				'		<div>Building on X<span id="builderX"></span>:Y<span id="builderY"></span></div>',
-				'		<div id="builderMenu" class="yui-content" style="overflow:auto;height:', bM, 'px;">',
+				'		<div id="builderMenu" class="yui-content" style="overflow:auto;">',
 				'			<ul>',
 				'				<li class="builderMenuGroup">',
 				'					<em>Resources</em>',
@@ -193,7 +192,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'				</div>',
 				'				<a href="#" id="builderBuildLink">Build</a><span id="builderFilterTrail"> &gt; <a href="#Resources" class="buildMenuLink">Resources</a> &gt; <span class="buildMenuLink">Ore</span></span>',
 				'			</div>',
-				'			<div class="yui-content" style="overflow:auto;height:', bM, 'px;"><ul id="builderList"></ul></div>',
+				'			<div class="yui-content" style="overflow:auto;"><ul id="builderList"></ul></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -712,6 +711,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.resetDisplay(this);
 			this.buildingBuilder.setTile(tile);
 			this.buildingBuilder.show();
+
+			var Ht = Game.GetSize().h - 75;
+			if(Ht > 420) { Ht = 420; }
+			Dom.setStyle(Dom.get('builderMenu'),'height',Ht + 'px');
+			Dom.setStyle(Dom.get('builderList').parentNode,'height',Ht + 'px');
 		},
 		BuilderGet : function(data) {
 			Lacuna.Pulser.Show();

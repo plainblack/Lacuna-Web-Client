@@ -118,7 +118,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				details.innerHTML = "";
 				Dom.setStyle(details.parentNode,"height","");
 				Dom.setStyle(details.parentNode,"overflow-y","");
-						
 				for(var i=0; i<prisoners.length; i++) {
 					var prisoner = prisoners[i],
 						nDiv = div.cloneNode(false),
@@ -167,11 +166,10 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				}
 				//wait for tab to display first
 				setTimeout(function() {
-					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-					if(details.parentNode.clientHeight > dHt) {
-						Dom.setStyle(details.parentNode,"height",dHt + "px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 200;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},
@@ -315,7 +313,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				details.innerHTML = "";
 				Dom.setStyle(details.parentNode,"height","");
 				Dom.setStyle(details.parentNode,"overflow-y","");
-						
+				
 				for(var i=0; i<spies.length; i++) {
 					var spy = spies[i],
 						nDiv = div.cloneNode(false),
@@ -344,11 +342,10 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 				}
 				//wait for tab to display first
 				setTimeout(function() {
-					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-					if(details.parentNode.clientHeight > dHt) {
-						Dom.setStyle(details.parentNode,"height",dHt + "px");
-						Dom.setStyle(details.parentNode,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 200;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
 		},

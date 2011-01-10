@@ -177,6 +177,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					this.getGlyphs();
 				}
 				var Ht = Game.GetSize().h - 180;
+				if(Ht > 442) { Ht = 442; }
 				var tC = Dom.get('archaeologyGlyphDetails').parentNode.parentNode;
 				Dom.setStyle(tC, 'height', Ht + 'px');
 				Dom.setStyle(tC, 'overflow-y', 'auto');

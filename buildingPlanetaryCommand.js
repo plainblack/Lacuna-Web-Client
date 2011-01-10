@@ -223,11 +223,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-					if(divParent.clientHeight > dHt) {
-						Dom.setStyle(divParent,"height",dHt + "px");
-						Dom.setStyle(divParent,"overflow-y","auto");
-					}
+					var Ht = Game.GetSize().h - 170;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(divParent,"height",Ht + "px");
+					Dom.setStyle(divParent,"overflow-y","auto");
 				},10);
 			}
 		}

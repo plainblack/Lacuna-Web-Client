@@ -24,10 +24,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 	Messaging.prototype = {
 		_buildPanel : function() {
 			var panelId = "messagingPanel";
-			var size = Game.GetViewport();
-			var mHt = size.h >= 600 ? 400 : 200;
-			var dHt = size.h >= 600 ? 369 : 169;
-			var rows = size.h >= 600 ? 20 : 10;
 			var panel = document.createElement("div");
 			panel.id = panelId;
 			panel.innerHTML = ['<div class="hd">Messaging</div>',
@@ -45,7 +41,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<div class="messagingCreatorC"><label>To:</label><input id="messagingCreateTo" type="text" /></div>',
 				'			<div class="messagingCreatorC"><label>Subject:</label><input id="messagingCreateSubject" type="text" /></div>',
 				'			<div class="messagingCreatorC" id="messagingCreateBody">',
-				'				<textarea id="messagingCreateText" cols="80" rows="',rows,'"></textarea>',
+				'				<textarea id="messagingCreateText" cols="80" rows="20"></textarea>',
 				'			</div>',
 				'		</div>',
 				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
@@ -61,7 +57,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '                   <option value="Tutorial">Tutorial</option>',
                 '               </select>',
 				'			</div>',
-				'			<div class="yui-u first" style="height:',mHt,'px; overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
+				'			<div id="mHt" class="yui-u first" style="overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'				<div id="messagingPaginator">',
 				'				</div>',
 				'				<ul id="messagingList"></ul>',
@@ -72,7 +68,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<button id="messagingForward" type="button">Forward</button>',
 				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
 				'				</div>',
-				'				<div style="height:',dHt,'px;overflow:auto;">',
+				'				<div id="dHt" style=";overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
 				'					<div><label>From:</label><span id="messagingFrom"></span></div>',
 				'					<div><label>To:</label><span id="messagingTo"></span></div>',
@@ -560,6 +556,18 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			
 			Event.delegate(list, "click", this.loadMessage, "div.messageContainer", this, true);
 			Event.delegate(list, "click", this.checkSelect, "input[type=checkbox]", this, true);
+
+			//wait for tab to display first
+			setTimeout(function() {
+				var size = Game.GetSize();
+				var Ht = size.h - 90;
+				if(Ht > 400) { Ht = 400; }
+				var dHt = Ht - 31;
+				Dom.setStyle(Dom.get('mHt'),'height',Ht + 'px');
+				Dom.setStyle(Dom.get('dHt'),'height',dHt + 'px');
+				Dom.setStyle(Dom.get('messagingCreateBody'),'height',Ht + 'px');
+				Dom.setY(Dom.get('messagingPanel'),10);
+			},10);
 		},
 		
 		checkSelect : function(e, matchedEl, container) {

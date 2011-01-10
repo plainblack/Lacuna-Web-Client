@@ -36,6 +36,7 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 				if(e.newValue) {
 					this.getMissions();
 					var mHt = Game.GetSize().h - 150;
+					if(mHt > 300) { mHt = 300; }
 					Dom.setStyle(Dom.get('missionsHt'), 'height', mHt + 'px');
 				}
 			}, this, true);

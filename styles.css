@@ -19,7 +19,7 @@ body {
 	left: 0;
 	right: 0;
 	text-align:left;
-	/*min-width: 1050px;*/
+	min-width: 1050px;
 	/*min-height: 768px;*/
 	overflow: hidden;
 }
@@ -52,7 +52,7 @@ button, input[type="submit"], input[type="button"] {
 	height:55px;
 	position:fixed;
 	width: 100%;
-	/*min-width: 1050px;*/
+	min-width: 1050px;
 	background-color:#52acff;
 	font-family:impact, sans-serif;
 }
@@ -1523,6 +1523,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	font-weight:bold;
 }
 .embassyContainers, .tradeContainers {
+	height:200px;
 	overflow-y:auto;
 	border:1px solid #52ACFF;
 }
@@ -1559,7 +1560,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:320px;
 }
 .tradeContainers .tradeResourceName {
-	width:240px;
+	width:230px;
 }
 
 .accordian {
@@ -1649,7 +1650,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 }
 .securityInfo .securityNextMisson, .securityInfo .securitySentence {
-	width:150px;
+	width:170px;
 }
 .securityInfo .securityExecute {
 	width:100px;

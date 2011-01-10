@@ -69,11 +69,10 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 					}
 					//wait for tab to display first
 					setTimeout(function() {
-						var dHt = Game.GetViewport().h >= 600 ? 300 : 150;
-						if(details.parentNode.clientHeight > dHt) {
-							Dom.setStyle(details.parentNode,"height",dHt + "px");
-							Dom.setStyle(details.parentNode,"overflow-y","auto");
-						}
+						var Ht = Game.GetSize().h - 200;
+						if(Ht > 300) { Ht = 300; }
+						Dom.setStyle(details.parentNode,"height",Ht + "px");
+						Dom.setStyle(details.parentNode,"overflow-y","auto");
 					},10);
 				}
 			}

@@ -728,9 +728,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					details.appendChild(nUl);
 					
 				}
-			   //wait for tab to display first
+				//wait for tab to display first
 				setTimeout(function() {
 					var Ht = Game.GetSize().h - 240;
+                    if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
 					Dom.setStyle(tC,"overflow-y","auto");
@@ -925,7 +926,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
                 //wait for tab to display first
                 setTimeout(function() {
                     var Ht = Game.GetSize().h - 185;
-                    var tC = elm.parentNode.parentNode;
+                    if(Ht > 300) { Ht = 300; }
+                    var tC = details.parentNode;
                     Dom.setStyle(tC,"height",Ht + "px");
                     Dom.setStyle(tC,"overflow-y","auto");
                 },10);
@@ -1023,9 +1025,10 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					}
 				}
 			}
-           //wait for tab to display first
+			//wait for tab to display first
             setTimeout(function() {
                 var Ht = Game.GetSize().h - 180;
+				if(Ht > 300) { Ht = 300; }
                 var aHt = Dom.get('aHt');
                 Dom.setStyle(aHt,"height",Ht + "px");
                 Dom.setStyle(aHt,"overflow-y","auto");
@@ -1409,6 +1412,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
             //wait for tab to display first
             setTimeout(function() {
                 var Ht = Game.GetSize().h - 180;
+				if(Ht > 270) { Ht = 270; }
                 var pHt = Dom.get('pHt');
                 Dom.setStyle(pHt,"height",Ht + "px");
                 Dom.setStyle(pHt,"overflow-y","auto");
