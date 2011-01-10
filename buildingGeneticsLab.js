@@ -41,13 +41,16 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 				'			</ul>',
 				'		</div>',
 				'	</div>',
-				'	<div class="yui-u" id="geneticsLabDetailsContainer" style="display:none;width:59.1%;">',
-				'		<div style="border-bottom:1px solid #52acff;margin-bottom:5px;font-weight:bold;"><label><span id="geneticsLabSpyName"></span> Details</label></div>',
-				'		<label for="geneticsLabAffinities" style="font-weight:bold;">Graft:</label><select id="geneticsLabAffinities"></select>',
-				'		<button type="button" id="geneticsLabRunExperiement">Run Experiment</button>',
-				'		<div style="overflow:auto;height:120px;border:1px solid #52acff;">',
-				'			<ul id="geneticsLabDetails">',
-				'			</ul>',
+				'	<div class="yui-u" style="width:59.1%;">',
+				'		<div id="geneticsLabExperimentMessage" style="display:none;"></div>',
+				'		<div id="geneticsLabDetailsContainer" style="display:none;">',
+				'			<div style="border-bottom:1px solid #52acff;margin-bottom:5px;font-weight:bold;"><label><span id="geneticsLabSpyName"></span> Details</label></div>',
+				'			<label for="geneticsLabAffinities" style="font-weight:bold;">Graft:</label><select id="geneticsLabAffinities"></select>',
+				'			<button type="button" id="geneticsLabRunExperiement">Run Experiment</button>',
+				'			<div style="overflow:auto;height:120px;border:1px solid #52acff;">',
+				'				<ul id="geneticsLabDetails">',
+				'				</ul>',
+				'			</div>',
 				'		</div>',
 				'	</div>',
 				'</div>',
@@ -179,6 +182,11 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
 						
+						if(o.result.grafts.length > 0) {
+							Dom.get("geneticsLabMessage").innerHTML = "";
+							Dom.setStyle("geneticsLabDisplay","display","");
+						}
+						
 						this.updateDisplay(o.result);
 					},
 					failure : function(o){
@@ -204,7 +212,8 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
 						
-						Dom.get("geneticsLabMessage").innerHTML = o.result.experiment.message;
+						Dom.get("geneticsLabExperimentMessage").innerHTML = o.result.experiment.message;
+						Dom.setStyle("geneticsLabExperimentMessage","display","");
 
 						Dom.setStyle("geneticsLabDetailsContainer", "display", "none");
 						this.updateDisplay(o.result);
@@ -227,6 +236,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 			Dom.removeClass(Sel.query("li.selected", "geneticsLabSpies"),"selected");
 			Dom.addClass(matchedEl,"selected");
 			Dom.get("geneticsLabSpyName").innerHTML = ['[',obj.species.name,'] ',obj.spy.name].join('');
+			Dom.setStyle("geneticsLabExperimentMessage","display","none");
 			Dom.setStyle("geneticsLabDetailsContainer","display","");
 			this.currentSpy = obj.spy.id;
 			sel.options.length = 0;
@@ -265,8 +275,6 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 					}
 				});
 				
-				Lib.fadeOutElm("geneticsLabMessage");
-				Dom.setStyle("geneticsLabDisplay","display","");
 				var li = document.createElement("li"),
 					ul = Dom.get("geneticsLabSpies");
 				ul.innerHTML = "";
