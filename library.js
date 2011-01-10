@@ -310,7 +310,28 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			spy_pod:"Spy Pod",
 			spy_shuttle:"Spy Shuttle",
 			terraforming_platform_ship:"Terraforming Platform Ship"
-		}
+		},
+
+        // planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
+        planetarySort : function(planets) {
+            var newplanets = Array();
+            for(var pId in planets) {
+                newplanets.push(planets[pId]);
+            }
+            planets = newplanets.sort(function(a,b) {
+                    if (a.name > b.name) {
+                        return 1;
+                    }
+                    else if (a.name < b.name) {
+                        return -1;
+                    }
+                    else {
+                        return 0;
+                    }
+            });
+            return planets;
+        }
+
 	};
 	
 	YAHOO.lacuna.Library = Library;
