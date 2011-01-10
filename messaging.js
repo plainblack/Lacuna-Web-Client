@@ -68,7 +68,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<button id="messagingForward" type="button">Forward</button>',
 				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
 				'				</div>',
-				'				<div id="dHt" style=";overflow:auto;">',
+				'				<div id="dHt" style="overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
 				'					<div><label>From:</label><span id="messagingFrom"></span></div>',
 				'					<div><label>To:</label><span id="messagingTo"></span></div>',
@@ -558,15 +558,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			Event.delegate(list, "click", this.checkSelect, "input[type=checkbox]", this, true);
 
 			//wait for tab to display first
+			var panel = this.messagingPanel;
 			setTimeout(function() {
 				var size = Game.GetSize();
 				var Ht = size.h - 90;
 				if(Ht > 400) { Ht = 400; }
 				var dHt = Ht - 31;
-				Dom.setStyle(Dom.get('mHt'),'height',Ht + 'px');
-				Dom.setStyle(Dom.get('dHt'),'height',dHt + 'px');
-				Dom.setStyle(Dom.get('messagingCreateBody'),'height',Ht + 'px');
-				Dom.setY(Dom.get('messagingPanel'),10);
+				Dom.setStyle('mHt','height',Ht + 'px');
+				Dom.setStyle('dHt','height',dHt + 'px');
+				Dom.setStyle('messagingCreateBody','height',Ht + 'px');
+				panel.center();
+				//Dom.setY('messagingPanel',10);
 			},10);
 		},
 		
@@ -794,8 +796,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		handleProfileLink : function(e, el) {
 			Event.stopEvent(e);
-			var res = el.href.match(/\#(\d+)$/);
-			Lacuna.Info.Empire.Load(res[1]);
+			var res = el.href.match(/\#(-?\d+)$/);
+			if(res) {
+				Lacuna.Info.Empire.Load(res[1]);
+			}
 		},
 		handleStarmapLink : function(e, el) {
 			Event.stopEvent(e);
@@ -809,14 +813,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 		handlePlanetLink : function(e, el) {
 			Event.stopEvent(e);
-			var res = el.href.match(/\#(\d+)$/);
+			var res = el.href.match(/\#(-?\d+)$/);
 			this.hide();
 			var planet = Game.EmpireData.planets[res[1]];
 			Game.PlanetJump(planet);
 		},
 		handleAllianceLink : function(e, el) {
 			Event.stopEvent(e);
-			var res = el.href.match(/\#(\d+)$/);
+			var res = el.href.match(/\#(-?\d+)$/);
 			Lacuna.Info.Alliance.Load(res[1]);
 		},
 		replyMessage : function(e) {
