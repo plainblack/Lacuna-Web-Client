@@ -288,7 +288,13 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 				}
 			}
 			else {
-				Dom.get("geneticsLabMessage").innerHTML = "No spies available to run experiments on.";
+				var expMsg = Dom.get("geneticsLabExperimentMessage").innerHTML;
+				if(expMsg) {
+					Dom.get("geneticsLabMessage").innerHTML = expMsg + "  No spies available to run experiments on.";
+				}
+				else {
+					Dom.get("geneticsLabMessage").innerHTML = "No spies available to run experiments on.";
+				}
 				Dom.setStyle("geneticsLabDisplay","display","none");
 			}
 		}

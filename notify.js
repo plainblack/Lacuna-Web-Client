@@ -77,7 +77,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			else {
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
-						ms = Lib.parseServerDate(ship.date_arrives) - Lib.parseServerDate(Game.ServerData.time),
+						ms = Lib.parseServerDate(ship.date_arrives) - (new Date()),
 						arrTime;
 					i++;
 					if(ms > 0) {
@@ -103,7 +103,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			var incoming = planet.incoming_foreign_ships || [],
 				planetShips = this.incomingShips[planet.id] || [];
 			
-			incoming = incoming.slice(0);
 			incoming.sort(function(a,b) {
 				if (a.date_arrives > b.date_arrives) {
 					return 1;
