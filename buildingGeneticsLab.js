@@ -33,17 +33,17 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 				'	</tr>',
 				'</table>',
 				'<div id="geneticsLabMessage" style="border-top:1px solid #52acff;margin-top:5px;"></div>',
-				'<div id="geneticsLabDisplay" class="yui-g" style="display:none;margin-bottom:10px;">',
+				'<div id="geneticsLabDisplay" class="yui-g" style="display:none;margin:5px 0;">',
 				'	<div class="yui-u first" style="width:39.1%">',
-				'		<div style="border-bottom:1px solid #52acff;margin-bottom:5px;"><label>Available Spies</label></div>',
+				'		<div style="border-bottom:1px solid #52acff;margin-bottom:5px;font-weight:bold;"><label>Available Spies</label></div>',
 				'		<div style="overflow:auto;height:150px;">',
 				'			<ul id="geneticsLabSpies">',
 				'			</ul>',
 				'		</div>',
 				'	</div>',
 				'	<div class="yui-u" id="geneticsLabDetailsContainer" style="display:none;width:59.1%;">',
-				'		<div style="border-bottom:1px solid #52acff;margin-bottom:5px;"><label>Spy Details</label></div>',
-				'		<select id="geneticsLabAffinities"></select>',
+				'		<div style="border-bottom:1px solid #52acff;margin-bottom:5px;font-weight:bold;"><label><span id="geneticsLabSpyName"></span> Details</label></div>',
+				'		<label for="geneticsLabAffinities" style="font-weight:bold;">Graft:</label><select id="geneticsLabAffinities"></select>',
 				'		<button type="button" id="geneticsLabRunExperiement">Run Experiment</button>',
 				'		<div style="overflow:auto;height:120px;border:1px solid #52acff;">',
 				'			<ul id="geneticsLabDetails">',
@@ -206,6 +206,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 						
 						Dom.get("geneticsLabMessage").innerHTML = o.result.experiment.message;
 
+						Dom.setStyle("geneticsLabDetailsContainer", "display", "none");
 						this.updateDisplay(o.result);
 					},
 					failure : function(o){
@@ -225,7 +226,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 			
 			Dom.removeClass(Sel.query("li.selected", "geneticsLabSpies"),"selected");
 			Dom.addClass(matchedEl,"selected");
-			
+			Dom.get("geneticsLabSpyName").innerHTML = ['[',obj.species.name,'] ',obj.spy.name].join('');
 			Dom.setStyle("geneticsLabDetailsContainer","display","");
 			this.currentSpy = obj.spy.id;
 			sel.options.length = 0;

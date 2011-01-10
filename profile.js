@@ -403,6 +403,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.medals.appendChild(frag);
 
 			var Ht = Game.GetSize().h - 195;
+			if(Ht > 270) { Ht = 270; }
 			Dom.setStyle(Dom.get('profilePlayer'), 'height', Ht + 'px')
 			Dom.setStyle(this.notes, 'height', Ht + 'px')
 			Dom.setStyle(this.medals, 'height', Ht + 'px')
@@ -529,7 +530,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.species.innerHTML = "";
 			this.species.appendChild(frag);
 			var Ht = Game.GetSize().h - 180;
-			if(Ht > 300) { Ht = 300; }
+			if(Ht > 270) { Ht = 270; }
 			Dom.setStyle(this.species, 'height', Ht + 'px')
 		},
 		showSpeciesRedefine : function(e) {
