@@ -336,6 +336,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.domElement.title = this.data ? this.data.name : "Ground";
 			this._createActionIcon();
 			
+			if(this.data && this.data.efficiency*1 < 100) {
+				this._createEfficiencyBar(this.data.efficiency*1);
+			}
+			else if(this.cBar) {
+				this.cBar.parentNode.removeChild(this.cBar);
+				delete this.cBar;
+				delete this.eBar;
+			}
+			
 			this.startTick();
 			/*if(this.data && this.data.pending_build) {
 				this._createCounter();
@@ -349,15 +358,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.counterBuild.parentNode.removeChild(this.counterBuild);
 				delete this.counterBuild;
 			}*/
-			
-			if(this.data && this.data.efficiency*1 < 100) {
-				this._createEfficiencyBar(this.data.efficiency*1);
-			}
-			else if(this.cBar) {
-				this.cBar.parentNode.removeChild(this.cBar);
-				delete this.cBar;
-				delete this.eBar;
-			}
 		},
 		refresh : function() {
 			Mapper.PlanetTile.superclass.refresh.call(this);
@@ -487,6 +487,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				//Dom.setStyle(counterWork, "width", this.tileSizeInPx + 'px');
 				//Dom.setStyle(counterWork, "height", this.tileSizeInPx + 'px');
 				this.counterWork = counterWork;
+			}
+			if(this.cBar) {
+				Dom.setStyle(this.counterWork, "bottom" ,"20px");
+			}
+			else {
+				Dom.setStyle(this.counterWork, "bottom" ,"0");
 			}
 		},
 		_createActionIcon : function() {

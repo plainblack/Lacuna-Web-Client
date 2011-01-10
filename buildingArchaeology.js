@@ -85,13 +85,22 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 		},
 		onDrag: function(e) {
 			// Keep track of the direction of the drag for use during onDragOver
-			var y = Event.getPageY(e);
+			var y = Event.getPageY(e),
+				el = this.getEl(),
+				container = el.parentNode;
 
 			if (y < this.lastY) {
 				this.goingUp = true;
+				if(container.scrollTop > el.offsetTop) {
+					container.scrollTop -= el.clientHeight;
+				}
 			} else if (y > this.lastY) {
 				this.goingUp = false;
+				if((el.offsetTop - container.scrollTop) > el.clientHeight) {
+					container.scrollTop = el.offsetTop;
+				}
 			}
+			
 
 			this.lastY = y;
 		},
@@ -182,6 +191,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			Event.onAvailable("archaeologyCombine", function(e){
 				Event.on("archaeologyCombine", "click", this.assembleGlyph, this, true);
 			}, this, true);
+			
+			Event.delegate("archaeologyGlyphDetails", "dblclick", this.viewAdd, "li");
+			Event.delegate("archaeologyGlyphCombine", "dblclick", this.viewRemove, "li");
 			
 			this.viewTab = tab;
 			return tab;
@@ -282,25 +294,22 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					nLi.innerHTML = [
 						'<div class="archaeologyGlyphContainer">',
 						'	<div class="archaeologyGlyphHeader">',obj.type,'</div>',
-						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:119px;height:150px;" />', //"width:158px;height:200px;"
+						'	<img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:79px;height:100px;" />', //"width:119px;height:150px;"
 						'</div>'
 					].join('');
 					
-					Event.on(nLi, "dblclick", function(ev) { 
-						var id = this.parentNode.id;
-						var destCont;
-						if (id == "archaeologyGlyphDetails") {
-							destCont = Dom.get("archaeologyGlyphCombine");
-						}
-						else if (id == "archaeologyGlyphCombine") {
-							destCont = Dom.get("archaeologyGlyphDetails");
-						}
-						destCont.appendChild(this);
-					});
 					nLi = details.appendChild(nLi);
 					nLi.DD = new DDList(nLi);
 				}
 			}
+		},
+		viewAdd : function(e, matchedEl, container) { 
+			matchedEl.parentNode.removeChild(matchedEl);
+			Dom.get("archaeologyGlyphCombine").appendChild(matchedEl);
+		},
+		viewRemove : function(e, matchedEl, container) { 
+			matchedEl.parentNode.removeChild(matchedEl);
+			Dom.get("archaeologyGlyphDetails").appendChild(matchedEl);
 		},
 		
 		checkIfWorking : function() {

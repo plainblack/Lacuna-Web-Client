@@ -237,11 +237,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			this.buildingBuilder.hideEvent.subscribe(function(){
 				this.buildingBuilder.resetDisplay(this);
 			}, this, true);
-			//this.buildingBuilder.showEvent.subscribe(function() {
-				//this.buildable = {};
-				//Dom.setStyle(this.menuView, 'display', 'block');
-				//Dom.setStyle(this.listView, 'display', 'none');
-			//});
 			this.buildingBuilder.clickBuildMenu = function (e, matchedEl, container) {
 				Event.preventDefault(e);
 				var frag = matchedEl.href.split("#")[1];
@@ -372,7 +367,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					bd.name = names[i];
 					
 					if(bd.build.reason) {
-						reason = Lib.parseReason(bd.build.reason, "");
+						reason = bd.build.reason[1];
 					}
 					else {
 						reason = undefined;
@@ -908,6 +903,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					break;
 				case "/hallsofvrbansk":
 					classObj = new Lacuna.buildings.HallsOfVrbansk(result);
+					break;
+				case "/geneticslab":
+					classObj = new Lacuna.buildings.GeneticsLab(result);
 					break;
 				case "/intelligence":
 					classObj = new Lacuna.buildings.Intelligence(result);

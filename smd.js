@@ -665,6 +665,34 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			GeneticsLab : {
+				"SMDVersion":"2.0",
+				"description": "Genetics Lab",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/geneticslab",
+
+				"services": {
+					"prepare_experiment" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"run_experiment" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false},
+							{"name":"affinity", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			HallsOfVrbansk : {
 				"SMDVersion":"2.0",
 				"description": "Halls Of Vrbansk",

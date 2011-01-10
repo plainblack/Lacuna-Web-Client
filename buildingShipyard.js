@@ -255,16 +255,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						nLi = li.cloneNode(false),
 						reason="", attributes = [];
 					
-					if(ship.reason) {						
-						reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
+					if(ship.reason) {
+						reason = '<div style="font-style:italic;">'+ship.reason[1]+'</div>';
+						//reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
 					}
 					
 					for(var a in ship.attributes) {
-						attributes[attributes.length] = '<span style="white-space:nowrap;margin-left:10px;"><label style="font-style:italic">';
+						attributes[attributes.length] = '<span style="white-space:nowrap;margin-left:5px;"><label style="font-style:italic">';
 						attributes[attributes.length] = a.titleCaps('_',' ');
 						attributes[attributes.length] = ': </label>';
 						attributes[attributes.length] = ship.attributes[a];
-						attributes[attributes.length] = '</span>';
+						attributes[attributes.length] = '</span> ';
 					}
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',

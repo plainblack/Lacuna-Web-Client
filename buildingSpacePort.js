@@ -656,12 +656,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
 						Lacuna.Pulser.Hide();
 						this.Self.rpcSuccess(o);
-						var ships = this.Self.shipsView.ships;
+						var ships = this.Self.shipsView.ships,
+							info = Dom.get("shipsCount");
 						for(var i=0; i<ships.length; i++) {
 							if(ships[i].id == this.Ship.id) {
 								ships.splice(i,1);
 								break;
 							}
+						}
+						if(info) {
+							this.Self.result.docks_available++;
+							info.innerHTML = ['This SpacePort can dock a maximum of ', this.Self.result.max_ships, ' ships. There are ', this.Self.result.docks_available, ' docks available.'].join(''); 
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},

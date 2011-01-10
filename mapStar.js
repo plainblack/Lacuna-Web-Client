@@ -771,7 +771,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						nLi = li.cloneNode(false);
 						
 					nLi.Ship = ship;
-					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
+					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:5px;">',
 					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:50px;height:50px;" />',
 					'	</div>',
@@ -786,7 +786,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
 					'			<span>Combat:<span>',ship.combat,'</span></span>',
 					'		</div>',
-					'		<div style="font-style:italic;">',Lib.parseReason(ships[i].reason),'</div>',
+					'		<div style="font-style:italic;">',ships[i].reason[1],'</div>',
 					'	</div>',
 					'</div>'].join('');
 					

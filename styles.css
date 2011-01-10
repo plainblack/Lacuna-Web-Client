@@ -167,6 +167,24 @@ body.yui-skin-sam .yui-panel hr {
 	border-width:0px;
 }
 
+.tleTable {
+	width:100%;
+	border: 1px solid white;
+}
+.tleTable th {
+	text-align:center;
+	color:#fff;
+	background-color:#52acff;
+	border: 1px solid white;
+}
+.tleTable td {
+	font-size:90%;
+	text-align:center;
+	border-width: 0px 1px 1px 0;
+	border-style: solid;
+	border-color: white;
+}
+
 /*
 dialogs
 */
@@ -1428,6 +1446,7 @@ planet details
 	border-bottom: 1px solid #52ACFF;
 }
 
+
 /* shared display headers */
 .buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader, .planHeader {
 	font-weight:bold;
@@ -1651,7 +1670,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 }
 .securityInfo .securityNextMisson, .securityInfo .securitySentence {
-	width:150px;
+	width:180px;
 }
 .securityInfo .securityExecute {
 	width:100px;
@@ -1874,7 +1893,16 @@ PROFILE
 	margin-right:10px;
 }
 
-#profileSpecies label {
+#geneticsLabSpies li.selected {
+	font-weight:bold;
+}
+#geneticsLabSpies li {
+	cursor:pointer;
+	background-color: #52acff;
+	padding:2px;
+	margin: 2px 0;
+}
+#profileSpecies label , #geneticsLabDetails label {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
@@ -1882,7 +1910,7 @@ PROFILE
 	vertical-align:top;
 	font-weight:bold;
 }
-#profileSpecies span {
+#profileSpecies span, #geneticsLabDetails span {
 	display:inline-block;
 	width:250px;
 }
