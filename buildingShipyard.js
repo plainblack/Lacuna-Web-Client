@@ -133,7 +133,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				var divParent = div.parentNode,
 					ul = document.createElement("ul"),
 					li = document.createElement("li"),
-					serverTime = Lib.parseServerDate(Game.ServerData.time);
+					serverTime = Lib.getTime(Game.ServerData.time);
 
 				this.resetQueue();
 				div = divParent.removeChild(div);
@@ -148,7 +148,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						var bqo = bq.ships_building[i],
 							nUl = ul.cloneNode(false),
 							nLi = li.cloneNode(false),
-							ncs = (Lib.parseServerDate(bqo.date_completed).getTime() - serverTime.getTime()) / 1000;
+							ncs = (Lib.getTime(bqo.date_completed) - serverTime) / 1000;
 						
 						nUl.Build = bqo;
 						

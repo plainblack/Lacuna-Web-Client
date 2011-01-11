@@ -160,7 +160,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'				</div>',
 			'			</div>',
 			'		</form>',
-			'	</div>',
+			'	</div>'
 			].join('');
 		},
 		
@@ -291,10 +291,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			var timers = this.timers;
 			timers[el.id] = function() {
 				if(sDate) {
-					var tDate = Lib.parseServerDate(sDate),
-						cDate = Lib.parseServerDate(Game.ServerData.time),
-						tTime = tDate.getTime(),
-						cTime = cDate.getTime(),
+					var tTime = Lib.getTime(Lib.parseServerDate(sDate)),
+						cTime = Lib.getTime(Game.ServerData.time),
 						diffTime = tTime - cTime;
 					if(diffTime > 0) {
 						el.innerHTML = Lib.formatMillisecondTime(diffTime);
@@ -308,7 +306,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 		},
 		tick : function() {
 			for (var key in this.timers){
-			if (this.timers.hasOwnProperty(key)) {
+				if (this.timers.hasOwnProperty(key)) {
 					this.timers[key]();
 				}
 			}

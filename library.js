@@ -167,7 +167,18 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		formatNumber : function(num) {
 			return Util.Number.format(num,{thousandsSeparator:","});
 		},
+		getTime : function(dt) {
+			if(dt instanceof Date) {
+				return dt.getTime();
+			}
+			else {
+				return Library.parseServerDate(dt).getTime();
+			}
+		},
 		parseServerDate : function(strDate) {
+			if(strDate instanceof Date) {
+				return strDate;
+			}
 			//"23 03 2010 01:20:11 +0000"
 			var pieces = strDate.split(' '), //[day month year hr:min:sec timez]
 				time = pieces[3].split(':');
@@ -314,22 +325,22 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 
         // planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
         planetarySort : function(planets) {
-            var newplanets = Array();
+            var newplanets = [];
             for(var pId in planets) {
                 newplanets.push(planets[pId]);
             }
-            planets = newplanets.sort(function(a,b) {
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    else if (a.name < b.name) {
-                        return -1;
-                    }
-                    else {
-                        return 0;
-                    }
+            newplanets.sort(function(a,b) {
+				if (a.name > b.name) {
+					return 1;
+				}
+				else if (a.name < b.name) {
+					return -1;
+				}
+				else {
+					return 0;
+				}
             });
-            return planets;
+            return newplanets;
         }
 
 	};

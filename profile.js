@@ -135,7 +135,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			postmethod:"none",
 			buttons:[
 				{ text:' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update', handler: { fn: this.redefineSpecies, scope:this }, isDefault:true },
-				{ text:"Cancel", handler: { fn: function() { this.hide() } } }
+				{ text:"Cancel", handler: { fn: function() { this.hide(); } } }
 			],
 			visible:false,
 			draggable:true,
@@ -404,9 +404,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 
 			var Ht = Game.GetSize().h - 195;
 			if(Ht > 270) { Ht = 270; }
-			Dom.setStyle(Dom.get('profilePlayer'), 'height', Ht + 'px')
-			Dom.setStyle(this.notes, 'height', Ht + 'px')
-			Dom.setStyle(this.medals, 'height', Ht + 'px')
+			Dom.setStyle('profilePlayer', 'height', Ht + 'px');
+			Dom.setStyle(this.notes, 'height', Ht + 'px');
+			Dom.setStyle(this.medals, 'height', Ht + 'px');
 			
 			this.Dialog.center();
 		},
@@ -520,7 +520,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			var redefineButton = document.createElement('button');
 			redefineButton.innerHTML = [
 				this.speciesRedefineLimits.essentia_cost,
-				' <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> Redefine Species',
+				' <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> Redefine Species'
 			].join('');
 			nLi.appendChild(redefineButton);
 			frag.appendChild(nLi);
@@ -531,7 +531,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.species.appendChild(frag);
 			var Ht = Game.GetSize().h - 180;
 			if(Ht > 270) { Ht = 270; }
-			Dom.setStyle(this.species, 'height', Ht + 'px')
+			Dom.setStyle(this.species, 'height', Ht + 'px');
 		},
 		showSpeciesRedefine : function(e) {
 			Event.stopEvent(e);
@@ -539,11 +539,10 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				this.Dialog.hide();
 				this.SpeciesDesigner.setSpeciesData(this.speciesStats);
 				if (this.SpeciesDesigner.needsExpert(this.speciesStats)) {
-					this.SpeciesDesigner.setExpert()
+					this.SpeciesDesigner.setExpert();
 				}
 				this.SpeciesDesigner.setSpeciesLocks(this.speciesRedefineLimits);
-				this.SpeciesDialog.getButtons()[0].innerHTML = this.speciesRedefineLimits.essentia_cost+
-				' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update',
+				this.SpeciesDialog.getButtons()[0].innerHTML = [this.speciesRedefineLimits.essentia_cost,' <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> Update'].join('');
 				this.SpeciesDialog.show();
 			}
 			else {

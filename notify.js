@@ -75,9 +75,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				arr = arr.concat(['<li>None</li>']);
 			}
 			else {
+				var serverTime = Lib.getTime(Game.ServerData.time);
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
-						ms = Lib.parseServerDate(ship.date_arrives) - (new Date()),
+						ms = Lib.getTime(ship.date_arrives) - serverTime,
 						arrTime;
 					i++;
 					if(ms > 0) {

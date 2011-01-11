@@ -204,15 +204,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			
 			Event.onAvailable("tradePushColony", function(){
 				var opt = document.createElement("option"),
-					planets = Game.EmpireData.planets,
+					planets = Lib.planetarySort(Game.EmpireData.planets),
 					cp = Game.GetCurrentPlanet(),
 					nOpt;
-                planets = Lib.planetarySort(planets);
-				for(var pId in planets) {
-					if(planets.hasOwnProperty(pId) && pId != cp.id){
+
+				for(var p=0; p<planets.length; p++) {
+					if(planets[p].id != cp.id){
 						nOpt = opt.cloneNode(false);
-						nOpt.value = pId;
-						nOpt.innerHTML = planets[pId].name;
+						nOpt.value = planets[p].id;
+						nOpt.innerHTML = planets[p].name;
 						this.appendChild(nOpt);
 					}
 				}
@@ -1443,44 +1443,48 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			}
 		},
 		getPushShips : function() {
-			Lacuna.Pulser.Show();
 			var targetId = Lib.getSelectedOptionValue("tradePushColony");
-			
-			this.service.get_trade_ships({
-				session_id: Game.GetSession(""),
-				building_id: this.building.id,
-				target_body_id: targetId
-			},{
-				success : function(o){
-					this.rpcSuccess(o);
-					
-					var elm = Dom.get("tradePushShip"),
-						opt = document.createElement("option"),
-						ships = o.result.ships,
-						nOpt;
+			if(targetId) {
+				Lacuna.Pulser.Show();
+				this.service.get_trade_ships({
+					session_id: Game.GetSession(""),
+					building_id: this.building.id,
+					target_body_id: targetId
+				},{
+					success : function(o){
+						this.rpcSuccess(o);
 						
-					if(elm && ships) {
-						var selectedVal = Lib.getSelectedOptionValue(elm);
-						elm.options.length = 0;	
-						for(var x=0; x < ships.length; x++) {
-							var obj = ships[x];
-							nOpt = opt.cloneNode(false);
-							nOpt.value = obj.id;
-							nOpt.innerHTML = [obj.name, ' (', obj.type_human, ' - Hold:', obj.hold_size, ' - Estimated Travel Time:', Lib.formatTime(obj.estimated_travel_time), ')'].join('');
-							nOpt.selected = selectedVal == obj.id;
-							elm.appendChild(nOpt);
+						var elm = Dom.get("tradePushShip"),
+							opt = document.createElement("option"),
+							ships = o.result.ships,
+							nOpt;
+							
+						if(elm && ships) {
+							var selectedVal = Lib.getSelectedOptionValue(elm);
+							elm.options.length = 0;	
+							for(var x=0; x < ships.length; x++) {
+								var obj = ships[x];
+								nOpt = opt.cloneNode(false);
+								nOpt.value = obj.id;
+								nOpt.innerHTML = [obj.name, ' (', obj.type_human, ' - Hold:', obj.hold_size, ' - Estimated Travel Time:', Lib.formatTime(obj.estimated_travel_time), ')'].join('');
+								nOpt.selected = selectedVal == obj.id;
+								elm.appendChild(nOpt);
+							}
 						}
-					}
-					
-					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
+						
+						Lacuna.Pulser.Hide();
+					},
+					failure : function(o){
+						Lacuna.Pulser.Hide();
+						this.rpcFailure(o);
+					},
+					timeout:Game.Timeout,
+					scope:this
+				});
+			}
+			else {
+				Dom.get("tradePushShip").options.length = 0;
+			}
 		},
 		updatePushCargo : function(byVal) {
 			var c = Dom.get("tradePushCargo"),

@@ -243,7 +243,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			if(details) {
 				var parentEl = details.parentNode,
 					li = document.createElement("li"),
-					serverTime = Lib.parseServerDate(Game.ServerData.time);
+					serverTime = Lib.getTime(Game.ServerData.time);
 
 				Event.purgeElement(details);
 				details = parentEl.removeChild(details);
@@ -252,7 +252,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
 						nLi = li.cloneNode(false),
-						sec = (Lib.parseServerDate(ship.date_arrives).getTime() - serverTime.getTime()) / 1000;
+						sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
 					
 					nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
 					'<div class="yui-g first">',
@@ -558,13 +558,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				
-				var serverTime = Lib.parseServerDate(Game.ServerData.time);
+				var serverTime = Lib.getTime(Game.ServerData.time);
 
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
 						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false),
-						sec = (Lib.parseServerDate(ship.date_arrives).getTime() - serverTime.getTime()) / 1000;
+						sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
 						
 					nUl.Ship = ship;
 					Dom.addClass(nUl, "shipInfo");

@@ -179,7 +179,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				'		<ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
 				'		</ul>',
 				'	</div>',
-				'</div><button type="button" id="archaeologyCombine">Combine</button>',
+				'</div><button type="button" id="archaeologyCombine">Combine</button>'
 			].join('')});
 			tab.subscribe("activeChange", function(e) {
 				if(e.newValue) {
@@ -207,14 +207,14 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			var sel = Dom.get("archaeologyOre");
 			if(sel && this.ore){
 				sel.options.length = 0;
-				var opt = document.createElement("option");
-                var ore = Array();
-                for(var oKey in this.ore) {
+				var opt = document.createElement("option"),
+					ore = [], oKey;
+                for(oKey in this.ore) {
                     ore.push(oKey);
                 }
                 ore = ore.sort();
                 for(var i=0; i<ore.length; i++) {
-                    var oKey = ore[i];
+                    oKey = ore[i];
 					if(this.ore.hasOwnProperty(oKey)) {
 						var nOpt = opt.cloneNode(false);
 						nOpt.value = oKey;

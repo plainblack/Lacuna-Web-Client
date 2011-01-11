@@ -53,7 +53,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 				'			</div>',
 				'		</div>',
 				'	</div>',
-				'</div>',
+				'</div>'
 			].join('')});
 			this.tab.subscribe("activeChange", this.prepareExperiment, this, true);
 			

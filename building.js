@@ -77,9 +77,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 			if(o.result.building && this.building) {
 				//if we suddenly have work update the tile to add the tile.  if we don't have work update the tile to remove the timer
 				var workChanged = (
-					(this.building.work && !o.result.building.work)
-					|| (!this.building.work && o.result.building.work)
-					|| (this.building.work && o.result.building.work && this.building.work.end != o.result.building.work.end)
+					(this.building.work && !o.result.building.work) ||
+					(!this.building.work && o.result.building.work) ||
+					(this.building.work && o.result.building.work && this.building.work.end != o.result.building.work.end)
 				);
 				if(workChanged) {
 					this.building.work = o.result.building.work;

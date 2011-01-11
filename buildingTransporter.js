@@ -241,7 +241,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			'</div>',
 			'<ul style="margin-top:5px;">',
 			'	<li style=""><label>Total Cargo:</label><span id="tradePushCargo">0</span></li>',
-			'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"><option value="" selected>&nbsp;</option></select></li>',
+			'	<li style="margin-bottom:5px;"><label>To Colony:</label><select id="tradePushColony"><option value="" selected></option></select></li>',
 			'	<li id="tradePushMessage" class="alert"></li>',
 			'</ul></div><button id="tradePushSend">',this.pushTradeText,'</button>'].join('')});
 
@@ -253,15 +253,15 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			
 			Event.onAvailable("tradePushColony", function(){
 				var opt = document.createElement("option"),
-					planets = Game.EmpireData.planets,
+					planets = Lib.planetarySort(Game.EmpireData.planets),
 					cp = Game.GetCurrentPlanet(),
 					nOpt;
-                planets = Lib.planetarySort(planets);
-				for(var pId in planets) {
-					if(planets.hasOwnProperty(pId) && pId != cp.id){
+
+				for(var p=0; p<planets.length; p++) {
+					if(planets[p].id != cp.id){
 						nOpt = opt.cloneNode(false);
-						nOpt.value = pId;
-						nOpt.innerHTML = planets[pId].name;
+						nOpt.value = planets[p].id;
+						nOpt.innerHTML = planets[p].name;
 						this.appendChild(nOpt);
 					}
 				}

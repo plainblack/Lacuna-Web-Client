@@ -411,6 +411,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(status.server) {
 					//add everything from status empire to game empire
 					Lang.augmentObject(Game.ServerData, status.server, true);
+					Game.ServerData.time = Lib.parseServerDate(Game.ServerData.time);
 					
 					if(status.server.announcement) {
 						Lacuna.Announce.show();
@@ -717,9 +718,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		//Tick related
 		Tick : function() {
 			var ED = Lacuna.Game.EmpireData,
+				SD = Lacuna.Game.ServerData,
 				dt = (new Date()).getTime(),
 				diff = dt - Lacuna.Game.recTime;
 			Lacuna.Game.recTime = dt;
+			SD.time = new Date(Lib.getTime(SD.time) + diff);
+
 			var ratio = (diff / Lacuna.Game.HourMS),
 				updateMenu = true,
 				totalWasteOverage = 0;
