@@ -371,6 +371,28 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					}
 					this.Assign.currentAssign = assign;
 					this.Self.SpyAssignChange.call(this.Assign);
+
+					// Update spy display
+					var spy = o.result.spy;
+					var liSpyAssign = this.Assign.parentNode;
+					var res = liSpyAssign.childNodes[2];
+					var currentNum = liSpyAssign.children.length;
+					for (var i = 0; i < currentNum; i++) {
+						liSpyAssign.removeChild(liSpyAssign.lastChild);
+					}
+					liSpyAssign.innerHTML = spy.assignment;
+					liSpyAssign.appendChild(res);
+					var divSpyInfo = liSpyAssign.parentNode.parentNode;
+					var levelUl = divSpyInfo.childNodes[1];
+					levelUl.childNodes[0].innerHTML = '<label>Level:</label>' + spy.level;
+					levelUl.childNodes[1].innerHTML = '<label>Offense:</label>' + spy.offense_rating;
+					levelUl.childNodes[2].innerHTML = '<label>Defense:</label>' + spy.defense_rating;
+					levelUl.childNodes[3].innerHTML = '<label>Available:</label>' + (spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on));
+					var skillsUl = divSpyInfo.childNodes[2];
+					skillsUl.childNodes[0].innerHTML = '<label>Intel:</label>' + spy.intel;
+					skillsUl.childNodes[1].innerHTML = '<label>Mayhem:</label>' + spy.mayhem;
+					skillsUl.childNodes[2].innerHTML = '<label>Politics:</label>' + spy.politics;
+					skillsUl.childNodes[3].innerHTML = '<label>Theft:</label>' + spy.theft;
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
