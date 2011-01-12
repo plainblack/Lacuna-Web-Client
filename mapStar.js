@@ -588,7 +588,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 			details = elm.appendChild(c).appendChild(details);
 			
-			var serverTime = Lib.getTime(Game.ServerData);
+			var serverTime = Lib.getTime(Game.ServerData.time);
 			
 			for(var i=0; i<ships.length; i++) {
 				var ship = ships[i],
@@ -1078,10 +1078,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			tab.elSpyShipsList.innerHTML = "";
 			tab.elMessage.innerHTML = "";
 			Dom.setStyle(tab.elSendButton, 'display', 'none');
-			var rpc_count = 0;
 			Lacuna.Pulser.Show();
-			var method;
-			var data;
+			var method,data;
 			if ( tab.id == 'planetDetailSendSpies' ) {
 				method = 'prepare_send_spies';
 				data = {
