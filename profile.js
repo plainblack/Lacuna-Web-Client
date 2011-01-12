@@ -122,6 +122,10 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		speciesContainer.innerHTML = [
 			'	<div class="hd">Redefine Species</div>',
 			'	<div class="bd">',
+			'		<div id="profileSpeciesRedefineWarning">',
+			'			Changing your species affinities is risky business and will affect the game in many ways you cannot foresee. ',
+			'			In addition, you can only change your affinities once per month. Use at your own risk!',
+			'		</div>',
 			'		<form name="profileSpeciesRedefineForm">',
 			'			<div id="profileSpeciesDesigner"></div>',
 			'			<div id="profileSpeciesMessage" class="hidden"></div>',

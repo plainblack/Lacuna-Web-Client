@@ -309,6 +309,12 @@ dialogs
 #createEmpire textarea { width:224px; }
 #createEmpire li { margin-bottom:3px; }
 
+#profileSpeciesRedefineWarning {
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #52acff;
+}
+
 .profileSpeciesRedefineButton {
 	text-align: center;
 }
