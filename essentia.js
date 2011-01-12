@@ -150,7 +150,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'					</div>',
 			'					<hr />',
 			'					<p>Give the gift of Essentia. Simply choose the amount you want, and pay for at it at PayPal with a credit card, or with your PayPal account. You\'ll then receive an email with an essentia code that can be redeemed in the game.</p>',
-			'					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="">',
+			'					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">',
 			'					<input type="hidden" name="cmd" value="_s-xclick">',
 			'					<input type="hidden" name="hosted_button_id" value="X66S44RDHKKS8">',
 			'					<p style="margin: 10px 0;"><input type="hidden" name="on0" value="Buy an Essentia Code">Buy an Essentia Code: <select name="os0">',
