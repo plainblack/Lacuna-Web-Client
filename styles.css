@@ -992,7 +992,7 @@ Info dialogs for Empire and Alliance
 	margin:-12px auto 0;
 }
 .tile50 .planetMapTileActionLevel {
-	font-size:120%;
+	font-size:180%;
 }
 .tile50 .planetMapTileActionButton {
 	background: transparent url('assets/ui/s/build.png');
