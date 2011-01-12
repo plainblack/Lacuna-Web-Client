@@ -371,13 +371,15 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					}
 					this.Assign.currentAssign = assign;
 					this.Self.SpyAssignChange.call(this.Assign);
+
+					// Update spy display
+					var spy = o.result.spy;
 					var liSpyAssign = this.Assign.parentNode;
 					var res = liSpyAssign.childNodes[2];
 					var currentNum = liSpyAssign.children.length;
 					for (var i = 0; i < currentNum; i++) {
 						liSpyAssign.removeChild(liSpyAssign.lastChild);
 					}
-					var spy = o.result.spy;
 					liSpyAssign.innerHTML = spy.assignment;
 					liSpyAssign.appendChild(res);
 					var divSpyInfo = liSpyAssign.parentNode.parentNode;
