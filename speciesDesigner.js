@@ -12,94 +12,99 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 		Slider = YAHOO.widget.Slider,
 		Lib = Lacuna.Library;
 
-	var SpeciesDesigner = function() {
-		this.speciesTemplates = [
-			{
-				name : 'Average',
-				description : 'Not specializing in any area, but without any particular weaknesses.',
-				min_orbit: 3,
-				max_orbit: 3,
-				manufacturing_affinity: 4,
-				deception_affinity: 4,
-				research_affinity: 4,
-				management_affinity: 4,
-				farming_affinity: 4,
-				mining_affinity: 4,
-				science_affinity: 4,
-				environmental_affinity: 4,
-				political_affinity: 4,
-				trade_affinity: 4,
-				growth_affinity : 4
-			},
-			{
-				name : 'Resilient',
-				description : 'Resilient and able to colonize most any planet.  Somewhat docile, but very quick learners and above average at producing any resource.',
-				min_orbit: 2,
-				max_orbit: 7,
-				manufacturing_affinity: 3,
-				deception_affinity: 3,
-				research_affinity: 3,
-				management_affinity: 5,
-				farming_affinity: 5,
-				mining_affinity: 5,
-				science_affinity: 5,
-				environmental_affinity: 5,
-				political_affinity: 1,
-				trade_affinity: 1,
-				growth_affinity : 3
-			},
-			{
-				name : 'Warmonger',
-				description : 'Adept at ship building and espionage. They are bent on domination.',
-				min_orbit: 4,
-				max_orbit: 5,
-				manufacturing_affinity: 4,
-				deception_affinity: 7,
-				research_affinity: 2,
-				management_affinity: 4,
-				farming_affinity: 2,
-				mining_affinity: 2,
-				science_affinity: 7,
-				environmental_affinity: 2,
-				political_affinity: 7,
-				trade_affinity: 1,
-				growth_affinity : 5
-			},
-			{
-				name : 'Viral',
-				description : 'Proficient at growing at the most expedient pace like a virus in the Expanse.',
-				min_orbit: 1,
-				max_orbit: 7,
-				manufacturing_affinity: 1,
-				deception_affinity: 4,
-				research_affinity: 7,
-				management_affinity: 7,
-				farming_affinity: 1,
-				mining_affinity: 1,
-				science_affinity: 1,
-				environmental_affinity: 1,
-				political_affinity: 7,
-				trade_affinity: 1,
-				growth_affinity : 7
-			},
-			{
-				name : 'Trader',
-				description : 'Masters of commerce and ship building.',
-				min_orbit: 2,
-				max_orbit: 3,
-				manufacturing_affinity: 5,
-				deception_affinity: 4,
-				research_affinity: 7,
-				management_affinity: 7,
-				farming_affinity: 1,
-				mining_affinity: 1,
-				science_affinity: 7,
-				environmental_affinity: 1,
-				political_affinity: 1,
-				trade_affinity: 7,
-				growth_affinity : 2
-			}
-		];
+	var SpeciesDesigner = function( config ) {
+		if ( (typeof config !== 'undefined') && (typeof config.templates !== 'undefined') && ! config.templates ) {
+			this.speciesTemplates = [];
+		}
+		else {
+			this.speciesTemplates = [
+				{
+					name : 'Average',
+					description : 'Not specializing in any area, but without any particular weaknesses.',
+					min_orbit: 3,
+					max_orbit: 3,
+					manufacturing_affinity: 4,
+					deception_affinity: 4,
+					research_affinity: 4,
+					management_affinity: 4,
+					farming_affinity: 4,
+					mining_affinity: 4,
+					science_affinity: 4,
+					environmental_affinity: 4,
+					political_affinity: 4,
+					trade_affinity: 4,
+					growth_affinity : 4
+				},
+				{
+					name : 'Resilient',
+					description : 'Resilient and able to colonize most any planet.  Somewhat docile, but very quick learners and above average at producing any resource.',
+					min_orbit: 2,
+					max_orbit: 7,
+					manufacturing_affinity: 3,
+					deception_affinity: 3,
+					research_affinity: 3,
+					management_affinity: 5,
+					farming_affinity: 5,
+					mining_affinity: 5,
+					science_affinity: 5,
+					environmental_affinity: 5,
+					political_affinity: 1,
+					trade_affinity: 1,
+					growth_affinity : 3
+				},
+				{
+					name : 'Warmonger',
+					description : 'Adept at ship building and espionage. They are bent on domination.',
+					min_orbit: 4,
+					max_orbit: 5,
+					manufacturing_affinity: 4,
+					deception_affinity: 7,
+					research_affinity: 2,
+					management_affinity: 4,
+					farming_affinity: 2,
+					mining_affinity: 2,
+					science_affinity: 7,
+					environmental_affinity: 2,
+					political_affinity: 7,
+					trade_affinity: 1,
+					growth_affinity : 5
+				},
+				{
+					name : 'Viral',
+					description : 'Proficient at growing at the most expedient pace like a virus in the Expanse.',
+					min_orbit: 1,
+					max_orbit: 7,
+					manufacturing_affinity: 1,
+					deception_affinity: 4,
+					research_affinity: 7,
+					management_affinity: 7,
+					farming_affinity: 1,
+					mining_affinity: 1,
+					science_affinity: 1,
+					environmental_affinity: 1,
+					political_affinity: 7,
+					trade_affinity: 1,
+					growth_affinity : 7
+				},
+				{
+					name : 'Trader',
+					description : 'Masters of commerce and ship building.',
+					min_orbit: 2,
+					max_orbit: 3,
+					manufacturing_affinity: 5,
+					deception_affinity: 4,
+					research_affinity: 7,
+					management_affinity: 7,
+					farming_affinity: 1,
+					mining_affinity: 1,
+					science_affinity: 7,
+					environmental_affinity: 1,
+					political_affinity: 1,
+					trade_affinity: 7,
+					growth_affinity : 2
+				}
+			];
+		}
 	};
 	SpeciesDesigner.prototype = {
 		render : function(el) {
@@ -112,24 +117,31 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 			this.elName = Sel.query(".speciesName", container, true);
 			this.elDesc = Sel.query(".speciesDesc", container, true);
 			this.elTemplates = Sel.query(".speciesTemplates", container, true);
-			Event.delegate(this.elTemplates, 'click', function(e, matchedEl) {
-				Event.stopEvent(e);
-				this.selectTemplate(matchedEl.TemplateIndex);
-			}, '.speciesTemplate', this, true);
-			
-			for (var i = 0; i < this.speciesTemplates.length; i++) {
-				var template = this.speciesTemplates[i];
-				var tButton = document.createElement('button');
-				tButton.innerHTML = template.name;
-				tButton.title = template.description;
-				tButton.TemplateIndex = i;
-				Dom.addClass(tButton, 'speciesTemplate');
-				this.elTemplates.appendChild(tButton);
+			if (this.speciesTemplates.length > 0) {
+				Event.delegate(this.elTemplates, 'click', function(e, matchedEl) {
+					Event.stopEvent(e);
+					this.selectTemplate(matchedEl.TemplateIndex);
+				}, '.speciesTemplate', this, true);
+				
+				for (var i = 0; i < this.speciesTemplates.length; i++) {
+					var template = this.speciesTemplates[i];
+					var tButton = document.createElement('button');
+					tButton.innerHTML = template.name;
+					tButton.title = template.description;
+					tButton.TemplateIndex = i;
+					Dom.addClass(tButton, 'speciesTemplate');
+					this.elTemplates.appendChild(tButton);
+				}
+			}
+			else {
+				Dom.setStyle(Sel.query(".speciesButtons", container, true), 'display', 'none');
 			}
 			el.appendChild(container);
 			this._createSliders();
 			this._createTooltips();
-			this.selectTemplate(0);
+			if (this.speciesTemplates.length > 0) {
+				this.selectTemplate(0);
+			}
 		},
 		_createSliders : function() {
 			this.speciesHO = this._createHabitableOrbits();
@@ -220,19 +232,40 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 			var slider = new YW.DualSlider(mins, maxs, range, [90,90]);
 			var mintSetX = mint.setXConstraint;
 			mint.setXConstraint = function (iLeft, iRight, iTickSize) {
-				iRight += iTickSize * 1.5;
+				if (slider.minLock) {
+					iRight = ( slider.minLock - 1 ) * iTickSize;
+				}
+				else {
+					iRight += iTickSize * 1.5;
+				}
 				mintSetX.apply(mint, [iLeft, iRight, iTickSize]);
 			};
 			var maxtSetX = maxt.setXConstraint;
 			maxt.setXConstraint = function (iLeft, iRight, iTickSize) {
-				iLeft += iTickSize;
+				if (slider.maxLock) {
+					iLeft = ( 1 - slider.maxLock ) * iTickSize;
+				}
+				else {
+					iLeft += iTickSize;
+				}
 				maxtSetX.apply(maxt, [iLeft, iRight, iTickSize]);
 			};
-
+			
 			// slider.minRange = -15;
 			// Decorate the DualSlider instance with some new properties and
 			// methods to maintain the highlight element
 			YAHOO.lang.augmentObject(slider, {
+				setLocks : function(min, max) {
+					this.minLock = min;
+					this.maxLock = max;
+					var delta = max - min;
+					Dom.setStyle(this._lock,'display', 'block');
+					Dom.setStyle(this._lock,'left', ( min * tickSize - 23 ) + 'px');
+					Dom.setStyle(this._lock,'width', Math.max(delta * tickSize,0) + 'px');
+				},
+				minLock : undefined,
+				maxLock : undefined,
+				_lock : Sel.query('.speciesSlider_lock', elSlider, true),
 				// The highlight element
 				_highlight : Sel.query('.speciesHO_highlight', this.container, true),
 				// A method to update the status and update the highlight
@@ -290,6 +323,13 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				thumb.id, 0, range, tickSize);
 			slider.key = container.id;
 			YAHOO.lang.augmentObject(slider, {
+				setLock : function(min) {
+					Dom.setStyle(this._lock,'display', 'block');
+					Dom.setStyle(this._lock,'left', '0px');
+					Dom.setStyle(this._lock,'width', ((min - 1) * tickSize + 8) + 'px');
+					this.thumb.setXConstraint((1 - min) * tickSize, range, tickSize);
+				},
+				_lock : Sel.query('.speciesSlider_lock', container, true),
 				getAffinity : function() {
 					return Math.round(this.getValue() / tickSize + 1);
 				},
@@ -298,7 +338,7 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 					this.setValue(value, skipAnim, force, silent);
 					return affinity;
 				}
-			});
+			}, true);
 			slider.setAffinity(4);
 			var updateUI = function () {
 				elNum.innerHTML = this.getAffinity();
@@ -358,7 +398,23 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 			this.speciesGrowth.setAffinity(data.growth_affinity,true,true);
 		},
 		setSpeciesLocks : function(data) {
-			
+			this.speciesHO.setLocks(data.min_orbit, data.max_orbit);
+			this.speciesGrowth.setLock(data.min_growth);
+		},
+		compareSpeciesData : function (species1, species2) {
+			return (
+				species1.manufacturing_affinity == species2.manufacturing_affinity &&
+				species1.deception_affinity     == species2.deception_affinity &&
+				species1.research_affinity      == species2.research_affinity &&
+				species1.management_affinity    == species2.management_affinity &&
+				species1.farming_affinity       == species2.farming_affinity &&
+				species1.mining_affinity        == species2.mining_affinity &&
+				species1.science_affinity       == species2.science_affinity &&
+				species1.environmental_affinity == species2.environmental_affinity &&
+				species1.political_affinity     == species2.political_affinity &&
+				species1.trade_affinity         == species2.trade_affinity &&
+				species1.growth_affinity        == species2.growth_affinity
+			);
 		},
 		setExpert : function() {
 			this._expert = true;
@@ -412,7 +468,7 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				'	</span>',
 				'</div>',
 				'<div class="speciesCreate">',
-				'	<ul style="margin-top:5px; padding-top:5px; border-top:1px solid #52acff;">',
+				'	<ul>',
 				'		<li style="margin-bottom:3px;"><label for="',nameId,'">Species Name</label><input id="',nameId,'" type="text" class="speciesName" maxlength="30" size="30" /></label></li>',
 				'		<li><label for="',descId,'">Description</label><textarea id="',descId,'" class="speciesDesc" cols="40" rows="4"></textarea></li>',
 				'		<li style="margin: 10px 0;"><span class="affinitiesLabel">Affinities:</span><span class="speciesPointLine speciesPointsValid"><label>Points</label><span class="speciesPointTotal">0</span>/45</span></li>',
@@ -423,6 +479,7 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				'				<li><label title="Determines the orbits your species can inhabit. Orbits 2-5 have the most abundant food. Orbits 1,6 and 7 have less competition from other players.">Habitable Orbits</label>',
 				'					<div class="speciesHO speciesSlider_bg" title="Habitable Orbits Selector">',
 				'						<span class="speciesHO_highlight"></span>',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesHO_min">',
 			'	 							<div class="speciesHO_min_thumb speciesSliderThumb"><span class="speciesHO_from thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb-half-left.png" /></div>',
 				'						</div>',
@@ -433,26 +490,31 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				'				</li>',
 				'				<li><label title="Increases the output of buildings that convert one resource into another.">Manufacturing</label>',
 				'					<div class="speciesConst speciesSlider_bg" title="Manufacturing Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesConst_thumb speciesSliderThumb"><span class="speciesConst_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Determines how skilled your spies are naturally.">Deception</label>',
 				'					<div class="speciesDecep speciesSlider_bg" title="Deception Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesDecep_thumb speciesSliderThumb"><span class="speciesDecep_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Decreases the amount of resources it takes to upgrade buildings.">Research</label>',
 				'					<div class="speciesResearch speciesSlider_bg" title="Research Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesResearch_thumb speciesSliderThumb"><span class="speciesResearch_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Decreases the amount of time it takes to build and process everything.">Management</label>',
 				'					<div class="speciesManagement speciesSlider_bg" title="Management Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesManagement_thumb speciesSliderThumb"><span class="speciesManagement_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Increases your production of food.">Farming</label>',
 				'					<div class="speciesFarming speciesSlider_bg" title="Farming Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesFarming_thumb speciesSliderThumb"><span class="speciesFarming_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
@@ -462,31 +524,37 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 				'			<ul>',
 				'				<li><label title="Increases your production of ore.">Mining</label>',
 				'					<div class="speciesMining speciesSlider_bg" title="Mining Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesMining_thumb speciesSliderThumb"><span class="speciesMining_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Increases production from power plants, and technological upgrades such as the Propulsion Factory.">Science</label>',
 				'					<div class="speciesScience speciesSlider_bg" title="Science Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesScience_thumb speciesSliderThumb"><span class="speciesScience_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Increases your production of water, and decreases your production of waste.">Environmental</label>',
 				'					<div class="speciesEnviro speciesSlider_bg" title="Environmental Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesEnviro_thumb speciesSliderThumb"><span class="speciesEnviro_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Increases happiness production, and lowers the cost of settling new colonies.">Political</label>',
 				'					<div class="speciesPolitical speciesSlider_bg" title="Political Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesPolitical_thumb speciesSliderThumb"><span class="speciesPolitical_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Increases the amount of goods that can be hauled on cargo ships and transported through Subspace Transporters, and gives you some advantages trading with Lacuna Expanse Corp.">Trade</label>',
 				'					<div class="speciesTrade speciesSlider_bg" title="Trade Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesTrade_thumb speciesSliderThumb"><span class="speciesTrade_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',
 				'				<li><label title="Sets the starting size of your Planetary Command Center on each colony you create, which gives you more starting production and storage.">Growth</label>',
 				'					<div class="speciesGrowth speciesSlider_bg" title="Growth Selector">',
+				'						<span class="speciesSlider_lock"><span class="speciesSlider_lock_bg"></span></span>',
 				'						<div class="speciesGrowth_thumb speciesSliderThumb"><span class="speciesGrowth_num thumbDisplay">1</span><img src="',Lib.AssetUrl,'ui/web/slider-thumb.png" /></div>',
 				'					</div>',
 				'				</li>',

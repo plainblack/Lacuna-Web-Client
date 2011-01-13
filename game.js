@@ -294,6 +294,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Invite.subscribe("onRpc", Game.onRpc);
 				Lacuna.Invite.subscribe("onRpcFailed", Game.Failure);
 				
+				Lacuna.Profile.subscribe("onRpc", Game.onRpc);
+				Lacuna.Profile.subscribe("onRpcFailed", Game.Failure);
+				
 				Game._hasRun = true;
 				
 				Event.on(window, "resize", function (e) {

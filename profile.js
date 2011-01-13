@@ -102,7 +102,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						},
 						failure : function(o){
 							YAHOO.log(o, "error", "Profile.redefine_species_limits.failure");
-							this.fireEvent('onRpcFailed', o.result);
+							this.fireEvent('onRpcFailed', o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -151,7 +151,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			zIndex:99999
 		});
 		this.SpeciesDialog.renderEvent.subscribe(function(){
-			this.SpeciesDesigner = new Lacuna.SpeciesDesigner();
+			this.SpeciesDesigner = new Lacuna.SpeciesDesigner({ templates : false });
 			this.SpeciesDesigner.render('profileSpeciesDesigner');
 			Dom.removeClass(this.speciesId, Lib.Styles.HIDDEN);
 		}, this, true);
@@ -257,7 +257,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						},
 						failure : function(o){
 							YAHOO.log(o, "error", "Profile.handleUpdate.password.failure");
-							alert(o.error.message);
+							this.fireEvent('onRpcFailed', o);
 							this.tabView.set('activeIndex', 4);
 							this.new_password.focus();
 						},
@@ -330,7 +330,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.handleUpdate.failure");
-					alert(o.error.message);
+					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -341,10 +341,12 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			Game.Services.Empire.view_profile({session_id:Game.GetSession("")},{
 				success : function(o){
 					YAHOO.log(o, "info", "Profile.show.view_profile.success");
+					this.fireEvent('onRpc', o.result);
 					this.populateProfile(o.result);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.show.view_profile.failure");
+					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:Lacuna.Profile
@@ -555,6 +557,10 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		},
 		redefineSpecies : function() {
 			var data = this.SpeciesDesigner.getSpeciesData();
+			if (this.SpeciesDesigner.compareSpeciesData(data, this.speciesStats)) {
+				this.SpeciesDialog.hide();
+				return;
+			}
 			try {
 				if ( ! this.SpeciesDesigner.validateSpecies(data) ) {
 					return;
@@ -576,7 +582,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 				failure : function(o){
 					YAHOO.log(o, "error", "Profile.redefine_species.failure");
 					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o.result);
+					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:this

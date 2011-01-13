@@ -846,16 +846,46 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	color:black;
 	bottom: 2px;
 }
+.speciesButtons {
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #52acff;
+}
 
 .speciesHO_highlight {
 	position: absolute;
-	background: green;
+	background: #103060;
 	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
 	top: 10px;
 	left: 12px;
 	height: 13px;
 	width: 188px;
+	opacity: 0.7;
 }
+.speciesHO .speciesSlider_lock {
+	border-left: 1px solid red;
+}
+.speciesSlider_lock {
+	position: absolute;
+	border-right: 1px solid red;
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	top: 8px;
+	left: 12px;
+	height: 20px;
+	width: 0px;
+	display: none;
+}
+.speciesSlider_lock_bg {
+	position: relative;
+	background: #bfbfbf;
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	top: 2px;
+	height: 13px;
+	width: 100%;
+	display: block;
+	opacity: 0.5;
+}
+
 .speciesSliderThumb {
 	position: absolute;
 	cursor: default;
