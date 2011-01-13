@@ -44,11 +44,10 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 			Event.on('subspaceTransmitEnergy', 'click', this.Transmit, {method:"transmit_energy"}, this);
 			Event.on('subspaceCompleteBuildQueue', 'click', this.Transmit, {method:"complete_build_queue"}, this);
 
-			Game.onTick.subscribe(this.UpdateQueueTime, this, true);
 			var tab = new YAHOO.widget.Tab({ label: "Transmit Resources", contentEl: div });
 			tab.subscribe("activeChange", function(e) {
-				var buildQueueTotal = 0;
 				if(e.newValue) {
+					var buildQueueTotal = 0;
 					var buildings = Lacuna.MapPlanet.buildings;
 					for (var building in buildings) {
 						if( buildings.hasOwnProperty(building) ) {
@@ -58,40 +57,28 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 							}
 						}
 					}
+					this.addQueue( buildQueueTotal, this.UpdateQueueTime, Dom.get('subspaceQueueTime'), this);
+					this.UpdateQueueTime( buildQueueTotal );
 				}
-				this.queueStartTime = new Date();
-				this.buildQueueTotal = buildQueueTotal;
-				this.UpdateQueueTime();
 			}, this, true);
 			
 			return tab;
 		},
-		UpdateQueueTime : function(e) {
-			if (! this.queueStartTime) {
-				return;
-			}
-			var timeLeft = this.buildQueueTotal - ( (new Date()).getTime() - this.queueStartTime.getTime() ) / 1000;
-			if (timeLeft < 1) {
-				timeLeft = 0;
-				delete this.buildQueueTotal;
-				delete this.queueStartTime;
+		UpdateQueueTime : function(remaining) {
+			if (remaining < 1) {
+				remaining = 0;
 				Dom.get('subspaceCompleteBuildQueue').disabled = true;
 			}
 			else {
 				Dom.get('subspaceCompleteBuildQueue').disabled = false;
 			}
-			Dom.get('subspaceQueueTime').innerHTML = Lib.formatTime(timeLeft);
+			Dom.get('subspaceQueueTime').innerHTML = Lib.formatTime(remaining);
 		},
 		Transmit : function(e, opt) {
 			var btn = Event.getTarget(e);
 			Event.stopEvent(e);
 			Lacuna.Pulser.Show();
 			btn.disabled = true;
-			var oldStartTime;
-			if (opt.method == 'complete_build_queue') {
-				oldStartTime = this.queueStartTime;
-				delete this.queueStartTime;
-			}
 			this.service[opt.method]({
 				session_id:Game.GetSession(),
 				building_id:this.building.id
@@ -100,9 +87,8 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 					YAHOO.log(o, "info", "SubspaceSupplyDepot.Transmit.success");
 					var elMessage = Dom.get('subspaceMessage');
 					if (opt.method == 'complete_build_queue') {
-						this.queueStartTime = oldStartTime;
-						this.buildQueueTotal = 0;
-						this.UpdateQueueTime();
+						this.resetQueue();
+						this.UpdateQueueTime(0);
 						elMessage.innerHTML = 'Build queue completed.';
 					}
 					else {
@@ -119,13 +105,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "SubspaceSupplyDepot.Transmit.failure");
-					if (opt.method == 'complete_build_queue') {
-						this.queueStartTime = oldStartTime;
-						this.UpdateQueueTime();
-					}
-					else {
-						btn.disabled = false;
-					}
+					btn.disabled = false;
 					Lacuna.Pulser.Hide();
 					this.rpcFailure(o);
 				},
