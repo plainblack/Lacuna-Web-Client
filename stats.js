@@ -39,27 +39,27 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			//subscribe after adding so active doesn't fire
 			this.tabView.getTab(1).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.EmpireStats();
+					this.AllianceStats();
 				}
 			}, this, true);
 			this.tabView.getTab(2).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.AllianceStats();
+					this.ColonyStats();
 				}
 			}, this, true);
 			this.tabView.getTab(3).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.ColonyStats();
+					this.SpyStats();
 				}
 			}, this, true);
 			this.tabView.getTab(4).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.SpyStats();
+					this.WeeklyMedalStats();
 				}
 			}, this, true);
 			this.tabView.getTab(5).subscribe("activeChange", function(e) {
 				if(e.newValue) {
-					this.WeeklyMedalStats();
+					this.getServerStats();
 				}
 			}, this, true);
 			
@@ -84,14 +84,19 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'	<div class="bd">',			
 			'		<div id="statsTabs" class="yui-navset">',
 			'			<ul class="yui-nav">',
-			'				<li><a href="#statsGeneral"><em>General</em></a></li>',
 			'				<li><a href="#statsEmpire"><em>Empires</em></a></li>',
 			'				<li><a href="#statsAlliance"><em>Alliances</em></a></li>',
 			'				<li><a href="#statsColony"><em>Colonies</em></a></li>',
 			'				<li><a href="#statsSpy"><em>Spies</em></a></li>',
 			'				<li><a href="#statsWeeklyMedal"><em>Weekly Medals</em></a></li>',
+			'				<li><a href="#statsGeneral"><em>General</em></a></li>',
 			'			</ul>',
 			'			<div id="oHt" class="yui-content" style="overflow:auto;">',
+			'				<div id="statsEmpire"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsEmpireFind" /></span></div><div id="statsEmpireTable"></div><div id="statsEmpirePaginator"></div></div>',
+			'				<div id="statsAlliance"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsAllianceFind" /></span></div><div id="statsAllianceTable"></div><div id="statsAlliancePaginator"></div></div>',
+			'				<div id="statsColony"><div id="statsColonyTable"></div></div>',
+			'				<div id="statsSpy"><div id="statsSpyTable"></div></div>',
+			'				<div id="statsWeeklyMedal"><div id="statsWeeklyMedalTable"></div></div>',
 			'				<div id="statsGeneral">',
 			'					<div id="statsGeneralTabs" class="yui-navset">',
 			'						<ul class="yui-nav">',
@@ -121,11 +126,6 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'						</div>',
 			'					</div>',
 			'				</div>',
-			'				<div id="statsEmpire"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsEmpireFind" /></span></div><div id="statsEmpireTable"></div><div id="statsEmpirePaginator"></div></div>',
-			'				<div id="statsAlliance"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsAllianceFind" /></span></div><div id="statsAllianceTable"></div><div id="statsAlliancePaginator"></div></div>',
-			'				<div id="statsColony"><div id="statsColonyTable"></div></div>',
-			'				<div id="statsSpy"><div id="statsSpyTable"></div></div>',
-			'				<div id="statsWeeklyMedal"><div id="statsWeeklyMedalTable"></div></div>',
 			'			</div>',
 			'		</div>',
 			'	</div>',
@@ -1264,7 +1264,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 		
 		show : function() {
 			//this is called out of scope so make sure to pass the correct scope in
-			Lacuna.Stats.getServerStats();
+			Lacuna.Stats.EmpireStats();
 			Game.OverlayManager.hideAll();
 
 			var oHt = Game.GetSize().h - 40;
