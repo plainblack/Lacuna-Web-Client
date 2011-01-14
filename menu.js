@@ -699,28 +699,37 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			Dom.addClass(this.container, Lib.Styles.HIDDEN);
 		},
 		
+		resourceTTText : function(name, icon, iconClass, hour, store, cap) {
+			var wantCap = typeof cap !== 'undefined';
+			return [
+				'<div><strong>',name,'</strong></div>',
+				'<div><img alt="" class="',iconClass,'" src="',Lib.AssetUrl,'ui/s/',icon,'.png" /> ',Lib.formatNumber(hour),'/hr</div>',
+				'<div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(store)), (wantCap ? '/'+Lib.formatNumber(cap) : ''),'</div>',
+				(wantCap ? '<div><img alt="" class="smallTime" src="'+Lib.AssetUrl+'ui/s/time.png />' + ( hour < 0 ? 'Will Never Fill' : 'Full In '+Lib.formatTime(3600 * (cap - store) / hour)) + '</div>' : '')
+			];
+		},
 		getTextFor : function(id) {
 			var ED = Game.EmpireData,
 				planet = ED.planets[ED.current_planet_id || ED.home_planet_id],
 				output;
 			switch(id){
 				case "planetMenuFood":
-					output = ['<div><strong>Food</strong></div><div><img alt="" class="smallFood" src="',Lib.AssetUrl,'ui/s/food.png" /> ',Lib.formatNumber(planet.food_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.food_stored)), '/', Lib.formatNumber(planet.food_capacity),'</div>'];
+					output = this.resourceTTText('Food', 'food', 'smallFood', planet.food_hour, planet.food_stored, planet.food_capacity);
 					break;
 				case "planetMenuOre":
-					output = ['<div><strong>Ore</strong></div><div><img alt="" class="smallOre" src="',Lib.AssetUrl,'ui/s/ore.png" /> ',Lib.formatNumber(planet.ore_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.ore_stored)), '/', Lib.formatNumber(planet.ore_capacity),'</div>'];
+					output = this.resourceTTText('Ore', 'ore', 'smallOre', planet.ore_hour, planet.ore_stored, planet.ore_capacity);
 					break;
 				case "planetMenuWater":
-					output = ['<div><strong>Water</strong></div><div><img alt="" class="smallWater" src="',Lib.AssetUrl,'ui/s/water.png" /> ',Lib.formatNumber(planet.water_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.water_stored)), '/', Lib.formatNumber(planet.water_capacity),'</div>'];
+					output = this.resourceTTText('Water', 'water', 'smallWater', planet.water_hour, planet.water_stored, planet.water_capacity);
 					break;
 				case "planetMenuEnergy":
-					output = ['<div><strong>Energy</strong></div><div><img alt="" class="smallEnergy" src="',Lib.AssetUrl,'ui/s/energy.png" /> ',Lib.formatNumber(planet.energy_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.energy_stored)), '/', Lib.formatNumber(planet.energy_capacity),'</div>'];
+					output = this.resourceTTText('Energy', 'energy', 'smallEnergy', planet.energy_hour, planet.energy_stored, planet.energy_capacity);
 					break;
 				case "planetMenuWaste":
-					output = ['<div><strong>Waste</strong></div><div><img alt="" class="smallWaste" src="',Lib.AssetUrl,'ui/s/waste.png" /> ',Lib.formatNumber(planet.waste_hour),'/hr</div><div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(planet.waste_stored)), '/', Lib.formatNumber(planet.waste_capacity),'</div>'];
+					output = this.resourceTTText('Waste', 'waste', 'smallWaste', planet.waste_hour, planet.waste_stored, planet.waste_capacity);
 					break;
 				case "planetMenuHappiness":
-					output = ['<div><strong>Happiness</strong></div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(planet.happiness_hour),'/hr</div><div><img alt="" class="smallHappy" src="',Lib.AssetUrl,'ui/s/happiness.png" /> ',Lib.formatNumber(Math.round(planet.happiness)),'</div>'];
+					output = this.resourceTTText('Happiness', 'happiness', 'smallHappy', planet.happiness_hour, planet.happiness);
 					break;
 				case "planetMenuPlots":
 					output = [planet.plots_available*1, ' Plots Available'];
