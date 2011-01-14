@@ -358,9 +358,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						nLi = li.cloneNode(false),
 						costs = bd.build.cost,
 						prod = bd.production,
+						noPlots = (isMaxPlots && ! bd.build.no_plot_use),
 						isLater = bd.build.tags.indexOf('Later') > -1,
 						isPlan = bd.build.tags.indexOf('Plan') > -1,
-						isNotBuildable = (isLater || isQueueFull || (isMaxPlots && !isPlan));
+						isNotBuildable = (isLater || isQueueFull || noPlots )
 						
 					bd.name = names[i];
 					
@@ -371,6 +372,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						reason = undefined;
 						if (isQueueFull) {
 							reason = "Build queue is full.";
+						}
+						else if (noPlots) {
+							reason = "No plots available.";
 						}
 						else if (isPlan) {
 							var extra_level = bd.build.extra_level*1;
