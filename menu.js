@@ -589,7 +589,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			this.Menu.addItems(items);
 			this.Menu.render();
 			
-			this.elText.innerHTML = [cp.image ? '<img src="'+Lib.AssetUrl+'star_system/'+cp.image+'.png" class="menuPlanetThumb" />' : '', cp.name].join('');
+			this.elText.innerHTML = [cp.image ? '<img src="'+Lib.AssetUrl+'star_system/'+cp.image+'.png" class="menuPlanetThumb" />' : '', '<div id="menuPlanetName">',cp.name,'</div>'].join('');
 			
 			this.updateTick();
 		},

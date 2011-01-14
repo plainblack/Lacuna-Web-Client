@@ -361,6 +361,11 @@ menu
 	padding-left:20px;
 	padding-top:25px;
 	text-align:left;
+	overflow: hidden;
+	width: 300px;
+}
+#menuPlanetName {
+	width: 1000px;
 }
 #planets img {
 	float:left;
