@@ -50,6 +50,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					'			<li><label>Population:</label>',Lib.formatNumber(planet.population),'</li>',
 					'			<li><label>Next Colony Cost:</label>',Lib.formatNumber(this.result.next_colony_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>',
 					'			<li><label>Location:</label>',planet.x,'x : ',planet.y,'y</li>',
+					'			<li><label>Zone:</label>',planet.zone,'</li>',
 					'			<li><label>Star:</label>',planet.star_name,'</li>',
 					'			<li><label>Orbit:</label>',planet.orbit,'</li>',
 					'		</ul>',

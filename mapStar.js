@@ -912,6 +912,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li id="starDetailsName">',data.name,'</li>',
 				'	<li><label>X: </label>',data.x,'</li>',
 				'	<li><label>Y: </label>',data.y,'</li>',
+				'	<li><label>Zone: </label>',data.zone,'</li>',
 				'</ul>'
 			].join('');
 			
@@ -942,6 +943,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li><label>Water: </label>',body.water,'</li>',
 				'	<li><label>Planet Size:</label>',body.size,'</li>',
 				'	<li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
+				'	<li><label>Zone:</label>',body.zone,'</li>',
 				'	<li><label>Star:</label>',body.star_name,'</li>',
 				'	<li><label>Orbit:</label>',body.orbit,'</li>',
 				empire.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
