@@ -251,6 +251,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "themepark",
+		type: "js",
+		fullpath: urlBuilder("buildingThemePark.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "trade",
 		type: "js",
 		fullpath: urlBuilder("buildingTradeMinistry.js"),
@@ -295,6 +301,7 @@
 			"spaceport",
 			"subspacesupplydepot",
 			"templeofthedrajilites",
+			"themepark",
 			"trade",
 			"transporter",
 			"wasterecycling",

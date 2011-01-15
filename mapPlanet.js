@@ -953,6 +953,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/subspacesupplydepot":
 					classObj = new Lacuna.buildings.SubspaceSupplyDepot(result);
 					break;
+				case "/themepark":
+					classObj = new Lacuna.buildings.ThemePark(result);
+					break;
 				case "/templeofthedrajilites":
 					classObj = new Lacuna.buildings.TempleOfTheDrajilites(result);
 					break;

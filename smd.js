@@ -1736,6 +1736,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			ThemePark : {
+				"SMDVersion":"2.0",
+				"description": "Theme Park",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/themepark",
+
+				"services": {
+					"operate" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Trade : {
 				"SMDVersion":"2.0",
 				"description": "Trade",
