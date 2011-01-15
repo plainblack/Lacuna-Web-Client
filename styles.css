@@ -343,6 +343,9 @@ menu
 #planetMenuTT strong {
 	font-weight: bold;
 }
+#planetMenuTT img {
+	vertical-align: middle;
+}
 #userMenu, #planetMenu {
 	width:315px;
 }
