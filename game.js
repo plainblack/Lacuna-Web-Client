@@ -574,7 +574,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(planet) {
 				Game.OverlayManager.hideAll();
 				Game.EmpireData.current_planet_id = planet.id;
-				Lacuna.Menu.PlanetMenu.elText.innerHTML = [planet.image ? '<img src="'+Lib.AssetUrl+'star_system/'+planet.image+'.png" class="menuPlanetThumb" />' : '', planet.name].join('');
+				Lacuna.Menu.PlanetMenu.update();
 				Game.SetLocation(planet.id, Lib.View.PLANET);
 			
 				Lacuna.MapStar.MapVisible(false);

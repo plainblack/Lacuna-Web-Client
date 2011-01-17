@@ -343,6 +343,9 @@ menu
 #planetMenuTT strong {
 	font-weight: bold;
 }
+#planetMenuTT img {
+	vertical-align: middle;
+}
 #userMenu, #planetMenu {
 	width:315px;
 }
@@ -363,12 +366,10 @@ menu
 	text-align:left;
 	overflow: hidden;
 	width: 300px;
-}
-#menuPlanetName {
-	width: 1000px;
+	white-space: nowrap;
 }
 #planets img {
-	float:left;
+	vertical-align: top;
 	margin-right:10px;
 }
 

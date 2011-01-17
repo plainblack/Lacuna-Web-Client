@@ -318,8 +318,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						}
 					},
 					hideEventFn = function(){
-						delete this.availSpyShips;
-						delete this.availSpies;
+						delete this.avail.spyShips;
+						delete this.avail.spies;
 					};
 				for (var tabId in spyTabs) {
 					if (spyTabs.hasOwnProperty(tabId)) {
@@ -1073,7 +1073,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		ShowSpies : function(tab) {
 			Dom.setStyle(tab.elSpiesPane, 'display', 'block');
 			Dom.setStyle(tab.elSpyShipsPane, 'display', 'none');
-			if ( tab.availSpies && tab.availSpyShips ) {
+			if ( tab.avail && tab.avail.spies && tab.avail.spyShips ) {
 				return;
 			}
 			tab.elSpiesList.innerHTML = "";
@@ -1104,8 +1104,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					YAHOO.log(o, "info", "MapStar.ShowSpies."+method+".success");
 					this.fireEvent("onMapRpc", o.result);
 					Lacuna.Pulser.Hide();
-					tab.availSpyShips = o.result.ships;
-					tab.availSpies = o.result.spies;
+					tab.avail = {
+						spyShips : o.result.ships,
+						spies : o.result.spies
+					};
 					this.populateSpies(tab);
 				},
 				failure : function(o){
@@ -1119,8 +1121,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 		populateSpies : function(tab) {
 			var list = tab.elSpiesList;
-			var spies = tab.availSpies;
-			var ships = tab.availSpyShips;
+			var spies = tab.avail.spies;
+			var ships = tab.avail.spyShips;
 			var verb = tab.id == 'planetDetailSendSpies' ? 'send' : 'fetch';
 			
 			if (spies.length == 0) {
@@ -1172,7 +1174,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		MoveSpies : function(e, tab) {
 			Event.stopEvent(e);
 			var spies = [];
-			var ships = tab.availSpyShips;
+			var ships = tab.avail.spyShips;
 			var list = tab.elSpyShipsList;
 			var verb = tab.id == 'planetDetailSendSpies' ? 'send' : 'fetch';
 			Dom.batch(tab.elSpiesList.getElementsByTagName('input'), function(el) {
@@ -1248,8 +1250,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					alert(successMessage + '  Arrival time: ' + Lib.formatServerDateShort(o.result.ship.date_arrives));
-					delete tab.availSpies;
-					delete tab.availSpyShips;
+					delete tab.avail.spies;
+					delete tab.avail.spyShips;
 					this.ShowSpies(tab);
 				},
 				failure : function(o){

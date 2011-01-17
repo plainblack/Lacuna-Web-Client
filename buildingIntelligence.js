@@ -172,7 +172,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"spyAssignedTo");
-					nLi.innerHTML = "<label>Assigned To:</label>"+spy.assigned_to.name;
+					nLi.innerHTML = '<label>Assigned To:</label> <a class="starmap_link" href="#' + spy.assigned_to.x + 'x' + spy.assigned_to.y + '">' + spy.assigned_to.name + '</a>';
+					Event.delegate(nLi, "click", this.handleStarmapLink, "a.starmap_link", this, true);
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -319,6 +320,11 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
+		},
+		handleStarmapLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/);
+			Game.StarJump({x:res[1],y:res[2]});
 		},
 		SpyShowMessage : function () {
 			var message_id = this.ResultLink.MessageId;
