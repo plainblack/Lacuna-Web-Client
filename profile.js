@@ -536,7 +536,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.species.innerHTML = "";
 			this.species.appendChild(frag);
 			var Ht = Game.GetSize().h - 180;
-			if(Ht > 270) { Ht = 270; }
+			if(Ht > 290) { Ht = 290; }
 			Dom.setStyle(this.species, 'height', Ht + 'px');
 		},
 		showSpeciesRedefine : function(e) {
