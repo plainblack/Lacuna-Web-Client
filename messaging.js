@@ -605,6 +605,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
+						var message = matchedEl.parentNode;
+						var messageSelect = message.childNodes[1];
+						var img = messageSelect.childNodes[0];
+						Dom.setAttribute(img, 'src', Lib.AssetUrl+'ui/mail-read.png');
 						Dom.removeClass(matchedEl.parentNode, "unread");
 						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
