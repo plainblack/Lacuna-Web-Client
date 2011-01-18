@@ -537,11 +537,20 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				msg.is = isTab;
 				nLi.Message = msg;
 				Dom.addClass(nLi, "message");
+				var img;
 				if(msg.has_read == "0") {
 					Dom.addClass(nLi, "unread");
+					img = 'unread';
+				}
+				else {
+					img = 'read';
+				}
+				if(msg.has_replied == "1") {
+					img = 'replied';
 				}
 				nLi.innerHTML = [
-					isTab.inbox ? '	<div class="messageSelect"><input type="checkbox" /></div>' : '',
+					' <div class="messageSelect"><img width="26" height="26" src="',Lib.AssetUrl,'ui/mail-',img,'.png" /><br />',
+					isTab.inbox ? '	<input type="checkbox" />' : '', '</div>',
 					'	<div class="messageContainer">',
 					'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
 					'		<div class="messageFrom">',
@@ -568,7 +577,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Dom.setStyle('dHt','height',dHt + 'px');
 				Dom.setStyle('messagingCreateBody','height',Ht + 'px');
 				panel.center();
-				//Dom.setY('messagingPanel',10);
 			},10);
 		},
 		
