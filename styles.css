@@ -676,11 +676,18 @@ about
 	position:absolute;
 	right:1px;
 }
+.messageSelect input[type="checkbox"] {
+	float:right;
+}
+
 .message .messageExcerpt {
 	font-size:90%;
 }
 .unread .messageDate, .unread .messageFrom, .unread .messageSubject {
 	font-weight:bold;
+}
+.messageDate, .messageFrom, .messageSubject {
+	font-size: 80%;
 }
 
 #messagingTabs .yui-content {
