@@ -143,6 +143,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "energyreserve",
+		type: "js",
+		fullpath: urlBuilder("buildingEnergyReserve.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "entertainment",
 		type: "js",
 		fullpath: urlBuilder("buildingEntertainment.js"),
@@ -283,6 +289,7 @@
 			"capitol",
 			"development",
 			"embassy",
+			"energyreserve",
 			"entertainment",
 			"foodreserve",
 			"geneticslab",

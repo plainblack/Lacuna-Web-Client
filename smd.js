@@ -635,6 +635,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			EnergyReserve : {
+				"SMDVersion":"2.0",
+				"description": "Energy Reserve",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/energyreserve",
+
+				"services": {
+					"dump" : {
+						"description": "Converts energy into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Entertainment : {
 				"SMDVersion":"2.0",
 				"description": "Entertainment",
