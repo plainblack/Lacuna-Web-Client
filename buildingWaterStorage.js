@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna.buildings");
 
-if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.buildings.EnergyReserve) {
+if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.buildings.WaterStorage) {
 	
 (function(){
     var Lang = YAHOO.lang,
@@ -11,13 +11,13 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
 
-	var EnergyReserve = function(result){
-		EnergyReserve.superclass.constructor.call(this, result);
+	var WaterStorage = function(result){
+		WaterStorage.superclass.constructor.call(this, result);
 
-        this.service = Game.Services.Buildings.EnergyReserve;
+        this.service = Game.Services.Buildings.WaterStorage;
 	};
 
-	YAHOO.lang.extend(EnergyReserve, YAHOO.lacuna.buildings.Building, {
+	YAHOO.lang.extend(WaterStorage, YAHOO.lacuna.buildings.Building, {
 		getChildTabs : function() {
 			return [this._getDumpTab()];
 		},
@@ -29,11 +29,11 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
             var ul = document.createElement('ul'),
                 li = document.createElement('li'),
                 nLi = li.cloneNode(false);
-            nLi.innerHTML = 'Convert energy into waste.';
+            nLi.innerHTML = 'Convert water into waste.';
             ul.appendChild(nLi);
 
             nLi = li.cloneNode(false);
-            nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/energy.png" class="smallEnergy" /></span>';
+            nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/water.png" class="smallWater" /></span>';
             input = document.createElement("input");
             input.id = 'dumpAmount';
             input.type = "text";
@@ -64,19 +64,19 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
             var planet = Game.GetCurrentPlanet();
             var building = this.building;
             if(building) {
-                var energy = this.dumpAmountEl.value*1;
-                if(energy > planet.energy_stored) {
-                    this.dumpMessageEl.innerHTML = "Can only convert ore you have stored.";
+                var water = this.dumpAmountEl.value*1;
+                if(water > planet.water_stored) {
+                    this.dumpMessageEl.innerHTML = "Can only convert water you have stored.";
                 }
                 else {
                     Lacuna.Pulser.Show();
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
-                        amount:energy,
+                        amount:water,
                     }, {
                         success : function(o){
-                            YAHOO.log(o, "info", "EnergyReserve.Dump.success");
+                            YAHOO.log(o, "info", "WaterStorage.Dump.success");
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
                             if(this.dumpTab){
@@ -84,11 +84,11 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
                                 Event.purgeElement(ce);
                                 ce.innerHTML = "";
 								ce.appendChild(this.DumpGetDisplay(o.result.dump));
-                                this.dumpMessageEl.innerHTML = "Successfully converted " + energy + " energy to waste.";
+                                this.dumpMessageEl.innerHTML = "Successfully converted " + water + " water to waste.";
                             }
                         },
                         failure : function(o){
-                            YAHOO.log(o, "error", "EnergyReserve.Dump.failure");
+                            YAHOO.log(o, "error", "WaterStorage.Dump.failure");
                             Lacuna.Pulser.Hide();
                             this.rpcFailure(o);
                         },
@@ -101,9 +101,9 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
 
 	});
 
-	YAHOO.lacuna.buildings.EnergyReserve = EnergyReserve;
+	YAHOO.lacuna.buildings.WaterStorage = WaterStorage;
 
 })();
-YAHOO.register("energyreserve", YAHOO.lacuna.buildings.EnergyReserve, {version: "1", build: "0"});
+YAHOO.register("waterstorage", YAHOO.lacuna.buildings.WaterStorage, {version: "1", build: "0"});
 
 }

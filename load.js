@@ -281,6 +281,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "waterstorage",
+		type: "js",
+		fullpath: urlBuilder("buildingWaterStorage.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
@@ -311,6 +317,7 @@
 			"themepark",
 			"trade",
 			"transporter",
+			"waterstorage",
 			"wasterecycling",
 			"event-delegate",
 			"event-mouseenter",

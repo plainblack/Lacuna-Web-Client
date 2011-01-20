@@ -968,6 +968,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/transporter":
 					classObj = new Lacuna.buildings.Transporter(result);
 					break;
+				case "/waterstorage":
+					classObj = new Lacuna.buildings.WaterStorage(result);
+					break;
 				case "/wasterecycling":
 					classObj = new Lacuna.buildings.WasteRecycling(result);
 					break;
