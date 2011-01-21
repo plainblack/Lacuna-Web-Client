@@ -635,6 +635,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			EnergyReserve : {
+				"SMDVersion":"2.0",
+				"description": "Energy Reserve",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/energyreserve",
+
+				"services": {
+					"dump" : {
+						"description": "Converts energy into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Entertainment : {
 				"SMDVersion":"2.0",
 				"description": "Entertainment",
@@ -670,6 +689,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"string"}
+					}
+				}
+			},
+			FoodReserve : {
+				"SMDVersion":"2.0",
+				"description": "Food Reserve",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/foodreserve",
+
+				"services": {
+					"dump" : {
+						"description": "Converts food into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},
@@ -1062,6 +1101,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									]       
 							 }
 						*/
+					}
+				}
+			},
+			OreStorage : {
+				"SMDVersion":"2.0",
+				"description": "Ore Storage",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/orestorage",
+
+				"services": {
+					"dump" : {
+						"description": "Converts ore into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},
@@ -2200,7 +2259,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"returns":{"type":"object"}
 					}
 				}
-			}
+			},
+			WaterStorage : {
+				"SMDVersion":"2.0",
+				"description": "Water Storage",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/waterstorage",
+
+				"services": {
+					"dump" : {
+						"description": "Converts water into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 		},
 		Chat : {
 			"SMDVersion":"2.0",
