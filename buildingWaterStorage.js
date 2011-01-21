@@ -56,7 +56,9 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
 
             div.appendChild(form);
 
-            this.dumpMessageEl = div.appendChild(document.createElement('div'));
+			var msg = document.createElement('div');
+			msg.id = "dumpMessage";
+            div.appendChild(msg);
 
             return div;
         },
@@ -67,7 +69,8 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
             if(building) {
                 var amount = this.dumpAmountEl.value*1;
                 if(amount > planet.water_stored) {
-                    this.dumpMessageEl.innerHTML = "Can only convert " + type + " you have stored.";
+                    Dom.get("dumpMessage").innerHTML = "Can only convert " + type + " you have stored.";
+                    Lib.fadeOutElm("dumpMessage");
                 }
 				else if(amount <= 0) {
 					Dom.get("dumpMessage").innerHTML = "You must specify an amount greater than zero.";
@@ -89,7 +92,8 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                                 Event.purgeElement(ce);
                                 ce.innerHTML = "";
 								ce.appendChild(this.DumpGetDisplay(o.result.dump));
-                                this.dumpMessageEl.innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
+								Dom.get("dumpMessage").innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
+								Lib.fadeOutElm("dumpMessage");
                             }
                         },
                         failure : function(o){
