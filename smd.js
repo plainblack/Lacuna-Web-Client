@@ -692,6 +692,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			FoodReserve : {
+				"SMDVersion":"2.0",
+				"description": "Food Reserve",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/foodreserve",
+
+				"services": {
+					"dump" : {
+						"description": "Converts food into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			GeneticsLab : {
 				"SMDVersion":"2.0",
 				"description": "Genetics Lab",

@@ -40,7 +40,6 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
             input.value = 0;
             input = nLi.appendChild(input);
             Event.on(input, "change", this.DumpValueChange, this, true);
-            this.dumpAmountEl = input;
             ul.appendChild(nLi);
 
            var div = document.createElement("div");
@@ -56,24 +55,28 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
 
             div.appendChild(form);
 
-            this.dumpMessageEl = div.appendChild(document.createElement('div'));
+			var msg = document.createElement('div');
+			msg.id = "dumpMessage";
+            div.appendChild(msg);
 
             return div;
         },
         Dump : function(e) {
             var planet = Game.GetCurrentPlanet();
             var building = this.building;
+			var type = "energy";
             if(building) {
-                var energy = this.dumpAmountEl.value*1;
-                if(energy > planet.energy_stored) {
-                    this.dumpMessageEl.innerHTML = "Can only convert ore you have stored.";
+                var amount = Dom.get("dumpAmount").value*1;
+                if(amount > planet.energy_stored) {
+                    Dom.get("dumpMessage").innerHTML = "Can only convert " + type + " you have stored.";
+					Lib.fadeOutElm("dumpMessage");
                 }
                 else {
                     Lacuna.Pulser.Show();
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
-                        amount:energy,
+                        amount:amount,
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "EnergyReserve.Dump.success");
@@ -84,7 +87,8 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
                                 Event.purgeElement(ce);
                                 ce.innerHTML = "";
 								ce.appendChild(this.DumpGetDisplay(o.result.dump));
-                                this.dumpMessageEl.innerHTML = "Successfully converted " + energy + " energy to waste.";
+								Dom.get("dumpMessage").innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
+								Lib.fadeOutElm("dumpMessage");
                             }
                         },
                         failure : function(o){
