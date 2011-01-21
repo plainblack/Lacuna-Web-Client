@@ -3,12 +3,10 @@ YAHOO.namespace("lacuna.buildings");
 if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.buildings.FoodReserve) {
 	
 (function(){
-	var Lang = YAHOO.lang,
-		Util = YAHOO.util,
+	var Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
 		Sel = Util.Selector,
-		Pager = YAHOO.widget.Paginator,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
@@ -67,52 +65,70 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
             return this.dumpTab;
         },
         DumpGetDisplay : function() {
-            var ul = document.createElement('ul'),
-                li = document.createElement('li'),
-                nLi = li.cloneNode(false);
-            nLi.innerHTML = 'Convert food into waste.';
-            ul.appendChild(nLi);
+			var div = document.createElement("div"),
+				resources = [],
+				rKey;
 
-            nLi = li.cloneNode(false);
-            nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/food.png" class="smallFood" /></span>';
-
-			var sel = document.createElement("select"),
-				opt = document.createElement("option");
-			for(var r in this.resources) {
-				var resource = this.resources[r];
-				if( resource > 0 ) {
-				nOpt = opt.cloneNode(false);
-				nOpt.value = r;
-				nOpt.innerHTML = r + " (" + resource + ")";
-				sel.appendChild(nOpt);
-				}
+			for(rKey in this.resources) {
+				resources.push(rKey);
 			}
-			sel.id = "type";
-			nLi.appendChild(sel);
+			resources = resources.sort();
 
-            input = document.createElement("input");
-            input.id = 'dumpAmount';
-            input.type = "text";
-            input.value = 0;
-            input = nLi.appendChild(input);
-            ul.appendChild(nLi);
+			if( resources.length > 0 ) {
+				var ul = document.createElement('ul'),
+					li = document.createElement('li'),
+					nLi = li.cloneNode(false);
+				nLi.innerHTML = 'Convert food into waste.';
+				ul.appendChild(nLi);
 
-           var div = document.createElement("div");
-            Dom.addClass(div, 'dumpTab');
-            div.appendChild(ul);
+				nLi = li.cloneNode(false);
+				nLi.innerHTML = '<span class="smallImg"><img src="'+Lib.AssetUrl+'ui/s/food.png" class="smallFood" /></span>';
 
-            var form = document.createElement('form');
-            btn = document.createElement("button");
-            btn.setAttribute("type", "button");
-            btn.innerHTML = "Dump";
-            btn = form.appendChild(btn);
-            Event.on(btn, "click", this.Dump, this, true);
+				var sel = document.createElement("select"),
+					opt = document.createElement("option");
+				for(var i=0; i<resources.length; i++) {
+					rKey = resources[i];
+                    if(this.resources.hasOwnProperty(rKey) && this.resources[rKey] > 0) {
+                        var nOpt = opt.cloneNode(false);
+                        nOpt.value = rKey;
+                        nOpt.innerHTML = [rKey, ' (', this.resources[rKey], ')'].join('');
+                        sel.appendChild(nOpt);
+                    }
+				}
+				if( sel.options.length == 0 ) {
+					div.innerHTML = "No food to dump.";
+					return div;
+				}
+				sel.id = "type";
+				nLi.appendChild(sel);
 
-            div.appendChild(form);
+				input = document.createElement("input");
+				input.id = 'dumpAmount';
+				input.type = "text";
+				input.value = 0;
+				input = nLi.appendChild(input);
+				ul.appendChild(nLi);
 
-			var msg = document.createElement('div');
-			msg.id = "dumpMessage";
-            div.appendChild(msg);
+				Dom.addClass(div, 'dumpTab');
+				div.appendChild(ul);
+
+				var form = document.createElement('form');
+				btn = document.createElement("button");
+				btn.setAttribute("type", "button");
+				btn.innerHTML = "Dump";
+				btn = form.appendChild(btn);
+				Event.on(btn, "click", this.Dump, this, true);
+
+				div.appendChild(form);
+
+				var msg = document.createElement('div');
+				msg.id = "dumpMessage";
+				div.appendChild(msg);
+
+			}
+			else {
+				div.innerHTML = "No food to dump.";
+			}
 
             return div;
         },
@@ -126,6 +142,10 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
                     Dom.get("dumpMessage").innerHTML = "Can only convert " + type + " you have stored.";
                     Lib.fadeOutElm("dumpMessage");
                 }
+				else if(amount <= 0) {
+					Dom.get("dumpMessage").innerHTML = "You must specify an amount greater than zero.";
+                    Lib.fadeOutElm("dumpMessage");
+				}
                 else {
                     Lacuna.Pulser.Show();
 					this.service.dump({

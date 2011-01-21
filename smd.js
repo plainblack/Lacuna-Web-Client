@@ -1104,6 +1104,26 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			OreStorage : {
+				"SMDVersion":"2.0",
+				"description": "Ore Storage",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/orestorage",
+
+				"services": {
+					"dump" : {
+						"description": "Converts ore into waste",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false},
+							{"name":"amount", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Park : {
 				"SMDVersion":"2.0",
 				"description": "Park",
