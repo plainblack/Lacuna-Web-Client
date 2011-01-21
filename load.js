@@ -143,6 +143,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "energyreserve",
+		type: "js",
+		fullpath: urlBuilder("buildingEnergyReserve.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "entertainment",
 		type: "js",
 		fullpath: urlBuilder("buildingEntertainment.js"),
@@ -275,6 +281,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "waterstorage",
+		type: "js",
+		fullpath: urlBuilder("buildingWaterStorage.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
@@ -283,6 +295,7 @@
 			"capitol",
 			"development",
 			"embassy",
+			"energyreserve",
 			"entertainment",
 			"foodreserve",
 			"geneticslab",
@@ -304,6 +317,7 @@
 			"themepark",
 			"trade",
 			"transporter",
+			"waterstorage",
 			"wasterecycling",
 			"event-delegate",
 			"event-mouseenter",

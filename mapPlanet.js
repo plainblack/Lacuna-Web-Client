@@ -902,6 +902,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/embassy":
 					classObj = new Lacuna.buildings.Embassy(result);
 					break;
+				case "/energyreserve":
+					classObj = new Lacuna.buildings.EnergyReserve(result);
+					break;
 				case "/entertainment":
 					classObj = new Lacuna.buildings.Entertainment(result);
 					break;
@@ -964,6 +967,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					break;
 				case "/transporter":
 					classObj = new Lacuna.buildings.Transporter(result);
+					break;
+				case "/waterstorage":
+					classObj = new Lacuna.buildings.WaterStorage(result);
 					break;
 				case "/wasterecycling":
 					classObj = new Lacuna.buildings.WasteRecycling(result);
