@@ -63,17 +63,22 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
         Dump : function(e) {
             var planet = Game.GetCurrentPlanet();
             var building = this.building;
+			var type = "water";
             if(building) {
-                var water = this.dumpAmountEl.value*1;
-                if(water > planet.water_stored) {
-                    this.dumpMessageEl.innerHTML = "Can only convert water you have stored.";
+                var amount = this.dumpAmountEl.value*1;
+                if(amount > planet.water_stored) {
+                    this.dumpMessageEl.innerHTML = "Can only convert " + type + " you have stored.";
                 }
+				else if(amount <= 0) {
+					Dom.get("dumpMessage").innerHTML = "You must specify an amount greater than zero.";
+                    Lib.fadeOutElm("dumpMessage");
+				}
                 else {
                     Lacuna.Pulser.Show();
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
-                        amount:water,
+                        amount:amount,
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "WaterStorage.Dump.success");
@@ -84,7 +89,7 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                                 Event.purgeElement(ce);
                                 ce.innerHTML = "";
 								ce.appendChild(this.DumpGetDisplay(o.result.dump));
-                                this.dumpMessageEl.innerHTML = "Successfully converted " + water + " water to waste.";
+                                this.dumpMessageEl.innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
                             }
                         },
                         failure : function(o){

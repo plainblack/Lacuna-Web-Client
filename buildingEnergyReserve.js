@@ -71,6 +71,10 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
                     Dom.get("dumpMessage").innerHTML = "Can only convert " + type + " you have stored.";
 					Lib.fadeOutElm("dumpMessage");
                 }
+				else if( amount <= 0 ) {
+					Dom.get("dumpMessage").innerHTML = "You must specify an amount greater than zero.";
+                    Lib.fadeOutElm("dumpMessage");
+				}
                 else {
                     Lacuna.Pulser.Show();
                     this.service.dump({
