@@ -49,6 +49,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness = Dom.get("profileSkipHappiness");
 			this.skipResource = Dom.get("profileSkipResource");
 			this.skipPollution = Dom.get("profileSkipPollution");
+			this.rpc = Dom.get("profileRpc");
 			
 			this.medals = Dom.get("profileMedalsList");
 			this.species = Dom.get("profileSpecies");
@@ -194,6 +195,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
 			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li></ul></div>',
 			'							</div></li>',
+			'							<li><hr />Current RPC Usage:<span id="profileRpc" style="margin-left:5px;"></span></li>',
 			'						</ul>',
 			'					</div>',
 			'					<div id="detailsMedals">',
@@ -377,6 +379,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
+			
+			this.rpc.innerHTML = [(Game.EmpireData.rpc_count || 0), ' / ', (Game.ServerData.rpc_limit || 0)].join('');
 			
 			this.notes.value = p.notes;
 			this.sitter_password.value = p.sitter_password;

@@ -182,12 +182,17 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
 						
-						if(o.result.grafts.length > 0) {
-							Dom.get("geneticsLabMessage").innerHTML = "";
-							Dom.setStyle("geneticsLabDisplay","display","");
+						if(o.result.can_experiment == 1) {
+							if(o.result.grafts.length > 0) {
+								Dom.get("geneticsLabMessage").innerHTML = "";
+								Dom.setStyle("geneticsLabDisplay","display","");
+							}
+							
+							this.updateDisplay(o.result);
 						}
-						
-						this.updateDisplay(o.result);
+						else {
+							Dom.get("geneticsLabMessage").innerHTML = "Unable to currently run experiments.  You can only have 1 graft per level of the Genetics Lab.";
+						}
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
