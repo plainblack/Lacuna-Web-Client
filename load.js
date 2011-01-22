@@ -209,6 +209,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "oracleofanid",
+		type: "js",
+		fullpath: urlBuilder("buildingOracleOfAnid.js"),
+		requires : ["building","mapStar"]
+	});
+	loader.addModule({
 		name: "orestorage",
 		type: "js",
 		fullpath: urlBuilder("buildingOreStorage.js"),
@@ -306,6 +312,7 @@
 			"missioncommand",
 			"network19",
 			"observatory",
+			"oracleofanid",
 			"orestorage",
 			"park",
 			"planetarycommand",

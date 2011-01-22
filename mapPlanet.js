@@ -935,6 +935,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/observatory":
 					classObj = new Lacuna.buildings.Observatory(result);
 					break;
+				case "/oracleofanid":
+					classObj = new Lacuna.buildings.OracleOfAnid(result);
+					break;
 				case "/orestorage":
 					classObj = new Lacuna.buildings.OreStorage(result);
 					break;

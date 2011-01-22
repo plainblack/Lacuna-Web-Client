@@ -1104,6 +1104,42 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			OracleOfAnid : {
+				"SMDVersion":"2.0",
+				"description": "Oracle of Anid",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/oracleofanid",
+
+				"services": {
+					"get_star" : {
+						"description": "Retrieves a single star",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 { 
+							"star" : {
+								"name"          : "Sol",
+								"color"         : "yellow",
+								"x"             : -41,
+								"y"             : 27,
+								"bodies"        : [     # only added if a probe is present
+									{
+										same data as get_status() on /body
+									},
+									...
+								]
+							}    
+							"status" : { ... }
+						 }
+						*/
+					}
+				}
+			},
 			OreStorage : {
 				"SMDVersion":"2.0",
 				"description": "Ore Storage",
@@ -2278,7 +2314,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"returns":{"type":"object"}
 					}
 				}
-			},
+			}
 		},
 		Chat : {
 			"SMDVersion":"2.0",
@@ -2789,7 +2825,31 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				
+				"get_star" : {
+					"description": "Retrieves a single star",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"star_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+					/*
+					 { 
+						"star" : {
+							"name"          : "Sol",
+							"color"         : "yellow",
+							"x"             : -41,
+							"y"             : 27,
+							"bodies"        : [     # only added if a probe is present
+								{
+									same data as get_status() on /body
+								},
+								...
+							]
+						}    
+						"status" : { ... }
+					 }
+					*/
+				},
 				"get_stars" : {
 					"description": "Retrieves a chunk of the map and returns it as an array of hashes.",
 					"parameters": [
@@ -2827,7 +2887,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 					*/
 				},
-
 				"get_star_by_name" : {
 					"description": "Retrieves info on a single star.",
 					"parameters": [
@@ -2836,7 +2895,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-
 				"get_star_by_xy" : {
 					"description": "Retrieves info on a single star.",
 					"parameters": [
@@ -2846,7 +2904,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
-				
 				"search_stars" : {
 					"description": "If you know a partial name of a star you can search for it. Returns up to 25 results. No body data is returned with this search.",
 					"parameters": [

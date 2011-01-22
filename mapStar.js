@@ -63,7 +63,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				close:true,
 				underlay:false,
 				width:"500px",
-				zIndex:9995,
+				zIndex:9997,
 				context:["header","tl","bl"]
 			});
 			this.starDetails.addQueue = function(seconds, queueFn, elm, sc) {
@@ -137,6 +137,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.starDetails.hideEvent.subscribe(function(){
 				this.starDetails.resetDisplay(this);
 			}, this, true);
+			this.starDetails.showEvent.subscribe(function(){
+				this.bringToTop();
+			});
 			
 			this.starDetails.isStarPanel = true;
 			
@@ -245,7 +248,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				close:true,
 				underlay:false,
 				width:"500px",
-				zIndex:9995,
+				zIndex:9997,
 				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
 			});
 			this.planetDetails.addQueue = function(seconds, queueFn, elm, sc) {
@@ -348,7 +351,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			this.planetDetails.hideEvent.subscribe(function(){
 				this.planetDetails.resetDisplay(this);
 			}, this, true);
-			
+			this.planetDetails.showEvent.subscribe(function(){
+				this.bringToTop();
+			});
 			this.planetDetails.render();
 			Game.OverlayManager.register(this.planetDetails);
 		},
@@ -896,9 +901,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			});
 			
 		},
-		ShowStar : function(tile) {
-			//hide everything first so the hideEvents get run
-			Game.OverlayManager.hideAllBut(this.starDetails.id);
+		ShowStar : function(tile, keepOpen) {
+			if(!keepOpen) {
+				Game.OverlayManager.hideAllBut(this.starDetails.id);
+			}
 			
 			var data = tile.data,
 				panel = this.starDetails;
@@ -922,9 +928,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			panel.show();
 		},
-		ShowPlanet : function(tile) {
-			//hide everything first so the hideEvents get run
-			Game.OverlayManager.hideAllBut(this.planetDetails.id);
+		ShowPlanet : function(tile, keepOpen) {
+			if(!keepOpen) {
+				Game.OverlayManager.hideAllBut(this.planetDetails.id);
+			}
 			
 			var body = tile.data,
 				tab, tabs,
@@ -1054,8 +1061,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							Dom.get("planetDetailsName").innerHTML = newName;
 							Game.EmpireData.planets[this.selectedBody.id].name = newName;
 							Lacuna.Menu.update();
-							this._map.tileCache[this.selectedTile.x][this.selectedTile.y].name = newName;
-							this.selectedTile.refresh();
+							if(this.selectedTile instanceof YAHOO.lacuna.Mapper.StarTile) {
+								this._map.tileCache[this.selectedTile.x][this.selectedTile.y].name = newName;
+								this.selectedTile.refresh();
+							}
 							
 							this.selectedBody.name = newName;
 						}
