@@ -50,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 					'<div>',
 					'	<div><label for="oracleStarFind">Lookup Star Name:</label><div style="display:inline-block;width:300px;"><input type="text" id="oracleStarFind" /></div> or <button type="button" id="oracleCurrentStar">Go To Current Star</button></div>',
 					'	<div id="oracleMessage" style="font-weight: bold; margin: 5px;"></div>',
-					'	<div id="oracleDisplay" style="position:relative;background-color:black;height:150px;width:700px;background-image:url("',Lib.AssetUrl,'star_system/field.png")">',
+					'	<div id="oracleDisplay" style="position:relative;height:150px;width:700px;background:black url(',Lib.AssetUrl,'star_system/field.png);">',
 					'		<div id="oracleStar" class="tile" style="position:absolute;height:150px;width:150px;left:0px;top:0px;"></div>',
 					'		<div id="oraclePlanetOne" class="tile" style="position:absolute;height:50px;width:50px;left:150px;top:50px;"></div>',
 					'		<div id="oraclePlanetTwo" class="tile" style="position:absolute;height:50px;width:50px;left:210px;top:50px;"></div>',
