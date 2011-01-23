@@ -178,9 +178,11 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"spyAssignment");
+					
+					var sel;
 					if(spy.is_available) {
-						var sel = document.createElement("select"),
-							opt = document.createElement("option"),
+						sel = document.createElement("select");
+						var opt = document.createElement("option"),
 							btn = document.createElement("button");
 						for(var a=0; a<assign.length; a++) {
 							var job = assign[a];
@@ -210,20 +212,21 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 
 					// Add mission results if they exist
 					if(spy.mission) {
-					var elem = sel ? sel : nLi;
-					var result = document.createElement("div");
-					Dom.setStyle(result, "display", "none");
-					Dom.addClass(result, 'spyAssignResult');
-					var result_text = document.createElement("span");
-					var result_link = document.createElement("a");
-					result_link.href = "#";
-					result_link.innerHTML = "View Report";
-					Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
-					Dom.setStyle(result_link, "display", "none");
+						var elem = sel ? sel : nLi;
+						var result = document.createElement("div");
+						Dom.setStyle(result, "display", "none");
+						Dom.addClass(result, 'spyAssignResult');
+						var result_text = document.createElement("span");
+						var result_link = document.createElement("a");
+						result_link.href = "#";
+						result_link.innerHTML = "View Report";
+						Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
+						Dom.setStyle(result_link, "display", "none");
 
-					elem.ResultText = result.appendChild(result_text);
-					elem.ResultLink = result.appendChild(result_link);
-					elem.Results = nLi.appendChild(result);
+						elem.ResultText = result.appendChild(result_text);
+						elem.ResultLink = result.appendChild(result_link);
+						elem.Results = nLi.appendChild(result);
+						
 						var mission = spy.mission;
 						elem.ResultText.innerHTML = "Mission " + mission.result + (
 							mission.reason ? ": " + mission.reason

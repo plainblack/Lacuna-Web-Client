@@ -361,7 +361,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						noPlots = (isMaxPlots && ! bd.build.no_plot_use),
 						isLater = bd.build.tags.indexOf('Later') > -1,
 						isPlan = bd.build.tags.indexOf('Plan') > -1,
-						isNotBuildable = (isLater || isQueueFull || noPlots )
+						isNotBuildable = (isLater || isQueueFull || noPlots );
 						
 					bd.name = names[i];
 					

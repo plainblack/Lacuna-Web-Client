@@ -297,8 +297,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.imageHolder = image;
 			}
 			if(this.data.orbit) {
-				var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
-				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+				if(this.map.hidePlanets) {
+					this.imageHolder.innerHTML = this.data.orbit;
+				}
+				else {
+					var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
+					this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+				}
+				
 			}
 			else {
 				this.imageHolder.innerHTML = ['<img src="',this.image,'" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
@@ -306,23 +312,36 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		_createAlignments : function() {
 			if(this.data.empire && this.data.empire.alignment) {
-				if(!this.alignHolder) {
-					var align = this.domElement.appendChild(document.createElement('div'));
-					Dom.setStyle(align, "width", this.tileSizeInPx + 'px');
-					Dom.setStyle(align, "height", this.tileSizeInPx + 'px');
-					Dom.setStyle(align, "position", "absolute");
-					Dom.setStyle(align, "top", "0");
-					Dom.setStyle(align, "left", "0");
-					Dom.setStyle(align, "z-index", '2');
-					this.alignHolder = align;
-				}
+				this._buildAlignmentHolder();
 				if(this.data.orbit) {
-					var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
-					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.empire.alignment,'.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+					if(this.map.hidePlanets) {
+						Dom.addClass(this.alignHolder, this.data.empire.alignment);
+					}
+					else {
+						var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
+						this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.empire.alignment,'.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+					}
+					
 				}
 				else {
 					this.alignHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/',this.data.empire.alignment,'.png" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
 				}
+			}
+			else if(this.map.hidePlanets && this.data.orbit){
+				this._buildAlignmentHolder();
+				Dom.addClass(this.alignHolder, 'probed');
+			}
+		},
+		_buildAlignmentHolder : function() {
+			if(!this.alignHolder) {
+				var align = this.domElement.appendChild(document.createElement('div'));
+				Dom.setStyle(align, "width", this.tileSizeInPx + 'px');
+				Dom.setStyle(align, "height", this.tileSizeInPx + 'px');
+				Dom.setStyle(align, "position", "absolute");
+				Dom.setStyle(align, "top", "0");
+				Dom.setStyle(align, "left", "0");
+				Dom.setStyle(align, "z-index", '2');
+				this.alignHolder = align;
 			}
 		}
 	});
@@ -1227,6 +1246,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.TileLayer = Mapper.StarTileLayer;
 			
 			this.zoom = Game.GetCookieSettings("starZoom",0)*1;
+			this.hidePlanets = Game.GetCookieSettings("hidePlanets", 0)*1;
+			
 			this._setTileSizeByZoom();
 		},
 		getTile : function(x, y){
@@ -1298,28 +1319,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			return this.bounds[this.zoom] || {x1Left:0,x2Right:0,y1Top:0,y2Bottom:0};
 		},
 
-		/*updateBounds : function(oStar) {
-			//force numbers
-			oStar.x *= 1;
-			oStar.y *= 1;
-			var bnds = this.getBounds();
-			
-			if(bnds.x1Left > oStar.x) {
-				bnds.x1Left = oStar.x;
-			}
-			else if(bnds.x2Right < oStar.x) {
-				bnds.x2Right = oStar.x;
-			}
-			
-			if(bnds.y1Top < oStar.y) {
-				bnds.y1Top = oStar.y;
-			}
-			else if(bnds.y2Bottom > oStar.y) {
-				bnds.y2Bottom = oStar.y;
-			}
-			
-			this.bounds[this.zoom] = bnds;
-		},*/
 		addTileData : function(aStars) {
 			//var startZoomLevel = 0;
 			var cp = Game.GetCurrentPlanet();

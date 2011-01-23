@@ -67,6 +67,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			
 			this.stopAnim = Dom.get("profileDisableDialogAnim");
 			this.showLevels = Dom.get("profileShowBuildingLevels");
+			this.hidePlanets = Dom.get("profileHidePlanets");
 			
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			//species tab
@@ -225,6 +226,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'						<ul>',
 			'							<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li>',
 			'							<li><input id="profileShowBuildingLevels" type="checkbox" /> Always Show Building Levels</li>',
+			'							<li><input id="profileHidePlanets" type="checkbox" /> Hide Planets in Star Map</li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -303,6 +305,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					Dom.setStyle(levels[n].parentNode, "visibility", this.showLevels.checked ? "visible" : "");
 				}
 			}
+			if(Game.GetCookieSettings("hidePlanets","0") != (this.hidePlanets.checked ? "1" : "0")) {
+				if(this.hidePlanets.checked) {
+					Game.SetCookieSettings("hidePlanets","1");
+				}
+				else {
+					Game.RemoveCookieSettings("hidePlanets");
+				}
+				if(YAHOO.lacuna.MapStar.IsVisible()){
+					YAHOO.lacuna.MapStar._map.hidePlanets = Game.GetCookieSettings("hidePlanets", 0)*1;
+					YAHOO.lacuna.MapStar._map.redraw();
+				}
+			}
 			
 			Game.Services.Empire.edit_profile({
 					session_id:Game.GetSession(""),
@@ -379,6 +393,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
+			this.hidePlanets.checked = Game.GetCookieSettings("hidePlanets","0") == "1";
 			
 			this.rpc.innerHTML = [(Game.EmpireData.rpc_count || 0), ' / ', (Game.ServerData.rpc_limit || 0)].join('');
 			

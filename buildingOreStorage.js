@@ -150,7 +150,7 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
 						session_id:Game.GetSession(),
 						building_id:this.building.id,
 						type:type,
-						amount:amount,
+						amount:amount
 					}, {
 						success : function(o){
 							YAHOO.log(o, "info", "OreStorage.Dump.success");

@@ -152,7 +152,7 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
 						session_id:Game.GetSession(),
 						building_id:this.building.id,
 						type:type,
-						amount:amount,
+						amount:amount
 					}, {
 						success : function(o){
 							YAHOO.log(o, "info", "FoodReserve.Dump.success");

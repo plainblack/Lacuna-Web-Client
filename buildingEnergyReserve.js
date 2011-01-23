@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
-                        amount:amount,
+                        amount:amount
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "EnergyReserve.Dump.success");

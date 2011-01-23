@@ -81,7 +81,7 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
-                        amount:amount,
+                        amount:amount
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "WaterStorage.Dump.success");

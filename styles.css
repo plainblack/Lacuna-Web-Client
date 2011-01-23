@@ -947,6 +947,27 @@ Info dialogs for Empire and Alliance
 /*#planetMap {
 	background: brown url('assets/planet_side/ground.png');
 }*/
+.tile {
+	word-wrap: break-word;
+}
+.tile .self {
+	border: 1px solid green;
+}
+.tile .ally {
+	border: 1px solid purple;
+}
+.tile .ally-isolationist {
+	border: 1px dashed purple;
+}
+.tile .hostile {
+	border: 1px solid orange;
+}
+.tile .hostile-isolationist {
+	border: 1px dashed orange;
+}
+.tile .probed {
+	border: 1px dotted #555;
+}
 .tileContainer div.planetMapTileCounter {
 	z-index: 2;
 	text-align: right;

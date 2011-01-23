@@ -837,9 +837,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				nLi = li.cloneNode(false);
 				Dom.addClass(nLi,"shipName");
 				nLi.innerHTML = ship.empire_name;
-				Event.on(nLi, "click", function(e, id){
-					Lacuna.Info.Empire.Load(id);
-				}, ship.empire_id);
+				Event.on(nLi, "click", this.ShowEmpire, ship.empire_id);
 				nUl.appendChild(nLi);
 				
 				details.appendChild(nUl);
@@ -854,6 +852,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			},10);
 			
 			panel.addTab(new YAHOO.widget.Tab({ label: "Mining", contentEl:elm }));
+		},
+		ShowEmpire : function(e, id){
+			Lacuna.Info.Empire.Load(id);
 		},
 	
 		GetShips : function(panel, target) {

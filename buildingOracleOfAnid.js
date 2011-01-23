@@ -33,7 +33,7 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 				5:Dom.get("oraclePlanetFive"),
 				6:Dom.get("oraclePlanetSix"),
 				7:Dom.get("oraclePlanetSeven"),
-				8:Dom.get("oraclePlanetEight"),
+				8:Dom.get("oraclePlanetEight")
 			};
 			
 			Event.delegate("oracleDisplay", "click", this.DisplayClick, "div.tile", this, true);
@@ -128,7 +128,7 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 					Lacuna.Pulser.Hide();
 					this.rpcSuccess(o);
 					this.star = o.result.star;
-					Dom.get("oracleMessage").innerHTML = this.star.name
+					Dom.get("oracleMessage").innerHTML = this.star.name;
 					this.Display();
 				},
 				failure : function(o){

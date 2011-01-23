@@ -983,6 +983,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						}
 						this.Line.parentNode.removeChild(this.Line);
 						Lacuna.Pulser.Hide();
+						
+						this.getStoredResources(true);
+						this.getPlans(true);
+						this.getGlyphs(true);
+						this.getPrisoners(true);
+						this.getShips(true);
 					},
 					failure : function(o){
 						Lacuna.Pulser.Hide();
@@ -1340,12 +1346,30 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					offer: [],
 					ask: qVal
 				},
+				hasResources, hasPlans, hasGlyphs, hasShips, hasPrisoners,
 				lis = Sel.query("li","tradeAddItems");
 				
 			for(n=0; n<lis.length; n++) {
 				obj = lis[n].Object;
 				if(obj) {
 					data.offer[data.offer.length] = obj;
+					switch(obj.type) {
+						case "plan":
+							hasPlanes = true;
+							break;
+						case "glyph":
+							hasGlyphs = true;
+							break;
+						case "prisoner":
+							hasPrisoners = true;
+							break;
+						case "ship":
+							hasShips = true;
+							break;
+						default:
+							hasResources = true;
+							break;
+					}
 				}
 			}
 			
@@ -1353,11 +1377,21 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.service.add_to_market(data, {
 				success : function(o){
 					this.rpcSuccess(o);
-					delete this.glyphs;
-					delete this.plans;
-					delete this.prisoners;
-					delete this.ships;
-					delete this.resources;
+					if(hasResources) {
+						this.getStoredResources(true);
+					}
+					if(hasPlans) {
+						this.getPlans(true);
+					}
+					if(hasGlyphs) {
+						this.getGlyphs(true);
+					}
+					if(hasPrisoners) {
+						this.getPrisoners(true);
+					}
+					if(hasShips) {
+						this.getShips(true);
+					}
 					for(var i=0; i<lis.length; i++) {
 						if(lis[i].Object) {
 							Event.purgeElement(lis[i]);
@@ -1716,7 +1750,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				},
 				lis = Sel.query("li","tradePushItems"),
 				items = [],
-				hasResources, hasPlans, hasGlyphs;
+				hasResources, hasPlans, hasGlyphs, hasShips, hasPrisoners;
 				
 			for(var n=0; n<lis.length; n++) {
 				if(lis[n].Object) {
@@ -1727,6 +1761,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 							break;
 						case "glyph":
 							hasGlyphs = true;
+							break;
+						case "prisoner":
+							hasPrisoners = true;
+							break;
+						case "ship":
+							hasShips = true;
 							break;
 						default:
 							hasResources = true;
@@ -1763,6 +1803,12 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						}
 						if(hasGlyphs) {
 							this.getGlyphs(true);
+						}
+						if(hasPrisoners) {
+							this.getPrisoners(true);
+						}
+						if(hasShips) {
+							this.getShips(true);
 						}
 						
 						var msg = Dom.get("tradePushMessage");
