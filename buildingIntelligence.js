@@ -141,48 +141,19 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				}
 			}
 		},
-		
-		SpyPopulate : function() {
-			var details = Dom.get("spiesDetails");
-			if(details) {
-				var spies = this.spies.spies,
-					isTraining;
-					
-				Event.purgeElement(details);
-				details.innerHTML = "";
-				Dom.setStyle(details.parentNode,"height","");
-				Dom.setStyle(details.parentNode,"overflow-y","");
-						
-				for(var i=0; i<spies.length; i++) {
-					details.appendChild(this.SpyRecord(spies[i]));
-				}
-				
-				if(isTraining) {
-					Dom.get("spiesSubsidize").disabled = false;
-					Dom.setStyle("spiesSubsidizeOffer", "display", "");
-				}
-				else {
-					Dom.get("spiesSubsidize").disabled = true;
-					Dom.setStyle("spiesSubsidizeOffer", "display", "none");
-				}
-				
-				//wait for tab to display first
-				setTimeout(function() {
-					var Ht = Game.GetSize().h - 150;
-					if(Ht > 300) { Ht = 300; }
-					Dom.setStyle(details.parentNode,"height",Ht + "px");
-					Dom.setStyle(details.parentNode,"overflow-y","auto");
-				},10);
-			}
-		},
-		SpyRecord : function(spy) {
+
+		SpyInfo : function(spy) {
 			var assign = spy.possible_assignments,
-				ul = document.createElement("ul"),
-				li = document.createElement("li"),
-				nDiv = document.createElement("div"),
+				div = document.createElement("div"),
+                ul = document.createElement("ul"),
+                li = document.createElement("li"),
+				isTraining;
+			var nDiv = div.cloneNode(false),
 				nUl = ul.cloneNode(false),
 				nLi = li.cloneNode(false);
+
 			Dom.addClass(nDiv, "spyInfo");
+			nDiv.id = 'spy' + spy.id;
 			Dom.addClass(nUl, "clearafter");
 
 			Dom.addClass(nLi,"spyName");
@@ -195,10 +166,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			nLi.innerHTML = '<label>Assigned To:</label> <a class="starmap_link" href="#' + spy.assigned_to.x + 'x' + spy.assigned_to.y + '">' + spy.assigned_to.name + '</a>';
 			Event.delegate(nLi, "click", this.handleStarmapLink, "a.starmap_link", this, true);
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyAssignment");
-			
+
 			var sel;
 			if(spy.is_available) {
 				sel = document.createElement("select");
@@ -213,15 +184,14 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					sel.appendChild(nOpt);
 				}
 				Event.on(sel, "change", this.SpyAssignChange);
-				
+
 				nLi.appendChild(sel);
-				
+
 				btn.setAttribute("type", "button");
 				btn.innerHTML = "Assign";
 				Dom.setStyle(btn,"display","none");
-				Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nDiv}, true);
+				Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nUl}, true);
 				sel.Button = nLi.appendChild(btn);
-				
 			}
 			else {
 				nLi.innerHTML = spy.assignment;
@@ -246,7 +216,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				elem.ResultText = result.appendChild(result_text);
 				elem.ResultLink = result.appendChild(result_link);
 				elem.Results = nLi.appendChild(result);
-				
+
 				var mission = spy.mission;
 				elem.ResultText.innerHTML = "Mission " + mission.result + (
 					mission.reason ? ": " + mission.reason
@@ -262,50 +232,50 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			}
 
 			nUl.appendChild(nLi);
-			//***
+
 			nDiv.appendChild(nUl);
 			nUl = ul.cloneNode(false);
 			Dom.addClass(nUl, "clearafter");
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyLevel");
 			nLi.innerHTML = "<label>Level:</label>"+spy.level;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyOffense");
 			nLi.innerHTML = "<label>Offense:</label>"+spy.offense_rating;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyDefense");
 			nLi.innerHTML = "<label>Defense:</label>"+spy.defense_rating;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyAvailableWhen");
 			nLi.innerHTML = "<label>Available:</label>"+(spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on));
 			nUl.appendChild(nLi);
-			//***
+
 			nDiv.appendChild(nUl);
 			nUl = ul.cloneNode(false);
 			Dom.addClass(nUl, "clearafter");
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyIntel");
 			nLi.innerHTML = "<label>Intel:</label>"+spy.intel;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyMayhem");
 			nLi.innerHTML = "<label>Mayhem:</label>"+spy.mayhem;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyPolitics");
 			nLi.innerHTML = "<label>Politics:</label>"+spy.politics;
 			nUl.appendChild(nLi);
-			
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyTheft");
 			nLi.innerHTML = "<label>Theft:</label>"+spy.theft;
@@ -318,12 +288,49 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			bbtn.innerHTML = "Burn";
 			bbtn = nLi.appendChild(bbtn);
 			nUl.appendChild(nLi);
-			//***
+
 			nDiv.appendChild(nUl);
-			
+
 			Event.on(bbtn, "click", this.SpyBurn, {Self:this,Spy:spy,Line:nDiv}, true);
+
+			return [nDiv, isTraining];
+		},
+		SpyPopulate : function() {
+			var details = Dom.get("spiesDetails");
+			if(details) {
+				var spies = this.spies.spies,
+					nDiv,
+					isTraining;
 					
-			return nDiv;
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				Dom.setStyle(details.parentNode,"height","");
+				Dom.setStyle(details.parentNode,"overflow-y","");
+						
+				for(var i=0; i<spies.length; i++) {
+					var ret = this.SpyInfo( spies[i] );
+					nDiv = ret[0];
+					isTraining = ret[1];
+					details.appendChild(nDiv);
+				}
+				
+				if(isTraining) {
+					Dom.get("spiesSubsidize").disabled = false;
+					Dom.setStyle("spiesSubsidizeOffer", "display", "");
+				}
+				else {
+					Dom.get("spiesSubsidize").disabled = true;
+					Dom.setStyle("spiesSubsidizeOffer", "display", "none");
+				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 150;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
+				},10);
+			}
 		},
 		handleStarmapLink : function(e, el) {
 			Event.stopEvent(e);
@@ -384,7 +391,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					YAHOO.log(o, "info", "Intelligence.SpyAssign.success");
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
-					//delete this.Self.spies;
+					//delete this.Self.spies; /* Can't delete it, we need it later */
 					var spy = o.result.spy;
 					spy.assignment = assign;
 					spy.mission = o.result.mission;
@@ -396,10 +403,11 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						}
 					}
 					this.Self.spies.spies = spies;
-					//this.Self.SpyPopulate();
-					this.Line.parentNode.insertBefore(this.Self.SpyRecord(spy), this.Line);
+					var ret = this.Self.SpyInfo(spy);
+					Dom.get('spiesDetails').replaceChild(ret[0], Dom.get('spy' + spy.id));
+					/*this.Line.parentNode.insertBefore(this.Self.SpyRecord(spy), this.Line);
 					var ol = this.Line.parentNode.removeChild(this.Line);
-					Event.purgeElement(ol);
+					Event.purgeElement(ol);*/
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
@@ -482,7 +490,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					YAHOO.log(o, "info", "Intelligence.SpyNameSave.success");
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
-					this.Self.spies = undefined;
+					//this.Self.spies = undefined; /* Can't delete it, we need it later */
 					this.Spy.name = newName;
 					if(this.Input) {
 						this.Input.value = newName;
