@@ -672,9 +672,13 @@ about
 	padding:2px 2px 0;
 	position:relative;
 }
+.message .messageContainer {
+	margin-right:26px;
+}
 .message .messageSelect {
 	position:absolute;
 	right:1px;
+	width:26px;
 }
 .messageSelect input[type="checkbox"] {
 	float:right;
@@ -687,7 +691,8 @@ about
 	font-weight:bold;
 }
 .messageDate, .messageFrom, .messageSubject {
-	font-size: 80%;
+	font-size: 100%;
+	padding: 2px 0;
 }
 
 #messagingTabs .yui-content {
@@ -1040,12 +1045,12 @@ Info dialogs for Empire and Alliance
 }
 
 .tileContainer .tile50  div.planetMapTileCounter {
-	font-family: sans-serif;
-	font-size: 100%;
+	font-family: Arial Narrow, Times New Roman, sans-serif;
+	font-size: 95%;
 }
 .tileContainer .tile50  div.planetMapTileCounterWork {
-	font-family: sans-serif;
-	font-size: 100%;
+	font-family: Arial Narrow, Times New Roman, sans-serif;
+	font-size: 95%;
 }
 .tile50 .planetMapTileActionContainer {
 	font-size: 100%;

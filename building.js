@@ -199,14 +199,13 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				'		<div class="yui-u">',
 				'			<ul id="buildingDetailsUpgradeProduction">',
 				up ? [
-					'<li><ul><li>Upgrade Production</li>',
+					'<li>Upgrade Production</li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></span><span class="buildingDetailsNum">',up.production.food_hour,'/hr</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span><span class="buildingDetailsNum">',up.production.ore_hour,'/hr</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span><span class="buildingDetailsNum">',up.production.water_hour,'/hr</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span><span class="buildingDetailsNum">',up.production.energy_hour,'/hr</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',up.production.waste_hour,'/hr</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></span><span class="buildingDetailsNum">',up.production.happiness_hour,'/hr</span></li>',
-					'	</ul></li>',
 					up.can ? '<li><button id="buildingDetailsUpgrade" type="button">Upgrade to Level ' + (1 + (this.building.level*1)) + '</button></li>' : '<li class="alert">Unable to Upgrade:</li><li class="alert">',up.reason[1],'</li>'
 					].join('') : '',
 				'			</ul>',

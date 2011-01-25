@@ -146,9 +146,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			var details = Dom.get("spiesDetails");
 			if(details) {
 				var spies = this.spies.spies,
-					div = document.createElement("div"),
-					ul = document.createElement("ul"),
-					li = document.createElement("li"),
 					isTraining;
 					
 				Event.purgeElement(details);
@@ -157,153 +154,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				Dom.setStyle(details.parentNode,"overflow-y","");
 						
 				for(var i=0; i<spies.length; i++) {
-					var spy = spies[i],
-						assign = spy.possible_assignments,
-						nDiv = div.cloneNode(false),
-						nUl = ul.cloneNode(false),
-						nLi = li.cloneNode(false);
-					Dom.addClass(nDiv, "spyInfo");
-					Dom.addClass(nUl, "clearafter");
-
-					Dom.addClass(nLi,"spyName");
-					nLi.innerHTML = spy.name;
-					nUl.appendChild(nLi);
-					Event.on(nLi, "click", this.SpyName, {Self:this,Spy:spy,el:nLi}, true);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyAssignedTo");
-					nLi.innerHTML = '<label>Assigned To:</label> <a class="starmap_link" href="#' + spy.assigned_to.x + 'x' + spy.assigned_to.y + '">' + spy.assigned_to.name + '</a>';
-					Event.delegate(nLi, "click", this.handleStarmapLink, "a.starmap_link", this, true);
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyAssignment");
-					
-					var sel;
-					if(spy.is_available) {
-						sel = document.createElement("select");
-						var opt = document.createElement("option"),
-							btn = document.createElement("button");
-						for(var a=0; a<assign.length; a++) {
-							var job = assign[a];
-							nOpt = opt.cloneNode(false);
-							nOpt.value = job.task;
-							nOpt.innerHTML = [job.task, ' - Skill: ', job.skill.titleCaps('_',''), ' - Recovery: ', Lib.formatTime(job.recovery)].join('');
-							if(spy.assignment == job.task) { nOpt.selected = true; sel.currentAssign = job.task; }
-							sel.appendChild(nOpt);
-						}
-						Event.on(sel, "change", this.SpyAssignChange);
-						
-						nLi.appendChild(sel);
-						
-						btn.setAttribute("type", "button");
-						btn.innerHTML = "Assign";
-						Dom.setStyle(btn,"display","none");
-						Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nUl}, true);
-						sel.Button = nLi.appendChild(btn);
-						
-					}
-					else {
-						nLi.innerHTML = spy.assignment;
-						if(!isTraining) {
-							isTraining = spy.assignment == "Training";
-						}
-					}
-
-					// Add mission results if they exist
-					if(spy.mission) {
-						var elem = sel ? sel : nLi;
-						var result = document.createElement("div");
-						Dom.setStyle(result, "display", "none");
-						Dom.addClass(result, 'spyAssignResult');
-						var result_text = document.createElement("span");
-						var result_link = document.createElement("a");
-						result_link.href = "#";
-						result_link.innerHTML = "View Report";
-						Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
-						Dom.setStyle(result_link, "display", "none");
-
-						elem.ResultText = result.appendChild(result_text);
-						elem.ResultLink = result.appendChild(result_link);
-						elem.Results = nLi.appendChild(result);
-						
-						var mission = spy.mission;
-						elem.ResultText.innerHTML = "Mission " + mission.result + (
-							mission.reason ? ": " + mission.reason
-								: ".");
-						Dom.setStyle(elem.Results, "display", "block");
-						if (mission.message_id) {
-							elem.ResultLink.MessageId = mission.message_id;
-							Dom.setStyle(elem.ResultLink, "display", "inline");
-						}
-						else {
-							Dom.setStyle(elem.ResultLink, "display", "none");
-						}
-					}
-
-					nUl.appendChild(nLi);
-					//***
-					nDiv.appendChild(nUl);
-					nUl = ul.cloneNode(false);
-					Dom.addClass(nUl, "clearafter");
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyLevel");
-					nLi.innerHTML = "<label>Level:</label>"+spy.level;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyOffense");
-					nLi.innerHTML = "<label>Offense:</label>"+spy.offense_rating;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyDefense");
-					nLi.innerHTML = "<label>Defense:</label>"+spy.defense_rating;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyAvailableWhen");
-					nLi.innerHTML = "<label>Available:</label>"+(spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on));
-					nUl.appendChild(nLi);
-					//***
-					nDiv.appendChild(nUl);
-					nUl = ul.cloneNode(false);
-					Dom.addClass(nUl, "clearafter");
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyIntel");
-					nLi.innerHTML = "<label>Intel:</label>"+spy.intel;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyMayhem");
-					nLi.innerHTML = "<label>Mayhem:</label>"+spy.mayhem;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyPolitics");
-					nLi.innerHTML = "<label>Politics:</label>"+spy.politics;
-					nUl.appendChild(nLi);
-					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyTheft");
-					nLi.innerHTML = "<label>Theft:</label>"+spy.theft;
-					nUl.appendChild(nLi);
-
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"spyBurn");
-					var bbtn = document.createElement("button");
-					bbtn.setAttribute("type", "button");
-					bbtn.innerHTML = "Burn";
-					bbtn = nLi.appendChild(bbtn);
-					nUl.appendChild(nLi);
-					//***
-					nDiv.appendChild(nUl);
-
-					details.appendChild(nDiv);
-					
-					Event.on(bbtn, "click", this.SpyBurn, {Self:this,Spy:spy,Line:nDiv}, true);
+					details.appendChild(this.SpyRecord(spies[i]));
 				}
 				
 				if(isTraining) {
@@ -323,6 +174,156 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
 			}
+		},
+		SpyRecord : function(spy) {
+			var assign = spy.possible_assignments,
+				ul = document.createElement("ul"),
+				li = document.createElement("li"),
+				nDiv = document.createElement("div"),
+				nUl = ul.cloneNode(false),
+				nLi = li.cloneNode(false);
+			Dom.addClass(nDiv, "spyInfo");
+			Dom.addClass(nUl, "clearafter");
+
+			Dom.addClass(nLi,"spyName");
+			nLi.innerHTML = spy.name;
+			nUl.appendChild(nLi);
+			Event.on(nLi, "click", this.SpyName, {Self:this,Spy:spy,el:nLi}, true);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyAssignedTo");
+			nLi.innerHTML = '<label>Assigned To:</label> <a class="starmap_link" href="#' + spy.assigned_to.x + 'x' + spy.assigned_to.y + '">' + spy.assigned_to.name + '</a>';
+			Event.delegate(nLi, "click", this.handleStarmapLink, "a.starmap_link", this, true);
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyAssignment");
+			
+			var sel;
+			if(spy.is_available) {
+				sel = document.createElement("select");
+				var opt = document.createElement("option"),
+					btn = document.createElement("button");
+				for(var a=0; a<assign.length; a++) {
+					var job = assign[a];
+					nOpt = opt.cloneNode(false);
+					nOpt.value = job.task;
+					nOpt.innerHTML = [job.task, ' - Skill: ', job.skill.titleCaps('_',''), ' - Recovery: ', Lib.formatTime(job.recovery)].join('');
+					if(spy.assignment == job.task) { nOpt.selected = true; sel.currentAssign = job.task; }
+					sel.appendChild(nOpt);
+				}
+				Event.on(sel, "change", this.SpyAssignChange);
+				
+				nLi.appendChild(sel);
+				
+				btn.setAttribute("type", "button");
+				btn.innerHTML = "Assign";
+				Dom.setStyle(btn,"display","none");
+				Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nDiv}, true);
+				sel.Button = nLi.appendChild(btn);
+				
+			}
+			else {
+				nLi.innerHTML = spy.assignment;
+				if(!isTraining) {
+					isTraining = spy.assignment == "Training";
+				}
+			}
+
+			// Add mission results if they exist
+			if(spy.mission) {
+				var elem = sel ? sel : nLi;
+				var result = document.createElement("div");
+				Dom.setStyle(result, "display", "none");
+				Dom.addClass(result, 'spyAssignResult');
+				var result_text = document.createElement("span");
+				var result_link = document.createElement("a");
+				result_link.href = "#";
+				result_link.innerHTML = "View Report";
+				Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
+				Dom.setStyle(result_link, "display", "none");
+
+				elem.ResultText = result.appendChild(result_text);
+				elem.ResultLink = result.appendChild(result_link);
+				elem.Results = nLi.appendChild(result);
+				
+				var mission = spy.mission;
+				elem.ResultText.innerHTML = "Mission " + mission.result + (
+					mission.reason ? ": " + mission.reason
+						: ".");
+				Dom.setStyle(elem.Results, "display", "block");
+				if (mission.message_id) {
+					elem.ResultLink.MessageId = mission.message_id;
+					Dom.setStyle(elem.ResultLink, "display", "inline");
+				}
+				else {
+					Dom.setStyle(elem.ResultLink, "display", "none");
+				}
+			}
+
+			nUl.appendChild(nLi);
+			//***
+			nDiv.appendChild(nUl);
+			nUl = ul.cloneNode(false);
+			Dom.addClass(nUl, "clearafter");
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyLevel");
+			nLi.innerHTML = "<label>Level:</label>"+spy.level;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyOffense");
+			nLi.innerHTML = "<label>Offense:</label>"+spy.offense_rating;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyDefense");
+			nLi.innerHTML = "<label>Defense:</label>"+spy.defense_rating;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyAvailableWhen");
+			nLi.innerHTML = "<label>Available:</label>"+(spy.is_available ? 'Now' : Lib.formatServerDate(spy.available_on));
+			nUl.appendChild(nLi);
+			//***
+			nDiv.appendChild(nUl);
+			nUl = ul.cloneNode(false);
+			Dom.addClass(nUl, "clearafter");
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyIntel");
+			nLi.innerHTML = "<label>Intel:</label>"+spy.intel;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyMayhem");
+			nLi.innerHTML = "<label>Mayhem:</label>"+spy.mayhem;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyPolitics");
+			nLi.innerHTML = "<label>Politics:</label>"+spy.politics;
+			nUl.appendChild(nLi);
+			
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyTheft");
+			nLi.innerHTML = "<label>Theft:</label>"+spy.theft;
+			nUl.appendChild(nLi);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyBurn");
+			var bbtn = document.createElement("button");
+			bbtn.setAttribute("type", "button");
+			bbtn.innerHTML = "Burn";
+			bbtn = nLi.appendChild(bbtn);
+			nUl.appendChild(nLi);
+			//***
+			nDiv.appendChild(nUl);
+			
+			Event.on(bbtn, "click", this.SpyBurn, {Self:this,Spy:spy,Line:nDiv}, true);
+					
+			return nDiv;
 		},
 		handleStarmapLink : function(e, el) {
 			Event.stopEvent(e);
@@ -395,7 +396,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						}
 					}
 					this.Self.spies.spies = spies;
-					this.Self.SpyPopulate();
+					//this.Self.SpyPopulate();
+					this.Line.parentNode.insertBefore(this.Self.SpyRecord(spy), this.Line);
+					var ol = this.Line.parentNode.removeChild(this.Line);
+					Event.purgeElement(ol);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
