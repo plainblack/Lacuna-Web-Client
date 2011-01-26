@@ -132,8 +132,8 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					YAHOO.log(o, "info", "PlanetaryCommand.abandon.success");
 					this.rpcSuccess(o);
 
-					// BUG doesn't actually update
-					Lacuna.Menu.PlanetMenu.update();
+					delete Game.EmpireData.planets[cp.id]; // Remove the abandoned planet
+					this.fireEvent("onMapRpc"); // Redraw the map, menu, etc...
 
 					this.fireEvent("onHide");
 					Game.PlanetJump(); //jumps to home planet if nothing passed in
