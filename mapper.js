@@ -463,6 +463,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(!hasUpgrade && !hasWork) {
 				this.finishTick();
 			}
+			else if(!hasUpgrade && this.data.pending_build && this.data.pending_build.seconds_remaining <= 0) {
+				this.finishTick();
+			}
+			else if(!hasWork && this.data.work && this.data.work.seconds_remaining <= 0) {
+				this.finishTick();
+			}
 		},
 		
 		refreshCounter : function() {
