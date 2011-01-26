@@ -133,7 +133,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					this.rpcSuccess(o);
 
 					delete Game.EmpireData.planets[cp.id]; // Remove the abandoned planet
-					this.fireEvent("onMapRpc"); // Redraw the map, menu, etc...
 
 					this.fireEvent("onHide");
 					Game.PlanetJump(); //jumps to home planet if nothing passed in
