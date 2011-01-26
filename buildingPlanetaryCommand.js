@@ -132,6 +132,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					YAHOO.log(o, "info", "PlanetaryCommand.abandon.success");
 					this.rpcSuccess(o);
 
+					// BUG doesn't actually update
+					Lacuna.Menu.PlanetMenu.update();
+
 					this.fireEvent("onHide");
 					Game.PlanetJump(); //jumps to home planet if nothing passed in
 					
