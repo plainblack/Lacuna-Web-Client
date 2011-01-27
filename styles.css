@@ -1012,6 +1012,7 @@ Info dialogs for Empire and Alliance
 .planetMapEfficiencyBar {
 	z-index: 2;
 	height:100%;
+	white-space: nowrap;
 }
 .planetMapTileActionContainer {
 	z-index: 3;
