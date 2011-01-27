@@ -180,7 +180,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			</ul>',
 				'		</div>',
 				'		<div id="builderListContainer">',
-				'			<div id="builderFilter" style="overflow:auto">',
+				'			<div id="builderFilter" style="overflow:hidden">',
 				'				<div style="float: right">',
 				'					Available: ',
 				'					<select id="builderTimeFilter">',
