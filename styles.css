@@ -1652,7 +1652,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 .tradeContainers  .tradeName {
-	width:320px;
+	width:319px; /* reduced from 320px to keep the + button from wrapping */
 }
 .tradeContainers .tradeResourceName {
 	width:230px;
