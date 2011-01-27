@@ -208,7 +208,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<div id="planetDetailSendSpies">',
 				'				<div class="planetDetailSelectSpies">',
 				'					<div class="planetDetailSpiesMessage"></div><button>Send</button>',
-				'					<ul id="sHt" class="planetDetailSpiesList">',
+				'					<ul class="planetDetailSpiesList">',
 				'					</ul>',
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
@@ -221,7 +221,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<div id="planetDetailFetchSpies">',
 				'				<div class="planetDetailSelectSpies">',
 				'					<div class="planetDetailSpiesMessage"></div><button>Fetch</button>',
-				'					<ul id="fHt" class="planetDetailSpiesList"></ul>',
+				'					<ul class="planetDetailSpiesList"></ul>',
 				'				</div>',
 				'				<div class="planetDetailSelectSpyShip">',
 				'					<div class="planetDetailSpyShipHeader">',
@@ -1174,12 +1174,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				list.appendChild(nLi);
 			}
 			
-			setTimeout(function() {
-				var Ht = Game.GetSize().h - 260;
-				if(Ht > 240) { Ht = 240; }
-				Dom.setStyle(Dom.get('sHt'),'height',Ht + 'px');
-				Dom.setStyle(Dom.get('fHt'),'height',Ht + 'px');
-			},10);
+			var Ht = Game.GetSize().h - 260;
+			if(Ht > 240) { Ht = 240; }
+			Dom.setStyle(list,'height',Ht + 'px');
 		},
 		MoveSpies : function(e, tab) {
 			Event.stopEvent(e);
@@ -1229,6 +1226,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				].join('');
 				list.appendChild(nLi);
 			}
+			var Ht = Game.GetSize().h - 260;
+			if(Ht > 240) { Ht = 240; }
+			Dom.setStyle(list,'height',Ht + 'px');
 			Dom.setStyle(tab.elSpiesPane, 'display', 'none');
 			Dom.setStyle(tab.elSpyShipsPane, 'display', 'block');
 		},
