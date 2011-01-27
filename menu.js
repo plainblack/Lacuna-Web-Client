@@ -705,7 +705,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				'<div><strong>',name,'</strong></div>',
 				'<div><img alt="" class="',iconClass,'" src="',Lib.AssetUrl,'ui/s/',icon,'.png" /> ',Lib.formatNumber(hour),'/hr</div>',
 				'<div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(store)), (wantCap ? '/'+Lib.formatNumber(cap) : ''),'</div>',
-				(wantCap ? '<div><img alt="" class="smallTime" src="'+Lib.AssetUrl+'ui/s/time.png />' + ( hour < 0 ? 'Will Never Fill' : 'Full In '+Lib.formatTime(3600 * (cap - store) / hour)) + '</div>' : '')
+				(wantCap ? '<div><img alt="" class="smallTime" src="'+Lib.AssetUrl+'ui/s/time.png" />' + (
+					hour < 0 && store > 0 ?
+						'Empty In '+Lib.formatTime(-3600 * store / hour) :
+					hour >= 0 && cap == store ?
+						'Full' :
+					hour > 0 ?
+						'Full In '+Lib.formatTime(3600 * (cap - store) / hour) :
+					'Will Never Fill'
+				) + '</div>' : '')
 			];
 		},
 		getTextFor : function(id) {
