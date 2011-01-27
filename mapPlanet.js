@@ -1055,6 +1055,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				Dom.setStyle("buildingDetailTabs", "display", "");
 				panel.tabView.selectTab(0);
+				panel.setFirstLastFocusable();
+				panel.focusFirst();
 			}
 		},
 
