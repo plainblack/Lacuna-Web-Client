@@ -440,6 +440,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 
 				list.appendChild(frag);
+				list.parentNode.scrollTop = 0;
 			};
 			
 			this.buildingBuilder.render();
