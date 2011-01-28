@@ -261,7 +261,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					},
 					failure : function(o){
 						YAHOO.log(o, "error", "Essentia.boost.failure");
-						this.fireEvent("onRpcFailed", o.result);
+						this.fireEvent("onRpcFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this
