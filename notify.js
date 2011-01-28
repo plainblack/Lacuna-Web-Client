@@ -67,7 +67,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_updating : function() {
 			var list = this.Display.notifyList;
-			
 			var planetShips = this.incomingShips[this.planetId] || [], 
 				arr = [],
 				i = 0;
@@ -92,12 +91,14 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			}
 			
 			list.innerHTML = arr.join('');
-			
 			if(i == 0) {
 				Game.onTick.unsubscribe(this._updating);
 				delete this.subscribed;
 				this.incomingShips = {};
 				this.Hide();
+			}
+			else {
+				this.Display.show();
 			}
 		},
 		Load : function(planet) {
@@ -125,15 +126,14 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					Game.onTick.subscribe(this._updating, this, true);
 					this.subscribed = 1;
 				}
-				
 				this.Display.show();
 				this.Display.bringToTop();
 			}
 		},
 		Show : function(planetId) {
+			this.planetId = planetId;
 			if(this.Display) {
 				if(this.subscribed && this.incomingShips[planetId]) {
-					this.planetId = planetId;
 					this.Display.show();
 					this.Display.bringToTop();
 				}
