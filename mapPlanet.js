@@ -180,7 +180,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			</ul>',
 				'		</div>',
 				'		<div id="builderListContainer">',
-				'			<div id="builderFilter" style="overflow:auto">',
+				'			<div id="builderFilter" style="overflow:hidden">',
 				'				<div style="float: right">',
 				'					Available: ',
 				'					<select id="builderTimeFilter">',
@@ -440,6 +440,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 
 				list.appendChild(frag);
+				list.parentNode.scrollTop = 0;
 			};
 			
 			this.buildingBuilder.render();
@@ -1055,6 +1056,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				Dom.setStyle("buildingDetailTabs", "display", "");
 				panel.tabView.selectTab(0);
+				panel.setFirstLastFocusable();
+				panel.focusFirst();
 			}
 		},
 

@@ -242,28 +242,18 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Pulser.Hide();
 		},
 		InitChat : function() {
-			var loginCommand = Game.GetCookie("chatLogin");
-			if(loginCommand) {
-				YAHOO.log("Chat login to existing session", "debug", "InitChat");
-				if(window.env_executeCommand) {
-					window.env_executeCommand(loginCommand);
-				}
-			}
-			else {
-				Game.Services.Chat.get_commands({session_id:Game.GetSession()},{
-					success : function(o){
-						Game.SetCookie("chatLogin", o.result.login_command);
-						Game.SetCookie("chatLogout", o.result.logout_command);
-						if(window.env_executeCommand) {
-							YAHOO.log(o, "debug", "Chat.get_commands.success");
-							window.env_executeCommand(o.result.login_command);
-						}
-					},
-					failure : function(o){
-						YAHOO.log(o, "debug", "Chat.get_commands.failure");
+			Game.Services.Chat.get_commands({session_id:Game.GetSession()},{
+				success : function(o){
+					Game.chatLogout = o.result.logout_command;
+					if(window.env_executeCommand) {
+						YAHOO.log(o, "debug", "Chat.get_commands.success");
+						window.env_executeCommand(o.result.login_command);
 					}
-				});
-			}
+				},
+				failure : function(o){
+					YAHOO.log(o, "debug", "Chat.get_commands.failure");
+				}
+			});
 		},
 		InitEvents : function() {
 			//make sure we only subscribe once
@@ -657,12 +647,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//disable esc handler
 			Game.escListener.disable();
 			
-			var logoutCommand = Game.GetCookie("chatLogout");
+			var logoutCommand = Game.chatLogout;
 	
 			Game.RemoveCookie("locationId");
 			Game.RemoveCookie("locationView");
-			Game.RemoveCookie("chatLogin");
-			Game.RemoveCookie("chatLogout");
 			
 			Game.SetSession();
 			Game.EmpireData = {};

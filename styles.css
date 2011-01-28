@@ -1012,6 +1012,8 @@ Info dialogs for Empire and Alliance
 .planetMapEfficiencyBar {
 	z-index: 2;
 	height:100%;
+	margin-right: auto;
+	white-space: nowrap;
 }
 .planetMapTileActionContainer {
 	z-index: 3;
@@ -1274,7 +1276,7 @@ planet details
 	overflow-y: auto;
 	clear: both;
 	border-top: 1px solid #52acff;
-	margin: 0 -6px 0 -7px;
+	margin: 0 -6px -3px -7px;
 }
 
 .planetDetailSpiesList li,
