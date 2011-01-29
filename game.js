@@ -24,6 +24,26 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			var l = window.location;
 			Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
 			Game.domain = l.hostname || "lacunaexpanse.com";
+
+			var ie = YAHOO.env.ua.ie, // 7 or later
+				opera = YAHOO.env.ua.opera, // 9.65 or later
+				firefox = YAHOO.env.ua.gecko, // 1.9 = 3.0
+				webkit = YAHOO.env.ua.webkit, // 523 = Safari 3
+				oldBrowserOkay = Game.GetCookieSettings("oldBrowserOkay","0");
+			if(oldBrowserOkay == 0 && (
+					(ie > 0 && ie < 7) ||
+					(opera > 0 && opera < 9.65) ||
+					(firefox > 0 && firefox < 1.9) ||
+					(webkit > 0 && webkit < 523)
+				)) {
+				if (confirm("Your browser is quite old and some game functions may not work properly. Are you certain you want to continue?")) {
+					Game.SetCookieSettings("oldBrowserOkay", "1");
+				}
+				else {
+					window.location = 'http://www.lacunaexpanse.com';
+				}
+			}
+ 
 			if(!Lacuna.Pulser) {
 				Lacuna.Pulser = new Lacuna.Pulse();
 			}
