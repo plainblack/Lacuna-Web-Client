@@ -191,8 +191,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return cd;*/
 			var dt = new Date();
 			dt.setUTCFullYear(pieces[2]*1);
-			dt.setUTCMonth((pieces[1]*1)-1);
-			dt.setUTCDate(pieces[0]*1);
+			dt.setUTCMonth((pieces[1]*1-1), pieces[0]*1);
 			dt.setUTCHours(time[0]*1);
 			dt.setUTCMinutes(time[1]*1);
 			dt.setUTCSeconds(time[2]*1);
