@@ -68,6 +68,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.stopAnim = Dom.get("profileDisableDialogAnim");
 			this.showLevels = Dom.get("profileShowBuildingLevels");
 			this.hidePlanets = Dom.get("profileHidePlanets");
+			this.hideTips = Dom.get("profileHideTips");
 			
 			this.tabView = new YAHOO.widget.TabView("profileTabs");
 			//species tab
@@ -227,6 +228,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li>',
 			'							<li><input id="profileShowBuildingLevels" type="checkbox" /> Always Show Building Levels</li>',
 			'							<li><input id="profileHidePlanets" type="checkbox" /> Hide Planet Images in Star Map</li>',
+			'							<li><input id="profileHideTips" type="checkbox" /> Hide Tips at Login</li>',
 			'						</ul>',
 			'					</div>',
 			'				</div>',
@@ -317,6 +319,14 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					YAHOO.lacuna.MapStar._map.redraw();
 				}
 			}
+			if(Game.GetCookieSettings("hideTips","0") != (this.hideTips.checked ? "1" : "0")) {
+				if(this.hideTips.checked) {
+					Game.SetCookieSettings("hideTips","1");
+				}
+				else {
+					Game.RemoveCookieSettings("hideTips");
+				}
+			}
 			
 			Game.Services.Empire.edit_profile({
 					session_id:Game.GetSession(""),
@@ -394,6 +404,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
 			this.hidePlanets.checked = Game.GetCookieSettings("hidePlanets","0") == "1";
+			this.hideTips.checked = Game.GetCookieSettings("hideTips","0") == "1";
 			
 			this.rpc.innerHTML = [(Game.EmpireData.rpc_count || 0), ' / ', (Game.ServerData.rpc_limit || 0)].join('');
 			

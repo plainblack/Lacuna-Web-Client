@@ -173,7 +173,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
-
 					if (result.welcome_message_id) {
 						var container = document.createElement('div');
 						container.id = 'welcomeMessage';
@@ -213,6 +212,87 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
 						//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
 						welcome.render();
+					}
+					else {
+						Game.RemoveCookieSettings("showTips");
+						var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
+						if(showTips == "1") {
+							var maxTips = Game.Resources.tips.length - 1;
+							var tipNum = Game.GetCookieSettings("tipNum", -1);
+							var container = document.createElement('div');
+							container.id = 'tipsMessage';
+							Dom.setStyle(container, "text-align", "justify");
+							document.body.insertBefore(container, document.body.firstChild);
+							var nextTipNum = function(tipNum) {
+									tipNum++;
+									if(tipNum > maxTips) { tipNum = 0; }
+									return tipNum;
+								},
+								showTip = function(tipNum) {
+									var tip = Game.Resources.tips[tipNum];
+									Dom.get('tipsTip').innerHTML = tip;
+									Game.SetCookieSettings("tipNum", nextTipNum(tipNum));
+								},
+								nextTip = function(tipNum) {
+									tipNum = nextTipNum(tipNum);
+									showTip(tipNum);
+									return tipNum;
+								},
+								prevTip = function(tipNum) {
+									tipNum--
+									if(tipNum < 0) { tipNum = maxTips; }
+									showTip(tipNum);
+									return tipNum;
+								}
+								tips = new YAHOO.widget.SimpleDialog(container, {
+									width: "400px",
+									fixedcenter: true,
+									visible: false,
+									draggable: false,
+									text: [
+										'Lacuna Expanse Tips',
+										'<p id="tipsTip" style="margin:10px 0;"></p>',
+										'<p><input id="showTips" type="checkbox" checked />Show tips at login</p>'
+									].join(''),
+									constraintoviewport: true,
+									modal: true,
+									close: false,
+									zindex: 20000,
+									buttons: [
+										{ text:"< Previous", handler:function() {
+											tipNum = prevTip(tipNum);
+										} },
+										{ text:"Next >", handler:function() {
+											tipNum = nextTip(tipNum);
+										} },
+										{ text:"Close", handler:function() {
+											this.hide();
+										}, isDefault:true }
+									]
+								});
+							tips.renderEvent.subscribe(function() {
+								showTip(tipNum);
+								this.show();
+								Event.on(Dom.get('showTips'),"change",function() {
+									// set hide to the reverse of show
+									if(Dom.get("showTips").checked) {
+										Game.RemoveCookieSettings("hideTips");
+									}
+									else {
+										Game.SetCookieSettings("hideTips", "1");
+									}
+								});
+							});
+							tips.hideEvent.subscribe(function() {
+								//let the current process complete before destroying
+								setTimeout(function(){
+									tips.destroy();
+								},1);
+							});
+
+							//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
+							tips.render();
+						}
 					}
 				});
 			}
