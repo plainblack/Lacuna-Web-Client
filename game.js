@@ -250,7 +250,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									visible: false,
 									draggable: false,
 									text: [
-										'Lacuna Expanse Tips',
+										'<p style="font-weight:bold;">Tips</p>',
 										'<p id="tipsTip" style="margin:10px 0;"></p>',
 										'<p><input id="showTips" type="checkbox" checked />Show tips at login</p>'
 									].join(''),
