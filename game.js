@@ -519,7 +519,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(status.empire) {
 					//convert to numbers
 					status.empire.has_new_messages *= 1;
-					
 					if(status.empire.happiness) {
 						status.empire.happiness *= 1;
 						status.empire.happiness_hour *= 1;
@@ -527,6 +526,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					
 					if(!Lacuna.Game.EmpireData.planets){
 						Lacuna.Game.EmpireData.planets = {};
+					}
+					if(!Lacuna.Game.EmpireData.planetsByName){
+						Lacuna.Game.EmpireData.planetsByName = {};
 					}
 					for(var pKey in status.empire.planets) {
 						if(status.empire.planets.hasOwnProperty(pKey)){
@@ -542,6 +544,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							else {
 								Lacuna.Game.EmpireData.planets[pKey].name = status.empire.planets[pKey];
 							}
+							Lacuna.Game.EmpireData.planetsByName[status.empire.planets[pKey]] = Lacuna.Game.EmpireData.planets[pKey];
 							doMenuUpdate = true;
 						}
 					}

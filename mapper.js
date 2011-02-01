@@ -866,6 +866,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_showCachedTiles : function() {
 			if(this.tileCache) {
 				var bounds = this.visibleArea.coordBounds();
+				var planets = Game.EmpireData.planetsByName || {};
 				
 				//from left to right (smaller to bigger)
 				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
@@ -873,6 +874,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
 						var tile = this.findTile(xc,yc,this.map.zoom);
 						if(tile) {
+							if(tile.data && tile.data.name) {
+								if(planets.hasOwnProperty(tile.data.name)) {
+									if(Lacuna.MapStar._map.tileCache[tile.x] && Lacuna.MapStar._map.tileCache[tile.x][tile.y]) {
+										delete Lacuna.MapStar._map.tileCache[tile.x][tile.y]; // Remove the planet from the cache
+									}
+									tile.blank = true;
+								}
+							}
 							if(tile.blank) {
 								tile.refresh();
 							}
