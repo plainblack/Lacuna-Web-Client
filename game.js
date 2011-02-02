@@ -192,7 +192,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							close: false,
 							zindex: 20000,
 							buttons: [
-								{ text:"View Tuturial", handler:function() {
+								{ text:"View Tutorial", handler:function() {
 									this.hide();
 									Lacuna.Messaging.showMessage(result.welcome_message_id);
 								}, isDefault:true },
