@@ -107,8 +107,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			//Run rest of UI since we're logged in
 			Game.GetStatus({
-				success:Lacuna.Game.Run,
-				failure:Lacuna.Game.Failure
+				success:Game.Run,
+				failure:function(o){
+					if (o.error.code == 1002) {
+						Game.Reset();
+						Game.DoLogin(o.error);
+					}
+					else {
+						Game.Failure(o);
+					}
+				}
 			});
 		},
 		Failure : function(o){
