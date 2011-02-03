@@ -299,7 +299,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			if(this.data.orbit) {
 				if(this.map.hidePlanets) {
-					this.imageHolder.innerHTML = this.data.orbit;
+					switch(this.data.type) {
+						case 'habitable planet':
+							this.imageHolder.innerHTML = "H";
+							break;
+						case 'gas giant':
+							this.imageHolder.innerHTML = "G";
+							break;
+						case 'asteroid':
+							this.imageHolder.innerHTML = "A";
+							break;
+						default:
+							this.imageHolder.innerHTML = "U";
+							break;
+					}
 				}
 				else {
 					var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
