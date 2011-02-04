@@ -125,17 +125,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Game.Reset();
 				Game.DoLogin(o.error);
 			}
-			else if(o.error.code == 1002) {
-				alert(o.error.message);
-				Game.RemoveCookie('session');
-				delete Game._session;
-				Game.DoLogin();
-			}
 			else if(o.error.code == 1200) {
 				alert(o.error.message);
-				Game.RemoveCookie('session');
-				delete Game._session;
-				window.location = o.error.data.url;
+				Game.Reset();
+				window.location = o.error.data;
 			}
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
