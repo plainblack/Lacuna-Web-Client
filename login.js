@@ -125,6 +125,10 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 						Game.OverlayManager.hideAll();
 						Game.SpeciesCreator.show(o.error.data.empire_id);
 					}
+					else if(o.error.code == 1200) {
+						alert(o.error.message);
+						window.location = o.error.data;
+					}
 					else {
 						this.setMessage(o.error.message || "There was a problem logging in.  Please try again.");
 					}
