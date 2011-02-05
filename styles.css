@@ -1349,6 +1349,9 @@ planet details
 .buildingStats th {
 	font-weight: bold;
 }
+.buildingStats .low-resource, .buildingDetailsNum.low-resource {
+	color: #f00;
+}
 .buildingDesc, .shipDesc, .missionDesc, .missionPosted, .missionUniversity  {
 	font-size:85%;
 }

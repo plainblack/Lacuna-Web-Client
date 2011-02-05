@@ -43,6 +43,9 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 
 		getUpgradable : function(e) {
 			if(e.newValue) {
+				Dom.setStyle("hovNoSacrifice", "display", "none");
+				Dom.setStyle("hovCanSacrifice", "display", "none");
+				Dom.get("hovAvailableBuildings").innerHTML = '';
 				Lacuna.Pulser.Show();
 				this.service.get_upgradable_buildings({session_id:Game.GetSession(),building_id:this.building.id}, {
 					success : function(o){

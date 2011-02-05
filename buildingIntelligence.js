@@ -190,7 +190,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				btn.setAttribute("type", "button");
 				btn.innerHTML = "Assign";
 				Dom.setStyle(btn,"display","none");
-				Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nUl}, true);
+				Event.on(btn, "click", this.SpyAssign, {Self:this,Assign:sel,Id:spy.id,Line:nDiv}, true);
 				sel.Button = nLi.appendChild(btn);
 			}
 			else {
@@ -210,7 +210,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				var result_link = document.createElement("a");
 				result_link.href = "#";
 				result_link.innerHTML = "View Report";
-				Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nUl}, true);
+				Event.on(result_link, "click", this.SpyShowMessage, {Self:this,ResultLink:result_link,Id:spy.id,Line:nDiv}, true);
 				Dom.setStyle(result_link, "display", "none");
 
 				elem.ResultText = result.appendChild(result_text);
@@ -404,10 +404,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					}
 					this.Self.spies.spies = spies;
 					var ret = this.Self.SpyInfo(spy);
-					Dom.get('spiesDetails').replaceChild(ret[0], Dom.get('spy' + spy.id));
-					/*this.Line.parentNode.insertBefore(this.Self.SpyRecord(spy), this.Line);
+					//Dom.get('spiesDetails').replaceChild(ret[0], Dom.get('spy' + spy.id));
+					this.Line.parentNode.insertBefore(ret[0], this.Line);
 					var ol = this.Line.parentNode.removeChild(this.Line);
-					Event.purgeElement(ol);*/
+					Event.purgeElement(ol);
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
