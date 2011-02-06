@@ -85,31 +85,32 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			var maxHeight = this._map.height;
 			if(mb) {
 				var tileSize = this._map.tileSizeInPx,
+					extraSpaceHeight = 30 + Math.ceil(tileSize / 2),
+					extraSpaceWidth = 100 + Math.ceil(tileSize / 2),
 					maxBoundsWidth = (mb.x2Right - mb.x1Left) * tileSize,
-					maxBoundsHeight = (mb.y1Top - mb.y2Bottom) * tileSize,
-					extraSpace = 30 + Math.ceil(tileSize / 2);
+					maxBoundsHeight = (mb.y1Top - mb.y2Bottom) * tileSize;
 					
 				if(maxWidth > maxBoundsWidth) {
-					maxWidth = maxBoundsWidth + (extraSpace*2);
+					maxWidth = maxBoundsWidth + (extraSpaceWidth*2);
 				}
 				if(maxHeight > maxBoundsHeight) {
-					maxHeight = maxBoundsHeight + (extraSpace*2);
+					maxHeight = maxBoundsHeight + (extraSpaceHeight*2);
 				}
-				var	cb = this.calcCoordBounds(this.left + mx + extraSpace, this.top + my + extraSpace, this.left + mx + maxWidth - extraSpace, this.top + my + maxHeight - extraSpace);
+				var	cb = this.calcCoordBounds(this.left + mx + extraSpaceWidth, this.top + my + extraSpaceHeight, this.left + mx + maxWidth - extraSpaceWidth, this.top + my + maxHeight - extraSpaceHeight);
 				//if out of bounds, only move to max
 				//x axis
 				if(mx < 0 && cb.x1 < mb.x1Left) { //if moving left
-					mx = mb.x1Left * tileSize - extraSpace - this.left;
+					mx = mb.x1Left * tileSize - extraSpaceWidth - this.left;
 				}
 				else if(mx > 0 && cb.x2 > (mb.x2Right+1)) { //if moving right
-					mx = ((mb.x2Right+1) * tileSize) - (this.left + maxWidth - extraSpace);
+					mx = ((mb.x2Right+1) * tileSize) - (this.left + maxWidth - extraSpaceWidth);
 				}
 				//y axis
 				if(my < 0 && cb.y1 > mb.y1Top){ //if moving up 
-					my = 0 - mb.y1Top * tileSize - extraSpace - this.top;
+					my = 0 - mb.y1Top * tileSize - extraSpaceHeight - this.top;
 				}
 				else if(my > 0 && cb.y2 < (mb.y2Bottom-1)) { //if moving down
-					my = - ((mb.y2Bottom-1) * tileSize) - (this.top + maxHeight - extraSpace);
+					my = - ((mb.y2Bottom-1) * tileSize) - (this.top + maxHeight - extraSpaceHeight);
 				}
 			}
 			//modify with new values now
@@ -298,7 +299,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 			if(this.data.orbit) {
 				if(this.map.hidePlanets) {
-					this.imageHolder.innerHTML = this.data.orbit;
+					switch(this.data.type) {
+						case 'habitable planet':
+							this.imageHolder.innerHTML = "H";
+							break;
+						case 'gas giant':
+							this.imageHolder.innerHTML = "G";
+							break;
+						case 'asteroid':
+							this.imageHolder.innerHTML = "A";
+							break;
+						default:
+							this.imageHolder.innerHTML = "U";
+							break;
+					}
 				}
 				else {
 					var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
@@ -460,6 +474,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.counterWork.innerHTML = Lib.formatTime(remainingWork);
 			}
 			if(!hasUpgrade && !hasWork) {
+				this.finishTick();
+			}
+			else if(!hasUpgrade && this.data.pending_build && this.data.pending_build.seconds_remaining <= 0) {
+				this.finishTick();
+			}
+			else if(!hasWork && this.data.work && this.data.work.seconds_remaining <= 0) {
 				this.finishTick();
 			}
 		},
@@ -673,6 +693,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			for(var x=xMin - 1; x<=xMax + 1; x++) {
 				var num = this.div.cloneNode(false);
 				num.xIndex = x;
+				Dom.addClass(num, "coordX");
 				if (x >= xMin && x <= xMax) {
 					num.innerHTML = x;
 					Dom.setStyle(num, "width", size);
@@ -682,8 +703,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					Dom.setStyle(num, "width", (pxSize * 3) + "px");
 					Dom.addClass(num, "coordX"+(pxSize * 3));
 				}
-				Dom.addClass(num, "coordX");
-				Dom.setStyle(num, "left", (x * pxSize) + "px");
+				if(x < xMin) {
+					Dom.setStyle(num, "left", (x * pxSize - (pxSize*2)) + "px");
+				}
+				else {
+					Dom.setStyle(num, "left", (x * pxSize) + "px");
+				}
 				anchor.appendChild(num);
 			}
 			this.xCoords = this.containerDiv.appendChild(anchor);
@@ -707,6 +732,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			for(var y=yMax + 1; y>=yMin - 1; y--) {
 				var num = this.div.cloneNode(false);
 				num.yIndex = y;
+				Dom.addClass(num, "coordY");
 				if (y >= yMin && y <= yMax) {
 					num.innerHTML = y;
 					Dom.setStyle(num, "height", sizeLeft);
@@ -717,8 +743,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");
 					Dom.addClass(num, "coordY"+(pxSize * 3));
 				}
-				Dom.addClass(num, "coordY");
-				Dom.setStyle(num, "top", (y * negPxSize) + "px");
+				if(y > yMax) {
+					Dom.setStyle(num, "top", (y * negPxSize - (pxSize*2)) + "px");
+				}
+				else {
+					Dom.setStyle(num, "top", (y * negPxSize) + "px");
+				}
 				anchor.appendChild(num);
 			}
 			this.yCoords = this.containerDiv.appendChild(anchor);
@@ -849,6 +879,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		_showCachedTiles : function() {
 			if(this.tileCache) {
 				var bounds = this.visibleArea.coordBounds();
+				var planets = Game.EmpireData.planetsByName || {};
 				
 				//from left to right (smaller to bigger)
 				for(var xc=bounds.x1; xc <= bounds.x2; xc++){
@@ -856,6 +887,14 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					for(var yc=bounds.y2; yc <= bounds.y1; yc++){
 						var tile = this.findTile(xc,yc,this.map.zoom);
 						if(tile) {
+							if(tile.data && tile.data.name) {
+								if(planets.hasOwnProperty(tile.data.name)) {
+									if(Lacuna.MapStar._map.tileCache[tile.x] && Lacuna.MapStar._map.tileCache[tile.x][tile.y]) {
+										delete Lacuna.MapStar._map.tileCache[tile.x][tile.y]; // Remove the planet from the cache
+									}
+									tile.blank = true;
+								}
+							}
 							if(tile.blank) {
 								tile.refresh();
 							}

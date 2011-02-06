@@ -67,7 +67,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_updating : function() {
 			var list = this.Display.notifyList;
-			
 			var planetShips = this.incomingShips[this.planetId] || [], 
 				arr = [],
 				i = 0;
@@ -79,6 +78,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
 						ms = Lib.getTime(ship.date_arrives) - serverTime,
+						color = (ship.is_own == 1 ? "green" : (ship.is_ally == 1 ? "purple" : "white")),
 						arrTime;
 					i++;
 					if(ms > 0) {
@@ -87,17 +87,23 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					else {
 						arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
 					}
-					arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> ', arrTime,'</li>']);
+					if(ship.is_ally) {
+					}
+					else if(ship.is_own) {
+					}
+					arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> <span style="color:',color,';">', arrTime,'</span></li>']);
 				}
 			}
 			
 			list.innerHTML = arr.join('');
-			
 			if(i == 0) {
 				Game.onTick.unsubscribe(this._updating);
 				delete this.subscribed;
 				this.incomingShips = {};
 				this.Hide();
+			}
+			else {
+				this.Display.show();
 			}
 		},
 		Load : function(planet) {
@@ -125,15 +131,14 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					Game.onTick.subscribe(this._updating, this, true);
 					this.subscribed = 1;
 				}
-				
 				this.Display.show();
 				this.Display.bringToTop();
 			}
 		},
 		Show : function(planetId) {
+			this.planetId = planetId;
 			if(this.Display) {
 				if(this.subscribed && this.incomingShips[planetId]) {
-					this.planetId = planetId;
 					this.Display.show();
 					this.Display.bringToTop();
 				}

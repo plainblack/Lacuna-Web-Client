@@ -180,7 +180,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'			</ul>',
 				'		</div>',
 				'		<div id="builderListContainer">',
-				'			<div id="builderFilter" style="overflow:auto">',
+				'			<div id="builderFilter" style="overflow:hidden">',
 				'				<div style="float: right">',
 				'					Available: ',
 				'					<select id="builderTimeFilter">',
@@ -406,18 +406,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					'				<th><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></th>',
 					'			</tr>',
 					'			<tr><th>Cost:</th>',
-					'				<td>',costs.food,'</td>',
-					'				<td>',costs.ore,'</td>',
-					'				<td>',costs.water,'</td>',
-					'				<td>',costs.energy,'</td>',
+					'				<td class=',costs.food > planet.food_stored ? 'low-resource' : '','>',costs.food,'</td>',
+					'				<td class=',costs.ore > planet.ore_stored ? 'low-resource' : '','>',costs.ore,'</td>',
+					'				<td class=',costs.water > planet.water_stored ? 'low-resource' : '','>',costs.water,'</td>',
+					'				<td class=',costs.energy > planet.energy_stored ? 'low-resource' : '','>',costs.energy,'</td>',
 					'				<td>',costs.waste,'</td>',
 					'				<td></td>',
 					'			</tr>',
 					'			<tr><th>Prod:</th>',
-					'				<td>',prod.food_hour,'/hr</td>',
-					'				<td>',prod.ore_hour,'/hr</td>',
-					'				<td>',prod.water_hour,'/hr</td>',
-					'				<td>',prod.energy_hour,'/hr</td>',
+					'				<td class=',-1*prod.food_hour > planet.food_hour ? 'low-resource' : '','>',prod.food_hour,'/hr</td>',
+					'				<td class=',-1*prod.ore_hour > planet.ore_hour ? 'low-resource' : '','>',prod.ore_hour,'/hr</td>',
+					'				<td class=',-1*prod.water_hour > planet.water_hour ? 'low-resource' : '','>',prod.water_hour,'/hr</td>',
+					'				<td class=',-1*prod.energy_hour > planet.energy_hour ? 'low-resource' : '','>',prod.energy_hour,'/hr</td>',
 					'				<td>',prod.waste_hour,'/hr</td>',
 					'				<td>',prod.happiness_hour,'/hr</td>',
 					'			</tr>',
@@ -440,6 +440,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				}
 
 				list.appendChild(frag);
+				list.parentNode.scrollTop = 0;
 			};
 			
 			this.buildingBuilder.render();
@@ -608,7 +609,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			Lacuna.Pulser.Hide();
 		},
-		Load : function(planetId, showNotify) {
+		Load : function(planetId, showNotify, silent) {
 			Lacuna.Pulser.Show();
 			if(showNotify) {
 				Lacuna.Notify.Show(planetId);
@@ -617,7 +618,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Lacuna.Notify.Hide();
 			}
 			this.locationId = planetId;
-			this.ReLoad();
+			this.ReLoad(silent);
 		},
 		Refresh : function() {
 			if(this.locationId) {
@@ -646,7 +647,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				});
 			}
 		},
-		ReLoad : function() {
+		ReLoad : function(silent) {
 			if(this.locationId) {
 				var BodyServ = Game.Services.Body,
 					data = {
@@ -658,7 +659,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					success : function(o){
 						//YAHOO.log(o, "info", "MapPlanet.ReLoad");
 						this.fireEvent("onMapRpc", o.result);
-						this.Mapper(o.result);
+						if(silent) {
+							Lacuna.Pulser.Hide();
+						}
+						else {
+							this.Mapper(o.result);
+						}
 					},
 					failure : function(o){
 						//YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
@@ -1055,6 +1061,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				
 				Dom.setStyle("buildingDetailTabs", "display", "");
 				panel.tabView.selectTab(0);
+				panel.setFirstLastFocusable();
+				panel.focusFirst();
 			}
 		},
 

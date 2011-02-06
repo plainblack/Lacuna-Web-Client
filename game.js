@@ -24,6 +24,26 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			var l = window.location;
 			Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
 			Game.domain = l.hostname || "lacunaexpanse.com";
+
+			var ie = YAHOO.env.ua.ie, // 7 or later
+				opera = YAHOO.env.ua.opera, // 9.65 or later
+				firefox = YAHOO.env.ua.gecko, // 1.9 = 3.0
+				webkit = YAHOO.env.ua.webkit, // 523 = Safari 3
+				oldBrowserOkay = Game.GetCookieSettings("oldBrowserOkay","0");
+			if(oldBrowserOkay == 0 && (
+					(ie > 0 && ie < 7) ||
+					(opera > 0 && opera < 9.65) ||
+					(firefox > 0 && firefox < 1.9) ||
+					(webkit > 0 && webkit < 523)
+				)) {
+				if (confirm("Your browser is quite old and some game functions may not work properly. Are you certain you want to continue?")) {
+					Game.SetCookieSettings("oldBrowserOkay", "1");
+				}
+				else {
+					window.location = 'http://www.lacunaexpanse.com';
+				}
+			}
+ 
 			if(!Lacuna.Pulser) {
 				Lacuna.Pulser = new Lacuna.Pulse();
 			}
@@ -87,8 +107,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			//Run rest of UI since we're logged in
 			Game.GetStatus({
-				success:Lacuna.Game.Run,
-				failure:Lacuna.Game.Failure
+				success:Game.Run,
+				failure:function(o){
+					if (o.error.code == 1002) {
+						Game.Reset();
+						Game.DoLogin(o.error);
+					}
+					else {
+						Game.Failure(o);
+					}
+				}
 			});
 		},
 		Failure : function(o){
@@ -96,6 +124,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if(o.error.code == 1006) {
 				Game.Reset();
 				Game.DoLogin(o.error);
+			}
+			else if(o.error.code == 1200) {
+				alert(o.error.message);
+				Game.Reset();
+				window.location = o.error.data;
 			}
 			else if(o.error.message != "Internal error.") {
 				alert(o.error.message);
@@ -147,7 +180,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
-
 					if (result.welcome_message_id) {
 						var container = document.createElement('div');
 						container.id = 'welcomeMessage';
@@ -167,7 +199,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							close: false,
 							zindex: 20000,
 							buttons: [
-								{ text:"View Tuturial", handler:function() {
+								{ text:"View Tutorial", handler:function() {
 									this.hide();
 									Lacuna.Messaging.showMessage(result.welcome_message_id);
 								}, isDefault:true },
@@ -187,6 +219,87 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
 						//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
 						welcome.render();
+					}
+					else {
+						Game.RemoveCookieSettings("showTips");
+						var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
+						if(showTips == "1") {
+							var maxTips = Game.Resources.tips.length - 1;
+							var tipNum = Game.GetCookieSettings("tipNum", -1);
+							var container = document.createElement('div');
+							container.id = 'tipsMessage';
+							Dom.setStyle(container, "text-align", "justify");
+							document.body.insertBefore(container, document.body.firstChild);
+							var nextTipNum = function(tipNum) {
+									tipNum++;
+									if(tipNum > maxTips) { tipNum = 0; }
+									return tipNum;
+								},
+								showTip = function(tipNum) {
+									var tip = Game.Resources.tips[tipNum];
+									Dom.get('tipsTip').innerHTML = tip;
+									Game.SetCookieSettings("tipNum", nextTipNum(tipNum));
+								},
+								nextTip = function(tipNum) {
+									tipNum = nextTipNum(tipNum);
+									showTip(tipNum);
+									return tipNum;
+								},
+								prevTip = function(tipNum) {
+									tipNum--
+									if(tipNum < 0) { tipNum = maxTips; }
+									showTip(tipNum);
+									return tipNum;
+								}
+								tips = new YAHOO.widget.SimpleDialog(container, {
+									width: "400px",
+									fixedcenter: true,
+									visible: false,
+									draggable: false,
+									text: [
+										'<p style="font-weight:bold;">Tips</p>',
+										'<p id="tipsTip" style="margin:10px 0;"></p>',
+										'<p><input id="showTips" type="checkbox" checked />Show tips at login</p>'
+									].join(''),
+									constraintoviewport: true,
+									modal: true,
+									close: false,
+									zindex: 20000,
+									buttons: [
+										{ text:"< Previous", handler:function() {
+											tipNum = prevTip(tipNum);
+										} },
+										{ text:"Next >", handler:function() {
+											tipNum = nextTip(tipNum);
+										} },
+										{ text:"Close", handler:function() {
+											this.hide();
+										}, isDefault:true }
+									]
+								});
+							tips.renderEvent.subscribe(function() {
+								showTip(tipNum);
+								this.show();
+								Event.on(Dom.get('showTips'),"change",function() {
+									// set hide to the reverse of show
+									if(Dom.get("showTips").checked) {
+										Game.RemoveCookieSettings("hideTips");
+									}
+									else {
+										Game.SetCookieSettings("hideTips", "1");
+									}
+								});
+							});
+							tips.hideEvent.subscribe(function() {
+								//let the current process complete before destroying
+								setTimeout(function(){
+									tips.destroy();
+								},1);
+							});
+
+							//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
+							tips.render();
+						}
 					}
 				});
 			}
@@ -242,28 +355,18 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Pulser.Hide();
 		},
 		InitChat : function() {
-			var loginCommand = Game.GetCookie("chatLogin");
-			if(loginCommand) {
-				YAHOO.log("Chat login to existing session", "debug", "InitChat");
-				if(window.env_executeCommand) {
-					window.env_executeCommand(loginCommand);
-				}
-			}
-			else {
-				Game.Services.Chat.get_commands({session_id:Game.GetSession()},{
-					success : function(o){
-						Game.SetCookie("chatLogin", o.result.login_command);
-						Game.SetCookie("chatLogout", o.result.logout_command);
-						if(window.env_executeCommand) {
-							YAHOO.log(o, "debug", "Chat.get_commands.success");
-							window.env_executeCommand(o.result.login_command);
-						}
-					},
-					failure : function(o){
-						YAHOO.log(o, "debug", "Chat.get_commands.failure");
+			Game.Services.Chat.get_commands({session_id:Game.GetSession()},{
+				success : function(o){
+					Game.chatLogout = o.result.logout_command;
+					if(window.env_executeCommand) {
+						YAHOO.log(o, "debug", "Chat.get_commands.success");
+						window.env_executeCommand(o.result.login_command);
 					}
-				});
-			}
+				},
+				failure : function(o){
+					YAHOO.log(o, "debug", "Chat.get_commands.failure");
+				}
+			});
 		},
 		InitEvents : function() {
 			//make sure we only subscribe once
@@ -423,7 +526,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(status.empire) {
 					//convert to numbers
 					status.empire.has_new_messages *= 1;
-					
 					if(status.empire.happiness) {
 						status.empire.happiness *= 1;
 						status.empire.happiness_hour *= 1;
@@ -431,6 +533,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					
 					if(!Lacuna.Game.EmpireData.planets){
 						Lacuna.Game.EmpireData.planets = {};
+					}
+					if(!Lacuna.Game.EmpireData.planetsByName){
+						Lacuna.Game.EmpireData.planetsByName = {};
 					}
 					for(var pKey in status.empire.planets) {
 						if(status.empire.planets.hasOwnProperty(pKey)){
@@ -446,6 +551,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							else {
 								Lacuna.Game.EmpireData.planets[pKey].name = status.empire.planets[pKey];
 							}
+							Lacuna.Game.EmpireData.planetsByName[status.empire.planets[pKey]] = Lacuna.Game.EmpireData.planets[pKey];
 							doMenuUpdate = true;
 						}
 					}
@@ -582,6 +688,21 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.Load(planet.id, true);
 			}
 		},
+		PlanetChange : function(planet) {
+			if(!planet) {
+				//try to find home planet
+				planet = Game.EmpireData.planets[Game.EmpireData.home_planet_id];
+			}
+			//make sure we have found a planet to look at
+			if(planet) {
+				Game.OverlayManager.hideAll();
+				Game.EmpireData.current_planet_id = planet.id;
+				Lacuna.Menu.PlanetMenu.update();
+				Game.SetLocation(planet.id, Lib.View.PLANET);
+				
+				Lacuna.MapPlanet.Load(planet.id, false, true);
+			}
+		},
 
 		GetResources : function() {
 			Util.Connect.asyncRequest('GET', 'resources.json', {
@@ -657,12 +778,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			//disable esc handler
 			Game.escListener.disable();
 			
-			var logoutCommand = Game.GetCookie("chatLogout");
+			var logoutCommand = Game.chatLogout;
 	
 			Game.RemoveCookie("locationId");
 			Game.RemoveCookie("locationView");
-			Game.RemoveCookie("chatLogin");
-			Game.RemoveCookie("chatLogout");
 			
 			Game.SetSession();
 			Game.EmpireData = {};

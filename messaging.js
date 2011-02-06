@@ -57,12 +57,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '                   <option value="Tutorial">Tutorial</option>',
                 '               </select>',
 				'			</div>',
-				'			<div id="mHt" class="yui-u first" style="overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
+				'			<div id="mHt" class="yui-u first" style="width:36%;overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'				<div id="messagingPaginator">',
 				'				</div>',
 				'				<ul id="messagingList"></ul>',
 				'			</div>',
-				'			<div id="messagingDisplay" class="yui-u">',
+				'			<div id="messagingDisplay" class="yui-u" style="width:62%;">',
 				'				<div id="messagingActions" style="border-width: 1px;">',
 				'					<span id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></span>',
 				'					<button id="messagingForward" type="button">Forward</button>',
@@ -354,26 +354,35 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			if(this.tag) {
 				data.options.tags = [this.tag];
 			}
+			
+			Lacuna.Pulser.Show();
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						pageLinks : 5,
-						alwaysVisible : false
-					});
-					this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
-					this.pager.render();
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							pageLinks : 5,
+							alwaysVisible : false
+						});
+						this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result,{inbox:1});
 					this.fireEvent("onPageLoaded", o);
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadInboxMessages");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -388,25 +397,33 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					session_id: Game.GetSession(""),
 					options:{page_number: 1}
 				};
+			Lacuna.Pulser.Show();
 			InboxServ.view_sent(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						alwaysVisible : false
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
 
-					});
-					this.pager.subscribe('changeRequest',this.handleSentPagination, this, true);
-					this.pager.render();
+						});
+						this.pager.subscribe('changeRequest',this.handleSentPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result, {sent:1});
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadSentMessages");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -421,25 +438,33 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					session_id: Game.GetSession(""),
 					options:{page_number: 1}
 				};
+			Lacuna.Pulser.Show();
 			InboxServ.view_archived(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						alwaysVisible : false
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
 
-					});
-					this.pager.subscribe('changeRequest',this.handleArchivePagination, this, true);
-					this.pager.render();
+						});
+						this.pager.subscribe('changeRequest',this.handleArchivePagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result,{archive:1});
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.loadArchiveMessages");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -455,14 +480,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			if(this.tag) {
 				data.options.tags = [this.tag];
 			}
+			Lacuna.Pulser.Show();
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
 					this.processMessages(o.result,{inbox:1});
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.handleInboxPagination");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -477,14 +505,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					session_id: Game.GetSession(""),
 					options:{page_number: newState.page}
 				};
+			Lacuna.Pulser.Show();
 			InboxServ.view_sent(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
 					this.processMessages(o.result,{sent:1});
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.handleSentPagination");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -499,14 +530,17 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					session_id: Game.GetSession(""),
 					options:{page_number: newState.page}
 				};
+			Lacuna.Pulser.Show();
 			InboxServ.view_archived(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
 					this.processMessages(o.result,{archive:1});
+					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
 					YAHOO.log(o, "error", "Messaging.handleArchivePagination");
 					this.fireEvent("onRpcFailed", o);
+					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -602,6 +636,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						session_id: Game.GetSession(""),
 						message_id: msg.id
 					};
+				
+				Lacuna.Pulser.Show();
 				InboxServ.read_message(data, {
 					success : function(o){
 						YAHOO.log(o, "info", "Messaging.loadMessage.success");
@@ -612,8 +648,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						Dom.removeClass(matchedEl.parentNode, "unread");
 						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
+						Lacuna.Pulser.Hide();
 					},
 					failure : function(o){
+						Lacuna.Pulser.Hide();
 						YAHOO.log(o, "error", "Messaging.loadMessage.failure");
 						this.fireEvent("onRpcFailed", o);
 					},
@@ -916,6 +954,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					el.parentNode.removeChild(el);
 				}
 			}, this, true);
+			
+			if(this.pager) {
+				//reload messages if we had a pager
+				this.loadTab();
+			}
 			
 			Dom.setStyle(this.display, "visibility", "hidden");
 			delete this.selectedAll;

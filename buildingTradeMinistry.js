@@ -774,7 +774,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOfferedDate");
-					nLi.innerHTML = Lib.formatServerDate(trade.date_offered);
+					nLi.innerHTML = Lib.formatServerDateTimeShort(trade.date_offered);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
@@ -1620,7 +1620,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {plan_id:gId, type:"plan"};
-					content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
+					if(li.Plan.extra_build_level) {
+						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
+					}
+					else {
+						content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
+					}
 					c.appendChild(item);
 					this.updatePushCargo(this.planSize);
 				}
