@@ -243,6 +243,10 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %I:%M%p"}, "en");
 		},
+		formatUTC : function(oDate) {
+			var dt = new Date(oDate.getUTCFullYear(), oDate.getUTCMonth(), oDate.getUTCDate(), oDate.getUTCHours(), oDate.getUTCMinutes(), oDate.getUTCSeconds(),0);
+			return Util.Date.format(dt, {format:"%m/%d/%Y %r"}, "en");
+		},
 		convertNumDisplay : function(number, always) {
 			if(number >= 100000000 || number <= -100000000) {
 				//101m

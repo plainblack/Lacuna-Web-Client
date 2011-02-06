@@ -359,16 +359,21 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_inbox(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						pageLinks : 5,
-						alwaysVisible : false
-					});
-					this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
-					this.pager.render();
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							pageLinks : 5,
+							alwaysVisible : false
+						});
+						this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result,{inbox:1});
 					this.fireEvent("onPageLoaded", o);
@@ -396,16 +401,21 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_sent(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						alwaysVisible : false
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
 
-					});
-					this.pager.subscribe('changeRequest',this.handleSentPagination, this, true);
-					this.pager.render();
+						});
+						this.pager.subscribe('changeRequest',this.handleSentPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result, {sent:1});
 					Lacuna.Pulser.Hide();
@@ -432,16 +442,21 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			InboxServ.view_archived(data, {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
-					this.pager = new Pager({
-						rowsPerPage : 25,
-						totalRecords: o.result.message_count,
-						containers  : 'messagingPaginator',
-						template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-						alwaysVisible : false
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
 
-					});
-					this.pager.subscribe('changeRequest',this.handleArchivePagination, this, true);
-					this.pager.render();
+						});
+						this.pager.subscribe('changeRequest',this.handleArchivePagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
 
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
@@ -939,6 +954,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					el.parentNode.removeChild(el);
 				}
 			}, this, true);
+			
+			if(this.pager) {
+				//reload messages if we had a pager
+				this.loadTab();
+			}
 			
 			Dom.setStyle(this.display, "visibility", "hidden");
 			delete this.selectedAll;

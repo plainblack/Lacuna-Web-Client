@@ -609,7 +609,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			Lacuna.Pulser.Hide();
 		},
-		Load : function(planetId, showNotify) {
+		Load : function(planetId, showNotify, silent) {
 			Lacuna.Pulser.Show();
 			if(showNotify) {
 				Lacuna.Notify.Show(planetId);
@@ -618,7 +618,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				Lacuna.Notify.Hide();
 			}
 			this.locationId = planetId;
-			this.ReLoad();
+			this.ReLoad(silent);
 		},
 		Refresh : function() {
 			if(this.locationId) {
@@ -647,7 +647,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				});
 			}
 		},
-		ReLoad : function() {
+		ReLoad : function(silent) {
 			if(this.locationId) {
 				var BodyServ = Game.Services.Body,
 					data = {
@@ -659,7 +659,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					success : function(o){
 						//YAHOO.log(o, "info", "MapPlanet.ReLoad");
 						this.fireEvent("onMapRpc", o.result);
-						this.Mapper(o.result);
+						if(silent) {
+							Lacuna.Pulser.Hide();
+						}
+						else {
+							this.Mapper(o.result);
+						}
 					},
 					failure : function(o){
 						//YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
