@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
 						ms = Lib.getTime(ship.date_arrives) - serverTime,
-						align = (ship.is_own == 1 ? "#0f0" : (ship.is_ally == 1 ? "#b0b" : "#fff")),
+						color = (ship.is_own == 1 ? "#0f0" : (ship.is_ally == 1 ? "#b0b" : "#fff")),
 						arrTime;
 					i++;
 					if(ms > 0) {
@@ -74,10 +74,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					}
 					else {
 						arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
-					}
-					if(ship.is_ally) {
-					}
-					else if(ship.is_own) {
 					}
 					arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> <span style="color:',color,';">', arrTime,'</span></li>']);
 				}
