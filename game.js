@@ -642,7 +642,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if (session) {
 				Game.SetCookie('session', session);
 				Game._session = session;
-				this.InitTips();
+				Game.InitTips();
 			}
 			else {
 				Game.RemoveCookie('session');
