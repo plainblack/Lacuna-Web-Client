@@ -355,6 +355,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			return serviceOut;
 		},
 		InitTips : function() {
+			if(!Game.Resources.tips && !Game.Resources.complete) {
+				setTimeout(InitTips, 10);
+			}
+			
 			Game.RemoveCookieSettings("showTips");
 			var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
 			if(showTips == "1") {
@@ -716,9 +720,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					catch(ex) {
 						YAHOO.log(ex);
 					}
+					Game.Resources.complete = 1;
 				}, 
 				failure: function(o) {
 					YAHOO.log(o, "error", "GetResources.failure");
+					Game.Resources.complete = 1;
 				},
 				scope: this
 			});
