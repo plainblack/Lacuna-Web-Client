@@ -180,8 +180,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Lacuna.Game.ProcessStatus(result.status);
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
+					var container = document.createElement('div');
 					if (result.welcome_message_id) {
-						var container = document.createElement('div');
 						container.id = 'welcomeMessage';
 						Dom.setStyle(container, "text-align", "justify");
 						document.body.insertBefore(container, document.body.firstChild);
@@ -226,7 +226,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(showTips == "1") {
 							var maxTips = Game.Resources.tips.length - 1;
 							var tipNum = Game.GetCookieSettings("tipNum", -1);
-							var container = document.createElement('div');
 							container.id = 'tipsMessage';
 							Dom.setStyle(container, "text-align", "justify");
 							document.body.insertBefore(container, document.body.firstChild);
@@ -246,11 +245,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									return tipNum;
 								},
 								prevTip = function(tipNum) {
-									tipNum--
+									tipNum--;
 									if(tipNum < 0) { tipNum = maxTips; }
 									showTip(tipNum);
 									return tipNum;
-								}
+								},
 								tips = new YAHOO.widget.SimpleDialog(container, {
 									width: "400px",
 									fixedcenter: true,
