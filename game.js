@@ -688,6 +688,21 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.MapPlanet.Load(planet.id, true);
 			}
 		},
+		PlanetChange : function(planet) {
+			if(!planet) {
+				//try to find home planet
+				planet = Game.EmpireData.planets[Game.EmpireData.home_planet_id];
+			}
+			//make sure we have found a planet to look at
+			if(planet) {
+				Game.OverlayManager.hideAll();
+				Game.EmpireData.current_planet_id = planet.id;
+				Lacuna.Menu.PlanetMenu.update();
+				Game.SetLocation(planet.id, Lib.View.PLANET);
+				
+				Lacuna.MapPlanet.Load(planet.id, false, true);
+			}
+		},
 
 		GetResources : function() {
 			Util.Connect.asyncRequest('GET', 'resources.json', {

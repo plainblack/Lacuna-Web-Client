@@ -392,7 +392,7 @@
 		type: "js",
 		fullpath: urlBuilder("menu.js"),
 		// invite has to come before essentia in order for the friend invite button to work
-		requires : ["about","invite","essentia","messaging","menu","profile","stats"]
+		requires : ["about","info","invite","essentia","messaging","menu","profile","stats"]
 	});
 	loader.require("gameMenu","announce","info","logger","login","mapPlanet","mapStar","notify");
 	loader.onSuccess = function(o) {

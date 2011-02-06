@@ -1139,6 +1139,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				tab.elMessage.innerHTML = 'No spies available.';
 				return;
 			}
+			
 			var maxSpies = 0;
 			for (var i = 0; i < ships.length; i++) {
 				var ship = ships[i];
@@ -1174,7 +1175,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				list.appendChild(nLi);
 			}
 			
-			var Ht = Game.GetSize().h - 260;
+			var Ht = Game.GetSize().h - 330;
 			if(Ht > 240) { Ht = 240; }
 			Dom.setStyle(list,'height',Ht + 'px');
 		},

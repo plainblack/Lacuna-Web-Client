@@ -30,7 +30,8 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				context:[this.clickId, "tl", "bl",[11, -14]]
 			});
 			userMenu.addItems([{ text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_blank" },
-				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" }
+				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" },
+				{ text: "Server Clock", onclick: { fn: Lacuna.Info.Clock.Show, scope:Lacuna.Info.Clock } }
 			]);
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
@@ -677,7 +678,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 		menuClick : function(p_sType, p_aArgs, planet){
 			Lacuna.Menu.PlanetMenu.Menu.hide();
 			YAHOO.log(planet, "info", "PlanetMenu.menuClick.click");
-			Game.PlanetJump(planet);
+			if(Lacuna.MapStar.IsVisible()) {
+				Game.PlanetChange(planet);
+			}
+			else {
+				Game.PlanetJump(planet);
+			}
 			/*Game.EmpireData.current_planet_id = planet.id;
 			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
 			Game.SetLocation(planet.id, Lib.View.PLANET);

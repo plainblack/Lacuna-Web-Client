@@ -897,7 +897,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeOfferedDate");
-					nLi.innerHTML = Lib.formatServerDate(trade.date_offered);
+					nLi.innerHTML = Lib.formatServerDateTimeShort(trade.date_offered);
 					nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
