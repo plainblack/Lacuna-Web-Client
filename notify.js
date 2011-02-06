@@ -38,21 +38,9 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				this.Display.renderEvent.subscribe(function(){
 					this.notifyList = Dom.get('notifyList');
 					this.notify = Dom.get("notify");
-					/*this.notifyHide = document.createElement("div");
-					this.notifyHide.id = "notifyHide";
-					Dom.setStyle(this.notifyHide, "background-color", "red");
-					this.notify.parentNode.insertBefore(this.notifyHide, this.notify);*/
 					
 					Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
 				});
-				/*this.Display.showEvent.subscribe(function(){
-					Dom.setStyle(this.notifyHide, "visibility", "hidden");
-				});
-				this.Display.beforeHideEvent.subscribe(function(){
-					Dom.setStyle(this.notifyHide, "visibility", "visible");
-					Dom.setStyle(this.notify, "visibility", "hidden");
-					return false;
-				});*/
 				this.Display.render();
 			}
 		},
@@ -78,7 +66,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				for(var s=0; s<planetShips.length;s++) {
 					var ship = planetShips[s],
 						ms = Lib.getTime(ship.date_arrives) - serverTime,
-						color = (ship.is_own == 1 ? "green" : (ship.is_ally == 1 ? "purple" : "white")),
+						align = (ship.is_own == 1 ? "#0f0" : (ship.is_ally == 1 ? "#b0b" : "#fff")),
 						arrTime;
 					i++;
 					if(ms > 0) {
