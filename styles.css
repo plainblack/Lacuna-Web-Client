@@ -1181,6 +1181,14 @@ Info dialogs for Empire and Alliance
 	position: absolute;
 	left: 0;
 }
+.coordX.out-of-bounds {
+	border-left: none;
+	border-right: none;
+}
+.coordY.out-of-bounds {
+	border-top: none;
+	border-bottom: none;
+}
 
 .coordX50, .coordY50 {
 	font-size:85%;
