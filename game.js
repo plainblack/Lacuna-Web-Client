@@ -356,7 +356,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		InitTips : function() {
 			if(!Game.Resources.tips && !Game.Resources.complete) {
-				setTimeout(InitTips, 10);
+				setTimeout(Game.InitTips, 10);
+				return;
 			}
 			
 			Game.RemoveCookieSettings("showTips");
