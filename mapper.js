@@ -91,10 +91,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					maxBoundsHeight = (mb.y1Top - mb.y2Bottom) * tileSize;
 					
 				if(maxWidth > maxBoundsWidth) {
-					maxWidth = maxBoundsWidth + (extraSpaceWidth*2);
+					maxWidth = maxBoundsWidth;
 				}
 				if(maxHeight > maxBoundsHeight) {
-					maxHeight = maxBoundsHeight + (extraSpaceHeight*2);
+					maxHeight = maxBoundsHeight;
 				}
 				var	cb = this.calcCoordBounds(this.left + mx + extraSpaceWidth, this.top + my + extraSpaceHeight, this.left + mx + maxWidth - extraSpaceWidth, this.top + my + maxHeight - extraSpaceHeight);
 				//if out of bounds, only move to max
