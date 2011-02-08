@@ -86,6 +86,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 					*/
 				},
+				"get_status" : {
+					"description": "Returns detailed statistics about a planet.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"body_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
 				"rename" : {
 					"description": "Renames a body, provided the empire attached to the session owns the body. Returns a 1 on success.",
 					"parameters": [

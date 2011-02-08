@@ -245,6 +245,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					setTimeout(GameLoop, 1000);
 				}
 			})();
+			Game.planetRefreshInterval = setInterval(function(){
+				var BodyServ = Game.Services.Body,
+					session = Game.GetSession(),
+					body = Game.GetCurrentPlanet();
+				BodyServ.get_status({session_id: session, body_id: body},{
+					success:Game.onRpc,
+					failure:Game.Failure
+				});
+			}, 10 * 60 * 1000);
+
 			//chat system
 			Game.InitChat();
 			//init event subscribtions if we need to
@@ -783,6 +793,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Reset : function() {
 			//clearInterval(Game.recInt);
 			delete Game.isRunning;
+			clearInterval(Game.planetRefreshInterval);
+			delete Game.planetRefreshInterval;
 			//disable esc handler
 			Game.escListener.disable();
 			
