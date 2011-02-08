@@ -359,9 +359,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				setTimeout(Game.InitTips, 10);
 			}
 			
-			Game.RemoveCookieSettings("showTips");
-			var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
-			if(showTips == "1") {
+			//Game.RemoveCookieSettings("showTips");
+			var showTips = 1 - (Game.GetCookieSettings("hideTips", "0")*1);
+			if(showTips == 1) {
 				var maxTips = Game.Resources.tips.length - 1,
 					tipNum = Game.GetCookieSettings("tipNum", 0),
 					container = document.createElement('div');
@@ -411,6 +411,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 								tipNum = nextTip(tipNum);
 							} },
 							{ text:"Close", handler:function() {
+								if(Dom.get("showTips").checked) {
+									Game.RemoveCookieSettings("hideTips");
+								}
+								else {
+									Game.SetCookieSettings("hideTips", "1");
+								}
 								this.hide();
 							}, isDefault:true }
 						]
@@ -418,15 +424,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				tips.renderEvent.subscribe(function() {
 					showTip(tipNum);
 					this.show();
-					Event.on(Dom.get('showTips'),"change",function() {
+					/* change event doesn't fire on checkboxes in all browsers
+					Event.on('showTips',"change",function() {
 						// set hide to the reverse of show
-						if(Dom.get("showTips").checked) {
+						if(this.checked) {
 							Game.RemoveCookieSettings("hideTips");
 						}
 						else {
 							Game.SetCookieSettings("hideTips", "1");
 						}
-					});
+					});*/
 				});
 				tips.hideEvent.subscribe(function() {
 					//let the current process complete before destroying
