@@ -811,12 +811,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.showTiles();
 				},
 				failure:function(o) {
-					if(o.error.code == 1006) {
-						Game.Failure(o);
-					}
-					else {
-						this.showTiles();
-					}
+					Game.Failure(o);
 				},
 				scope:this
 			}, x1, x2, y1, y2);
