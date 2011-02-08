@@ -513,11 +513,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Pulser.Show();
 			func({session_id:session},{
 				success : function(o){
+					YAHOO.log(o, 'info', 'Game.onDestructClick.success');
 					Game.ProcessStatus(o.result.status);
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["DESTRUCT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.onDestructClick.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
@@ -776,14 +777,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
-					YAHOO.log(o);
+					YAHOO.log(o, 'info', 'Game.Logout.success');
 					//Dom.setStyle(Game._envolveContainer, "display", "none");
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["LOGOUT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.Logout.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
