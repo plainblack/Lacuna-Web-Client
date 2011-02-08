@@ -458,6 +458,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(this.data.pending_build) {
 				this.data.pending_build.seconds_remaining -= tickSec;
 				var remainingBuild = Math.round(this.data.pending_build.seconds_remaining);
+				var upgrade = this.data.upgrade;
+				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && ! upgrade.preloaded) {
+					upgrade.preloaded = true;
+					var imgSize = this.map.getTileImageSize();
+					var img = new Image();
+					img.src = [Lib.AssetUrl,'planet_side/',imgSize,upgrade.image,'.png'].join('');
+				}
 				if (remainingBuild < 0) {
 					remainingBuild = 0;
 				}
@@ -804,12 +811,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.showTiles();
 				},
 				failure:function(o) {
-					if(o.error.code == 1006) {
-						Game.Failure(o);
-					}
-					else {
-						this.showTiles();
-					}
+					Game.Failure(o);
 				},
 				scope:this
 			}, x1, x2, y1, y2);
@@ -1436,27 +1438,24 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.moveByPx(ox * -1, oy * -1);*/
 			}
 		},
+		getTileImageSize : function() {
+			switch(this.zoom) {
+				case 2:
+					return "400/";
+				case 1:
+					return "300/";
+				case -1:
+					return "100/";
+				case -2:
+					return "50/";
+			}
+		},
 		getTile : function(x, y, z){
 			var ySet = this.tileCache[x],
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				var imgSize = "";
-				switch(this.zoom) {
-					case 2:
-						imgSize = "400/";
-						break;
-					case 1:
-						imgSize = "300/";
-						break;
-					case -1:
-						imgSize = "100/";
-						break;
-					case -2:
-						imgSize = "50/";
-						break;
-				}
-				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',imgSize,building.image,'.png'].join('')};
+				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',this.getTileImageSize(),building.image,'.png'].join('')};
 			}
 			else {
 				return {blank:true};
