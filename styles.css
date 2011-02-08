@@ -517,6 +517,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:2px;
 	width:53px;
 	overflow:hidden;
+	white-space: nowrap;
 	/*font-size:25px;
 	margin-left:5px;
 	margin-top:8px;*/
@@ -527,6 +528,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:2px;
 	width:53px;
 	overflow:hidden;
+	white-space: nowrap;
 }
 #header .menuItem , #footer .plots .stored{
 	font-size:200%;
@@ -1180,6 +1182,14 @@ Info dialogs for Empire and Alliance
 	width: 30px;
 	position: absolute;
 	left: 0;
+}
+.coordX.out-of-bounds {
+	border-left: none;
+	border-right: none;
+}
+.coordY.out-of-bounds {
+	border-top: none;
+	border-bottom: none;
 }
 
 .coordX50, .coordY50 {
