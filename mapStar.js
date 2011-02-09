@@ -442,6 +442,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				Event.on(panelId+"Jump", "click", this.FindJump, this, true);
 				this.starFind.createFind();
 			},this,true);
+			this.starFind.showEvent.subscribe(function(){
+				this.starFind.findInput.blur();
+			},this,true);
 			
 			this.starFind.render();
 		},

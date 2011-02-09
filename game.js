@@ -68,6 +68,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
+			Game.PreloadUI();
 			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
@@ -134,10 +135,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				alert(o.error.message);
 			}
 			else {
-				var container = document.createElement('div');
-				container.id = 'internalErrorMessage';
-				document.body.insertBefore(container, document.body.firstChild);
-				var internalError = new YAHOO.widget.SimpleDialog(container, {
+				Game.QuickDialog('internalErrorMessage', {
 					width: "500px",
 					fixedcenter: true,
 					visible: false,
@@ -152,17 +150,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					buttons: [
 						{ text:"Close", handler:function() { this.hide(); } }
 					]
-				});
-				internalError.renderEvent.subscribe(function() {
+				}, function() {
 					Dom.get('internalErrorMessageText').value = o.error.data;
-					this.show();
 				});
-				internalError.hideEvent.subscribe(function() {
-					setTimeout(function(){
-						internalError.destroy();
-					},1);
-				});
-				internalError.render();
 			}
 		},
 		InitLogin : function(error) {
@@ -181,19 +171,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
 					if (result.welcome_message_id) {
-						var container = document.createElement('div');
-						container.id = 'welcomeMessage';
-						Dom.setStyle(container, "text-align", "justify");
-						document.body.insertBefore(container, document.body.firstChild);
-						var welcome = new YAHOO.widget.SimpleDialog(container, {
+						Game.QuickDialog('welcomeMessage', {
 							width: "400px",
 							fixedcenter: true,
 							visible: false,
 							draggable: false,
 							text: ['Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.',
-								'<p style="margin:10px 0;">If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;vertical-align:middle;margin:-5px 0 -4px -2px" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
-								'<p style="margin:10px 0;">For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;vertical-align:middle;margin-left:-3px" /> button.</p>',
-								'<p style="margin:10px 0;">Thanks for playing!</p>'].join(''),
+								'<p>If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;vertical-align:middle;margin:-5px 0 -4px -2px" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
+								'<p>For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;vertical-align:middle;margin-left:-3px" /> button.</p>',
+								'<p>Thanks for playing!</p>'].join(''),
 							constraintoviewport: true,
 							modal: true,
 							close: false,
@@ -207,18 +193,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									this.hide();
 								} } ]
 						});
-						welcome.renderEvent.subscribe(function() {
-							this.show();
-						});
-						welcome.hideEvent.subscribe(function() {
-							//let the current process complete before destroying
-							setTimeout(function(){
-								welcome.destroy();
-							},1);
-						});
-
-						//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
-						welcome.render();
 					}
 				});
 			}
@@ -370,85 +344,73 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				return;
 			}
 			
-			Game.RemoveCookieSettings("showTips");
-			var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
-			if(showTips == "1") {
-				var maxTips = Game.Resources.tips.length - 1,
-					tipNum = Game.GetCookieSettings("tipNum", 0),
-					container = document.createElement('div');
-				container.id = 'tipsMessage';
-				Dom.setStyle(container, "text-align", "justify");
-				document.body.insertBefore(container, document.body.firstChild);
-				var nextTipNum = function(tipNum) {
-						tipNum++;
-						if(tipNum > maxTips) { tipNum = 0; }
-						return tipNum;
-					},
-					showTip = function(tipNum) {
+			var showTips = 1 - Game.GetCookieSettings("hideTips", "0") * 1;
+			if(showTips == 1) {
+				var tipCount = Game.Resources.tips.length,
+					tipNum = Game.GetCookieSettings("tipNum", -1),
+					showTip = function(dialog, change) {
+						tipNum = (tipNum + change + tipCount) % tipCount;
 						var tip = Game.Resources.tips[tipNum];
-						Dom.get('tipsTip').innerHTML = tip;
-						Game.SetCookieSettings("tipNum", nextTipNum(tipNum));
-					},
-					nextTip = function(tipNum) {
-						tipNum = nextTipNum(tipNum);
-						showTip(tipNum);
-						return tipNum;
-					},
-					prevTip = function(tipNum) {
-						tipNum--;
-						if(tipNum < 0) { tipNum = maxTips; }
-						showTip(tipNum);
-						return tipNum;
-					},
-					tips = new YAHOO.widget.SimpleDialog(container, {
-						width: "400px",
-						fixedcenter: true,
-						visible: false,
-						draggable: false,
-						text: [
-							'<p style="font-weight:bold;">Tips</p>',
-							'<p id="tipsTip" style="margin:10px 0;"></p>',
-							'<p><input id="showTips" type="checkbox" checked />Show tips at login</p>'
-						].join(''),
-						constraintoviewport: true,
-						modal: true,
-						close: false,
-						zindex: 20000,
-						buttons: [
-							{ text:"< Previous", handler:function() {
-								tipNum = prevTip(tipNum);
-							} },
-							{ text:"Next >", handler:function() {
-								tipNum = nextTip(tipNum);
-							} },
-							{ text:"Close", handler:function() {
-								this.hide();
-							}, isDefault:true }
-						]
-					});
-				tips.renderEvent.subscribe(function() {
-					showTip(tipNum);
-					this.show();
-					Event.on(Dom.get('showTips'),"change",function() {
-						// set hide to the reverse of show
-						if(Dom.get("showTips").checked) {
-							Game.RemoveCookieSettings("hideTips");
-						}
-						else {
-							Game.SetCookieSettings("hideTips", "1");
-						}
-					});
+						dialog.setBody(tip);
+						Game.SetCookieSettings("tipNum", tipNum);
+					};
+				Game.QuickDialog('tipsMessage', {
+					width: "400px",
+					fixedcenter: true,
+					visible: false,
+					draggable: false,
+					constraintoviewport: true,
+					modal: true,
+					close: false,
+					zindex: 20000,
+					buttons: [
+						{ text:"< Previous", handler:function() { showTip(dialog, -1); } },
+						{ text:"Next >", handler:function() { showTip(dialog, 1); } },
+						{ text:"Close", handler:function() {
+							if(Dom.get('showTips').checked) {
+								Game.RemoveCookieSettings("hideTips");
+							}
+							else {
+								Game.SetCookieSettings("hideTips", "1");
+							}
+							this.hide();
+						}, isDefault:true }
+					]
+				}, function() {
+					this.setHeader('Tips');
+					showTip(this, 1);
+					var label = document.createElement('label');
+					Dom.setStyle(label, 'float', 'left');
+					label.innerHTML = '<input id="showTips" type="checkbox" checked="checked" /> Show tips at login';
+					this.footer.insertBefore(label, this.footer.firstChild);
 				});
-				tips.hideEvent.subscribe(function() {
-					//let the current process complete before destroying
-					setTimeout(function(){
-						tips.destroy();
-					},1);
-				});
-
-				//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
-				tips.render();
 			}
+		},
+		PreloadUI : function() {
+			var images = Lib.UIImages;
+			for (var i = 0; i < images.length; i++) {
+				var url = Lib.AssetUrl + images[i];
+				var img = new Image();
+				img.src = url;
+			}
+		},
+		QuickDialog : function (id, config, afterRender) {
+			var container = document.createElement('div');
+			container.id = id;
+			Dom.addClass(container, 'quick-dialog');
+			document.body.insertBefore(container, document.body.firstChild);
+			var dialog = new YAHOO.widget.SimpleDialog(container, config);
+			dialog.renderEvent.subscribe(function() {
+				if (afterRender) { afterRender.call(this); }
+				this.show();
+			});
+			dialog.hideEvent.subscribe(function() {
+				// let the current process complete before destroying
+				setTimeout(function(){
+					dialog.destroy();
+				},1);
+			});
+			dialog.render();
 		},
 		
 		onChangeToPlanetView : function(planetId) {
