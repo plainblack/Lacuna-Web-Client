@@ -224,7 +224,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		
 		appendToDom : function() {
-			if(this.domElement && !this.blank && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+			if(this.domElement && !this.blank && !Dom.isAncestor(this.layer.tileContainer, this.domElement)) {
 				this.layer.tileContainer.appendChild(this.domElement);
 			}
 		},
@@ -397,7 +397,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.init();
 		},
 		appendToDom : function() {
-			if(this.domElement && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+			if(this.domElement && !Dom.isAncestor(this.layer.tileContainer, this.domElement)) {
 				this.layer.tileContainer.appendChild(this.domElement);
 			}
 		},
