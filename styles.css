@@ -337,6 +337,14 @@ dialogs
 .speciesCreate .speciesAffinities li label {
 	vertical-align:middle;
 }
+
+#tipsMessage {
+	text-align : justify;
+}
+
+#welcomeMessage {
+	text-align : justify;
+}
 /*
 menu
 */
