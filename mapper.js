@@ -678,6 +678,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				}
 			}
 		},
+		resize : function() {
+			this.displayXCoords();
+			this.displayYCoords();
+			this.move(0,0);
+		},
 		redraw : function() {
 			if( this.containerDiv ) {
 				this.map.movableContainer.removeChild( this.containerDiv );
@@ -705,6 +710,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.endDrag();
 		},
 		displayXCoords : function() {
+			if( this.xCoords ) {
+				this.xCoords.parentNode.removeChild( this.xCoords );
+			}
 			var anchor = this.div.cloneNode(false);
 			Dom.addClass(anchor, "coordTop");
 
@@ -729,6 +737,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		displayYCoords : function() {
+			if( this.yCoords ) {
+				this.yCoords.parentNode.removeChild( this.yCoords );
+			}
 			var anchor = this.div.cloneNode(false);
 			Dom.addClass(anchor, "coordLeft");
 
@@ -1186,6 +1197,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.height = this.mapDiv.offsetHeight;
 			
 			this.visibleArea.resize();
+			this.coordLayer.resize();
 			
 			this.tileLayer.showTiles();
 		},
@@ -1597,6 +1609,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", clickMoveMap, [ 1, 0 ]);
 		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", clickMoveMap, [ -1, 0 ]);
 
+		
 		if((map.maxZoom - map.minZoom) != 0) {
 			var zoomEl = document.createElement('div');
 			zoomEl.className = 'mapiator_zoom';
