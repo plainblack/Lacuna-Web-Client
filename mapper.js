@@ -7,6 +7,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
+		KL = Util.KeyListener,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
@@ -1570,6 +1571,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		this.dd.subscribe("startDragEvent", this.startDrag, this, true);
 		this.dd.subscribe("endDragEvent", this.endDrag, this, true);
 		
+		var moveKeyListener = new KL(document, {
+			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
+		}, { fn: this.moveKey, scope:this, correctScope:true }, KL.KEYDOWN);
+		var moveKeyUpListener = new KL(document, {
+			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
+		}, { fn: this.moveKeyUp, scope:this, correctScope:true }, KL.KEYUP);
+		
+		moveKeyListener.enable();
+		moveKeyUpListener.enable();
 		var navEl = document.createElement('div');
 		navEl.className = 'mapiator_nav';
 		navEl.innerHTML = [
@@ -1665,6 +1675,40 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		isDragging : function() {
 			return this._dragging; // Math.abs(this.xmove) > 5;
+		},
+		moveKey : function(evName, evInfo) {
+			var keyCode = evInfo[0],
+				e = evInfo[1];
+			if(!Dom.inDocument(this.map.mapDiv)) {
+				return;
+			}
+			switch (e.target.tagName) {
+				case "INPUT": case "SELECT": case "TEXTAREA": return;
+			}
+			
+			if (keyCode == KL.KEY.UP) {
+				this.map.moveByTiles(0,1);
+			}
+			else if (keyCode == KL.KEY.DOWN) {
+				this.map.moveByTiles(0,-1);
+			}
+			else if (keyCode == KL.KEY.LEFT) {
+				this.map.moveByTiles(1,0);
+			}
+			else if (keyCode == KL.KEY.RIGHT) {
+				this.map.moveByTiles(-1,0);
+			}
+		},
+		moveKeyUp : function(evName, evInfo) {
+			var keyCode = evInfo[0];
+			var e = evInfo[1];
+			if(!Dom.inDocument(this.map.mapDiv)) {
+				return;
+			}
+			switch (e.target.tagName) {
+				case "INPUT": case "SELECT": case "TEXTAREA": return;
+			}
+			this.map.tileLayer.render(true);
 		}
 	};
 
