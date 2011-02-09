@@ -68,6 +68,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
+			Game.PreloadUI();
 			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
@@ -455,6 +456,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
 				//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
 				tips.render();
+			}
+		},
+		PreloadUI : function() {
+			var images = Lib.UIImages;
+			for (var i = 0; i < images.length; i++) {
+				var url = Lib.AssetUrl + images[i];
+				var img = new Image();
+				img.src = url;
 			}
 		},
 		
