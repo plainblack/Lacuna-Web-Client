@@ -53,7 +53,10 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 						if( buildings.hasOwnProperty(building) ) {
 							var b = buildings[building];
 							if (b.pending_build) {
-								buildQueueTotal += b.pending_build.seconds_remaining*1;
+								var buildLength = b.pending_build.seconds_remaining*1;
+								if (buildLength > buildQueueTotal) {
+									buildQueueTotal = buildLength;
+								}
 							}
 						}
 					}

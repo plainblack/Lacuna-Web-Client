@@ -245,6 +245,16 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					setTimeout(GameLoop, 1000);
 				}
 			})();
+			Game.planetRefreshInterval = setInterval(function(){
+				var BodyServ = Game.Services.Body,
+					session = Game.GetSession(),
+					body = Game.GetCurrentPlanet();
+				BodyServ.get_status({session_id: session, body_id: body},{
+					success:Game.onRpc,
+					failure:Game.Failure
+				});
+			}, 10 * 60 * 1000);
+
 			//chat system
 			Game.InitChat();
 			//init event subscribtions if we need to
@@ -503,11 +513,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Pulser.Show();
 			func({session_id:session},{
 				success : function(o){
+					YAHOO.log(o, 'info', 'Game.onDestructClick.success');
 					Game.ProcessStatus(o.result.status);
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["DESTRUCT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.onDestructClick.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
@@ -766,14 +777,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
-					YAHOO.log(o);
+					YAHOO.log(o, 'info', 'Game.Logout.success');
 					//Dom.setStyle(Game._envolveContainer, "display", "none");
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["LOGOUT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.Logout.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
@@ -783,6 +794,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Reset : function() {
 			//clearInterval(Game.recInt);
 			delete Game.isRunning;
+			clearInterval(Game.planetRefreshInterval);
+			delete Game.planetRefreshInterval;
 			//disable esc handler
 			Game.escListener.disable();
 			

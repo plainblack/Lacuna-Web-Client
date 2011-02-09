@@ -235,10 +235,6 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		},
-		formatServerDateShortTime : function(oDate) {
-			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
-			return Util.Date.format(dt, {format:"%m/%d/%Y %I:%M%p"}, "en");
-		},
 		formatServerDateTimeShort : function(oDate) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %I:%M%p"}, "en");
