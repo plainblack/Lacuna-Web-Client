@@ -679,6 +679,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 								
 				for(var i=0; i<trades.length; i++) {
 					var trade = trades[i],
+						bbtn,
 						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false);
 						
@@ -709,7 +710,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAction");
-					var bbtn = document.createElement("button");
+					bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					bbtn.innerHTML = this.availableAcceptText;
 					bbtn = nLi.appendChild(bbtn);
@@ -718,7 +719,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAction");
-					var bbtn = document.createElement("button");
+					bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					Dom.addClass(bbtn, "reportAbuse");
 					bbtn.innerHTML = "Spam";
