@@ -363,7 +363,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				nOpt, optGroup;
 				
 			if(elm) {
-				elm.options.length = 0;
+				elm.innerHTML = '';
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
 						var resource = Lib.ResourceTypes[r];
