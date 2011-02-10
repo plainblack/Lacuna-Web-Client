@@ -2193,7 +2193,7 @@ TextboxList
 .yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { overflow-y:scroll; height:100px; text-align:left; background-color:#52acff; }
 
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete { width:10em; }
-.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { TEXT-ALIGN:left }
+.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { text-align:left }
 
 .TextboxListIcon {
     cursor:default;
