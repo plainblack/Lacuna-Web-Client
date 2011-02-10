@@ -235,6 +235,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.InitEvents();
 			//enable esc handler
 			Game.escListener.enable();
+			
+			document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
+			
 			//load the correct screen
 			var locationId = Game.GetCookie("locationId"),
 				locationView = Game.GetCookie("locationView");
@@ -760,6 +763,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			delete Game.planetRefreshInterval;
 			//disable esc handler
 			Game.escListener.disable();
+			
+			document.title = 'Lacuna Expanse';
 			
 			var logoutCommand = Game.chatLogout;
 	
