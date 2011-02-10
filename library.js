@@ -390,14 +390,13 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			'ui/zoom.png',
 			'ui/zoom_slider.png'
 		],
-
-        // planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
-        planetarySort : function(planets) {
-            var newplanets = [];
-            for(var pId in planets) {
-                newplanets.push(planets[pId]);
-            }
-            newplanets.sort(function(a,b) {
+		// planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
+		planetarySort : function(planets) {
+			var newplanets = [];
+			for(var pId in planets) {
+				newplanets.push(planets[pId]);
+			}
+			newplanets.sort(function(a,b) {
 				if (a.name > b.name) {
 					return 1;
 				}
@@ -407,10 +406,9 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 				else {
 					return 0;
 				}
-            });
-            return newplanets;
-        }
-
+			});
+			return newplanets;
+		}
 	};
 	
 	YAHOO.lacuna.Library = Library;
