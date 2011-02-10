@@ -338,13 +338,13 @@ dialogs
 	vertical-align:middle;
 }
 
-#tipsMessage {
+.quick-dialog {
 	text-align : justify;
+}
+.quick-dialog p {
+	margin: 10px 0;
 }
 
-#welcomeMessage {
-	text-align : justify;
-}
 /*
 menu
 */

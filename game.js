@@ -135,18 +135,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				alert(o.error.message);
 			}
 			else {
-				Game.QuickDialog('internalErrorMessage', {
+				Game.QuickDialog({
 					width: "500px",
-					fixedcenter: true,
-					visible: false,
-					draggable: false,
-					text: ['An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.',
+					text: ['<p>An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.</p>',
 						'<textarea style="width: 100%; height: 300px;" id="internalErrorMessageText" readonly="readonly" onclick="this.select()"></textarea>'
 						].join(''),
-					constraintoviewport: true,
-					modal: true,
-					close: false,
-					zindex: 20000,
 					buttons: [
 						{ text:"Close", handler:function() { this.hide(); } }
 					]
@@ -171,19 +164,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
 					if (result.welcome_message_id) {
-						Game.QuickDialog('welcomeMessage', {
+						Game.QuickDialog({
 							width: "400px",
-							fixedcenter: true,
-							visible: false,
-							draggable: false,
 							text: ['Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.',
 								'<p>If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;vertical-align:middle;margin:-5px 0 -4px -2px" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
 								'<p>For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;vertical-align:middle;margin-left:-3px" /> button.</p>',
 								'<p>Thanks for playing!</p>'].join(''),
-							constraintoviewport: true,
-							modal: true,
-							close: false,
-							zindex: 20000,
 							buttons: [
 								{ text:"View Tutorial", handler:function() {
 									this.hide();
@@ -235,7 +221,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.InitEvents();
 			//enable esc handler
 			Game.escListener.enable();
-			
+
 			document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
 			
 			//load the correct screen
@@ -357,27 +343,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						dialog.setBody(tip);
 						Game.SetCookieSettings("tipNum", tipNum);
 					};
-				Game.QuickDialog('tipsMessage', {
+				Game.QuickDialog({
 					width: "400px",
-					fixedcenter: true,
-					visible: false,
-					draggable: false,
-					constraintoviewport: true,
-					modal: true,
-					close: false,
-					zindex: 20000,
 					buttons: [
 						{ text:"< Previous", handler:function() { showTip(dialog, -1); } },
 						{ text:"Next >", handler:function() { showTip(dialog, 1); } },
-						{ text:"Close", handler:function() {
-							if(Dom.get('showTips').checked) {
-								Game.RemoveCookieSettings("hideTips");
-							}
-							else {
-								Game.SetCookieSettings("hideTips", "1");
-							}
-							this.hide();
-						}, isDefault:true }
+						{ text:"Close", handler:function() { this.hide(); }, isDefault:true }
 					]
 				}, function() {
 					this.setHeader('Tips');
@@ -386,6 +357,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Dom.setStyle(label, 'float', 'left');
 					label.innerHTML = '<input id="showTips" type="checkbox" checked="checked" /> Show tips at login';
 					this.footer.insertBefore(label, this.footer.firstChild);
+				}, function() {
+					if(Dom.get('showTips').checked) {
+						Game.RemoveCookieSettings("hideTips");
+					}
+					else {
+						Game.SetCookieSettings("hideTips", "1");
+					}
 				});
 			}
 		},
@@ -397,9 +375,21 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				img.src = url;
 			}
 		},
-		QuickDialog : function (id, config, afterRender) {
+		QuickDialog : function (config, afterRender, afterHide) {
 			var container = document.createElement('div');
-			container.id = id;
+			if (config.id) {
+				container.id = config.id;
+				delete config.id;
+			}
+			YAHOO.lang.augmentObject(config, {
+				fixedcenter: true,
+				visible: false,
+				draggable: false,
+				constraintoviewport: true,
+				modal: true,
+				close: false,
+				zindex: 20000,
+			});
 			Dom.addClass(container, 'quick-dialog');
 			document.body.insertBefore(container, document.body.firstChild);
 			var dialog = new YAHOO.widget.SimpleDialog(container, config);
@@ -408,12 +398,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				this.show();
 			});
 			dialog.hideEvent.subscribe(function() {
+				if (afterHide) { afterHide.call(this); }
 				// let the current process complete before destroying
 				setTimeout(function(){
 					dialog.destroy();
 				},1);
 			});
 			dialog.render();
+			Game.OverlayManager.register(dialog);
 		},
 		
 		onChangeToPlanetView : function(planetId) {
