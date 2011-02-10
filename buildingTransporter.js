@@ -175,8 +175,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getOneForOneTab : function() {
-			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div>',
-				'<div>You may trade one-for-one with Lacuna Corp for 3<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per transaction.</div>',
+			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div class="transporterOneForOne">',
+				'<div>You may trade one-for-one with Lacuna Corp for 3<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia smallImg" /> per transaction.</div>',
 				'<ul>',
 				'	<li><label>Want:</label><select id="transporterOneForOneWant"></select></li>',
 				'	<li><label>Have:</label><select id="transporterOneForOneHave"></select></li>',
