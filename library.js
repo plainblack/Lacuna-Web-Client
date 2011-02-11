@@ -250,12 +250,12 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		},
 		convertNumDisplay : function(number, always) {
 			if(number >= 100000000 || number <= -100000000) {
-				//101m
-				return Math.floor(number/1000000) + 'm';
+				//101M
+				return Math.floor(number/1000000) + 'M';
 			}
 			else if(number >= 1000000 || number <= -1000000) {
-				//75.3m
-				return (Math.floor(number/100000) / 10) + 'm';
+				//75.3M
+				return (Math.floor(number/100000) / 10) + 'M';
 			}
 			else if(number >= 10000 || number <= -10000) {
 				//123k
