@@ -338,13 +338,13 @@ dialogs
 	vertical-align:middle;
 }
 
-#tipsMessage {
+.quick-dialog {
 	text-align : justify;
+}
+.quick-dialog p {
+	margin: 10px 0;
 }
 
-#welcomeMessage {
-	text-align : justify;
-}
 /*
 menu
 */
@@ -1912,6 +1912,20 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 #tradePushCargo {
     margin: 0 4px;
 }
+
+.transporterOneForOne label {
+	display:inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
+	width:75px;
+}
+.transporterOneForOne input, .transporterOneForOne select {
+	width : 200px;
+}
+.transporterOneForOne button {
+	margin: 5px;
+}
+
 .platformInfo .platformLocation {
 	width:250px;
 	text-decoration:underline;
@@ -2193,7 +2207,7 @@ TextboxList
 .yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { overflow-y:scroll; height:100px; text-align:left; background-color:#52acff; }
 
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete { width:10em; }
-.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { TEXT-ALIGN:left }
+.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { text-align:left }
 
 .TextboxListIcon {
     cursor:default;

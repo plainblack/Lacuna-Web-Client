@@ -175,8 +175,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			return [this._getOneForOneTab(),this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
 		},
 		_getOneForOneTab : function() {
-			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div>',
-				'<div>You may trade one-for-one with Lacuna Corp for 3<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per transaction.</div>',
+			this.oneForOne = new YAHOO.widget.Tab({ label: "One For One", content: ['<div class="transporterOneForOne">',
+				'<div>You may trade one-for-one with Lacuna Corp for 3<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia smallImg" /> per transaction.</div>',
 				'<ul>',
 				'	<li><label>Want:</label><select id="transporterOneForOneWant"></select></li>',
 				'	<li><label>Have:</label><select id="transporterOneForOneHave"></select></li>',
@@ -363,7 +363,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				nOpt, optGroup;
 				
 			if(elm) {
-				elm.options.length = 0;
+				elm.innerHTML = '';
 				for(var r in Lib.ResourceTypes) {
 					if(Lib.ResourceTypes.hasOwnProperty(r)) {
 						var resource = Lib.ResourceTypes[r];
@@ -679,6 +679,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 								
 				for(var i=0; i<trades.length; i++) {
 					var trade = trades[i],
+						bbtn,
 						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false);
 						
@@ -709,7 +710,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAction");
-					var bbtn = document.createElement("button");
+					bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					bbtn.innerHTML = this.availableAcceptText;
 					bbtn = nLi.appendChild(bbtn);
@@ -718,7 +719,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAction");
-					var bbtn = document.createElement("button");
+					bbtn = document.createElement("button");
 					bbtn.setAttribute("type", "button");
 					Dom.addClass(bbtn, "reportAbuse");
 					bbtn.innerHTML = "Spam";
