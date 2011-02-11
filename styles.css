@@ -32,7 +32,7 @@ a, a:link, a:visited {
 h1,h2,h3,h4,h5,h6 {
 	font-weight:bold;
 }
-button, input[type="submit"], input[type="button"] {
+button, input[type="submit"], input[type="button"], .button {
 	padding: 2px 6px 3px;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -42,14 +42,21 @@ button, input[type="submit"], input[type="button"] {
 	background-color: #103070;
 	color: #ffffff;
 }
-button:active, input[type="submit"]:active, input[type="button"]:active {
+button:active, input[type="submit"]:active, input[type="button"]:active, .button:active {
 	background-color: #002060;
 	border-color: #254595 #153585 #153585 #254595;
 }
-button[disabled], input[type="submit"][disabled], input[type="button"][disabled] {
+button[disabled], input[type="submit"][disabled], input[type="button"][disabled], .button[disabled] {
 	border-color: #3555a5 #254595 #254595 #3555a5;
 	background-color: #204070;
 	color: #808080;
+}
+.button {
+	padding: 2px 6px 3px;
+	text-decoration: none;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
 }
 
 .clearafter { height:100%; }
@@ -1437,31 +1444,20 @@ planet details
 	margin: 5px auto 15px;
 	text-align: center;
 }
+#builderMenu .builderMenuGroup em,
 #builderMenu .builderMenuGroup li {
 	display: inline-block; /*mozilla 3.0, ie 8*/
-    zoom:1; /*force ie layout so we can use the display:inline below*/
-    *display:inline; /*ie hack to make it think this is an inline-block*/
-}
-#builderMenu .builderMenuGroup em,
-#builderMenu .builderMenuGroup a {
-	display: block;
-	width: 200px;
-	height: 25px;
-	vertical-align: middle;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
 	margin-bottom: 1px;
 }
-
 #builderMenu .builderMenuGroup a {
-	text-decoration: none;
-	background-image: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/button_bkg_200.png");
-	background-repeat: no-repeat;
-	background-position: center center;
+	width: 200px;
+	height: 20px;
 }
 #builderMenu .builderMenuGroup em {
 	font-weight: bold;
+	height: 20px;
 }
 /*#buildingDetailsExtra {
 	padding: 5px 0;
