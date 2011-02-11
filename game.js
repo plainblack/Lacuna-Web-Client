@@ -209,7 +209,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				var BodyServ = Game.Services.Body,
 					session = Game.GetSession(),
 					body = Game.GetCurrentPlanet();
-				BodyServ.get_status({session_id: session, body_id: body},{
+				BodyServ.get_status({session_id: session, body_id: body.id},{
 					success:Game.onRpc,
 					failure:Game.Failure
 				});
