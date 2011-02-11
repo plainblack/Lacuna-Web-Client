@@ -211,7 +211,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					body = Game.GetCurrentPlanet();
 				BodyServ.get_status({session_id: session, body_id: body.id},{
 					success:Game.onRpc,
-					failure:Game.Failure
+					failure:function(o) {
+						// for refreshes like this, ignore communication errors
+						if (o.error.message == "Communication with the server has been interrupted for an unknown reason.") {
+							return;
+						}
+						Game.Failure(o);
+					}
 				});
 			}, 10 * 60 * 1000);
 
