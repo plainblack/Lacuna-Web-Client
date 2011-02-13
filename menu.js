@@ -566,15 +566,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 							text: p.name, 
 							id: "planetMenuItem"+(count++), 
 							onclick: { fn: this.menuClick, obj:p }
-						};
+						},
+						submenuItems = [{ text: "Go To Surface", onclick: { fn: this.menuPlanetClick, obj:p } }];
 					if(p.star_name) {
-						pObj.submenu = {
-							id : "planetMenuItem"+count+"-Star",
-							itemData : [
-								{ text: "Go To Star ("+p.star_name+")", onclick: { fn: this.menuStarClick, obj:p } }
-							]
-						};
+						submenuItems.push({ text: "Go To Star ("+p.star_name+")", onclick: { fn: this.menuStarClick, obj:p } });
 					}
+					pObj.submenu = {
+						id : "planetMenuItem"+count+"-Sub",
+						itemData : submenuItems
+					};
 					items.push(pObj);
 				}
 			}
@@ -684,18 +684,15 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			else {
 				Game.PlanetJump(planet);
 			}
-			/*Game.EmpireData.current_planet_id = planet.id;
-			Lacuna.Menu.PlanetMenu.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', planet.image, '.png" class="menuPlanetThumb" />', planet.name].join('');
-			Game.SetLocation(planet.id, Lib.View.PLANET);
-			Game.OverlayManager.hideAll();
-			Lacuna.MapStar.MapVisible(false);
-			Lacuna.Menu.PlanetVisible();
-			Lacuna.MapPlanet.Load(planet.id);*/
 		},
 		menuStarClick : function(p_sType, p_aArgs, planet){
 			Lacuna.Menu.PlanetMenu.Menu.hide();
 			YAHOO.log(planet, "info", "PlanetMenu.menuStarClick.click");
 			Game.StarJump({id:planet.star_id, name:planet.star_name, x:planet.x, y:planet.y});
+		},
+		menuPlanetClick : function(p_sType, p_aArgs, planet){
+			Lacuna.Menu.PlanetMenu.Menu.hide();
+			Game.PlanetJump(planet);
 		},
 		
 		show : function() {
