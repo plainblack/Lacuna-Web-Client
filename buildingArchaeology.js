@@ -209,7 +209,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				sel.options.length = 0;
 				var opt = document.createElement("option"),
 					ore = [], oKey;
-				ore = this.ore.slice(0);
+				for(oKey in this.ore) {
+					ore.push(oKey);
+				}
 				ore.sort();
 				for(var i=0; i<ore.length; i++) {
 					oKey = ore[i];
