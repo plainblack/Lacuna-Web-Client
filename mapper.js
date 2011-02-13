@@ -7,6 +7,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Util = YAHOO.util,
 		Dom = Util.Dom,
 		Event = Util.Event,
+		KL = Util.KeyListener,
 		Sel = Util.Selector,
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
@@ -91,10 +92,10 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					maxBoundsHeight = (mb.y1Top - mb.y2Bottom) * tileSize;
 					
 				if(maxWidth > maxBoundsWidth) {
-					maxWidth = maxBoundsWidth + (extraSpaceWidth*2);
+					maxWidth = maxBoundsWidth;
 				}
 				if(maxHeight > maxBoundsHeight) {
-					maxHeight = maxBoundsHeight + (extraSpaceHeight*2);
+					maxHeight = maxBoundsHeight;
 				}
 				var	cb = this.calcCoordBounds(this.left + mx + extraSpaceWidth, this.top + my + extraSpaceHeight, this.left + mx + maxWidth - extraSpaceWidth, this.top + my + maxHeight - extraSpaceHeight);
 				//if out of bounds, only move to max
@@ -224,7 +225,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		
 		appendToDom : function() {
-			if(this.domElement && !this.blank && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+			if(this.domElement && !this.blank && !Dom.isAncestor(this.layer.tileContainer, this.domElement)) {
 				this.layer.tileContainer.appendChild(this.domElement);
 			}
 		},
@@ -397,7 +398,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.init();
 		},
 		appendToDom : function() {
-			if(this.domElement && !Dom.isAncestor(this.domElement, this.layer.tileContainer)) {
+			if(this.domElement && !Dom.isAncestor(this.layer.tileContainer, this.domElement)) {
 				this.layer.tileContainer.appendChild(this.domElement);
 			}
 		},
@@ -458,6 +459,13 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			if(this.data.pending_build) {
 				this.data.pending_build.seconds_remaining -= tickSec;
 				var remainingBuild = Math.round(this.data.pending_build.seconds_remaining);
+				var upgrade = this.data.upgrade;
+				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && ! upgrade.preloaded) {
+					upgrade.preloaded = true;
+					var imgSize = this.map.getTileImageSize();
+					var img = new Image();
+					img.src = [Lib.AssetUrl,'planet_side/',imgSize,upgrade.image,'.png'].join('');
+				}
 				if (remainingBuild < 0) {
 					remainingBuild = 0;
 				}
@@ -613,14 +621,67 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		move : function(x,y) {
+			// the coordinate div is inside the movable container
+			// start by repositioning to match the current view
 			this.offsetX += x;
 			this.offsetY += y;
 			this.containerDiv.style.left = ''+ this.offsetX +'px';
 			this.containerDiv.style.top  = ''+ this.offsetY +'px';
+			
 			this.offsetCoordsX -= x;
 			this.offsetCoordsY -= y;
-			this.xCoords.style.left = ''+ this.offsetCoordsX +'px';
-			this.yCoords.style.top  = ''+ this.offsetCoordsY +'px';
+			
+			var tileSize = this.map.tileSizeInPx;
+
+			var left = this.offsetCoordsX % tileSize;
+			if (left >= 0) {
+				left -= tileSize;
+			}
+			var top = this.offsetCoordsY % tileSize;
+			if (top >= 0) {
+				top -= tileSize;
+			}
+			this.xCoords.style.left = left +'px';
+			this.yCoords.style.top = top + 'px';
+
+			var i, coord, el;
+			var startX = Math.ceil(-1 * this.offsetCoordsX / tileSize) - 1,
+				xEls = this.xCoordTiles,
+				xMin = this.map.maxBounds.x1Left,
+				xMax = this.map.maxBounds.x2Right;
+			for (i = 0; i < xEls.length; i++) {
+				el = xEls[i];
+				coord = startX + i;
+				if (coord < xMin || coord > xMax) {
+					Dom.addClass(el, 'out-of-bounds');
+					el.innerHTML = '';
+				}
+				else {
+					Dom.removeClass(el, 'out-of-bounds');
+					el.innerHTML = coord;
+				}
+			}
+			var startY = Math.ceil(this.offsetCoordsY / tileSize) - 1,
+				yEls = this.yCoordTiles,
+				yMin = this.map.maxBounds.y2Bottom,
+				yMax = this.map.maxBounds.y1Top;
+			for (i = 0; i < yEls.length; i++) {
+				el = yEls[i];
+				coord = startY - i + 1;
+				if (coord < yMin || coord > yMax) {
+					Dom.addClass(el, 'out-of-bounds');
+					el.innerHTML = '';
+				}
+				else {
+					Dom.removeClass(el, 'out-of-bounds');
+					el.innerHTML = coord;
+				}
+			}
+		},
+		resize : function() {
+			this.displayXCoords();
+			this.displayYCoords();
+			this.move(0,0);
 		},
 		redraw : function() {
 			if( this.containerDiv ) {
@@ -648,70 +709,27 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.move(0,0);
 			this.endDrag();
 		},
-		resize : function() {
-			var pxSize = this.map.tileSizeInPx,
-				size = pxSize + "px",
-				xMin = this.map.maxBounds.x1Left,
-				xMax = this.map.maxBounds.x2Right,
-				xEls = Sel.query("div.coordX", this.xCoords);
-			Dom.batch(xEls, function(el){
-				if (el.xIndex >= xMin && el.xIndex <= xMax) {
-					Dom.setStyle(num, "width", size);
-				}
-				else {
-					Dom.setStyle(num, "width", (pxSize * 3) + "px");
-				}
-				Dom.setStyle(el, "left", (el.xIndex * pxSize) + "px");
-			}, this, true);
-			
-			var negPxSize = pxSize * -1,
-				thrd = Math.ceil(pxSize / 3),
-				sizeLeft = (pxSize - thrd) + "px",
-				thrdTxt = thrd + "px",
-				yMin = this.map.maxBounds.y1Top,
-				yMax = this.map.maxBounds.y2Bottom,
-				yEls = Sel.query("div.coordY", this.yCoords);
-			Dom.batch(yEls, function(el){
-				Dom.setStyle(el, "top", (el.yIndex * negPxSize) + "px");
-				if (el.yIndex >= yMin && el.yIndex <= yMax) {
-					Dom.setStyle(num, "height", sizeLeft);
-					Dom.setStyle(el, "padding-top", thrdTxt);
-				}
-				else {
-					Dom.setStyle(num, "height", (pxSize * 3) + "px");
-				}
-			}, this, true);
-		},
 		displayXCoords : function() {
+			if( this.xCoords ) {
+				this.xCoords.parentNode.removeChild( this.xCoords );
+			}
 			var anchor = this.div.cloneNode(false);
 			Dom.addClass(anchor, "coordTop");
 
-			var pxSize = this.map.tileSizeInPx,
-				size = pxSize + "px",
-				xMin = this.map.maxBounds.x1Left,
-				xMax = this.map.maxBounds.x2Right;
-			for(var x=xMin - 1; x<=xMax + 1; x++) {
+			var pxSize = this.map.tileSizeInPx;
+			var numToDraw = Math.ceil(this.map.width / pxSize) + 1;
+			var xCoordTiles = [];
+			for(var i=0; i < numToDraw; i++) {
 				var num = this.div.cloneNode(false);
-				num.xIndex = x;
 				Dom.addClass(num, "coordX");
-				if (x >= xMin && x <= xMax) {
-					num.innerHTML = x;
-					Dom.setStyle(num, "width", size);
-					Dom.addClass(num, "coordX"+pxSize);
-				}
-				else {
-					Dom.setStyle(num, "width", (pxSize * 3) + "px");
-					Dom.addClass(num, "coordX"+(pxSize * 3));
-				}
-				if(x < xMin) {
-					Dom.setStyle(num, "left", (x * pxSize - (pxSize*2)) + "px");
-				}
-				else {
-					Dom.setStyle(num, "left", (x * pxSize) + "px");
-				}
+				Dom.addClass(num, "coordX"+pxSize);
+				Dom.setStyle(num, "left", (i * pxSize - 1) + "px");
+				Dom.setStyle(num, "width", pxSize + "px");
+				xCoordTiles.push(num);
 				anchor.appendChild(num);
 			}
 			this.xCoords = this.containerDiv.appendChild(anchor);
+			this.xCoordTiles = xCoordTiles;
 			if(!YAHOO.env.ua.ie && !YAHOO.env.ua.gecko) {
 				this.xAnimOff = new Util.Anim(this.xCoords, {opacity:{to:0.3}}, 10); 
 				this.xAnimOn = new Util.Anim(this.xCoords, {opacity:{to:1.0}}, 0.2);
@@ -719,39 +737,30 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			}
 		},
 		displayYCoords : function() {
+			if( this.yCoords ) {
+				this.yCoords.parentNode.removeChild( this.yCoords );
+			}
 			var anchor = this.div.cloneNode(false);
 			Dom.addClass(anchor, "coordLeft");
 
 			var pxSize = this.map.tileSizeInPx,
-				negPxSize = pxSize * -1,
 				thrd = Math.ceil(pxSize / 3),
 				sizeLeft = (pxSize - thrd) + "px",
-				thrdTxt = thrd + "px",
-				yMin = this.map.maxBounds.y2Bottom,
-				yMax = this.map.maxBounds.y1Top;
-			for(var y=yMax + 1; y>=yMin - 1; y--) {
+				thrdTxt = thrd + "px";
+			var numToDraw = Math.ceil(this.map.height / pxSize) + 1;
+			var yCoordTiles = [];
+			for(var i=0; i < numToDraw; i++) {
 				var num = this.div.cloneNode(false);
-				num.yIndex = y;
 				Dom.addClass(num, "coordY");
-				if (y >= yMin && y <= yMax) {
-					num.innerHTML = y;
-					Dom.setStyle(num, "height", sizeLeft);
-					Dom.setStyle(num, "padding-top", thrdTxt);
-					Dom.addClass(num, "coordY"+pxSize);
-				}
-				else {
-					Dom.setStyle(num, "height", ( pxSize * 3 ) + "px");
-					Dom.addClass(num, "coordY"+(pxSize * 3));
-				}
-				if(y > yMax) {
-					Dom.setStyle(num, "top", (y * negPxSize - (pxSize*2)) + "px");
-				}
-				else {
-					Dom.setStyle(num, "top", (y * negPxSize) + "px");
-				}
+				Dom.addClass(num, "coordY"+pxSize);
+				Dom.setStyle(num, "height", sizeLeft);
+				Dom.setStyle(num, "padding-top", thrdTxt);
+				Dom.setStyle(num, "top", (i * pxSize - 1) + "px");
+				yCoordTiles.push(num);
 				anchor.appendChild(num);
 			}
 			this.yCoords = this.containerDiv.appendChild(anchor);
+			this.yCoordTiles = yCoordTiles;
 			if(!YAHOO.env.ua.ie && !YAHOO.env.ua.gecko) {
 				this.yAnimOff = new Util.Anim(this.yCoords, {opacity:{to:0.3}}, 10); 
 				this.yAnimOn = new Util.Anim(this.yCoords, {opacity:{to:1.0}}, 0.2); 
@@ -814,12 +823,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 					this.showTiles();
 				},
 				failure:function(o) {
-					if(o.error.code == 1006) {
-						Game.Failure(o);
-					}
-					else {
-						this.showTiles();
-					}
+					Game.Failure(o);
 				},
 				scope:this
 			}, x1, x2, y1, y2);
@@ -1193,6 +1197,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.height = this.mapDiv.offsetHeight;
 			
 			this.visibleArea.resize();
+			this.coordLayer.resize();
 			
 			this.tileLayer.showTiles();
 		},
@@ -1446,27 +1451,24 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.moveByPx(ox * -1, oy * -1);*/
 			}
 		},
+		getTileImageSize : function() {
+			switch(this.zoom) {
+				case 2:
+					return "400/";
+				case 1:
+					return "300/";
+				case -1:
+					return "100/";
+				case -2:
+					return "50/";
+			}
+		},
 		getTile : function(x, y, z){
 			var ySet = this.tileCache[x],
 				building = ySet ? ySet[y] : null;
 			
 			if(building && building.image) {
-				var imgSize = "";
-				switch(this.zoom) {
-					case 2:
-						imgSize = "400/";
-						break;
-					case 1:
-						imgSize = "300/";
-						break;
-					case -1:
-						imgSize = "100/";
-						break;
-					case -2:
-						imgSize = "50/";
-						break;
-				}
-				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',imgSize,building.image,'.png'].join('')};
+				return {blank:building.level == 0, data:building, url:[Lib.AssetUrl,'planet_side/',this.getTileImageSize(),building.image,'.png'].join('')};
 			}
 			else {
 				return {blank:true};
@@ -1576,11 +1578,20 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 	
 	Mapper.TraditionalController = function( map ) {
 		this.map = map;
-		this.dd = new YAHOO.util.DragDrop(map.mapDiv);
+		this.dd = new YAHOO.util.DragDrop(map.mapDiv, 'mapper' );
 		this.dd.subscribe("dragEvent", this.moveMap, this, true);
 		this.dd.subscribe("startDragEvent", this.startDrag, this, true);
 		this.dd.subscribe("endDragEvent", this.endDrag, this, true);
 		
+		var moveKeyListener = new KL(document, {
+			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
+		}, { fn: this.moveKey, scope:this, correctScope:true }, KL.KEYDOWN);
+		var moveKeyUpListener = new KL(document, {
+			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
+		}, { fn: this.moveKeyUp, scope:this, correctScope:true }, KL.KEYUP);
+		
+		moveKeyListener.enable();
+		moveKeyUpListener.enable();
 		var navEl = document.createElement('div');
 		navEl.className = 'mapiator_nav';
 		navEl.innerHTML = [
@@ -1598,6 +1609,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		Event.on(Sel.query(".mapiator_nav_left", navEl, true), "click", clickMoveMap, [ 1, 0 ]);
 		Event.on(Sel.query(".mapiator_nav_right", navEl, true), "click", clickMoveMap, [ -1, 0 ]);
 
+		
 		if((map.maxZoom - map.minZoom) != 0) {
 			var zoomEl = document.createElement('div');
 			zoomEl.className = 'mapiator_zoom';
@@ -1676,6 +1688,40 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		isDragging : function() {
 			return this._dragging; // Math.abs(this.xmove) > 5;
+		},
+		moveKey : function(evName, evInfo) {
+			var keyCode = evInfo[0],
+				e = evInfo[1];
+			if(!Dom.inDocument(this.map.mapDiv)) {
+				return;
+			}
+			switch (e.target.tagName) {
+				case "INPUT": case "SELECT": case "TEXTAREA": return;
+			}
+			
+			if (keyCode == KL.KEY.UP) {
+				this.map.moveByTiles(0,1);
+			}
+			else if (keyCode == KL.KEY.DOWN) {
+				this.map.moveByTiles(0,-1);
+			}
+			else if (keyCode == KL.KEY.LEFT) {
+				this.map.moveByTiles(1,0);
+			}
+			else if (keyCode == KL.KEY.RIGHT) {
+				this.map.moveByTiles(-1,0);
+			}
+		},
+		moveKeyUp : function(evName, evInfo) {
+			var keyCode = evInfo[0];
+			var e = evInfo[1];
+			if(!Dom.inDocument(this.map.mapDiv)) {
+				return;
+			}
+			switch (e.target.tagName) {
+				case "INPUT": case "SELECT": case "TEXTAREA": return;
+			}
+			this.map.tileLayer.render(true);
 		}
 	};
 

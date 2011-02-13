@@ -68,6 +68,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			//get resources right away since they don't depend on anything
 			Game.GetResources();
+			Game.PreloadUI();
 			
 			Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
 			
@@ -134,35 +135,17 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				alert(o.error.message);
 			}
 			else {
-				var container = document.createElement('div');
-				container.id = 'internalErrorMessage';
-				document.body.insertBefore(container, document.body.firstChild);
-				var internalError = new YAHOO.widget.SimpleDialog(container, {
+				Game.QuickDialog({
 					width: "500px",
-					fixedcenter: true,
-					visible: false,
-					draggable: false,
-					text: ['An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.',
+					text: ['<p>An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.</p>',
 						'<textarea style="width: 100%; height: 300px;" id="internalErrorMessageText" readonly="readonly" onclick="this.select()"></textarea>'
 						].join(''),
-					constraintoviewport: true,
-					modal: true,
-					close: false,
-					zindex: 20000,
 					buttons: [
 						{ text:"Close", handler:function() { this.hide(); } }
 					]
-				});
-				internalError.renderEvent.subscribe(function() {
+				}, function() {
 					Dom.get('internalErrorMessageText').value = o.error.data;
-					this.show();
 				});
-				internalError.hideEvent.subscribe(function() {
-					setTimeout(function(){
-						internalError.destroy();
-					},1);
-				});
-				internalError.render();
 			}
 		},
 		InitLogin : function(error) {
@@ -181,23 +164,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					//Run rest of UI now that we're logged in
 					Lacuna.Game.Run();
 					if (result.welcome_message_id) {
-						var container = document.createElement('div');
-						container.id = 'welcomeMessage';
-						Dom.setStyle(container, "text-align", "justify");
-						document.body.insertBefore(container, document.body.firstChild);
-						var welcome = new YAHOO.widget.SimpleDialog(container, {
+						Game.QuickDialog({
 							width: "400px",
-							fixedcenter: true,
-							visible: false,
-							draggable: false,
 							text: ['Welcome to the Lacuna Expanse.  It is recommended that you play through the in game tutorial to familiarize yourself with the game, and to get some free resources to build up your empire.',
-								'<p style="margin:10px 0;">If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;vertical-align:middle;margin:-5px 0 -4px -2px" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
-								'<p style="margin:10px 0;">For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;vertical-align:middle;margin-left:-3px" /> button.</p>',
-								'<p style="margin:10px 0;">Thanks for playing!</p>'].join(''),
-							constraintoviewport: true,
-							modal: true,
-							close: false,
-							zindex: 20000,
+								'<p>If you choose to skip the tutorial now you may find it by clicking <img src="',Lib.AssetUrl,'ui/s/inbox.png" title="Inbox" style="width:19px;height:22px;vertical-align:middle;margin:-5px 0 -4px -2px" /> in the upper left of the interface and find the message with the subject `Welcome`.</p>',
+								'<p>For some extra help, look to the upper right of the interface for the <img src="',Lib.AssetUrl,'ui/s/tutorial.png" title="Interface Tutorial" style="width:19px;height:22px;vertical-align:middle;margin-left:-3px" /> button.</p>',
+								'<p>Thanks for playing!</p>'].join(''),
 							buttons: [
 								{ text:"View Tutorial", handler:function() {
 									this.hide();
@@ -207,99 +179,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									this.hide();
 								} } ]
 						});
-						welcome.renderEvent.subscribe(function() {
-							this.show();
-						});
-						welcome.hideEvent.subscribe(function() {
-							//let the current process complete before destroying
-							setTimeout(function(){
-								welcome.destroy();
-							},1);
-						});
-
-						//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
-						welcome.render();
-					}
-					else {
-						Game.RemoveCookieSettings("showTips");
-						var showTips = 1 - Game.GetCookieSettings("hideTips", "0");
-						if(showTips == "1") {
-							var maxTips = Game.Resources.tips.length - 1;
-							var tipNum = Game.GetCookieSettings("tipNum", -1);
-							var container = document.createElement('div');
-							container.id = 'tipsMessage';
-							Dom.setStyle(container, "text-align", "justify");
-							document.body.insertBefore(container, document.body.firstChild);
-							var nextTipNum = function(tipNum) {
-									tipNum++;
-									if(tipNum > maxTips) { tipNum = 0; }
-									return tipNum;
-								},
-								showTip = function(tipNum) {
-									var tip = Game.Resources.tips[tipNum];
-									Dom.get('tipsTip').innerHTML = tip;
-									Game.SetCookieSettings("tipNum", nextTipNum(tipNum));
-								},
-								nextTip = function(tipNum) {
-									tipNum = nextTipNum(tipNum);
-									showTip(tipNum);
-									return tipNum;
-								},
-								prevTip = function(tipNum) {
-									tipNum--
-									if(tipNum < 0) { tipNum = maxTips; }
-									showTip(tipNum);
-									return tipNum;
-								}
-								tips = new YAHOO.widget.SimpleDialog(container, {
-									width: "400px",
-									fixedcenter: true,
-									visible: false,
-									draggable: false,
-									text: [
-										'<p style="font-weight:bold;">Tips</p>',
-										'<p id="tipsTip" style="margin:10px 0;"></p>',
-										'<p><input id="showTips" type="checkbox" checked />Show tips at login</p>'
-									].join(''),
-									constraintoviewport: true,
-									modal: true,
-									close: false,
-									zindex: 20000,
-									buttons: [
-										{ text:"< Previous", handler:function() {
-											tipNum = prevTip(tipNum);
-										} },
-										{ text:"Next >", handler:function() {
-											tipNum = nextTip(tipNum);
-										} },
-										{ text:"Close", handler:function() {
-											this.hide();
-										}, isDefault:true }
-									]
-								});
-							tips.renderEvent.subscribe(function() {
-								showTip(tipNum);
-								this.show();
-								Event.on(Dom.get('showTips'),"change",function() {
-									// set hide to the reverse of show
-									if(Dom.get("showTips").checked) {
-										Game.RemoveCookieSettings("hideTips");
-									}
-									else {
-										Game.SetCookieSettings("hideTips", "1");
-									}
-								});
-							});
-							tips.hideEvent.subscribe(function() {
-								//let the current process complete before destroying
-								setTimeout(function(){
-									tips.destroy();
-								},1);
-							});
-
-							//don't register because showing the inbox will hide this //Game.OverlayManager.register(welcome);
-							tips.render();
-						}
 					}
 				});
 			}
@@ -326,12 +205,31 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					setTimeout(GameLoop, 1000);
 				}
 			})();
+			Game.planetRefreshInterval = setInterval(function(){
+				var BodyServ = Game.Services.Body,
+					session = Game.GetSession(),
+					body = Game.GetCurrentPlanet();
+				BodyServ.get_status({session_id: session, body_id: body.id},{
+					success:Game.onRpc,
+					failure:function(o) {
+						// for refreshes like this, ignore communication errors
+						if (o.error.message == "Communication with the server has been interrupted for an unknown reason.") {
+							return;
+						}
+						Game.Failure(o);
+					}
+				});
+			}, 10 * 60 * 1000);
+
 			//chat system
 			Game.InitChat();
 			//init event subscribtions if we need to
 			Game.InitEvents();
 			//enable esc handler
 			Game.escListener.enable();
+
+			document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
+			
 			//load the correct screen
 			var locationId = Game.GetCookie("locationId"),
 				locationView = Game.GetCookie("locationView");
@@ -435,7 +333,87 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			}
 			return serviceOut;
 		},
-
+		InitTips : function() {
+			if(!Game.Resources.tips && !Game.Resources.complete) {
+				setTimeout(Game.InitTips, 10);
+				return;
+			}
+			
+			var showTips = 1 - Game.GetCookieSettings("hideTips", "0") * 1;
+			if(showTips == 1) {
+				var tipCount = Game.Resources.tips.length,
+					tipNum = Game.GetCookieSettings("tipNum", -1),
+					showTip = function(dialog, change) {
+						tipNum = (tipNum + change + tipCount) % tipCount;
+						var tip = Game.Resources.tips[tipNum];
+						dialog.setBody(tip);
+						Game.SetCookieSettings("tipNum", tipNum);
+					};
+				Game.QuickDialog({
+					width: "400px",
+					buttons: [
+						{ text:"< Previous", handler:function() { showTip(dialog, -1); } },
+						{ text:"Next >", handler:function() { showTip(dialog, 1); } },
+						{ text:"Close", handler:function() { this.hide(); }, isDefault:true }
+					]
+				}, function() {
+					this.setHeader('Tips');
+					showTip(this, 1);
+					var label = document.createElement('label');
+					Dom.setStyle(label, 'float', 'left');
+					label.innerHTML = '<input id="showTips" type="checkbox" checked="checked" /> Show tips at login';
+					this.footer.insertBefore(label, this.footer.firstChild);
+				}, function() {
+					if(Dom.get('showTips').checked) {
+						Game.RemoveCookieSettings("hideTips");
+					}
+					else {
+						Game.SetCookieSettings("hideTips", "1");
+					}
+				});
+			}
+		},
+		PreloadUI : function() {
+			var images = Lib.UIImages;
+			for (var i = 0; i < images.length; i++) {
+				var url = Lib.AssetUrl + images[i];
+				var img = new Image();
+				img.src = url;
+			}
+		},
+		QuickDialog : function (config, afterRender, afterHide) {
+			var container = document.createElement('div');
+			if (config.id) {
+				container.id = config.id;
+				delete config.id;
+			}
+			YAHOO.lang.augmentObject(config, {
+				fixedcenter: true,
+				visible: false,
+				draggable: false,
+				constraintoviewport: true,
+				modal: true,
+				close: false,
+				zindex: 20000,
+			});
+			Dom.addClass(container, 'quick-dialog');
+			document.body.insertBefore(container, document.body.firstChild);
+			var dialog = new YAHOO.widget.SimpleDialog(container, config);
+			dialog.renderEvent.subscribe(function() {
+				if (afterRender) { afterRender.call(this); }
+				this.show();
+			});
+			dialog.hideEvent.subscribe(function() {
+				if (afterHide) { afterHide.call(this); }
+				// let the current process complete before destroying
+				setTimeout(function(){
+					dialog.destroy();
+				},1);
+			});
+			dialog.render();
+			Game.OverlayManager.register(dialog);
+		},
+		
 		onChangeToPlanetView : function(planetId) {
 			YAHOO.log(planetId, "info", "onChangeToPlanetView");
 			Game.PlanetJump(Game.EmpireData.planets[planetId]);
@@ -498,11 +476,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Lacuna.Pulser.Show();
 			func({session_id:session},{
 				success : function(o){
+					YAHOO.log(o, 'info', 'Game.onDestructClick.success');
 					Game.ProcessStatus(o.result.status);
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["DESTRUCT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.onDestructClick.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
@@ -638,6 +617,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			if (session) {
 				Game.SetCookie('session', session);
 				Game._session = session;
+				Game.InitTips();
 			}
 			else {
 				Game.RemoveCookie('session');
@@ -715,9 +695,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					catch(ex) {
 						YAHOO.log(ex);
 					}
+					Game.Resources.complete = 1;
 				}, 
 				failure: function(o) {
 					YAHOO.log(o, "error", "GetResources.failure");
+					Game.Resources.complete = 1;
 				},
 				scope: this
 			});
@@ -758,14 +740,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			
 			EmpireServ.logout({session_id:session},{
 				success : function(o){
-					YAHOO.log(o);
+					YAHOO.log(o, 'info', 'Game.Logout.success');
 					//Dom.setStyle(Game._envolveContainer, "display", "none");
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					YAHOO.log(["LOGOUT FAILED: ", o]);
+					YAHOO.log(o, 'error', 'Game.Logout.failure');
 					Lacuna.Pulser.Hide();
 					Game.Failure.call(this, o);
 				},
@@ -775,8 +757,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Reset : function() {
 			//clearInterval(Game.recInt);
 			delete Game.isRunning;
+			clearInterval(Game.planetRefreshInterval);
+			delete Game.planetRefreshInterval;
 			//disable esc handler
 			Game.escListener.disable();
+			
+			document.title = 'Lacuna Expanse';
 			
 			var logoutCommand = Game.chatLogout;
 	

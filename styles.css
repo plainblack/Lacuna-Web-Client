@@ -337,6 +337,14 @@ dialogs
 .speciesCreate .speciesAffinities li label {
 	vertical-align:middle;
 }
+
+.quick-dialog {
+	text-align : justify;
+}
+.quick-dialog p {
+	margin: 10px 0;
+}
+
 /*
 menu
 */
@@ -517,6 +525,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:2px;
 	width:53px;
 	overflow:hidden;
+	white-space: nowrap;
 	/*font-size:25px;
 	margin-left:5px;
 	margin-top:8px;*/
@@ -527,6 +536,7 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	margin-left:2px;
 	width:53px;
 	overflow:hidden;
+	white-space: nowrap;
 }
 #header .menuItem , #footer .plots .stored{
 	font-size:200%;
@@ -1180,6 +1190,14 @@ Info dialogs for Empire and Alliance
 	width: 30px;
 	position: absolute;
 	left: 0;
+}
+.coordX.out-of-bounds {
+	border-left: none;
+	border-right: none;
+}
+.coordY.out-of-bounds {
+	border-top: none;
+	border-bottom: none;
 }
 
 .coordX50, .coordY50 {
@@ -1894,6 +1912,20 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 #tradePushCargo {
     margin: 0 4px;
 }
+
+.transporterOneForOne label {
+	display:inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
+	width:75px;
+}
+.transporterOneForOne input, .transporterOneForOne select {
+	width : 200px;
+}
+.transporterOneForOne button {
+	margin: 5px;
+}
+
 .platformInfo .platformLocation {
 	width:250px;
 	text-decoration:underline;
@@ -2175,7 +2207,7 @@ TextboxList
 .yui-skin-sam .TextboxList .TextboxListAutoComplete .yui-ac-content { overflow-y:scroll; height:100px; text-align:left; background-color:#52acff; }
 
 .yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete { width:10em; }
-.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { TEXT-ALIGN:left }
+.yui-skin-sam .yui-dt-editor .TextboxList .TextboxListAutoComplete .yui-ac-content { text-align:left }
 
 .TextboxListIcon {
     cursor:default;

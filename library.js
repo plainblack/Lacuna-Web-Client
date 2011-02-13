@@ -107,14 +107,19 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			1003 : "Too much information",
 			1004 : "Password incorrect",
 			1005 : "Contains invalid characters",
-			1006 : "Authorization denied",
+			1006 : "Session expired",
 			1007 : "Overspend",
 			1008 : "Underspend",
 			1009 : "Invalid range",
 			1010 : "Insufficient privileges",
 			1011 : "Not enough resources in storage",
 			1012 : "Not enough resources in production",
-			1013 : "Missing prerequisites" 
+			1013 : "Missing prerequisites",
+			1014 : "Captcha not valid",
+			1015 : "Restricted for sitter logins",
+			1100 : "Empire not founded",
+			1101 : "Empire not founded, and you tried to create it, but had the wrong password",
+			1200 : "Game Over"
 		},
 		View : {
 			STAR : "star",
@@ -191,7 +196,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			return cd;*/
 			var dt = new Date();
 			dt.setUTCFullYear(pieces[2]*1);
-			dt.setUTCMonth((pieces[1]*1)-1,pieces[0]*1);
+			dt.setUTCMonth((pieces[1]*1-1), pieces[0]*1);
 			dt.setUTCHours(time[0]*1);
 			dt.setUTCMinutes(time[1]*1);
 			dt.setUTCSeconds(time[2]*1);
@@ -235,10 +240,6 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %r"}, "en");
 		},
-		formatServerDateShortTime : function(oDate) {
-			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
-			return Util.Date.format(dt, {format:"%m/%d/%Y %I:%M%p"}, "en");
-		},
 		formatServerDateTimeShort : function(oDate) {
 			var dt = oDate instanceof Date ? oDate : Library.parseServerDate(oDate);
 			return Util.Date.format(dt, {format:"%m/%d %I:%M%p"}, "en");
@@ -249,12 +250,12 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		},
 		convertNumDisplay : function(number, always) {
 			if(number >= 100000000 || number <= -100000000) {
-				//101m
-				return Math.floor(number/1000000) + 'm';
+				//101M
+				return Math.floor(number/1000000) + 'M';
 			}
 			else if(number >= 1000000 || number <= -1000000) {
-				//75.3m
-				return (Math.floor(number/100000) / 10) + 'm';
+				//75.3M
+				return (Math.floor(number/100000) / 10) + 'M';
 			}
 			else if(number >= 10000 || number <= -10000) {
 				//123k
@@ -325,14 +326,77 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			spy_shuttle:"Spy Shuttle",
 			terraforming_platform_ship:"Terraforming Platform Ship"
 		},
-
-        // planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
-        planetarySort : function(planets) {
-            var newplanets = [];
-            for(var pId in planets) {
-                newplanets.push(planets[pId]);
-            }
-            newplanets.sort(function(a,b) {
+		UIImages : [
+			'ui/bkg.png',
+			'ui/button_bkg_200.png',
+			'ui/close.png',
+			'ui/down.png',
+			'ui/l/about.png',
+			'ui/l/bookmarks.png',
+			'ui/l/build-no.png',
+			'ui/l/build.png',
+			'ui/l/disable_self_destruct.png',
+			'ui/l/enable_self_destruct.png',
+			'ui/l/energy.png',
+			'ui/l/essentia.png',
+			'ui/l/food.png',
+			'ui/l/happiness.png',
+			'ui/l/inbox.png',
+			'ui/l/inbox_new.png',
+			'ui/l/invite_friend.png',
+			'ui/l/logout.png',
+			'ui/l/ore.png',
+			'ui/l/planet_side.png',
+			'ui/l/plots.png',
+			'ui/l/profile.png',
+			'ui/l/star_map.png',
+			'ui/l/stats.png',
+			'ui/l/support.png',
+			'ui/l/tutorial.png',
+			'ui/l/waste.png',
+			'ui/l/water.png',
+			'ui/mail-read.png',
+			'ui/rss.png',
+			'ui/s/build-no.png',
+			'ui/s/build.png',
+			'ui/s/energy.png',
+			'ui/s/essentia.png',
+			'ui/s/food.png',
+			'ui/s/happiness.png',
+			'ui/s/inbox.png',
+			'ui/s/ore.png',
+			'ui/s/refresh.png',
+			'ui/s/star_map.png',
+			'ui/s/storage.png',
+			'ui/s/time.png',
+			'ui/s/tutorial.png',
+			'ui/s/waste.png',
+			'ui/s/water.png',
+			'ui/tab.png',
+			'ui/tickbar.png',
+			'ui/transparent_black.png',
+			'ui/up.png',
+			'ui/web/bar_bottom_back.png',
+			'ui/web/bar_top_back.png',
+			'ui/web/facebook-login-button.png',
+			'ui/web/selector_bottom.png',
+			'ui/web/selector_bottom_shine.png',
+			'ui/web/selector_top.png',
+			'ui/web/selector_top_shine.png',
+			'ui/web/slider-thumb-half-left.png',
+			'ui/web/slider-thumb-half-right.png',
+			'ui/web/slider-thumb.png',
+			'ui/web/t.png',
+			'ui/zoom.png',
+			'ui/zoom_slider.png'
+		],
+		// planetarySort - Input: Game.EmpireData.planets, Output: A sorted array of planetary objects
+		planetarySort : function(planets) {
+			var newplanets = [];
+			for(var pId in planets) {
+				newplanets.push(planets[pId]);
+			}
+			newplanets.sort(function(a,b) {
 				if (a.name > b.name) {
 					return 1;
 				}
@@ -342,10 +406,9 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 				else {
 					return 0;
 				}
-            });
-            return newplanets;
-        }
-
+			});
+			return newplanets;
+		}
 	};
 	
 	YAHOO.lacuna.Library = Library;
