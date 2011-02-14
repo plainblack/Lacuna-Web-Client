@@ -394,7 +394,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				constraintoviewport: true,
 				modal: true,
 				close: false,
-				zindex: 20000,
+				zindex: 20000
 			});
 			Dom.addClass(container, 'quick-dialog');
 			document.body.insertBefore(container, document.body.firstChild);
