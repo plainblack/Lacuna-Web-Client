@@ -88,11 +88,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						this.SetDocksAvailableMessage();
 						this.ShipPopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Shipyard.getBuild.get_buildable.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -111,11 +106,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						this.rpcSuccess(o);
 						this.ship_build_queue = o.result;
 						this.ShipyardDisplay();
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Shipyard.getQueue.view_build_queue.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -197,11 +187,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
 					this.ship_build_queue = undefined;
 					this.ShipyardDisplay();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Shipyard.SubsidizeBuildQueue.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -342,8 +327,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				},
 				failure : function(o){
 					btn.disabled = false;
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

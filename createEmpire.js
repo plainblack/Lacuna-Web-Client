@@ -96,8 +96,8 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					this.elCaptchaImage.src = o.result.url;
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "RefreshCaptchaFailure");
 					this.setMessage(o.error.message);
+					return true;
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -147,9 +147,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 						this.hide(); //hide empire
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "CreateEmpireFailure");
 						this.setMessage(o.error.message);
-						Lacuna.Pulser.Hide();
 						if (o.error.code == 1014) {
 							this.captchaGUID = o.error.data.guid;
 							this.elCaptchaImage.src = o.error.data.url;
@@ -162,6 +160,7 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 							Game.SpeciesCreator.show(o.error.data.empire_id);
 							this.hide(); //hide empire
 						}
+						return true;
 					},
 					timeout:Game.Timeout,
 					scope:this

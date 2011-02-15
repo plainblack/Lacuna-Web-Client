@@ -119,11 +119,6 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 					//refresh map
 					this.fireEvent("onUpdateMap");
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Development.DevSubsidize.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});		

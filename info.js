@@ -98,10 +98,6 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					
 					this.memberList.innerHTML = memberArray.join('');
 				},
-				failure:function(o){
-					Lacuna.Pulser.Hide();
-					Game.Failure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -281,10 +277,6 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					else {
 						Event.removeListener(this.id+'Alliance', "click");
 					}
-				},
-				failure:function(o){
-					Lacuna.Pulser.Hide();
-					Game.Failure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

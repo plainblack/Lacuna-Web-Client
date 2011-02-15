@@ -85,10 +85,6 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 					this.rpcSuccess(o);
 					this.speciesDisplay(o.result.species);
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});

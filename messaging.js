@@ -15,7 +15,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		
 	var Messaging = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		this.createEvent("onShow");
 		this.createEvent("onPageLoaded");
 		this._buildPanel();
@@ -379,11 +378,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.fireEvent("onPageLoaded", o);
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadInboxMessages");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -418,11 +412,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					}
 
 					this.processMessages(o.result, {sent:1});
-					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadSentMessages");
-					this.fireEvent("onRpcFailed", o);
 					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
@@ -461,11 +450,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadArchiveMessages");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -485,11 +469,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
 					this.processMessages(o.result,{inbox:1});
-					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleInboxPagination");
-					this.fireEvent("onRpcFailed", o);
 					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
@@ -512,11 +491,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{sent:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleSentPagination");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -535,11 +509,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				success : function(o){
 					this.fireEvent("onRpc", o.result);
 					this.processMessages(o.result,{archive:1});
-					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleArchivePagination");
-					this.fireEvent("onRpcFailed", o);
 					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
@@ -655,11 +624,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.fireEvent("onRpc", o.result);
 						this.displayMessage(o.result.message);
 						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Messaging.loadMessage.failure");
-						this.fireEvent("onRpcFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -818,12 +782,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "Messaging.sendMessage.failure");
 						if(o.error.code == 1005) {
 							this.createResponse.innerHTML = o.error.message;
-						}
-						else {
-							this.fireEvent("onRpcFailed", o);
+							return true;
 						}
 					},
 					timeout:Game.Timeout,
@@ -909,10 +870,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.archiveProcess(o.result);
 					this.fireEvent("onRpc", o.result);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.archiveMessage.failure");
-					this.fireEvent("onRpcFailed", o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -935,10 +892,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
 						this.archiveProcess(o.result);
 						this.fireEvent("onRpc", o.result);
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
-						this.fireEvent("onRpcFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -1026,10 +979,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.fireEvent("onRpc", o);
 					this.loadTab();
 					this.displayMessage(message);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.showMessage.failure");
-					this.fireEvent("onRpcFailed", o);
 				},
 				timeout:Game.Timeout,
 				scope:this

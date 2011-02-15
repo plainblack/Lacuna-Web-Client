@@ -67,11 +67,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 							
 							this.MiningMinistryPlatforms();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "MiningMinistry.view_platforms.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -297,11 +292,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "MiningMinistry.MiningMinistryPlatformAbandon.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -317,11 +307,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					this.ships = o.result.ships;
 					
 					this.MiningMinistryShipsPopulate();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsView.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -419,11 +404,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsAdd.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this.Self
 			});
@@ -442,11 +422,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					this.rpcSuccess(o);
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MiningMinistry.MiningMinistryShipsRemove.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this.Self

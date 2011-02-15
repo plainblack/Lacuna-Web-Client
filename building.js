@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 
 	var Building = function(oResults){
 		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
 		this.createEvent("onQueueAdd");
 		this.createEvent("onQueueReset");
 		this.createEvent("onAddTab");
@@ -100,9 +99,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 				}*/
 			}
 		},
-		rpcFailure : function(o) {
-			this.fireEvent("onMapRpcFailed", o);
-		},
 		addQueue : function(sec, func, elm, sc) {
 			this.fireEvent("onQueueAdd", {seconds:sec, fn:func, el:elm, scope:sc});
 		},
@@ -166,9 +162,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					this.fireEvent("onRepair");
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Building.Repair.repair.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 					target.disabled = false;
 				},
 				target:this.building.url,
@@ -253,11 +246,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						this.removeBuildingTile(this.building);
 						this.fireEvent("onHide");					
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Building.Demolish.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this,
 					target:this.building.url
@@ -285,11 +273,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						this.updateBuildingTile(b);
 					
 						this.fireEvent("onHide");					
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Building.Downgrade.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this,
@@ -321,11 +304,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					this.updateBuildingTile(b);
 					
 					this.fireEvent("onHide");
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Building.Upgrade.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this,

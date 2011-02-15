@@ -95,11 +95,6 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
 								Lib.fadeOutElm("dumpMessage");
                             }
                         },
-                        failure : function(o){
-                            YAHOO.log(o, "error", "EnergyReserve.Dump.failure");
-                            Lacuna.Pulser.Hide();
-                            this.rpcFailure(o);
-                        },
                         timeout:Game.Timeout,
                         scope:this
                     });

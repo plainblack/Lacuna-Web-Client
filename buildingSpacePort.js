@@ -159,11 +159,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.SpacePortPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_ships_travelling.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -199,11 +194,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.ViewPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_all_ships.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -238,11 +228,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							this.foreignPager.render();
 							
 							this.ForeignPopulate();
-						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -342,11 +327,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						ships_travelling: o.result.ships_travelling
 					};
 					this.SpacePortPopulate();
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ShipHandlePagination.view_ships_travelling.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -476,11 +456,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ViewPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ViewHandlePagination.view_all_ships.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -536,9 +511,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					this.Self.ShipNameClear.call(this);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ShipNameSave.failure");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 					if(this.Input) {
 						this.Input.value = this.Ship.name;
 					}
@@ -660,11 +632,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ForeignPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -717,9 +684,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					},
 					failure : function(o){
 						btn.disabled = false;
-						YAHOO.log(o, "error", "SpacePort.ShipScuttle.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -763,8 +727,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					},
 					failure : function(o){
 						btn.disabled = false;
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -800,10 +762,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Hide();
 					this.fireEvent("onMapRpc", o.result);
 					this.PopulateShipsSendTab(target, o.result.available);
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -892,8 +850,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + ".";
 					},
 					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
 						btn.disabled = false;
 					},
 					timeout:Game.Timeout,

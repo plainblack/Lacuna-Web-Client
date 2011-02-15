@@ -47,10 +47,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 						
 						this.LotteryPopulate(o.result.options);
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -113,10 +109,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 					this.result.ducks_quacked++;
 					this.SetQuacks();
 					Dom.get("entertainmentDuckMessage").innerHTML = o.result;
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

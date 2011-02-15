@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 		
 	var Profile = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		this.id = "profile";
 		
 		var container = document.createElement("div");
@@ -87,9 +86,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 								this.populateSpecies();
 							}
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Profile.show.view_stats.failure");
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -102,10 +98,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 							if (requests == 2) {
 								this.populateSpecies();
 							}
-						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Profile.redefine_species_limits.failure");
-							this.fireEvent('onRpcFailed', o);
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -262,10 +254,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 							}
 						},
 						failure : function(o){
-							YAHOO.log(o, "error", "Profile.handleUpdate.password.failure");
-							this.fireEvent('onRpcFailed', o);
 							this.tabView.set('activeIndex', 4);
 							this.new_password.focus();
+							return true;
 						},
 						timeout:Game.Timeout,
 						scope:this
@@ -354,10 +345,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						this.hide();
 					}
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Profile.handleUpdate.failure");
-					this.fireEvent('onRpcFailed', o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -369,10 +356,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					YAHOO.log(o, "info", "Profile.show.view_profile.success");
 					this.fireEvent('onRpc', o.result);
 					this.populateProfile(o.result);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Profile.show.view_profile.failure");
-					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:Lacuna.Profile
@@ -608,11 +591,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					this.hasSpecies = false;
 					this.SpeciesDialog.hide();
 					this.fireEvent('onRpc', o.result);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Profile.redefine_species.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:this

@@ -132,10 +132,8 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 					this.Display();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					//this.rpcFailure(o);
-					
 					Dom.get("oracleMessage").innerHTML = o.error.message;
+					return true;
 				},
 				timeout:Game.Timeout,
 				scope:this

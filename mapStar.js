@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		
 	var MapStar = function() {
 		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
 		//this.createEvent("onChangeToSystemView");
 		this.createEvent("onChangeToPlanetView");
 		
@@ -742,11 +741,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						Event.purgeElement(this.Line);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + " to " + targetName + ".";
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "MapStar.ShipSend.send_ship.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -894,11 +888,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						panel.tabView.selectTab(0);
 					}
 
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.ShowStar.get_ships_for.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -1074,9 +1063,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "MapStar.Rename.failure");
 						Dom.get("planetDetailRenameMessage").innerHTML = o.error.message;
 						Lib.fadeOutElm("planetDetailRenameMessage");
+						return true;
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -1122,11 +1111,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						spies : o.result.spies
 					};
 					this.populateSpies(tab);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.ShowSpies."+method+".failure");
-					this.fireEvent("onMapRpcFailed", o);
-					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -1267,10 +1251,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					delete tab.avail.spies;
 					delete tab.avail.spyShips;
 					this.ShowSpies(tab);
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
 				},
 				timeout:Game.Timeout,
 				scope:this

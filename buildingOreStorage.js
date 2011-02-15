@@ -167,11 +167,6 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
                             }
 							Lacuna.Pulser.Hide();
                         },
-						failure : function(o){
-							YAHOO.log(o, "error", "OreStorage.Dump.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
                         timeout:Game.Timeout,
                         scope:this
                     });

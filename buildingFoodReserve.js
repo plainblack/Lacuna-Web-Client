@@ -169,11 +169,6 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
                             }
 							Lacuna.Pulser.Hide();
                         },
-						failure : function(o){
-							YAHOO.log(o, "error", "FoodReserve.Dump.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
                         timeout:Game.Timeout,
                         scope:this
                     });

@@ -107,10 +107,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 					this.rpcSuccess(o);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "SubspaceSupplyDepot.Transmit.failure");
 					btn.disabled = false;
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

@@ -80,11 +80,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 								}
 							}
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "WasteRecycling.Recycle.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -335,11 +330,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						ce.innerHTML = "";
 						ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
 					}
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "WasteRecycling.RecycleSubsidize.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

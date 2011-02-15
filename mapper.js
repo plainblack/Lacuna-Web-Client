@@ -822,9 +822,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				success:function() {
 					this.showTiles();
 				},
-				failure:function(o) {
-					Game.Failure(o);
-				},
 				scope:this
 			}, x1, x2, y1, y2);
 		},
@@ -1348,10 +1345,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						}
 					},
 					failure : function(o){
-						//YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.failure");
-						Lacuna.Pulser.Hide();
 						if(callback.failure) {
 							callback.failure.call(callback.scope || this, o);
+							return true;
 						}
 					},
 					timeout:Game.Timeout,

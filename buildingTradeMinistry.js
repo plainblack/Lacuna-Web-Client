@@ -324,11 +324,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.fireEvent("onLoadGlyphs");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -347,11 +342,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.planSize = o.result.cargo_space_used_each;
 						this.fireEvent("onLoadPlans");
 						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -372,11 +362,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.fireEvent("onLoadPrisoners");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -396,11 +381,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.fireEvent("onLoadShips");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -418,11 +398,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.resources = o.result.resources;
 						this.fireEvent("onLoadResources");
 						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -533,11 +508,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						
 						this.AvailablePopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -635,11 +605,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					
 					this.AvailablePopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -672,16 +637,11 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "Trade.accept_trade.failure");
-					
 					if(o.error.code == 1014) {
 						this.Self.availableTrades.captcha = o.error.data;
 						this.Self.acceptVerify.setCaptcha(o.error.data.url);
 						this.Self.acceptVerify.setError(o.error.message);
-					}
-					else {					
-						this.Self.rpcFailure(o);
+						return true;
 					}
 				},
 				timeout:Game.Timeout,
@@ -703,10 +663,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					}
 					this.Self.rpcSuccess(o);
 					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -742,11 +698,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.minePage.render();
 						
 						this.MinePopulate();
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Trade.view_my_trades.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -829,11 +780,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					
 					this.MinePopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -867,12 +813,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						this.Self.getGlyphs(true);
 						this.Self.getPrisoners(true);
 						this.Self.getShips(true);
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.withdraw_trade.failure");
-						
-						this.Self.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -1053,10 +993,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					}
 					
 					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -1322,12 +1258,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "Trade.add_trade.failure");
-					
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -1508,10 +1438,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						}
 						
 						Lacuna.Pulser.Hide();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -1789,12 +1715,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Lacuna.Pulser.Hide();
 						//get new ships since we just sent one
 						this.getPushShips();
-					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.Push.failure");
-						
-						this.rpcFailure(o);
 					},
 					timeout:Game.Timeout,
 					scope:this

@@ -147,10 +147,6 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 						YAHOO.log(ex);
 					}
 				}, 
-				failure: function(o) {
-					YAHOO.log(o, "error", "Stats.populateServerStats.failure");
-					Lacuna.Pulser.Hide();
-				},
 				scope: this
 			});
 		},

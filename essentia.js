@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 
 	var Essentia = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		
 		this.id = "essentia";
 		
@@ -186,9 +185,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					}, 1000);
 					this.populate(o.result);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Essentia.show.failure");
-				},
 				timeout:Game.Timeout,
 				scope:Lacuna.Essentia
 			});
@@ -217,11 +213,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					alert('Redeemed code for '+addedEssentia+' essentia.');
 					this.elCode.value = '';
 					this.fireEvent('onRpc', o.result);
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "EssentiaRedeem.show.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -256,10 +247,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 						YAHOO.log(o, "info", "Essentia.boost.success");
 						this.update(o.result);
 						this.fireEvent("onRpc", o.result);
-					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Essentia.boost.failure");
-						this.fireEvent("onRpcFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this

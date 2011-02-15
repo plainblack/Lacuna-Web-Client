@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
 		
 		this._buildDetailsPanel();
 		this._buildBuilderPanel();
@@ -454,9 +453,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}*/
 			this.fireEvent("onMapRpc", result);
 		},
-		_fireRpcFailed : function(o){
-			this.fireEvent("onMapRpcFailed", o);
-		},
 		_fireQueueAdd : function(obj) {
 			if(this.buildingDetails.isVisible()) {
 				this.buildingDetails.addQueue(obj.seconds, obj.fn, obj.el, obj.scope);
@@ -637,11 +633,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this._map.addTileData(o.result.buildings, true);
 						this._map.refresh();
 					},
-					failure : function(o){
-						//YAHOO.log(o, "error", "MapPlanet.Refresh.FAILED");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -665,11 +656,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						else {
 							this.Mapper(o.result);
 						}
-					},
-					failure : function(o){
-						//YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
 					},
 					timeout:Game.Timeout,
 					scope:this
@@ -734,9 +720,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				},
 				failure : function(o){
 					delete this.currentBuildConnection;
-					//YAHOO.log(o, "error", "MapPlanet.BuilderGet.failure");
-					this.fireEvent("onMapRpcFailed", o);
-					Lacuna.Pulser.Hide();
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -795,9 +778,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.ReloadBuilding(b);
 				},
 				failure : function(o){
-					//YAHOO.log(o, "error", "MapPlanet.Build.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
 					this.buildingBuilder.hide();
 				},
 				timeout:Game.Timeout,
@@ -834,14 +814,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					//YAHOO.log(o, "error", "MapPlanet.ViewData.failure");
-					
 					if(callback && callback.failure) {
 						callback.failure.call(this, o, callback.url, x, y);
-					}
-					else {
-						this.fireEvent("onMapRpcFailed", o);
+						return true;
 					}
 				},
 				timeout:Game.Timeout,
@@ -888,7 +863,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				},
 				failure:function(o){
 					delete this.currentViewConnection;
-					this.fireEvent("onMapRpcFailed", o);
 				},
 				url:tile.data.url
 			}, tile.x, tile.y);
@@ -990,7 +964,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
-				classObj.subscribe("onMapRpcFailed", this._fireRpcFailed, this, true);
 				classObj.subscribe("onQueueAdd", this._fireQueueAdd, this, true);
 				classObj.subscribe("onQueueReset", this._fireQueueReset, this, true);
 				classObj.subscribe("onAddTab", this._fireAddTab, this, true);

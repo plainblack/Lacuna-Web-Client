@@ -64,9 +64,6 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 					target.disabled = false;
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Network19.NewsCoverage.restrict_coverage.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 					target.disabled = false;
 				},
 				timeout:Game.Timeout,
@@ -115,11 +112,6 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 						}
 						newsRssLinks.appendChild(rssFrag);
 					}
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Network19.NewsGet.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

@@ -110,14 +110,13 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 					this.PlanetsDisplay();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					//this.rpcFailure(o);
 					var msg = Dom.get("planetsDetailsMessage"),
 						planetsDetails = Dom.get("planetsDetails");
 					
 					msg.innerHTML = o.error.message;
 					Event.purgeElement(planetsDetails);
 					planetsDetails.innerHTML = "";
+					return true;
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -158,10 +157,6 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 							this.rpcSuccess(o);
 							this.maps[nLi.Planet.id] = o.result.map;
 							Lacuna.Messaging.attachmentPanel.load(o.result.map);
-						},
-						failure : function(o){
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this

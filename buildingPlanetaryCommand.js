@@ -104,10 +104,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 								
 								this.PlanPopulate();
 							},
-							failure : function(o){
-								Lacuna.Pulser.Hide();
-								this.rpcFailure(o);
-							},
 							timeout:Game.Timeout,
 							scope:this
 						});
@@ -162,12 +158,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "PlanetaryCommand.abandon.failure");
-					
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -204,9 +194,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "PlanetaryCommand.Rename.failure");
 						Dom.get("commandPlanetRenameMessage").innerHTML = o.error.message;
 						Lib.fadeOutElm("commandPlanetRenameMessage");
+						return true;
 					},
 					timeout:Game.Timeout,
 					scope:this

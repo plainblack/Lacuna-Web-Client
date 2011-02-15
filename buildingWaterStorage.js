@@ -96,11 +96,6 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
 								Lib.fadeOutElm("dumpMessage");
                             }
                         },
-                        failure : function(o){
-                            YAHOO.log(o, "error", "WaterStorage.Dump.failure");
-                            Lacuna.Pulser.Hide();
-                            this.rpcFailure(o);
-                        },
                         timeout:Game.Timeout,
                         scope:this
                     });

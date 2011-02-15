@@ -67,9 +67,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					this._found();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "CreateSpeciesFailure");
 					this.setMessage(o.error.message);
+					return true;
 				},
 				timeout:Game.Timeout,
 				scope:this
@@ -91,9 +90,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					this.fireEvent("onCreateSuccessful", o);
 				},
 				failure : function(o) {
-					YAHOO.log(o, "info", "CreateSpecies._found.failure");
-					Lacuna.Pulser.Hide();
 					this.setMessage(o.error.message);
+					return true;
 				},
 				timeout:Game.Timeout,
 				scope:this

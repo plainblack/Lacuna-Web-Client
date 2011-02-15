@@ -53,10 +53,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 						this.rpcSuccess(o);
 						this.Display(o.result.buildings);
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
 					timeout:Game.Timeout,
 					scope:this
 				});
@@ -94,10 +90,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 					Lacuna.Pulser.Hide();
 					this.rpcSuccess(o);
 					this.fireEvent("onHide");
-				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
 				timeout:Game.Timeout,
 				scope:this

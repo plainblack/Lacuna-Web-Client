@@ -69,11 +69,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							
 							this.ProbesDisplay();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Observatory.get_probed_stars.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
 						timeout:Game.Timeout,
 						scope:this
 					});
@@ -149,11 +144,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 					this.pager.setState(newState);
 					this.ProbesDisplay();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Observatory.ProbesHandlePagination.get_probed_stars.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
 				timeout:Game.Timeout,
 				scope:this
 			});
@@ -174,11 +164,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							Event.purgeElement(container);
 							container.parentNode.removeChild(container);
 							this.probes = null;
-						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Observatory.ProbeAction.abandon_probe.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
 						},
 						timeout:Game.Timeout,
 						scope:this
