@@ -980,7 +980,79 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				}
 			}
-		}
+		},
+		onScroll : (function(){
+			var evName;
+			var func;
+			var pixelsPerLine = 10;
+			var ua = navigator.userAgent;
+			var safari5 = ua.match(/\bSafari\//) && ua.match(/\bVersion\/5/);
+			var isEventSupported = (function() {
+				var TAGNAMES = {
+					'select':'input',
+					'change':'input',
+					'submit':'form',
+					'reset':'form',
+					'error':'img',
+					'load':'img',
+					'abort':'img'
+				};
+				var cache = {};
+				function isEventSupported(eventName) {
+					var el = document.createElement(TAGNAMES[eventName] || 'div');
+					eventName = 'on' + eventName;
+					if (eventName in cache) {
+						return cache[eventName];
+					}
+					var isSupported = (eventName in el);
+					if (!isSupported) {
+						el.setAttribute(eventName, 'return;');
+						isSupported = typeof el[eventName] == 'function';
+					}
+					cache[eventName] = isSupported;
+					el = null;
+					return isSupported;
+				}
+				return isEventSupported;
+			})();
+			if (isEventSupported('mousewheel')) {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'mousewheel', function(e, o) {
+						var xDelta = 'wheelDeltaX' in e ? e.wheelDeltaX : 0;
+						var yDelta = 'wheelDeltaY' in e ? e.wheelDeltaY : e.wheelDelta;
+						// chrome/safari 4 give pixels
+						// safari 5 gives pixels * 120
+						if (safari5) {
+							xDelta /= 120;
+							yDelta /= 120;
+						}
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+			// not possible to feature detect this, have to just use the version number
+			else if (YAHOO.env.ua.gecko >= 1.9 && ! ua.match(/\brv:1\.9\.0/)) {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'MozMousePixelScroll', function(e, o) {
+						var xAxis = e.axis == e.HORIZONTAL_AXIS;
+						var xDelta = xAxis ? -e.detail : 0;
+						var yDelta = xAxis ? 0 : -e.detail;
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+			else {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'DOMMouseScroll', function(e, o) {
+						var xAxis = 'axis' in e && e.axis == e.HORIZONTAL_AXIS;
+						// this event gets 'lines'
+						var xDelta = xAxis ? -e.detail * pixelsPerLine : 0;
+						var yDelta = xAxis ? 0 : -e.detail * pixelsPerLine;
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+		})()
 	};
 	
 	YAHOO.lacuna.Game = Game;
@@ -988,3 +1060,4 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 YAHOO.register("game", YAHOO.lacuna.Game, {version: "1", build: "0"}); 
 
 }
+

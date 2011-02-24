@@ -1590,6 +1590,32 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
 		}, { fn: this.moveKeyUp, scope:this, correctScope:true }, KL.KEYUP);
 		
+		var xMove = 0;
+		var yMove = 0;
+		var lastMove = (new Date(0)).getTime();
+		var timerActive = false;
+		Game.onScroll(map.mapDiv, function(e, x, y) {
+			xMove += x;
+			yMove += y;
+			
+			// we get tons of events, so only move every 50 milliseconds
+			var now = (new Date()).getTime();
+			if ( now - lastMove > 50 ) {
+				lastMove = now;
+				map.moveByPx(xMove, yMove);
+				xMove = 0;
+				yMove = 0;
+			}
+			// refresh screen every second during scrolling, and once afterward
+			if (!timerActive) {
+				timerActive = true;
+				setTimeout(function(){
+					map.tileLayer.render(true);
+					timerActive = false;
+				}, 1000);
+			}
+		});
+		
 		moveKeyListener.enable();
 		moveKeyUpListener.enable();
 		var navEl = document.createElement('div');
