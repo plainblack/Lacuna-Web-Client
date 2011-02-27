@@ -726,7 +726,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				});
 			}
 		},
-		ShipRecall : function() {
+		ShipRecall : function(e) {
 			if(confirm(["Are you sure you want to Recall ",this.Ship.name,"?"].join(''))) {
 				var btn = Event.getTarget(e);
 				btn.disabled = true;
@@ -755,6 +755,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						}
 						//set to traveling
 						Sel.query("li.shipTask", this.Line, true).innerHTML = "Travelling";
+						var buttonLi = Sel.query("li.shipScuttle", this.Line, true);
+						Event.purgeElement(buttonLi);
+						buttonLi.innerHTML = "";
 						//remove ships traveling so the tab gets reloaded when viewed next time
 						delete this.Self.shipsTraveling;
 					},
