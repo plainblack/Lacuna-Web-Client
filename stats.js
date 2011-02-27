@@ -91,7 +91,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 			'				<li><a href="#statsWeeklyMedal"><em>Weekly Medals</em></a></li>',
 			'				<li><a href="#statsGeneral"><em>General</em></a></li>',
 			'			</ul>',
-			'			<div id="oHt" class="yui-content" style="overflow:auto;">',
+			'			<div id="oHt" class="yui-content">',
 			'				<div id="statsEmpire"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsEmpireFind" /></span></div><div id="statsEmpireTable"></div><div id="statsEmpirePaginator"></div></div>',
 			'				<div id="statsAlliance"><div><label style="font-weight:bold;display:inline-block;width:50px;">Find:</label><span style="display:inline-block;width:300px;"><input type="text" id="statsAllianceFind" /></span></div><div id="statsAllianceTable"></div><div id="statsAlliancePaginator"></div></div>',
 			'				<div id="statsColony"><div id="statsColonyTable"></div></div>',
@@ -903,7 +903,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					}},
 					{key:"empire_name", label:"Empire"},
 					{key:"planet_name", label:"Colony"},
-					{key:"population", label:"Pop"},
+					{key:"population", label:"Pop", sortable:true},
 					{key:"building_count", label:"Buildings"},
 					{key:"average_building_level", label:"Avg. Building Lvl"},
 					{key:"highest_building_level", label:"High Building Lvl"}
@@ -925,7 +925,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							]
 				};
 				
-				var cHt = Game.GetSize() - 115;
+				var cHt = Game.GetSize().h - 115;
 				if(cHt > 410) { cHt = 410; }
 				this.ColonyTable = new YAHOO.widget.ScrollingDataTable("statsColonyTable", this.ColonyColumns, this.ColonyData, {
 					width:"100%",
@@ -1010,7 +1010,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								sort
+								sort+'_rank'
 							]
 						});
 				});
@@ -1031,9 +1031,9 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					{key:"age", label:"Age",formatter:function(el, oRecord, oColumn, oData) {
 						el.innerHTML = Lib.formatTime(oData);
 					}},
-					{key:"level", label:"Level"},
-					{key:"success_rate", label:"Success Rate", formatter:this.formatPercent},
-					{key:"dirtiest", label:"Dirtiest"}
+					{key:"level", label:"Level", sortable:true},
+					{key:"success_rate", label:"Success Rate", formatter:this.formatPercent, sortable:true},
+					{key:"dirtiest", label:"Dirtiest", sortable:true}
 				];
 				
 				this.SpyData = new Util.XHRDataSource("/stats");
@@ -1052,7 +1052,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							]
 				};
 				
-				var sHt = Game.GetSize() - 115;
+				var sHt = Game.GetSize().h - 115;
 				if(sHt > 410) { sHt = 410; }
 				this.SpyTable = new YAHOO.widget.ScrollingDataTable("statsSpyTable", this.SpyColumns, this.SpyData, {
 					width:"100%",
@@ -1137,7 +1137,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"jsonrpc": "2.0",
 							"params": [
 								Game.GetSession(""),
-								sort
+								sort+'_rank'
 							]
 						});
 				});
@@ -1176,7 +1176,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 					} 
 				};
 				
-				var wHt = Game.GetSize() - 115;
+				var wHt = Game.GetSize().h - 115;
 				if(wHt > 410) { wHt = 410; }
 				this.WeeklyMedalTable = new YAHOO.widget.ScrollingDataTable("statsWeeklyMedalTable", this.WeeklyMedalColumns, this.WeeklyMedalData, {
 					width:"100%",
