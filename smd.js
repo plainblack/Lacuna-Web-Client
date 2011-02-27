@@ -1630,6 +1630,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						* name 
 						*/
 					},
+					"recall_ship" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					
 					"scuttle_ship" : {
 						"description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
 						"parameters": [

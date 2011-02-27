@@ -446,7 +446,7 @@
 			'inflating government structure',
 			'discrediting liquids',
 			'camoflaging nerds',
-			'villifying heroes',
+			'vilifying heroes',
 			'flooding prairies',
 			'nebulizing nebulas',
 			'spinning plates',
