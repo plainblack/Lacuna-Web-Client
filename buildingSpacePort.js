@@ -438,11 +438,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						Event.on(bbtn, "click", this.ShipScuttle, {Self:this,Ship:ship,Line:nUl}, true);
 					}
 					else if(ship.task == "Defend") {
-						var bbtn = document.createElement("button");
-						bbtn.setAttribute("type", "button");
-						bbtn.innerHTML = "Recall";
-						bbtn = nLi.appendChild(bbtn);
-						Event.on(bbtn, "click", this.ShipRecall, {Self:this,Ship:ship,Line:nUl}, true);
+						var dbtn = document.createElement("button");
+						dbtn.setAttribute("type", "button");
+						dbtn.innerHTML = "Recall";
+						dbtn = nLi.appendChild(dbtn);
+						Event.on(dbtn, "click", this.ShipRecall, {Self:this,Ship:ship,Line:nUl}, true);
 					}
 					nUl.appendChild(nLi);
 								
