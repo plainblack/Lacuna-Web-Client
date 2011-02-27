@@ -314,7 +314,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
 			}
 		},
-		ShipBuild : function() {
+		ShipBuild : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
 			Lacuna.Pulser.Show();
 			
 			this.Self.service.build_ship({
@@ -324,7 +326,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				quantity:1
 			}, {
 				success : function(o){
-					YAHOO.log(o, "info", "Shipyard.ShipBuild.success");
+					btn.disabled = false;
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
 
@@ -339,7 +341,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					this.Self.SetBuildMessage("Successfully started building " + this.Ship.type_human + ".");
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Shipyard.ShipBuild.failure");
+					btn.disabled = false;
 					Lacuna.Pulser.Hide();
 					this.Self.rpcFailure(o);
 				},

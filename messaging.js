@@ -565,40 +565,46 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
 			
-			for(var i=0; i<messages.length; i++) {
-				var msg = messages[i],
-					nLi = li.cloneNode(false);
-				msg.is = isTab;
-				nLi.Message = msg;
-				Dom.addClass(nLi, "message");
-				var img;
-				if(msg.has_read == "0") {
-					Dom.addClass(nLi, "unread");
-					img = 'unread';
-				}
-				else {
-					img = 'read';
-				}
-				if(msg.has_replied == "1") {
-					img = 'replied';
-				}
-				nLi.innerHTML = [
-					' <div class="messageSelect"><img width="26" height="26" src="',Lib.AssetUrl,'ui/mail-',img,'.png" /><br />',
-					isTab.inbox ? '	<input type="checkbox" />' : '', '</div>',
-					'	<div class="messageContainer">',
-					'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
-					'		<div class="messageFrom">',
-					isTab.sent ? msg.to : msg.from,
-					'		</div>',
-					'		<div class="messageSubject">',msg.subject,'</div>',
-					//'		<div class="messageExcerpt">',msg.body_preview,'</div>',
-					'	</div>'
-					].join('');
-				list.appendChild(nLi);
+			if(messages.length == 0) {
+				li.innerHTML = 'No messages to display.';
+				list.appendChild(li);
 			}
-			
-			Event.delegate(list, "click", this.loadMessage, "div.messageContainer", this, true);
-			Event.delegate(list, "click", this.checkSelect, "input[type=checkbox]", this, true);
+			else {
+				for(var i=0; i<messages.length; i++) {
+					var msg = messages[i],
+						nLi = li.cloneNode(false);
+					msg.is = isTab;
+					nLi.Message = msg;
+					Dom.addClass(nLi, "message");
+					var img;
+					if(msg.has_read == "0") {
+						Dom.addClass(nLi, "unread");
+						img = 'unread';
+					}
+					else {
+						img = 'read';
+					}
+					if(msg.has_replied == "1") {
+						img = 'replied';
+					}
+					nLi.innerHTML = [
+						' <div class="messageSelect"><img width="26" height="26" src="',Lib.AssetUrl,'ui/mail-',img,'.png" /><br />',
+						isTab.inbox ? '	<input type="checkbox" />' : '', '</div>',
+						'	<div class="messageContainer">',
+						'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
+						'		<div class="messageFrom">',
+						isTab.sent ? msg.to : msg.from,
+						'		</div>',
+						'		<div class="messageSubject">',msg.subject,'</div>',
+						//'		<div class="messageExcerpt">',msg.body_preview,'</div>',
+						'	</div>'
+						].join('');
+					list.appendChild(nLi);
+				}
+				
+				Event.delegate(list, "click", this.loadMessage, "div.messageContainer", this, true);
+				Event.delegate(list, "click", this.checkSelect, "input[type=checkbox]", this, true);
+			}
 
 			//wait for tab to display first
 			var panel = this.messagingPanel;
