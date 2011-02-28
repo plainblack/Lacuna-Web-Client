@@ -9,7 +9,7 @@
 		}
 	}
 	if (window.history.replaceState) {
-		window.history.replaceState({}, window.title, l.protocol+'//'+l.host+l.pathname+l.search);
+		window.history.replaceState({}, document.title, l.protocol+'//'+l.host+l.pathname+l.search);
 	}
 	else if (l.hash != '') {
 		l.hash = '';
