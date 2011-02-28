@@ -38,7 +38,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
-			try{
 			this.timeFood = Dom.get("essentialDetailsTimeFood");
 			this.timeOre = Dom.get("essentialDetailsTimeOre");
 			this.timeWater = Dom.get("essentialDetailsTimeWater");
@@ -59,7 +58,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				this.elEssentiaAmount.innerHTML = Game.EmpireData.essentia;
 			}, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-			}catch(e){alert(e);}
 		}, this, true);
 
 		this.Dialog.hideEvent.subscribe(function(){
