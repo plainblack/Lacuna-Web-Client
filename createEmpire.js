@@ -99,7 +99,6 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 					this.setMessage(o.error.message);
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -162,7 +161,6 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
 						}
 						return true;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

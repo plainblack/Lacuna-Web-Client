@@ -69,7 +69,6 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 						YAHOO.log(o, "info", "Stats");
 						this.populateCredits(o.result);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

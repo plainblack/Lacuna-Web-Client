@@ -185,7 +185,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					}, 1000);
 					this.populate(o.result);
 				},
-				timeout:Game.Timeout,
 				scope:Lacuna.Essentia
 			});
 			Game.OverlayManager.hideAll();
@@ -214,7 +213,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					this.elCode.value = '';
 					this.fireEvent('onRpc', o.result);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -248,7 +246,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 						this.update(o.result);
 						this.fireEvent("onRpc", o.result);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

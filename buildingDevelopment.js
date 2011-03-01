@@ -119,7 +119,6 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 					//refresh map
 					this.fireEvent("onUpdateMap");
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});		
 		}

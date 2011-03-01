@@ -633,7 +633,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this._map.addTileData(o.result.buildings, true);
 						this._map.refresh();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -657,7 +656,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this.Mapper(o.result);
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -721,7 +719,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				failure : function(o){
 					delete this.currentBuildConnection;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -780,7 +777,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				failure : function(o){
 					this.buildingBuilder.hide();
 				},
-				timeout:Game.Timeout,
 				scope:this,
 				target:building.url
 			});
@@ -819,7 +815,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						return true;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this,
 				target:url
 			});

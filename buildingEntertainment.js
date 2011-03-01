@@ -47,7 +47,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 						
 						this.LotteryPopulate(o.result.options);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -110,7 +109,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 					this.SetQuacks();
 					Dom.get("entertainmentDuckMessage").innerHTML = o.result;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

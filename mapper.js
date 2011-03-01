@@ -1350,7 +1350,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 							return true;
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

@@ -67,7 +67,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 							
 							this.MiningMinistryPlatforms();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -292,7 +291,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -308,7 +306,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					
 					this.MiningMinistryShipsPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -404,7 +401,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
 				},
-				timeout:Game.Timeout,
 				scope:this.Self
 			});
 		},
@@ -423,7 +419,6 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					this.MiningMinistryShipsView();
 					delete this.platforms; //reset platforms so we geto the new correct info
 				},
-				timeout:Game.Timeout,
 				scope:this.Self
 			});
 		}

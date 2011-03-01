@@ -127,7 +127,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							
 							this.SpyPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -352,7 +351,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					this.spies = o.result;
 					this.SpyPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -402,7 +400,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				failure : function(o){
 					this.Assign.selectedIndex = this.Assign.defaultIndex;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -429,7 +426,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						this.Line.parentNode.removeChild(this.Line);
 						this.Self.result.spies.current = (this.Self.result.spies.current*1) - 1;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -484,7 +480,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						this.Input.value = this.Spy.name;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -519,7 +514,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							//this.UpdateCost(this.spies.training_costs, trained);
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -542,7 +536,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				failure : function(o){
 					Dom.get("spiesSubsidize").disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

@@ -106,7 +106,6 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 					}
 					this.fireEvent('onRpc', o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -129,7 +128,6 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 				failure : function(o){
 					this.inviteGenerate.disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

@@ -88,7 +88,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						this.SetDocksAvailableMessage();
 						this.ShipPopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -107,7 +106,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						this.ship_build_queue = o.result;
 						this.ShipyardDisplay();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -188,7 +186,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					this.ship_build_queue = undefined;
 					this.ShipyardDisplay();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -328,7 +325,6 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 				failure : function(o){
 					btn.disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

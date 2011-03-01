@@ -66,7 +66,6 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 				failure : function(o){
 					target.disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -113,7 +112,6 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 						newsRssLinks.appendChild(rssFrag);
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

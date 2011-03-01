@@ -98,7 +98,6 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					
 					this.memberList.innerHTML = memberArray.join('');
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -278,7 +277,6 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 						Event.removeListener(this.id+'Alliance', "click");
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

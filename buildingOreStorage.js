@@ -167,7 +167,6 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
                             }
 							Lacuna.Pulser.Hide();
                         },
-                        timeout:Game.Timeout,
                         scope:this
                     });
                 }

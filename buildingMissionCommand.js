@@ -52,7 +52,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						this.missions = o.result.missions;
 						this.displayMissions();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -158,7 +157,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 					this.Self.missions = undefined;
 					this.Self.getMissions();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -176,7 +174,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 					this.Self.missions = undefined;
 					this.Self.getMissions();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

@@ -109,7 +109,6 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 				failure : function(o){
 					btn.disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

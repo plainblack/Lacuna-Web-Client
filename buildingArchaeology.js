@@ -347,7 +347,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						
 						this.populateSearch();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -364,7 +363,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						
 						this.populateView();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -386,7 +384,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					delete this.glyphs;
 					this.getGlyphs();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -407,7 +404,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						//this.updateBuildingTile(o.result.building);
 						this.checkIfWorking();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -430,7 +426,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					Dom.get("archaeologySearchTime").innerHTML = "";
 					this.checkIfWorking();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

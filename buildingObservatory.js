@@ -69,7 +69,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							
 							this.ProbesDisplay();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -144,7 +143,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 					this.pager.setState(newState);
 					this.ProbesDisplay();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -165,7 +163,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							container.parentNode.removeChild(container);
 							this.probes = null;
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}

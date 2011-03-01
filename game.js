@@ -501,8 +501,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					YAHOO.log(o, 'info', 'Game.onDestructClick.success');
 					Game.ProcessStatus(o.result.status);
 					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout
+				}
 			});
 		},
 
@@ -619,7 +618,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						return callback.failure.call(this, o);
 					}
 				},
-				timeout:Game.Timeout,
 				scope:callback && callback.scope || this
 			});
 		},
@@ -761,8 +759,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout
+				}
 			});
 		},
 		Reset : function() {

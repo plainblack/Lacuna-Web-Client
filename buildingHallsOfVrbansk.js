@@ -53,7 +53,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 						this.rpcSuccess(o);
 						this.Display(o.result.buildings);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -91,7 +90,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 					this.rpcSuccess(o);
 					this.fireEvent("onHide");
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

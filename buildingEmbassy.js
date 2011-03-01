@@ -237,7 +237,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.StashPopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -549,7 +548,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -582,7 +580,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -602,7 +599,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.InvitesPopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -696,7 +692,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -722,7 +717,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Line.parentNode.removeChild(this.Line);
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -751,7 +745,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					a.animate();
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -774,7 +767,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.addTab(this._getCreateTab());
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -797,7 +789,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.addTab(this._getCreateTab());
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -821,7 +812,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.PendingPopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -898,7 +888,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Line.parentNode.removeChild(this.Line);
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -923,7 +912,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1002,7 +990,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Self.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1023,7 +1010,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Self.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

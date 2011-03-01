@@ -61,7 +61,6 @@ if (typeof YAHOO.lacuna.buildings.Capitol == "undefined" || !YAHOO.lacuna.buildi
 				failure : function(o){
 					btn.disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

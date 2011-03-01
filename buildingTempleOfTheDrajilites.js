@@ -118,7 +118,6 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 					planetsDetails.innerHTML = "";
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -158,7 +157,6 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 							this.maps[nLi.Planet.id] = o.result.map;
 							Lacuna.Messaging.attachmentPanel.load(o.result.map);
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}

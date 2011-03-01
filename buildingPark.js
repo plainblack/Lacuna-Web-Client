@@ -54,7 +54,6 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 					
 					this.UpdatePartyTab(o.result.party);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});	
 		},
@@ -123,7 +122,6 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 				failure : function(o){
 					Dom.get("parkSubsidize").disabled = false;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

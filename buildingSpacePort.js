@@ -159,7 +159,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.SpacePortPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -194,7 +193,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.ViewPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -229,7 +227,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.ForeignPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -328,7 +325,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.SpacePortPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -456,7 +452,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ViewPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -515,7 +510,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						this.Input.value = this.Ship.name;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -632,7 +626,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ForeignPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -685,7 +678,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					failure : function(o){
 						btn.disabled = false;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -728,7 +720,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					failure : function(o){
 						btn.disabled = false;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -763,7 +754,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					this.fireEvent("onMapRpc", o.result);
 					this.PopulateShipsSendTab(target, o.result.available);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 			
@@ -852,7 +842,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					failure : function(o){
 						btn.disabled = false;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

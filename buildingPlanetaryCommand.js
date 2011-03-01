@@ -104,7 +104,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 								
 								this.PlanPopulate();
 							},
-							timeout:Game.Timeout,
 							scope:this
 						});
 					}
@@ -158,7 +157,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 			}
@@ -198,7 +196,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 						Lib.fadeOutElm("commandPlanetRenameMessage");
 						return true;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				}
 			);

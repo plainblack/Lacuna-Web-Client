@@ -132,7 +132,6 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					}
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -352,7 +351,6 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 				failure: function(o) {
 					this.EmailDialog.getButtons()[0].disabled = false;
 				},
-				timeout: Game.Timeout,
 				scope: this
 			});
 		},
@@ -389,7 +387,6 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 						this.fireEvent('onResetSuccessful', o);
 						this.hide();
 					},
-					timeout: Game.Timeout,
 					scope: this
 				});
 			}

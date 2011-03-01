@@ -169,7 +169,6 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
                             }
 							Lacuna.Pulser.Hide();
                         },
-                        timeout:Game.Timeout,
                         scope:this
                     });
                 }

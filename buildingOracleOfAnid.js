@@ -135,7 +135,6 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 					Dom.get("oracleMessage").innerHTML = o.error.message;
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

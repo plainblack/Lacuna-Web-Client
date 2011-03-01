@@ -92,7 +92,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 							
 							this.PrisonersPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -182,7 +181,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					this.prisoners = o.result.prisoners;
 					this.PrisonersPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -211,7 +209,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -238,7 +235,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -267,7 +263,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 							
 							this.SpyPopulate();
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -338,7 +333,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					this.spies = o.result.spies;
 					this.SpyPopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 

@@ -96,7 +96,6 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
 								Lib.fadeOutElm("dumpMessage");
                             }
                         },
-                        timeout:Game.Timeout,
                         scope:this
                     });
                 }

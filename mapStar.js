@@ -741,7 +741,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						Event.purgeElement(this.Line);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + " to " + targetName + ".";
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -889,7 +888,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					}
 
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 			
@@ -1067,7 +1065,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						Lib.fadeOutElm("planetDetailRenameMessage");
 						return true;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				}
 			);
@@ -1112,7 +1109,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					};
 					this.populateSpies(tab);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1252,7 +1248,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					delete tab.avail.spyShips;
 					this.ShowSpies(tab);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

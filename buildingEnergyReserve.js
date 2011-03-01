@@ -95,7 +95,6 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
 								Lib.fadeOutElm("dumpMessage");
                             }
                         },
-                        timeout:Game.Timeout,
                         scope:this
                     });
                 }

@@ -194,7 +194,6 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 							Dom.get("geneticsLabMessage").innerHTML = "Unable to currently run experiments.  You can only have 1 graft per level of the Genetics Lab.";
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});	
 			}
@@ -219,7 +218,6 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 						Dom.setStyle("geneticsLabDetailsContainer", "display", "none");
 						this.updateDisplay(o.result);
 					},
-					timeout:Game.Timeout,
 					scope:this
 			});
 			}

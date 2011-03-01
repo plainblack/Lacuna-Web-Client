@@ -378,7 +378,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.fireEvent("onPageLoaded", o);
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -414,7 +413,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result, {sent:1});
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -450,7 +448,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -471,7 +468,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{inbox:1});
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -491,7 +487,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{sent:1});
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -511,7 +506,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -625,7 +619,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.displayMessage(o.result.message);
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -787,7 +780,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 							return true;
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -870,7 +862,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.archiveProcess(o.result);
 					this.fireEvent("onRpc", o.result);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -893,7 +884,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.archiveProcess(o.result);
 						this.fireEvent("onRpc", o.result);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -980,7 +970,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.loadTab();
 					this.displayMessage(message);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

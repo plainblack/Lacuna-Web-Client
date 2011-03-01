@@ -54,7 +54,6 @@ if (typeof YAHOO.lacuna.buildings.ThemePark == "undefined" || !YAHOO.lacuna.buil
 					
 					this.updateDisplay(o.result);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

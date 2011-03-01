@@ -421,7 +421,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.getStoredResources(true);
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -441,7 +440,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadGlyphs");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -460,7 +458,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadPlans");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -479,7 +476,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadPrisoners");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -498,7 +494,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadShips");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -516,7 +511,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadResources");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -625,7 +619,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						
 						this.AvailablePopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -722,7 +715,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 					this.AvailablePopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -761,7 +753,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						return true;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -781,7 +772,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					this.Self.rpcSuccess(o);
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -816,7 +806,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						
 						this.MinePopulate();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -897,7 +886,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 					this.MinePopulate();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -931,7 +919,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.getPrisoners(true);
 						this.getShips(true);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1338,7 +1325,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1750,7 +1736,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						Lib.fadeOutElm("tradePushMessage");
 						Lacuna.Pulser.Hide();
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}

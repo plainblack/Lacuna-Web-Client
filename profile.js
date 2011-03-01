@@ -86,7 +86,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 								this.populateSpecies();
 							}
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 					Game.Services.Empire.redefine_species_limits({session_id:Game.GetSession("")},{
@@ -99,7 +98,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 								this.populateSpecies();
 							}
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -258,7 +256,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 							this.new_password.focus();
 							return true;
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -345,7 +342,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						this.hide();
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -357,7 +353,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					this.fireEvent('onRpc', o.result);
 					this.populateProfile(o.result);
 				},
-				timeout:Game.Timeout,
 				scope:Lacuna.Profile
 			});
 			Game.OverlayManager.hideAll();
@@ -592,7 +587,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					this.SpeciesDialog.hide();
 					this.fireEvent('onRpc', o.result);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

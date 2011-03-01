@@ -80,7 +80,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 								}
 							}
 						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -331,7 +330,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}

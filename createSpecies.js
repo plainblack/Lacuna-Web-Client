@@ -70,7 +70,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					this.setMessage(o.error.message);
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -93,7 +92,6 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
 					this.setMessage(o.error.message);
 					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},

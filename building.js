@@ -165,7 +165,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					target.disabled = false;
 				},
 				target:this.building.url,
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -246,7 +245,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						this.removeBuildingTile(this.building);
 						this.fireEvent("onHide");					
 					},
-					timeout:Game.Timeout,
 					scope:this,
 					target:this.building.url
 				});
@@ -274,7 +272,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					
 						this.fireEvent("onHide");					
 					},
-					timeout:Game.Timeout,
 					scope:this,
 					target:this.building.url
 				});
@@ -305,7 +302,6 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					
 					this.fireEvent("onHide");
 				},
-				timeout:Game.Timeout,
 				scope:this,
 				target:building.url
 			});
