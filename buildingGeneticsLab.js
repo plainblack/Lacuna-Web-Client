@@ -302,3 +302,4 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("geneticslab", YAHOO.lacuna.buildings.GeneticsLab, {version: "1", build: "0"}); 
 
 }
+/* vim: noet:ts=4:sw=4 */

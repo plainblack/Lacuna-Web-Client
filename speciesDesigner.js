@@ -572,3 +572,4 @@ if (typeof YAHOO.lacuna.SpeciesDesigner == "undefined" || !YAHOO.lacuna.SpeciesD
 YAHOO.register("speciesDesigner", YAHOO.lacuna.SpeciesDesigner, {version: "1", build: "0"});
 
 }
+/* vim: noet:ts=4:sw=4 */

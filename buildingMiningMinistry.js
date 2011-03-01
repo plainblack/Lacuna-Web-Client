@@ -431,3 +431,4 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 YAHOO.register("miningministry", YAHOO.lacuna.buildings.MiningMinistry, {version: "1", build: "0"}); 
 
 }
+/* vim: noet:ts=4:sw=4 */

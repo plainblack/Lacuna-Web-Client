@@ -40,3 +40,4 @@ YAHOO.register("pulse", YAHOO.lacuna.Pulse, {version: "1.0.1", build: "2"});
 
 
 }
+/* vim: noet:ts=4:sw=4 */

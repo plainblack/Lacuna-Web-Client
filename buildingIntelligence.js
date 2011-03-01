@@ -548,3 +548,4 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 YAHOO.register("Intelligence", YAHOO.lacuna.buildings.Intelligence, {version: "1", build: "0"}); 
 
 }
+/* vim: noet:ts=4:sw=4 */

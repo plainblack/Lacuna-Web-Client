@@ -1714,3 +1714,4 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 YAHOO.register("trade", YAHOO.lacuna.buildings.Trade, {version: "1", build: "0"}); 
 
 }
+/* vim: noet:ts=4:sw=4 */

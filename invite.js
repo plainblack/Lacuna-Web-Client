@@ -141,3 +141,4 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 YAHOO.register("invite", YAHOO.lacuna.Invite, {version: "1", build: "0"}); 
 
 }
+/* vim: noet:ts=4:sw=4 */
