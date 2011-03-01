@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			var div = document.createElement("div");
 			div.innerHTML = ['<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
 				'<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
-                '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
+				'<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
 			Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
 		
 			var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });

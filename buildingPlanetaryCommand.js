@@ -130,27 +130,27 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					delete Game.EmpireData.planets[cp.id]; // Remove the abandoned planet
 
 					// Clean up the star map
-                    if(Lacuna.MapStar._map) {
-                        if(cp.x && cp.y) {
-                            if(Lacuna.MapStar._map.tileCache[cp.x] && Lacuna.MapStar._map.tileCache[cp.x][cp.y]) {
-                                delete Lacuna.MapStar._map.tileCache[cp.x][cp.y]; // Remove the planet from the cache
-                            }
-                            var tileId = ['tile',cp.x,cp.y,Lacuna.MapStar._map.zoom].join('_');
-                            var tile = Lacuna.MapStar._map.tileLayer.tileCache[tileId];
-                            if(tile) {
-                                if(tile.domElement) {
+					if(Lacuna.MapStar._map) {
+						if(cp.x && cp.y) {
+							if(Lacuna.MapStar._map.tileCache[cp.x] && Lacuna.MapStar._map.tileCache[cp.x][cp.y]) {
+								delete Lacuna.MapStar._map.tileCache[cp.x][cp.y]; // Remove the planet from the cache
+							}
+							var tileId = ['tile',cp.x,cp.y,Lacuna.MapStar._map.zoom].join('_');
+							var tile = Lacuna.MapStar._map.tileLayer.tileCache[tileId];
+							if(tile) {
+								if(tile.domElement) {
 									var domEl = tile.domElement; // get the element
-                                    var childEl = domEl.childNodes[1]; // find the alignment child
-                                    if(childEl) {
-                                        domEl.removeChild(childEl); // remove it
-                                    }
-                                }
-                                delete tile.data; // Remove the data
-                                delete tile.alignHolder; // Remove the alignment display
-                                tile.blank = true; // Force the planet to redraw
-                            }
-                        }
-                    }
+									var childEl = domEl.childNodes[1]; // find the alignment child
+									if(childEl) {
+										domEl.removeChild(childEl); // remove it
+									}
+								}
+								delete tile.data; // Remove the data
+								delete tile.alignHolder; // Remove the alignment display
+								tile.blank = true; // Force the planet to redraw
+							}
+						}
+					}
 
 					this.fireEvent("onHide");
 					Game.PlanetJump(); //jumps to home planet if nothing passed in

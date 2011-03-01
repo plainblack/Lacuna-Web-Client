@@ -690,7 +690,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				//wait for tab to display first
 				setTimeout(function() {
 					var Ht = Game.GetSize().h - 240;
-                    if(Ht > 300) { Ht = 300; }
+					if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
 					Dom.setStyle(tC,"overflow-y","auto");
@@ -859,14 +859,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 				}
 				
-                //wait for tab to display first
-                setTimeout(function() {
-                    var Ht = Game.GetSize().h - 185;
-                    if(Ht > 300) { Ht = 300; }
-                    var tC = details.parentNode;
-                    Dom.setStyle(tC,"height",Ht + "px");
-                    Dom.setStyle(tC,"overflow-y","auto");
-                },10);
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 185;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
 			}
 		},
 		MineHandlePagination : function(newState) {
@@ -955,13 +955,13 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				}
 			}
 			//wait for tab to display first
-            setTimeout(function() {
-                var Ht = Game.GetSize().h - 180;
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
 				if(Ht > 300) { Ht = 300; }
-                var aHt = Dom.get('aHt');
-                Dom.setStyle(aHt,"height",Ht + "px");
-                Dom.setStyle(aHt,"overflow-y","auto");
-            },10);
+				var aHt = Dom.get('aHt');
+				Dom.setStyle(aHt,"height",Ht + "px");
+				Dom.setStyle(aHt,"overflow-y","auto");
+			},10);
 		},
 		populateAddGlyphName : function() {
 			var elm = Dom.get("tradeAddGlyphName"),
@@ -1359,14 +1359,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					}
 				}
 			}
-            //wait for tab to display first
-            setTimeout(function() {
-                var Ht = Game.GetSize().h - 180;
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
 				if(Ht > 270) { Ht = 270; }
-                var pHt = Dom.get('pHt');
-                Dom.setStyle(pHt,"height",Ht + "px");
-                Dom.setStyle(pHt,"overflow-y","auto");
-            },10);
+				var pHt = Dom.get('pHt');
+				Dom.setStyle(pHt,"height",Ht + "px");
+				Dom.setStyle(pHt,"overflow-y","auto");
+			},10);
 		},
 		populatePushGlyphName : function() {
 			var elm = Dom.get("tradePushGlyphName"),

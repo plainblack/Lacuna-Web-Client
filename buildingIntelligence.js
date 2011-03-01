@@ -139,8 +139,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 		SpyInfo : function(spy) {
 			var assign = spy.possible_assignments,
 				div = document.createElement("div"),
-                ul = document.createElement("ul"),
-                li = document.createElement("li"),
+				ul = document.createElement("ul"),
+				li = document.createElement("li"),
 				isTraining;
 			var nDiv = div.cloneNode(false),
 				nUl = ul.cloneNode(false),

@@ -47,14 +47,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<div id="messagingArchiver">',
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
-                '               <select id="inboxTag">',
-                '                   <option value="">Inbox</option>',
-                '                   <option value="Correspondence">Correspondence</option>',
-                '                   <option value="Alert">Alerts</option>',
-                '                   <option value="Intelligence">Intel</option>',
-                '                   <option value="Medal">Medals</option>',
-                '                   <option value="Tutorial">Tutorial</option>',
-                '               </select>',
+				'				<select id="inboxTag">',
+				'					<option value="">Inbox</option>',
+				'					<option value="Correspondence">Correspondence</option>',
+				'					<option value="Alert">Alerts</option>',
+				'					<option value="Intelligence">Intel</option>',
+				'					<option value="Medal">Medals</option>',
+				'					<option value="Tutorial">Tutorial</option>',
+				'				</select>',
 				'			</div>',
 				'			<div id="mHt" class="yui-u first" style="width:36%;overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'				<div id="messagingPaginator">',
@@ -100,9 +100,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//tabs
 				this.create = Dom.get("messagingCreate");
 				this.inbox = Dom.get("messagingInbox");
-                this.inboxTag = Dom.get("inboxTag");
-                this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
-                Event.on("inboxTag", "change", this.updateTag, this, true);
+				this.inboxTag = Dom.get("inboxTag");
+				this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+				Event.on("inboxTag", "change", this.updateTag, this, true);
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
 				this.announce = Dom.get("messagingAnnounce");
@@ -338,10 +338,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 			this._setTab(this.create);
 		},
-        updateTag : function() {
-            this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
-            this.loadInboxMessages();
-        },
+		updateTag : function() {
+			this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+			this.loadInboxMessages();
+		},
 		loadInboxMessages : function() {
 			this._setTab(this.inbox);
 			if(this.pager) {this.pager.destroy();}
