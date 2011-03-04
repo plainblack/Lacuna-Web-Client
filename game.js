@@ -347,10 +347,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						YAHOO.log(o, "error", logNS);
 						Lacuna.Pulser.Hide();
 						Game.Failure(o, retry, failure);
-					},
-					timeout:Game.Timeout
+					}
 				};
-				YAHOO.lang.augmentObject(opts, origOpts, 'timeout');
+				YAHOO.lang.augmentObject(opts, origOpts);
+				if (!('timeout' in opts)) {
+					opts.timeout = Game.Timeout;
+				}
 				method(params, opts);
 			};
 			return func;
