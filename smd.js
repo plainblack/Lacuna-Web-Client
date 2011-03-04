@@ -2722,7 +2722,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 			"services": {
 				"fetch" : {
 					"description": "Retrieves a captcha that is required in order to call the solve method.",
-					"parameters": [],
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
 					"returns":{"type":"object"}
 				},
 				"solve" : {
