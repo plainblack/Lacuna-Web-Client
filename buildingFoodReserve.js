@@ -183,4 +183,4 @@ if (typeof YAHOO.lacuna.buildings.FoodReserve == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("foodreserve", YAHOO.lacuna.buildings.FoodReserve, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

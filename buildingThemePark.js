@@ -103,4 +103,4 @@ if (typeof YAHOO.lacuna.buildings.ThemePark == "undefined" || !YAHOO.lacuna.buil
 YAHOO.register("ThemePark", YAHOO.lacuna.buildings.ThemePark, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

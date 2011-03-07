@@ -124,4 +124,4 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
 YAHOO.register("network19", YAHOO.lacuna.buildings.Network19, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

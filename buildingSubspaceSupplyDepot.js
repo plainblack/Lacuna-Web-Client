@@ -120,4 +120,4 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 YAHOO.register("SubspaceSupplyDepot", YAHOO.lacuna.buildings.SubspaceSupplyDepot, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

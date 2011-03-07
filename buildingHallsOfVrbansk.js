@@ -102,4 +102,4 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 YAHOO.register("HallsOfVrbansk", YAHOO.lacuna.buildings.HallsOfVrbansk, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

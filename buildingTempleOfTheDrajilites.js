@@ -174,4 +174,4 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
 YAHOO.register("templeofthedrajilites", YAHOO.lacuna.buildings.TempleOfTheDrajilites, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

@@ -148,4 +148,4 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 YAHOO.register("libraryofjith", YAHOO.lacuna.buildings.LibraryOfJith, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

@@ -215,4 +215,4 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 YAHOO.register("OracleOfAnid", YAHOO.lacuna.buildings.OracleOfAnid, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

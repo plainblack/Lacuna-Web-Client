@@ -182,4 +182,4 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("Observatory", YAHOO.lacuna.buildings.Observatory, {version: "1", build: "0"}); 
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4

@@ -705,4 +705,4 @@ if (typeof YAHOO.lacuna.TextboxList == "undefined" || !YAHOO.lacuna.TextboxList)
 YAHOO.register("textboxList", YAHOO.lacuna.TextboxList, {version: "1.0.0", build: "1"});
 
 }
-/* vim: noet:ts=4:sw=4 */
+// vim: noet:ts=4:sw=4
