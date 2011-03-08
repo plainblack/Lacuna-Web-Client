@@ -128,6 +128,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Game.Reset();
 				window.location = o.error.data;
 			}
+			else if(o.error.code == 1016) {
+				Lacuna.Captcha.show(retry, function(){ fail(true); });
+			}
 			// Internal error
 			else if(o.error.code == -32603) {
 				Game.QuickDialog({
@@ -336,13 +339,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				var opts = {
 					failure : function(o) {
 						var self = this;
-						var failure = function(){
+						var failure = function(silent){
 							if(Lang.isFunction(origOpts.failure)) {
 								if (origOpts.failure.call(self, o)) {
 									return;
 								}
 							}
-							alert(o.error.message);
+							if (! silent) {
+								alert(o.error.message);
+							}
 						};
 						YAHOO.log(o, "error", logNS);
 						Lacuna.Pulser.Hide();
