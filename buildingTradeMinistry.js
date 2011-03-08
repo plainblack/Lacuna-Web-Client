@@ -161,9 +161,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			if(this.minePage) {
 				this.minePage.destroy();
 			}
-			if(this.acceptVerify) {
-				this.acceptVerify.destroy();
-			}
 			Trade.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
@@ -401,78 +398,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		
 		//View Available
-		_buildAcceptCaptcha : function() {
-			var panelId = "tradeAcceptVerify";
-			
-			var panel = document.createElement("div");
-			panel.id = panelId;
-			panel.innerHTML = ['<div class="hd">Verify</div>',
-				'<div class="bd">',
-				'	<div style="margin:5px 0;padding:2px;">',
-				'		<div id="tradeAcceptVerifymessage"></div>',
-				'		<div id="tradeAcceptVerifycaptcha" style="margin:5px 0;"></div>',
-				'		<label for="tradeAcceptVerifyanswer">Answer:</label><input type="text" id="tradeAcceptVerifyanswer" />',
-				'	</div>',
-				'	<div id="tradeAcceptVerifyerror" class="alert" style="text-align:right;"></div>',
-				'</div>'].join('');
-			document.body.insertBefore(panel, document.body.firstChild);
-			
-			this.acceptVerify = new YAHOO.widget.Dialog(panelId, {
-				constraintoviewport:true,
-				visible:false,
-				draggable:true,
-				effect:Game.GetContainerEffect(),
-				modal:true,
-				fixedcenter:true,
-				close:true,
-				width:"400px",
-				underlay:false,
-				zIndex:10000,
-				context:["header","tl","bl"]
-			});
-
-			this.acceptVerify.renderEvent.subscribe(function(){
-				this.message = Dom.get("tradeAcceptVerifymessage");
-				this.captcha = Dom.get("tradeAcceptVerifycaptcha");
-				this.answer = Dom.get("tradeAcceptVerifyanswer");
-				this.error = Dom.get("tradeAcceptVerifyerror");
-			});
-			this.acceptVerify.hideEvent.subscribe(function(){
-				this.message.innerHTML = "";
-				this.captcha.innerHTML = "";
-				this.answer.value = "";
-			});
-			this.acceptVerify.load = function(oSelf) {
-				var captcha = oSelf.Self.availableTrades.captcha;
-				
-				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
-					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
-				
-				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> essentia and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
-				this.setCaptcha(captcha.url);
-				
-				this.show();
-			};
-			this.acceptVerify.setCaptcha = function(url) {
-				this.captcha.innerHTML = ['<img src="', url, '" alt="Loading captcha.  If it does not appear please cancel the trade and try again." />'].join('');
-			};
-			this.acceptVerify.setError = function(msg) {
-				this.answer.value = "";
-				this.error.innerHTML = msg;
-				var a = new Util.Anim(this.error, {opacity:{from:1,to:0}}, 4);
-				a.onComplete.subscribe(function(){
-					this.error.innerHTML = "";
-					//Dom.setStyle(this.error, "opacity", 1);
-				}, this, true);
-				a.animate();
-			};
-			this.acceptVerify.getAnswer = function() {
-				return this.answer.value;
-			};
-
-			this.acceptVerify.render();
-			Game.OverlayManager.register(this.acceptVerify);
-		},
 		getAvailable : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
@@ -606,36 +531,18 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			this.availablePager.setState(newState);
 		},
 		AvailableAccept : function() {
-			if(!this.Self.acceptVerify) {
-				this.Self._buildAcceptCaptcha.call(this.Self);
-			}
-			
-			this.Self.acceptVerify.load(this);
-		},
-		AvailableAcceptVerified : function() {
 			Lacuna.Pulser.Show();
 			this.Self.service.accept_from_market({
 				session_id:Game.GetSession(""),
 				building_id:this.Self.building.id,
-				trade_id:this.Trade.id,
-				captcha_guid:this.Self.availableTrades.captcha.guid,
-				captcha_solution:this.Self.acceptVerify.getAnswer()
+				trade_id:this.Trade.id
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.accept_trade.success");
 					this.Self.rpcSuccess(o);
-					this.Self.acceptVerify.hide();
 					//force get the new availabe list after accepting so we get a new captcha
 					this.Self.getAvailable({newValue:true});
 					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					if(o.error.code == 1014) {
-						this.Self.availableTrades.captcha = o.error.data;
-						this.Self.acceptVerify.setCaptcha(o.error.data.url);
-						this.Self.acceptVerify.setError(o.error.message);
-						return true;
-					}
 				},
 				scope:this
 			});
