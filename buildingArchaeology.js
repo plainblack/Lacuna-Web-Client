@@ -347,12 +347,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						
 						this.populateSearch();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Archaeology.getOres.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -369,12 +363,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						
 						this.populateView();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Archaeology.getGlyphs.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -396,12 +384,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					delete this.glyphs;
 					this.getGlyphs();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Archaeology.assembleGlyph.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -422,12 +404,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 						//this.updateBuildingTile(o.result.building);
 						this.checkIfWorking();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Archaeology.searchForGlyph.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -450,11 +426,6 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 					Dom.get("archaeologySearchTime").innerHTML = "";
 					this.checkIfWorking();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -466,3 +437,4 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("archaeology", YAHOO.lacuna.buildings.Archaeology, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

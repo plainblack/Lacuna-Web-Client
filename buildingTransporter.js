@@ -165,9 +165,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			if(this.minePage) {
 				this.minePage.destroy();
 			}
-			if(this.acceptVerify) {
-				this.acceptVerify.destroy();
-			}
 			Transporter.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
@@ -421,13 +418,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.getStoredResources(true);
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Transporter.Trade.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -447,12 +437,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadGlyphs");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -471,12 +455,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadPlans");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -495,12 +473,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadPrisoners");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -519,12 +491,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadShips");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -542,90 +508,11 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.fireEvent("onLoadResources");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
 		},
 		
-		//View Available
-		_buildAcceptCaptcha : function() {
-			var panelId = "tradeAcceptVerify";
-			
-			var panel = document.createElement("div");
-			panel.id = panelId;
-			panel.innerHTML = ['<div class="hd">Verify</div>',
-				'<div class="bd">',
-				'	<div style="margin:5px 0;padding:2px;">',
-				'		<div id="tradeAcceptVerifymessage"></div>',
-				'		<div id="tradeAcceptVerifycaptcha" style="margin:5px 0;"></div>',
-				'		<label for="tradeAcceptVerifyanswer">Answer:</label><input type="text" id="tradeAcceptVerifyanswer" />',
-				'	</div>',
-				'	<div id="tradeAcceptVerifyerror" class="alert" style="text-align:right;"></div>',
-				'</div>'].join('');
-			document.body.insertBefore(panel, document.body.firstChild);
-			
-			this.acceptVerify = new YAHOO.widget.Dialog(panelId, {
-				constraintoviewport:true,
-				visible:false,
-				draggable:true,
-				effect:Game.GetContainerEffect(),
-				modal:true,
-				fixedcenter:true,
-				close:true,
-				width:"400px",
-				underlay:false,
-				zIndex:10000,
-				context:["header","tl","bl"]
-			});
-
-			this.acceptVerify.renderEvent.subscribe(function(){
-				this.message = Dom.get("tradeAcceptVerifymessage");
-				this.captcha = Dom.get("tradeAcceptVerifycaptcha");
-				this.answer = Dom.get("tradeAcceptVerifyanswer");
-				this.error = Dom.get("tradeAcceptVerifyerror");
-			});
-			this.acceptVerify.hideEvent.subscribe(function(){
-				this.message.innerHTML = "";
-				this.captcha.innerHTML = "";
-				this.answer.value = "";
-			});
-			this.acceptVerify.load = function(oSelf) {
-				var captcha = oSelf.Self.availableTrades.captcha;
-				
-				this.cfg.setProperty("buttons", [ { text:"Accept", handler:{fn:oSelf.Self.AvailableAcceptVerified, scope:oSelf} },
-					{ text:"Cancel", handler:this.cancel, isDefault:true }]);
-				
-				this.message.innerHTML = ['Solve the problem below to accept the trade asking for <span style="font-weight:bold">', oSelf.Trade.ask, '</span> essentia and offering <span style="font-weight:bold">', oSelf.Trade.offer.join(', '),'</span>.'].join('');
-				this.setCaptcha(captcha.url);
-				
-				this.show();
-			};
-			this.acceptVerify.setCaptcha = function(url) {
-				this.captcha.innerHTML = ['<img src="', url, '" alt="Loading captcha.  If it does not appear please cancel the trade and try again." />'].join('');
-			};
-			this.acceptVerify.setError = function(msg) {
-				this.answer.value = "";
-				this.error.innerHTML = msg;
-				var a = new Util.Anim(this.error, {opacity:{from:1,to:0}}, 4);
-				a.onComplete.subscribe(function(){
-					this.error.innerHTML = "";
-					//Dom.setStyle(this.error, "opacity", 1);
-				}, this, true);
-				a.animate();
-			};
-			this.acceptVerify.getAnswer = function() {
-				return this.answer.value;
-			};
-
-			this.acceptVerify.render();
-			Game.OverlayManager.register(this.acceptVerify);
-		},
 		getAvailable : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
@@ -656,12 +543,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						
 						this.AvailablePopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -733,7 +614,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				//wait for tab to display first
 				setTimeout(function() {
 					var Ht = Game.GetSize().h - 240;
-                    if(Ht > 300) { Ht = 300; }
+					if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
 					Dom.setStyle(tC,"overflow-y","auto");
@@ -758,12 +639,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 					this.AvailablePopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -771,43 +646,19 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 			this.availablePager.setState(newState);
 		},
 		AvailableAccept : function() {
-			if(!this.Self.acceptVerify) {
-				this.Self._buildAcceptCaptcha.call(this.Self);
-			}
-			
-			this.Self.acceptVerify.load(this);
-		},
-		AvailableAcceptVerified : function() {
 			Lacuna.Pulser.Show();
 			this.Self.service.accept_from_market({
 				session_id:Game.GetSession(""),
 				building_id:this.Self.building.id,
-				trade_id:this.Trade.id,
-				captcha_guid:this.Self.availableTrades.captcha.guid,
-				captcha_solution:this.Self.acceptVerify.getAnswer()
+				trade_id:this.Trade.id
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "Trade.accept_trade.success");
 					this.Self.rpcSuccess(o);
-					this.Self.acceptVerify.hide();
 					//force get the new availabe list after accepting so we get a new captcha
 					this.Self.getAvailable({newValue:true});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "Trade.accept_trade.failure");
-					
-					if(o.error.code == 1014) {
-						this.Self.availableTrades.captcha = o.error.data;
-						this.Self.acceptVerify.setCaptcha(o.error.data.url);
-						this.Self.acceptVerify.setError(o.error.message);
-					}
-					else {					
-						this.Self.rpcFailure(o);
-					}
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -827,11 +678,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					this.Self.rpcSuccess(o);
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -866,12 +712,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						
 						this.MinePopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Trade.view_my_trades.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -925,14 +765,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 				}
 				
-                //wait for tab to display first
-                setTimeout(function() {
-                    var Ht = Game.GetSize().h - 185;
-                    if(Ht > 300) { Ht = 300; }
-                    var tC = details.parentNode;
-                    Dom.setStyle(tC,"height",Ht + "px");
-                    Dom.setStyle(tC,"overflow-y","auto");
-                },10);
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 185;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
 			}
 		},
 		MineHandlePagination : function(newState) {
@@ -952,12 +792,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					
 					this.MinePopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Trade.view_available_trades.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -991,13 +825,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						this.getPrisoners(true);
 						this.getShips(true);
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.withdraw_trade.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1034,13 +861,13 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 				}
 			}
 			//wait for tab to display first
-            setTimeout(function() {
-                var Ht = Game.GetSize().h - 180;
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
 				if(Ht > 300) { Ht = 300; }
-                var aHt = Dom.get('aHt');
-                Dom.setStyle(aHt,"height",Ht + "px");
-                Dom.setStyle(aHt,"overflow-y","auto");
-            },10);
+				var aHt = Dom.get('aHt');
+				Dom.setStyle(aHt,"height",Ht + "px");
+				Dom.setStyle(aHt,"overflow-y","auto");
+			},10);
 		},
 		populateAddGlyphName : function() {
 			var elm = Dom.get("tradeAddGlyphName"),
@@ -1404,13 +1231,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					this.fireEvent("onSelectTab", this.mineTabIndex);
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "Trade.add_trade.failure");
-					
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1445,14 +1265,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 					}
 				}
 			}
-            //wait for tab to display first
-            setTimeout(function() {
-                var Ht = Game.GetSize().h - 180;
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 180;
 				if(Ht > 270) { Ht = 270; }
-                var pHt = Dom.get('pHt');
-                Dom.setStyle(pHt,"height",Ht + "px");
-                Dom.setStyle(pHt,"overflow-y","auto");
-            },10);
+				var pHt = Dom.get('pHt');
+				Dom.setStyle(pHt,"height",Ht + "px");
+				Dom.setStyle(pHt,"overflow-y","auto");
+			},10);
 		},
 		populatePushGlyphName : function() {
 			var elm = Dom.get("tradePushGlyphName"),
@@ -1822,13 +1642,6 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 						Lib.fadeOutElm("tradePushMessage");
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Trade.Push.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1842,3 +1655,4 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("transporter", YAHOO.lacuna.buildings.Transporter, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

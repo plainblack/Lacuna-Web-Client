@@ -345,6 +345,27 @@ dialogs
 	margin: 10px 0;
 }
 
+#captcha li label {
+	width:70px;
+	text-align:right;
+	padding-right:6px;
+	vertical-align:top;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
+}
+#captchaSolution {
+	width: 220px;
+}
+#captchaImage {
+	border: 1px solid #000;
+	vertical-align: top;
+	margin: 5px 0;
+}
+#captchaRefresh {
+	margin: 32px 0 0 13px;
+}
+
 /*
 menu
 */
@@ -2231,3 +2252,4 @@ TextboxList
     *display:inline; /*ie hack to make it think this is an inline-block*/
     overflow:hidden;
 }
+/* vim: noet:ts=4:sw=4 */

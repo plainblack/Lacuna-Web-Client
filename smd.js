@@ -1998,9 +1998,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"trade_id", "type":"string", "optional":false},
-							{"name":"captcha_guid", "type":"string", "optional":false},
-							{"name":"captcha_solution", "type":"string", "optional":false}
+							{"name":"trade_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					},
@@ -2217,9 +2215,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"trade_id", "type":"string", "optional":false},
-							{"name":"captcha_guid", "type":"string", "optional":false},
-							{"name":"captcha_solution", "type":"string", "optional":false}
+							{"name":"trade_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					},
@@ -2711,6 +2707,33 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				}
 			}
 		},
+		Captcha : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
+
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/captcha",
+			
+			"services": {
+				"fetch" : {
+					"description": "Retrieves a captcha that is required in order to call the solve method.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"solve" : {
+					"description": "Validates the user's solution against the known solution for the given guid.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"captcha_guid", "type":"string", "optional":false},
+						{"name":"captcha_solution", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				}
+			}
+		},
 		Inbox : {
 			"SMDVersion":"2.0",
 			"description": "SMD service demonstration",
@@ -3105,3 +3128,4 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

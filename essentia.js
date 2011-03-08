@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 
 	var Essentia = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		
 		this.id = "essentia";
 		
@@ -38,7 +37,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			zIndex:9999
 		});
 		this.Dialog.renderEvent.subscribe(function(){
-			try{
 			this.timeFood = Dom.get("essentialDetailsTimeFood");
 			this.timeOre = Dom.get("essentialDetailsTimeOre");
 			this.timeWater = Dom.get("essentialDetailsTimeWater");
@@ -59,7 +57,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				this.elEssentiaAmount.innerHTML = Game.EmpireData.essentia;
 			}, this, true);
 			Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-			}catch(e){alert(e);}
 		}, this, true);
 
 		this.Dialog.hideEvent.subscribe(function(){
@@ -188,10 +185,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					}, 1000);
 					this.populate(o.result);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Essentia.show.failure");
-				},
-				timeout:Game.Timeout,
 				scope:Lacuna.Essentia
 			});
 			Game.OverlayManager.hideAll();
@@ -220,12 +213,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 					this.elCode.value = '';
 					this.fireEvent('onRpc', o.result);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "EssentiaRedeem.show.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -259,11 +246,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 						this.update(o.result);
 						this.fireEvent("onRpc", o.result);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Essentia.boost.failure");
-						this.fireEvent("onRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -332,3 +314,4 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 YAHOO.register("essentia", YAHOO.lacuna.Essentia, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

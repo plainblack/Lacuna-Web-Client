@@ -237,11 +237,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.StashPopulate();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -553,12 +548,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -591,13 +580,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.CreateAlliance.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -617,12 +599,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.InvitesPopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Embassy.get_my_invites.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -716,13 +692,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.accept_invite.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -748,13 +717,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Line.parentNode.removeChild(this.Line);
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.reject_invite.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -783,13 +745,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					a.animate();
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "Embassy.update_alliance.failure");
-					
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -812,13 +767,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.addTab(this._getCreateTab());
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.leave_alliance.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -841,13 +789,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.addTab(this._getCreateTab());
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.dissolve_alliance.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -871,12 +812,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						this.PendingPopulate();
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Embassy.get_pending_invites.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -953,13 +888,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Line.parentNode.removeChild(this.Line);
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.withdraw_invite.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -984,13 +912,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.send_invite.failure");
-						
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1069,13 +990,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Self.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.expel_member.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1096,13 +1010,6 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						this.Self.MembersPopulate();
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Embassy.assign_alliance_leader.failure");
-						
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1115,3 +1022,4 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 YAHOO.register("embassy", YAHOO.lacuna.buildings.Embassy, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

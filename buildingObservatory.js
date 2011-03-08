@@ -69,12 +69,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							
 							this.ProbesDisplay();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Observatory.get_probed_stars.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -149,12 +143,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 					this.pager.setState(newState);
 					this.ProbesDisplay();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Observatory.ProbesHandlePagination.get_probed_stars.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -175,12 +163,6 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 							container.parentNode.removeChild(container);
 							this.probes = null;
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Observatory.ProbeAction.abandon_probe.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -200,3 +182,4 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("Observatory", YAHOO.lacuna.buildings.Observatory, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

@@ -15,7 +15,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		
 	var Messaging = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		this.createEvent("onShow");
 		this.createEvent("onPageLoaded");
 		this._buildPanel();
@@ -48,14 +47,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'			<div id="messagingArchiver">',
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
-                '               <select id="inboxTag">',
-                '                   <option value="">Inbox</option>',
-                '                   <option value="Correspondence">Correspondence</option>',
-                '                   <option value="Alert">Alerts</option>',
-                '                   <option value="Intelligence">Intel</option>',
-                '                   <option value="Medal">Medals</option>',
-                '                   <option value="Tutorial">Tutorial</option>',
-                '               </select>',
+				'				<select id="inboxTag">',
+				'					<option value="">Inbox</option>',
+				'					<option value="Correspondence">Correspondence</option>',
+				'					<option value="Alert">Alerts</option>',
+				'					<option value="Intelligence">Intel</option>',
+				'					<option value="Medal">Medals</option>',
+				'					<option value="Tutorial">Tutorial</option>',
+				'				</select>',
 				'			</div>',
 				'			<div id="mHt" class="yui-u first" style="width:36%;overflow-y: auto;border-right: 1px solid gray;position:relative;" >',
 				'				<div id="messagingPaginator">',
@@ -101,9 +100,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				//tabs
 				this.create = Dom.get("messagingCreate");
 				this.inbox = Dom.get("messagingInbox");
-                this.inboxTag = Dom.get("inboxTag");
-                this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
-                Event.on("inboxTag", "change", this.updateTag, this, true);
+				this.inboxTag = Dom.get("inboxTag");
+				this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+				Event.on("inboxTag", "change", this.updateTag, this, true);
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
 				this.announce = Dom.get("messagingAnnounce");
@@ -339,10 +338,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 			this._setTab(this.create);
 		},
-        updateTag : function() {
-            this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
-            this.loadInboxMessages();
-        },
+		updateTag : function() {
+			this.tag = this.inboxTag.options[this.inboxTag.selectedIndex].value;
+			this.loadInboxMessages();
+		},
 		loadInboxMessages : function() {
 			this._setTab(this.inbox);
 			if(this.pager) {this.pager.destroy();}
@@ -379,12 +378,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.fireEvent("onPageLoaded", o);
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadInboxMessages");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -420,12 +413,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result, {sent:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadSentMessages");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -461,12 +448,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.loadArchiveMessages");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -487,12 +468,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{inbox:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleInboxPagination");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -512,12 +487,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{sent:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleSentPagination");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -537,12 +506,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.processMessages(o.result,{archive:1});
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.handleArchivePagination");
-					this.fireEvent("onRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -656,12 +619,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.displayMessage(o.result.message);
 						Lacuna.Pulser.Hide();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						YAHOO.log(o, "error", "Messaging.loadMessage.failure");
-						this.fireEvent("onRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -818,15 +775,11 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "Messaging.sendMessage.failure");
 						if(o.error.code == 1005) {
 							this.createResponse.innerHTML = o.error.message;
-						}
-						else {
-							this.fireEvent("onRpcFailed", o);
+							return true;
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -909,11 +862,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.archiveProcess(o.result);
 					this.fireEvent("onRpc", o.result);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.archiveMessage.failure");
-					this.fireEvent("onRpcFailed", o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -936,11 +884,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 						this.archiveProcess(o.result);
 						this.fireEvent("onRpc", o.result);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Messaging.archiveMessages.failure");
-						this.fireEvent("onRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1027,11 +970,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.loadTab();
 					this.displayMessage(message);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Messaging.showMessage.failure");
-					this.fireEvent("onRpcFailed", o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1046,3 +984,4 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 YAHOO.register("messaging", YAHOO.lacuna.Messaging, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

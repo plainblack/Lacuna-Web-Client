@@ -92,12 +92,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 							
 							this.PrisonersPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Security.Security.view_prisoners.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -187,12 +181,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					this.prisoners = o.result.prisoners;
 					this.PrisonersPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Security.PrisonersHandlePagination.view_prisoners.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -221,12 +209,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Security.PrisonersExecute.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -253,12 +235,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 						}
 						this.Line.parentNode.removeChild(this.Line);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Security.PrisonersRelease.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -287,12 +263,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 							
 							this.SpyPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Security.Security.view_foreign_spies.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -363,12 +333,6 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 					this.spies = o.result.spies;
 					this.SpyPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Security.SpyHandlePagination.view_foreign_spies.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -384,3 +348,4 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
 YAHOO.register("Security", YAHOO.lacuna.buildings.Security, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

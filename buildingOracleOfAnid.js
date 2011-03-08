@@ -132,12 +132,9 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 					this.Display();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					//this.rpcFailure(o);
-					
 					Dom.get("oracleMessage").innerHTML = o.error.message;
+					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -218,3 +215,4 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
 YAHOO.register("OracleOfAnid", YAHOO.lacuna.buildings.OracleOfAnid, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

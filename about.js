@@ -69,10 +69,6 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 						YAHOO.log(o, "info", "Stats");
 						this.populateCredits(o.result);
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "StatsFailure");
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -118,3 +114,4 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 YAHOO.register("about", YAHOO.lacuna.About, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

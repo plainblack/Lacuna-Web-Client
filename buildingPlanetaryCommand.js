@@ -104,11 +104,6 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 								
 								this.PlanPopulate();
 							},
-							failure : function(o){
-								Lacuna.Pulser.Hide();
-								this.rpcFailure(o);
-							},
-							timeout:Game.Timeout,
 							scope:this
 						});
 					}
@@ -135,40 +130,33 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 					delete Game.EmpireData.planets[cp.id]; // Remove the abandoned planet
 
 					// Clean up the star map
-                    if(Lacuna.MapStar._map) {
-                        if(cp.x && cp.y) {
-                            if(Lacuna.MapStar._map.tileCache[cp.x] && Lacuna.MapStar._map.tileCache[cp.x][cp.y]) {
-                                delete Lacuna.MapStar._map.tileCache[cp.x][cp.y]; // Remove the planet from the cache
-                            }
-                            var tileId = ['tile',cp.x,cp.y,Lacuna.MapStar._map.zoom].join('_');
-                            var tile = Lacuna.MapStar._map.tileLayer.tileCache[tileId];
-                            if(tile) {
-                                if(tile.domElement) {
+					if(Lacuna.MapStar._map) {
+						if(cp.x && cp.y) {
+							if(Lacuna.MapStar._map.tileCache[cp.x] && Lacuna.MapStar._map.tileCache[cp.x][cp.y]) {
+								delete Lacuna.MapStar._map.tileCache[cp.x][cp.y]; // Remove the planet from the cache
+							}
+							var tileId = ['tile',cp.x,cp.y,Lacuna.MapStar._map.zoom].join('_');
+							var tile = Lacuna.MapStar._map.tileLayer.tileCache[tileId];
+							if(tile) {
+								if(tile.domElement) {
 									var domEl = tile.domElement; // get the element
-                                    var childEl = domEl.childNodes[1]; // find the alignment child
-                                    if(childEl) {
-                                        domEl.removeChild(childEl); // remove it
-                                    }
-                                }
-                                delete tile.data; // Remove the data
-                                delete tile.alignHolder; // Remove the alignment display
-                                tile.blank = true; // Force the planet to redraw
-                            }
-                        }
-                    }
+									var childEl = domEl.childNodes[1]; // find the alignment child
+									if(childEl) {
+										domEl.removeChild(childEl); // remove it
+									}
+								}
+								delete tile.data; // Remove the data
+								delete tile.alignHolder; // Remove the alignment display
+								tile.blank = true; // Force the planet to redraw
+							}
+						}
+					}
 
 					this.fireEvent("onHide");
 					Game.PlanetJump(); //jumps to home planet if nothing passed in
 					
 					Lacuna.Pulser.Hide();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					YAHOO.log(o, "error", "PlanetaryCommand.abandon.failure");
-					
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 			}
@@ -204,11 +192,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "PlanetaryCommand.Rename.failure");
 						Dom.get("commandPlanetRenameMessage").innerHTML = o.error.message;
 						Lib.fadeOutElm("commandPlanetRenameMessage");
+						return true;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				}
 			);
@@ -274,3 +261,4 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 YAHOO.register("planetarycommand", YAHOO.lacuna.buildings.PlanetaryCommand, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

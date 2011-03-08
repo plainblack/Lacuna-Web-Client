@@ -110,31 +110,29 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 			Game.GetStatus({
 				success:Game.Run,
 				failure:function(o){
-					if (o.error.code == 1002) {
-						Game.Reset();
-						Game.DoLogin(o.error);
-					}
-					else {
-						Game.Failure(o);
-					}
+					Game.Reset();
+					Game.DoLogin(o.error);
+					return true;
 				}
 			});
 		},
-		Failure : function(o){
-			YAHOO.log(o, "debug", "Game.Failure");
+		Failure : function(o, retry, fail) {
+			// session expired
 			if(o.error.code == 1006) {
 				Game.Reset();
 				Game.DoLogin(o.error);
 			}
+			// Game over
 			else if(o.error.code == 1200) {
 				alert(o.error.message);
 				Game.Reset();
 				window.location = o.error.data;
 			}
-			else if(o.error.message != "Internal error.") {
-				alert(o.error.message);
+			else if(o.error.code == 1016) {
+				Lacuna.Captcha.show(retry, function(){ fail(true); });
 			}
-			else {
+			// Internal error
+			else if(o.error.code == -32603) {
 				Game.QuickDialog({
 					width: "500px",
 					text: ['<p>An internal error has occurred.  Please report this on <a target="_blank" href="http://community.lacunaexpanse.com/forums/support">the support forums</a>, and include the data below.</p>',
@@ -146,6 +144,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}, function() {
 					Dom.get('internalErrorMessageText').value = o.error.data;
 				});
+			}
+			else {
+				fail();
 			}
 		},
 		InitLogin : function(error) {
@@ -211,13 +212,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					body = Game.GetCurrentPlanet();
 				BodyServ.get_status({session_id: session, body_id: body.id},{
 					success:Game.onRpc,
-					failure:function(o) {
-						// for refreshes like this, ignore communication errors
-						if (o.error.message == "Communication with the server has been interrupted for an unknown reason.") {
-							return;
-						}
-						Game.Failure(o);
-					}
+					failure:function(o){return true;}
 				});
 			}, 10 * 60 * 1000);
 
@@ -261,9 +256,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						window.env_executeCommand(o.result.login_command);
 					}
 				},
-				failure : function(o){
-					YAHOO.log(o, "debug", "Chat.get_commands.failure");
-				}
+				failure : function(o){ return true; }
 			});
 		},
 		InitEvents : function() {
@@ -273,11 +266,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				//Game.onTick.subscribe(Game.QueueProcess);
 				//this will be called on the first load and create menu
 				Lacuna.MapStar.subscribe("onMapRpc", Game.onRpc);
-				Lacuna.MapStar.subscribe("onMapRpcFailed", Game.Failure);
 				Lacuna.MapStar.subscribe("onChangeToPlanetView", Game.onChangeToPlanetView);
 								
 				Lacuna.MapPlanet.subscribe("onMapRpc", Game.onRpc);
-				Lacuna.MapPlanet.subscribe("onMapRpcFailed", Game.Failure);
 				
 				Lacuna.Menu.subscribe("onChangeClick", Game.onChangeClick);
 				Lacuna.Menu.subscribe("onInboxClick", function() {
@@ -287,16 +278,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				Lacuna.Menu.subscribe("onDestructClick", Game.onDestructClick);
 				
 				Lacuna.Messaging.subscribe("onRpc", Game.onRpc);
-				Lacuna.Messaging.subscribe("onRpcFailed", Game.Failure);
 				
 				Lacuna.Essentia.subscribe("onRpc", Game.onRpc);
-				Lacuna.Essentia.subscribe("onRpcFailed", Game.Failure);
 				
 				Lacuna.Invite.subscribe("onRpc", Game.onRpc);
-				Lacuna.Invite.subscribe("onRpcFailed", Game.Failure);
 				
 				Lacuna.Profile.subscribe("onRpc", Game.onRpc);
-				Lacuna.Profile.subscribe("onRpcFailed", Game.Failure);
 				
 				Game._hasRun = true;
 				
@@ -324,7 +311,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				if(smd.hasOwnProperty(sKey)) {
 					var oSmd = smd[sKey];
 					if(oSmd.services) {
-						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd, undefined, Game.RPCBase);
+						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd, {success:function(){
+							for (var methodName in this) {
+								if (this.hasOwnProperty(methodName) && Lang.isFunction(this[methodName])) {
+									var method = this[methodName];
+									this[methodName] = Game.WrappedService(method, sKey+'.'+methodName);
+								}
+							}
+						} }, Game.RPCBase);
 					}
 					else {
 						serviceOut[sKey] = Game.InitServices(oSmd);
@@ -332,6 +326,41 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 				}
 			}
 			return serviceOut;
+		},
+		WrappedService : function(method, name) {
+			var logNS = 'Game.RPC.'+name+'.failure';
+			var func = function(params, origOpts) {
+				var retry = function(){
+					var opts = { retry : 0 };
+					YAHOO.lang.augmentObject(opts, origOpts, true);
+					opts.retry++;
+					func(params, opts);
+				};
+				var opts = {
+					failure : function(o) {
+						var self = this;
+						var failure = function(silent){
+							if(Lang.isFunction(origOpts.failure)) {
+								if (origOpts.failure.call(self, o)) {
+									return;
+								}
+							}
+							if (! silent) {
+								alert(o.error.message);
+							}
+						};
+						YAHOO.log(o, "error", logNS);
+						Lacuna.Pulser.Hide();
+						Game.Failure(o, retry, failure);
+					}
+				};
+				YAHOO.lang.augmentObject(opts, origOpts);
+				if (!('timeout' in opts)) {
+					opts.timeout = Game.Timeout;
+				}
+				method(params, opts);
+			};
+			return func;
 		},
 		InitTips : function() {
 			if(!Game.Resources.tips && !Game.Resources.complete) {
@@ -479,13 +508,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					YAHOO.log(o, 'info', 'Game.onDestructClick.success');
 					Game.ProcessStatus(o.result.status);
 					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					YAHOO.log(o, 'error', 'Game.onDestructClick.failure');
-					Lacuna.Pulser.Hide();
-					Game.Failure.call(this, o);
-				},
-				timeout:Game.Timeout
+				}
 			});
 		},
 
@@ -594,16 +617,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					YAHOO.log(o, "info", "Game.GetStatus.success");
 					Lacuna.Game.ProcessStatus(o.result);
 					if(callback && callback.success) {
-						callback.success.call(this);
+						return callback.success.call(this);
 					}
 				},
 				failure : function(o) {
-					YAHOO.log(o, "error", "Game.GetStatus.failure");
 					if(callback && callback.failure) {
-						callback.failure.call(this, o);
+						return callback.failure.call(this, o);
 					}
 				},
-				timeout:Game.Timeout,
 				scope:callback && callback.scope || this
 			});
 		},
@@ -696,7 +717,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						YAHOO.log(ex);
 					}
 					Game.Resources.complete = 1;
-				}, 
+				},
 				failure: function(o) {
 					YAHOO.log(o, "error", "GetResources.failure");
 					Game.Resources.complete = 1;
@@ -745,13 +766,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					Game.Reset();
 					Game.DoLogin();
 					Lacuna.Pulser.Hide();
-				},
-				failure : function(o){
-					YAHOO.log(o, 'error', 'Game.Logout.failure');
-					Lacuna.Pulser.Hide();
-					Game.Failure.call(this, o);
-				},
-				timeout:Game.Timeout
+				}
 			});
 		},
 		Reset : function() {
@@ -844,11 +859,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.energy_stored > planet.energy_capacity) {
 							planet.energy_stored = planet.energy_capacity;
 						}
+						else if(planet.energy_stored < 0) {
+							planet.happiness += planet.energy_stored;
+							planet.energy_stored = 0;
+						}
 					}
 					if(planet.food_stored < planet.food_capacity){
 						planet.food_stored += planet.food_hour * ratio;
 						if(planet.food_stored > planet.food_capacity) {
 							planet.food_stored = planet.food_capacity;
+						}
+						else if(planet.food_stored < 0) {
+							planet.happiness += planet.food_stored;
+							planet.food_stored = 0;
 						}
 					}
 					if(planet.ore_stored < planet.ore_capacity){
@@ -856,11 +879,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.ore_stored > planet.ore_capacity) {
 							planet.ore_stored = planet.ore_capacity;
 						}
+						else if(planet.ore_stored < 0) {
+							planet.happiness += planet.ore_stored;
+							planet.ore_stored = 0;
+						}
 					}
 					if(planet.water_stored < planet.water_capacity){
 						planet.water_stored += planet.water_hour * ratio;
 						if(planet.water_stored > planet.water_capacity) {
 							planet.water_stored = planet.water_capacity;
+						}
+						else if(planet.water_stored < 0) {
+							planet.happiness += planet.water_stored;
+							planet.water_stored = 0;
 						}
 					}
 					
@@ -870,6 +901,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.waste_stored > planet.waste_capacity) {
 							wasteOverage = planet.waste_stored - planet.waste_capacity;
 							planet.waste_stored = planet.waste_capacity;
+						}
+						else if(planet.waste_stored < 0) {
+							planet.happiness += planet.waste_stored;
+							planet.waste_stored = 0;
 						}
 					}
 					else {
@@ -980,7 +1015,79 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 					}
 				}
 			}
-		}
+		},
+		onScroll : (function(){
+			var evName;
+			var func;
+			var pixelsPerLine = 10;
+			var ua = navigator.userAgent;
+			var safari5 = ua.match(/\bSafari\//) && ua.match(/\bVersion\/5/);
+			var isEventSupported = (function() {
+				var TAGNAMES = {
+					'select':'input',
+					'change':'input',
+					'submit':'form',
+					'reset':'form',
+					'error':'img',
+					'load':'img',
+					'abort':'img'
+				};
+				var cache = {};
+				function isEventSupported(eventName) {
+					var el = document.createElement(TAGNAMES[eventName] || 'div');
+					eventName = 'on' + eventName;
+					if (eventName in cache) {
+						return cache[eventName];
+					}
+					var isSupported = (eventName in el);
+					if (!isSupported) {
+						el.setAttribute(eventName, 'return;');
+						isSupported = typeof el[eventName] == 'function';
+					}
+					cache[eventName] = isSupported;
+					el = null;
+					return isSupported;
+				}
+				return isEventSupported;
+			})();
+			if (isEventSupported('mousewheel')) {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'mousewheel', function(e, o) {
+						var xDelta = 'wheelDeltaX' in e ? e.wheelDeltaX : 0;
+						var yDelta = 'wheelDeltaY' in e ? e.wheelDeltaY : e.wheelDelta;
+						// chrome/safari 4 give pixels
+						// safari 5 gives pixels * 120
+						if (safari5) {
+							xDelta /= 120;
+							yDelta /= 120;
+						}
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+			// not possible to feature detect this, have to just use the version number
+			else if (YAHOO.env.ua.gecko >= 1.9 && ! ua.match(/\brv:1\.9\.0/)) {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'MozMousePixelScroll', function(e, o) {
+						var xAxis = e.axis == e.HORIZONTAL_AXIS;
+						var xDelta = xAxis ? -e.detail : 0;
+						var yDelta = xAxis ? 0 : -e.detail;
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+			else {
+				return function(el, fn, obj, context) {
+					Event.on(el, 'DOMMouseScroll', function(e, o) {
+						var xAxis = 'axis' in e && e.axis == e.HORIZONTAL_AXIS;
+						// this event gets 'lines'
+						var xDelta = xAxis ? -e.detail * pixelsPerLine : 0;
+						var yDelta = xAxis ? 0 : -e.detail * pixelsPerLine;
+						fn.call(this, e, xDelta, yDelta, o);
+					}, obj, context);
+				};
+			}
+		})()
 	};
 	
 	YAHOO.lacuna.Game = Game;
@@ -988,3 +1095,4 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 YAHOO.register("game", YAHOO.lacuna.Game, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

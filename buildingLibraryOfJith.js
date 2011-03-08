@@ -85,11 +85,6 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 					this.rpcSuccess(o);
 					this.speciesDisplay(o.result.species);
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -153,3 +148,4 @@ if (typeof YAHOO.lacuna.buildings.LibraryOfJith == "undefined" || !YAHOO.lacuna.
 YAHOO.register("libraryofjith", YAHOO.lacuna.buildings.LibraryOfJith, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

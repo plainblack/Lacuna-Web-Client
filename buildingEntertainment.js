@@ -47,11 +47,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 						
 						this.LotteryPopulate(o.result.options);
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -114,11 +109,6 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 					this.SetQuacks();
 					Dom.get("entertainmentDuckMessage").innerHTML = o.result;
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -130,3 +120,4 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 YAHOO.register("Entertainment", YAHOO.lacuna.buildings.Entertainment, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

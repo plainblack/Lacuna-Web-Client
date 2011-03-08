@@ -127,12 +127,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							
 							this.SpyPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "Intelligence.Intelligence.view_spies.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -145,8 +139,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 		SpyInfo : function(spy) {
 			var assign = spy.possible_assignments,
 				div = document.createElement("div"),
-                ul = document.createElement("ul"),
-                li = document.createElement("li"),
+				ul = document.createElement("ul"),
+				li = document.createElement("li"),
 				isTraining;
 			var nDiv = div.cloneNode(false),
 				nUl = ul.cloneNode(false),
@@ -357,12 +351,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					this.spies = o.result;
 					this.SpyPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Intelligence.SpyHandlePagination.view_spies.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -410,12 +398,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					Event.purgeElement(ol);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Intelligence.SpyAssign.failure");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 					this.Assign.selectedIndex = this.Assign.defaultIndex;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -442,12 +426,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 						this.Line.parentNode.removeChild(this.Line);
 						this.Self.result.spies.current = (this.Self.result.spies.current*1) - 1;
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Intelligence.SpyBurn.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -498,14 +476,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					this.Self.SpyNameClear.call(this);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Intelligence.SpyNameSave.failure");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 					if(this.Input) {
 						this.Input.value = this.Spy.name;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -540,12 +514,6 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							//this.UpdateCost(this.spies.training_costs, trained);
 						}
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "Intelligence.SpyTrain.failure");
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -566,11 +534,8 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 					this.spiesView({newValue:1});
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
 					Dom.get("spiesSubsidize").disabled = false;
-					this.rpcFailure(o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -583,3 +548,4 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 YAHOO.register("Intelligence", YAHOO.lacuna.buildings.Intelligence, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4
