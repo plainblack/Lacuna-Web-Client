@@ -1476,9 +1476,9 @@ planet details
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
 }
-.pcStored { width:60px; }
-.pcCapacity { width:65px; }
-.pcPerHour { width:40px; }
+.pcStored { width:100px; }
+.pcCapacity { width:100px; }
+.pcPerHour { width:50px; }
 .pcSlash {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
