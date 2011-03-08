@@ -854,11 +854,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.energy_stored > planet.energy_capacity) {
 							planet.energy_stored = planet.energy_capacity;
 						}
+						else if(planet.energy_stored < 0) {
+							planet.happiness += planet.energy_stored;
+							planet.energy_stored = 0;
+						}
 					}
 					if(planet.food_stored < planet.food_capacity){
 						planet.food_stored += planet.food_hour * ratio;
 						if(planet.food_stored > planet.food_capacity) {
 							planet.food_stored = planet.food_capacity;
+						}
+						else if(planet.food_stored < 0) {
+							planet.happiness += planet.food_stored;
+							planet.food_stored = 0;
 						}
 					}
 					if(planet.ore_stored < planet.ore_capacity){
@@ -866,11 +874,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.ore_stored > planet.ore_capacity) {
 							planet.ore_stored = planet.ore_capacity;
 						}
+						else if(planet.ore_stored < 0) {
+							planet.happiness += planet.ore_stored;
+							planet.ore_stored = 0;
+						}
 					}
 					if(planet.water_stored < planet.water_capacity){
 						planet.water_stored += planet.water_hour * ratio;
 						if(planet.water_stored > planet.water_capacity) {
 							planet.water_stored = planet.water_capacity;
+						}
+						else if(planet.water_stored < 0) {
+							planet.happiness += planet.water_stored;
+							planet.water_stored = 0;
 						}
 					}
 					
@@ -880,6 +896,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						if(planet.waste_stored > planet.waste_capacity) {
 							wasteOverage = planet.waste_stored - planet.waste_capacity;
 							planet.waste_stored = planet.waste_capacity;
+						}
+						else if(planet.waste_stored < 0) {
+							planet.happiness += planet.waste_stored;
+							planet.waste_stored = 0;
 						}
 					}
 					else {
