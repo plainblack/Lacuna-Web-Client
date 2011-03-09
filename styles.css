@@ -1828,7 +1828,18 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:60px;
 	float:right;
 }
-
+.spyInfo .spyMissionCounts {
+	width:100px;
+}
+.spyInfo .spyOffensiveMissions {
+	width:100px;
+}
+.spyInfo .spyDefensiveMissions {
+	width:100px;
+}
+.spyInfo .spyTotalMissions {
+	width:100px;
+}
 
 .shipInfo .shipType {
 	width:180px;

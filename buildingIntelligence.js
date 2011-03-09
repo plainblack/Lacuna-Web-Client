@@ -275,6 +275,31 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			nLi.innerHTML = "<label>Theft:</label>"+spy.theft;
 			nUl.appendChild(nLi);
 
+			var mission_count = spy.mission_count;
+			nDiv.appendChild(nUl);
+			nUl = ul.cloneNode(false);
+			Dom.addClass(nUl, "clearafter");
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyMissionCounts");
+			nLi.innerHTML = "<label>Mission Count</label>";
+			nUl.appendChild(nLi);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyOffensiveMissions");
+			nLi.innerHTML = "<label>Offensive:</label>"+mission_count.offensive;
+			nUl.appendChild(nLi);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyDefensiveMissions");
+			nLi.innerHTML = "<label>Defensive:</label>"+mission_count.defensive;
+			nUl.appendChild(nLi);
+
+			nLi = li.cloneNode(false);
+			Dom.addClass(nLi,"spyTotalMissions");
+			nLi.innerHTML = "<label>Total:</label>"+(parseInt(mission_count.defensive,10)+parseInt(mission_count.offensive,10));
+			nUl.appendChild(nLi);
+
 			nLi = li.cloneNode(false);
 			Dom.addClass(nLi,"spyBurn");
 			var bbtn = document.createElement("button");
