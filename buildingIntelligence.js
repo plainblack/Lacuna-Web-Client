@@ -574,6 +574,4 @@ YAHOO.register("Intelligence", YAHOO.lacuna.buildings.Intelligence, {version: "1
 
 }
 
-/* 
- * vim: noet:ts=4:sw=4 
- */
+// vim: noet:ts=4:sw=4 
