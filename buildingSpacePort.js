@@ -171,7 +171,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			if(e.newValue) {
 				if(!this.shipsView) {
 					Lacuna.Pulser.Show();
-					this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+					this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,paging:{page_number:1}}, {
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
 							Lacuna.Pulser.Hide();
@@ -440,7 +440,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.service.view_all_ships({
 				session_id:Game.GetSession(),
 				building_id:this.building.id,
-				page_number:newState.page
+				paging:{page_number:newState.page}
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_ships.success");
