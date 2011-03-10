@@ -1691,7 +1691,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"page_number", "type":"string", "optional":false}
+							{"name":"paging", "type":"object", "optional":true},
+							{"name":"filter", "type":"object", "optional":true},
+							{"name":"sort", "type":"string", "optional":true}
 						],
 						"returns":{"type":"object"}
 						/*
