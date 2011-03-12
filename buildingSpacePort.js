@@ -413,7 +413,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						bbtn = nLi.appendChild(bbtn);
 						Event.on(bbtn, "click", this.ShipScuttle, {Self:this,Ship:ship,Line:nUl}, true);
 					}
-					else if(ship.task == "Defend") {
+					else if(ship.task == "Defend"||ship.task == "Orbiting") {
 						var dbtn = document.createElement("button");
 						dbtn.setAttribute("type", "button");
 						dbtn.innerHTML = "Recall";
