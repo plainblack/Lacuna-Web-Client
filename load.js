@@ -256,6 +256,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "stationcommand",
+		type: "js",
+		fullpath: urlBuilder("buildingStationCommand.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "subspacesupplydepot",
 		type: "js",
 		fullpath: urlBuilder("buildingSubspaceSupplyDepot.js"),
@@ -324,6 +330,7 @@
 			"security",
 			"shipyard",
 			"spaceport",
+			"stationcommand",
 			"subspacesupplydepot",
 			"templeofthedrajilites",
 			"themepark",

@@ -1783,6 +1783,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
 				}
 			},
+			StationCommand : {
+				"SMDVersion":"2.0",
+				"description": "Station Command",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/stationcommand",
+
+				"services": {
+					"view_plans" : {
+						"description": "Returns a list of all the plans you've collected through various means.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			SubspaceSupplyDepot : {
 				"SMDVersion":"2.0",
 				"description": "Subspace Supply Depot",

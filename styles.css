@@ -34,21 +34,29 @@ h1,h2,h3,h4,h5,h6 {
 }
 button, input[type="submit"], input[type="button"], .button {
 	padding: 2px 6px 3px;
+	margin: 1px;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-style: solid;
-	border-width: 2px;
-	border-color: #3555a5 #254595 #254595 #3555a5;
-	background-color: #103070;
+	border-width: 1px;
+	border-color: #fefefe #dedede #dedede #fefefe;
+	background: #103070 url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/bar_bottom_back.png") 0 -10px;
 	color: #ffffff;
 }
-button:active, input[type="submit"]:active, input[type="button"]:active, .button:active {
-	background-color: #002060;
+button:hover:active, input[type="submit"]:hover:active, input[type="button"]:hover:active, .button:hover:active {
+	/*background-color: #002060;*/
+	background-position: 0 -30px;
 	border-color: #254595 #153585 #153585 #254595;
+}
+button:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+	border-color: #254595 #3555a5 #3555a5 #254595;
+	/*background-color: #183878;*/
+	background-position: 0 -20px;
 }
 button[disabled], input[type="submit"][disabled], input[type="button"][disabled], .button[disabled] {
 	border-color: #3555a5 #254595 #254595 #3555a5;
 	background-color: #204070;
+	background-image:none;
 	color: #808080;
 }
 .button {

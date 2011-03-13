@@ -12,6 +12,39 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 		
+	var FactoryMap = {
+		"/archaeology": Lacuna.buildings.Archaeology,
+		"/capitol": Lacuna.buildings.Capitol,
+		"/development": Lacuna.buildings.Development,
+		"/embassy": Lacuna.buildings.Embassy,
+		"/energyreserve": Lacuna.buildings.EnergyReserve,
+		"/entertainment": Lacuna.buildings.Entertainment,
+		"/foodreserve": Lacuna.buildings.FoodReserve,
+		"/hallsofvrbansk": Lacuna.buildings.HallsOfVrbansk,
+		"/geneticslab": Lacuna.buildings.GeneticsLab,
+		"/intelligence": Lacuna.buildings.Intelligence,
+		"/libraryofjith": Lacuna.buildings.LibraryOfJith,
+		"/miningministry": Lacuna.buildings.MiningMinistry,
+		"/missioncommand": Lacuna.buildings.MissionCommand,
+		"/network19": Lacuna.buildings.Network19,
+		"/observatory": Lacuna.buildings.Observatory,
+		"/oracleofanid": Lacuna.buildings.OracleOfAnid,
+		"/orestorage": Lacuna.buildings.OreStorage,
+		"/park": Lacuna.buildings.Park,
+		"/planetarycommand": Lacuna.buildings.PlanetaryCommand,
+		"/security": Lacuna.buildings.Security,
+		"/shipyard": Lacuna.buildings.Shipyard,
+		"/spaceport": Lacuna.buildings.SpacePort,
+		"/stationcommand": Lacuna.buildings.StationCommand,
+		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
+		"/themepark": Lacuna.buildings.ThemePark,
+		"/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
+		"/trade": Lacuna.buildings.Trade,
+		"/transporter": Lacuna.buildings.Transporter,
+		"/waterstorage": Lacuna.buildings.WaterStorage,
+		"/wasterecycling": Lacuna.buildings.WasteRecycling
+	};
+		
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
 		
@@ -863,7 +896,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}, tile.x, tile.y);
 		},
 		BuildingFactory : function(result) {
-			var classObj;
+			/*var classObj;
 			switch(result.building.url){
 				case "/archaeology":
 					classObj = new Lacuna.buildings.Archaeology(result);
@@ -931,6 +964,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/spaceport":
 					classObj = new Lacuna.buildings.SpacePort(result);
 					break;
+				case "/stationcommand":
+					classObj = new Lacuna.buildings.StationCommand(result);
+					break;
 				case "/subspacesupplydepot":
 					classObj = new Lacuna.buildings.SubspaceSupplyDepot(result);
 					break;
@@ -955,7 +991,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				default:
 					classObj = new Lacuna.buildings.Building(result);
 					break;
-			}
+			}*/
+			
+			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
+				classObj = new classConstructor(result);
 			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
