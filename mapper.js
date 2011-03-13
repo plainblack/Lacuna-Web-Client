@@ -214,13 +214,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		refresh : function() {
 			var obj = this.map.getTile(this.x,this.y,this.z);
 			this.blank = obj.blank;
-			this.url = obj.url;
 			this.data = obj.data;
-			if(this.url) {
-				Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
-			}
-			else {
-				Dom.setStyle(this.domElement, "background", 'transparent');
+			if(this.url != obj.url) {
+				this.url = obj.url;
+				if(this.url) {
+					Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
+				}
+				else {
+					Dom.setStyle(this.domElement, "background", 'transparent');
+				}
 			}
 		},
 		
@@ -452,7 +454,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		finishTick : function() {
 			this.stopTick();
-			this.fireEvent("onReload", this);
+			if(this.data.pending_build && this.data.upgrade) {
+				delete this.data.pending_build;
+				this.data.level = (this.data.level*1) + 1;
+				this.data.image = this.data.upgrade.image;
+				this.map.addSingleTileData(this.data);
+				this.refresh();
+			}
+			else {
+				this.fireEvent("onReload", this);
+			}
 		},
 		tick : function(e, oArgs) {
 			var tickSec = oArgs[0]/1000, hasUpgrade, hasWork;
@@ -460,7 +471,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.data.pending_build.seconds_remaining -= tickSec;
 				var remainingBuild = Math.round(this.data.pending_build.seconds_remaining);
 				var upgrade = this.data.upgrade;
-				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && ! upgrade.preloaded) {
+				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && !upgrade.preloaded) {
 					upgrade.preloaded = true;
 					var imgSize = this.map.getTileImageSize();
 					var img = new Image();
@@ -1498,7 +1509,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				if(oTiles.hasOwnProperty(tKey)){
 					var tile = oTiles[tKey];
 					tile.id = tKey;
-					if(tile.url == "/planetarycommand") {
+					if(tile.url == "/planetarycommand" || tile.url == "/stationcommand") {
 						this.command = tile;
 						this.command.x *= 1;
 						this.command.y *= 1;
@@ -1523,7 +1534,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			return startZoomLevel;
 		},
 		addSingleTileData : function(oBuilding) {
-			if(oBuilding.url == "/planetarycommand") {
+			if(oBuilding.url == "/planetarycommand" || oBuilding.url == "/stationcommand") {
 				this.command = oBuilding;
 				this.command.x *= 1;
 				this.command.y *= 1;
