@@ -1691,7 +1691,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"page_number", "type":"string", "optional":false}
+							{"name":"paging", "type":"object", "optional":true},
+							{"name":"filter", "type":"object", "optional":true},
+							{"name":"sort", "type":"string", "optional":true}
 						],
 						"returns":{"type":"object"}
 						/*
@@ -1779,6 +1781,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						*/
 					}
 
+				}
+			},
+			StationCommand : {
+				"SMDVersion":"2.0",
+				"description": "Station Command",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/stationcommand",
+
+				"services": {
+					"view_plans" : {
+						"description": "Returns a list of all the plans you've collected through various means.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
 				}
 			},
 			SubspaceSupplyDepot : {
@@ -1998,9 +2019,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"trade_id", "type":"string", "optional":false},
-							{"name":"captcha_guid", "type":"string", "optional":false},
-							{"name":"captcha_solution", "type":"string", "optional":false}
+							{"name":"trade_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					},
@@ -2217,9 +2236,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
-							{"name":"trade_id", "type":"string", "optional":false},
-							{"name":"captcha_guid", "type":"string", "optional":false},
-							{"name":"captcha_solution", "type":"string", "optional":false}
+							{"name":"trade_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					},
@@ -2711,6 +2728,33 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				}
 			}
 		},
+		Captcha : {
+			"SMDVersion":"2.0",
+			"description": "SMD service demonstration",
+
+			"envelope":"JSON-RPC-2.0",
+			"transport":"POST",
+			"target":"/captcha",
+			
+			"services": {
+				"fetch" : {
+					"description": "Retrieves a captcha that is required in order to call the solve method.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				},
+				"solve" : {
+					"description": "Validates the user's solution against the known solution for the given guid.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"captcha_guid", "type":"string", "optional":false},
+						{"name":"captcha_solution", "type":"string", "optional":false}
+					],
+					"returns":{"type":"object"}
+				}
+			}
+		},
 		Inbox : {
 			"SMDVersion":"2.0",
 			"description": "SMD service demonstration",
@@ -3105,3 +3149,4 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

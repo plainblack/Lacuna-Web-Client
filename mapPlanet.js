@@ -12,9 +12,41 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
 		
+	var FactoryMap = {
+		"/archaeology": Lacuna.buildings.Archaeology,
+		"/capitol": Lacuna.buildings.Capitol,
+		"/development": Lacuna.buildings.Development,
+		"/embassy": Lacuna.buildings.Embassy,
+		"/energyreserve": Lacuna.buildings.EnergyReserve,
+		"/entertainment": Lacuna.buildings.Entertainment,
+		"/foodreserve": Lacuna.buildings.FoodReserve,
+		"/hallsofvrbansk": Lacuna.buildings.HallsOfVrbansk,
+		"/geneticslab": Lacuna.buildings.GeneticsLab,
+		"/intelligence": Lacuna.buildings.Intelligence,
+		"/libraryofjith": Lacuna.buildings.LibraryOfJith,
+		"/miningministry": Lacuna.buildings.MiningMinistry,
+		"/missioncommand": Lacuna.buildings.MissionCommand,
+		"/network19": Lacuna.buildings.Network19,
+		"/observatory": Lacuna.buildings.Observatory,
+		"/oracleofanid": Lacuna.buildings.OracleOfAnid,
+		"/orestorage": Lacuna.buildings.OreStorage,
+		"/park": Lacuna.buildings.Park,
+		"/planetarycommand": Lacuna.buildings.PlanetaryCommand,
+		"/security": Lacuna.buildings.Security,
+		"/shipyard": Lacuna.buildings.Shipyard,
+		"/spaceport": Lacuna.buildings.SpacePort,
+		"/stationcommand": Lacuna.buildings.StationCommand,
+		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
+		"/themepark": Lacuna.buildings.ThemePark,
+		"/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
+		"/trade": Lacuna.buildings.Trade,
+		"/transporter": Lacuna.buildings.Transporter,
+		"/waterstorage": Lacuna.buildings.WaterStorage,
+		"/wasterecycling": Lacuna.buildings.WasteRecycling
+	};
+		
 	var MapPlanet = function() {
 		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
 		
 		this._buildDetailsPanel();
 		this._buildBuilderPanel();
@@ -154,29 +186,29 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				'				<li class="builderMenuGroup">',
 				'					<em>Resources</em>',
 				'					<ul>',
-				'						<li><a href="#Resources/Food">Food</a></li>',
-				'						<li><a href="#Resources/Ore">Ore</a></li>',
-				'						<li><a href="#Resources/Water">Water</a></li>',
-				'						<li><a href="#Resources/Energy">Energy</a></li>',
-				'						<li><a href="#Resources/Waste">Waste</a></li>',
-				'						<li><a href="#Resources/Storage">Storage</a></li>',
-				'						<li><a href="#Resources" class="buildMenuAll">All Resources</a></li>',
+				'						<li><a class="button" href="#Resources/Food">Food</a></li>',
+				'						<li><a class="button" href="#Resources/Ore">Ore</a></li>',
+				'						<li><a class="button" href="#Resources/Water">Water</a></li>',
+				'						<li><a class="button" href="#Resources/Energy">Energy</a></li>',
+				'						<li><a class="button" href="#Resources/Waste">Waste</a></li>',
+				'						<li><a class="button" href="#Resources/Storage">Storage</a></li>',
+				'						<li><a class="button" href="#Resources">All Resources</a></li>',
 				'					</ul>',
 				'				</li>',
 				'				<li class="builderMenuGroup">',
 				'					<em>Infrastructure</em>',
 				'					<ul>',
-				'						<li><a href="#Infrastructure/Construction">Construction</a></li>',
-				'						<li><a href="#Infrastructure/Intelligence">Intelligence</a></li>',
-				'						<li><a href="#Infrastructure/Happiness">Happiness</a></li>',
-				'						<li><a href="#Infrastructure/Ships">Ships</a></li>',
-				'						<li><a href="#Infrastructure/Colonization">Colonization</a></li>',
-				'						<li><a href="#Infrastructure/Trade">Trade</a></li>',
-				'						<li><a href="#Infrastructure" class="buildMenuAll">All Infrastructure</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Construction">Construction</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Intelligence">Intelligence</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Happiness">Happiness</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Ships">Ships</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Colonization">Colonization</a></li>',
+				'						<li><a class="button" href="#Infrastructure/Trade">Trade</a></li>',
+				'						<li><a class="button" href="#Infrastructure">All Infrastructure</a></li>',
 				'					</ul>',
 				'				</li>',
-				'				<li class="builderMenuGroup"><a href="#Plan"><em>Plans</em></a></li>',
-				'				<li class="builderMenuGroup"><a href="#"><em>All Buildings</em></a></li>',
+				'				<li class="builderMenuGroup"><a class="button" href="#Plan"><em>Plans</em></a></li>',
+				'				<li class="builderMenuGroup"><a class="button" href="#"><em>All Buildings</em></a></li>',
 				'			</ul>',
 				'		</div>',
 				'		<div id="builderListContainer">',
@@ -454,9 +486,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			}*/
 			this.fireEvent("onMapRpc", result);
 		},
-		_fireRpcFailed : function(o){
-			this.fireEvent("onMapRpcFailed", o);
-		},
 		_fireQueueAdd : function(obj) {
 			if(this.buildingDetails.isVisible()) {
 				this.buildingDetails.addQueue(obj.seconds, obj.fn, obj.el, obj.scope);
@@ -637,12 +666,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 						this._map.addTileData(o.result.buildings, true);
 						this._map.refresh();
 					},
-					failure : function(o){
-						//YAHOO.log(o, "error", "MapPlanet.Refresh.FAILED");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -666,12 +689,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 							this.Mapper(o.result);
 						}
 					},
-					failure : function(o){
-						//YAHOO.log(o, "error", "MapPlanet.ReLoad.FAILED");
-						Lacuna.Pulser.Hide();
-						this.fireEvent("onMapRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -734,11 +751,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				},
 				failure : function(o){
 					delete this.currentBuildConnection;
-					//YAHOO.log(o, "error", "MapPlanet.BuilderGet.failure");
-					this.fireEvent("onMapRpcFailed", o);
-					Lacuna.Pulser.Hide();
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -795,12 +808,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					this.ReloadBuilding(b);
 				},
 				failure : function(o){
-					//YAHOO.log(o, "error", "MapPlanet.Build.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
 					this.buildingBuilder.hide();
 				},
-				timeout:Game.Timeout,
 				scope:this,
 				target:building.url
 			});
@@ -834,17 +843,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					Lacuna.Pulser.Hide();
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
-					//YAHOO.log(o, "error", "MapPlanet.ViewData.failure");
-					
 					if(callback && callback.failure) {
 						callback.failure.call(this, o, callback.url, x, y);
-					}
-					else {
-						this.fireEvent("onMapRpcFailed", o);
+						return true;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this,
 				target:url
 			});
@@ -888,13 +891,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				},
 				failure:function(o){
 					delete this.currentViewConnection;
-					this.fireEvent("onMapRpcFailed", o);
 				},
 				url:tile.data.url
 			}, tile.x, tile.y);
 		},
 		BuildingFactory : function(result) {
-			var classObj;
+			/*var classObj;
 			switch(result.building.url){
 				case "/archaeology":
 					classObj = new Lacuna.buildings.Archaeology(result);
@@ -962,6 +964,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				case "/spaceport":
 					classObj = new Lacuna.buildings.SpacePort(result);
 					break;
+				case "/stationcommand":
+					classObj = new Lacuna.buildings.StationCommand(result);
+					break;
 				case "/subspacesupplydepot":
 					classObj = new Lacuna.buildings.SubspaceSupplyDepot(result);
 					break;
@@ -986,11 +991,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				default:
 					classObj = new Lacuna.buildings.Building(result);
 					break;
-			}
+			}*/
+			
+			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
+				classObj = new classConstructor(result);
 			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
-				classObj.subscribe("onMapRpcFailed", this._fireRpcFailed, this, true);
 				classObj.subscribe("onQueueAdd", this._fireQueueAdd, this, true);
 				classObj.subscribe("onQueueReset", this._fireQueueReset, this, true);
 				classObj.subscribe("onAddTab", this._fireAddTab, this, true);
@@ -1099,3 +1106,4 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 YAHOO.register("mapPlanet", YAHOO.lacuna.MapPlanet, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

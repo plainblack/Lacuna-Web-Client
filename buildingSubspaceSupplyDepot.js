@@ -107,12 +107,8 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 					this.rpcSuccess(o);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "SubspaceSupplyDepot.Transmit.failure");
 					btn.disabled = false;
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -124,3 +120,4 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 YAHOO.register("SubspaceSupplyDepot", YAHOO.lacuna.buildings.SubspaceSupplyDepot, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

@@ -119,12 +119,6 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 					//refresh map
 					this.fireEvent("onUpdateMap");
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Development.DevSubsidize.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});		
 		}
@@ -136,3 +130,4 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("development", YAHOO.lacuna.buildings.Development, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

@@ -54,12 +54,6 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 					
 					this.UpdatePartyTab(o.result.party);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "Park.Party.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});	
 		},
@@ -126,11 +120,8 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 					this.UpdatePartyTab(o.result.party);
 				},
 				failure : function(o){
-					Lacuna.Pulser.Hide();
 					Dom.get("parkSubsidize").disabled = false;
-					this.rpcFailure(o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -143,3 +134,4 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 YAHOO.register("park", YAHOO.lacuna.buildings.Park, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

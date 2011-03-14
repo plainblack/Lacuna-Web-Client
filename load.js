@@ -9,7 +9,7 @@
 		}
 	}
 	if (window.history.replaceState) {
-		window.history.replaceState({}, window.title, l.protocol+'//'+l.host+l.pathname+l.search);
+		window.history.replaceState({}, document.title, l.protocol+'//'+l.host+l.pathname+l.search);
 	}
 	else if (l.hash != '') {
 		l.hash = '';
@@ -256,6 +256,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "stationcommand",
+		type: "js",
+		fullpath: urlBuilder("buildingStationCommand.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "subspacesupplydepot",
 		type: "js",
 		fullpath: urlBuilder("buildingSubspaceSupplyDepot.js"),
@@ -324,6 +330,7 @@
 			"security",
 			"shipyard",
 			"spaceport",
+			"stationcommand",
 			"subspacesupplydepot",
 			"templeofthedrajilites",
 			"themepark",
@@ -391,6 +398,12 @@
 		fullpath: urlBuilder("notify.js"),
 		requires : ["container","dom","game"]
 	});
+	loader.addModule({
+		name: "captcha",
+		type: "js",
+		fullpath: urlBuilder("captcha.js"),
+		requires : ["container","dom","game"]
+	});
 	/*add after requirements*/
 	loader.addModule({
 		name: "gameMenu",
@@ -399,9 +412,9 @@
 		// invite has to come before essentia in order for the friend invite button to work
 		requires : ["about","info","invite","essentia","messaging","menu","profile","stats"]
 	});
-	loader.require("gameMenu","announce","info","logger","login","mapPlanet","mapStar","notify");
+	loader.require("gameMenu","announce","info","logger","login","mapPlanet","mapStar","notify","captcha");
 	loader.onSuccess = function(o) {
-		YAHOO.widget.Logger.enableBrowserConsole();		
+		YAHOO.widget.Logger.enableBrowserConsole();
 		YAHOO.lacuna.Game.Start(query);
 		progressLoaderC.parentNode.removeChild(progressLoaderC);
 	};
@@ -547,3 +560,4 @@
 
 	loader.insert();
 })();
+// vim: noet:ts=4:sw=4

@@ -52,11 +52,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 						this.missions = o.result.missions;
 						this.displayMissions();
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -162,11 +157,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 					this.Self.missions = undefined;
 					this.Self.getMissions();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -184,11 +174,6 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 					this.Self.missions = undefined;
 					this.Self.getMissions();
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -200,3 +185,4 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 YAHOO.register("MissionCommand", YAHOO.lacuna.buildings.MissionCommand, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

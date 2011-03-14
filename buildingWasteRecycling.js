@@ -80,12 +80,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 								}
 							}
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "WasteRecycling.Recycle.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -336,12 +330,6 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 						ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
 					}
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "WasteRecycling.RecycleSubsidize.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -354,3 +342,4 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 YAHOO.register("wasterecycling", YAHOO.lacuna.buildings.WasteRecycling, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

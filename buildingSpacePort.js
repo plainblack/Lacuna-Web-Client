@@ -159,12 +159,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.SpacePortPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_ships_travelling.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -177,7 +171,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			if(e.newValue) {
 				if(!this.shipsView) {
 					Lacuna.Pulser.Show();
-					this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+					this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,paging:{page_number:1}}, {
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
 							Lacuna.Pulser.Hide();
@@ -199,12 +193,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.ViewPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_all_ships.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -239,12 +227,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							
 							this.ForeignPopulate();
 						},
-						failure : function(o){
-							YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
-							Lacuna.Pulser.Hide();
-							this.rpcFailure(o);
-						},
-						timeout:Game.Timeout,
 						scope:this
 					});
 				}
@@ -343,12 +325,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.SpacePortPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ShipHandlePagination.view_ships_travelling.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -437,7 +413,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						bbtn = nLi.appendChild(bbtn);
 						Event.on(bbtn, "click", this.ShipScuttle, {Self:this,Ship:ship,Line:nUl}, true);
 					}
-					else if(ship.task == "Defend") {
+					else if(ship.task == "Defend"||ship.task == "Orbiting") {
 						var dbtn = document.createElement("button");
 						dbtn.setAttribute("type", "button");
 						dbtn.innerHTML = "Recall";
@@ -464,7 +440,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.service.view_all_ships({
 				session_id:Game.GetSession(),
 				building_id:this.building.id,
-				page_number:newState.page
+				paging:{page_number:newState.page}
 			}, {
 				success : function(o){
 					YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_ships.success");
@@ -476,12 +452,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ViewPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ViewHandlePagination.view_all_ships.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -536,14 +506,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					this.Self.ShipNameClear.call(this);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.ShipNameSave.failure");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcFailure(o);
 					if(this.Input) {
 						this.Input.value = this.Ship.name;
 					}
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -660,12 +626,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					};
 					this.ForeignPopulate();
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "SpacePort.view_foreign_ships.failure");
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 	 
@@ -717,11 +677,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					},
 					failure : function(o){
 						btn.disabled = false;
-						YAHOO.log(o, "error", "SpacePort.ShipScuttle.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -763,10 +719,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					},
 					failure : function(o){
 						btn.disabled = false;
-						Lacuna.Pulser.Hide();
-						this.Self.rpcFailure(o);
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -801,11 +754,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					this.fireEvent("onMapRpc", o.result);
 					this.PopulateShipsSendTab(target, o.result.available);
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 			
@@ -892,11 +840,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + ".";
 					},
 					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
 						btn.disabled = false;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -912,3 +857,4 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 YAHOO.register("spaceport", YAHOO.lacuna.buildings.SpacePort, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

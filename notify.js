@@ -41,6 +41,9 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 					
 					Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
 				});
+				this.Display.showEvent.subscribe(function(){
+					Dom.setStyle(this.notifyList.parentNode, "max-height", (Game.GetSize().h - 125) + "px");
+				});
 				this.Display.render();
 			}
 		},
@@ -48,8 +51,9 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 			return [
 			'	<div class="hd" style="background:transparent;">Incoming Ships!</div>',
 			'	<div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
-			'		<ul id="notifyList">',
-			'		</ul>',
+			'		<div style="overflow:auto;">',
+			'			<ul id="notifyList"></ul>',
+			'		</div>',
 			'	</div>'
 			].join('');
 		},
@@ -145,3 +149,4 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 YAHOO.register("notify", YAHOO.lacuna.Notify, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

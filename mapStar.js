@@ -14,7 +14,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		
 	var MapStar = function() {
 		this.createEvent("onMapRpc");
-		this.createEvent("onMapRpcFailed");
 		//this.createEvent("onChangeToSystemView");
 		this.createEvent("onChangeToPlanetView");
 		
@@ -118,6 +117,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				this.tabView.selectTab(0);
 			};
 			this.starDetails.resetDisplay = function(oSelf) {
+				delete oSelf.currentShips;
 				delete oSelf.selectedStar;
 				this.resetQueue();
 				this.removeTabs();
@@ -125,6 +125,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			this.starDetails.renderEvent.subscribe(function(){
 				this.starDetails.tabView = new YAHOO.widget.TabView("starDetailTabs");
+				
 				/*Event.delegate("starDetailsInfo", "click", function(e, matchedEl, container){
 					var data = this.selectedStar;
 					if(data) {
@@ -299,18 +300,40 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					}
 					delete this.removeableTabs;
 				}
-				this.tabView.selectTab(0);
+				//this.tabView.selectTab(0);
 			};
 			this.planetDetails.resetDisplay = function(oSelf) {
+				delete oSelf.currentShips;
 				delete oSelf.selectedBody;
 				delete oSelf.selectedTile;
 				this.resetQueue();
 				this.removeTabs();
+				
+				var send = Dom.get("planetDetailSendShips"),
+					unavail = Dom.get("planetDetailUnavailShips");
+					
+				Event.purgeElement(send);
+				send.innerHTML = "";
+				Event.purgeElement(unavail);
+				unavail.innerHTML = "";
 			};
 			
 			this.planetDetails.renderEvent.subscribe(function(){
 				Event.delegate("planetDetailsInfo", "click", this.DetailsClick, "button", this, true);
 				var tv = this.planetDetails.tabView = new YAHOO.widget.TabView("planetDetailTabs");
+				//Send Tab
+				tv.getTab(4).subscribe('beforeActiveChange', function(e) {
+					if(e.newValue) {
+						this.GetShips(this.planetDetails,{body_id:this.selectedBody.id});
+					}
+				}, this, true);
+				//Unavailable Tab
+				tv.getTab(5).subscribe('beforeActiveChange', function(e) {
+					if(e.newValue) {
+						this.GetShips(this.planetDetails,{body_id:this.selectedBody.id});
+					}
+				}, this, true);
+				
 				var spyTabs = {
 					"planetDetailSendSpies" : 2,
 					"planetDetailFetchSpies" : 3
@@ -742,12 +765,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						Event.purgeElement(this.Line);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + " to " + targetName + ".";
 					},
-					failure : function(o){
-						YAHOO.log(o, "error", "MapStar.ShipSend.send_ship.failure");
-						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpcFailed", o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -861,49 +878,43 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 	
 		GetShips : function(panel, target) {
-			Lacuna.Pulser.Show();
-			
-			Game.Services.Buildings.SpacePort.get_ships_for({
-				session_id:Game.GetSession(),
-				from_body_id:Game.GetCurrentPlanet().id,
-				target:target
-			}, {
-				success : function(o){
-					YAHOO.log(o, "info", "MapStar.ShowStar.get_ships_for.success");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
-					this.currentShips = o.result;
+			if(!this.currentShips) {
+				Lacuna.Pulser.Show();
+				
+				Game.Services.Buildings.SpacePort.get_ships_for({
+					session_id:Game.GetSession(),
+					from_body_id:Game.GetCurrentPlanet().id,
+					target:target
+				}, {
+					success : function(o){
+						YAHOO.log(o, "info", "MapStar.ShowStar.get_ships_for.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
+						this.currentShips = o.result;
 
-					this.PopulateShipsSendTab(panel);
-					
-					this.PopulateShipsUnavailTab(panel);
+						this.PopulateShipsSendTab(panel);
+						
+						this.PopulateShipsUnavailTab(panel);
 
-					panel.removeTabs(); //remove any tabs that are removable before adding new ones
-					
-					if(o.result.incoming && o.result.incoming.length > 0) {
-						this.CreateShipsIncomingTab(panel);
-					}
-					
-					if(o.result.mining_platforms && o.result.mining_platforms.length > 0) {
-						this.CreateShipsMiningPlatforms(panel);
-					}
-					
-					
-					//select 0 index tab unless we already selected a different one
-					if(panel.tabView.get("activeIndex") <= 0) {
-						panel.tabView.selectTab(0);
-					}
+						panel.removeTabs(); //remove any tabs that are removable before adding new ones
+						
+						if(o.result.incoming && o.result.incoming.length > 0) {
+							this.CreateShipsIncomingTab(panel);
+						}
+						
+						if(o.result.mining_platforms && o.result.mining_platforms.length > 0) {
+							this.CreateShipsMiningPlatforms(panel);
+						}
+						
+						//select 0 index tab unless we already selected a different one
+						/*if(panel.tabView.get("activeIndex") <= 0) {
+							panel.tabView.selectTab(0);
+						}*/
 
-				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.ShowStar.get_ships_for.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
-				scope:this
-			});
-			
+					},
+					scope:this
+				});
+			}
 		},
 		ShowStar : function(tile, keepOpen) {
 			if(!keepOpen) {
@@ -1039,7 +1050,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}
 			}
 			
-			this.GetShips(panel,{body_id:body.id});
+			//this.GetShips(panel,{body_id:body.id});
 			
 			this.selectedBody = body;
 			this.selectedTile = tile;
@@ -1074,11 +1085,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						}
 					},
 					failure : function(o){
-						YAHOO.log(o, "error", "MapStar.Rename.failure");
 						Dom.get("planetDetailRenameMessage").innerHTML = o.error.message;
 						Lib.fadeOutElm("planetDetailRenameMessage");
+						return true;
 					},
-					timeout:Game.Timeout,
 					scope:this
 				}
 			);
@@ -1123,12 +1133,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					};
 					this.populateSpies(tab);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "MapStar.ShowSpies."+method+".failure");
-					this.fireEvent("onMapRpcFailed", o);
-					Lacuna.Pulser.Hide();
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1268,11 +1272,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					delete tab.avail.spyShips;
 					this.ShowSpies(tab);
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpcFailed", o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -1289,3 +1288,4 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 YAHOO.register("mapStar", YAHOO.lacuna.MapStar, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

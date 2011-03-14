@@ -32,8 +32,39 @@ a, a:link, a:visited {
 h1,h2,h3,h4,h5,h6 {
 	font-weight:bold;
 }
-button, input[type="submit"], input[type="button"] {
+button, input[type="submit"], input[type="button"], .button {
 	padding: 2px 6px 3px;
+	margin: 1px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fefefe #dedede #dedede #fefefe;
+	background: #103070 url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/bar_bottom_back.png") 0 -10px;
+	color: #ffffff;
+}
+button:hover:active, input[type="submit"]:hover:active, input[type="button"]:hover:active, .button:hover:active {
+	/*background-color: #002060;*/
+	background-position: 0 -30px;
+	border-color: #254595 #153585 #153585 #254595;
+}
+button:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+	border-color: #254595 #3555a5 #3555a5 #254595;
+	/*background-color: #183878;*/
+	background-position: 0 -20px;
+}
+button[disabled], input[type="submit"][disabled], input[type="button"][disabled], .button[disabled] {
+	border-color: #3555a5 #254595 #254595 #3555a5;
+	background-color: #204070;
+	background-image:none;
+	color: #808080;
+}
+.button {
+	padding: 2px 6px 3px;
+	text-decoration: none;
+	display:inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
 }
 
 .clearafter { height:100%; }
@@ -343,6 +374,27 @@ dialogs
 }
 .quick-dialog p {
 	margin: 10px 0;
+}
+
+#captcha li label {
+	width:70px;
+	text-align:right;
+	padding-right:6px;
+	vertical-align:top;
+	display: inline-block; /*mozilla 3.0, ie 8*/
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
+}
+#captchaSolution {
+	width: 220px;
+}
+#captchaImage {
+	border: 1px solid #000;
+	vertical-align: top;
+	margin: 5px 0;
+}
+#captchaRefresh {
+	margin: 32px 0 0 13px;
 }
 
 /*
@@ -889,6 +941,8 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	height: 13px;
 	width: 188px;
 	opacity: 0.7;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+	filter: alpha(opacity=70);
 }
 .speciesHO .speciesSlider_lock {
 	border-left: 1px solid red;
@@ -912,6 +966,8 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 	width: 100%;
 	display: block;
 	opacity: 0.5;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
 }
 
 .speciesSliderThumb {
@@ -1396,31 +1452,20 @@ planet details
 	margin: 5px auto 15px;
 	text-align: center;
 }
+#builderMenu .builderMenuGroup em,
 #builderMenu .builderMenuGroup li {
 	display: inline-block; /*mozilla 3.0, ie 8*/
-    zoom:1; /*force ie layout so we can use the display:inline below*/
-    *display:inline; /*ie hack to make it think this is an inline-block*/
-}
-#builderMenu .builderMenuGroup em,
-#builderMenu .builderMenuGroup a {
-	display: block;
-	width: 200px;
-	height: 25px;
-	vertical-align: middle;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
+	zoom:1; /*force ie layout so we can use the display:inline below*/
+	*display:inline; /*ie hack to make it think this is an inline-block*/
 	margin-bottom: 1px;
 }
-
 #builderMenu .builderMenuGroup a {
-	text-decoration: none;
-	background-image: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/button_bkg_200.png");
-	background-repeat: no-repeat;
-	background-position: center center;
+	width: 200px;
+	height: 20px;
 }
 #builderMenu .builderMenuGroup em {
 	font-weight: bold;
+	height: 20px;
 }
 /*#buildingDetailsExtra {
 	padding: 5px 0;
@@ -1455,9 +1500,9 @@ planet details
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
 }
-.pcStored { width:60px; }
-.pcCapacity { width:65px; }
-.pcPerHour { width:40px; }
+.pcStored { width:100px; }
+.pcCapacity { width:100px; }
+.pcPerHour { width:50px; }
 .pcSlash {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
@@ -1794,7 +1839,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:270px;
 }
 .spyInfo .spyAssignment {
-	width:340px;
+	width:440px;
 }
 .spyInfo .spyAssignment select {
 	width:325px;
@@ -1828,7 +1873,18 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:60px;
 	float:right;
 }
-
+.spyInfo .spyMissionCounts {
+	width:100px;
+}
+.spyInfo .spyOffensiveMissions {
+	width:100px;
+}
+.spyInfo .spyDefensiveMissions {
+	width:100px;
+}
+.spyInfo .spyTotalMissions {
+	width:100px;
+}
 
 .shipInfo .shipType {
 	width:180px;
@@ -2231,3 +2287,6 @@ TextboxList
     *display:inline; /*ie hack to make it think this is an inline-block*/
     overflow:hidden;
 }
+/* 
+ * vim: noet:ts=4:sw=4 
+ */

@@ -116,8 +116,6 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					this.hide();
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Login.handleLogin.failure");
-					Lacuna.Pulser.Hide();
 					if(o.error.code == 1100) {
 						//haven't founded empire yet so take them to species
 						this.hide();
@@ -132,8 +130,8 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					else {
 						this.setMessage(o.error.message || "There was a problem logging in.  Please try again.");
 					}
+					return true;
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -346,17 +344,13 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 			Lacuna.Pulser.Show();
 			Game.Services.Empire.send_password_reset_message(data,{
 				success: function(o) {
-					YAHOO.log(o, "info", "ResetPassword.sendEmail.failure");
+					YAHOO.log(o, "info", "ResetPassword.sendEmail.success");
 					Lacuna.Pulser.Hide();
 					this.showReset();
 				},
 				failure: function(o) {
-					YAHOO.log(o, "error", "ResetPassword.sendEmail.failure");
-					Lacuna.Pulser.Hide();
 					this.EmailDialog.getButtons()[0].disabled = false;
-					alert(o.error.message);
 				},
-				timeout: Game.Timeout,
 				scope: this
 			});
 		},
@@ -388,17 +382,11 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 					api_key:Lib.ApiKey
 				},{
 					success: function(o) {
-						YAHOO.log(o, "info", "ResetPassword.resetPassword.failure");
+						YAHOO.log(o, "info", "ResetPassword.resetPassword.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent('onResetSuccessful', o);
 						this.hide();
 					},
-					failure: function(o) {
-						YAHOO.log(o, "error", "ResetPassword.resetPassword.failure");
-						Lacuna.Pulser.Hide();
-						alert(o.error.message);
-					},
-					timeout: Game.Timeout,
 					scope: this
 				});
 			}
@@ -411,3 +399,4 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
 YAHOO.register("login", YAHOO.lacuna.Login, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

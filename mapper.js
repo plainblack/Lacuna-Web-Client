@@ -214,13 +214,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		refresh : function() {
 			var obj = this.map.getTile(this.x,this.y,this.z);
 			this.blank = obj.blank;
-			this.url = obj.url;
 			this.data = obj.data;
-			if(this.url) {
-				Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
-			}
-			else {
-				Dom.setStyle(this.domElement, "background", 'transparent');
+			if(this.url != obj.url) {
+				this.url = obj.url;
+				if(this.url) {
+					Dom.setStyle(this.domElement, "background", 'transparent url('+ this.url +') no-repeat scroll center');
+				}
+				else {
+					Dom.setStyle(this.domElement, "background", 'transparent');
+				}
 			}
 		},
 		
@@ -309,6 +311,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 							break;
 						case 'asteroid':
 							this.imageHolder.innerHTML = "A";
+							break;
+						case 'space station':
+							this.imageHolder.innerHTML = "S";
 							break;
 						default:
 							this.imageHolder.innerHTML = "U";
@@ -452,7 +457,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		},
 		finishTick : function() {
 			this.stopTick();
-			this.fireEvent("onReload", this);
+			if(this.data.pending_build && this.data.upgrade) {
+				delete this.data.pending_build;
+				this.data.level = (this.data.level*1) + 1;
+				this.data.image = this.data.upgrade.image;
+				this.map.addSingleTileData(this.data);
+				this.refresh();
+			}
+			else {
+				this.fireEvent("onReload", this);
+			}
 		},
 		tick : function(e, oArgs) {
 			var tickSec = oArgs[0]/1000, hasUpgrade, hasWork;
@@ -460,7 +474,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				this.data.pending_build.seconds_remaining -= tickSec;
 				var remainingBuild = Math.round(this.data.pending_build.seconds_remaining);
 				var upgrade = this.data.upgrade;
-				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && ! upgrade.preloaded) {
+				if (remainingBuild > 0 && remainingBuild < 15 && upgrade && upgrade.image && !upgrade.preloaded) {
 					upgrade.preloaded = true;
 					var imgSize = this.map.getTileImageSize();
 					var img = new Image();
@@ -821,9 +835,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			this.map.getTileData({
 				success:function() {
 					this.showTiles();
-				},
-				failure:function(o) {
-					Game.Failure(o);
 				},
 				scope:this
 			}, x1, x2, y1, y2);
@@ -1348,13 +1359,11 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						}
 					},
 					failure : function(o){
-						//YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.failure");
-						Lacuna.Pulser.Hide();
 						if(callback.failure) {
 							callback.failure.call(callback.scope || this, o);
+							return true;
 						}
 					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -1503,7 +1512,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 				if(oTiles.hasOwnProperty(tKey)){
 					var tile = oTiles[tKey];
 					tile.id = tKey;
-					if(tile.url == "/planetarycommand") {
+					if(tile.url == "/planetarycommand" || tile.url == "/stationcommand") {
 						this.command = tile;
 						this.command.x *= 1;
 						this.command.y *= 1;
@@ -1528,7 +1537,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 			return startZoomLevel;
 		},
 		addSingleTileData : function(oBuilding) {
-			if(oBuilding.url == "/planetarycommand") {
+			if(oBuilding.url == "/planetarycommand" || oBuilding.url == "/stationcommand") {
 				this.command = oBuilding;
 				this.command.x *= 1;
 				this.command.y *= 1;
@@ -1589,6 +1598,32 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 		var moveKeyUpListener = new KL(document, {
 			keys : [ KL.KEY.UP, KL.KEY.DOWN, KL.KEY.LEFT, KL.KEY.RIGHT ]
 		}, { fn: this.moveKeyUp, scope:this, correctScope:true }, KL.KEYUP);
+		
+		var xMove = 0;
+		var yMove = 0;
+		var lastMove = (new Date(0)).getTime();
+		var timerActive = false;
+		Game.onScroll(map.mapDiv, function(e, x, y) {
+			xMove += x;
+			yMove += y;
+			
+			// we get tons of events, so only move every 50 milliseconds
+			var now = (new Date()).getTime();
+			if ( now - lastMove > 50 ) {
+				lastMove = now;
+				map.moveByPx(xMove, yMove);
+				xMove = 0;
+				yMove = 0;
+			}
+			// refresh screen every second during scrolling, and once afterward
+			if (!timerActive) {
+				timerActive = true;
+				setTimeout(function(){
+					map.tileLayer.render(true);
+					timerActive = false;
+				}, 1000);
+			}
+		});
 		
 		moveKeyListener.enable();
 		moveKeyUpListener.enable();
@@ -1780,3 +1815,4 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 YAHOO.register("mapper", YAHOO.lacuna.Mapper, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

@@ -13,7 +13,6 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 
 	var Invite = function() {
 		this.createEvent("onRpc");
-		this.createEvent("onRpcFailed");
 		
 		this.id = "invite";
 		
@@ -107,12 +106,6 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 					}
 					this.fireEvent('onRpc', o);
 				},
-				failure : function(o){
-					YAHOO.log(o, "error", "InviteFriend.failure");
-					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		},
@@ -133,12 +126,8 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 					this.fireEvent('onRpc', o);
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "handleGenerate.failure");
 					this.inviteGenerate.disabled = false;
-					Lacuna.Pulser.Hide();
-					this.fireEvent('onRpcFailed', o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -152,3 +141,4 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
 YAHOO.register("invite", YAHOO.lacuna.Invite, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

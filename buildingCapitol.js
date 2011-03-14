@@ -59,12 +59,8 @@ if (typeof YAHOO.lacuna.buildings.Capitol == "undefined" || !YAHOO.lacuna.buildi
 					alert('Your empire name has been changed!');
 				},
 				failure : function(o){
-					YAHOO.log(o, "error", "Capitol.rename_empire.failure");
 					btn.disabled = false;
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
 				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -76,3 +72,4 @@ if (typeof YAHOO.lacuna.buildings.Capitol == "undefined" || !YAHOO.lacuna.buildi
 YAHOO.register("Capitol", YAHOO.lacuna.buildings.Capitol, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4

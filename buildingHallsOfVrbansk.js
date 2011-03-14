@@ -53,11 +53,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 						this.rpcSuccess(o);
 						this.Display(o.result.buildings);
 					},
-					failure : function(o){
-						Lacuna.Pulser.Hide();
-						this.rpcFailure(o);
-					},
-					timeout:Game.Timeout,
 					scope:this
 				});
 			}
@@ -95,11 +90,6 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 					this.rpcSuccess(o);
 					this.fireEvent("onHide");
 				},
-				failure : function(o){
-					Lacuna.Pulser.Hide();
-					this.rpcFailure(o);
-				},
-				timeout:Game.Timeout,
 				scope:this
 			});
 		}
@@ -112,3 +102,4 @@ if (typeof YAHOO.lacuna.buildings.HallsOfVrbansk == "undefined" || !YAHOO.lacuna
 YAHOO.register("HallsOfVrbansk", YAHOO.lacuna.buildings.HallsOfVrbansk, {version: "1", build: "0"}); 
 
 }
+// vim: noet:ts=4:sw=4
