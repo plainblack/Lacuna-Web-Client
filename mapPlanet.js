@@ -16,6 +16,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/archaeology": Lacuna.buildings.Archaeology,
 		"/capitol": Lacuna.buildings.Capitol,
 		"/development": Lacuna.buildings.Development,
+		"/distributioncenter": Lacuna.buildings.DistributionCenter,
 		"/embassy": Lacuna.buildings.Embassy,
 		"/energyreserve": Lacuna.buildings.EnergyReserve,
 		"/entertainment": Lacuna.buildings.Entertainment,
@@ -35,6 +36,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/security": Lacuna.buildings.Security,
 		"/shipyard": Lacuna.buildings.Shipyard,
 		"/spaceport": Lacuna.buildings.SpacePort,
+		"/ssla": Lacuna.buildings.SpaceStationLab,
 		"/stationcommand": Lacuna.buildings.StationCommand,
 		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
 		"/themepark": Lacuna.buildings.ThemePark,
@@ -895,104 +897,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				url:tile.data.url
 			}, tile.x, tile.y);
 		},
-		BuildingFactory : function(result) {
-			/*var classObj;
-			switch(result.building.url){
-				case "/archaeology":
-					classObj = new Lacuna.buildings.Archaeology(result);
-					break;
-				case "/capitol":
-					classObj = new Lacuna.buildings.Capitol(result);
-					break;
-				case "/development":
-					classObj = new Lacuna.buildings.Development(result);
-					break;
-				case "/embassy":
-					classObj = new Lacuna.buildings.Embassy(result);
-					break;
-				case "/energyreserve":
-					classObj = new Lacuna.buildings.EnergyReserve(result);
-					break;
-				case "/entertainment":
-					classObj = new Lacuna.buildings.Entertainment(result);
-					break;
-				case "/foodreserve":
-					classObj = new Lacuna.buildings.FoodReserve(result);
-					break;
-				case "/hallsofvrbansk":
-					classObj = new Lacuna.buildings.HallsOfVrbansk(result);
-					break;
-				case "/geneticslab":
-					classObj = new Lacuna.buildings.GeneticsLab(result);
-					break;
-				case "/intelligence":
-					classObj = new Lacuna.buildings.Intelligence(result);
-					break;
-				case "/libraryofjith":
-					classObj = new Lacuna.buildings.LibraryOfJith(result);
-					break;
-				case "/miningministry":
-					classObj = new Lacuna.buildings.MiningMinistry(result);
-					break;
-				case "/missioncommand":
-					classObj = new Lacuna.buildings.MissionCommand(result);
-					break;
-				case "/network19":
-					classObj = new Lacuna.buildings.Network19(result);
-					break;
-				case "/observatory":
-					classObj = new Lacuna.buildings.Observatory(result);
-					break;
-				case "/oracleofanid":
-					classObj = new Lacuna.buildings.OracleOfAnid(result);
-					break;
-				case "/orestorage":
-					classObj = new Lacuna.buildings.OreStorage(result);
-					break;
-				case "/park":
-					classObj = new Lacuna.buildings.Park(result);
-					break;
-				case "/planetarycommand":
-					classObj = new Lacuna.buildings.PlanetaryCommand(result);
-					break;
-				case "/security":
-					classObj = new Lacuna.buildings.Security(result);
-					break;
-				case "/shipyard":
-					classObj = new Lacuna.buildings.Shipyard(result);
-					break;
-				case "/spaceport":
-					classObj = new Lacuna.buildings.SpacePort(result);
-					break;
-				case "/stationcommand":
-					classObj = new Lacuna.buildings.StationCommand(result);
-					break;
-				case "/subspacesupplydepot":
-					classObj = new Lacuna.buildings.SubspaceSupplyDepot(result);
-					break;
-				case "/themepark":
-					classObj = new Lacuna.buildings.ThemePark(result);
-					break;
-				case "/templeofthedrajilites":
-					classObj = new Lacuna.buildings.TempleOfTheDrajilites(result);
-					break;
-				case "/trade":
-					classObj = new Lacuna.buildings.Trade(result);
-					break;
-				case "/transporter":
-					classObj = new Lacuna.buildings.Transporter(result);
-					break;
-				case "/waterstorage":
-					classObj = new Lacuna.buildings.WaterStorage(result);
-					break;
-				case "/wasterecycling":
-					classObj = new Lacuna.buildings.WasteRecycling(result);
-					break;
-				default:
-					classObj = new Lacuna.buildings.Building(result);
-					break;
-			}*/
-			
+		BuildingFactory : function(result) {			
 			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
 				classObj = new classConstructor(result);
 			

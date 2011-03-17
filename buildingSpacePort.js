@@ -683,46 +683,44 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			}
 		},
 		ShipRecall : function(e) {
-			if(confirm(["Are you sure you want to Recall ",this.Ship.name,"?"].join(''))) {
-				var btn = Event.getTarget(e);
-				btn.disabled = true;
-				Lacuna.Pulser.Show();
-				
-				this.Self.service.recall_ship({
-					session_id:Game.GetSession(),
-					building_id:this.Self.building.id,
-					ship_id:this.Ship.id
-				}, {
-					success : function(o){
-						Lacuna.Pulser.Hide();
-						this.Self.rpcSuccess(o);
-						
-						var ships = this.Self.shipsView.ships,
-							info = Dom.get("shipsCount");
-						for(var i=0; i<ships.length; i++) {
-							if(ships[i].id == this.Ship.id) {
-								ships.splice(i,1);
-								break;
-							}
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			Lacuna.Pulser.Show();
+			
+			this.Self.service.recall_ship({
+				session_id:Game.GetSession(),
+				building_id:this.Self.building.id,
+				ship_id:this.Ship.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+					
+					var ships = this.Self.shipsView.ships,
+						info = Dom.get("shipsCount");
+					for(var i=0; i<ships.length; i++) {
+						if(ships[i].id == this.Ship.id) {
+							ships.splice(i,1);
+							break;
 						}
-						if(info) {
-							this.Self.result.docks_available++;
-							info.innerHTML = ['This SpacePort can dock a maximum of ', this.Self.result.max_ships, ' ships. There are ', this.Self.result.docks_available, ' docks available.'].join(''); 
-						}
-						//set to traveling
-						Sel.query("li.shipTask", this.Line, true).innerHTML = "Travelling";
-						var buttonLi = Sel.query("li.shipScuttle", this.Line, true);
-						Event.purgeElement(buttonLi);
-						buttonLi.innerHTML = "";
-						//remove ships traveling so the tab gets reloaded when viewed next time
-						delete this.Self.shipsTraveling;
-					},
-					failure : function(o){
-						btn.disabled = false;
-					},
-					scope:this
-				});
-			}
+					}
+					if(info) {
+						this.Self.result.docks_available++;
+						info.innerHTML = ['This SpacePort can dock a maximum of ', this.Self.result.max_ships, ' ships. There are ', this.Self.result.docks_available, ' docks available.'].join(''); 
+					}
+					//set to traveling
+					Sel.query("li.shipTask", this.Line, true).innerHTML = "Travelling";
+					var buttonLi = Sel.query("li.shipScuttle", this.Line, true);
+					Event.purgeElement(buttonLi);
+					buttonLi.innerHTML = "";
+					//remove ships traveling so the tab gets reloaded when viewed next time
+					delete this.Self.shipsTraveling;
+				},
+				failure : function(o){
+					btn.disabled = false;
+				},
+				scope:this
+			});
 		},
 		
 		GetShipsFor : function() {
