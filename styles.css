@@ -1680,37 +1680,37 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .embassyInfo .embassyAction {
 	width:100px;
 }
-.embassyStash legend, .tradeStash legend {
+.embassyStash legend, .tradeStash legend, .distribContainers legend {
 	color: #fff;
 	padding: 0 5px;
 	font-weight:bold;
 }
-.embassyContainers, .tradeContainers {
+.embassyContainers, .tradeContainers, .distribContainers {
 	height:200px;
 	overflow-y:auto;
 	border:1px solid #52ACFF;
 }
-.embassyContainers .stashName, .tradeContainers .tradeName, .tradeContainers .tradeResourceName {
+.embassyContainers .stashName, .tradeContainers .tradeName, .tradeContainers .tradeResourceName, .distribContainers .reserveName {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:150px;
 	overflow:hidden;
 }
-.embassyContainers li, .tradeContainers  li{
+.embassyContainers li, .tradeContainers  li, .distribContainers li {
 	background-color:#52ACFF;
 	border:1px solid black;
 	margin:1px;
 	padding:1px 2px;
 	font-size:80%;
 }
-.embassyContainers li button, .tradeContainers  li button {
+.embassyContainers li button, .tradeContainers  li button, .distribContainers  li button {
 	padding:1px;
 }
-.stashItem , .tradeItem{
+.stashItem , .tradeItem, .reserveItem {
 	position:relative;
 }
-.stashItem .stashDelete, .tradeItem .tradeDelete {
+.stashItem .stashDelete, .tradeItem .tradeDelete, .distribContainers .reserveDelete {
 	background:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/close.png") no-repeat scroll center center transparent;
 	height:11px;
 	width:11px;
@@ -1722,7 +1722,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .tradeContainers  .tradeName {
 	width:319px; /* reduced from 320px to keep the + button from wrapping */
 }
-.tradeContainers .tradeResourceName {
+.tradeContainers .tradeResourceName, .distribContainers .reserveName {
 	width:230px;
 }
 

@@ -43,10 +43,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		<ul class="yui-nav">',
 				'			<li><a href="#"><em>Send</em></a></li>',
 				'			<li><a href="#"><em>Unavailable</em></a></li>',
+				'			<li><a href="#"><em>Incoming</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content">',
 				'			<div><div><ul id="starDetailSendShips"></ul></div></div>',
 				'			<div><div><ul id="starDetailUnavailShips"></ul></div></div>',
+				'			<div><div><ul id="starDetailIncomingShips"></ul></div></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -167,6 +169,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<li><a href="#planetDetailFetchSpies"><em>',this._fetchSpiesLabel,'</em></a></li>',
 				'			<li><a href="#"><em>Send</em></a></li>',
 				'			<li><a href="#"><em>Unavailable</em></a></li>',
+				'			<li><a href="#"><em>Incoming</em></a></li>',
 				'		</ul>',
 				'		<div class="yui-content">',
 				'			<div id="planetDetailOre">',
@@ -234,6 +237,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			</div>',
 				'			<div><div><ul id="planetDetailSendShips"></ul></div></div>',
 				'			<div><div><ul id="planetDetailUnavailShips"></ul></div></div>',
+				'			<div><div><ul id="planetDetailIncomingShips"></ul></div></div>',
 				'		</div>',
 				'	</div>',
 				'</div>'].join('');
@@ -248,7 +252,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				fixedcenter:false,
 				close:true,
 				underlay:false,
-				width:"500px",
+				width:"570px",
 				zIndex:9997,
 				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
 			});
@@ -329,6 +333,12 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				}, this, true);
 				//Unavailable Tab
 				tv.getTab(5).subscribe('beforeActiveChange', function(e) {
+					if(e.newValue) {
+						this.GetShips(this.planetDetails,{body_id:this.selectedBody.id});
+					}
+				}, this, true);
+				//Incoming Tab
+				tv.getTab(6).subscribe('beforeActiveChange', function(e) {
 					if(e.newValue) {
 						this.GetShips(this.planetDetails,{body_id:this.selectedBody.id});
 					}
@@ -597,74 +607,74 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 		},
 	
 	
-		CreateShipsIncomingTab : function(panel) {
+		PopulateShipsIncomingTab : function(panel) {
 			var ships = this.currentShips.incoming,
-				elm = document.createElement("div"),
-				c = elm.cloneNode(false),
-				details = document.createElement("ul"),
-				li = document.createElement("li");
-			
-			ships = ships.slice(0);
-			ships.sort(function(a,b) {
-				if (a.date_arrives > b.date_arrives) {
-					return 1;
-				}
-				else if (a.date_arrives < b.date_arrives) {
-					return -1;
-				}
-				else {
-					return 0;
-				}
-			});
-
-			details = elm.appendChild(c).appendChild(details);
-			
-			var serverTime = Lib.getTime(Game.ServerData.time);
-			
-			for(var i=0; i<ships.length; i++) {
-				var ship = ships[i],
-					nLi = li.cloneNode(false),
-					sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
-					
-				nLi.Ship = ship;
+				details = Dom.get(panel.isStarPanel ? "starDetailIncomingShips" : "planetDetailIncomingShips");
 				
-				nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
-				'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-				'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:75px;height:75px;" />',
-				'	</div>',
-				'	<div class="yui-u" style="width:75%">',
-				'		<div class="buildingName">[',ship.type_human,'] ',ship.name,' - Arrives in: <span class="shipArrives">',Lib.formatTime(sec),'</span></div>',
-				'		<div><label style="font-weight:bold;">Details:</label>',
-				'			<span><span>Task:</span><span>',ship.task,'</span></span>',
-				'			<span><span>From:</span><span>',ship.from ? ship.from.name : 'Unknown','</span></span>',
-				'			<span><span>To:</span><span>',ship.to.name,'</span></span>',
-				'		</div>',
-				'		<div><label style="font-weight:bold;">Attributes:</label>',
-				'			<span>Speed:<span>',ship.speed,'</span></span>',
-				'			<span>Hold Size:<span>',ship.hold_size,'</span></span>',
-				'			<span>Stealth:<span>',ship.stealth,'</span></span>',
-				'			<span>Combat:<span>',ship.combat,'</span></span>',
-				'		</div>',
-				'		<div><label style="font-weight:bold;">Payload:</label> ',
-				ship.payload.join(', '),
-				'		</div>',
-				'	</div>',
-				'</div>'].join('');
+			if(ships.length > 0) {
+				var	li = document.createElement("li");
 				
-				panel.addQueue(sec, this.ArrivesQueue, nLi);
+				ships = ships.slice(0);
+				ships.sort(function(a,b) {
+					if (a.date_arrives > b.date_arrives) {
+						return 1;
+					}
+					else if (a.date_arrives < b.date_arrives) {
+						return -1;
+					}
+					else {
+						return 0;
+					}
+				});
 				
-				details.appendChild(nLi);
-			}
+				var serverTime = Lib.getTime(Game.ServerData.time);
+				
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nLi = li.cloneNode(false),
+						sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
 						
+					nLi.Ship = ship;
+					
+					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
+					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:75px;height:75px;" />',
+					'	</div>',
+					'	<div class="yui-u" style="width:75%">',
+					'		<div class="buildingName">[',ship.type_human,'] ',ship.name,' - Arrives in: <span class="shipArrives">',Lib.formatTime(sec),'</span></div>',
+					'		<div><label style="font-weight:bold;">Details:</label>',
+					'			<span><span>Task:</span><span>',ship.task,'</span></span>',
+					'			<span><span>From:</span><span>',ship.from ? ship.from.name : 'Unknown','</span></span>',
+					'			<span><span>To:</span><span>',ship.to.name,'</span></span>',
+					'		</div>',
+					'		<div><label style="font-weight:bold;">Attributes:</label>',
+					'			<span>Speed:<span>',ship.speed,'</span></span>',
+					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>',
+					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+					'			<span>Combat:<span>',ship.combat,'</span></span>',
+					'		</div>',
+					'		<div><label style="font-weight:bold;">Payload:</label> ',
+					ship.payload.join(', '),
+					'		</div>',
+					'	</div>',
+					'</div>'].join('');
+					
+					panel.addQueue(sec, this.ArrivesQueue, nLi);
+					
+					details.appendChild(nLi);
+				}
+				
+			}	
+			else {
+				details.innerHTML = '<li>No Incoming ships</li>';
+			}
 			//wait for tab to display first
 			setTimeout(function() {
-				var Ht = Game.GetSize().h - 240;
+				var Ht = Game.GetSize().h - 330;
 				if(Ht > 240) { Ht = 240; }
 				Dom.setStyle(details.parentNode,"height",Ht + "px");
 				Dom.setStyle(details.parentNode,"overflow-y","auto");
 			},10);
-			
-			panel.addTab(new YAHOO.widget.Tab({ label: "Incoming", contentEl:elm }));
 		},
 		ArrivesQueue : function(remaining, elLine){
 			var arrTime;
@@ -729,7 +739,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							
 			//wait for tab to display first
 			setTimeout(function() {
-				var Ht = Game.GetSize().h - 240;
+				var Ht = Game.GetSize().h - 330;
 				if(Ht > 240) { Ht = 240; }
 				Dom.setStyle(detailsParent,"height",Ht + "px");
 				Dom.setStyle(detailsParent,"overflow-y","auto");
@@ -821,7 +831,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			//wait for tab to display first
 			setTimeout(function() {
-				var Ht = Game.GetSize().h - 240;
+				var Ht = Game.GetSize().h - 330;
 				if(Ht > 240) { Ht = 240; }
 				Dom.setStyle(detailsParent,"height",Ht + "px");
 				Dom.setStyle(detailsParent,"overflow-y","auto");
@@ -865,7 +875,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 			//wait for tab to display first
 			setTimeout(function() {
-				var Ht = Game.GetSize().h - 240;
+				var Ht = Game.GetSize().h - 330;
 				if(Ht > 240) { Ht = 240; }
 				Dom.setStyle(details.parentNode,"height",Ht + "px");
 				Dom.setStyle(details.parentNode,"overflow-y","auto");
@@ -895,12 +905,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						this.PopulateShipsSendTab(panel);
 						
 						this.PopulateShipsUnavailTab(panel);
+						
+						this.PopulateShipsIncomingTab(panel);
 
 						panel.removeTabs(); //remove any tabs that are removable before adding new ones
-						
-						if(o.result.incoming && o.result.incoming.length > 0) {
-							this.CreateShipsIncomingTab(panel);
-						}
 						
 						if(o.result.mining_platforms && o.result.mining_platforms.length > 0) {
 							this.CreateShipsMiningPlatforms(panel);

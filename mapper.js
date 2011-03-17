@@ -312,6 +312,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 						case 'asteroid':
 							this.imageHolder.innerHTML = "A";
 							break;
+						case 'space station':
+							this.imageHolder.innerHTML = "S";
+							break;
 						default:
 							this.imageHolder.innerHTML = "U";
 							break;
