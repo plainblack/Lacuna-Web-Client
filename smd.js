@@ -1684,6 +1684,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"send_fleet" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"ship_ids", "type":"array", "optional":false},
+							{"name":"target", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"send_ship" : {
 						"description": "Sends a ship to a specified body or star. Use with get_ships_for.",
 						"parameters": [
