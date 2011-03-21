@@ -232,37 +232,39 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 
 		},
 		Demolish : function() {
-			if(confirm(['Are you sure you want to Demolish the level ',this.building.level,' ',this.building.name,'?'].join(''))) {
+			var building = this.building;
+			if(confirm(['Are you sure you want to Demolish the level ',building.level,' ',building.name,'?'].join(''))) {
 				Lacuna.Pulser.Show();
 				Game.Services.Buildings.Generic.demolish({
 					session_id:Game.GetSession(),
-					building_id:this.building.id
+					building_id:building.id
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Demolish.success");
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
-						this.removeBuildingTile(this.building);
+						this.removeBuildingTile(building);
 						this.fireEvent("onHide");					
 					},
 					scope:this,
-					target:this.building.url
+					target:building.url
 				});
 			}
 		},
 		Downgrade : function() {
-			if(confirm(['Are you sure you want to downgrade the level ',this.building.level,' ',this.building.name,'?'].join(''))) {
+			var building = this.building;
+			if(confirm(['Are you sure you want to downgrade the level ',building.level,' ',building.name,'?'].join(''))) {
 				Lacuna.Pulser.Show();
 				Game.Services.Buildings.Generic.downgrade({
 					session_id:Game.GetSession(),
-					building_id:this.building.id
+					building_id:building.id
 				}, {
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Downgrade.success");
 						Lacuna.Pulser.Hide();
 						this.fireEvent("onMapRpc", o.result);
 						
-						var b = this.building; //originally passed in building data from currentBuilding
+						var b = building; //originally passed in building data from currentBuilding
 						b.id = o.result.building.id;
 						b.level = o.result.building.level;
 						b.pending_build = o.result.building.pending_build;
@@ -273,7 +275,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 						this.fireEvent("onHide");					
 					},
 					scope:this,
-					target:this.building.url
+					target:building.url
 				});
 			}
 		},

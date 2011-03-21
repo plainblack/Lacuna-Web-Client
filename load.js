@@ -41,7 +41,7 @@
 		combine: false
 	});
 	var urlBuilder = function(file) {
-		return host + file + '?4';
+		return host + file + '?5';
 	};
 /** END */
 
@@ -139,6 +139,12 @@
 		name: "capitol",
 		type: "js",
 		fullpath: urlBuilder("buildingCapitol.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "distributioncenter",
+		type: "js",
+		fullpath: urlBuilder("buildingDistributionCenter.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -256,10 +262,16 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "spacestationlab",
+		type: "js",
+		fullpath: urlBuilder("buildingSpaceStationLab.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "stationcommand",
 		type: "js",
 		fullpath: urlBuilder("buildingStationCommand.js"),
-		requires : ["building"]
+		requires : ["planetarycommand"]
 	});
 	loader.addModule({
 		name: "subspacesupplydepot",
@@ -311,6 +323,7 @@
 			"archaeology",
 			"capitol",
 			"development",
+			"distributioncenter",
 			"embassy",
 			"energyreserve",
 			"entertainment",
@@ -330,6 +343,7 @@
 			"security",
 			"shipyard",
 			"spaceport",
+			"spacestationlab",
 			"stationcommand",
 			"subspacesupplydepot",
 			"templeofthedrajilites",

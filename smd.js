@@ -296,6 +296,41 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					*/
 				}
 			},
+			DistributionCenter : {
+				"SMDVersion":"2.0",
+				"description": "Distribution Center",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/distributioncenter",
+				
+				"services": {
+					"reserve" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"resources", "type":"array", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"release_reserve" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_stored_resources" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Embassy : {
 				"SMDVersion":"2.0",
 				"description": "Embassy",
@@ -1649,6 +1684,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"send_fleet" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"ship_ids", "type":"array", "optional":false},
+							{"name":"target", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"send_ship" : {
 						"description": "Sends a ship to a specified body or star. Use with get_ships_for.",
 						"parameters": [
@@ -1781,6 +1825,35 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						*/
 					}
 
+				}
+			},
+			SpaceStationLab : {
+				"SMDVersion":"2.0",
+				"description": "Space Station Lab",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/ssla",
+
+				"services": {
+					"make_plan" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"type", "type":"string", "optional":false},
+							{"name":"level", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"subsidize_plan" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
 				}
 			},
 			StationCommand : {
