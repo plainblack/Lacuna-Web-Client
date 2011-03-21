@@ -880,7 +880,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 			panel.tabView.set('activeTab',null);
 			while(panel.tabView.get("tabs").length > 0){
 				var tab = panel.tabView.getTab(0);
-				Event.purgeElement(tab.get("contentEl"));
+				Event.purgeElement(tab.get("contentEl"), true);
 				panel.tabView.removeTab(tab);
 			}
 			

@@ -18,7 +18,8 @@ if (typeof YAHOO.lacuna.buildings.StationCommand == "undefined" || !YAHOO.lacuna
 		this.service = Game.Services.Buildings.StationCommand;
 	};
 	
-	Lang.extend(StationCommand, Lacuna.buildings.Building, {
+	Lang.extend(StationCommand, Lacuna.buildings.PlanetaryCommand);
+	/*, {
 		getChildTabs : function() {
 			return [this._getPlanetTab(), this._getPlanTab()];
 		},
@@ -146,7 +147,7 @@ if (typeof YAHOO.lacuna.buildings.StationCommand == "undefined" || !YAHOO.lacuna
 				},10);
 			}
 		}
-	});
+	});*/
 	
 	Lacuna.buildings.StationCommand = StationCommand;
 

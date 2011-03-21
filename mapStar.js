@@ -918,7 +918,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						},
 						failure : function(o){
 							btn.disabled = false;
-							return true;
 						},
 						scope:this
 					});
