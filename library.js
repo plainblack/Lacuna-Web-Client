@@ -132,13 +132,26 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 			SYSTEM : "3"
 		},
 		
-		formatInlineList : function(stringArray) {
+		formatInlineList : function(stringArray, start, end) {
 			var offering = ['<ul class="inlineList">'];
-			for(var n=0; n<stringArray.length; n++) {
+			
+			var len = stringArray.length,
+				begin = 0;
+			if(start) {
+				begin = start;
+				
+				if(end) {
+					end += 1; //add one so we include the end index
+					len = end > len ? len : end;
+				}
+			}
+
+			for(var n=begin; n<len; n++) {
 				offering[offering.length] = '<li>';
 				offering[offering.length] = stringArray[n];
 				offering[offering.length] = '</li>';
 			}
+				
 			offering[offering.length] = '</ul>';
 			return offering.join('');
 		},

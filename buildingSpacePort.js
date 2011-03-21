@@ -276,7 +276,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
 					'<div class="yui-g first">',
 					'	<div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:95px;height:95px;" />',
+					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:105px;height:105px;" />',
 					'	</div>',
 					'	<div class="yui-u">',
 					'		<span class="shipName">',ship.name,'</span>: ',
@@ -362,10 +362,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		},
 		
 		ViewActionDetails : function(nLi, ship, noEvent) {
-			var ulDet = ['<li><label style="font-weight:bold;">',ship.task,'</label></li>'];
+			var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',ship.task,'</label></li>'];
 
 			if(ship.task == "Docked") {
-				ulDet[ulDet.length] = '<li style="white-space:nowrap;"><button type="button" class="scuttle">Scuttle</button></li>';
+				ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="scuttle">Scuttle</button></li>';
 				
 				if(!noEvent) {
 					Event.delegate(nLi, 'click', this.ShipScuttle, 'button.scuttle', {Self:this,Ship:ship,Line:nLi}, true);
@@ -388,12 +388,25 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			else if(ship.task == "Defend" || ship.task == "Orbiting") {
 				ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="shipTo">';
 				ulDet[ulDet.length] = ship.orbiting.name;
-				ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><button type="button" class="recall">Recall</button></li>';
+				ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><button type="button" class="recall">Recall</button></li>';
 				
 				if(!noEvent) {
 					Event.delegate(nLi, 'click', this.ShipRecall, 'button.recall', {Self:this,Ship:ship,Line:nLi}, true);
 				}
 			}
+			
+			if(ship.payload && ship.payload.length > 0) {
+				ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="payload">Payload</button></li>';
+				
+				if(!noEvent) {
+					Event.delegate(nLi, 'click', function(e, matchedEl, container){
+						var div = Sel.query('div.shipPayload', container);
+							curDis = Dom.getStyle(div[0], "display");
+						Dom.setStyle(div, "display", curDis == "none" ? "" : "none");
+					}, 'button.payload', this, true);
+				}
+			}
+			
 			return ulDet.join('');
 		},
 		ViewPopulate : function() {
@@ -421,7 +434,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
 					'<div class="yui-g first">',
 					'	<div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:95px;height:95px;" />',
+					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:115px;height:115px;" />',
 					'	</div>',
 					'	<div class="yui-u">',
 					'		<span class="shipName">',ship.name,'</span>: ',
@@ -436,14 +449,20 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					'		<li><label style="font-weight:bold;">Attributes:</label></li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.speed,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.hold_size,'</li>',
-					'		<li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.stealth,'</li>',
-					'		<li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',ship.combat,'</li>',
-					'		<li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',ship.max_occupants,'</li>',
 					'		</ul>',
+					'		<div class="shipPayload" style="display:none;margin-top:5px"><div><label style="font-weight:bold;">Payload:</label></div>',
+					Lib.formatInlineList(ship.payload, 0, 3),
+					'</div>',
 					'	</div>',
 					'	<div class="yui-u">',
-					'		<div><label style="font-weight:bold;">Payload:</label></div>',
-					Lib.formatInlineList(ship.payload),
+					'		<ul>',
+					'		<li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',ship.max_occupants,'</li>',
+					'		<li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.stealth,'</li>',
+					'		<li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',ship.combat,'</li>',
+					'		</ul>',
+					'		<div class="shipPayload" style="display:none;margin-top:5px">',
+					Lib.formatInlineList(ship.payload, 3),
+					'		</div>',
 					'	</div>',
 					'</div>',
 					'</div>'].join('');
@@ -753,7 +772,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				},
 				failure : function(o){
 					matchedEl.disabled = false;
-					return true;
 				},
 				scope:this
 			});
@@ -1004,7 +1022,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						},
 						failure : function(o){
 							btn.disabled = false;
-							return true;
 						},
 						scope:this
 					});

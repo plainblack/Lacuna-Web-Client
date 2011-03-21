@@ -271,7 +271,7 @@
 		name: "stationcommand",
 		type: "js",
 		fullpath: urlBuilder("buildingStationCommand.js"),
-		requires : ["building"]
+		requires : ["planetarycommand"]
 	});
 	loader.addModule({
 		name: "subspacesupplydepot",
