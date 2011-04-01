@@ -654,6 +654,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Event.delegate(this.display, "click", this.handleStarmapLink, "a.starmap_link", this, true);
 				Event.delegate(this.display, "click", this.handlePlanetLink, "a.planet_link", this, true);
 				Event.delegate(this.display, "click", this.handleAllianceLink, "a.alliance_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteYesLink, "a.voteyes_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteNoLink, "a.voteno_link", this, true);
 				
 				this.viewingMessage = msg;
 				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
@@ -795,11 +797,13 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
 			});
 			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
-			body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="profile_link" href="#$1">$2</a>');
 			//body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
-			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
-			body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="planet_link" href="#$1">$2</a>');
-			body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
+			body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="planet_link" href="#$1">$2</a>');
+			body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+			body = body.replace(/\{VoteYes\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteyes_link" href="#$1&$2&$3">Yes!</a>');
+			body = body.replace(/\{VoteNo\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteno_link" href="#$1&$2&$3">No!</a>');
 			//body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
 			return body;
 		},
@@ -831,6 +835,36 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			Event.stopEvent(e);
 			var res = el.href.match(/\#(-?\d+)$/);
 			Lacuna.Info.Alliance.Load(res[1]);
+		},
+		handleVoteYesLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)&(-?\d+)&(-?\d+)$/);
+			Game.Services.Modules.Parliament.cast_vote({
+				session_id:Game.GetSession(""),
+				building_id:res[2],
+				proposition_id:res[3],
+				vote:1
+			},{
+				success : function(o){
+					alert("Voted Yes!");
+				},
+				scope:this
+			});
+		},
+		handleVoteNoLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)&(-?\d+)&(-?\d+)$/);
+			Game.Services.Modules.Parliament.cast_vote({
+				session_id:Game.GetSession(""),
+				building_id:res[2],
+				proposition_id:res[3],
+				vote:0
+			},{
+				success : function(o){
+					alert("Voted No!");
+				},
+				scope:this
+			});
 		},
 		replyMessage : function(e) {
 			this.currentTab = this.create.id;

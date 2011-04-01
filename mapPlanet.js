@@ -13,6 +13,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Lib = Lacuna.Library;
 		
 	var FactoryMap = {
+		//buildings
 		"/archaeology": Lacuna.buildings.Archaeology,
 		"/capitol": Lacuna.buildings.Capitol,
 		"/development": Lacuna.buildings.Development,
@@ -25,6 +26,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/geneticslab": Lacuna.buildings.GeneticsLab,
 		"/intelligence": Lacuna.buildings.Intelligence,
 		"/libraryofjith": Lacuna.buildings.LibraryOfJith,
+		"/mercenariesguild": Lacuna.buildings.MercenariesGuild,
 		"/miningministry": Lacuna.buildings.MiningMinistry,
 		"/missioncommand": Lacuna.buildings.MissionCommand,
 		"/network19": Lacuna.buildings.Network19,
@@ -37,14 +39,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/shipyard": Lacuna.buildings.Shipyard,
 		"/spaceport": Lacuna.buildings.SpacePort,
 		"/ssla": Lacuna.buildings.SpaceStationLab,
-		"/stationcommand": Lacuna.buildings.StationCommand,
 		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
 		"/themepark": Lacuna.buildings.ThemePark,
 		"/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
 		"/trade": Lacuna.buildings.Trade,
 		"/transporter": Lacuna.buildings.Transporter,
 		"/waterstorage": Lacuna.buildings.WaterStorage,
-		"/wasterecycling": Lacuna.buildings.WasteRecycling
+		"/wasterecycling": Lacuna.buildings.WasteRecycling,
+		//modules
+		"/stationcommand": Lacuna.modules.StationCommand
 	};
 		
 	var MapPlanet = function() {
