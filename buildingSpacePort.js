@@ -30,10 +30,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			if(this.foreignPager) {
 				this.foreignPager.destroy();
 			}
+			if(this.orbitingPager) {
+				this.orbitingPager.destroy();
+			}
 			SpacePort.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getTravelTab(), this._getViewTab(), this._getForeignTab(), this._getSendTab(), this._getSendFleetTab()];
+			return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getForeignTab(), this._getSendTab(), this._getSendFleetTab()];
 		},
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
@@ -66,15 +69,33 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		_getViewTab : function() {
 			this.viewShipsTab = new YAHOO.widget.Tab({ label: "View", content: [
 				'<div>',
-				'	<div id="shipsCount"></div>',	
+				'	<div class="yui-ge" style="border-bottom:1px solid #52acff;"><div id="shipsCount" class="yui-u first"></div><div class="yui-u"><button type="button" id="shipsRecallAll" style="display:none;">Recall All</button></div></div>',	
 				'	<div style="overflow:auto;margin-top:2px;"><ul id="shipsViewDetails"></ul></div>',
 				'	<div id="shipsViewPaginator"></div>',
 				'</div>'
 			].join('')});
 			//subscribe after adding so active doesn't fire
 			this.viewShipsTab.subscribe("activeChange", this.getShips, this, true);
+			Event.on("shipsRecallAll", "click", this.ShipRecallAll, this, true);
 			
 			return this.viewShipsTab;
+		},
+		_getOrbitingTab : function() {
+			this.viewOrbitingTab = new YAHOO.widget.Tab({ label: "Orbiting", content: [
+				'<div>',
+				'	<ul class="shipHeader shipInfo clearafter">',
+				'		<li class="shipTypeImage">&nbsp;</li>',
+				'		<li class="shipName">Name</li>',
+				'		<li class="shipArrives">Arrives</li>',
+				'		<li class="shipFrom">From</li>',
+				'	</ul>',
+				'	<div><div id="shipsOrbitingDetails"></div></div>',
+				'	<div id="shipsOrbitingPaginator"></div>',
+				'</div>'
+			].join('')});
+			this.viewOrbitingTab.subscribe("activeChange", this.getOrbiting, this, true);
+			
+			return this.viewOrbitingTab;
 		},
 		_getForeignTab : function() {
 			this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Incoming", content: [
@@ -254,6 +275,39 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				}
 			}
 		},
+		getOrbiting : function(e) {
+			if(e.newValue) {
+				if(!this.shipsOrbiting) {
+					Lacuna.Pulser.Show();
+					this.service.view_ships_orbiting({session_id:Game.GetSession(),building_id:this.building.id}, {
+						success : function(o){
+							Lacuna.Pulser.Hide();
+							this.rpcSuccess(o);
+							this.shipsOrbiting = {
+								number_of_ships: o.result.number_of_ships,
+								ships: o.result.ships
+							};
+							this.orbitingPager = new Pager({
+								rowsPerPage : 25,
+								totalRecords: o.result.number_of_ships,
+								containers  : 'shipsOrbitingPaginator',
+								template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+								alwaysVisible : false
+
+							});
+							this.orbitingPager.subscribe('changeRequest',this.OrbitingHandlePagination, this, true);
+							this.orbitingPager.render();
+							
+							this.OrbitingPopulate();
+						},
+						scope:this
+					});
+				}
+				else {
+					this.OrbitingPopulate();
+				}
+			}
+		},
 		
 		SpacePortPopulate : function() {
 			var ships = this.shipsTraveling.ships_travelling,
@@ -319,7 +373,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
 				//wait for tab to display first
 				setTimeout(function() {
-					var Ht = Game.GetSize().h - 170;
+					var Ht = Game.GetSize().h - 220;
 					if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
@@ -416,14 +470,15 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				var ships = this.shipsView.ships,
 					parentEl = details.parentNode,
 					li = document.createElement("li"),
-					info = Dom.get("shipsCount");
+					info = Dom.get("shipsCount"),
+					displayRecallAll;
 					
 				Event.purgeElement(details, true);
 				details = parentEl.removeChild(details);
 				details.innerHTML = "";
 
 				if(info && this.result.max_ships > 0) {
-					info.innerHTML = ['This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
+					info.innerHTML = ['<div>This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
 				}               
 
 				for(var i=0; i<ships.length; i++) {
@@ -467,6 +522,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					'</div>',
 					'</div>'].join('');
 					
+					if(ship.task == "Defend" || ship.task == "Orbiting") {
+						displayRecallAll = true;
+					}
+					
 					var sn = Sel.query("span.shipName",nLi,true);
 					Event.on(sn, "click", this.ShipName, {Self:this,Ship:ship,el:sn}, true);
 					//Event.on(Sel.query("span.shipFrom",nLi,true), "click", this.EmpireProfile, ship.from);
@@ -477,12 +536,19 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					
 				}
 				
+				if(displayRecallAll) {
+					Dom.setStyle("shipsRecallAll","display","");
+				}
+				else {
+					Dom.setStyle("shipsRecallAll","display","none");
+				}
+				
 				//add child back in
 				parentEl.appendChild(details);
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					var Ht = Game.GetSize().h - 220;
+					var Ht = Game.GetSize().h - 230;
 					if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
@@ -656,7 +722,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				
 				//wait for tab to display first
 				setTimeout(function() {
-					var Ht = Game.GetSize().h - 180;
+					var Ht = Game.GetSize().h - 220;
 					if(Ht > 300) { Ht = 300; }
 					var tC = details.parentNode;
 					Dom.setStyle(tC,"height",Ht + "px");
@@ -696,6 +762,118 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				arrTime = Lib.formatTime(Math.round(remaining));
 			}
 			Sel.query("li.shipArrives",elLine,true).innerHTML = arrTime;
+		},
+		
+		OrbitingPopulate : function() {
+			var details = Dom.get("shipsOrbitingDetails");
+			
+			if(details) {
+				var ships = this.shipsOrbiting.ships,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+				
+				ships = ships.slice(0);
+				ships.sort(function(a,b) {
+					if(a.date_arrives || b.date_arrives) {
+						if (a.date_arrives > b.date_arrives) {
+							return 1;
+						}
+						else if (a.date_arrives < b.date_arrives) {
+							return -1;
+						}
+						else {
+							return 0;
+						}
+					}
+					else {
+						return 0;
+					}
+				});
+				
+				Event.purgeElement(details, true);
+				details.innerHTML = "";
+				
+				var serverTime = Lib.getTime(Game.ServerData.time);
+
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false),
+						sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					Dom.addClass(nLi,"shipTypeImage");
+					Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
+					Dom.setStyle(nLi, "text-align", "center");
+					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = ship.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipArrives");
+					nLi.innerHTML = Lib.formatTime(sec);
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipFrom");
+					if(ship.from && ship.from.name) {
+						if(ship.from.empire && ship.from.empire.name) {
+							nLi.innerHTML = ship.from.name + ' <span style="cursor:pointer;">[' + ship.from.empire.name + ']</span>';
+							Event.on(nLi, "click", this.EmpireProfile, ship.from.empire);
+						}
+						else {
+							nLi.innerHTML = ship.from.name;
+						}
+					}
+					else {
+						nLi.innerHTML = 'Unknown';
+					}
+					nUl.appendChild(nLi);
+
+					this.addQueue(sec, this.ForeignQueue, nUl);
+								
+					details.appendChild(nUl);
+					
+				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 220;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
+			}
+		},
+		OrbitingHandlePagination : function(newState) {
+			Lacuna.Pulser.Show();
+			this.service.view_ships_orbiting({
+				session_id:Game.GetSession(),
+				building_id:this.building.id,
+				page_number:newState.page
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					this.shipsOrbiting = {
+						number_of_ships: o.result.number_of_ships,
+						ships: o.result.ships
+					};
+					this.OrbitingPopulate();
+				},
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.orbitingPager.setState(newState);
 		},
 		
 		EmpireProfile : function(e, empire) {
@@ -776,6 +954,29 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				scope:this
 			});
 		},
+		ShipRecallAll : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			Lacuna.Pulser.Show();
+			
+			this.service.recall_all({
+				session_id:Game.GetSession(),
+				building_id:this.building.id
+			}, {
+				success : function(o){
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					
+					delete this.shipsTraveling;
+					delete this.shipsView;
+					this.getShips({newValue:true});
+				},
+				failure : function(o){
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
 		
 		GetShipsFor : function() {
 			Lacuna.Pulser.Show();
@@ -803,7 +1004,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			}, {
 				success : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.PopulateShipsSendTab(target, o.result.available);
 				},
 				scope:this
@@ -886,7 +1087,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				}, {
 					success : function(o){
 						Lacuna.Pulser.Hide();
-						this.Self.fireEvent("onMapRpc", o.result);
+						this.Self.rpcSuccess(o);
+						delete this.Self.shipsView;
+						delete this.Self.shipsTraveling;
 						this.Self.GetShipsFor();
 						Event.purgeElement(this.Line, true);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + ".";
@@ -927,7 +1130,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			}, {
 				success : function(o){
 					Lacuna.Pulser.Hide();
-					this.fireEvent("onMapRpc", o.result);
+					this.rpcSuccess(o);
 					this.PopulateFleetSendTab(target, o.result.available);
 				},
 				scope:this
@@ -1015,9 +1218,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					}, {
 						success : function(o){
 							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
+							this.rpcSuccess(o);
 							btn.disabled = false;
 							delete this.FleetTarget;
+							delete this.shipsView;
+							delete this.shipsTraveling;
 							this.GetFleetFor();
 						},
 						failure : function(o){

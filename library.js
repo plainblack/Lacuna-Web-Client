@@ -133,27 +133,35 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
 		},
 		
 		formatInlineList : function(stringArray, start, end) {
-			var offering = ['<ul class="inlineList">'];
-			
-			var len = stringArray.length,
-				begin = 0;
-			if(start) {
-				begin = start;
+			if(Lang.isArray(stringArray)) {
+				var offering = ['<ul class="inlineList">'];
 				
-				if(end) {
-					end += 1; //add one so we include the end index
-					len = end > len ? len : end;
+				var len = stringArray.length,
+					begin = 0;
+				if(start) {
+					begin = start;
+					
+					if(end) {
+						end += 1; //add one so we include the end index
+						len = end > len ? len : end;
+					}
 				}
-			}
 
-			for(var n=begin; n<len; n++) {
-				offering[offering.length] = '<li>';
-				offering[offering.length] = stringArray[n];
-				offering[offering.length] = '</li>';
+				for(var n=begin; n<len; n++) {
+					offering[offering.length] = '<li>';
+					offering[offering.length] = stringArray[n];
+					offering[offering.length] = '</li>';
+				}
+					
+				offering[offering.length] = '</ul>';
+				return offering.join('');
 			}
-				
-			offering[offering.length] = '</ul>';
-			return offering.join('');
+			else if(Lang.isString(stringArray)){
+				return stringArray;
+			}
+			else {
+				return 'Unrecognized stringArray in formatInlineList';
+			}
 		},
 		formatMillisecondTime : function(totalMs) {
 			return Library.formatTime(totalMs / 1000);

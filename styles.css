@@ -441,6 +441,12 @@ body.yui-skin-sam  #planetsCenter .yuimenu .bd {
 	background-color:#52acff;
 	border:5px solid #52ACFF;
 }
+body.yui-skin-sam  #planetsCenter .yuimenu .bd .yuimenu .bd {
+	-moz-border-radius:10px 10px 10px 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	border-radius:10px 10px 10px 10px;
+}
 body.yui-skin-sam #usersCenter .yuimenu .bd {
 	-moz-border-radius: 0 0 10px 10px;
 	-webkit-border-bottom-left-radius: 10px;
@@ -448,6 +454,12 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	border-radius: 0 0 10px 10px;
 	background-color:#52acff;
 	border:5px solid #52ACFF;
+}
+body.yui-skin-sam  #usersCenter .yuimenu .bd .yuimenu .bd {
+	-moz-border-radius:10px 10px 10px 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	border-radius:10px 10px 10px 10px;
 }
 
 .menuPlanetThumb {

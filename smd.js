@@ -922,6 +922,103 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			MercenariesGuild : {
+				"SMDVersion":"2.0",
+				"description": "Mercenaries Guild",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/mercenariesguild",
+
+				"services": {
+					"add_to_market" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false},
+							{"name":"ask", "type":"number", "optional":false},
+							{"name":"ship_id", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_spies" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"spies" : [
+								{
+									"id" : "id-goes-here",
+									"name" : "Jack Bauer",
+									"level" : "9"
+								},
+								...
+							],
+							"cargo_space_used_each" : 350,
+							"status" : { ... }
+						 }
+						*/
+					},
+					"withdraw_from_market" : {
+						"description": "Remove a trade that you have offered and collect the items up for trade.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"accept_from_market" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_market" : {
+						"description": "Displays a list of trades available at the present time.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_my_market" : {
+						"description": "Displays a list of trades the current user has posted.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_trade_ships" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target_body_id", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"report_abuse" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"trade_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			Mining : {
 				"SMDVersion":"2.0",
 				"description": "Mining Ministry",
@@ -1674,6 +1771,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"recall_all" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					
 					"scuttle_ship" : {
 						"description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
@@ -1823,6 +1928,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							]
 						 }
 						*/
+					},
+					"view_ships_orbiting" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
 					}
 
 				}
@@ -1848,25 +1962,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					},
 					"subsidize_plan" : {
 						"description": "",
-						"parameters": [
-							{"name":"session_id", "type":"string", "optional":false},
-							{"name":"building_id", "type":"string", "optional":false}
-						],
-						"returns":{"type":"object"}
-					}
-				}
-			},
-			StationCommand : {
-				"SMDVersion":"2.0",
-				"description": "Station Command",
-
-				"envelope":"JSON-RPC-2.0",
-				"transport":"POST",
-				"target":"/stationcommand",
-
-				"services": {
-					"view_plans" : {
-						"description": "Returns a list of all the plans you've collected through various means.",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false}
@@ -3065,6 +3160,182 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"status" : { ... }
 					 }
 					*/
+				}
+			}
+		},
+		Modules : {
+			Parliament : {
+				"SMDVersion":"2.0",
+				"description": "Parliament",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/parliament",
+
+				"services": {
+					"view_laws" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_propositions" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_stars_in_jurisdiction" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_bodies_for_star_in_jurisdiction" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"get_mining_platforms_for_asteroid_in_jurisdiction" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"asteroid_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"cast_vote" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"proposition_id", "type":"string", "optional":false},
+							{"name":"vote", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_writ" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"title", "type":"string", "optional":false},
+							{"name":"description", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_repeal_law" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"law_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_transfer_station_ownership" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"to_empire_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_seize_star" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_rename_star" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"star_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_broadcast_on_network19" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_rename_asteroid" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"asteroid_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_members_only_mining_rights" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_evict_mining_platform" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"platform_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_fire_bfg" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"body_id", "type":"string", "optional":false},
+							{"name":"reason", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
+			StationCommand : {
+				"SMDVersion":"2.0",
+				"description": "Station Command",
+
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/stationcommand",
+
+				"services": {
+					"view_plans" : {
+						"description": "Returns a list of all the plans you've collected through various means.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
 				}
 			}
 		},
