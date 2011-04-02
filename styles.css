@@ -2022,6 +2022,26 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	float:right;
 }
 
+#propsDetails li , #lawsDetails li{
+	margin-top:3px;
+	border:1px solid #52acff;
+	padding:5px;
+}
+#propsDetails li  label , #lawsDetails li  label {
+	font-weight:bold;
+}
+#propsDetails .propDesc, #lawsDetails .lawDesc {
+	padding:5px;
+	font-size:90%;
+}
+#propsDetails .propMyVote {
+	padding:5px;
+}
+#propsDetails th {
+	border-bottom:1px solid #999;
+	font-weight:bold;
+}
+
 body.yui-skin-sam .yui-tt .bd {
 	-moz-border-radius:0 0 0 0;
 	-webkit-border-top-right-radius: 0;

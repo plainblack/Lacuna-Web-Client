@@ -118,6 +118,12 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.subject = Dom.get("messagingSubject");
 				this.body = Dom.get("messagingBody");
 				this.display = Dom.get("messagingDisplay");
+				Event.delegate(this.display, "click", this.handleProfileLink, "a.profile_link", this, true);
+				Event.delegate(this.display, "click", this.handleStarmapLink, "a.starmap_link", this, true);
+				Event.delegate(this.display, "click", this.handlePlanetLink, "a.planet_link", this, true);
+				Event.delegate(this.display, "click", this.handleAllianceLink, "a.alliance_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteYesLink, "a.voteyes_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteNoLink, "a.voteno_link", this, true);
 				//archiving setup
 				this.archiver = Dom.get("messagingArchiver");
 				Event.on("messagingArchiveSelected", "click", this.archiveMessages, this, true);
@@ -514,7 +520,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 		},
 
 		processMessages : function(results, is) {
-			YAHOO.log(results, "info", "Messaging.processMessages");
 			var list = this.list,
 				messages = results.messages,
 				li = document.createElement("li"),
@@ -609,7 +614,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Lacuna.Pulser.Show();
 				InboxServ.read_message(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Messaging.loadMessage.success");
 						var message = matchedEl.parentNode;
 						var messageSelect = message.childNodes[1];
 						var img = messageSelect.childNodes[0];
@@ -648,14 +652,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				else {
 					Dom.setStyle("messagingReplyC", "display", "none");
 				}
-
-				Event.purgeElement(this.display);
-				Event.delegate(this.display, "click", this.handleProfileLink, "a.profile_link", this, true);
-				Event.delegate(this.display, "click", this.handleStarmapLink, "a.starmap_link", this, true);
-				Event.delegate(this.display, "click", this.handlePlanetLink, "a.planet_link", this, true);
-				Event.delegate(this.display, "click", this.handleAllianceLink, "a.alliance_link", this, true);
-				Event.delegate(this.display, "click", this.handleVoteYesLink, "a.voteyes_link", this, true);
-				Event.delegate(this.display, "click", this.handleVoteNoLink, "a.voteno_link", this, true);
 				
 				this.viewingMessage = msg;
 				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
@@ -761,7 +757,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				
 				InboxServ.send_message(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Messaging.sendMessage.success");
 						this.fireEvent("onRpc", o.result);
 						var u = o.result.message.unknown;
 						if(u && u.length > 0) {
@@ -786,6 +781,101 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				});
 			}
 		},
+		replyMessage : function(e) {
+			this.currentTab = this.create.id;
+			this.loadTab();
+		},
+		replyAllMessage : function(e) {
+			this.currentTab = this.create.id;
+			this.loadTab(true);
+		},
+		forwardMessage : function(e) {
+			this.currentTab = this.create.id;
+			this.viewingMessage.forwarding = true;
+			this.loadTab();
+		},
+		archiveMessage : function(e) {
+			if(!this.toArchive[this.viewingMessage.id]) {
+				this.toArchive[this.viewingMessage.id] = this.viewingMessage;
+				this.toArchiveCount++;
+			}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					message_ids: [this.viewingMessage.id]
+				};
+			InboxServ.archive_messages(data, {
+				success : function(o){
+					this.archiveProcess(o.result);
+					this.fireEvent("onRpc", o.result);
+				},
+				scope:this
+			});
+		},
+		archiveMessages : function() {
+			if(this.toArchiveCount > 0) {
+				var mIds = [];
+				for(var key in this.toArchive) {
+					if(this.toArchive.hasOwnProperty(key)) {
+						mIds.push(key);
+					}
+				}
+				var InboxServ = Game.Services.Inbox,
+					data = {
+						session_id: Game.GetSession(""),
+						message_ids: mIds
+					};
+				InboxServ.archive_messages(data, {
+					success : function(o){
+						this.archiveProcess(o.result);
+						this.fireEvent("onRpc", o.result);
+					},
+					scope:this
+				});
+			}
+		},
+		archiveProcess : function(results) {
+			Dom.batch(Sel.query("li.message", this.list), function(el){
+				if(results.success.indexOf(el.Message.id) >= 0) {
+					delete this.toArchive[el.Message.id];
+					if (el.Message.has_read*1 == 0) {
+						Game.EmpireData.has_new_messages--;
+						if(Game.EmpireData.has_new_messages < 0) {
+							Game.EmpireData.has_new_messages = 0;
+						}
+					}
+					this.toArchiveCount--;
+					Event.purgeElement(el);
+					el.parentNode.removeChild(el);
+				}
+			}, this, true);
+			
+			if(this.pager) {
+				//reload messages if we had a pager
+				this.loadTab();
+			}
+			
+			Dom.setStyle(this.display, "visibility", "hidden");
+			delete this.selectedAll;
+			this.select.innerHTML = "Select All";
+		},
+		selectAllMessages : function() {
+			var els = Sel.query("input[type=checkbox]",this.list);
+			Dom.batch(els, function(el) {
+				el.checked = !this.selectedAll;
+				this.checkSelect(null,el);
+			}, this, true);
+			if(this.selectedAll) {
+				delete this.selectedAll;
+				this.select.innerHTML = "Select All";
+			}
+			else {
+				this.selectedAll = 1;
+				this.select.innerHTML = "Select None";
+			}
+		},
+		
 		formatBody : function(body) {
 			body = body.replace(/&/g,'&amp;');
 			body = body.replace(/</g,'&lt;');
@@ -866,102 +956,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				scope:this
 			});
 		},
-		replyMessage : function(e) {
-			this.currentTab = this.create.id;
-			this.loadTab();
-		},
-		replyAllMessage : function(e) {
-			this.currentTab = this.create.id;
-			this.loadTab(true);
-		},
-		forwardMessage : function(e) {
-			this.currentTab = this.create.id;
-			this.viewingMessage.forwarding = true;
-			this.loadTab();
-		},
-		archiveMessage : function(e) {
-			if(!this.toArchive[this.viewingMessage.id]) {
-				this.toArchive[this.viewingMessage.id] = this.viewingMessage;
-				this.toArchiveCount++;
-			}
-			
-			var InboxServ = Game.Services.Inbox,
-				data = {
-					session_id: Game.GetSession(""),
-					message_ids: [this.viewingMessage.id]
-				};
-			InboxServ.archive_messages(data, {
-				success : function(o){
-					YAHOO.log(o, "info", "Messaging.archiveMessage.success");
-					this.archiveProcess(o.result);
-					this.fireEvent("onRpc", o.result);
-				},
-				scope:this
-			});
-		},
-		archiveMessages : function() {
-			if(this.toArchiveCount > 0) {
-				var mIds = [];
-				for(var key in this.toArchive) {
-					if(this.toArchive.hasOwnProperty(key)) {
-						mIds.push(key);
-					}
-				}
-				var InboxServ = Game.Services.Inbox,
-					data = {
-						session_id: Game.GetSession(""),
-						message_ids: mIds
-					};
-				InboxServ.archive_messages(data, {
-					success : function(o){
-						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
-						this.archiveProcess(o.result);
-						this.fireEvent("onRpc", o.result);
-					},
-					scope:this
-				});
-			}
-		},
-		archiveProcess : function(results) {
-			Dom.batch(Sel.query("li.message", this.list), function(el){
-				if(results.success.indexOf(el.Message.id) >= 0) {
-					delete this.toArchive[el.Message.id];
-					if (el.Message.has_read*1 == 0) {
-						Game.EmpireData.has_new_messages--;
-						if(Game.EmpireData.has_new_messages < 0) {
-							Game.EmpireData.has_new_messages = 0;
-						}
-					}
-					this.toArchiveCount--;
-					Event.purgeElement(el);
-					el.parentNode.removeChild(el);
-				}
-			}, this, true);
-			
-			if(this.pager) {
-				//reload messages if we had a pager
-				this.loadTab();
-			}
-			
-			Dom.setStyle(this.display, "visibility", "hidden");
-			delete this.selectedAll;
-			this.select.innerHTML = "Select All";
-		},
-		selectAllMessages : function() {
-			var els = Sel.query("input[type=checkbox]",this.list);
-			Dom.batch(els, function(el) {
-				el.checked = !this.selectedAll;
-				this.checkSelect(null,el);
-			}, this, true);
-			if(this.selectedAll) {
-				delete this.selectedAll;
-				this.select.innerHTML = "Select All";
-			}
-			else {
-				this.selectedAll = 1;
-				this.select.innerHTML = "Select None";
-			}
-		},
 		
 		isVisible : function() {
 			return this.messagingPanel.cfg.getProperty("visible");
@@ -992,7 +986,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				};
 			InboxServ.read_message(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "Messaging.showMessage.success");
 					var message = o.result.message;
 					if (message.has_archived != "0") {
 						this.currentTab = this.archive.id;
