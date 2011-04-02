@@ -81,7 +81,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return this.viewShipsTab;
 		},
 		_getOrbitingTab : function() {
-			this.viewOrbitingTab = new YAHOO.widget.Tab({ label: "Orbiting", content: [
+			this.viewOrbitingTab = new YAHOO.widget.Tab({ label: "Foreign Orbiting", content: [
 				'<div>',
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',

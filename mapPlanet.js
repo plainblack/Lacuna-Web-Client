@@ -47,7 +47,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/waterstorage": Lacuna.buildings.WaterStorage,
 		"/wasterecycling": Lacuna.buildings.WasteRecycling,
 		//modules
-		"/stationcommand": Lacuna.modules.StationCommand
+		"/stationcommand": Lacuna.modules.StationCommand,
+		"/parliament": Lacuna.modules.Parliament
 	};
 		
 	var MapPlanet = function() {
@@ -902,7 +903,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		BuildingFactory : function(result) {			
 			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
-				classObj = new classConstructor(result);
+				classObj = new classConstructor(result, this.locationId);
 			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);

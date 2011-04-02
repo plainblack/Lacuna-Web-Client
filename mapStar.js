@@ -920,7 +920,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							details.innerHTML = '<li>Sent ' + o.result.fleet.length + ' ships!</li>';
 							
 							this.GetShips(panel, target);
-							btn.disabled = false;
 						},
 						failure : function(o){
 							btn.disabled = false;

@@ -317,12 +317,12 @@
 		requires : ["building"]
 	});
 	//modules
-	/*loader.addModule({
-		name: "parliment",
+	loader.addModule({
+		name: "parliament",
 		type: "js",
-		fullpath: urlBuilder("moduleParliment.js"),
+		fullpath: urlBuilder("moduleParliament.js"),
 		requires : ["building"]
-	});*/
+	});
 	loader.addModule({
 		name: "stationcommand",
 		type: "js",
@@ -369,6 +369,7 @@
 			"waterstorage",
 			"wasterecycling",
 			//modules
+			"parliament",
 			"stationcommand",
 			//helpers
 			"event-delegate",
