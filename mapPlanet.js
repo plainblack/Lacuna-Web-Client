@@ -118,10 +118,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					while(queue.length > 0) {
 						var callback = queue.pop();
 						callback.secondsRemaining -= diff;
-						if(callback.secondsRemaining > 0) {
+						if(!callback.fn.call(callback.scope || this, callback.secondsRemaining, callback.el) && callback.secondsRemaining > 0) {
 							newq.push(callback);
 						}
-						callback.fn.call(callback.scope || this, callback.secondsRemaining, callback.el);
 					}
 					this.queue = newq;
 				}
@@ -486,10 +485,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		
 		_fireRpcSuccess : function(result){
-			/*if(result.building && result.building.work) {
-				this.buildings[result.building.id].work = result.building.work;
-				this._map.refreshTile(this.buildings[result.building.id]);
-			}*/
 			this.fireEvent("onMapRpc", result);
 		},
 		_fireQueueAdd : function(obj) {
@@ -942,18 +937,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
 					if(building.pending_build.seconds_remaining > 0) {
 						panel.addQueue(building.pending_build.seconds_remaining,
-							function(remaining){
+							function(remaining, elm){
 								var rf = Math.round(remaining);
 								if(rf <= 0) {
-									this.buildingDetails.timeLeftLi.innerHTML = "";
+									elm.innerHTML = "";
 									YAHOO.log("Complete","info","buildingDetails.showEvent.BuildTimeRemaining");
 									this.DetailsView({data:{id:building.id,url:building.url},x:building.x,y:building.y});
 								}
 								else {
-									this.buildingDetails.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
+									elm.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
 								}
 							},
-							null,
+							panel.timeLeftLi,
 							this
 						);
 					}

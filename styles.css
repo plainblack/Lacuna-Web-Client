@@ -1416,7 +1416,7 @@ planet details
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
-	width:80px;
+	width:120px;
 }
 #buildingDetailsName, .buildingName, .shipName {
 	font-weight:bold;
@@ -2041,6 +2041,19 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	border-bottom:1px solid #999;
 	font-weight:bold;
 }
+
+#proposeContainer label{
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
+	width:130px;
+	font-weight:bold;
+	vertical-align:top;
+}
+#proposeContainer  button { margin-top: 10px; }
+#proposeContainer li { margin-top: 2px; }
+
+#proposeSeizeStarFindTbl, #proposeInductMemberTbl  { width: 400px; }
 
 body.yui-skin-sam .yui-tt .bd {
 	-moz-border-radius:0 0 0 0;

@@ -19,23 +19,16 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 		this.service = Game.Services.Modules.Parliament;
 		
 		this.canRepealLaw = this.building.level >= 5;
-		
-		var actionsByLevel = [];
-		actionsByLevel[4] = ['propose_writ'];
-		actionsByLevel[5] = ['propose_repeal_law'];
-		actionsByLevel[6] = ['propose_transfer_station_ownership'];
-		actionsByLevel[7] = ['propose_seize_star'];
-		actionsByLevel[8] = ['propose_rename_star'];
-		actionsByLevel[9] = ['propose_broadcast_on_network19'];
-		actionsByLevel[12] = ['propose_rename_asteroid'];
-		actionsByLevel[13] = ['propose_members_only_mining_rights'];
-		actionsByLevel[14] = ['propose_evict_mining_platform'];
-		actionsByLevel[25] = ['propose_fire_bfg'];
 	};
 	
 	Lang.extend(Parliament, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getLawsTab(), this._getPropsTab()];
+			if(this.building.level >= 4) {
+				return [this._getCreateTab(), this._getLawsTab(), this._getPropsTab()];
+			}
+			else {
+				return [this._getLawsTab(), this._getPropsTab()];
+			}
 		},
 		_getLawsTab : function() {
 			var tab = new YAHOO.widget.Tab({ label: "Laws", content: [
@@ -102,20 +95,604 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			return tab;
 		},
 		_getCreateTab : function() {
-				
-			var tab = new YAHOO.widget.Tab({ label: "Propose", content: [
-				'<div>',
-				'	<select id="propose"></select>',
-				'	<div id="proposeWrit" style="display:none;">',
-				'		<select id="proposeWritTemplates"></select>',
-				'		<input type="text" id="proposeTitle" />',
-				'		<textarea id="proposeDesc"></textarea>',
+
+			this.createEvent("onAllianceMembers");
+
+			var opts = ['<option value="proposeWrit" selected>Writ</option>'],
+				dis = [], getAllianceMembers;
+			if(this.building.level >= 6) {
+				opts[opts.length] = '<option value="proposeTransfer">Transer Station Ownership</option>';
+				dis[dis.length] = [
+				'	<div id="proposeTransfer" class="proposeOption" style="display:none;">',
+				'		<label>Empire:</label><select id="proposeTransferTo"></select><br />',
+				'		<button type="button" id="proposeTransferSubmit">Propose Transfer</button>',
+				'	</div>'
+				].join('');
+				getAllianceMembers = true;
+				this.subscribe("onLoad", function() {
+					this.subscribe("onAllianceMembers", function() {
+						var sel = Dom.get("proposeTransferTo"),
+							opts = [];
+						for(var n=0; n<this.allianceMembers.length; n++) {
+							var member = this.allianceMembers[n];
+							if(!member.isLeader) {
+								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
+							}
+						}
+						sel.innerHTML = opts.join('');
+						sel.selectedIndex = -1;
+					}, this, true);
+					Event.on("proposeTransferSubmit", "click", this.TransferOwner, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 7) {
+				opts[opts.length] = '<option value="proposeSeizeStar">Seize Star</option>';
+				dis[dis.length] = [
+				'	<div id="proposeSeizeStar" class="proposeOption" style="display:none;">',
+				'		<label>Star:</label><input type="text" id="proposeSeizeStarFind" /><br />',
+				'		<button type="button" id="proposeSeizeStarSubmit">Propose Seize Star</button>',
+				'	</div>'
+				].join('');
+				this.subscribe("onLoad", function() {
+					this.seizeStarTextboxList = this.CreateStarSearch("proposeSeizeStarFind");
+					Event.on("proposeSeizeStarSubmit", "click", this.SeizeStar, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 8) {
+				opts[opts.length] = '<option value="proposeRenameStar">Rename Star</option>';
+				dis[dis.length] = [
+				'	<div id="proposeRenameStar" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Star:</label><select id="proposeRenameStarSelect"></select></li>',
+				'		<li><label>New Name:</label><input type="text" id="proposeRenameStarName" /></li></ul><br />',
+				'		<button type="button" id="proposeRenameStarSubmit">Propose Rename Star</button>',
+				'	</div>'
+				].join('');
+				this.subscribe("onLoad", function() {
+					this.service.get_stars_in_jurisdiction({session_id:Game.GetSession(""),building_id:this.building.id},{
+						success:function(o){
+							var el = Dom.get('proposeRenameStarSelect');
+							if(el) {
+								var stars = o.result.stars;
+								var opts = [];
+								for(var m=0; m<stars.length; m++) {
+									var obj = stars[m];
+									opts[opts.length] = '<option value="'+obj.id+'">'+obj.name+'</option>';
+								}
+								
+								el.innerHTML = opts.join('');
+								el.selectedIndex = -1;
+							}
+						},
+						scope:this
+					});
+					Event.on("proposeRenameStarSubmit", "click", this.RenameStar, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 9) {
+				opts[opts.length] = '<option value="proposeBroadcast">Broadcast on Net19</option>';
+				dis[dis.length] = [
+				'	<div id="proposeBroadcast" class="proposeOption" style="display:none;">',
+				'		<label>Message:</label><input type="text" id="proposeBroadcastMessage" maxlength="100" size="50" /><br />',
+				'		<button type="button" id="proposeBroadcastSubmit">Propose Broadcast</button>',
+				'	</div>'
+				].join('');
+				this.subscribe("onLoad", function() {
+					Event.on("proposeBroadcastSubmit", "click", this.Broadcast, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 10) {
+				opts[opts.length] = '<option value="proposeInduct">Induct Member</option>';
+				opts[opts.length] = '<option value="proposeExpel">Expel Member</option>';
+				dis[dis.length] = [
+				'	<div id="proposeInduct" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Empire:</label><input type="text" id="proposeInductMember" /></li>',
+				'		<li><label>Message:</label><textarea id="proposeInductMessage"></textarea></li></ul><br />',
+				'		<button type="button" id="proposeInductSubmit">Propose Induct Member</button>',
 				'	</div>',
+				'	<div id="proposeExpel" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Empire:</label><select id="proposeExpelMember"></select></li>',
+				'		<li><label>Reason:</label><textarea id="proposeExpelReason"></textarea></li></ul><br />',
+				'		<button type="button" id="proposeExpelSubmit">Propose Expel Member</button>',
+				'	</div>'
+				].join('');
+				getAllianceMembers = true;
+				this.subscribe("onLoad", function() {
+					this.inductMemberTextboxList = this.CreateEmpireSearch("proposeInductMember");
+					Event.on("proposeInductSubmit", "click", this.MemberInduct, this, true);
+
+					this.subscribe("onAllianceMembers", function() {
+						var sel = Dom.get("proposeExpelMember"),
+							opts = [];
+						for(var n=0; n<this.allianceMembers.length; n++) {
+							var member = this.allianceMembers[n];
+							if(!member.isLeader) {
+								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
+							}
+						}
+						sel.innerHTML = opts.join('');
+						sel.selectedIndex = -1;
+					}, this, true);
+					Event.on("proposeExpelSubmit", "click", this.MemberExpel, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 11) {
+				opts[opts.length] = '<option value="proposeElectLeader">Elect New Leader</option>';
+				dis[dis.length] = [
+				'	<div id="proposeElectLeader" class="proposeOption" style="display:none;">',
+				'		<label>Empire:</label><select id="proposeElectLeaderMember"></select><br />',
+				'		<button type="button" id="proposeElectLeaderSubmit">Propose as New Leader</button>',
+				'	</div>'
+				].join('');
+				getAllianceMembers = true;
+				this.subscribe("onLoad", function() {
+					this.subscribe("onAllianceMembers", function() {
+						var sel = Dom.get("proposeElectLeaderMember"),
+							opts = [];
+						for(var n=0; n<this.allianceMembers.length; n++) {
+							var member = this.allianceMembers[n];
+							if(!member.isLeader) {
+								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
+							}
+						}
+						sel.innerHTML = opts.join('');
+						sel.selectedIndex = -1;
+					}, this, true);
+					Event.on("proposeElectLeaderSubmit", "click", this.MemberNewLeader, this, true);
+				}, this, true);
+			}
+			if(this.building.level >= 12) {
+				opts[opts.length] = '<option value="proposeRenameAsteroid">Rename Asteroid</option>';
+				dis[dis.length] = [
+				'	<div id="proposeRenameAsteroid" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Asteroid:</label><select id="proposeRenameAsteroidJurisdiction"></select></li>',
+				'		<li><label>Name:</label><input type="text" id="proposeRenameAsteroidName" /></li></ul><br />',
+				'		<button type="button" id="proposeRenameAsteroidSubmit">Propose Rename Asteroid</button>',
+				'	</div>'
+				].join('');
+			}
+			if(this.building.level >= 13) {
+				opts[opts.length] = '<option value="proposeMembersMining">Members Only Mining Rights</option>';
+				dis[dis.length] = [
+				'	<div id="proposeMembersMining" class="proposeOption" style="display:none;">',
+				'		Allow only members to mine on asteroids under this stations jurisdiction.<br />',
+				'		<button type="button" id="proposeMembersMiningSubmit">Propose</button>',
+				'	</div>'
+				].join('');
+				Event.on("proposeMembersMiningSubmit", "click", this.MiningOnly, this, true);
+			}
+			if(this.building.level >= 14) {
+				opts[opts.length] = '<option value="proposeEvictMining">Evict Mining Platform</option>';
+				dis[dis.length] = [
+				'	<div id="proposeEvictMining" class="proposeOption" style="display:none;">',
+				'		<label>Mining Platform:</label><select id="proposeEvictMiningJurisdiction"></select><br />',
+				'		<button type="button" id="proposeEvictMiningSubmit">Propose Eviction</button>',
+				'	</div>'
+				].join('');
+			}
+			if(this.building.level >= 17) {
+				opts[opts.length] = '<option value="proposeRenameUninhabited">Rename Uninhabited</option>';
+				dis[dis.length] = [
+				'	<div id="proposeRenameUninhabited" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Planet:</label><select id="proposeRenameUninhabitedJurisdiction"></select></li>',
+				'		<li><label>Name:</label><input type="text" id="proposeRenameUninhabitedName" /></li></ul><br />',
+				'		<button type="button" id="proposeRenameUninhabitedSubmit">Propose Rename Uninhabited</button>',
+				'	</div>'
+				].join('');
+			}
+			if(this.building.level >= 18) {
+				opts[opts.length] = '<option value="proposeMembersColonize">Members Only Colonization</option>';
+				dis[dis.length] = [
+				'	<div id="proposeMembersColonize" class="proposeOption" style="display:none;">',
+				'		Allow only members to colonize planets under this stations jurisdiction.<br />',
+				'		<button type="button" id="proposeMembersColonizeSubmit">Propose</button>',
+				'	</div>'
+				].join('');
+				Event.on("proposeMembersColonizeSubmit", "click", this.ColonizeOnly, this, true);
+			}
+			if(this.building.level >= 25) {
+				opts[opts.length] = '<option value="proposeFireBfg">Fire BFG</option>';
+				dis[dis.length] = [
+				'	<div id="proposeFireBfg" class="proposeOption" style="display:none;">',
+				'		<ul><li><label>Body:</label><select id="proposeFireBfgJurisdiction"></select></li>',
+				'		<li><label>Reason:</label><textarea id="proposeFireBfgReason"></textarea></li></ul><br />',
+				'		<button type="button" id="proposeFireBfgSubmit">Propose to Fire BFG</button>',
+				'	</div>'
+				].join('');
+			}
+			
+			if(getAllianceMembers) {
+				Game.Services.Alliance.view_profile({session_id:Game.GetSession(""),alliance_id:Game.GetCurrentPlanet().alliance.id},{
+					success:function(o){
+						var el = Dom.get('proposeTransferTo');
+						if(el) {
+							var profile = o.result.profile;
+							var memberArray = [];
+							for(var m=0; m<profile.members.length; m++) {
+								var member = profile.members[m];
+								member.isLeader = member.id == profile.leader_id
+								memberArray[memberArray.length] = member;
+							}
+							this.allianceMembers = memberArray;
+							this.fireEvent("onAllianceMembers");
+						}
+					},
+					scope:this
+				});
+			}
+			
+			var tab = new YAHOO.widget.Tab({ label: "Propose", content: [
+				'<div id="proposeContainer">',
+				'	<div style="border-bottom:1px solid #52acff;padding-bottom:5px; margin-bottom:5px;">',
+				'		Propose: <select id="proposeSelect">',
+				opts.join(''),
+				'	</select></div>',
+				'	<div id="proposeMessage"></div>',
+				'	<div id="proposeWrit" class="proposeOption">',
+				'		<ul><li><label>Template:</label><select id="proposeWritTemplates"></select></li>',
+				'		<li><label>Title:</label><input type="text" id="proposeTitle" size="50" maxlength="30" /></li>',
+				'		<li><label>Description:</label><textarea id="proposeDesc" rows="4" cols="80"></textarea></li></ul><br />',
+				'		<button type="button" id="proposeWritSubmit">Propose Writ</button>',
+				'	</div>',
+				dis.join(''),
 				'</div>'
 			].join('')});
 
+			this.subscribe("onLoad", function() {
+				this.proposeOptions = Sel.query("div.proposeOption", "proposeContainer");
+				this.proposeMessage = Dom.get("proposeMessage");
+				
+				Event.on("proposeSelect", "change", function(e) {
+					Dom.setStyle(this.proposeOptions, "display", "none");
+					Dom.setStyle(Lib.getSelectedOptionValue("proposeSelect"), "display", "");
+				}, this, true);
+
+				//Propose Writ
+				var t = Dom.get("proposeWritTemplates"),
+					templates = Game.Resources.writ_templates,
+					opts = [];
+				for(var n=0; n<templates.length; n++) {
+					var tmp = templates[n];
+					opts.push('<option value="');
+					opts.push(n);
+					opts.push('">');
+					opts.push(tmp.title);
+					opts.push('</option>');
+				}
+				t.innerHTML = opts.join('');
+				Dom.get("proposeTitle").value = templates[0].title;
+				Dom.get("proposeDesc").value = templates[0].description;
+				
+				Event.on(t, "change", this.ProposeWritTemplateChange, this, true);
+				
+				Event.on("proposeWritSubmit", "click", this.ProposeWrit, this, true);
+			}, this, true);
+
 			return tab;
 		},
+		
+		ProposeWritTemplateChange : function() {
+			var opt = Game.Resources.writ_templates[Lib.getSelectedOption("proposeWritTemplates").value];
+			Dom.get("proposeTitle").value = opt.title;
+			Dom.get("proposeDesc").value = opt.description;
+		},
+		CreateStarSearch : function(id) {
+			var dataSource = new Util.XHRDataSource("/map");
+			dataSource.connMethodPost = "POST";
+			dataSource.maxCacheEntries = 2;
+			dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+			dataSource.responseSchema = {
+				resultsList : "result.stars",
+				fields : ["name","id","zone","color","x","y"]
+			};
+			
+			var oTextboxList = new YAHOO.lacuna.TextboxList(id, dataSource, { //config options
+				maxResultsDisplayed: 25,
+				minQueryLength:3,
+				multiSelect:false,
+				forceSelection:false,
+				useIndicator:true
+			});
+			oTextboxList.formatResult = function(oResultData, sQuery, sResultMatch) {
+				return [
+					'<div class="yui-gf">',
+					'	<div class="yui-u first" style="background-color:black;">',
+					'		<img src="',Lib.AssetUrl,'star_map/',oResultData.color,'.png" alt="',oResultData,name,'" style="width:50px;height:50px;" />',
+					'	</div>',
+					'	<div class="yui-u">',
+					'		<div>',oResultData.name,'</div>',
+					'		<div>',oResultData.x,' : ',oResultData.y,'</div>',
+					'	</div>',
+					'</div>'].join("");
+			};
+			oTextboxList.generateRequest = function(sQuery){				
+				var s = Lang.JSON.stringify({
+						"id": YAHOO.rpc.Service._requestId++,
+						"method": "search_stars",
+						"jsonrpc": "2.0",
+						"params": [
+							Game.GetSession(""),
+							decodeURIComponent(sQuery)
+						]
+					});
+				return s;
+			};
+
+			return oTextboxList;
+		},
+		CreateEmpireSearch : function(id) {
+			var dataSource = new Util.XHRDataSource("/empire");
+			dataSource.connMethodPost = "POST";
+			dataSource.maxCacheEntries = 2;
+			dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+			dataSource.responseSchema = {
+				resultsList : "result.empires",
+				fields : ["name","id"]
+			};
+			
+			var oTextboxList = new YAHOO.lacuna.TextboxList(id, dataSource, { //config options
+				maxResultsDisplayed: 10,
+				minQueryLength:3,
+				multiSelect:false,
+				forceSelection:true,
+				formatResultLabelKey:"name",
+				formatResultColumnKeys:["name"],
+				useIndicator:true
+			});
+			oTextboxList.generateRequest = function(sQuery){
+				var s = Lang.JSON.stringify({
+						"id": YAHOO.rpc.Service._requestId++,
+						"method": "find",
+						"jsonrpc": "2.0",
+						"params": [
+							Game.GetSession(""),
+							decodeURIComponent(sQuery)
+						]
+					});
+				return s;
+			};
+			
+			return oTextboxList;
+		},
+		
+		Broadcast : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_broadcast_on_network19({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				message : Dom.get("proposeBroadcastMessage").value
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal of Broadcast successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					Dom.get("proposeBroadcastMessage").value = "";
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		ColonizeOnly : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_members_only_colonization({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal for Members Only Colonization successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		MemberExpel : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_expel_member({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				empire_id : Lib.getSelectedOptionValue("proposeExpelMember"),
+				message : Dom.get('proposeExpelReason').value
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal to Expel Member successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					Dom.get("proposeExpelMember").selectedIndex = -1;
+					Dom.get('proposeExpelReason').value = "";
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		MemberInduct : function(e) {
+			if(this.inductMemberTextboxList._oTblSingleSelection) {
+				var btn = Event.getTarget(e);
+				btn.disabled = true;
+				var selObj = this.inductMemberTextboxList._oTblSingleSelection.Object;
+				
+				this.service.propose_induct_member({
+					session_id : Game.GetSession(''),
+					building_id : this.building.id,
+					empire_id : selObj.id,
+					message : Dom.get('proposeInductMessage').value
+				},
+				{
+					success : function(o) {
+						this.rpcSuccess(o);
+						this.proposeMessage.innerHTML = "Proposal to Induct Member successful.";
+						Lib.fadeOutElm(this.proposeMessage);
+						this.inductMemberTextboxList.ResetSelections();
+						Dom.get('proposeInductMessage').value = "";
+						btn.disabled = false;
+					},
+					failure : function(o) {
+						btn.disabled = false;
+					},
+					scope:this
+				});
+			}
+		},
+		MemberNewLeader : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_elect_new_leader({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				to_empire_id : Lib.getSelectedOptionValue("proposeElectLeaderMember")
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal to Elect New Leader successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					Dom.get("proposeElectLeaderMember").selectedIndex = -1;
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		MiningOnly : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_members_only_mining_rights({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal for Members Only Mining Rights successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		ProposeWrit : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_writ({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				title : Dom.get("proposeTitle").value,
+				description : Dom.get("proposeDesc").value
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal of Writ successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					this.ProposeWritTemplateChange();
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		RenameStar : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_seize_star({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				star_id : Lib.getSelectedOptionValue("proposeRenameStarSelect"),
+				name : Dom.get("proposeRenameStarName").value
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal to Rename star successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					Dom.get("proposeRenameStarSelect").selectedIndex = -1;
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		SeizeStar : function(e) {
+			if(this.seizeStarTextboxList._oTblSingleSelection) {
+				var btn = Event.getTarget(e);
+				btn.disabled = true;
+				var selObj = this.seizeStarTextboxList._oTblSingleSelection.Object;
+				
+				this.service.propose_seize_star({
+					session_id : Game.GetSession(''),
+					building_id : this.building.id,
+					star_id : selObj.id
+				},
+				{
+					success : function(o) {
+					this.rpcSuccess(o);
+						this.proposeMessage.innerHTML = "Proposal to Seize star successful.";
+						Lib.fadeOutElm(this.proposeMessage);
+						this.seizeStarTextboxList.ResetSelections();
+						btn.disabled = false;
+					},
+					failure : function(o) {
+						btn.disabled = false;
+					},
+					scope:this
+				});
+			}
+		},
+		TransferOwner : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+		
+			this.service.propose_transfer_station_ownership({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id,
+				to_empire_id : Lib.getSelectedOptionValue("proposeTransferTo")
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal to Transfer Ownership successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					Dom.get("proposeTransferTo").selectedIndex = -1;
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		
 		
 		LawsPopulate : function(){
 			var details = Dom.get("lawsDetails");
@@ -226,21 +803,41 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			}
 		},
 		PropLineDetails : function(prop, sec) {
-			return ['<div style="margin-bottom:2px;">',
-				'<div class="yui-gb">',
-				'	<div class="yui-u first"><label>',prop.name,':</label>',prop.status,'</div>',
-				'	<div class="yui-u">Proposed by <a class="profile_link" href="#',prop.proposed_by.id,'">',prop.proposed_by.name,'</a></div>',
-				'	<div class="yui-u">Ends in <span class="propTime">',Lib.formatTime(sec),'</span></div>',
-				'</div>',
-				'<div class="yui-gc">',
-				'	<div class="yui-u first"><div class="propDesc">',this.formatBody(prop.description),'</div></div>',
-				'	<div class="yui-u"><div class="propMyVote">',this.PropVoteDetails(prop),'</div></div>',
-				'</div>',
-				'<table style="width:100%"><col width="25%"><col width="25%"><col width="25%"><col width="25%">',
-				'<tr><th>Needed</th><th>Have</th><th>Yes</th><th>No</th></tr>',
-				'<tr><td>',prop.votes_needed,'</td><td>',prop.votes_yes*1 + prop.votes_no*1,'</td><td>',prop.votes_yes,'</td><td>',prop.votes_no,'</td></tr>',
-				'</table>',
-				'</div>'].join('');
+			if(prop.status == "Passed" || prop.status == "Failed") {
+				return ['<div style="margin-bottom:2px;">',
+					'<div class="yui-gb">',
+					'	<div class="yui-u first"><label>',prop.name,'</label></div>',
+					'	<div class="yui-u">Proposed by <a class="profile_link" href="#',prop.proposed_by.id,'">',prop.proposed_by.name,'</a></div>',
+					'	<div class="yui-u"><label>',prop.status,'</label></div>',
+					'</div>',
+					'<div class="yui-gc">',
+					'	<div class="yui-u first"><div class="propDesc">',this.formatBody(prop.description),'</div></div>',
+					'	<div class="yui-u"><div class="propMyVote">',this.PropVoteDetails(prop),'</div></div>',
+					'</div>',
+					'<table style="width:100%"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;">',
+					'<tr><th>Needed</th><th>Yes</th><th>No</th></tr>',
+					'<tr><td>',prop.votes_needed,'</td><td>',prop.votes_yes,'</td><td>',prop.votes_no,'</td></tr>',
+					'</table>',
+					'</div>'].join('');
+
+			}
+			else {
+				return ['<div style="margin-bottom:2px;">',
+					'<div class="yui-gb">',
+					'	<div class="yui-u first"><label>',prop.name,'</label></div>',
+					'	<div class="yui-u">Proposed by <a class="profile_link" href="#',prop.proposed_by.id,'">',prop.proposed_by.name,'</a></div>',
+					'	<div class="yui-u">',prop.status,': <span class="propTime">',Lib.formatTime(sec),'</span></div>',
+					'</div>',
+					'<div class="yui-gc">',
+					'	<div class="yui-u first"><div class="propDesc">',this.formatBody(prop.description),'</div></div>',
+					'	<div class="yui-u"><div class="propMyVote">',this.PropVoteDetails(prop),'</div></div>',
+					'</div>',
+					'<table style="width:100%"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;">',
+					'<tr><th>Needed</th><th>Yes</th><th>No</th></tr>',
+					'<tr><td>',prop.votes_needed,'</td><td>',prop.votes_yes,'</td><td>',prop.votes_no,'</td></tr>',
+					'</table>',
+					'</div>'].join('');
+			}
 		},
 		PropVoteDetails : function(prop) {
 			if(prop.my_vote !== undefined) {
@@ -258,7 +855,13 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			else {
 				arrTime = Lib.formatTime(Math.round(remaining));
 			}
-			Sel.query("span.propTime",elLine,true).innerHTML = arrTime;
+			var el = Sel.query("span.propTime",elLine,true);
+			if(el) {
+				el.innerHTML = arrTime;
+			}
+			else {
+				return true;
+			}
 		},
 		PropClick : function(e, matchedEl, container){
 			var type = matchedEl.innerHTML;

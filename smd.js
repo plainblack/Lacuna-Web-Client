@@ -3280,12 +3280,52 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"propose_induct_member" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"empire_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_expel_member" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"empire_id", "type":"string", "optional":false},
+							{"name":"message", "type":"string", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_elect_new_leader" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"to_empire_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"propose_rename_asteroid" : {
 						"description": "",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"asteroid_id", "type":"string", "optional":false},
+							{"name":"name", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					
+					"propose_rename_uninhabited" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"planet_id", "type":"string", "optional":false},
 							{"name":"name", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
@@ -3304,6 +3344,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"platform_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_members_only_colonization" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
 					},
