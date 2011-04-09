@@ -3367,6 +3367,52 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			PoliceStation : {
+				"SMDVersion":"2.0",
+				"description": "Police Station",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/policestation",
+
+				"services": {
+					"view_prisoners" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+					},
+					"execute_prisoner" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"prisoner_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"release_prisoner" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"prisoner_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"view_foreign_spies" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			StationCommand : {
 				"SMDVersion":"2.0",
 				"description": "Station Command",

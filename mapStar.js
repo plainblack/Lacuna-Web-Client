@@ -330,7 +330,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var send = Dom.get("planetDetailSendShips"),
 					fleet = Dom.get("planetDetailSendFleet"),
 					unavail = Dom.get("planetDetailUnavailShips"),
-					mining = Dom.get("planetDetailMiningShips");
+					mining = Dom.get("planetDetailMiningShips"),
+					incoming = Dom.get("planetDetailIncomingShips"),
+					orbiting = Dom.get("planetDetailOrbitingShips");
 				
 				if(send) {
 					Event.purgeElement(send, true);
@@ -347,6 +349,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				if(mining) {
 					Event.purgeElement(mining, true);
 					mining.innerHTML = "";
+				}
+				if(incoming) {
+					Event.purgeElement(incoming, true);
+					incoming.innerHTML = "";
+				}
+				if(orbiting) {
+					Event.purgeElement(orbiting, true);
+					orbiting.innerHTML = "";
 				}
 			};
 			

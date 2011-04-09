@@ -324,6 +324,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "policestation",
+		type: "js",
+		fullpath: urlBuilder("modulePoliceStation.js"),
+		requires : ["security"]
+	});
+	loader.addModule({
 		name: "stationcommand",
 		type: "js",
 		fullpath: urlBuilder("moduleStationCommand.js"),
@@ -370,6 +376,7 @@
 			"wasterecycling",
 			//modules
 			"parliament",
+			"policestation",
 			"stationcommand",
 			//helpers
 			"event-delegate",
