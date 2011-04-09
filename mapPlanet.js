@@ -47,8 +47,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/waterstorage": Lacuna.buildings.WaterStorage,
 		"/wasterecycling": Lacuna.buildings.WasteRecycling,
 		//modules
-		"/stationcommand": Lacuna.modules.StationCommand,
-		"/parliament": Lacuna.modules.Parliament
+		"/parliament": Lacuna.modules.Parliament,
+		"/policestation": Lacuna.modules.PoliceStation,
+		"/stationcommand": Lacuna.modules.StationCommand
 	};
 		
 	var MapPlanet = function() {

@@ -186,12 +186,12 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				dis[dis.length] = [
 				'	<div id="proposeInduct" class="proposeOption" style="display:none;">',
 				'		<ul><li><label>Empire:</label><input type="text" id="proposeInductMember" /></li>',
-				'		<li><label>Message:</label><textarea id="proposeInductMessage"></textarea></li></ul><br />',
+				'		<li><label>Message:</label><textarea id="proposeInductMessage" rows="4" cols="80"></textarea></li></ul><br />',
 				'		<button type="button" id="proposeInductSubmit">Propose Induct Member</button>',
 				'	</div>',
 				'	<div id="proposeExpel" class="proposeOption" style="display:none;">',
 				'		<ul><li><label>Empire:</label><select id="proposeExpelMember"></select></li>',
-				'		<li><label>Reason:</label><textarea id="proposeExpelReason"></textarea></li></ul><br />',
+				'		<li><label>Reason:</label><textarea id="proposeExpelReason" rows="4" cols="80"></textarea></li></ul><br />',
 				'		<button type="button" id="proposeExpelSubmit">Propose Expel Member</button>',
 				'	</div>'
 				].join('');
@@ -294,7 +294,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				dis[dis.length] = [
 				'	<div id="proposeFireBfg" class="proposeOption" style="display:none;">',
 				'		<ul><li><label>Body:</label><select id="proposeFireBfgJurisdiction"></select></li>',
-				'		<li><label>Reason:</label><textarea id="proposeFireBfgReason"></textarea></li></ul><br />',
+				'		<li><label>Reason:</label><textarea id="proposeFireBfgReason" rows="4" cols="80"></textarea></li></ul><br />',
 				'		<button type="button" id="proposeFireBfgSubmit">Propose to Fire BFG</button>',
 				'	</div>'
 				].join('');
