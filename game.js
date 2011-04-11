@@ -15,7 +15,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Resources : {},
 		ServerData : {},
 		Services : {},
-		Timeout : 30000,
+		Timeout : 60000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		onTick : new Util.CustomEvent("onTick"),
 		OverlayManager : new YAHOO.widget.OverlayManager(),
