@@ -118,7 +118,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					info = Dom.get("platformShippingInfo");
 					
 				if(platforms.length > 0) {
-					info.innerHTML = ['Total of ', platforms.length, ' platforms deployed.  This ministry can control a maximum of ', this.platforms.max_platforms, 
+					info.innerHTML = ['Total of ', platforms.length, ' platforms deployed.	This ministry can control a maximum of ', this.platforms.max_platforms, 
 						' platforms. ', this.CapacityDescription(platforms[0].shipping_capacity)
 					].join('');
 				}
@@ -229,7 +229,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 			}
 		},
 		MiningMinistryPlatformAbandon : function() {
-			if(confirm(["Are you sure you want to Abandon the mining platform at  ",this.Platform.asteroid.name,"?"].join(''))) {
+			if(confirm(["Are you sure you want to Abandon the mining platform at	",this.Platform.asteroid.name,"?"].join(''))) {
 				Lacuna.Pulser.Show();
 				
 				this.Self.service.abandon_platform({
