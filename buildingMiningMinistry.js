@@ -118,7 +118,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 					info = Dom.get("platformShippingInfo");
 					
 				if(platforms.length > 0) {
-					info.innerHTML = ['Total of ', platforms.length, ' platforms deployed.  This ministry can control a maximum of ', this.platforms.max_platforms, 
+					info.innerHTML = ['Total of ', platforms.length, ' platforms deployed.	This ministry can control a maximum of ', this.platforms.max_platforms, 
 						' platforms. ', this.CapacityDescription(platforms[0].shipping_capacity)
 					].join('');
 				}
@@ -126,99 +126,98 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				
-        var ores = [
-          'anthracite', 'bauxite', 'beryl',
-          'chalcopyrite', 'chromite', 'flourite',
-          'galena', 'goethite', 'gold',
-          'gypsum', 'halite', 'kerogen',
-          'magnetite', 'methane', 'monazite',
-          'rutile', 'sulfur', 'trona',
-          'uraninite', 'zircon']; // this list must already exist somewhere else, but I don't know where
-        var totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        var grand_total = 0;
+				var ores = [
+					'anthracite', 'bauxite', 'beryl',
+					'chalcopyrite', 'chromite', 'flourite',
+					'galena', 'goethite', 'gold',
+					'gypsum', 'halite', 'kerogen',
+					'magnetite', 'methane', 'monazite',
+					'rutile', 'sulfur', 'trona',
+					'uraninite', 'zircon']; // this list must already exist somewhere else, but I don't know where
+				var totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+				var grand_total = 0;
 
-        if (platforms.length > 0) {
-          for(var i=0; i<platforms.length; i++) {
-            var obj = platforms[i],
-              nUl = ul.cloneNode(false),
-              nLi = li.cloneNode(false);
-              
-            nUl.Platform = obj;
-            Dom.addClass(nUl, "platformInfo");
-            Dom.addClass(nUl, "clearafter");
+				if (platforms.length > 0) {
+					for(var i=0; i<platforms.length; i++) {
+						var obj = platforms[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+							
+						nUl.Platform = obj;
+						Dom.addClass(nUl, "platformInfo");
+						Dom.addClass(nUl, "clearafter");
 
-            Dom.addClass(nLi,"platformLocation");
-            nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
-            Event.on(nLi, "click", this.platformClick, obj, true);
-            nUl.appendChild(nLi);
-            
-            nLi = li.cloneNode(false);
-            Dom.addClass(nLi,"platformAbandon");
-            var bbtn = document.createElement("button");
-            bbtn.setAttribute("type", "button");
-            bbtn.innerHTML = "Abandon";
-            bbtn = nLi.appendChild(bbtn);
-            nUl.appendChild(nLi);
-            
-            nLi = li.cloneNode(false);
-            Dom.addClass(nLi,"platformOre");
-            var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
-            var total = 0;
-            for (var ore_i in ores) {
-              var ore = ores[ore_i];
-              if(obj[ore + '_hour'] > 0) {
-                outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
-                outOre.push(obj[ore+'_hour']);
-                outOre.push('</li>');
-                totals[ore_i] += parseInt(obj[ore+'_hour']);
-                total += parseInt(obj[ore+'_hour']);
-              }
-            }
-            if(total > 0) {
-              outOre.push('<li><label>Total:</label> ');
-              outOre.push(total);
-              outOre.push('</li>');
-              grand_total += total;
-            }
-            outOre.push('</ul>');
-            nLi.innerHTML = outOre.join('');
-            nUl.appendChild(nLi);
+						Dom.addClass(nLi,"platformLocation");
+						nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
+						Event.on(nLi, "click", this.platformClick, obj, true);
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"platformAbandon");
+						var bbtn = document.createElement("button");
+						bbtn.setAttribute("type", "button");
+						bbtn.innerHTML = "Abandon";
+						bbtn = nLi.appendChild(bbtn);
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"platformOre");
+						var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
+						var total = 0;
+						for (var ore_i in ores) {
+							var ore = ores[ore_i];
+							if(obj[ore + '_hour'] > 0) {
+								outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
+								outOre.push(obj[ore+'_hour']);
+								outOre.push('</li>');
+								totals[ore_i] += parseInt(obj[ore+'_hour']);
+								total += parseInt(obj[ore+'_hour']);
+							}
+						}
+						if(total > 0) {
+							outOre.splice(1, 0, '<li><label>Total:</label> ');
+							outOre.splice(2, 0, parseInt(total));
+							outOre.splice(3, 0, '</li>');
+							grand_total += total;
+						}
+						outOre.push('</ul>');
+						nLi.innerHTML = outOre.join('');
+						nUl.appendChild(nLi);
 
-            details.appendChild(nUl);
-            
-            Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
-          }
+						details.appendChild(nUl);
+						
+						Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
+					}
 
-          var nUl = ul.cloneNode(false), nLi = li.cloneNode(false);
-          Dom.addClass(nUl, "platformInfo");
-          Dom.addClass(nUl, "clearafter");
-          
-          Dom.addClass(nLi,"platformLocation");
-          Dom.setStyle(nLi, 'cursor', 'auto');
-          nLi.innerHTML = 'Total';
-          nUl.appendChild(nLi);
-          
-          nLi = li.cloneNode(false);
-          Dom.addClass(nLi,"platformOre");
-          var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
-          var total = 0;
-          for (var ore_i in ores) {
-            var ore = ores[ore_i];
-            if(totals[ore_i] > 0) {
-              outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
-              outOre.push(totals[ore_i]);
-              outOre.push('</li>');
-            }
-          }
-          outOre.push('<li><label>Grand Total:</label> ');
-          outOre.push(parseInt(grand_total));
-          outOre.push('</li>');
-          outOre.push('</ul>');
-          nLi.innerHTML = outOre.join('');
-          nUl.appendChild(nLi);
-          //details.appendChild(nUl);
-          details.insertBefore(nUl, details.firstChild);
-        }
+					var nUl = ul.cloneNode(false), nLi = li.cloneNode(false);
+					Dom.addClass(nUl, "platformInfo");
+					Dom.addClass(nUl, "clearafter");
+					
+					Dom.addClass(nLi,"platformLocation");
+					Dom.setStyle(nLi, 'cursor', 'auto');
+					nLi.innerHTML = 'Total';
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"platformOre");
+					var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
+					var total = 0;
+					for (var ore_i in ores) {
+						var ore = ores[ore_i];
+						if(totals[ore_i] > 0) {
+							outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
+							outOre.push(totals[ore_i]);
+							outOre.push('</li>');
+						}
+					}
+					outOre.splice(1, 0, '<li><label>Grand Total:</label> ');
+					outOre.splice(2, 0, parseInt(grand_total));
+					outOre.splice(3, 0, '</li>');
+					outOre.push('</ul>');
+					nLi.innerHTML = outOre.join('');
+					nUl.appendChild(nLi);
+					details.insertBefore(nUl, details.firstChild);
+				}
 				
 				//wait for tab to display first
 				setTimeout(function() {
@@ -230,7 +229,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 			}
 		},
 		MiningMinistryPlatformAbandon : function() {
-			if(confirm(["Are you sure you want to Abandon the mining platform at  ",this.Platform.asteroid.name,"?"].join(''))) {
+			if(confirm(["Are you sure you want to Abandon the mining platform at	",this.Platform.asteroid.name,"?"].join(''))) {
 				Lacuna.Pulser.Show();
 				
 				this.Self.service.abandon_platform({
