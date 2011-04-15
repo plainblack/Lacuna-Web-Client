@@ -61,6 +61,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<option value="Probe">Probe</option>',
 				'					<option value="Spies">Spies</option>',
 				'					<option value="Trade">Trade</option>',
+				'					<option value="Medal">Medals</option>',
 				'					<option value="Tutorial">Tutorial</option>',
 				'				</select>',
 				'			</div>',
