@@ -55,6 +55,34 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipAllExcavator = Dom.get("profileSkipAllExcavator");
 			this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
 			this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
+			Event.on(this.skipFoundNothing, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorResources, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorGlyph, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorPlan, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipAllExcavator, 'change', function() {
+				if(this.checked) {
+					Dom.get("profileSkipFoundNothing").checked = true;
+					Dom.get("profileSkipExcavatorResources").checked = true;
+					Dom.get("profileSkipExcavatorGlyph").checked = true;
+					Dom.get("profileSkipExcavatorPlan").checked = true;
+				}
+			});
 
 			this.rpc = Dom.get("profileRpc");
 			
@@ -188,19 +216,19 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><label>Skype:<input id="profileSkype" /></label></li>',
 			'							<li><hr /><div class="yui-g">',
 			'								<div class="yui-u first">',
-			'									<ul id="profileCheckboxes"><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
+			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
 			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li>',
-			'									<li><input id="profileSkipProbeDetected" type="checkbox" /> Stop Probe Detected Messages</li>',
+			'									<li><input id="profileSkipProbeDetected" type="checkbox" /> Stop Probe Detected</li>',
 			'									<li><input id="profileSkipSpyRecovery" type="checkbox" /> Stop Spy Recovery Messages</li>',
-			'									<li><input id="profileSkipFoundNothing" type="checkbox" /> Stop Excavator Found Nothing Messages</li>',
-			'									<li><input id="profileSkipExcavatorGlyph" type="checkbox" /> Stop Excavator Glyph Messages</li></ul></div>',
+			'									<li><input id="profileSkipFoundNothing" type="checkbox" /> Stop Excavator Found Nothing</li>',
+			'									<li><input id="profileSkipExcavatorGlyph" type="checkbox" /> Stop Excavator Glyph</li></ul></div>',
 			'								<div class="yui-u">',
 			'									<ul id="profileCheckboxes"><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
 			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li>',
 			'									<li><input id="profileSkipAllExcavator" type="checkbox" /> Stop All Excavator Messages</li>',
-			'									<li><input id="profileSkipExcavatorResources" type="checkbox" /> Stop Excavator Resources Messages</li>',
-			'									<li><input id="profileSkipExcavatorPlan" type="checkbox" /> Stop Excavator Plan Messages</li></ul></div>',
+			'									<li><input id="profileSkipExcavatorResources" type="checkbox" /> Stop Excavator Resources</li>',
+			'									<li><input id="profileSkipExcavatorPlan" type="checkbox" /> Stop Excavator Plan</li></ul></div>',
 			'							</div></li>',
 			'							<li><hr />Today\'s RPC Usage:<span id="profileRpc" style="margin-left:5px;"></span></li>',
 			'						</ul>',
