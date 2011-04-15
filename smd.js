@@ -2964,6 +2964,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					],
 					"returns":{"type":"object"}
 				},
+				"view_trashed" : {
+					"description": "Displays a list of the messages in the empire's trash.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"options", "type":"object", "optional":true}
+					],
+					"returns":{"type":"object"}
+				},
 				"view_sent" : {
 					"description": "Displays a list of the messages in the empire's outbox.",
 					"parameters": [
@@ -2991,6 +2999,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 								"has_read" : 1,
 								"has_replied" : 0,
 								"has_archived" : 0,
+								"has_trashed" : 0,
 								"in_reply_to" : "",
 								"recipients" : ["John Stewart"]
 							},
@@ -3000,6 +3009,20 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 				},
 				"archive_messages" : {
 					"description": "Archives a list of messages.",
+					"parameters": [
+						{"name":"session_id", "type":"string", "optional":false},
+						{"name":"message_ids", "type":"array", "optional":false}
+					],
+					"returns":{"type":"object"}
+						/*
+						 {
+							"success" : 1,
+							"status" : { get_status() }
+						 }
+						*/
+				},
+				"trash_messages" : {
+					"description": "Trashes a list of messages.",
 					"parameters": [
 						{"name":"session_id", "type":"string", "optional":false},
 						{"name":"message_ids", "type":"array", "optional":false}

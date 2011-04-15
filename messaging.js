@@ -32,6 +32,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingInbox" class="tab"><a href="#"><em>Inbox</em></a></li>',
 				'		<li id="messagingSent" class="tab"><a href="#"><em>Sent</em></a></li>',
 				'		<li id="messagingArchive" class="tab"><a href="#"><em>Archive</em></a></li>',
+				'		<li id="messagingTrash" class="tab"><a href="#"><em>Trash</em></a></li>',
 				'		<li id="messagingAnnounce" class="tab"><a href="#"><em>Announcement</em></a></li>',
 				'	</ul>',
 				'	<div class="yui-content">',
@@ -46,6 +47,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
 				'			<div id="messagingArchiver">',
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'				<button id="messagingTrashSelected" type="button">Trash</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
 				'				<select id="inboxTag">',
 				'					<option value="">Inbox</option>',
@@ -74,6 +76,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<span id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></span>',
 				'					<button id="messagingForward" type="button">Forward</button>',
 				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
+				'					<button id="messagingTrashDisplayed" type="button">Trash</button>',
 				'				</div>',
 				'				<div id="dHt" style="overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
@@ -113,12 +116,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Event.on("inboxTag", "change", this.updateTag, this, true);
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
+				this.trash = Dom.get("messagingTrash");
 				this.announce = Dom.get("messagingAnnounce");
 				//list and display view
 				Event.on("messagingReply", "click", this.replyMessage, this, true);
 				Event.on("messagingReplyAll", "click", this.replyAllMessage, this, true);
 				Event.on("messagingForward", "click", this.forwardMessage, this, true);
 				Event.on("messagingArchiveDisplayed", "click", this.archiveMessage, this, true);
+				Event.on("messagingTrashDisplayed", "click", this.trashMessage, this, true);
 				this.list = Dom.get("messagingList");
 				this.timestamp = Dom.get("messagingTimestamp");
 				this.from = Dom.get("messagingFrom");
@@ -134,7 +139,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Event.delegate(this.display, "click", this.handleVoteNoLink, "a.voteno_link", this, true);
 				//archiving setup
 				this.archiver = Dom.get("messagingArchiver");
-				Event.on("messagingArchiveSelected", "click", this.archiveMessages, this, true);
+				this.archiveButton = Dom.get("messagingArchiveSelected");
+				Event.on(this.archiveButton, "click", this.archiveMessages, this, true);
+				this.trashButton = Dom.get("messagingTrashSelected");
+				Event.on(this.trashButton, "click", this.trashMessages, this, true);
 				this.select = Dom.get("messagingSelectAll");
 				Event.on(this.select, "click", this.selectAllMessages, this, true);
 				//create
@@ -268,7 +276,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.alerts,this.intel,this.medals,this.tutorial,this.sent,this.archive,this.announce], "selected");
+			Dom.removeClass([this.create,this.inbox,this.alerts,this.intel,this.medals,this.tutorial,this.sent,this.archive,this.trash,this.announce], "selected");
 			Dom.addClass(el, "selected");
 			switch(el.id) {
 				case this.create.id:
@@ -316,11 +324,24 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.loadSentMessages();
 					break;
 				case this.archive.id:
-					Dom.setStyle(this.archiver,"display","none");
+					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","none");
+					Dom.setStyle(this.trashButton,"display","");
+					Dom.setStyle(this.inboxTag,"display","none");
 					this.loadArchiveMessages();
+					break;
+				case this.trash.id:
+					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","");
+					Dom.setStyle(this.trashButton,"display","none");
+					Dom.setStyle(this.inboxTag,"display","none");
+					this.loadTrashMessages();
 					break;
 				default:
 					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","");
+					Dom.setStyle(this.trashButton,"display","");
+					Dom.setStyle(this.inboxTag,"display","");
 					this.loadInboxMessages();
 					break;
 			}
@@ -465,6 +486,41 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				scope:this
 			});
 		},
+		loadTrashMessages : function() {
+			this._setTab(this.trash);
+			if(this.pager) {this.pager.destroy();}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: 1}
+				};
+			Lacuna.Pulser.Show();
+			InboxServ.view_trashed(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
+
+						});
+						this.pager.subscribe('changeRequest',this.handleTrashPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
+
+					this.processMessages(o.result,{trash:1});
+					Lacuna.Pulser.Hide();
+				},
+				scope:this
+			});
+		},
 
 		handleInboxPagination : function (newState) {
 			var InboxServ = Game.Services.Inbox,
@@ -526,6 +582,25 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			// Update the Paginator's state
 			this.pager.setState(newState);
 		},
+		handleTrashPagination : function (newState) {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: newState.page}
+				};
+			Lacuna.Pulser.Show();
+			InboxServ.view_trashed(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result,{trash:1});
+					Lacuna.Pulser.Hide();
+				},
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.pager.setState(newState);
+		},
 
 		processMessages : function(results, is) {
 			var list = this.list,
@@ -565,7 +640,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					}
 					nLi.innerHTML = [
 						' <div class="messageSelect"><img width="26" height="26" src="',Lib.AssetUrl,'ui/mail-',img,'.png" /><br />',
-						isTab.inbox ? '	<input type="checkbox" />' : '', '</div>',
+						!isTab.sent ? '	<input type="checkbox" />' : '', '</div>',
 						'	<div class="messageContainer">',
 						'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
 						'		<div class="messageFrom">',
@@ -844,6 +919,72 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		archiveProcess : function(results) {
+			Dom.batch(Sel.query("li.message", this.list), function(el){
+				if(results.success.indexOf(el.Message.id) >= 0) {
+					delete this.toArchive[el.Message.id];
+					if (el.Message.has_read*1 == 0) {
+						Game.EmpireData.has_new_messages--;
+						if(Game.EmpireData.has_new_messages < 0) {
+							Game.EmpireData.has_new_messages = 0;
+						}
+					}
+					this.toArchiveCount--;
+					Event.purgeElement(el);
+					el.parentNode.removeChild(el);
+				}
+			}, this, true);
+			
+			if(this.pager) {
+				//reload messages if we had a pager
+				this.loadTab();
+			}
+			
+			Dom.setStyle(this.display, "visibility", "hidden");
+			delete this.selectedAll;
+			this.select.innerHTML = "Select All";
+		},
+		trashMessage : function(e) {
+			if(!this.toArchive[this.viewingMessage.id]) {
+				this.toArchive[this.viewingMessage.id] = this.viewingMessage;
+				this.toArchiveCount++;
+			}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					message_ids: [this.viewingMessage.id]
+				};
+			InboxServ.trash_messages(data, {
+				success : function(o){
+					this.trashProcess(o.result);
+					this.fireEvent("onRpc", o.result);
+				},
+				scope:this
+			});
+		},
+		trashMessages : function() {
+			if(this.toArchiveCount > 0) {
+				var mIds = [];
+				for(var key in this.toArchive) {
+					if(this.toArchive.hasOwnProperty(key)) {
+						mIds.push(key);
+					}
+				}
+				var InboxServ = Game.Services.Inbox,
+					data = {
+						session_id: Game.GetSession(""),
+						message_ids: mIds
+					};
+				InboxServ.trash_messages(data, {
+					success : function(o){
+						this.trashProcess(o.result);
+						this.fireEvent("onRpc", o.result);
+					},
+					scope:this
+				});
+			}
+		},
+		trashProcess : function(results) {
 			Dom.batch(Sel.query("li.message", this.list), function(el){
 				if(results.success.indexOf(el.Message.id) >= 0) {
 					delete this.toArchive[el.Message.id];
