@@ -340,6 +340,10 @@ dialogs
 #createEmpire textarea { width:224px; }
 #createEmpire li { margin-bottom:3px; }
 
+#profileCheckboxes {
+	width:250px;
+}
+
 #profileSpeciesRedefineWarning {
 	margin-bottom: 5px;
 	padding-bottom: 5px;
