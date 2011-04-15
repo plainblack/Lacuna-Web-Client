@@ -171,6 +171,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<li><a href="#"><em>Fleet</em></a></li>',
 				'			<li><a href="#"><em>Unavailable</em></a></li>',
 				'			<li><a href="#"><em>Incoming</em></a></li>',
+				'			<li><a href="#"><em>Orbiting</em></a></li>',
 				'			<li><a href="#"><em>',this._miningLabel,'</em></a></li>',
 				'			<li><a href="#planetDetailRename"><em>',this._renameLabel,'</em></a></li>',
 				'			<li><a href="#planetDetailSendSpies"><em>',this._sendSpiesLabel,'</em></a></li>',
@@ -213,6 +214,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'			<div><div style="border-bottom:1px solid #52acff;text-align:right;"><button type="button" id="planetDetailSendFleetSubmit">Send Fleet</button></div><div><ul id="planetDetailSendFleet"></ul></div></div>',
 				'			<div><div><ul id="planetDetailUnavailShips"></ul></div></div>',
 				'			<div><div><ul id="planetDetailIncomingShips"></ul></div></div>',
+				'			<div><div><ul id="planetDetailOrbitingShips"></ul></div></div>',
 				'			<div>',
 				'				<ul class="shipHeader clearafter">',
 				'					<li class="shipName">From Empire</li>',
@@ -264,7 +266,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				fixedcenter:false,
 				close:true,
 				underlay:false,
-				width:"620px",
+				width:"710px",
 				zIndex:9997,
 				context:["header","tr","br", ["beforeShow", "windowResize"], [-200,40]]
 			});
@@ -328,7 +330,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				var send = Dom.get("planetDetailSendShips"),
 					fleet = Dom.get("planetDetailSendFleet"),
 					unavail = Dom.get("planetDetailUnavailShips"),
-					mining = Dom.get("planetDetailMiningShips");
+					mining = Dom.get("planetDetailMiningShips"),
+					incoming = Dom.get("planetDetailIncomingShips"),
+					orbiting = Dom.get("planetDetailOrbitingShips");
 				
 				if(send) {
 					Event.purgeElement(send, true);
@@ -345,6 +349,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				if(mining) {
 					Event.purgeElement(mining, true);
 					mining.innerHTML = "";
+				}
+				if(incoming) {
+					Event.purgeElement(incoming, true);
+					incoming.innerHTML = "";
+				}
+				if(orbiting) {
+					Event.purgeElement(orbiting, true);
+					orbiting.innerHTML = "";
 				}
 			};
 			
@@ -640,6 +652,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				details = Dom.get(panel.isStarPanel ? "starDetailIncomingShips" : "planetDetailIncomingShips");
 				
 			if(ships.length > 0) {
+				Event.purgeElement(details, true);
+				details.innerHTML = '';
+				
 				var	li = document.createElement("li");
 				
 				ships = ships.slice(0);
@@ -799,6 +814,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						YAHOO.log(o, "info", "MapStar.ShipSend.send_ship.success");
 						Lacuna.Pulser.Hide();
 						this.Self.fireEvent("onMapRpc", o.result);
+						delete this.Self.currentShips;
 						this.Self.GetShips(panel, target);
 						Event.purgeElement(this.Line, true);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + " to " + targetName + ".";
@@ -914,7 +930,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 							details.innerHTML = '<li>Sent ' + o.result.fleet.length + ' ships!</li>';
 							
 							this.GetShips(panel, target);
-							btn.disabled = false;
 						},
 						failure : function(o){
 							btn.disabled = false;
@@ -997,11 +1012,63 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 			
 		},
 	
+		PopulateShipsOrbitingTab : function(panel) {
+			var ships = this.currentShips.orbiting || [],
+				details = Dom.get("planetDetailOrbitingShips"),
+				detailsParent = details.parentNode,
+				li = document.createElement("li");
+				
+			Event.purgeElement(details, true); //clear any events before we remove
+			details = detailsParent.removeChild(details); //remove from DOM to make this faster
+			details.innerHTML = "";
+			
+			if(ships.length === 0) {
+				details.innerHTML = "No orbiting ships.";
+			}
+			else {
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nLi = li.cloneNode(false);
+						
+					nLi.Ship = ship;
+					nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
+					'	<div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+					'		<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
+					'	</div>',
+					'	<div class="yui-u" style="width:75%">',
+					'		<div class="buildingName">[',ship.type_human,'] ',ship.name,'</div>',
+					'		<div><label style="font-weight:bold;">Details:</label>',
+					'			<span>Task:<span>',ship.task,'</span></span>,',
+					'			<span>From:<span>',ship.from.name,'</span></span>',
+					'		</div>',
+					'		<div><label style="font-weight:bold;">Attributes:</label>',
+					'			<span>Speed:<span>',ship.speed,'</span></span>,',
+					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>,',
+					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
+					'			<span>Combat:<span>',ship.combat,'</span></span>',
+					'		</div>',
+					'	</div>',
+					'</div>'].join('');
+					
+					details.appendChild(nLi);
+				}
+			}
+			detailsParent.appendChild(details); //add back as child
+							
+			//wait for tab to display first
+			setTimeout(function() {
+				var Ht = Game.GetSize().h - 330;
+				if(Ht > 240) { Ht = 240; }
+				Dom.setStyle(detailsParent,"height",Ht + "px");
+				Dom.setStyle(detailsParent,"overflow-y","auto");
+			},10);
+		},
+	
 		PopulateShipsMiningPlatforms : function(panel) {
 			var ships = this.currentShips.mining_platforms || [];
 				details = Dom.get("planetDetailMiningShips");
 				
-			if(details ) {
+			if(details) {
 				var parent = details.parentNode;
 					
 				details = parent.removeChild(details);
@@ -1040,8 +1107,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					Dom.setStyle(details.parentNode,"height",Ht + "px");
 					Dom.setStyle(details.parentNode,"overflow-y","auto");
 				},10);
-				
-				//panel.addTab(new YAHOO.widget.Tab({ label: "Mining", contentEl:elm }));
 			}
 		},
 		ShowEmpire : function(e, id){
@@ -1070,6 +1135,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						this.PopulateShipsUnavailTab(panel);
 						
 						this.PopulateShipsIncomingTab(panel);
+						
+						this.PopulateShipsOrbitingTab(panel);
 						
 						this.PopulateShipsMiningPlatforms(panel);
 

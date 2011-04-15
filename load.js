@@ -117,6 +117,7 @@
 		fullpath: urlBuilder("mapStar.js"),
 		requires : ["event-delegate","game","mapper","selector"]
 	});
+	//buildings
 	loader.addModule({
 		name: "building",
 		type: "js",
@@ -196,6 +197,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "mercenariesguild",
+		type: "js",
+		fullpath: urlBuilder("buildingMercenariesGuild.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "miningministry",
 		type: "js",
 		fullpath: urlBuilder("buildingMiningMinistry.js"),
@@ -268,12 +275,6 @@
 		requires : ["building"]
 	});
 	loader.addModule({
-		name: "stationcommand",
-		type: "js",
-		fullpath: urlBuilder("buildingStationCommand.js"),
-		requires : ["planetarycommand"]
-	});
-	loader.addModule({
 		name: "subspacesupplydepot",
 		type: "js",
 		fullpath: urlBuilder("buildingSubspaceSupplyDepot.js"),
@@ -315,11 +316,32 @@
 		fullpath: urlBuilder("buildingWaterStorage.js"),
 		requires : ["building"]
 	});
+	//modules
+	loader.addModule({
+		name: "parliament",
+		type: "js",
+		fullpath: urlBuilder("moduleParliament.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "policestation",
+		type: "js",
+		fullpath: urlBuilder("modulePoliceStation.js"),
+		requires : ["security"]
+	});
+	loader.addModule({
+		name: "stationcommand",
+		type: "js",
+		fullpath: urlBuilder("moduleStationCommand.js"),
+		requires : ["planetarycommand"]
+	});
+	//
 	loader.addModule({
 		name: "mapPlanet",
 		type: "js",
 		fullpath: urlBuilder("mapPlanet.js"),
 		requires : [
+			//buildings
 			"archaeology",
 			"capitol",
 			"development",
@@ -332,6 +354,7 @@
 			"hallsofvrbansk",
 			"intelligence",
 			"libraryofjith",
+			"mercenariesguild",
 			"miningministry",
 			"missioncommand",
 			"network19",
@@ -344,7 +367,6 @@
 			"shipyard",
 			"spaceport",
 			"spacestationlab",
-			"stationcommand",
 			"subspacesupplydepot",
 			"templeofthedrajilites",
 			"themepark",
@@ -352,6 +374,11 @@
 			"transporter",
 			"waterstorage",
 			"wasterecycling",
+			//modules
+			"parliament",
+			"policestation",
+			"stationcommand",
+			//helpers
 			"event-delegate",
 			"event-mouseenter",
 			"mapper",

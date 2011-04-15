@@ -139,7 +139,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					
 			return this.repairTab;
 		},
-		Repair : function() {
+		Repair : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
 			Lacuna.Pulser.Show();
 			Game.Services.Buildings.Generic.repair({session_id:Game.GetSession(),building_id:this.building.id}, {
 				success : function(o){
@@ -162,7 +164,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					this.fireEvent("onRepair");
 				},
 				failure : function(o){
-					target.disabled = false;
+					btn.disabled = false;
 				},
 				target:this.building.url,
 				scope:this

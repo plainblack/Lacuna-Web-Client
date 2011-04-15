@@ -66,8 +66,9 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 				arr = arr.concat(['<li>None</li>']);
 			}
 			else {
-				var serverTime = Lib.getTime(Game.ServerData.time);
-				for(var s=0; s<planetShips.length;s++) {
+				var serverTime = Lib.getTime(Game.ServerData.time),
+					len = planetShips.length > 50 ? 50 : planetShips.length;
+				for(var s=0; s<len;s++) {
 					var ship = planetShips[s],
 						ms = Lib.getTime(ship.date_arrives) - serverTime,
 						color = (ship.is_own == 1 ? "#0f0" : (ship.is_ally == 1 ? "#b0b" : "#fff")),

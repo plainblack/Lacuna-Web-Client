@@ -32,6 +32,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<li id="messagingInbox" class="tab"><a href="#"><em>Inbox</em></a></li>',
 				'		<li id="messagingSent" class="tab"><a href="#"><em>Sent</em></a></li>',
 				'		<li id="messagingArchive" class="tab"><a href="#"><em>Archive</em></a></li>',
+				'		<li id="messagingTrash" class="tab"><a href="#"><em>Trash</em></a></li>',
 				'		<li id="messagingAnnounce" class="tab"><a href="#"><em>Announcement</em></a></li>',
 				'	</ul>',
 				'	<div class="yui-content">',
@@ -46,13 +47,22 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'		<div id="messagingReader" class="panelTabContainer yui-gd">',
 				'			<div id="messagingArchiver">',
 				'				<button id="messagingArchiveSelected" type="button">Archive</button>',
+				'				<button id="messagingTrashSelected" type="button">Trash</button>',
 				'				<button id="messagingSelectAll" type="button">Select All</button>',
 				'				<select id="inboxTag">',
 				'					<option value="">Inbox</option>',
 				'					<option value="Correspondence">Correspondence</option>',
 				'					<option value="Alert">Alerts</option>',
 				'					<option value="Intelligence">Intel</option>',
-				'					<option value="Medal">Medals</option>',
+				'					<option value="Attack">Attacks</option>',
+				'					<option value="Colonization">Colonization</option>',
+				'					<option value="Complaint">Complaints</option>',
+				'					<option value="Excavator">Excavators</option>',
+				'					<option value="Mission">Mission</option>',
+				'					<option value="Parliament">Parliment</option>',
+				'					<option value="Probe">Probe</option>',
+				'					<option value="Spies">Spies</option>',
+				'					<option value="Trade">Trade</option>',
 				'					<option value="Tutorial">Tutorial</option>',
 				'				</select>',
 				'			</div>',
@@ -66,6 +76,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<span id="messagingReplyC" style="display:none"><button id="messagingReply" type="button">Reply</button><button id="messagingReplyAll" type="button">Reply All</button></span>',
 				'					<button id="messagingForward" type="button">Forward</button>',
 				'					<button id="messagingArchiveDisplayed" type="button">Archive</button>',
+				'					<button id="messagingTrashDisplayed" type="button">Trash</button>',
 				'				</div>',
 				'				<div id="dHt" style="overflow:auto;">',
 				'					<div><label>Received:</label><span id="messagingTimestamp"></span></div>',
@@ -105,12 +116,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Event.on("inboxTag", "change", this.updateTag, this, true);
 				this.sent = Dom.get("messagingSent");
 				this.archive = Dom.get("messagingArchive");
+				this.trash = Dom.get("messagingTrash");
 				this.announce = Dom.get("messagingAnnounce");
 				//list and display view
 				Event.on("messagingReply", "click", this.replyMessage, this, true);
 				Event.on("messagingReplyAll", "click", this.replyAllMessage, this, true);
 				Event.on("messagingForward", "click", this.forwardMessage, this, true);
 				Event.on("messagingArchiveDisplayed", "click", this.archiveMessage, this, true);
+				Event.on("messagingTrashDisplayed", "click", this.trashMessage, this, true);
 				this.list = Dom.get("messagingList");
 				this.timestamp = Dom.get("messagingTimestamp");
 				this.from = Dom.get("messagingFrom");
@@ -118,9 +131,18 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				this.subject = Dom.get("messagingSubject");
 				this.body = Dom.get("messagingBody");
 				this.display = Dom.get("messagingDisplay");
+				Event.delegate(this.display, "click", this.handleProfileLink, "a.profile_link", this, true);
+				Event.delegate(this.display, "click", this.handleStarmapLink, "a.starmap_link", this, true);
+				Event.delegate(this.display, "click", this.handlePlanetLink, "a.planet_link", this, true);
+				Event.delegate(this.display, "click", this.handleAllianceLink, "a.alliance_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteYesLink, "a.voteyes_link", this, true);
+				Event.delegate(this.display, "click", this.handleVoteNoLink, "a.voteno_link", this, true);
 				//archiving setup
 				this.archiver = Dom.get("messagingArchiver");
-				Event.on("messagingArchiveSelected", "click", this.archiveMessages, this, true);
+				this.archiveButton = Dom.get("messagingArchiveSelected");
+				Event.on(this.archiveButton, "click", this.archiveMessages, this, true);
+				this.trashButton = Dom.get("messagingTrashSelected");
+				Event.on(this.trashButton, "click", this.trashMessages, this, true);
 				this.select = Dom.get("messagingSelectAll");
 				Event.on(this.select, "click", this.selectAllMessages, this, true);
 				//create
@@ -254,7 +276,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			var list = this.list;
 			Event.purgeElement(list, true);
 			list.innerHTML = "";
-			Dom.removeClass([this.create,this.inbox,this.alerts,this.intel,this.medals,this.tutorial,this.sent,this.archive,this.announce], "selected");
+			Dom.removeClass([this.create,this.inbox,this.alerts,this.intel,this.medals,this.tutorial,this.sent,this.archive,this.trash,this.announce], "selected");
 			Dom.addClass(el, "selected");
 			switch(el.id) {
 				case this.create.id:
@@ -302,11 +324,24 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					this.loadSentMessages();
 					break;
 				case this.archive.id:
-					Dom.setStyle(this.archiver,"display","none");
+					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","none");
+					Dom.setStyle(this.trashButton,"display","");
+					Dom.setStyle(this.inboxTag,"display","none");
 					this.loadArchiveMessages();
+					break;
+				case this.trash.id:
+					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","");
+					Dom.setStyle(this.trashButton,"display","none");
+					Dom.setStyle(this.inboxTag,"display","none");
+					this.loadTrashMessages();
 					break;
 				default:
 					Dom.setStyle(this.archiver,"display","");
+					Dom.setStyle(this.archiveButton,"display","");
+					Dom.setStyle(this.trashButton,"display","");
+					Dom.setStyle(this.inboxTag,"display","");
 					this.loadInboxMessages();
 					break;
 			}
@@ -451,6 +486,41 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				scope:this
 			});
 		},
+		loadTrashMessages : function() {
+			this._setTab(this.trash);
+			if(this.pager) {this.pager.destroy();}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: 1}
+				};
+			Lacuna.Pulser.Show();
+			InboxServ.view_trashed(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					if(o.result.message_count > 25) {
+						this.pager = new Pager({
+							rowsPerPage : 25,
+							totalRecords: o.result.message_count,
+							containers  : 'messagingPaginator',
+							template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+							alwaysVisible : false
+
+						});
+						this.pager.subscribe('changeRequest',this.handleTrashPagination, this, true);
+						this.pager.render();
+					}
+					else {
+						delete this.pager;
+					}
+
+					this.processMessages(o.result,{trash:1});
+					Lacuna.Pulser.Hide();
+				},
+				scope:this
+			});
+		},
 
 		handleInboxPagination : function (newState) {
 			var InboxServ = Game.Services.Inbox,
@@ -512,9 +582,27 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			// Update the Paginator's state
 			this.pager.setState(newState);
 		},
+		handleTrashPagination : function (newState) {
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					options:{page_number: newState.page}
+				};
+			Lacuna.Pulser.Show();
+			InboxServ.view_trashed(data, {
+				success : function(o){
+					this.fireEvent("onRpc", o.result);
+					this.processMessages(o.result,{trash:1});
+					Lacuna.Pulser.Hide();
+				},
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.pager.setState(newState);
+		},
 
 		processMessages : function(results, is) {
-			YAHOO.log(results, "info", "Messaging.processMessages");
 			var list = this.list,
 				messages = results.messages,
 				li = document.createElement("li"),
@@ -552,7 +640,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					}
 					nLi.innerHTML = [
 						' <div class="messageSelect"><img width="26" height="26" src="',Lib.AssetUrl,'ui/mail-',img,'.png" /><br />',
-						isTab.inbox ? '	<input type="checkbox" />' : '', '</div>',
+						!isTab.sent ? '	<input type="checkbox" />' : '', '</div>',
 						'	<div class="messageContainer">',
 						'		<div class="messageDate">',Lib.formatServerDate(msg.date),'</div>',
 						'		<div class="messageFrom">',
@@ -609,7 +697,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				Lacuna.Pulser.Show();
 				InboxServ.read_message(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Messaging.loadMessage.success");
 						var message = matchedEl.parentNode;
 						var messageSelect = message.childNodes[1];
 						var img = messageSelect.childNodes[0];
@@ -648,12 +735,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				else {
 					Dom.setStyle("messagingReplyC", "display", "none");
 				}
-
-				Event.purgeElement(this.display);
-				Event.delegate(this.display, "click", this.handleProfileLink, "a.profile_link", this, true);
-				Event.delegate(this.display, "click", this.handleStarmapLink, "a.starmap_link", this, true);
-				Event.delegate(this.display, "click", this.handlePlanetLink, "a.planet_link", this, true);
-				Event.delegate(this.display, "click", this.handleAllianceLink, "a.alliance_link", this, true);
 				
 				this.viewingMessage = msg;
 				this.timestamp.innerHTML = Lib.formatServerDate(msg.date);
@@ -759,7 +840,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				
 				InboxServ.send_message(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Messaging.sendMessage.success");
 						this.fireEvent("onRpc", o.result);
 						var u = o.result.message.unknown;
 						if(u && u.length > 0) {
@@ -783,54 +863,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					scope:this
 				});
 			}
-		},
-		formatBody : function(body) {
-			body = body.replace(/&/g,'&amp;');
-			body = body.replace(/</g,'&lt;');
-			body = body.replace(/>/g,'&gt;');
-			body = body.replace(/\n/g,'<br />');
-			body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
-			body = body.replace(/\{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)\}/gi, function(str,icon){
-				var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
-				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
-			});
-			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
-			body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="profile_link" href="#$1">$2</a>');
-			//body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
-			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
-			body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="planet_link" href="#$1">$2</a>');
-			body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)}/gi,'<a class="alliance_link" href="#$1">$2</a>');
-			//body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
-			return body;
-		},
-		handleProfileLink : function(e, el) {
-			Event.stopEvent(e);
-			var res = el.href.match(/\#(-?\d+)$/);
-			if(res) {
-				Lacuna.Info.Empire.Load(res[1]);
-			}
-		},
-		handleStarmapLink : function(e, el) {
-			Event.stopEvent(e);
-			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/);
-			Game.StarJump({x:res[1],y:res[2]});
-			//this.hide();
-			//Lacuna.MapPlanet.MapVisible(false);
-			//Lacuna.MapStar.MapVisible(true);
-			//Lacuna.Menu.StarVisible();
-			//Lacuna.MapStar.Jump(res[1]*1,res[2]*1);
-		},
-		handlePlanetLink : function(e, el) {
-			Event.stopEvent(e);
-			var res = el.href.match(/\#(-?\d+)$/);
-			this.hide();
-			var planet = Game.EmpireData.planets[res[1]];
-			Game.PlanetJump(planet);
-		},
-		handleAllianceLink : function(e, el) {
-			Event.stopEvent(e);
-			var res = el.href.match(/\#(-?\d+)$/);
-			Lacuna.Info.Alliance.Load(res[1]);
 		},
 		replyMessage : function(e) {
 			this.currentTab = this.create.id;
@@ -858,7 +890,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				};
 			InboxServ.archive_messages(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "Messaging.archiveMessage.success");
 					this.archiveProcess(o.result);
 					this.fireEvent("onRpc", o.result);
 				},
@@ -880,7 +911,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 					};
 				InboxServ.archive_messages(data, {
 					success : function(o){
-						YAHOO.log(o, "info", "Messaging.archiveMessages.success");
 						this.archiveProcess(o.result);
 						this.fireEvent("onRpc", o.result);
 					},
@@ -889,6 +919,72 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		archiveProcess : function(results) {
+			Dom.batch(Sel.query("li.message", this.list), function(el){
+				if(results.success.indexOf(el.Message.id) >= 0) {
+					delete this.toArchive[el.Message.id];
+					if (el.Message.has_read*1 == 0) {
+						Game.EmpireData.has_new_messages--;
+						if(Game.EmpireData.has_new_messages < 0) {
+							Game.EmpireData.has_new_messages = 0;
+						}
+					}
+					this.toArchiveCount--;
+					Event.purgeElement(el);
+					el.parentNode.removeChild(el);
+				}
+			}, this, true);
+			
+			if(this.pager) {
+				//reload messages if we had a pager
+				this.loadTab();
+			}
+			
+			Dom.setStyle(this.display, "visibility", "hidden");
+			delete this.selectedAll;
+			this.select.innerHTML = "Select All";
+		},
+		trashMessage : function(e) {
+			if(!this.toArchive[this.viewingMessage.id]) {
+				this.toArchive[this.viewingMessage.id] = this.viewingMessage;
+				this.toArchiveCount++;
+			}
+			
+			var InboxServ = Game.Services.Inbox,
+				data = {
+					session_id: Game.GetSession(""),
+					message_ids: [this.viewingMessage.id]
+				};
+			InboxServ.trash_messages(data, {
+				success : function(o){
+					this.trashProcess(o.result);
+					this.fireEvent("onRpc", o.result);
+				},
+				scope:this
+			});
+		},
+		trashMessages : function() {
+			if(this.toArchiveCount > 0) {
+				var mIds = [];
+				for(var key in this.toArchive) {
+					if(this.toArchive.hasOwnProperty(key)) {
+						mIds.push(key);
+					}
+				}
+				var InboxServ = Game.Services.Inbox,
+					data = {
+						session_id: Game.GetSession(""),
+						message_ids: mIds
+					};
+				InboxServ.trash_messages(data, {
+					success : function(o){
+						this.trashProcess(o.result);
+						this.fireEvent("onRpc", o.result);
+					},
+					scope:this
+				});
+			}
+		},
+		trashProcess : function(results) {
 			Dom.batch(Sel.query("li.message", this.list), function(el){
 				if(results.success.indexOf(el.Message.id) >= 0) {
 					delete this.toArchive[el.Message.id];
@@ -929,6 +1025,87 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 			}
 		},
 		
+		formatBody : function(body) {
+			body = body.replace(/&/g,'&amp;');
+			body = body.replace(/</g,'&lt;');
+			body = body.replace(/>/g,'&gt;');
+			body = body.replace(/\n/g,'<br />');
+			body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
+			body = body.replace(/\{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)\}/gi, function(str,icon){
+				var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
+				return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
+			});
+			body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
+			body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="profile_link" href="#$1">$2</a>');
+			//body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
+			body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
+			body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="planet_link" href="#$1">$2</a>');
+			body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+			body = body.replace(/\{VoteYes\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteyes_link" href="#$1&$2&$3">Yes!</a>');
+			body = body.replace(/\{VoteNo\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteno_link" href="#$1&$2&$3">No!</a>');
+			//body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
+			return body;
+		},
+		handleProfileLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)$/);
+			if(res) {
+				Lacuna.Info.Empire.Load(res[1]);
+			}
+		},
+		handleStarmapLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)x(-?\d+)$/);
+			Game.StarJump({x:res[1],y:res[2]});
+			//this.hide();
+			//Lacuna.MapPlanet.MapVisible(false);
+			//Lacuna.MapStar.MapVisible(true);
+			//Lacuna.Menu.StarVisible();
+			//Lacuna.MapStar.Jump(res[1]*1,res[2]*1);
+		},
+		handlePlanetLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)$/);
+			this.hide();
+			var planet = Game.EmpireData.planets[res[1]];
+			Game.PlanetJump(planet);
+		},
+		handleAllianceLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)$/);
+			Lacuna.Info.Alliance.Load(res[1]);
+		},
+		handleVoteYesLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)&(-?\d+)&(-?\d+)$/);
+			Game.Services.Modules.Parliament.cast_vote({
+				session_id:Game.GetSession(""),
+				building_id:res[2],
+				proposition_id:res[3],
+				vote:1
+			},{
+				success : function(o){
+					alert("Voted Yes!");
+				},
+				scope:this
+			});
+		},
+		handleVoteNoLink : function(e, el) {
+			Event.stopEvent(e);
+			var res = el.href.match(/\#(-?\d+)&(-?\d+)&(-?\d+)$/);
+			Game.Services.Modules.Parliament.cast_vote({
+				session_id:Game.GetSession(""),
+				building_id:res[2],
+				proposition_id:res[3],
+				vote:0
+			},{
+				success : function(o){
+					alert("Voted No!");
+				},
+				scope:this
+			});
+		},
+		
 		isVisible : function() {
 			return this.messagingPanel.cfg.getProperty("visible");
 		},
@@ -958,7 +1135,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				};
 			InboxServ.read_message(data, {
 				success : function(o){
-					YAHOO.log(o, "info", "Messaging.showMessage.success");
 					var message = o.result.message;
 					if (message.has_archived != "0") {
 						this.currentTab = this.archive.id;

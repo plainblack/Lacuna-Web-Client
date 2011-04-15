@@ -48,6 +48,42 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness = Dom.get("profileSkipHappiness");
 			this.skipResource = Dom.get("profileSkipResource");
 			this.skipPollution = Dom.get("profileSkipPollution");
+			this.skipFoundNothing = Dom.get("profileSkipFoundNothing");
+			this.skipExcavatorResources = Dom.get("profileSkipExcavatorResources"); 
+			this.skipExcavatorGlyph = Dom.get("profileSkipExcavatorGlyph");
+			this.skipExcavatorPlan = Dom.get("profileSkipExcavatorPlan");
+			this.skipAllExcavator = Dom.get("profileSkipAllExcavator");
+			this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
+			this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
+			Event.on(this.skipFoundNothing, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorResources, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorGlyph, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipExcavatorPlan, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipAllExcavator").checked = false;
+				}
+			});
+			Event.on(this.skipAllExcavator, 'change', function() {
+				if(this.checked) {
+					Dom.get("profileSkipFoundNothing").checked = true;
+					Dom.get("profileSkipExcavatorResources").checked = true;
+					Dom.get("profileSkipExcavatorGlyph").checked = true;
+					Dom.get("profileSkipExcavatorPlan").checked = true;
+				}
+			});
+
 			this.rpc = Dom.get("profileRpc");
 			
 			this.medals = Dom.get("profileMedalsList");
@@ -181,11 +217,18 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'							<li><hr /><div class="yui-g">',
 			'								<div class="yui-u first">',
 			'									<ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
-			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li></ul></div>',
+			'									<li><input id="profileSkipMedal" type="checkbox" /> Stop Medal Messages</li>',
+			'									<li><input id="profileSkipProbeDetected" type="checkbox" /> Stop Probe Detected</li>',
+			'									<li><input id="profileSkipSpyRecovery" type="checkbox" /> Stop Spy Recovery Messages</li>',
+			'									<li><input id="profileSkipFoundNothing" type="checkbox" /> Stop Excavator Found Nothing</li>',
+			'									<li><input id="profileSkipExcavatorGlyph" type="checkbox" /> Stop Excavator Glyph</li></ul></div>',
 			'								<div class="yui-u">',
-			'									<ul><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
+			'									<ul id="profileCheckboxes"><li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
-			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li></ul></div>',
+			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li>',
+			'									<li><input id="profileSkipAllExcavator" type="checkbox" /> Stop All Excavator Messages</li>',
+			'									<li><input id="profileSkipExcavatorResources" type="checkbox" /> Stop Excavator Resources</li>',
+			'									<li><input id="profileSkipExcavatorPlan" type="checkbox" /> Stop Excavator Plan</li></ul></div>',
 			'							</div></li>',
 			'							<li><hr />Today\'s RPC Usage:<span id="profileRpc" style="margin-left:5px;"></span></li>',
 			'						</ul>',
@@ -333,7 +376,13 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						skip_resource_warnings:this.skipResource.checked ? 1 : 0,
 						skip_pollution_warnings:this.skipPollution.checked ? 1 : 0,
 						skip_medal_messages:this.skipMedal.checked ? 1 : 0,
-						skip_facebook_wall_posts:this.skipFacebook.checked ? 1 : 0
+						skip_facebook_wall_posts:this.skipFacebook.checked ? 1 : 0,
+						skip_found_nothing:this.skipFoundNothing.checked ? 1 : 0,
+						skip_excavator_resources:this.skipExcavatorResources.checked ? 1 : 0,
+						skip_excavator_glyph:this.skipExcavatorGlyph.checked ? 1 : 0,
+						skip_excavator_plan:this.skipExcavatorPlan.checked ? 1 : 0,
+						skip_spy_recovery:this.skipSpyRecovery.checked ? 1 : 0,
+						skip_probe_detected:this.skipProbeDetected.checked ? 1 : 0
 					}
 				},{
 				success : function(o){
@@ -379,6 +428,13 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipHappiness.checked = p.skip_happiness_warnings == "1";
 			this.skipResource.checked = p.skip_resource_warnings == "1";
 			this.skipPollution.checked = p.skip_pollution_warnings == "1";
+			this.skipFoundNothing.checked = p.skip_found_nothing == "1";
+			this.skipExcavatorResources.checked = p.skip_excavator_resources == "1";
+			this.skipExcavatorGlyph.checked = p.skip_excavator_glyph == "1";
+			this.skipExcavatorPlan.checked = p.skip_excavator_plan == "1";
+			this.skipSpyRecovery.checked = p.skip_spy_recovery == "1";
+			this.skipProbeDetected.checked = p.skip_spy_recovery == "1";
+			this.skipAllExcavator.checked = this.skipFoundNothing.checked && this.skipExcavatorResources.checked && this.skipExcavatorGlyph.checked;
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
 			this.hidePlanets.checked = Game.GetCookieSettings("hidePlanets","0") == "1";

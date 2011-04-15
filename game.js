@@ -15,7 +15,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		Resources : {},
 		ServerData : {},
 		Services : {},
-		Timeout : 30000,
+		Timeout : 60000,
 		HourMS : 3600000, //(60min * 60sec * 1000ms),
 		onTick : new Util.CustomEvent("onTick"),
 		OverlayManager : new YAHOO.widget.OverlayManager(),
@@ -307,18 +307,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		},
 		InitServices : function(smd) {
 			var serviceOut = {};
+			var successFunc = function(){
+				for (var methodName in this) {
+					if (this.hasOwnProperty(methodName) && Lang.isFunction(this[methodName])) {
+						var method = this[methodName];
+						this[methodName] = Game.WrappedService(method, sKey+'.'+methodName);
+					}
+				}
+			};
 			for(var sKey in smd) {
 				if(smd.hasOwnProperty(sKey)) {
 					var oSmd = smd[sKey];
 					if(oSmd.services) {
-						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd, {success:function(){
-							for (var methodName in this) {
-								if (this.hasOwnProperty(methodName) && Lang.isFunction(this[methodName])) {
-									var method = this[methodName];
-									this[methodName] = Game.WrappedService(method, sKey+'.'+methodName);
-								}
-							}
-						} }, Game.RPCBase);
+						serviceOut[sKey] = new YAHOO.rpc.Service(oSmd, {success:successFunc }, Game.RPCBase);
 					}
 					else {
 						serviceOut[sKey] = Game.InitServices(oSmd);
@@ -547,7 +548,24 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 									id: pKey,
 									name: status.empire.planets[pKey],
 									star_name: "",
-									image: undefined
+									image: undefined,
+									energy_capacity: 0,
+									energy_hour: 0,
+									energy_stored: 0,
+									food_capacity: 0,
+									food_hour: 0,
+									food_stored: 0,
+									happiness: 0,
+									happiness_hour: 0,
+									ore_capacity: 0,
+									ore_hour: 0,
+									ore_stored: 0,
+									waste_capacity: 0,
+									waste_hour: 0,
+									waste_stored: 0,
+									water_capacity: 0,
+									water_hour: 0,
+									water_stored: 0
 								};
 							}
 							else {
@@ -575,25 +593,25 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						p = Game.EmpireData.planets[planet.id];
 					
 					if(p) {
-						planet.energy_capacity *= 1;
-						planet.energy_hour *= 1;
-						planet.energy_stored *= 1;
-						planet.food_capacity *= 1;
-						planet.food_hour *= 1;
-						planet.food_stored *= 1;
-						planet.happiness *= 1;
-						planet.happiness_hour *= 1;
-						planet.ore_capacity *= 1;
-						planet.ore_hour *= 1;
-						planet.ore_stored *= 1;
-						planet.waste_capacity *= 1;
-						planet.waste_hour *= 1;
-						planet.waste_stored *= 1;
-						planet.water_capacity *= 1;
-						planet.water_hour *= 1;
-						planet.water_stored *= 1;
-						
 						Lang.augmentObject(p, planet, true);
+						
+						p.energy_capacity *= 1;
+						p.energy_hour *= 1;
+						p.energy_stored *= 1;
+						p.food_capacity *= 1;
+						p.food_hour *= 1;
+						p.food_stored *= 1;
+						p.happiness *= 1;
+						p.happiness_hour *= 1;
+						p.ore_capacity *= 1;
+						p.ore_hour *= 1;
+						p.ore_stored *= 1;
+						p.waste_capacity *= 1;
+						p.waste_hour *= 1;
+						p.waste_stored *= 1;
+						p.water_capacity *= 1;
+						p.water_hour *= 1;
+						p.water_stored *= 1;
 						
 						doMenuUpdate = true;
 					}
@@ -853,14 +871,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 		
 			for(var pKey in ED.planets) {
 				if(ED.planets.hasOwnProperty(pKey)){
-					var planet = ED.planets[pKey];
+					var planet = ED.planets[pKey],
+						isNotStation = planet.type != "space station";
 					if(planet.energy_stored < planet.energy_capacity){
 						planet.energy_stored += planet.energy_hour * ratio;
 						if(planet.energy_stored > planet.energy_capacity) {
 							planet.energy_stored = planet.energy_capacity;
 						}
 						else if(planet.energy_stored < 0) {
-							planet.happiness += planet.energy_stored;
+							if(isNotStation) { planet.happiness += planet.energy_stored; }
 							planet.energy_stored = 0;
 						}
 					}
@@ -870,7 +889,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							planet.food_stored = planet.food_capacity;
 						}
 						else if(planet.food_stored < 0) {
-							planet.happiness += planet.food_stored;
+							if(isNotStation) { planet.happiness += planet.food_stored; }
 							planet.food_stored = 0;
 						}
 					}
@@ -880,7 +899,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							planet.ore_stored = planet.ore_capacity;
 						}
 						else if(planet.ore_stored < 0) {
-							planet.happiness += planet.ore_stored;
+							if(isNotStation) { planet.happiness += planet.ore_stored; }
 							planet.ore_stored = 0;
 						}
 					}
@@ -890,7 +909,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							planet.water_stored = planet.water_capacity;
 						}
 						else if(planet.water_stored < 0) {
-							planet.happiness += planet.water_stored;
+							if(isNotStation) { planet.happiness += planet.water_stored; }
 							planet.water_stored = 0;
 						}
 					}
@@ -903,7 +922,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 							planet.waste_stored = planet.waste_capacity;
 						}
 						else if(planet.waste_stored < 0) {
-							planet.happiness += planet.waste_stored;
+							if(isNotStation) { planet.happiness += planet.waste_stored; }
 							planet.waste_stored = 0;
 						}
 					}
@@ -911,19 +930,22 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 						wasteOverage = planet.waste_hour * ratio;
 					}
 					
-					planet.happiness += (planet.happiness_hour * ratio) - wasteOverage;
-					if(planet.happiness < 0 && ED.is_isolationist == "1") {
-						planet.happiness = 0;
+					if(isNotStation) { 
+						planet.happiness += (planet.happiness_hour * ratio) - wasteOverage;
+						if(planet.happiness < 0 && ED.is_isolationist == "1") {
+							planet.happiness = 0;
+						}
+						
+						//totalWasteOverage += wasteOverage;
 					}
 					
-					totalWasteOverage += wasteOverage;
 				}
 			}
 			
-			ED.happiness += (ED.happiness_hour * ratio) - totalWasteOverage;
+			/*ED.happiness += (ED.happiness_hour * ratio) - totalWasteOverage;
 			if(ED.happiness < 0 && ED.is_isolationist == "1") {
 				ED.happiness = 0;
-			}
+			}*/
 			
 			//YAHOO.log([diff, ratio]);
 			if(updateMenu) {

@@ -441,6 +441,12 @@ body.yui-skin-sam  #planetsCenter .yuimenu .bd {
 	background-color:#52acff;
 	border:5px solid #52ACFF;
 }
+body.yui-skin-sam  #planetsCenter .yuimenu .bd .yuimenu .bd {
+	-moz-border-radius:10px 10px 10px 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	border-radius:10px 10px 10px 10px;
+}
 body.yui-skin-sam #usersCenter .yuimenu .bd {
 	-moz-border-radius: 0 0 10px 10px;
 	-webkit-border-bottom-left-radius: 10px;
@@ -448,6 +454,12 @@ body.yui-skin-sam #usersCenter .yuimenu .bd {
 	border-radius: 0 0 10px 10px;
 	background-color:#52acff;
 	border:5px solid #52ACFF;
+}
+body.yui-skin-sam  #usersCenter .yuimenu .bd .yuimenu .bd {
+	-moz-border-radius:10px 10px 10px 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	border-radius:10px 10px 10px 10px;
 }
 
 .menuPlanetThumb {
@@ -1404,7 +1416,7 @@ planet details
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align:right;
-	width:80px;
+	width:120px;
 }
 #buildingDetailsName, .buildingName, .shipName {
 	font-weight:bold;
@@ -2009,6 +2021,39 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 	float:right;
 }
+
+#propsDetails li , #lawsDetails li{
+	margin-top:3px;
+	border:1px solid #52acff;
+	padding:5px;
+}
+#propsDetails li  label , #lawsDetails li  label {
+	font-weight:bold;
+}
+#propsDetails .propDesc, #lawsDetails .lawDesc {
+	padding:5px;
+	font-size:90%;
+}
+#propsDetails .propMyVote {
+	padding:5px;
+}
+#propsDetails th {
+	border-bottom:1px solid #999;
+	font-weight:bold;
+}
+
+#proposeContainer label{
+	display:inline-block; /*mozilla 3.0, ie 8*/
+    zoom:1; /*force ie layout so we can use the display:inline below*/
+    *display:inline; /*ie hack to make it think this is an inline-block*/
+	width:130px;
+	font-weight:bold;
+	vertical-align:top;
+}
+#proposeContainer  button { margin-top: 10px; }
+#proposeContainer li { margin-top: 2px; }
+
+#proposeSeizeStarFindTbl, #proposeInductMemberTbl  { width: 400px; }
 
 body.yui-skin-sam .yui-tt .bd {
 	-moz-border-radius:0 0 0 0;

@@ -13,6 +13,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		Lib = Lacuna.Library;
 		
 	var FactoryMap = {
+		//buildings
 		"/archaeology": Lacuna.buildings.Archaeology,
 		"/capitol": Lacuna.buildings.Capitol,
 		"/development": Lacuna.buildings.Development,
@@ -25,6 +26,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/geneticslab": Lacuna.buildings.GeneticsLab,
 		"/intelligence": Lacuna.buildings.Intelligence,
 		"/libraryofjith": Lacuna.buildings.LibraryOfJith,
+		"/mercenariesguild": Lacuna.buildings.MercenariesGuild,
 		"/miningministry": Lacuna.buildings.MiningMinistry,
 		"/missioncommand": Lacuna.buildings.MissionCommand,
 		"/network19": Lacuna.buildings.Network19,
@@ -37,14 +39,17 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/shipyard": Lacuna.buildings.Shipyard,
 		"/spaceport": Lacuna.buildings.SpacePort,
 		"/ssla": Lacuna.buildings.SpaceStationLab,
-		"/stationcommand": Lacuna.buildings.StationCommand,
 		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
 		"/themepark": Lacuna.buildings.ThemePark,
 		"/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
 		"/trade": Lacuna.buildings.Trade,
 		"/transporter": Lacuna.buildings.Transporter,
 		"/waterstorage": Lacuna.buildings.WaterStorage,
-		"/wasterecycling": Lacuna.buildings.WasteRecycling
+		"/wasterecycling": Lacuna.buildings.WasteRecycling,
+		//modules
+		"/parliament": Lacuna.modules.Parliament,
+		"/policestation": Lacuna.modules.PoliceStation,
+		"/stationcommand": Lacuna.modules.StationCommand
 	};
 		
 	var MapPlanet = function() {
@@ -114,10 +119,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					while(queue.length > 0) {
 						var callback = queue.pop();
 						callback.secondsRemaining -= diff;
-						if(callback.secondsRemaining > 0) {
+						if(!callback.fn.call(callback.scope || this, callback.secondsRemaining, callback.el) && callback.secondsRemaining > 0) {
 							newq.push(callback);
 						}
-						callback.fn.call(callback.scope || this, callback.secondsRemaining, callback.el);
 					}
 					this.queue = newq;
 				}
@@ -482,10 +486,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		
 		_fireRpcSuccess : function(result){
-			/*if(result.building && result.building.work) {
-				this.buildings[result.building.id].work = result.building.work;
-				this._map.refreshTile(this.buildings[result.building.id]);
-			}*/
 			this.fireEvent("onMapRpc", result);
 		},
 		_fireQueueAdd : function(obj) {
@@ -899,7 +899,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		},
 		BuildingFactory : function(result) {			
 			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
-				classObj = new classConstructor(result);
+				classObj = new classConstructor(result, this.locationId);
 			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
@@ -938,18 +938,18 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 					panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
 					if(building.pending_build.seconds_remaining > 0) {
 						panel.addQueue(building.pending_build.seconds_remaining,
-							function(remaining){
+							function(remaining, elm){
 								var rf = Math.round(remaining);
 								if(rf <= 0) {
-									this.buildingDetails.timeLeftLi.innerHTML = "";
+									elm.innerHTML = "";
 									YAHOO.log("Complete","info","buildingDetails.showEvent.BuildTimeRemaining");
 									this.DetailsView({data:{id:building.id,url:building.url},x:building.x,y:building.y});
 								}
 								else {
-									this.buildingDetails.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
+									elm.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
 								}
 							},
-							null,
+							panel.timeLeftLi,
 							this
 						);
 					}

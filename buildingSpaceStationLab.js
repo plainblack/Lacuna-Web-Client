@@ -84,7 +84,7 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
 				frag[frag.length] = [
 					'<li style="padding-bottom: 2px; margin-bottom:2px; border-bottom: 1px solid #52acff;">',
 					'	<div class="yui-gb">',
-					'		<div class="yui-u first" style="width:200px;background:transparent url(',Lacuna.MapPlanet.surfaceUrl,') no-repeat center;text-align:center">',
+					'		<div class="yui-u first" style="width:200px;background:transparent url(',Lib.AssetUrl,'planet_side/surface-station.jpg) no-repeat center;text-align:center">',
 					'			<img src="',Lib.AssetUrl,'planet_side/',plan.image,'.png" style="width:200px;height:200px;cursor:pointer;" class="buildingImage" />',
 					'		</div>',
 					'		<div class="yui-u">',
