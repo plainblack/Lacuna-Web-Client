@@ -385,8 +385,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				
 				
 				var spyTabs = {
-					"planetDetailSendSpies" : 7,
-					"planetDetailFetchSpies" : 8
+					"planetDetailSendSpies" : 8,
+					"planetDetailFetchSpies" : 9
 				};
 				var tabChange = function(e, tabEl) {
 						if (e.newValue) {
