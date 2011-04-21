@@ -86,7 +86,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				'	<ul class="shipHeader shipInfo clearafter">',
 				'		<li class="shipTypeImage">&nbsp;</li>',
 				'		<li class="shipName">Name</li>',
-				'		<li class="shipArrives">Arrives</li>',
+				'		<li class="shipArrives">Arrived</li>',
 				'		<li class="shipFrom">From</li>',
 				'	</ul>',
 				'	<div><div id="shipsOrbitingDetails"></div></div>',
@@ -789,18 +789,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						return 0;
 					}
 				});
-				
 				Event.purgeElement(details, true);
 				details.innerHTML = "";
-				
 				var serverTime = Lib.getTime(Game.ServerData.time);
-
 				for(var i=0; i<ships.length; i++) {
 					var ship = ships[i],
 						nUl = ul.cloneNode(false),
 						nLi = li.cloneNode(false),
-						sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
-						
+						sec = (Lib.getTime(ship.date_arrived) - serverTime) / 1000;
 					nUl.Ship = ship;
 					Dom.addClass(nUl, "shipInfo");
 					Dom.addClass(nUl, "clearafter");
@@ -818,7 +814,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"shipArrives");
-					nLi.innerHTML = Lib.formatTime(sec);
+					nLi.innerHTML = Lib.formatServerDate(ship.date_arrived);
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
@@ -837,8 +833,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					}
 					nUl.appendChild(nLi);
 
-					this.addQueue(sec, this.ForeignQueue, nUl);
-								
 					details.appendChild(nUl);
 					
 				}
