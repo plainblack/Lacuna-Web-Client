@@ -377,8 +377,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				tv.getTab(3).subscribe('beforeActiveChange', getShips, this, true);
 				//Incoming Tab
 				tv.getTab(4).subscribe('beforeActiveChange', getShips, this, true);
-				//Mining Tab
+				//Orbiting Tab
 				tv.getTab(5).subscribe('beforeActiveChange', getShips, this, true);
+				//Mining Tab
+				tv.getTab(6).subscribe('beforeActiveChange', getShips, this, true);
 				
 				Event.on("planetDetailSendFleetSubmit", "click", this.FleetSend, this, true);
 				Event.on("starDetailSendFleetSubmit", "click", this.FleetSend, this, true);
