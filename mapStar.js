@@ -1205,7 +1205,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'	<li><label>Zone:</label>',body.zone,'</li>',
 				'	<li><label>Star:</label>',body.star_name,'</li>',
 				'	<li><label>Orbit:</label>',body.orbit,'</li>',
-				empire.alignment == "self" ? '	<li><button type="button">View</button></li>' : '',
+				(empire.alignment == "self" || (empire.alignment == "ally" && body.type == "space station")) ? '	<li><button type="button">View</button></li>' : '',
 				'</ul>'
 			].join('');
 			
