@@ -623,7 +623,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			var btn = Event.getTarget(e);
 			btn.disabled = true;
 			
-			this.service.propose_seize_star({
+			this.service.propose_rename_star({
 				session_id : Game.GetSession(''),
 				building_id : this.building.id,
 				star_id : Lib.getSelectedOptionValue("proposeRenameStarSelect"),

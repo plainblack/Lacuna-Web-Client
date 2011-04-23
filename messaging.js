@@ -59,7 +59,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 				'					<option value="Complaint">Complaints</option>',
 				'					<option value="Excavator">Excavators</option>',
 				'					<option value="Mission">Mission</option>',
-				'					<option value="Parliament">Parliment</option>',
+				'					<option value="Parliament">Parliament</option>',
 				'					<option value="Probe">Probe</option>',
 				'					<option value="Spies">Spies</option>',
 				'					<option value="Trade">Trade</option>',
