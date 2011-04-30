@@ -143,7 +143,8 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 			lst[lst.length] = '</ol>';
 			return lst.join('');
 		},
-		completeMission : function() {
+		completeMission : function(e) {
+			e.target.disabled = true;
 			Lacuna.Pulser.Show();
 			this.Self.service.complete_mission({
 				session_id:Game.GetSession(),
@@ -157,10 +158,14 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 					this.Self.missions = undefined;
 					this.Self.getMissions();
 				},
+				failure : function(o) {
+					e.target.disabled = false;
+				},
 				scope:this
 			});
 		},
-		skipMission : function() {
+		skipMission : function(e) {
+			e.target.disabled = true;
 			Lacuna.Pulser.Show();
 			this.Self.service.skip_mission({
 				session_id:Game.GetSession(),
@@ -173,6 +178,9 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 
 					this.Self.missions = undefined;
 					this.Self.getMissions();
+				},
+				failure : function(o) {
+					e.target.disabled = false;
 				},
 				scope:this
 			});
