@@ -305,6 +305,12 @@
 		requires : ["building","trade"]
 	});
 	loader.addModule({
+		name: "wasteexchanger",
+		type: "js",
+		fullpath: urlBuilder("buildingWasteExchanger.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "wasterecycling",
 		type: "js",
 		fullpath: urlBuilder("buildingWasteRecycling.js"),
@@ -373,6 +379,7 @@
 			"trade",
 			"transporter",
 			"waterstorage",
+			"wasteexchanger",
 			"wasterecycling",
 			//modules
 			"parliament",
