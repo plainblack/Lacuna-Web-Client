@@ -43,11 +43,10 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.timeEnergy = Dom.get("essentialDetailsTimeEnergy");
 			this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
 			this.timeStorage = Dom.get("essentialDetailsTimeStorage");
-			this.timeRpc = Dom.get("essentialDetailsTimeRpc");
 			this.elCode = Dom.get("essentiaRedeemCode");
 			this.elEssentiaAmount = Dom.get("essentiaAmount");
 			this.tabView = new YAHOO.widget.TabView('essentiaTabs');
-			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage","essentiaBoostRpc"], "click", this.boost, this, true);
+			Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage"], "click", this.boost, this, true);
 			Event.on('essentiaRedeemButton', 'click', this.redeemClick, this, true);
 			Event.on('essentiaInvite', 'click', Lacuna.Invite.show, this, true);
 			Event.on("essentiaPurchaseButton", "click", function(e){
@@ -129,13 +128,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			'							<td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
 			'							<td class="essentiaDetailsBoost"><button id="essentiaBoostStorage" type="button">Boost</button></td>',
 			'							<td class="essentiaDetailsTime" id="essentialDetailsTimeStorage"></td>',
-			'						</tr>',
-			'						<tr>',
-			'							<td class="essentiaDetailsImg"><img class="smallTime" title="RPC" src="',Lib.AssetUrl,'ui/s/time.png" /></td>',
-			'							<td class="essentiaDetailsText">+100% RPC/day<br>+50% calls/minute</td>',
-			'							<td class="essentiaDetailsCost">25 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
-			'							<td class="essentiaDetailsBoost"><button id="essentiaBoostRpc" type="button">Boost</button></td>',
-			'							<td class="essentiaDetailsTime" id="essentialDetailsTimeRpc"></td>',
 			'						</tr>',
 			'					</table>',
 			'				</div>',
@@ -246,9 +238,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 				case "essentiaBoostStorage":
 					func = Game.Services.Empire.boost_storage;
 					break;
-				case "essentiaBoostRpc":
-					func = Game.Services.Empire.boost_rpc;
-					break;
 			}
 			if(func) {
 				func({session_id:Game.GetSession("")},{
@@ -280,9 +269,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			else if(results.storage_boost) {
 				this.updateTime(this.timeStorage, results.storage_boost);
 			}
-			else if(results.rpc_boost) {
-				this.updateTime(this.timeRpc, results.rpc_boost);
-			}
 		},
 		populate : function(results) {
 			var boosts = results.boosts;
@@ -293,7 +279,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 			this.updateTime(this.timeEnergy, boosts.energy);
 			this.updateTime(this.timeHappiness, boosts.happiness);
 			this.updateTime(this.timeStorage, boosts.storage);
-			this.updateTime(this.timeRpc, boosts.rpc);
 		},
 		updateTime : function(el, sDate) {
 			var timers = this.timers;
