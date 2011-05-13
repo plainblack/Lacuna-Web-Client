@@ -2741,7 +2741,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							"energy" : "01 31 2010 13:09:05 +0600",
 							"happiness" : "01 31 2010 13:09:05 +0600",
 							"water" : "01 31 2010 13:09:05 +0600",
-							"rpc" : "01 31 2010 13:09:05 +0600",
 						}
 					 }
 					*/
@@ -2821,19 +2820,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					 {
 						"status" : { get_status() },
 						"storage_boost" : "01 31 2010 13:09:05 +0600"
-					 }
-					*/
-				},
-				"boost_rpc" : {
-					"description": "Spends 25 essentia, and boosts the number of RPC calls allowed per minute by 50% as well as doubling the total number RPC calls per day. If a boost is already underway, calling again will add 7 more days.",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-					/*
-					 {
-						"status" : { get_status() },
-						"rpc_boost" : "01 31 2010 13:09:05 +0600"
 					 }
 					*/
 				},

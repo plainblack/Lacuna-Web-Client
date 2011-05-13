@@ -2164,11 +2164,9 @@ Essentia Dialog
 	width: 180px;
 }
 #essentiaTabBoost .essentiaDetailsCost {
-	text-align: right;
 	width: 45px;
 }
 #essentiaTabBoost .essentiaDetailsBoost {
-    padding-left: 10px;
 	width: 65px;
 }
 #essentiaTabBoost .essentiaDetailsTime {
