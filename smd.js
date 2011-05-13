@@ -735,6 +735,36 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			Exchanger : {
+				"SMDVersion":"2.0",
+				"description": "Waste Exchanger",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/wasteexchanger",
+				
+				"services": {
+					"recycle" : {
+						"description": "Converts waste into water, ore, and energy. You can choose which amounts of each you want, so long as their total does not go over the amount of waste you have on hand. For each unit of waste converted, the recycling center will take 1 second to complete the recycling process. However, the amount of time is reduced a bit by the level of the Waste Exchanger.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"water", "type":"number", "optional":false},
+							{"name":"ore", "type":"number", "optional":false},
+							{"name":"energy", "type":"number", "optional":false},
+							{"name":"use_essentia", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"subsidize_recycling" : {
+						"description": "Will spend 2 essentia to complete the current recycling job immediately.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					}
+				}
+			},
 			FoodReserve : {
 				"SMDVersion":"2.0",
 				"description": "Food Reserve",
@@ -2711,7 +2741,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							"energy" : "01 31 2010 13:09:05 +0600",
 							"happiness" : "01 31 2010 13:09:05 +0600",
 							"water" : "01 31 2010 13:09:05 +0600",
-							"rpc" : "01 31 2010 13:09:05 +0600",
 						}
 					 }
 					*/
@@ -2791,19 +2820,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					 {
 						"status" : { get_status() },
 						"storage_boost" : "01 31 2010 13:09:05 +0600"
-					 }
-					*/
-				},
-				"boost_rpc" : {
-					"description": "Spends 25 essentia, and boosts the number of RPC calls allowed per minute by 50% as well as doubling the total number RPC calls per day. If a boost is already underway, calling again will add 7 more days.",
-					"parameters": [
-						{"name":"session_id", "type":"string", "optional":false}
-					],
-					"returns":{"type":"object"}
-					/*
-					 {
-						"status" : { get_status() },
-						"rpc_boost" : "01 31 2010 13:09:05 +0600"
 					 }
 					*/
 				},

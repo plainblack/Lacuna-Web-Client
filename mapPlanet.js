@@ -45,6 +45,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/trade": Lacuna.buildings.Trade,
 		"/transporter": Lacuna.buildings.Transporter,
 		"/waterstorage": Lacuna.buildings.WaterStorage,
+		"/wasteexchanger": Lacuna.buildings.WasteExchanger,
 		"/wasterecycling": Lacuna.buildings.WasteRecycling,
 		//modules
 		"/parliament": Lacuna.modules.Parliament,
