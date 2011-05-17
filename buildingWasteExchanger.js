@@ -189,7 +189,7 @@ if (typeof YAHOO.lacuna.buildings.WasteExchanger == "undefined" || !YAHOO.lacuna
 			btn.setAttribute("type", "button");
 			btn.innerHTML = "Recycle";
 			btn = fieldset.appendChild(btn);
-			Event.on(btn, "click", this.Recycle, this, true);
+			Event.on(btn, "click", this.Recycle, undef, this, true);
 			form.appendChild(fieldset);
 
 			if(Game.EmpireData.essentia*1 >= 2) {
@@ -199,7 +199,7 @@ if (typeof YAHOO.lacuna.buildings.WasteExchanger == "undefined" || !YAHOO.lacuna
 				btn.setAttribute("type", "button");
 				btn.innerHTML = "Recycle Instantly";
 				btn = fieldset.appendChild(btn);
-				Event.on(btn, "click", this.Recycle, {instant : true}, this);
+				Event.on(btn, "click", this.Recycle, {instant : true}, this, true);
 				form.appendChild(fieldset);
 			}
 			
