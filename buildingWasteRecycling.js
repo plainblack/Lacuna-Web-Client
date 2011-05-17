@@ -189,7 +189,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 			btn.setAttribute("type", "button");
 			btn.innerHTML = "Recycle";
 			btn = fieldset.appendChild(btn);
-			Event.on(btn, "click", this.Recycle, undef, this, true);
+			Event.on(btn, "click", this.Recycle, undefined, this, true);
 			form.appendChild(fieldset);
 
 			if(Game.EmpireData.essentia*1 >= 2) {
