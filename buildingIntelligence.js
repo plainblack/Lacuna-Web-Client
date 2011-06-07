@@ -329,7 +329,9 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				for(var i=0; i<spies.length; i++) {
 					var ret = this.SpyInfo( spies[i] );
 					nDiv = ret[0];
-					isTraining = ret[1];
+					if (ret[1]) {
+						isTraining = true;
+					}
 					details.appendChild(nDiv);
 				}
 				

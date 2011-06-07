@@ -934,6 +934,66 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			IntelTraining : {
+				"SMDVersion":"2.0",
+				"description": "IntelTraining",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/inteltraining",
+
+				"services": {
+					"train_spy" : {
+						"description": "Allows you to train spies in intelligence",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"quantity", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
+						 }
+						*/
+					},
+					"view_spies" : {
+						"description": "Returns the list of idle spies you have on your roster.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"spies" : {
+								"id-goes-here" : {
+									"assignment" : "Idle",
+									"assigned_to" : {
+										"body_id" : "id-goes-here",
+										"name" : "Earth",
+									},
+									"is_available" : 1, # can be reassigned
+									"available_on" : "01 31 2010 13:09:05 +0600" # if can't be reassigned, this is when will be available
+								},
+								...
+							}
+						 }
+						*/
+					},
+					"subsidize_training" : {
+						"description": "Will spend 1 essentia per spy to complete the training of all spies immediately.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"} // view
+					}
+				}
+			},
 			LibraryOfJith : {
 				"SMDVersion":"2.0",
 				"description": "Library Of Jith",
