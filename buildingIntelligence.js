@@ -165,7 +165,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			Dom.addClass(nLi,"spyAssignment");
 
 			var sel;
-			if(spy.is_available) {
+			if(spy.is_available && spy.assignment != 'Mercenary Transport' ) {
 				sel = document.createElement("select");
 				var opt = document.createElement("option"),
 					btn = document.createElement("button");
