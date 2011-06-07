@@ -25,7 +25,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/hallsofvrbansk": Lacuna.buildings.HallsOfVrbansk,
 		"/geneticslab": Lacuna.buildings.GeneticsLab,
 		"/intelligence": Lacuna.buildings.Intelligence,
-		"/inteltraining": Lacuna.buildings.IntelTraining,
 		"/libraryofjith": Lacuna.buildings.LibraryOfJith,
 		"/mercenariesguild": Lacuna.buildings.MercenariesGuild,
 		"/miningministry": Lacuna.buildings.MiningMinistry,
