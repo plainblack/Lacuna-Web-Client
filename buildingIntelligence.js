@@ -165,7 +165,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 			Dom.addClass(nLi,"spyAssignment");
 
 			var sel;
-			if(spy.is_available) {
+			if(spy.is_available && spy.assignment != 'Mercenary Transport' ) {
 				sel = document.createElement("select");
 				var opt = document.createElement("option"),
 					btn = document.createElement("button");
@@ -329,7 +329,9 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 				for(var i=0; i<spies.length; i++) {
 					var ret = this.SpyInfo( spies[i] );
 					nDiv = ret[0];
-					isTraining = ret[1];
+					if (ret[1]) {
+						isTraining = true;
+					}
 					details.appendChild(nDiv);
 				}
 				
