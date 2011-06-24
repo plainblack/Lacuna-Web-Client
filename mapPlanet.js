@@ -901,7 +901,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		BuildingFactory : function(result) {			
 			var classConstructor = FactoryMap[result.building.url] || Lacuna.buildings.Building,
 				classObj = new classConstructor(result, this.locationId);
-			
 			if(classObj) {
 				classObj.subscribe("onMapRpc", this._fireRpcSuccess, this, true);
 				classObj.subscribe("onQueueAdd", this._fireQueueAdd, this, true);
@@ -965,6 +964,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 				//create building specific tabs and functionality
 				this.currentBuildingObj = this.BuildingFactory(oResults);
 				if(this.currentBuildingObj) {
+					//remove any tabs
+					while(panel.tabView.get("tabs").length > 0){
+						var tab = panel.tabView.getTab(0);
+						Event.purgeElement(tab.get("contentEl"));
+						panel.tabView.removeTab(tab);
+					}
 					var tabs = this.currentBuildingObj.getTabs();
 					for(var at=0; at<tabs.length; at++) {
 						panel.tabView.addTab(tabs[at]);
