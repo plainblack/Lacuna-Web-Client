@@ -19,7 +19,8 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
 		this.service = Game.Services.Buildings.MercenariesGuild;
 		
 		this.availableAcceptText = "Accept";
-		this.addMercenariesGuildText = ['Add for ',3-(this.building.level * 0.1),'<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" style="vertical-align:middle;" />'].join('');
+		var cost =  Math.round( (3-(this.building.level * 0.1)) * 10 ) / 10;
+		this.addMercenariesGuildText = ['Add for ',cost,'<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" style="vertical-align:middle;" />'].join('');
 		
 		//defaults.  Values are updated to server numbers during get_* calls
 		this.spySize = 350;
