@@ -810,6 +810,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"affinity", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
+					},
+					"rename_species" : {
+						"description" : "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"params", "type":"object", "optional":false}
+						],
+						"returns":{"type":"object"}
 					}
 				}
 			},

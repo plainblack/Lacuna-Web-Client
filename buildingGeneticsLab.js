@@ -11,7 +11,6 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 		Lacuna = YAHOO.lacuna,
 		Game = Lacuna.Game,
 		Lib = Lacuna.Library;
-
 	var GeneticsLab = function(result){
 		GeneticsLab.superclass.constructor.call(this, result);
 		
@@ -20,9 +19,9 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 	
 	Lang.extend(GeneticsLab, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getTab()];
+			return [this._getLabTab(),this._getRenameTab()];
 		},
-		_getTab : function() {
+		_getLabTab : function() {
 			this.tab = new YAHOO.widget.Tab({ label: "Lab", content: [
 				'<table class="tleTable">',
 				'	<tr>',
@@ -62,6 +61,77 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 			
 			return this.tab;
 		},
+       _getRenameTab : function() {
+            var div = document.createElement("div");
+            Dom.addClass(div, 'speciesRenameTab');
+            div.innerHTML = [
+				'<p>',
+                '    <div>Current species name: <span id="currentSpeciesName"></span></div>',
+                '    <div>Current species desc: <span id="currentSpeciesDesc"></span></div>',
+                '</p>',
+				'<hr />',
+                '<fieldset>',
+                '   <legend>Change Species Name</legend>',
+				'   <table>',
+                '     <tr valign="bottom"><td><label for="newSpeciesName">New species name:</label></td><td align="left"><input type="text" id="newSpeciesName"></input></td></tr>',
+                '     <tr valign="top"><td><label for="newSpeciesDesc">New species description:</label></td><td align="left"><textarea id="newSpeciesDesc" cols="47"></textarea></td></tr>',
+				'   </table>',
+                '   <div><button id="changeSpeciesName">Change Name</button></div>',
+                '</fieldset>'
+            ].join('');
+            this.tab = new YAHOO.widget.Tab({ label: "Rename Species", contentEl: div});
+			this.tab.subscribe("activeChange", this.ShowSpecies, this, true);
+
+            Event.on('changeSpeciesName', "click", this.RenameSpecies, this, true);
+
+            return this.tab;
+        },
+		ShowSpecies : function(e) {
+			Game.Services.Empire.view_public_profile({
+				session_id:Game.GetSession(),
+				empire_id:Game.EmpireData.id,
+			}, {
+                success:function(o){
+                    Lacuna.Pulser.Hide();
+                    var profile = o.result.profile;
+                    Dom.get('currentSpeciesDesc').innerHTML = profile.description;
+                    Dom.get('currentSpeciesName').innerHTML = profile.species;
+				},
+				scope:this
+			});
+		},
+        RenameSpecies : function(e) {
+            Event.stopEvent(e);
+            var btn = Event.getTarget(e);
+            var newName = Dom.get('newSpeciesName').value;
+			var newDesc = Dom.get('newSpeciesDesc').value.substr(0,1024);
+            Lacuna.Pulser.Show();
+            btn.disabled = true;
+            this.service.rename_species({
+                session_id:Game.GetSession(),
+                building_id:this.building.id,
+                params: {
+					name: newName,
+					description: newDesc,
+				},
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "GeneticsLab.rename_species.success");
+                    btn.disabled = false;
+                    Dom.get('newSpeciesName').value = '';
+                    Dom.get('newSpeciesDesc').value = '';
+                    Dom.get('currentSpeciesName').innerHTML = newName;
+                    Dom.get('currentSpeciesDesc').innerHTML = newDesc;
+                    Lacuna.Pulser.Hide();
+                    this.rpcSuccess(o);
+                    alert('Your species name has been changed!');
+                },
+                failure : function(o){
+                    btn.disabled = false;
+                },
+                scope:this
+            });
+        },
 		
 		getSpeciesStatList : function(stat) {
 			var frag = document.createDocumentFragment(),
