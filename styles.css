@@ -1749,7 +1749,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 
-.recycleTab fieldset {
+.recycleTab fieldset, .capitolEmpireRenameTab fieldset, .speciesRenameTab fieldset {
 	border: 1px solid #52acff;
 	padding: 5px;
 	display: inline-block; /*mozilla 3.0, ie 8*/
@@ -1759,28 +1759,18 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width: 220px;
 	margin: 10px;
 }
-.recycleTab fieldset legend {
+
+.recycleTab fieldset legend, .capitolEmpireRenameTab fieldset legend, .speciesRenameTab fieldset legend {
 	color: #fff;
 	padding: 0 5px;
 }
-.recycleTab fieldset label {
-	height: 22px;
+
+.recycleTab fieldset label, .speciesRenameTab fieldset label {
 	display: block;
 }
 
-.capitolEmpireRenameTab fieldset {
-	border: 1px solid #52acff;
-	padding: 5px;
-	display: inline-block; /*mozilla 3.0, ie 8*/
-    zoom:1; /*force ie layout so we can use the display:inline below*/
-    *display:inline; /*ie hack to make it think this is an inline-block*/
-	text-align: center;
-	width: 220px;
-	margin: 10px;
-}
-.capitolEmpireRenameTab fieldset legend {
-	color: #fff;
-	padding: 0 5px;
+.recycleTab fieldset label {
+	height: 22px;
 }
 
 .plan li {
