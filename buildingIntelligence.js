@@ -540,6 +540,10 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
 							// Dom.get("spiesCurrent").innerHTML = this.result.spies.current;
 							//this.UpdateCost(this.spies.training_costs, trained);
 						}
+						var not_trained = o.result.not_trained*1;
+						if(not_trained > 0 && o.result.reason_not_trained && o.result.reason_not_trained.message) {
+							alert(o.result.reason_not_trained.message);
+						}
 					},
 					scope:this
 				});
