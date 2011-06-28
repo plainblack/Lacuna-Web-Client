@@ -1756,8 +1756,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	text-align: center;
-	width: 220px;
 	margin: 10px;
+}
+.recycleTab fieldset, .capitolEmpireRenameTab fieldset {
+	width: 220px;
 }
 
 .recycleTab fieldset legend, .capitolEmpireRenameTab fieldset legend, .speciesRenameTab fieldset legend {
