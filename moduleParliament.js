@@ -101,7 +101,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			var opts = ['<option value="proposeWrit" selected>Writ</option>'],
 				dis = [], getAllianceMembers;
 			if(this.building.level >= 6) {
-				opts[opts.length] = '<option value="proposeTransfer">Transer Station Ownership</option>';
+				opts[opts.length] = '<option value="proposeTransfer">Transfer Station Ownership</option>';
 				dis[dis.length] = [
 				'	<div id="proposeTransfer" class="proposeOption" style="display:none;">',
 				'		<label>Empire:</label><select id="proposeTransferTo"></select><br />',
