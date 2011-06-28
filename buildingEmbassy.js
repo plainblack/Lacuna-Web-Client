@@ -772,7 +772,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 			}
 		},
 		DissolveAlliance : function() {
-			if(confirm(['Are you sure you want to dissolve ', this.alliance.name,'?'].join(''))) {
+			if(confirm(['All Space Stations will be abandoned. Are you sure you want to dissolve ', this.alliance.name,'?'].join(''))) {
 				this.service.dissolve_alliance({
 					session_id:Game.GetSession(""),
 					building_id:this.building.id
