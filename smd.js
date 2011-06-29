@@ -1833,7 +1833,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"ship_ids", "type":"array", "optional":false},
-							{"name":"target", "type":"string", "optional":false}
+							{"name":"target", "type":"string", "optional":false},
+							{"name":"set_speed", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
 					},
