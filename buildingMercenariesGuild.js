@@ -524,11 +524,10 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
 					this.rpcSuccess(o);
 					delete this.tradeShips;
 					this.getSpies(true);
-
 					Dom.get("tradeAddAskingQuantity").value = "";
-					
 					delete this.mineMercs;
 					this.fireEvent("onSelectTab", this.mineTabIndex);
+					btn.disabled = false;
 					Lacuna.Pulser.Hide();
 				},
 				failure : function() {
