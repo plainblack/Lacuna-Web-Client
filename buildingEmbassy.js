@@ -943,9 +943,14 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 					Event.on(nLi, "click", this.EmpireInfo, obj.empire_id);
 					nUl.appendChild(nLi);
 
-					if(this.isLeader) {
+					if(this.isLeader && this.alliance.leader_id != obj.empire_id) {
 						nLi = li.cloneNode(false);
 						Dom.addClass(nLi,"embassyAction");
+						var lbtn = document.createElement("button");
+						lbtn.setAttribute("type", "button");
+						lbtn.innerHTML = "Make Leader";
+						lbtn = nLi.appendChild(lbtn);
+						Event.on(lbtn, "click", this.MembersPromote, {Self:this,Member:obj,Line:nUl}, true);
 						var bbtn = document.createElement("button");
 						bbtn.setAttribute("type", "button");
 						bbtn.innerHTML = "Expel";
@@ -1005,9 +1010,15 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 						YAHOO.log(o, "info", "Embassy.assign_alliance_leader.success");
 						this.Self.rpcSuccess(o);
 						this.Self.alliance = o.result.alliance;
+						this.Self.isLeader = this.Self.alliance && this.Self.alliance.leader_id == Game.EmpireData.id;
 						this.Self.removeTab(this.Self.allianceTab);
 						this.Self.addTab(this.Self._getAllianceTab());
+						this.Self.removeTab(this.Self.memberTab);
+						this.Self.addTab(this.Self._getMemberTab());
 						this.Self.MembersPopulate();
+						this.Self.removeTab(this.Self.invitesTab);
+						this.Self.addTab(this.Self._getInvitesTab());
+						this.Self.removeTab(this.Self.sendTab);
 						Lacuna.Pulser.Hide();
 					},
 					scope:this
