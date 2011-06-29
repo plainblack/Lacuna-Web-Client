@@ -693,7 +693,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					'			<span><span>To:</span><span>',ship.to.name,'</span></span>',
 					'		</div>',
 					'		<div><label style="font-weight:bold;">Attributes:</label>',
-					'			<span>Speed:<span>',ship.speed,'</span></span>',
+					'			<span>Speed:<span>',(ship.fleet_speed > 0 && ship.fleet_speed < ship.speed) ? ship.fleet_speed : ship.speed,'</span></span>,',
 					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>',
 					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
 					'			<span>Combat:<span>',ship.combat,'</span></span>',
