@@ -148,6 +148,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 				'</div>',
 				'<div id="archaeologyWorkingContainer">',
 				'	<ul>',
+				'		<li>Searching: <span id="archaeologySearchOre"></span></li>',
 				'		<li>Time left on current search: <span id="archaeologySearchTime"></span></li>',
 				'		<li>You may subsidize the search for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
 				'		<li><button type="button" id="archaeologySearchSubsidize">Subsidize</button></li>',
@@ -326,6 +327,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 			if(this.work && this.work.seconds_remaining) {
 				Dom.setStyle("archaeologySearchContainer", "display", "none");
 				Dom.setStyle("archaeologyWorkingContainer", "display", "");
+				Dom.get("archaeologySearchOre").innerHTML = this.work.searching;
 				this.populateActiveSearch(this.work.seconds_remaining);
 			}
 			else {
