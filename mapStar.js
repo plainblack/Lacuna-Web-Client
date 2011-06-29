@@ -49,7 +49,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'		</ul>',
 				'		<div class="yui-content">',
 				'			<div><div><ul id="starDetailSendShips"></ul></div></div>',
-				'			<div><div style="border-bottom:1px solid #52acff;text-align:right;"><button type="button" id="starDetailSendFleetSubmit">Send Fleet</button></div><div><ul id="starDetailSendFleet"></ul></div></div>',
+				'			<div><div style="border-bottom:1px solid #52acff;text-align:right;">Set speed:<input type="text" id="starDetailSetSpeed" value="0" size="6"><button type="button" id="starDetailSendFleetSubmit">Send Fleet</button></div><div><ul id="starDetailSendFleet"></ul></div></div>',
 				'			<div><div><ul id="starDetailUnavailShips"></ul></div></div>',
 				'			<div><div><ul id="starDetailIncomingShips"></ul></div></div>',
 				'		</div>',
@@ -211,7 +211,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				'				</div>',
 				'			</div>',
 				'			<div><div><ul id="planetDetailSendShips"></ul></div></div>',
-				'			<div><div style="border-bottom:1px solid #52acff;text-align:right;"><button type="button" id="planetDetailSendFleetSubmit">Send Fleet</button></div><div><ul id="planetDetailSendFleet"></ul></div></div>',
+				'			<div><div style="border-bottom:1px solid #52acff;text-align:right;">Set speed:<input type="text" id="planetDetailSetSpeed" value="0" size="6"><button type="button" id="planetDetailSendFleetSubmit">Send Fleet</button></div><div><ul id="planetDetailSendFleet"></ul></div></div>',
 				'			<div><div><ul id="planetDetailUnavailShips"></ul></div></div>',
 				'			<div><div><ul id="planetDetailIncomingShips"></ul></div></div>',
 				'			<div><div><ul id="planetDetailOrbitingShips"></ul></div></div>',
@@ -907,37 +907,50 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				targetName = this.selectedStar.name;
 				panel = this.starDetails;
 			}
-			
-			var selected = Sel.query("input:checked", (panel.isStarPanel ? "starDetailSendFleet" : "planetDetailSendFleet"));	
+
+			var speed = Dom.get((panel.isStarPanel ? "starDetailSetSpeed" : "planetDetailSetSpeed")).value;
+			var selected = Sel.query("input:checked", (panel.isStarPanel ? "starDetailSendFleet" : "planetDetailSendFleet"));
 			if(selected.length > 0) {
-				var ships = [], shipIds = [], confirmIso;
+				var ships = [], shipIds = [], confirmIso, minSpeed = 99999999;
 				for(var n=0; n<selected.length; n++) {
 					var s = selected[n].Ship;
 					ships.push(s);
 					shipIds.push(s.id);
+					if (s.speed < minSpeed) {
+						minSpeed = s.speed;
+					}
 				}
-				
-				if(target && this.NotFleetIsolationist(ships)) {					
-					Game.Services.Buildings.SpacePort.send_fleet({
-						session_id:Game.GetSession(),
-						ship_ids:shipIds,
-						target:target
-					}, {
-						success : function(o){
-							Lacuna.Pulser.Hide();
-							this.fireEvent("onMapRpc", o.result);
-							delete this.currentShips;
-							
-							var details = Dom.get(panel.isStarPanel ? "starDetailSendFleet" : "planetDetailSendFleet");
-							details.innerHTML = '<li>Sent ' + o.result.fleet.length + ' ships!</li>';
-							
-							this.GetShips(panel, target);
-						},
-						failure : function(o){
+				if(target && this.NotFleetIsolationist(ships)) {
+					if (speed < 0) {
+						alert('Set speed cannot be less than zero.');
+						btn.disabled = false;
+					}
+					else {
+						if (speed > 0 && speed > minSpeed) {
+							alert('Set speed cannot exceed the speed of the slowest ship.');
 							btn.disabled = false;
-						},
-						scope:this
-					});
+						} else {
+							Game.Services.Buildings.SpacePort.send_fleet({
+								session_id:Game.GetSession(),
+								ship_ids:shipIds,
+								target:target,
+								set_speed:speed
+							}, {
+								success : function(o){
+									Lacuna.Pulser.Hide();
+									this.fireEvent("onMapRpc", o.result);
+									delete this.currentShips;
+									var details = Dom.get(panel.isStarPanel ? "starDetailSendFleet" : "planetDetailSendFleet");
+									details.innerHTML = '<li>Sent ' + o.result.fleet.length + ' ships!</li>';
+									this.GetShips(panel, target);
+								},
+								failure : function(o){
+									btn.disabled = false;
+								},
+								scope:this
+							});
+						}
+					}
 				}
 			}
 			else {
