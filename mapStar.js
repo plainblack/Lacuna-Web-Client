@@ -908,12 +908,13 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 				panel = this.starDetails;
 			}
 
-			var speed = Dom.get((panel.isStarPanel ? "starDetailSetSpeed" : "planetDetailSetSpeed")).value;
+			var speed = parseInt(Dom.get(panel.isStarPanel ? "starDetailSetSpeed" : "planetDetailSetSpeed").value,10);
 			var selected = Sel.query("input:checked", (panel.isStarPanel ? "starDetailSendFleet" : "planetDetailSendFleet"));
 			if(selected.length > 0) {
-				var ships = [], shipIds = [], confirmIso, minSpeed = 99999999;
+				var ships = [], shipIds = [], minSpeed = 999999999;
 				for(var n=0; n<selected.length; n++) {
 					var s = selected[n].Ship;
+					s.speed = parseInt(s.speed,10); // probably not needed but play it safe
 					ships.push(s);
 					shipIds.push(s.id);
 					if (s.speed < minSpeed) {
