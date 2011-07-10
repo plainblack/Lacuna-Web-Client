@@ -39,7 +39,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getForeignTab(), this._getSendTab(), this._getSendFleetTab()];
 		},
 		_getTravelTab : function() {
-			this.travelTab = new YAHOO.widget.Tab({ label: "Traveling", content: [
+			this.travelTab = new YAHOO.widget.Tab({ label: "Travelling", content: [
 				'<div>',
 				'	<div style="overflow:auto;margin-top:2px;">',
 				'		<ul id="shipDetails"></ul>',
@@ -175,14 +175,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		
 		getTravel : function(e) {
 			if(e.newValue) {
-				if(!this.shipsTraveling) {
+				if(!this.shipsTravelling) {
 					Lacuna.Pulser.Show();
 					this.service.view_ships_travelling({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
 						success : function(o){
 							YAHOO.log(o, "info", "SpacePort.view_ships_travelling.success");
 							Lacuna.Pulser.Hide();
 							this.rpcSuccess(o);
-							this.shipsTraveling = {
+							this.shipsTravelling = {
 								number_of_ships_travelling: o.result.number_of_ships_travelling,
 								ships_travelling: o.result.ships_travelling
 							};
@@ -310,7 +310,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 		},
 		
 		SpacePortPopulate : function() {
-			var ships = this.shipsTraveling.ships_travelling,
+			var ships = this.shipsTravelling.ships_travelling,
 				details = Dom.get("shipDetails");
 
 			if(details) {
@@ -392,7 +392,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					YAHOO.log(o, "info", "SpacePort.ShipHandlePagination.view_ships_travelling.success");
 					Lacuna.Pulser.Hide();
 					this.rpcSuccess(o);
-					this.shipsTraveling = {
+					this.shipsTravelling = {
 						number_of_ships_travelling: o.result.number_of_ships_travelling,
 						ships_travelling: o.result.ships_travelling
 					};
@@ -620,7 +620,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Hide();
 					this.Self.rpcSuccess(o);
 					delete this.Self.shipsView;
-					delete this.Self.shipsTraveling;
+					delete this.Self.shipsTravelling;
 					this.Ship.name = newName;
 					if(this.Input) {
 						this.Input.value = newName;
@@ -936,12 +936,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						this.Self.result.docks_available++;
 						info.innerHTML = ['This SpacePort can dock a maximum of ', this.Self.result.max_ships, ' ships. There are ', this.Self.result.docks_available, ' docks available.'].join(''); 
 					}
-					//set to traveling
+					//set to travelling
 					var ad = Sel.query("ul.shipActionDetails", this.Line, true);
 					ad.innerHTML = this.Self.ViewActionDetails(this.Line, o.result.ship, true);
 					
-					//remove ships traveling so the tab gets reloaded when viewed next time
-					delete this.Self.shipsTraveling;
+					//remove ships travelling so the tab gets reloaded when viewed next time
+					delete this.Self.shipsTravelling;
 				},
 				failure : function(o){
 					matchedEl.disabled = false;
@@ -962,7 +962,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					Lacuna.Pulser.Hide();
 					this.rpcSuccess(o);
 					
-					delete this.shipsTraveling;
+					delete this.shipsTravelling;
 					delete this.shipsView;
 					this.getShips({newValue:true});
 				},
@@ -1084,7 +1084,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 						Lacuna.Pulser.Hide();
 						this.Self.rpcSuccess(o);
 						delete this.Self.shipsView;
-						delete this.Self.shipsTraveling;
+						delete this.Self.shipsTravelling;
 						this.Self.GetShipsFor();
 						Event.purgeElement(this.Line, true);
 						this.Line.innerHTML = "Successfully sent " + this.Ship.type_human + ".";
@@ -1230,7 +1230,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 									btn.disabled = false;
 									delete this.FleetTarget;
 									delete this.shipsView;
-									delete this.shipsTraveling;
+									delete this.shipsTravelling;
 									this.GetFleetFor();
 								},
 								failure : function(o){

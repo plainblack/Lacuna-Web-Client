@@ -494,7 +494,7 @@
 			'breaking atmo',
 			'calculating trajectory',
 			'engaging hyper drive',
-			'traveling the verse',
+			'travelling the verse',
 			'other witty comments',
 			'reticulating splines',
 			'compacting nebulas',
