@@ -1196,12 +1196,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			var btn = Event.getTarget(e);
 			btn.disabled = true;
 
-			var speed = Dom.get("setSpeed").value;	
+			var speed = parseInt(Dom.get("setSpeed").value,10);
 			var selected = Sel.query("input:checked", "sendFleetAvail");
 			if(selected.length > 0) {
-				var ships = [], shipIds = [], confirmIso, minSpeed = 99999999;
+				var ships = [], shipIds = [], minSpeed = 999999999;
 				for(var n=0; n<selected.length; n++) {
 					var s = selected[n].Ship;
+					s.speed = parseInt(s.speed,10); // probably not needed but play it safe
 					ships.push(s);
 					shipIds.push(s.id);
 					if (s.speed < minSpeed) {
