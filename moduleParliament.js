@@ -95,7 +95,6 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			return tab;
 		},
 		_getCreateTab : function() {
-
 			this.createEvent("onAllianceMembers");
 
 			var opts = ['<option value="proposeWrit" selected>Writ</option>'],
@@ -115,7 +114,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 							opts = [];
 						for(var n=0; n<this.allianceMembers.length; n++) {
 							var member = this.allianceMembers[n];
-							if(!member.isLeader) {
+							if(member.id != Game.EmpireData.id) {
 								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
 							}
 						}
@@ -205,7 +204,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 							opts = [];
 						for(var n=0; n<this.allianceMembers.length; n++) {
 							var member = this.allianceMembers[n];
-							if(!member.isLeader) {
+							if(!member.isLeader && member.id != Game.EmpireData.id) {
 								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
 							}
 						}
@@ -230,7 +229,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 							opts = [];
 						for(var n=0; n<this.allianceMembers.length; n++) {
 							var member = this.allianceMembers[n];
-							if(!member.isLeader) {
+							if(!member.isLeader && member.id != Game.EmpireData.id) {
 								opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
 							}
 						}
