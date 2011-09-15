@@ -191,9 +191,21 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "inteltraining",
+		type: "js",
+		fullpath: urlBuilder("buildingIntelTraining.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "libraryofjith",
 		type: "js",
 		fullpath: urlBuilder("buildingLibraryOfJith.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "mayhemtraining",
+		type: "js",
+		fullpath: urlBuilder("buildingMayhemTraining.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -251,6 +263,12 @@
 		requires : ["building"]
 	});
 	loader.addModule({
+		name: "politicstraining",
+		type: "js",
+		fullpath: urlBuilder("buildingPoliticsTraining.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
 		name: "security",
 		type: "js",
 		fullpath: urlBuilder("buildingSecurity.js"),
@@ -284,6 +302,12 @@
 		name: "templeofthedrajilites",
 		type: "js",
 		fullpath: urlBuilder("buildingTempleOfTheDrajilites.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "thefttraining",
+		type: "js",
+		fullpath: urlBuilder("buildingTheftTraining.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -359,7 +383,9 @@
 			"geneticslab",
 			"hallsofvrbansk",
 			"intelligence",
+			"inteltraining",
 			"libraryofjith",
+			"mayhemtraining",
 			"mercenariesguild",
 			"miningministry",
 			"missioncommand",
@@ -369,12 +395,14 @@
 			"orestorage",
 			"park",
 			"planetarycommand",
+			"politicstraining",
 			"security",
 			"shipyard",
 			"spaceport",
 			"spacestationlab",
 			"subspacesupplydepot",
 			"templeofthedrajilites",
+			"thefttraining",
 			"themepark",
 			"trade",
 			"transporter",
