@@ -89,7 +89,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
 		ShowSpecies : function(e) {
 			Game.Services.Empire.view_public_profile({
 				session_id:Game.GetSession(),
-				empire_id:Game.EmpireData.id,
+				empire_id:Game.EmpireData.id
 			}, {
                 success:function(o){
                     Lacuna.Pulser.Hide();
@@ -112,8 +112,8 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
                 building_id:this.building.id,
                 params: {
 					name: newName,
-					description: newDesc,
-				},
+					description: newDesc
+				}
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "GeneticsLab.rename_species.success");
