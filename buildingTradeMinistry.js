@@ -799,7 +799,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						var obj = this.plans[x];
 						nLi = li.cloneNode(false);
 						nLi.Plan = obj;
-						if(obj.extra_build_level) {
+						if(obj.extra_build_level > 0) {
 							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '+', obj.extra_build_level, '</span> <button type="button">+</button>'].join('');
 						}
 						else {
@@ -992,7 +992,12 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {plan_id:gId, type:"plan"};
-					content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
+					if(li.Plan.extra_build_level > 0) {
+						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
+					}
+					else {
+						content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
+					}
 					c.appendChild(item);
 					this.updateAddCargo(this.planSize);
 				}
@@ -1240,7 +1245,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						var obj = this.plans[x];
 						nLi = li.cloneNode(false);
 						nLi.Plan = obj;
-						if(obj.extra_build_level) {
+						if(obj.extra_build_level > 0) {
 							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '+', obj.extra_build_level, '</span> <button type="button">+</button>'].join('');
 						}
 						else {
@@ -1439,7 +1444,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						item.parentNode.removeChild(item); 
 					}, this, true);
 					item.Object = {plan_id:gId, type:"plan"};
-					if(li.Plan.extra_build_level) {
+					if(li.Plan.extra_build_level > 0) {
 						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
 					}
 					else {
