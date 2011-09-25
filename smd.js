@@ -943,6 +943,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+			IntelTraining : {
+				"SMDVersion":"2.0",
+				"description": "Intel Training",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/inteltraining",
+
+				"services": {
+					"train_spy" : {
+						"description": "Allows you to train an idle spy in the ways of intelligence gathering.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
+						 }
+						*/
+					}
+				}
+			},
 			LibraryOfJith : {
 				"SMDVersion":"2.0",
 				"description": "Library Of Jith",
@@ -958,6 +984,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"empire_id", "type":"string", "optional":false}
 						]
+					}
+				}
+			},
+			MayhemTraining : {
+				"SMDVersion":"2.0",
+				"description": "Mayhem Training",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/mayhemtraining",
+
+				"services": {
+					"train_spy" : {
+						"description": "Allows you to train an idle spy in the art of destruction.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
+						 }
+						*/
 					}
 				}
 			},
@@ -1392,6 +1444,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 								},
 								...
 							]
+						 }
+						*/
+					}
+				}
+			},
+			PoliticsTraining : {
+				"SMDVersion":"2.0",
+				"description": "Politics Training",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/politicstraining",
+
+				"services": {
+					"train_spy" : {
+						"description": "The Politics Training Facility is where you train your spies in the dark art of social engineering.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
 						 }
 						*/
 					}
@@ -2083,6 +2161,32 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"planet_id", "type":"string", "optional":false}
 						]
+					}
+				}
+			},
+			TheftTraining : {
+				"SMDVersion":"2.0",
+				"description": "Theft Training",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/thefttraining",
+
+				"services": {
+					"train_spy" : {
+						"description": "The Theft Training Facility is where you train your spies in the art of appropriation.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"spy_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { get_status() },
+							"trained" : 3,
+							"not_trained" : 2
+						 }
+						*/
 					}
 				}
 			},
