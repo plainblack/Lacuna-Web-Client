@@ -128,7 +128,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				
 				var ores = [
 					'anthracite', 'bauxite', 'beryl',
-					'chalcopyrite', 'chromite', 'flourite',
+					'chalcopyrite', 'chromite', 'fluorite',
 					'galena', 'goethite', 'gold',
 					'gypsum', 'halite', 'kerogen',
 					'magnetite', 'methane', 'monazite',
