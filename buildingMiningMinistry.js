@@ -126,138 +126,96 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				
-				for(var i=0; i<platforms.length; i++) {
-					var obj = platforms[i],
-						nUl = ul.cloneNode(false),
-						nLi = li.cloneNode(false);
+				var ores = [
+					'anthracite', 'bauxite', 'beryl',
+					'chalcopyrite', 'chromite', 'flourite',
+					'galena', 'goethite', 'gold',
+					'gypsum', 'halite', 'kerogen',
+					'magnetite', 'methane', 'monazite',
+					'rutile', 'sulfur', 'trona',
+					'uraninite', 'zircon'];
+				var totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+				var grand_total = 0;
+
+				if (platforms.length > 0) {
+					for(var i=0; i<platforms.length; i++) {
+						var obj = platforms[i],
+							nUl = ul.cloneNode(false),
+							nLi = li.cloneNode(false);
+							
+						nUl.Platform = obj;
+						Dom.addClass(nUl, "platformInfo");
+						Dom.addClass(nUl, "clearafter");
+
+						Dom.addClass(nLi,"platformLocation");
+						nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
+						Event.on(nLi, "click", this.platformClick, obj, true);
+						nUl.appendChild(nLi);
 						
-					nUl.Platform = obj;
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"platformAbandon");
+						var bbtn = document.createElement("button");
+						bbtn.setAttribute("type", "button");
+						bbtn.innerHTML = "Abandon";
+						bbtn = nLi.appendChild(bbtn);
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
+						Dom.addClass(nLi,"platformOre");
+						var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
+						var total = 0;
+						for (var ore_i in ores) {
+							var ore = ores[ore_i];
+							if(obj[ore + '_hour'] > 0) {
+								outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
+								outOre.push(obj[ore+'_hour']);
+								outOre.push('</li>');
+								totals[ore_i] += parseInt(obj[ore+'_hour']);
+								total += parseInt(obj[ore+'_hour']);
+							}
+						}
+						if(total > 0) {
+							outOre.splice(1, 0, '<li><label>Total:</label> ');
+							outOre.splice(2, 0, parseInt(total));
+							outOre.splice(3, 0, '</li>');
+							grand_total += total;
+						}
+						outOre.push('</ul>');
+						nLi.innerHTML = outOre.join('');
+						nUl.appendChild(nLi);
+
+						details.appendChild(nUl);
+						
+						Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
+					}
+
+					var nUl = ul.cloneNode(false), nLi = li.cloneNode(false);
 					Dom.addClass(nUl, "platformInfo");
 					Dom.addClass(nUl, "clearafter");
-
-					Dom.addClass(nLi,"platformLocation");
-					nLi.innerHTML = ['<img src="',Lib.AssetUrl,'star_system/',obj.asteroid.image,'.png" />',obj.asteroid.name].join('');
-					Event.on(nLi, "click", this.platformClick, obj, true);
-					nUl.appendChild(nLi);
 					
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"platformAbandon");
-					var bbtn = document.createElement("button");
-					bbtn.setAttribute("type", "button");
-					bbtn.innerHTML = "Abandon";
-					bbtn = nLi.appendChild(bbtn);
+					Dom.addClass(nLi,"platformLocation");
+					Dom.setStyle(nLi, 'cursor', 'auto');
+					nLi.innerHTML = 'Total';
 					nUl.appendChild(nLi);
 					
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"platformOre");
 					var outOre = ['<ul><li><label>Ore Per Hour:</label></li>'];
-					if(obj.anthracite_hour > 0) {
-						outOre.push('<li><label>Anthracite:</label> ');
-						outOre.push(obj.anthracite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.bauxite_hour > 0) {
-						outOre.push('<li><label>Bauxite:</label> ');
-						outOre.push(obj.bauxite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.beryl_hour > 0) {
-						outOre.push('<li><label>Beryl:</label> ');
-						outOre.push(obj.beryl_hour);
-						outOre.push('</li>');
-					}
-					if(obj.chalcopyrite_hour > 0) {
-						outOre.push('<li><label>Chalcopyrite:</label> ');
-						outOre.push(obj.chalcopyrite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.chromite_hour > 0) {
-						outOre.push('<li><label>Chromite:</label> ');
-						outOre.push(obj.chromite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.fluorite_hour > 0) {
-						outOre.push('<li><label>Fluorite:</label> ');
-						outOre.push(obj.fluorite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.galena_hour > 0) {
-						outOre.push('<li><label>Galena:</label> ');
-						outOre.push(obj.galena_hour);
-						outOre.push('</li>');
-					}
-					if(obj.goethite_hour > 0) {
-						outOre.push('<li><label>Goethite:</label> ');
-						outOre.push(obj.goethite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.gold_hour > 0) {
-						outOre.push('<li><label>Gold:</label> ');
-						outOre.push(obj.gold_hour);
-						outOre.push('</li>');
-					}
-					if(obj.gypsum_hour > 0) {
-						outOre.push('<li><label>Gypsum:</label> ');
-						outOre.push(obj.gypsum_hour);
-						outOre.push('</li>');
-					}
-					if(obj.halite_hour > 0) {
-						outOre.push('<li><label>Halite:</label> ');
-						outOre.push(obj.halite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.kerogen_hour > 0) {
-						outOre.push('<li><label>Kerogen:</label> ');
-						outOre.push(obj.kerogen_hour);
-						outOre.push('</li>');
-					}
-					if(obj.magnetite_hour > 0) {
-						outOre.push('<li><label>Magnetite:</label> ');
-						outOre.push(obj.magnetite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.methane_hour > 0) {
-						outOre.push('<li><label>Methane:</label> ');
-						outOre.push(obj.methane_hour);
-						outOre.push('</li>');
-					}
-					if(obj.monazite_hour > 0) {
-						outOre.push('<li><label>Monazite:</label> ');
-						outOre.push(obj.monazite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.rutile_hour > 0) {
-						outOre.push('<li><label>Rutile:</label> ');
-						outOre.push(obj.rutile_hour);
-						outOre.push('</li>');
-					}
-					if(obj.sulfur_hour > 0) {
-						outOre.push('<li><label>Sulfur:</label> ');
-						outOre.push(obj.sulfur_hour);
-						outOre.push('</li>');
-					}
-					if(obj.trona_hour > 0) {
-						outOre.push('<li><label>Trona:</label> ');
-						outOre.push(obj.trona_hour);
-						outOre.push('</li>');
-					}
-					if(obj.uraninite_hour > 0) {
-						outOre.push('<li><label>Uraninite:</label> ');
-						outOre.push(obj.uraninite_hour);
-						outOre.push('</li>');
-					}
-					if(obj.zircon_hour > 0) {
-						outOre.push('<li><label>Zircon:</label> ');
-						outOre.push(obj.zircon_hour);
-						outOre.push('</li>');
+					outOre.push('<li><label>Grand Total:</label> ');
+					outOre.push(parseInt(grand_total));
+					outOre.push('</li>');
+					for (var ore_i in ores) {
+						var ore = ores[ore_i];
+						if(totals[ore_i] > 0) {
+							outOre.push('<li><label>' + ore.replace(/^\w/, function(c){ return c.toUpperCase() }) + ':</label> ');
+							outOre.push(totals[ore_i]);
+							outOre.push('</li>');
+						}
 					}
 					outOre.push('</ul>');
 					nLi.innerHTML = outOre.join('');
 					nUl.appendChild(nLi);
-
-					details.appendChild(nUl);
-					
-					Event.on(bbtn, "click", this.MiningMinistryPlatformAbandon, {Self:this,Platform:obj,Line:nUl}, true);
+					details.insertBefore(nUl, details.firstChild);
 				}
 				
 				//wait for tab to display first
