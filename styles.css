@@ -2014,6 +2014,20 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	float:right;
 }
 
+#battleLogsDetails label {
+  font-weight: bold;
+}
+#battleLogsDetails .attacker {
+	padding: 5px;
+	border-top: 1px solid #52acff;
+}
+#battleLogsDetails .defender {
+	padding: 5px;
+}
+#battleLogsDetails .first {
+	border-top: none;
+}
+
 #propsDetails li , #lawsDetails li{
 	margin-top:3px;
 	border:1px solid #52acff;
