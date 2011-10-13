@@ -36,7 +36,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			SpacePort.superclass.destroy.call(this);
 		},
 		getChildTabs : function() {
-			return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getForeignTab(), this._getSendTab(), this._getSendFleetTab()];
+			return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getForeignTab(), this._getLogsTab(), this._getSendTab(), this._getSendFleetTab()];
 		},
 		_getTravelTab : function() {
 			this.travelTab = new YAHOO.widget.Tab({ label: "Travelling", content: [
@@ -114,6 +114,24 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 			this.foreignShipsTab.subscribe("activeChange", this.getForeign, this, true);
 			
 			return this.foreignShipsTab;
+		},
+		_getLogsTab : function() {
+			this.battleLogsTab = new YAHOO.widget.Tab({ label: "Battle Logs", content: [
+				'<div>',
+				'	<ul class="shipHeader shipInfo clearafter" style="padding-left:5px; padding-right:5px;">',
+				'		<li class="shipTask">Role</li>',
+				'		<li class="shipName">Name</li>',
+				'		<li class="shipFrom">From</li>',
+				'		<li>Details</li>',
+				'	</ul>',
+				'	<div><div id="battleLogsDetails"></div></div>',
+				'	<div id="battleLogsPaginator"></div>',
+				'</div>'
+			].join('')});
+			//subscribe after adding so active doesn't fire
+			this.battleLogsTab.subscribe("activeChange", this.getLogs, this, true);
+			
+			return this.battleLogsTab;
 		},
 		_getSendTab : function() {
 			this.sendTab = new YAHOO.widget.Tab({ label: "Send", content: [
@@ -272,6 +290,40 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				}
 				else {
 					this.ForeignPopulate();
+				}
+			}
+		},
+		getLogs : function(e) {
+			if(e.newValue) {
+				if(!this.battleLogs) {
+					Lacuna.Pulser.Show();
+					this.service.view_battle_logs({session_id:Game.GetSession(),building_id:this.building.id}, {
+						success : function(o){
+							YAHOO.log(o, "info", "SpacePort.view_battle_logs.success");
+							Lacuna.Pulser.Hide();
+							this.rpcSuccess(o);
+							this.battleLogs = {
+								number_of_logs: o.result.number_of_logs,
+								battle_log: o.result.battle_log
+							};
+							this.logsPager = new Pager({
+								rowsPerPage : 25,
+								totalRecords: o.result.number_of_logs,
+								containers  : 'battleLogsPaginator',
+								template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
+								alwaysVisible : false
+
+							});
+							this.logsPager.subscribe('changeRequest',this.LogsHandlePagination, this, true);
+							this.logsPager.render();
+							
+							this.LogsPopulate();
+						},
+						scope:this
+					});
+				}
+				else {
+					this.LogsPopulate();
 				}
 			}
 		},
@@ -731,6 +783,87 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 				},10);
 			}
 		},
+		LogsPopulate : function() {
+			var details = Dom.get("battleLogsDetails");
+			
+			if(details) {
+				var logs = this.battleLogs.battle_log,
+					ul = document.createElement("ul"),
+					li = document.createElement("li");
+				
+				logs = logs.slice(0);
+				
+				Event.purgeElement(details, true);
+				details.innerHTML = "";
+				
+				for(var i=0; i<logs.length; i++) {
+					var log = logs[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+					if (!details.children.length) Dom.addClass(nUl, "first");
+					Dom.addClass(nUl, "attacker");
+
+					Dom.addClass(nLi,"shipTask");
+					nLi.innerHTML = 'Attacker';
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = log.attacking_unit;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipFrom");
+					nLi.innerHTML = log.attacking_body + ' [' + log.attacking_empire + ']';
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = '<label>Arrived:</label> ' + log.date;
+					nUl.appendChild(nLi);
+
+					details.appendChild(nUl);
+
+					nUl = ul.cloneNode(false),
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+					Dom.addClass(nUl, "defender");
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipTask");
+					nLi.innerHTML = 'Defender';
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = log.defending_unit;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipFrom");
+					nLi.innerHTML = log.defending_body + ' [' + log.defending_empire + ']';
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					nLi.innerHTML = '<label>Victory:</label> ' + log.victory_to.replace(/^\w/, function(c){return c.toUpperCase()});
+					nUl.appendChild(nLi);
+
+					details.appendChild(nUl);
+					
+				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 220;
+					if(Ht > 300) { Ht = 300; }
+					var tC = details.parentNode;
+					Dom.setStyle(tC,"height",Ht + "px");
+					Dom.setStyle(tC,"overflow-y","auto");
+				},10);
+			}
+		},
 		ForeignHandlePagination : function(newState) {
 			Lacuna.Pulser.Show();
 			this.service.view_foreign_ships({
@@ -753,6 +886,29 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 	 
 			// Update the Paginator's state
 			this.foreignPager.setState(newState);
+		},
+		LogsHandlePagination : function(newState) {
+			Lacuna.Pulser.Show();
+			this.service.view_battle_logs({
+				session_id:Game.GetSession(),
+				building_id:this.building.id,
+				page_number:newState.page
+			}, {
+				success : function(o){
+					YAHOO.log(o, "info", "SpacePort.view_battle_logs.success");
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					this.battleLogs = {
+						number_of_logs: o.result.number_of_logs,
+						battle_log: o.result.battle_log
+					};
+					this.LogsPopulate();
+				},
+				scope:this
+			});
+	 
+			// Update the Paginator's state
+			this.logsPager.setState(newState);
 		},
 		ForeignQueue : function(remaining, elLine){
 			var arrTime;
