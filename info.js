@@ -226,8 +226,8 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
 					this.species.innerHTML = profile.species;
 					this.alliance.innerHTML = profile.alliance ? profile.alliance.name : '';
 					this.colonyCount.innerHTML = profile.colony_count;
-					this.founded.innerHTML = Lib.formatServerDateShort(profile.date_founded);
-					this.login.innerHTML = Lib.formatServerDateShort(profile.last_login);
+					this.founded.innerHTML = Lib.formatServerDate(profile.date_founded);
+					this.login.innerHTML = Lib.formatServerDate(profile.last_login);
 					
 					//show now so there is a bit quicker response
 					this.Panel.show();
