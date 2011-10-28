@@ -173,6 +173,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 		
 		_getProductionTab : function() {
 			var up = this.building.upgrade,
+				down = this.building.downgrade,
 				currentLevel = this.building.level*1,
 				planet = Game.GetCurrentPlanet();
 			this.productionTab = new YAHOO.widget.Tab({ label: "Production", content: [
@@ -215,7 +216,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span><span class="buildingDetailsNum">',up.cost.waste,'</span></li>',
 					'	<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></span><span class="buildingDetailsNum">',Lib.formatTime(up.cost.time),'</span></li>'
 					].join('') : '',
-				currentLevel <= 1 ? '' : ' <li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + (currentLevel - 1) + '</button></li>',
+				currentLevel <= 1 ? '' : down.can ? '<li><button id="buildingDetailsDowngrade" type="button">Downgrade to Level ' + (currentLevel - 1) + '</button></li>' : '<li class="alert">Unable to Downgrade:</li><li class="alert">' + String(down.reason).replace(/^\d+,\s*/, '') + '</li>',
 				'			</ul>',
 				'		</div>',
 				'	</div>',
