@@ -30,6 +30,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		
 		this.createEvent("onLoadResources");
 		this.createEvent("onLoadGlyphs");
+        this.createEvent("onLoadGlyphSummary");
 		this.createEvent("onLoadPlans");
 		this.createEvent("onLoadShips");
 		this.createEvent("onLoadPrisoners");
@@ -53,7 +54,17 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 									Dom.setStyle("tradePushResourceName", "display", "none");
 								}
 							}, this, true);
-							Event.on("tradePushGlpyhs", "click", function(){
+                            Event.on("tradePushGlyphSummary", "click", function(){
+                                if(Dom.getStyle("tradePushGlyphSummaryName", "display") == "none") {
+                                    Dom.setStyle("tradePushGlyphSummaryName", "display", "block");
+                                    this.getGlyphSummary();
+                                }
+                                else {
+                                    Dom.setStyle("tradePushGlyphSummaryName", "display", "none");
+                                }
+                            }, this, true);
+
+							Event.on("tradePushGlyphs", "click", function(){
 								if(Dom.getStyle("tradePushGlyphName", "display") == "none") {
 									Dom.setStyle("tradePushGlyphName", "display", "block");
 									this.getGlyphs();
@@ -108,7 +119,17 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 									Dom.setStyle("tradeAddResourceName", "display", "none");
 								}
 							}, this, true);
-							Event.on("tradeAddGlpyhs", "click", function(){
+                            Event.on("tradeAddGlyphSummary", "click", function(){
+                                if(Dom.getStyle("tradeAddGlyphSummaryName", "display") == "none") {
+                                    Dom.setStyle("tradeAddGlyphSummaryName", "display", "block");
+                                    this.getGlyphSummary();
+                                }
+                                else {
+                                    Dom.setStyle("tradeAddGlyphSummaryName", "display", "none");
+                                }
+                            }, this, true);
+
+							Event.on("tradeAddGlyphs", "click", function(){
 								if(Dom.getStyle("tradeAddGlyphName", "display") == "none") {
 									Dom.setStyle("tradeAddGlyphName", "display", "block");
 									this.getGlyphs();
@@ -174,7 +195,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'		<legend>On Planet</legend>',
 			'		<div class="tradeContainers">',
 			'			<div><div id="tradePushResources" class="accordian">Resources</div><ul id="tradePushResourceName"></ul></div>',
-			'			<div><div id="tradePushGlpyhs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
+			'			<div><div id="tradePushGlyphs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
+            '           <div><div id="tradePushGlyphSummary" class="accordian">Glyph Summary</div><ul id="tradePushGlyphSummoryName" style="display:none;"></ul></div>',
 			'			<div><div id="tradePushPlans" class="accordian">Plans</div><ul id="tradePushPlanName" style="display:none;"></ul></div>',
 			'			<div><div id="tradePushShips" class="accordian">Ships</div><ul id="tradePushShipName" style="display:none;"></ul></div>',
 			'			<div><div id="tradePushPrisoners" class="accordian">Prisoners</div><ul id="tradePushPrisonerName" style="display:none;"></ul></div>',
@@ -195,6 +217,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 
 			this.subscribe("onLoadResources", this.populatePushResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populatePushGlyphName, this, true);
+            this.subscribe("onLoadGlyphSummary", this.populatePushGlyphSummaryName, this, true);
 			this.subscribe("onLoadPlans", this.populatePushPlanName, this, true);
 			this.subscribe("onLoadShips", this.populatePushShipName, this, true);
 			this.subscribe("onLoadPrisoners", this.populatePushPrisonerName, this, true);
@@ -271,7 +294,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'		<legend>On Planet</legend>',
 			'		<div class="tradeContainers">',
 			'			<div><div id="tradeAddResources" class="accordian">Resources</div><ul id="tradeAddResourceName"></ul></div>',
-			'			<div><div id="tradeAddGlpyhs" class="accordian">Glyphs</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
+			'			<div><div id="tradeAddGlyphs" class="accordian">Glyphs</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddGlyphSummary" class="accordian">Glyph Summary</div><ul id="tradeAddGlyphSummaryName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddPlans" class="accordian">Plans</div><ul id="tradeAddPlanName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddShips" class="accordian">Ships</div><ul id="tradeAddShipName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddPrisoners" class="accordian">Prisoners</div><ul id="tradeAddPrisonerName" style="display:none;"></ul></div>',
@@ -291,12 +315,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			
 			this.subscribe("onLoadResources", this.populateAddResourceName, this, true);
 			this.subscribe("onLoadGlyphs", this.populateAddGlyphName, this, true);
+            this.subscribe("onLoadGlyphSummary", this.populateAddGlyphSummaryName, this, true);
 			this.subscribe("onLoadPlans", this.populateAddPlanName, this, true);
 			this.subscribe("onLoadPrisoners", this.populateAddPrisonerName, this, true);
 			this.subscribe("onLoadShips", this.populateAddShipName, this, true);
 			
 			Event.delegate("tradeAddResourceName", "click", this.AddResource, "button", this, true);
 			Event.delegate("tradeAddGlyphName", "click", this.AddGlyph, "button", this, true);
+            Event.delegate("tradeAddGlyphSummaryName", "click", this.AddGlyphSummary, "button", this, true);
+
 			Event.delegate("tradeAddPlanName", "click", this.AddPlan, "button", this, true);
 			Event.delegate("tradeAddShipName", "click", this.AddShip, "button", this, true);
 			Event.delegate("tradeAddPrisonerName", "click", this.AddPrisoner, "button", this, true);
@@ -307,6 +334,25 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			return this.add;
 		},
 		
+        getGlyphSummary : function(force) {
+            if(force || !this.glyph_summary) {
+                Lacuna.Pulser.Show();
+                this.service.get_glyph_summary({
+                        session_id: Game.GetSession(""),
+                        building_id: this.building.id
+                    },{
+                    success : function(o){
+                        this.rpcSuccess(o);
+                        this.glyph_summary = o.result.glyph_summary;
+                        this.glyphSize = o.result.cargo_space_used_each;
+                        this.fireEvent("onLoadGlyphSummary");
+                        Lacuna.Pulser.Hide();
+                    },
+                    scope:this
+                });
+            }
+        },
+
 		getGlyphs : function(force) {
 			if(force || !this.glyphs) {
 				Lacuna.Pulser.Show();
@@ -754,6 +800,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				Dom.setStyle(aHt,"overflow-y","auto");
 			},10);
 		},
+        populateAddGlyphSummaryName : function() {
+            var elm = Dom.get("tradeAddGlyphSummaryName"),
+                li = document.createElement("li"), nLi;
+
+            if(elm) {
+                elm.innerHTML = "hello world";
+            }
+        },
 		populateAddGlyphName : function() {
 			var elm = Dom.get("tradeAddGlyphName"),
 				li = document.createElement("li"), nLi;
@@ -1200,6 +1254,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				Dom.setStyle(pHt,"overflow-y","auto");
 			},10);
 		},
+        populatePushGlyphSummaryName : function() {
+            var elm = Dom.get("tradePushGlyphSummaryName"),
+                li = document.createElement("li"), nLi;
+
+            if(elm) {
+                elm.innerHTML = "hello world";
+            }
+        },
+
 		populatePushGlyphName : function() {
 			var elm = Dom.get("tradePushGlyphName"),
 				li = document.createElement("li"), nLi;

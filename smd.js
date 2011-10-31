@@ -190,6 +190,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that have been found by this archaeology ministry.",
 						"parameters": [
@@ -2296,6 +2304,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2513,6 +2529,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
 						"parameters": [
