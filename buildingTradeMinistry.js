@@ -343,7 +343,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                     },{
                     success : function(o){
                         this.rpcSuccess(o);
-                        this.glyph_summary = o.result.glyph_summary;
+                        this.glyph_summary = o.result.glyphs;
                         this.glyphSize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadGlyphSummary");
                         Lacuna.Pulser.Hide();
@@ -805,7 +805,21 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                 li = document.createElement("li"), nLi;
 
             if(elm) {
-                elm.innerHTML = "hello world";
+                elm.innerHTML = "";
+                if(this.glyph_summary.length > 0) {
+                    for(var x=0; x < this.glyph_summary.length; x++) {
+                        var obj = this.glyph_summary[x];
+                        nLi = li.cloneNode(false);
+                        nLi.GlyphSummary = obj;
+                        nLi.innerHTML = ['<span class="tradeResourceName">',obj.name.titleCaps(), ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        elm.appendChild(nLi);
+                    }
+                }
+                else {
+                    nLi = li.cloneNode(false);
+                    nLi.innerHTML = "No Glyphs Available";
+                    elm.appendChild(nLi);
+                }
             }
         },
 		populateAddGlyphName : function() {
@@ -975,7 +989,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(ep);
 						ep.parentNode.removeChild(ep);
 					}, this, true);
-					item.Object = {type:li.Resource.type, quantity:quantity};
+					item.Object = {type:li.Resource.type, quantity:quantity, size:1};
 					content.innerHTML = ['<span class="tradeResourceName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
 					c.appendChild(item);
 					this.updateAddCargo(quantity);
@@ -1002,6 +1016,52 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				}
 			}
 		},
+        AddGlyphSummary : function(e, matchedEl, container){
+            var quantity = matchedEl.previousSibling.value*1,
+                li = matchedEl.parentNode,
+                c = Dom.get("tradeAddItems");
+            if(li && c) {
+                var gName = li.GlyphSummary.name,
+                    id = "addGlyphSummary-" + gName,
+                    exists = Sel.query("#"+id, c);
+                if(exists.length == 0) {
+                    var item = document.createElement("li"),
+                        del = item.appendChild(document.createElement("div")),
+                        content = item.appendChild(document.createElement("div"));
+                    item.id = id;
+                    Dom.addClass(item, "tradeItem");
+                    Dom.addClass(del, "tradeDelete");
+                    Event.on(del, "click", function(e){
+                        var ed = Event.getTarget(e),
+                            ep = ed.parentNode;
+                        this.updateAddCargo(ep.Object.quantity * -this.glyphSize);
+                        Event.purgeElement(item);
+                        item.parentNode.removeChild(item);
+                    }, this, true);
+                    item.Object = {name:gName, quantity:quantity, type:"glyph", size:this.glyphSize};
+                    content.innerHTML = ['<span class="tradeResourceName">',gName.titleCaps(),' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
+                    c.appendChild(item);
+                    this.updateAddCargo(this.glyphSize * quantity);
+                }
+                else {
+                    var found = exists[0],
+                    newTotal = found.Object.quantity + quantity,
+                    diff = quantity,
+                    lq = Sel.query(".quantity", found, true),
+                    inp = Sel.query("input", found, true);
+                    if(newTotal > li.GlyphSummary.quantity) {
+                        newTotal = li.GlyphSummary.quantity;
+                        diff = newTotal - found.Object.quantity;
+                    }
+                    if(inp) {
+                        inp.value = diff;
+                    }
+                    lq.innerHTML = newTotal;
+                    found.Object.quantity = newTotal;
+                    this.updateAddCargo(this.glyphSize * diff);
+                }
+            }
+        },
 		AddGlyph : function(e, matchedEl, container){
 			var li = matchedEl.parentNode,
 				c = Dom.get("tradeAddItems");
@@ -1020,7 +1080,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {glyph_id:gId, type:"glyph"};
+					item.Object = {glyph_id:gId, type:"glyph", size:this.glyphSize};
 					content.innerHTML = li.Glyph.type.titleCaps();
 					c.appendChild(item);
 					this.updateAddCargo(this.glyphSize);
@@ -1045,7 +1105,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {plan_id:gId, type:"plan"};
+					item.Object = {plan_id:gId, type:"plan", size:this.planSize};
 					if(li.Plan.extra_build_level > 0) {
 						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
 					}
@@ -1076,7 +1136,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {ship_id:gId, type:"ship"};
+					item.Object = {ship_id:gId, type:"ship", size:this.shipSize};
 					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
 					c.appendChild(item);
 					this.updateAddCargo(this.shipSize);
@@ -1102,7 +1162,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {prisoner_id:gId, type:"prisoner"};
+					item.Object = {prisoner_id:gId, type:"prisoner", size:this.spySize};
 					content.innerHTML = [obj.name, ' ', obj.level].join('');
 					c.appendChild(item);
 					this.updateAddCargo(this.spySize);
@@ -1122,14 +1182,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				}
 				
 				if(newTotal == 0) {
-					this.updateAddCargo(li.Object.quantity * -1);
+					this.updateAddCargo(li.Object.quantity * -1 * li.Object.size);
 					Event.purgeElement(li);
 					li.parentNode.removeChild(li);
 				}
 				else {
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
-					this.updateAddCargo(diff);
+					this.updateAddCargo(diff * li.Object.size);
 					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
 					a.animate();
 				}
@@ -1436,7 +1496,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(ep);
 						ep.parentNode.removeChild(ep);
 					}, this, true);
-					item.Object = {type:li.Resource.type, quantity:quantity};
+					item.Object = {type:li.Resource.type, quantity:quantity, size:1};
 					content.innerHTML = ['<span class="tradeResourceName">',item.Object.type.titleCaps(), ' (<label class="quantity">', quantity, '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
 					c.appendChild(item);
 					this.updatePushCargo(quantity);
@@ -1457,31 +1517,31 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 					lq.innerHTML = newTotal;
 					found.Object.quantity = newTotal;
 					this.updatePushCargo(diff);
-					
+
 					var a = new Util.ColorAnim(lq, {color:{from:'#0f0',to:'#fff'}}, 1.5);
 					a.animate();
 				}
 			}
-		},
-		PushAddGlyph : function(e, matchedEl, container){
-			var li = matchedEl.parentNode,
-				c = Dom.get("tradePushItems");
-			if(li && c) {
-				var gId = li.Glyph.id,
-					id = "pushGlyph-" + gId;
-				if(Sel.query("#"+id, c).length == 0) {
-					var item = document.createElement("li"),
-						del = item.appendChild(document.createElement("div")),
-						content = item.appendChild(document.createElement("div"));
-					item.id = id;
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ 
-						this.updatePushCargo(this.glyphSize*-1);
+						  },
+PushAddGlyph : function(e, matchedEl, container){
+				   var li = matchedEl.parentNode,
+				   c = Dom.get("tradePushItems");
+				   if(li && c) {
+					   var gId = li.Glyph.id,
+						   id = "pushGlyph-" + gId;
+					   if(Sel.query("#"+id, c).length == 0) {
+						   var item = document.createElement("li"),
+							   del = item.appendChild(document.createElement("div")),
+							   content = item.appendChild(document.createElement("div"));
+						   item.id = id;
+						   Dom.addClass(item, "tradeItem");
+						   Dom.addClass(del, "tradeDelete");
+						   Event.on(del, "click", function(){ 
+								   this.updatePushCargo(this.glyphSize*-1);
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {glyph_id:gId, type:"glyph"};
+					item.Object = {glyph_id:gId, type:"glyph", size:this.glyphSize};
 					content.innerHTML = li.Glyph.type.titleCaps();
 					c.appendChild(item);
 					this.updatePushCargo(this.glyphSize);
@@ -1506,7 +1566,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {plan_id:gId, type:"plan"};
+					item.Object = {plan_id:gId, type:"plan", size:this.planSize};
 					if(li.Plan.extra_build_level > 0) {
 						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
 					}
@@ -1537,7 +1597,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {ship_id:gId, type:"ship"};
+					item.Object = {ship_id:gId, type:"ship", size:this.shipSize};
 					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
 					c.appendChild(item);
 					this.updatePushCargo(this.shipSize);
@@ -1563,7 +1623,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 						Event.purgeElement(item);
 						item.parentNode.removeChild(item); 
 					}, this, true);
-					item.Object = {prisoner_id:gId, type:"prisoner"};
+					item.Object = {prisoner_id:gId, type:"prisoner", size:this.spySize};
 					content.innerHTML = [obj.name, ' ', obj.level].join('');
 					c.appendChild(item);
 					this.updatePushCargo(this.spySize);
@@ -1583,14 +1643,14 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 				}
 				
 				if(newTotal == 0) {
-					this.updatePushCargo(li.Object.quantity * -1);
+					this.updatePushCargo(li.Object.quantity * -1 * li.Object.size);
 					Event.purgeElement(li);
 					li.parentNode.removeChild(li);
 				}
 				else {
 					lq.innerHTML = newTotal;
 					li.Object.quantity = newTotal;
-					this.updatePushCargo(diff);
+					this.updatePushCargo(diffi * li.Object.size);
 					var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
 					a.animate();
 				}
