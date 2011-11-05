@@ -1214,7 +1214,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                 c = Dom.get("tradeAddItems");
             if(li && c) {
                 var pName = li.PlanSummary.name,
-                    pClass = li.PlanSummary.class,
+                    pClass = li.PlanSummary.plan_class,
                     pLevel = li.PlanSummary.level,
                     pExtra = li.PlanSummary.extra_build_level,
                     id = ['addPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
@@ -1233,7 +1233,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
+                    item.Object = {plan_class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
                     if(pExtra > 0) {
                         content.innerHTML = ['<span class="tradeResourceName">',pName, ' ', pLevel, '+', pExtra,' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
                     }
