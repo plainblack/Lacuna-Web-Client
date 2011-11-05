@@ -2063,6 +2063,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"page_number", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
+					},
+					"view_battle_logs" : {
+						"description": "Shows you the battle logs for your empire with the most recent action listed first. This data will be cleaned out every seven days.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
 					}
 
 				}
