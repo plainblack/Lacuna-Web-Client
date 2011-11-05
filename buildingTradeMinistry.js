@@ -22,7 +22,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		this.addTradeText = "Add Trade";
 		this.pushTradeText = "Send";
 		
-		//defaults.  Values are updated to server numbers during get_* calls
+		// defaults.  Values are updated to server numbers during get_* calls
 		this.shipSize = 50000;
 		this.planSize = 10000;
 		this.spySize = 350;
