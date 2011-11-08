@@ -333,9 +333,15 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 			'		<legend>On Planet</legend>',
 			'		<div class="tradeContainers">',
 			'			<div><div id="tradeAddResources" class="accordian">Resources</div><ul id="tradeAddResourceName"></ul></div>',
-            '           <div><div id="tradeAddGlyphSummary" class="accordian">Glyph Summary</div><ul id="tradeAddGlyphSummaryName" style="display:none;"></ul></div>',
-            '           <div><div id="tradeAddPlanSummary" class="accordian">Plan Summary</div><ul id="tradeAddPlanSummaryName" style="display:none;"></ul></div>',
-            '           <div><div id="tradeAddShipSummary" class="accordian">Ship Summary</div><ul id="tradeAddShipSummaryName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddGlyphs" class="accordian">Glyph</div><ul id="tradeAddGlyphName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddPlans" class="accordian">Plan</div><ul id="tradeAddPlanName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddShips" class="accordian">Ship</div><ul id="tradeAddShipName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddPrisoners" class="accordian">Prisoners</div><ul id="tradeAddPrisonerName" style="display:none;"></ul></div>',
+
+
+            '           <div><div id="tradeAddGlyphSummary" class="accordian">Glyph (Experimental)</div><ul id="tradeAddGlyphSummaryName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddPlanSummary" class="accordian">Plan (Experimental)</div><ul id="tradeAddPlanSummaryName" style="display:none;"></ul></div>',
+            '           <div><div id="tradeAddShipSummary" class="accordian">Ship (Experimental)</div><ul id="tradeAddShipSummaryName" style="display:none;"></ul></div>',
 			'			<div><div id="tradeAddPrisoners" class="accordian">Prisoners</div><ul id="tradeAddPrisonerName" style="display:none;"></ul></div>',
 			'		</div>',
 			'	</div>',
