@@ -706,8 +706,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							"method": "alliance_rank",
 							"jsonrpc": "2.0",
 							"params": [
-								Game.GetSession(""),
-								"average_empire_size_rank"
+								Game.GetSession("")
 							]
 						}),
 					dynamicData: true,
