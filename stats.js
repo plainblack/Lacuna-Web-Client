@@ -710,7 +710,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
 							]
 						}),
 					dynamicData: true,
-					sortedBy : {key:"average_empire_size", dir:YAHOO.widget.DataTable.CLASS_DSC},
+					sortedBy : {key:"influence", dir:YAHOO.widget.DataTable.CLASS_DSC},
 					paginator: new YAHOO.widget.Paginator({ rowsPerPage:25, containers:'statsAlliancePaginator' }),
 					selectionMode:"single"
 				} );
