@@ -190,6 +190,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that have been found by this archaeology ministry.",
 						"parameters": [
@@ -2055,6 +2063,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"page_number", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
+					},
+					"view_battle_logs" : {
+						"description": "Shows you the battle logs for your empire with the most recent action listed first. This data will be cleaned out every seven days.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"page_number", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"}
 					}
 
 				}
@@ -2227,6 +2244,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+                    "get_ship_summary" : {
+                        "description": "Returns a list of ships that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_ships" : {
 						"description": "Returns a list of ships that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2273,6 +2298,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_plan_summary" : {
+                        "description": "Returns a list of plans that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_plans" : {
 						"description": "Returns a list of plans that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2296,6 +2329,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2444,6 +2485,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+                    "get_ship_summary" : {
+                        "description": "Returns a list of ships that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_ships" : {
 						"description": "Returns a list of ships that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2490,6 +2539,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_plan_summary" : {
+                        "description": "Returns a list of plans that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_plans" : {
 						"description": "Returns a list of plans that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2513,6 +2570,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						 }
 						*/
 					},
+                    "get_glyph_summary" : {
+                        "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
 					"get_glyphs" : {
 						"description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
 						"parameters": [
@@ -2937,6 +3002,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					 }
 					*/
 				},
+                "boost_building" : {
+                    "description": "Spends 5 essentia, and boosts building queues on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+                    "parameters": [
+                        {"name":"session_id", "type":"string", "optional":false}
+                    ],
+                    "returns":{"type":"object"}
+                },
 				"enable_self_destruct" : {
 					"description": "Enables a destruction countdown of 24 hours. Sometime after the timer runs out, the empire will vaporize.",
 					"parameters": [

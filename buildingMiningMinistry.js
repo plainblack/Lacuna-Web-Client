@@ -126,15 +126,9 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
 				Event.purgeElement(details);
 				details.innerHTML = "";
 				
-				var ores = [
-					'anthracite', 'bauxite', 'beryl',
-					'chalcopyrite', 'chromite', 'fluorite',
-					'galena', 'goethite', 'gold',
-					'gypsum', 'halite', 'kerogen',
-					'magnetite', 'methane', 'monazite',
-					'rutile', 'sulfur', 'trona',
-					'uraninite', 'zircon'];
-				var totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+				var ores = Lib.ResourceTypes.ore;
+				var totals = [];
+				for (var i in ores) totals[i] = 0;
 				var grand_total = 0;
 
 				if (platforms.length > 0) {
