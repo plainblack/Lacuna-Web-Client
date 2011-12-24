@@ -256,10 +256,10 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					}
 					
 					nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
-					'	<div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+					'	<div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
 					'		<img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" class="shipImage" />',
 					'	</div>',
-					'	<div class="yui-u" style="width:67%">',
+					'	<div class="yui-u" style="width:63%">',
 					'		<span class="shipName">',ship.type_human,'</span>: ',
 					'		<div class="shipDesc" style="display:none;">',Game.GetShipDesc(shipName),'</div>',
 					'		<div><label style="font-weight:bold;">Cost:</label>',
@@ -273,8 +273,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 					'		<div><label style="font-weight:bold;">Attributes:</label>',attributes.join(''),'</div>',
 					!ship.can ? reason : '',
 					'	</div>',
-					'	<div class="yui-u" style="width:8%">',
-					ship.can ? '		<button type="button">Build</button>' : '',
+					'	<div class="yui-u" style="width:18%">',
+                    ship.can ? ' <input type="text" style="width:25px;" id="ship_'+shipName+'" value="1"> <button type="button">Build</button>' : 
 					'	</div>',
 					'</div>'].join('');
 					if(ship.can) {
@@ -300,12 +300,12 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 			var btn = Event.getTarget(e);
 			btn.disabled = true;
 			Lacuna.Pulser.Show();
-			
+			var qty = Dom.get("ship_"+this.Type);
 			this.Self.service.build_ship({
 				session_id:Game.GetSession(),
 				building_id:this.Self.building.id,
 				type:this.Type,
-				quantity:1
+				quantity:qty.value
 			}, {
 				success : function(o){
 					btn.disabled = false;
