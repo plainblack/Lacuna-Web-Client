@@ -31,6 +31,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			});
 			userMenu.addItems([{ text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_blank" },
 				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" },
+				{ text: "Ideas", url: "http://ideas.lacunaexpanse.com/", target:"_blank" },
 				{ text: "Server Clock", onclick: { fn: Lacuna.Info.Clock.Show, scope:Lacuna.Info.Clock } }
 			]);
 			userMenu.subscribe("beforeShow", function() {
