@@ -991,10 +991,10 @@ _getAddTab : function() {
                 c = Dom.get("tradeAddItems");
             if(li && c) {
                 var pName = li.PlanSummary.name,
-                    pClass = li.PlanSummary.plan_class,
+                    pType = li.PlanSummary.plan_type,
                     pLevel = li.PlanSummary.level,
                     pExtra = li.PlanSummary.extra_build_level,
-                    id = ['addPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
+                    id = ['addPlanSummary-', pType, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
                 if(exists.length == 0) {
                     var item = document.createElement("li"),
@@ -1010,7 +1010,7 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {plan_class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
+                    item.Object = {plan_type:pType, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
                     if(pExtra > 0) {
                         content.innerHTML = ['<span class="tradeResourceName">',pName, ' ', pLevel, '+', pExtra,' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
                     }
@@ -1559,10 +1559,10 @@ _getAddTab : function() {
                 c = Dom.get("tradePushItems");
             if(quantity && li && c) {
                 var pName = li.PlanSummary.name,
-                    pClass = li.PlanSummary.plan_class,
+                    pType = li.PlanSummary.plan_type,
                     pLevel = li.PlanSummary.level,
                     pExtra = li.PlanSummary.extra_build_level,
-                    id = ['pushPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
+                    id = ['pushPlanSummary-', pType, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
 
                 if(exists.length == 0) {
@@ -1579,7 +1579,7 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {plan_class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
+                    item.Object = {plan_type:pType, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
                     if(pExtra > 0) {
                         content.innerHTML = ['<span class="tradeResourceName">',pName, ' ', pLevel, '+', pExtra,' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
                     }
