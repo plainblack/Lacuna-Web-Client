@@ -52,7 +52,7 @@ if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 			'		<div style="overflow:auto;height:400px">',
 			'			The Lacuna Expanse',
 			'			<ul>',
-			'				<li>&copy; 2010 by Lacuna Expanse Corp</li>',
+			'				<li>&copy; 2011 by Lacuna Expanse Corp</li>',
 			'				<li>Server Version: <span id="aboutVersion"></span></li>',
 			'			</ul><br/>',
 			'			Credits',

@@ -131,15 +131,21 @@
 		requires : ["animation","building","dragdrop"]
 	});
 	loader.addModule({
-		name: "development",
+		name: "blackholegenerator",
 		type: "js",
-		fullpath: urlBuilder("buildingDevelopment.js"),
+		fullpath: urlBuilder("buildingBlackHoleGenerator.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
 		name: "capitol",
 		type: "js",
 		fullpath: urlBuilder("buildingCapitol.js"),
+		requires : ["building"]
+	});
+	loader.addModule({
+		name: "development",
+		type: "js",
+		fullpath: urlBuilder("buildingDevelopment.js"),
 		requires : ["building"]
 	});
 	loader.addModule({
@@ -373,6 +379,7 @@
 		requires : [
 			//buildings
 			"archaeology",
+			"blackholegenerator",
 			"capitol",
 			"development",
 			"distributioncenter",

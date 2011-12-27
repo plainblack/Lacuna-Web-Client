@@ -15,6 +15,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 	var FactoryMap = {
 		//buildings
 		"/archaeology": Lacuna.buildings.Archaeology,
+		"/blackholegenerator": Lacuna.buildings.BlackHoleGenerator,
 		"/capitol": Lacuna.buildings.Capitol,
 		"/development": Lacuna.buildings.Development,
 		"/distributioncenter": Lacuna.buildings.DistributionCenter,
