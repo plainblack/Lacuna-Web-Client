@@ -31,7 +31,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		this.createEvent("onLoadResources");
         this.createEvent("onLoadGlyphSummary");
         this.createEvent("onLoadPlanSummary");
-		this.createEvent("onLoadShips");
         this.createEvent("onLoadShipSummary");
 		this.createEvent("onLoadPrisoners");
 		
@@ -64,15 +63,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                                 }
                             }, this, true);
 
-							Event.on("tradePushGlyphs", "click", function(){
-								if(Dom.getStyle("tradePushGlyphName", "display") == "none") {
-									Dom.setStyle("tradePushGlyphName", "display", "block");
-									this.getGlyphs();
-								}
-								else {
-									Dom.setStyle("tradePushGlyphName", "display", "none");
-								}
-							}, this, true);
                             Event.on("tradePushPlanSummary", "click", function(){
                                 if(Dom.getStyle("tradePushPlanSummaryName", "display") == "none") {
                                     Dom.setStyle("tradePushPlanSummaryName", "display", "block");
@@ -82,15 +72,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                                     Dom.setStyle("tradePushPlanSummaryName", "display", "none");
                                 }
                             }, this, true);
-							Event.on("tradePushPlans", "click", function(){
-								if(Dom.getStyle("tradePushPlanName", "display") == "none") {
-									Dom.setStyle("tradePushPlanName", "display", "block");
-									this.getPlans();
-								}
-								else {
-									Dom.setStyle("tradePushPlanName", "display", "none");
-								}
-							}, this, true);
                             Event.on("tradePushShipSummary", "click", function(){
                                 if(Dom.getStyle("tradePushShipSummaryName", "display") == "none") {
                                     Dom.setStyle("tradePushShipSummaryName", "display", "block");
@@ -100,15 +81,6 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
                                     Dom.setStyle("tradePushShipSummaryName", "display", "none");
                                 }
                             }, this, true);
-							Event.on("tradePushShips", "click", function(){
-								if(Dom.getStyle("tradePushShipName", "display") == "none") {
-									Dom.setStyle("tradePushShipName", "display", "block");
-									this.getShips();
-								}
-								else {
-									Dom.setStyle("tradePushShipName", "display", "none");
-								}
-							}, this, true);
 							Event.on("tradePushPrisoners", "click", function(){
 								if(Dom.getStyle("tradePushPrisonerName", "display") == "none") {
 									Dom.setStyle("tradePushPrisonerName", "display", "block");
@@ -204,16 +176,9 @@ this.push = new YAHOO.widget.Tab({ label: "Push", content: [
 	'		<legend>On Planet</legend>',
 	'		<div class="tradeContainers">',
 	'			<div><div id="tradePushResources" class="accordian">Resources</div><ul id="tradePushResourceName"></ul></div>',
-	'			<div><div id="tradePushGlyphs" class="accordian">Glyphs</div><ul id="tradePushGlyphName" style="display:none;"></ul></div>',
-	'           <div><div id="tradePushPlans" class="accordian">Plans</div><ul id="tradePushPlanName" style="display:none;"></ul></div>',
-	'           <div><div id="tradePushShips" class="accordian">Ships</div><ul id="tradePushShipName" style="display:none;"></ul></div>',
-
-	'           <div><div id="tradePushGlyphSummary" class="accordian">Glyph Summary</div><ul id="tradePushGlyphSummaryName" style="display:none;"></ul></div>',
-	'           <div><div id="tradePushPlanSummary" class="accordian">Plan Summary</div><ul id="tradePushPlanSummaryName" style="display:none;"></ul></div>',
-	'           <div><div id="tradePushShipSummary" class="accordian">Ship Summary</div><ul id="tradePushShipSummaryName" style="display:none;"></ul></div>',
-
-
-
+	'           <div><div id="tradePushGlyphSummary" class="accordian">Glyphs</div><ul id="tradePushGlyphSummaryName" style="display:none;"></ul></div>',
+	'           <div><div id="tradePushPlanSummary" class="accordian">Plans</div><ul id="tradePushPlanSummaryName" style="display:none;"></ul></div>',
+	'           <div><div id="tradePushShipSummary" class="accordian">Ships</div><ul id="tradePushShipSummaryName" style="display:none;"></ul></div>',
 	'			<div><div id="tradePushPrisoners" class="accordian">Prisoners</div><ul id="tradePushPrisonerName" style="display:none;"></ul></div>',
 	'		</div>',
 	'	</div>',
@@ -231,11 +196,8 @@ this.push = new YAHOO.widget.Tab({ label: "Push", content: [
 	'</ul></div><button id="tradePushSend">',this.pushTradeText,'</button>'].join('')});
 
 this.subscribe("onLoadResources", this.populatePushResourceName, this, true);
-this.subscribe("onLoadGlyphs", this.populatePushGlyphName, this, true);
 this.subscribe("onLoadGlyphSummary", this.populatePushGlyphSummaryName, this, true);
-this.subscribe("onLoadPlans", this.populatePushPlanName, this, true);
 this.subscribe("onLoadPlanSummary", this.populatePushPlanSummaryName, this, true);
-this.subscribe("onLoadShips", this.populatePushShipName, this, true);
 this.subscribe("onLoadShipSummary", this.populatePushShipSummaryName, this, true);
 this.subscribe("onLoadPrisoners", this.populatePushPrisonerName, this, true);
 
@@ -257,9 +219,6 @@ Event.onAvailable("tradePushColony", function(){
 Event.on("tradePushColony", "change", this.getPushShips, this, true);
 
 Event.delegate("tradePushResourceName", "click", this.PushAddResource, "button", this, true);
-Event.delegate("tradePushGlyphName", "click", this.PushAddGlyph, "button", this, true);
-Event.delegate("tradePushPlanName", "click", this.PushAddPlan, "button", this, true);
-Event.delegate("tradePushShipName", "click", this.PushAddShip, "button", this, true);
 Event.delegate("tradePushGlyphSummaryName", "click", this.PushAddGlyphSummary, "button", this, true);
 Event.delegate("tradePushPlanSummaryName", "click", this.PushAddPlanSummary, "button", this, true);
 Event.delegate("tradePushShipSummaryName", "click", this.PushAddShipSummary, "button", this, true);
@@ -369,42 +328,6 @@ _getAddTab : function() {
             }
         },
 
-		getGlyphs : function(force) {
-			if(force || !this.glyphs) {
-				Lacuna.Pulser.Show();
-				this.service.get_glyphs({
-						session_id: Game.GetSession(""),
-						building_id: this.building.id
-					},{
-					success : function(o){
-						this.rpcSuccess(o);
-						this.glyphs = o.result.glyphs;
-						this.glyphSize = o.result.cargo_space_used_each;
-						this.fireEvent("onLoadGlyphs");
-						Lacuna.Pulser.Hide();
-					},
-					scope:this
-				});
-			}
-		},
-		getPlans : function(force) {
-			if(force || !this.plans) {
-				Lacuna.Pulser.Show();
-				this.service.get_plans({
-						session_id: Game.GetSession(""),
-						building_id: this.building.id
-					},{
-					success : function(o){
-						this.rpcSuccess(o);
-						this.plans = o.result.plans;
-						this.planSize = o.result.cargo_space_used_each;
-						this.fireEvent("onLoadPlans");
-						Lacuna.Pulser.Hide();
-					},
-					scope:this
-				});
-			}
-		},
         getPlanSummary : function(force) {
             if(force || !this.plan_summary) {
                 Lacuna.Pulser.Show();
@@ -459,24 +382,6 @@ _getAddTab : function() {
                 });
             }
         },
-		getShips : function(force) {
-			if(force || !this.ships) {
-				Lacuna.Pulser.Show();
-				this.service.get_ships({
-						session_id: Game.GetSession(""),
-						building_id: this.building.id
-					},{
-					success : function(o){
-						this.rpcSuccess(o);
-						this.ships = o.result.ships;
-						this.shipSize = o.result.cargo_space_used_each;
-						this.fireEvent("onLoadShips");
-						Lacuna.Pulser.Hide();
-					},
-					scope:this
-				});
-			}
-		},
 		getStoredResources : function(force) {
 			if(force || !this.resources) {
 				Lacuna.Pulser.Show();
@@ -803,10 +708,10 @@ _getAddTab : function() {
 						Lacuna.Pulser.Hide();
 						
 						this.Self.getStoredResources(true);
-						this.Self.getPlans(true);
-						this.Self.getGlyphs(true);
+						this.Self.getPlanSummary(true);
+						this.Self.getGlyphSummary(true);
 						this.Self.getPrisoners(true);
-						this.Self.getShips(true);
+						this.Self.getShipSummary(true);
 					},
 					scope:this
 				});
@@ -885,7 +790,12 @@ _getAddTab : function() {
                         var obj = this.plan_summary[x];
                         nLi = li.cloneNode(false);
                         nLi.PlanSummary = obj;
-                        nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level,'+',obj.extra_build_level, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        if (obj.extra_build_level > 0) {
+                            nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level,'+',obj.extra_build_level, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        }
+                        else {
+                            nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level,' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        }
                         elm.appendChild(nLi);
                     }
                 }
@@ -1343,16 +1253,16 @@ _getAddTab : function() {
 						this.getStoredResources(true);
 					}
 					if(hasPlans) {
-						this.getPlans(true);
+						this.getPlanSummary(true);
 					}
 					if(hasGlyphs) {
-						this.getGlyphs(true);
+						this.getGlyphSummary(true);
 					}
 					if(hasPrisoners) {
 						this.getPrisoners(true);
 					}
 					if(hasShips) {
-						this.getShips(true);
+						this.getShipSummary(true);
 					}
 					for(var i=0; i<lis.length; i++) {
 						if(lis[i].Object) {
@@ -1431,40 +1341,6 @@ _getAddTab : function() {
             }
         },
 
-		populatePushGlyphName : function() {
-			var elm = Dom.get("tradePushGlyphName"),
-				li = document.createElement("li"), nLi;
-				
-			if(elm) {
-				elm.innerHTML = "";
-				if(this.glyphs.length > 0) {
-					var glyphs = this.glyphs.sort(function(a,b) {
-						if (a.type > b.type) {
-							return 1;
-						}
-						else if (a.type < b.type) {
-							return -1;
-						}
-						else {
-							return 0;
-						}
-					});
-					
-					for(var x=0; x < glyphs.length; x++) {
-						var obj = glyphs[x];
-						nLi = li.cloneNode(false);
-						nLi.Glyph = obj;
-						nLi.innerHTML = ['<span class="tradeName">',obj.type.titleCaps(), '</span> <button type="button">+</button>'].join('');
-						elm.appendChild(nLi);
-					}
-				}
-				else {
-					nLi = li.cloneNode(false);
-					nLi.innerHTML = "No Glyphs Available";
-					elm.appendChild(nLi);
-				}
-			}
-		},
         populatePushPlanSummaryName : function() {
             var elm = Dom.get("tradePushPlanSummaryName"),
                 li = document.createElement("li"), nLi;
@@ -1480,7 +1356,7 @@ _getAddTab : function() {
                             nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level,'+',obj.extra_build_level, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
                         }
                         else {
-                            nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level,'+', ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                            nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' ',obj.level, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
                         }
                         elm.appendChild(nLi);
                     }
@@ -1492,33 +1368,6 @@ _getAddTab : function() {
                 }
             }
         },
-		populatePushPlanName : function() {
-			var elm = Dom.get("tradePushPlanName"),
-				li = document.createElement("li"), nLi;
-				
-			if(elm) {
-				elm.innerHTML = "";
-				if(this.plans.length > 0) {
-					for(var x=0; x < this.plans.length; x++) {
-						var obj = this.plans[x];
-						nLi = li.cloneNode(false);
-						nLi.Plan = obj;
-						if(obj.extra_build_level > 0) {
-							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '+', obj.extra_build_level, '</span> <button type="button">+</button>'].join('');
-						}
-						else {
-							nLi.innerHTML = ['<span class="tradeName">',obj.name, ' ', obj.level, '</span> <button type="button">+</button>'].join('');
-						}
-						elm.appendChild(nLi);
-					}
-				}
-				else {
-					nLi = li.cloneNode(false);
-					nLi.innerHTML = "No Plans Available";
-					elm.appendChild(nLi);
-				}
-			}
-		},
         populatePushShipSummaryName : function() {
             var elm = Dom.get("tradePushShipSummaryName"),
                 li = document.createElement("li"), nLi;
@@ -1541,28 +1390,6 @@ _getAddTab : function() {
                 }
             }
         },
-		populatePushShipName : function() {
-			var elm = Dom.get("tradePushShipName"),
-				li = document.createElement("li"), nLi;
-				
-			if(elm) {
-				elm.innerHTML = "";
-				if(this.ships.length > 0) {
-					for(var x=0; x < this.ships.length; x++) {
-						var obj = this.ships[x];
-						nLi = li.cloneNode(false);
-						nLi.Ship = obj;
-						nLi.innerHTML = ['<span class="tradeName">',obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, '</span> <button type="button">+</button>'].join('');
-						elm.appendChild(nLi);
-					}
-				}
-				else {
-					nLi = li.cloneNode(false);
-					nLi.innerHTML = "No Ships Available";
-					elm.appendChild(nLi);
-				}
-			}
-		},
 		populatePushPrisonerName : function() {
 			var elm = Dom.get("tradePushPrisonerName"),
 				li = document.createElement("li"), nLi;
@@ -1679,32 +1506,7 @@ _getAddTab : function() {
 					a.animate();
 				}
 			}
-						  },
-        PushAddGlyph : function(e, matchedEl, container){
-				   var li = matchedEl.parentNode,
-				   c = Dom.get("tradePushItems");
-				   if(li && c) {
-					   var gId = li.Glyph.id,
-						   id = "pushGlyph-" + gId;
-					   if(Sel.query("#"+id, c).length == 0) {
-						   var item = document.createElement("li"),
-							   del = item.appendChild(document.createElement("div")),
-							   content = item.appendChild(document.createElement("div"));
-						   item.id = id;
-						   Dom.addClass(item, "tradeItem");
-						   Dom.addClass(del, "tradeDelete");
-						   Event.on(del, "click", function(){ 
-								   this.updatePushCargo(this.glyphSize*-1);
-						Event.purgeElement(item);
-						item.parentNode.removeChild(item); 
-					}, this, true);
-					item.Object = {glyph_id:gId, type:"glyph", size:this.glyphSize};
-					content.innerHTML = li.Glyph.type.titleCaps();
-					c.appendChild(item);
-					this.updatePushCargo(this.glyphSize);
-				}
-			}
-		},
+        },
         PushAddGlyphSummary : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
                 li = matchedEl.parentNode,
@@ -1751,36 +1553,6 @@ _getAddTab : function() {
                 }
             }
         },
-        PushAddPlan : function(e, matchedEl, container){
-			var li = matchedEl.parentNode,
-				c = Dom.get("tradePushItems");
-			if(li && c) {
-				var gId = li.Plan.id,
-					id = "pushPlan-" + gId;
-				if(Sel.query("#"+id, c).length == 0) {
-					var item = document.createElement("li"),
-						del = item.appendChild(document.createElement("div")),
-						content = item.appendChild(document.createElement("div"));
-					item.id = id;
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ 
-						this.updatePushCargo(this.planSize*-1);
-						Event.purgeElement(item);
-						item.parentNode.removeChild(item); 
-					}, this, true);
-					item.Object = {plan_id:gId, type:"plan", size:this.planSize};
-					if(li.Plan.extra_build_level > 0) {
-						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
-					}
-					else {
-						content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
-					}
-					c.appendChild(item);
-					this.updatePushCargo(this.planSize);
-				}
-			}
-		},
         PushAddPlanSummary : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
                 li = matchedEl.parentNode,
@@ -1792,6 +1564,7 @@ _getAddTab : function() {
                     pExtra = li.PlanSummary.extra_build_level,
                     id = ['pushPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
+
                 if(exists.length == 0) {
                     var item = document.createElement("li"),
                         del = item.appendChild(document.createElement("div")),
@@ -1837,32 +1610,6 @@ _getAddTab : function() {
             }
         },
 
-		PushAddShip : function(e, matchedEl, container){
-			var li = matchedEl.parentNode,
-				c = Dom.get("tradePushItems");
-			if(li && c) {
-				var obj = li.Ship,
-					gId = obj.id,
-					id = "pushShip-" + gId;
-				if(Sel.query("#"+id, c).length == 0) {
-					var item = document.createElement("li"),
-						del = item.appendChild(document.createElement("div")),
-						content = item.appendChild(document.createElement("div"));
-					item.id = id;
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ 
-						this.updatePushCargo(this.shipSize*-1);
-						Event.purgeElement(item);
-						item.parentNode.removeChild(item); 
-					}, this, true);
-					item.Object = {ship_id:gId, type:"ship", size:this.shipSize};
-					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
-					c.appendChild(item);
-					this.updatePushCargo(this.shipSize);
-				}
-			}
-		},
         PushAddShipSummary : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
                 li = matchedEl.parentNode,
@@ -2026,16 +1773,16 @@ _getAddTab : function() {
 							this.getStoredResources(true);
 						}
 						if(hasPlans) {
-							this.getPlans(true);
+							this.getPlanSummary(true);
 						}
 						if(hasGlyphs) {
-							this.getGlyphs(true);
+							this.getGlyphSummary(true);
 						}
 						if(hasPrisoners) {
 							this.getPrisoners(true);
 						}
 						if(hasShips) {
-							this.getShips(true);
+							this.getShipSummary(true);
 						}
 					
 						var msg = Dom.get("tradePushMessage");
