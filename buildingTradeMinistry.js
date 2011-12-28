@@ -991,10 +991,10 @@ _getAddTab : function() {
                 c = Dom.get("tradeAddItems");
             if(li && c) {
                 var pName = li.PlanSummary.name,
-                    pClass = li.PlanSummary.plan_class,
+                    pType = li.PlanSummary.plan_type,
                     pLevel = li.PlanSummary.level,
                     pExtra = li.PlanSummary.extra_build_level,
-                    id = ['addPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
+                    id = ['addPlanSummary-', pType, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
                 if(exists.length == 0) {
                     var item = document.createElement("li"),
@@ -1010,7 +1010,7 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {plan_class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
+                    item.Object = {plan_type:pType, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
                     if(pExtra > 0) {
                         content.innerHTML = ['<span class="tradeResourceName">',pName, ' ', pLevel, '+', pExtra,' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
                     }
@@ -1040,62 +1040,6 @@ _getAddTab : function() {
                 }
             }
         },
-		AddPlan : function(e, matchedEl, container){
-			var li = matchedEl.parentNode,
-				c = Dom.get("tradeAddItems");
-			if(li && c) {
-				var gId = li.Plan.id,
-					id = "addPlan-" + gId;
-				if(Sel.query("#"+id, c).length == 0) {
-					var item = document.createElement("li"),
-						del = item.appendChild(document.createElement("div")),
-						content = item.appendChild(document.createElement("div"));
-					item.id = id;
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ 
-						this.updateAddCargo(this.planSize*-1);
-						Event.purgeElement(item);
-						item.parentNode.removeChild(item); 
-					}, this, true);
-					item.Object = {plan_id:gId, type:"plan", size:this.planSize};
-					if(li.Plan.extra_build_level > 0) {
-						content.innerHTML = [li.Plan.name, ' ', li.Plan.level, '+', li.Plan.extra_build_level].join('');
-					}
-					else {
-						content.innerHTML = [li.Plan.name, ' ', li.Plan.level].join('');
-					}
-					c.appendChild(item);
-					this.updateAddCargo(this.planSize);
-				}
-			}
-		},
-		AddShip : function(e, matchedEl, container){
-			var li = matchedEl.parentNode,
-				c = Dom.get("tradeAddItems");
-			if(li && c) {
-				var obj = li.Ship,
-					gId = obj.id,
-					id = "addShip-" + gId;
-				if(Sel.query("#"+id, c).length == 0) {
-					var item = document.createElement("li"),
-						del = item.appendChild(document.createElement("div")),
-						content = item.appendChild(document.createElement("div"));
-					item.id = id;
-					Dom.addClass(item, "tradeItem");
-					Dom.addClass(del, "tradeDelete");
-					Event.on(del, "click", function(){ 
-						this.updateAddCargo(this.shipSize*-1);
-						Event.purgeElement(item);
-						item.parentNode.removeChild(item); 
-					}, this, true);
-					item.Object = {ship_id:gId, type:"ship", size:this.shipSize};
-					content.innerHTML = [obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed].join('');
-					c.appendChild(item);
-					this.updateAddCargo(this.shipSize);
-				}
-			}
-		},
         AddShipSummary : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
                 li = matchedEl.parentNode,
@@ -1559,10 +1503,10 @@ _getAddTab : function() {
                 c = Dom.get("tradePushItems");
             if(quantity && li && c) {
                 var pName = li.PlanSummary.name,
-                    pClass = li.PlanSummary.plan_class,
+                    pType = li.PlanSummary.plan_type,
                     pLevel = li.PlanSummary.level,
                     pExtra = li.PlanSummary.extra_build_level,
-                    id = ['pushPlanSummary-', pName, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
+                    id = ['pushPlanSummary-', pType, '-', pLevel, '-', pExtra].join('').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
 
                 if(exists.length == 0) {
@@ -1579,7 +1523,7 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {plan_class:pClass, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
+                    item.Object = {plan_type:pType, quantity:quantity, type:"plan", level:pLevel, extra_build_level:pExtra, size:this.planSize};
                     if(pExtra > 0) {
                         content.innerHTML = ['<span class="tradeResourceName">',pName, ' ', pLevel, '+', pExtra,' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
                     }
