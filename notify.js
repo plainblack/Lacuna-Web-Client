@@ -12,7 +12,12 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		Lib = Lacuna.Library;
 		
 	var Notify = function(){
-		this.incomingShips = {};
+        this.incoming_own = {};
+        this.num_incoming_own = {};
+        this.incoming_ally = {};
+        this.num_incoming_ally = {};
+        this.incoming_enemy = {};
+        this.num_incoming_enemy = {};
 	};
 	Notify.prototype = {
 		_createDisplay : function() {
@@ -59,75 +64,115 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 		},
 		_updating : function() {
 			var list = this.Display.notifyList;
-			var planetShips = this.incomingShips[this.planetId] || [], 
-				arr = [],
-				i = 0;
-			if(planetShips.length === 0) {
-				arr = arr.concat(['<li>None</li>']);
-			}
-			else {
-				var serverTime = Lib.getTime(Game.ServerData.time),
-					len = planetShips.length > 50 ? 50 : planetShips.length;
-				for(var s=0; s<len;s++) {
-					var ship = planetShips[s],
-						ms = Lib.getTime(ship.date_arrives) - serverTime,
-						color = (ship.is_own == 1 ? "#0f0" : (ship.is_ally == 1 ? "#b0b" : "#fff")),
-						arrTime;
-					i++;
-					if(ms > 0) {
-						arrTime = Lib.formatMillisecondTime(ms);
-					}
-					else {
-						arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
-					}
-					arr = arr.concat(['<li><label style="color:#FFD800;">',i, ')</label> <span style="color:',color,';">', arrTime,'</span></li>']);
-				}
-			}
+            var incoming_own = this.incoming_own[this.planetId] || [],
+                incoming_ally = this.incoming_ally[this.planetId] || [],
+                incoming_enemy = this.incoming_enemy[this.planetId] || [],
+                num_incoming_own = this.num_incoming_own[this.planetId] || 0,
+                num_incoming_ally = this.num_incoming_ally[this.planetId] || 0,
+                num_incoming_enemy = this.num_incoming_enemy[this.planetId] || 0;
+                arr = [];
+            if(num_incoming_enemy > 0) {
+                arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' incoming enemy ships!</span></li>']);
+                var serverTime = Lib.getTime(Game.ServerData.time),
+                    len = incoming_enemy.length;
+                for(var s=0; s<len; s++) {
+                    var ship = incoming_enemy[s],
+                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    arrTime;
+                    if(ms > 0) {
+                        arrTime = Lib.formatMillisecondTime(ms);
+                    }
+                    else {
+                        arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
+                    }
+                    arr = arr.concat(['<li><span style="color:#fff;">',arrTime,'</span></li>']);
+                }
+            }
+            if(num_incoming_ally > 0) {
+                arr = arr.concat(['<li><span style="color:#b0b">',num_incoming_ally,' incoming ally ships</span></li>']);
+                var serverTime = Lib.getTime(Game.ServerData.time),
+                    len = incoming_ally.length;
+                for(var s=0; s<len; s++) {
+                    var ship = incoming_ally[s],
+                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    arrTime;
+                    if(ms > 0) {
+                        arrTime = Lib.formatMillisecondTime(ms);
+                    }
+                    else {
+                        arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
+                    }
+                    arr = arr.concat(['<li><span style="color:#b0b;">',arrTime,'</span></li>']);
+                }
+            }
+            if(num_incoming_own > 0) {
+                arr = arr.concat(['<li><span style="color:#0f0">',num_incoming_own,' incoming own ships</span></li>']);
+                var serverTime = Lib.getTime(Game.ServerData.time),
+                    len = incoming_own.length;
+                for(var s=0; s<len; s++) {
+                    var ship = incoming_own[s],
+                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    arrTime;
+                    if(ms > 0) {
+                        arrTime = Lib.formatMillisecondTime(ms);
+                    }
+                    else {
+                        arrTime = 'Overdue ' + Lib.formatMillisecondTime(-ms);
+                    }
+                    arr = arr.concat(['<li><span style="color:#0f0;">',arrTime,'</span></li>']);
+                }
+            }
 			
 			list.innerHTML = arr.join('');
-			if(i == 0) {
+			if(num_incoming_own + num_incoming_ally + num_incoming_enemy == 0) {
 				Game.onTick.unsubscribe(this._updating);
 				delete this.subscribed;
-				this.incomingShips = {};
+                this.incoming_own = {};
+                this.num_incoming_own = {};
+                this.incoming_ally = {};
+                this.num_incoming_ally = {};
+                this.incoming_enemy = {};
+                this.num_incoming_enemy = {};
 				this.Hide();
 			}
 			else {
 				this.Display.show();
 			}
 		},
-		Load : function(planet) {
-			var incoming = planet.incoming_foreign_ships || [],
-				planetShips = this.incomingShips[planet.id] || [];
-			
-			incoming.sort(function(a,b) {
-				if (a.date_arrives > b.date_arrives) {
-					return 1;
-				}
-				else if (a.date_arrives < b.date_arrives) {
-					return -1;
-				}
-				else {
-					return 0;
-				}
-			});
-			
-			if(planetShips.length != incoming.length) {
-				this._createDisplay();
-				this.incomingShips[planet.id] = incoming;
-				this.planetId = planet.id;
+        Load : function(planet) {
+            var incoming_own        = planet.incoming_own_ships || [],
+                incoming_ally       = planet.incoming_ally_ships || [],
+                incoming_enemy      = planet.incoming_enemy_ships || [],
+                num_incoming_own    = planet.num_incoming_own || 0,
+                num_incoming_ally   = planet.num_incoming_ally || 0,
+                num_incoming_enemy  = planet.num_incoming_enemy || 0;
+                planet_num_own      = this.num_incoming_own[planet.id] || 0;
+                planet_num_ally     = this.num_incoming_ally[planet.id] || 0;
+                planet_num_enemy    = this.num_incoming_enemy[planet.id] || 0;
 
-				if(!this.subscribed) {
-					Game.onTick.subscribe(this._updating, this, true);
-					this.subscribed = 1;
-				}
-				this.Display.show();
-				this.Display.bringToTop();
-			}
-		},
+            if(num_incoming_enemy + num_incoming_ally + num_incoming_own != planet_num_enemy + planet_num_ally + planet_num_enemy) {
+                this._createDisplay();
+                this.incoming_own[planet.id] = incoming_own;
+                this.num_incoming_own[planet.id] = num_incoming_own;
+                this.incoming_ally[planet.id] = incoming_ally;
+                this.num_incoming_ally[planet.id] = num_incoming_ally;
+                this.incoming_enemy[planet.id] = incoming_enemy;
+                this.num_incoming_enemy[planet.id] = num_incoming_enemy;
+                this.planetId = planet.id;
+
+                if(!this.subscribed) {
+                    Game.onTick.subscribe(this._updating, this, true);
+                    this.subscribed = 1;
+                }
+                this.Display.show();
+                this.Display.bringToTop();
+            }
+        },
+
 		Show : function(planetId) {
 			this.planetId = planetId;
 			if(this.Display) {
-				if(this.subscribed && this.incomingShips[planetId]) {
+				if(this.subscribed && (this.num_incoming_own[planetId] + this.num_incoming_ally[planetId] + this.num_incoming_enemy[planetId] > 0)) {
 					this.Display.show();
 					this.Display.bringToTop();
 				}
