@@ -2225,6 +2225,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					}
 				}
 			},
+            TheDillonForge : {
+                "SMDVersion":"2.0",
+                "description": "The Dillon Forge",
+                "envelope":"JSON-RPC-2.0",
+                "transport":"POST",
+                "target":"/thedillonforge",
+
+                "services": {
+                    "operate" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    }
+                }
+            },
 			Trade : {
 				"SMDVersion":"2.0",
 				"description": "Trade",
