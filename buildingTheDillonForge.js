@@ -19,21 +19,40 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
 	
 	Lang.extend(TheDillonForge, Lacuna.buildings.Building, {
 		getChildTabs : function() {
-			return [this._getTab()];
+			return [this._getSplitTab(), this._getMakeTab()];
 		},
-		_getTab : function() {
-			this.tab = new YAHOO.widget.Tab({ label: "Operations", content: [
-				'<div id="TheDillonForge" style="display:none;">',
-				'	Time left on current operations: <span id="TheDillonForge"></span>',
-				'</div>',
-				'<div id="TheDillonForgeMessage" style="margin-top:5px;"></div>',
-				'<div id="TheDillonForgeDisplay" style="display:none;margin:5px 0;">',
-				'	<button type="button" id="Operate">Open The Dillon Forge</button>',
-				'</div>'
+		_getSplitTab : function() {
+			this.splitTab = new YAHOO.widget.Tab({ label: "Split Plans", content: [
+                '<div id="forgeSplitReadyContainer">',
+                '  Ready to split a plan',
+                '  <button id="forgeSplitButton">Split</button>',
+                '</div>',
+                '<div id="forgeSplitWorkingContainer">',
+                '  Forge is busy splitting a plan',
+                '</div>',
 			].join('')});
 			
-			return this.tab;
-		}
+			return this.splitTab;
+		},
+        _getMakeTab : function() {
+            this.makeTab = new YAHOO.widget.Tab({ label: "Combine Plans", content: [
+                '<div id="TheDillonForge_make">',
+                '  Combine level 1 plans into higher level plans.',
+                '</div>'
+            ].join('')});
+            return this.makeTab;
+   	    },
+        checkIfWorking : function() {
+            if(this.result.tasks.can && this.result.tasks.seconds_remaining) {
+                Dom.setStyle("forgeSplitReadyContainer", "display", "none");
+                Dom.setStyle("forgeSplitWorkingContainer", "display", "");
+            }
+            else {
+                Dom.setStyle("forgeSplitReadyContainer", "display", "");
+                Dom.setStyle("forgeSplitWorkingContainer", "display", "none");
+            }
+        }
+
 	});
 	
 	YAHOO.lacuna.buildings.TheDillonForge = TheDillonForge;
