@@ -238,7 +238,7 @@ _getAvailTab : function() {
 						   '	<option value="ship">Ship</option><option value="plan">Plan</option></select></div>',
 						   '	<ul class="tradeHeader tradeInfo clearafter">',
 						   '		<li class="tradeEmpire">Empire</li>',
-						   '		<li class="tradeOfferedDate">Offered Date</li>',
+                           '        <li class="tradeOfferedDate">Travel Time</li>',
 						   '		<li class="tradeAsking">Cost</li>',
 						   '		<li class="tradeOffer">Offering</li>',
 						   '		<li class="tradeAction"></li>',
@@ -462,10 +462,10 @@ _getAddTab : function() {
 					Event.on(nLi, "click", this.EmpireProfile, trade.empire);
 					nUl.appendChild(nLi);
 
-					nLi = li.cloneNode(false);
-					Dom.addClass(nLi,"tradeOfferedDate");
-					nLi.innerHTML = Lib.formatServerDateTimeShort(trade.date_offered);
-					nUl.appendChild(nLi);
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"tradeOfferedDate");
+                    nLi.innerHTML = Lib.formatTime(Math.round(trade.delivery.duration));
+                    nUl.appendChild(nLi);
 
 					nLi = li.cloneNode(false);
 					Dom.addClass(nLi,"tradeAsking");

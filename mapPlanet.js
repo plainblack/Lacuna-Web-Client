@@ -46,6 +46,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 		"/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
 		"/thefttraining": Lacuna.buildings.TheftTraining,
 		"/themepark": Lacuna.buildings.ThemePark,
+        "/thedillonforge": Lacuna.buildings.TheDillonForge,
 		"/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
 		"/trade": Lacuna.buildings.Trade,
 		"/transporter": Lacuna.buildings.Transporter,

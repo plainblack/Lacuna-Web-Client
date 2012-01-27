@@ -1,5 +1,5 @@
 YAHOO.namespace("lacuna");
-
+ 
 if (typeof YAHOO.lacuna.About == "undefined" || !YAHOO.lacuna.About) {
 	
 (function(){

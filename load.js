@@ -322,6 +322,12 @@
 		fullpath: urlBuilder("buildingThemePark.js"),
 		requires : ["building"]
 	});
+    loader.addModule({
+        name: "thedillonforge",
+        type: "js",
+        fullpath: urlBuilder("buildingTheDillonForge.js"),
+        requires : ["building"]
+    });
 	loader.addModule({
 		name: "trade",
 		type: "js",
@@ -411,6 +417,7 @@
 			"templeofthedrajilites",
 			"thefttraining",
 			"themepark",
+            "thedillonforge",
 			"trade",
 			"transporter",
 			"waterstorage",
