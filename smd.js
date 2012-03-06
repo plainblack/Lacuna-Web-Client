@@ -3604,6 +3604,23 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+					"propose_members_only_excavation" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
+					"propose_evict_excavator" : {
+						"description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"platform_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+					},
 					"propose_members_only_colonization" : {
 						"description": "",
 						"parameters": [
