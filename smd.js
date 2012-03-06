@@ -257,6 +257,44 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false}
 						],
 						"returns":{"type":"object"}
+					},
+					"view_excavators" : {
+						"description": "Returns a list of the excavators currently controlled by this ministry.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+						/*
+						 {
+							"status" : { ... },
+							"max_excavators" : 1,
+							"excavators" : [
+								{
+									"id" : "id-goes-here",
+									"artifact" : 15, //Percentage chances
+									"glyph" : 16,
+									"plan" : 15,
+									"resource" : 60,
+									"body" : {
+										"id" : "id-goes-here",
+										"name" : "Kuiper",
+                                                                                ...
+									},
+								},
+								...
+							]
+						 }
+						*/
+					},
+					"abandon_excavator" : {
+						"description": "Close down an existing excavator site.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"excavator_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"} //status
 					}
 					
 				}
