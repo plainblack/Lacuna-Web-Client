@@ -72,7 +72,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                 num_incoming_enemy = this.num_incoming_enemy[this.planetId] || 0;
                 arr = [];
             if(num_incoming_enemy > 0) {
-                arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' incoming enemy ships!</span></li>']);
+                arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' foreign</span></li>']);
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     len = incoming_enemy.length;
                 for(var s=0; s<len; s++) {
@@ -89,7 +89,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                 }
             }
             if(num_incoming_ally > 0) {
-                arr = arr.concat(['<li><span style="color:#b0b">',num_incoming_ally,' incoming ally ships</span></li>']);
+                arr = arr.concat(['<li><span style="color:#b0b">',num_incoming_ally,' allied</span></li>']);
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     len = incoming_ally.length;
                 for(var s=0; s<len; s++) {
@@ -106,7 +106,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                 }
             }
             if(num_incoming_own > 0) {
-                arr = arr.concat(['<li><span style="color:#0f0">',num_incoming_own,' incoming own ships</span></li>']);
+                arr = arr.concat(['<li><span style="color:#0f0">',num_incoming_own,' own</span></li>']);
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     len = incoming_own.length;
                 for(var s=0; s<len; s++) {
