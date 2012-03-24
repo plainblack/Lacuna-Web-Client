@@ -288,6 +288,25 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				].join('');
 				Event.on("proposeMembersColonizeSubmit", "click", this.ColonizeOnly, this, true);
 			}
+			if(this.building.level >= 20) {
+				opts[opts.length] = '<option value="proposeMembersExcavation">Members Only Excavation</option>';
+				dis[dis.length] = [
+				'	<div id="proposeMembersExcavation" class="proposeOption" style="display:none;">',
+				'		Allow only members to excavate on bodies under this stations jurisdiction.<br />',
+				'		<button type="button" id="proposeMembersExcavationSubmit">Propose</button>',
+				'	</div>'
+				].join('');
+				Event.on("proposeMembersExcavationSubmit", "click", this.ExcavationOnly, this, true);
+			}
+			if(this.building.level >= 21) {
+				opts[opts.length] = '<option value="proposeEvictMining">Evict Excavator</option>';
+				dis[dis.length] = [
+				'	<div id="proposeEvictMining" class="proposeOption" style="display:none;">',
+				'		<label>Excavator:</label><select id="proposeEvictExcavatorJurisdiction"></select><br />',
+				'		<button type="button" id="proposeEvictExcavatorSubmit">Propose Eviction</button>',
+				'	</div>'
+				].join('');
+			}
 			if(this.building.level >= 25) {
 				opts[opts.length] = '<option value="proposeFireBfg">Fire BFG</option>';
 				dis[dis.length] = [
@@ -585,6 +604,27 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				success : function(o) {
 					this.rpcSuccess(o);
 					this.proposeMessage.innerHTML = "Proposal for Members Only Mining Rights successful.";
+					Lib.fadeOutElm(this.proposeMessage);
+					btn.disabled = false;
+				},
+				failure : function(o) {
+					btn.disabled = false;
+				},
+				scope:this
+			});
+		},
+		ExcavationOnly : function(e) {
+			var btn = Event.getTarget(e);
+			btn.disabled = true;
+			
+			this.service.propose_members_only_excavation({
+				session_id : Game.GetSession(''),
+				building_id : this.building.id
+			},
+			{
+				success : function(o) {
+					this.rpcSuccess(o);
+					this.proposeMessage.innerHTML = "Proposal for Members Only Excavation successful.";
 					Lib.fadeOutElm(this.proposeMessage);
 					btn.disabled = false;
 				},
