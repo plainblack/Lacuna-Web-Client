@@ -226,6 +226,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
               this.rpcSuccess(o);
               this.excavators = { 
                 max_excavators:o.result.max_excavators,
+                travel_e:o.result.travelling,
                 excavators:o.result.excavators
               };
               
@@ -250,7 +251,8 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
           
         if(excavators.length > 0) {
           info.innerHTML = ['Total of ', excavators.length - 1,
-                            ' excavators deployed.  This ministry can control a maximum of ',
+                            ' excavators deployed. ',
+                            this.excavators.travel_e, ' en route. This ministry can control a maximum of ',
                             this.excavators.max_excavators, 
                             ' excavators.'
           ].join('');
