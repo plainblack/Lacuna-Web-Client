@@ -557,7 +557,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 					(ship.fleet_speed > 0 && ship.fleet_speed < ship.speed) ? '		<li style="white-space:nowrap;"><label style="font-style:italic">Fleet Speed: </label>'+ship.fleet_speed+'</li>' : '',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',ship.speed,'</li>',
 					'		<li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',ship.hold_size,'</li>',
-					'		<li style="white-space:nowrap;"><label style="font-style:italic">Dock Size: </label>',ship.dock_size,'</li>',
+					'		<li style="white-space:nowrap;"><label style="font-style:italic">Berth Size: </label>',ship.berth_size,'</li>',
 					'		</ul>',
 					'		<div class="shipPayload" style="display:none;margin-top:5px"><div><label style="font-weight:bold;">Payload:</label></div>',
 					Lib.formatInlineList(ship.payload, 0, 3),
