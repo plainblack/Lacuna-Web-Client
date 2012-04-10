@@ -817,7 +817,12 @@ _getAddTab : function() {
                         var obj = this.ship_summary[x];
                         nLi = li.cloneNode(false);
                         nLi.ShipSummary = obj;
-                        nLi.innerHTML = ['<span class="tradeResourceName">',obj.name,' - ',obj.type.titleCaps('_',' '),' - Hold:',obj.hold_size,' - Speed:',obj.speed, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        nLi.innerHTML = ['<span class="tradeResourceName">', obj.name,' - ',obj.type.titleCaps('_',' '),
+                                         ' - Hold:',obj.hold_size,
+                                         ' - Berth:',obj.berth_level,
+                                         ' - Speed:',obj.speed,
+                                         ' (<label class="quantity">', obj.quantity,
+                                         '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
                         elm.appendChild(nLi);
                     }
                 }
@@ -872,7 +877,10 @@ _getAddTab : function() {
 							var obj = ships[x];
 							nOpt = opt.cloneNode(false);
 							nOpt.value = obj.id;
-							nOpt.innerHTML = [obj.name, ' (', obj.type_human, ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, ')'].join('');
+							nOpt.innerHTML = [obj.name, ' (', obj.type_human, ' - Hold:', obj.hold_size,
+                                                                          ' - Berth:', obj.berth_level,
+                                                                          ' - Speed:', obj.speed, ')'
+                                                                         ].join('');
 							nOpt.selected = selectedVal == obj.id;
 							elm.appendChild(nOpt);
 						}
@@ -1048,8 +1056,9 @@ _getAddTab : function() {
                 var sName = li.ShipSummary.name,
                     sType = li.ShipSummary.type,
                     sSize = li.ShipSummary.hold_size,
+                    sBerth = li.ShipSummary.berth_level,
                     sSpeed = li.ShipSummary.speed,
-                    id = ['addShipSummary', sName, sType, sSize, sSpeed].join('-').titleCaps(' ','_'),
+                    id = ['addShipSummary', sName, sType, sSize, sBerth, sSpeed].join('-').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
                 if(exists.length == 0) {
                     var item = document.createElement("li"),
@@ -1065,9 +1074,14 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {quantity:quantity, type:"ship", name:sName, ship_type:sType, hold_size:sSize, speed:sSpeed, size:this.shipSize};
-                    content.innerHTML = ['<span class="tradeResourceName">',sName, ' - ', sType.titleCaps('_',' '), ' - Hold:', sSize, ' - Speed:', sSpeed, ' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
-
+                    item.Object = {quantity:quantity, type:"ship", name:sName, ship_type:sType, hold_size:sSize, berth_level:sBerth, speed:sSpeed, size:this.shipSize};
+                    content.innerHTML = ['<span class="tradeResourceName">', sName, ' - ', sType.titleCaps('_',' '),
+                                         ' - Hold:', sSize,
+                                         ' - Berth:', sBerth,
+                                         ' - Speed:', sSpeed,
+                                         ' (<label class="quantity">',quantity,
+                                         '</label>)</span> <input type="text" style="width:75px;" value="',
+                                         quantity,'" /><button type="button">-</button>'].join('');
                     c.appendChild(item);
                     this.updateAddCargo(this.shipSize * quantity);
                 }
@@ -1323,7 +1337,13 @@ _getAddTab : function() {
                         var obj = this.ship_summary[x];
                         nLi = li.cloneNode(false);
                         nLi.ShipSummary = obj;
-                        nLi.innerHTML = ['<span class="tradeName">',obj.name, ' - ', obj.type.titleCaps('_',' '), ' - Hold:', obj.hold_size, ' - Speed:', obj.speed, ' (<label class="quantity">', obj.quantity, '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
+                        nLi.innerHTML = ['<span class="tradeName">',obj.name,
+                                         ' - ', obj.type.titleCaps('_',' '),
+                                         ' - Hold:', obj.hold_size,
+                                         ' - Berth:', obj.berth_level,
+                                         ' - Speed:', obj.speed,
+                                         ' (<label class="quantity">', obj.quantity,
+                                         '</label>)</span> <input type="text" style="width:75px;" /><button type="button">+</button>'].join('');
                         elm.appendChild(nLi);
                     }
                 }
@@ -1562,8 +1582,9 @@ _getAddTab : function() {
                 var sName = li.ShipSummary.name,
                     sType = li.ShipSummary.type,
                     sSize = li.ShipSummary.hold_size,
+                    sBerth = li.ShipSummary.berth_level,
                     sSpeed = li.ShipSummary.speed,
-                    id = ['pushShipSummary-', sName, sType, sSize, sSpeed].join('-').titleCaps(' ','_'),
+                    id = ['pushShipSummary-', sName, sType, sSize, sBerth, sSpeed].join('-').titleCaps(' ','_'),
                     exists = Sel.query("#"+id, c);
                 if(exists.length == 0) {
                     var item = document.createElement("li"),
@@ -1579,8 +1600,21 @@ _getAddTab : function() {
                         Event.purgeElement(item);
                         item.parentNode.removeChild(item);
                     }, this, true);
-                    item.Object = {quantity:quantity, type:"ship", name:sName, ship_type:sType, hold_size:sSize, speed:sSpeed, size:this.shipSize};
-                    content.innerHTML = ['<span class="tradeResourceName">',sName, ' - ', sType.titleCaps('_',' '), ' - Hold:', sSize, ' - Speed:', sSpeed, ' (<label class="quantity">',quantity,'</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
+                    item.Object = {quantity:quantity,
+                                   type:"ship",
+                                   name:sName,
+                                   ship_type:sType,
+                                   hold_size:sSize,
+                                   berth_level:sBerth,
+                                   speed:sSpeed,
+                                   size:this.shipSize};
+                    content.innerHTML = ['<span class="tradeResourceName">',sName, ' - ',
+                                         sType.titleCaps('_',' '),
+                                         ' - Hold:', sSize,
+                                         ' - Berth:', sBerth,
+                                         ' - Speed:', sSpeed,
+                                         ' (<label class="quantity">',quantity,
+                                         '</label>)</span> <input type="text" style="width:75px;" value="',quantity,'" /><button type="button">-</button>'].join('');
 
                     c.appendChild(item);
                     this.updatePushCargo(this.shipSize * quantity);
