@@ -27,23 +27,23 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     _getBHGTab : function() {
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
         '<div id="bhg">',
-        '   <div id="bhgTaskPick">',
-        '      Target <select id="bhgTargetType">',
-        '        <option value="body_name">Body Name</option>',
-        '        <option value="body_id">Body Id</option>',
-        '        <option value="xy">X,Y</option>',
-        '      </select>',
-        '      <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
-        '      <span id="bhgTargetSelectXY" style="display:none;">',
-        '        X:<input size="5" type="text" id="bhgTargetX" />',
-        '        Y:<input size="5" type="text" id="bhgTargetY" />',
-        '      </span>',
-        '      <button type="button" id="bhgGetActions">Get Actions</button>',
-        '   </div>',
-        '   <div id="bhgTaskInfo"></div>',
-        '   <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
+        '  Target <select id="bhgTargetType">',
+        '    <option value="body_name">Body Name</option>',
+        '    <option value="body_id">Body Id</option>',
+        '    <option value="xy">X,Y</option>',
+        '  </select>',
+        '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
+        '  <span id="bhgTargetSelectXY" style="display:none;">',
+        '    X:<input size="5" type="text" id="bhgTargetX" />',
+        '    Y:<input size="5" type="text" id="bhgTargetY" />',
+        '  </span>',
+        '  <button type="button" id="bhgGetActions">Get Actions</button>',
+        '  <div id="bhgTaskInfo"></div>',
+        '  <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
         '  Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
-        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="bhgActionsAvail"></ul></div>',
+        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '    <ul id="bhgActionsAvail"></ul>',
+        '  </div>',
         '  <div id="bhgResult"></div>',
         '</div>'
       ].join('')});
@@ -111,40 +111,43 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       }
       else {        
         Dom.get("bhgTargetDist").innerHTML = [
-          ' ; Range: ', actions[0].range, ' Dist: ', actions[0].dist, 'The Generate Button does not work'].join('');
+          ' ; Dist: ', actions[0].dist, ' Range: ', actions[0].range, ' <b>Note: The Generate Buttons do not work</b>'].join('');
         for(var i=0; i<actions.length; i++) {
           var task = actions[i],
               nLi = li.cloneNode(false);
+          var waste_out;
+          if (task.waste_cost < 1000000000) {
+            waste_out = [ Lib.formatNumber(task.waste_cost/1000000), 'M' ].join('');
+          }
+          else {
+            waste_out = [ Lib.formatNumber(task.waste_cost/1000000000), 'B' ].join('');
+          }
             
           nLi.Task = task;
-          nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:80%">',
-          task.success > 0 ? '    <button type="button" id="bhgGenerateButton">Generate</button>' : '',
-          '    <label style="font-weight:bold;">',task.name,'</label>',
-          task.name === "Change Type" ? 
-          '  <span id="bhgChangeTypeSelectText"><b>:</b><input type="number" id="bhgChangeTypeText" /></span>' : '',
-          '    <div>',
-          '      <span>Base Chance:<span>',100-task.base_fail,'</span></span>%,',
-          '      <span>Success Chance:<span>',task.success,'</span></span>%,',
-          '      <span>Waste Needed:<span>',Lib.formatNumber(task.waste_cost),' </span></span>',
-          '      <span>Recovery Time:<span>',Lib.formatTime(task.recovery),'</span></span>',
-          '    </div>',
-          '    <div>',
-          '    </div>',
-          '  </div>',
-          '</div>'].join('');
-          
-
-          if(task.success > 0) {
-            if (task.name === "Change Type") {
-                Dom.setStyle("bhgChangeTypeSelectText", "display", "none");
-            }
-          }
+          nLi.innerHTML = [
+            '<div class="yui-gd" style="margin-bottom:2px;">',
+            '  <div style="border:2px gold solid;" class="yui-u" style="width:80%">',
+                 task.success > 0 ?
+            '    <button type="button" id="bhgGenerateButton">Generate</button>' : '',
+            '    <label style="font-weight:bold;"><span id="bhgTaskName">',task.name,'</span></label>',
+                 task.name === "Change Type" ? 
+            '    <span id="bhgChangeTypeSelectText"><b>:</b><input type="number" id="bhgChangeTypeText" /></span>' : '',
+            '    <div>',
+            '      Base Chance: ',100-task.base_fail,'%,',
+            '      Success Chance: ',task.success,'%,<br>',
+            '      Waste Needed: ',waste_out,
+            '      Recovery Time: ',Lib.formatTime(task.recovery),
+            '    </div>',
+            '  <div>',
+            '</div>'].join('');
           
           details.appendChild(nLi);
         }
       }
       detailsParent.appendChild(details); //add back as child
+//      Event.on("bhgGenerateButton",
+//               "click",
+//               this.bhgGenerate(target), true);
 
       //wait for tab to display first
       setTimeout(function() {
@@ -155,11 +158,12 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       },10);
       return this.tab;
     },
-    bhgGenerate   : function(oself, mytask, target) {
+    bhgGenerate   : function(target) {
        var params = {};
 
       
       params.newtype = 11;
+      var mytask = Lib.getSelectedOptionValue("bhgTaskName");
       if (mytask === "Change Type") {
         params.newtype = Lib.getSelectedOptionValue("bhgChangeTypeText");
       }
@@ -172,7 +176,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       if (target) {
         this.service.generate_singularity({
           session_id:Game.GetSession(),
-          building_id:oself.building.id,
+          building_id:this.building.id,
           target:target,
           task:mytask,
           params:params,
