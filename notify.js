@@ -1,69 +1,69 @@
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
-	
+    
 (function(){
-	var Lang = YAHOO.lang,
-		Util = YAHOO.util,
-		Dom = Util.Dom,
-		Event = Util.Event,
-		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game,
-		Lib = Lacuna.Library;
-		
-	var Notify = function(){
+    var Lang = YAHOO.lang,
+        Util = YAHOO.util,
+        Dom = Util.Dom,
+        Event = Util.Event,
+        Lacuna = YAHOO.lacuna,
+        Game = Lacuna.Game,
+        Lib = Lacuna.Library;
+        
+    var Notify = function(){
         this.incoming_own = {};
         this.num_incoming_own = {};
         this.incoming_ally = {};
         this.num_incoming_ally = {};
         this.incoming_enemy = {};
         this.num_incoming_enemy = {};
-	};
-	Notify.prototype = {
-		_createDisplay : function() {
-			if(!this.Display) {
-				var container = document.createElement("div");
-				container.id = "notify";
-				Dom.addClass(container, Lib.Styles.HIDDEN);
-				Dom.addClass(container, "nofooter");
-				container.innerHTML = this._getHtml();
-				document.body.insertBefore(container, document.body.firstChild);
-				
-				this.Display = new YAHOO.widget.Panel("notify", {
-					constraintoviewport:true,
-					visible:false,
-					draggable:true,
-					effect:Game.GetContainerEffect(),
-					close:false,
-					underlay:false,
-					modal:false,
-					width:"180px",
-					context:["header","tr","br", ["beforeShow", "windowResize"], [0,40]]
-				});
-				this.Display.renderEvent.subscribe(function(){
-					this.notifyList = Dom.get('notifyList');
-					this.notify = Dom.get("notify");
-					
-					Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
-				});
-				this.Display.showEvent.subscribe(function(){
-					Dom.setStyle(this.notifyList.parentNode, "max-height", (Game.GetSize().h - 125) + "px");
-				});
-				this.Display.render();
-			}
-		},
-		_getHtml : function() {
-			return [
-			'	<div class="hd" style="background:transparent;">Incoming Ships!</div>',
-			'	<div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
-			'		<div style="overflow:auto;">',
-			'			<ul id="notifyList"></ul>',
-			'		</div>',
-			'	</div>'
-			].join('');
-		},
-		_updating : function() {
-			var list = this.Display.notifyList;
+    };
+    Notify.prototype = {
+        _createDisplay : function() {
+            if(!this.Display) {
+                var container = document.createElement("div");
+                container.id = "notify";
+                Dom.addClass(container, Lib.Styles.HIDDEN);
+                Dom.addClass(container, "nofooter");
+                container.innerHTML = this._getHtml();
+                document.body.insertBefore(container, document.body.firstChild);
+                
+                this.Display = new YAHOO.widget.Panel("notify", {
+                    constraintoviewport:true,
+                    visible:false,
+                    draggable:true,
+                    effect:Game.GetContainerEffect(),
+                    close:false,
+                    underlay:false,
+                    modal:false,
+                    width:"180px",
+                    context:["header","tr","br", ["beforeShow", "windowResize"], [0,40]]
+                });
+                this.Display.renderEvent.subscribe(function(){
+                    this.notifyList = Dom.get('notifyList');
+                    this.notify = Dom.get("notify");
+                    
+                    Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
+                });
+                this.Display.showEvent.subscribe(function(){
+                    Dom.setStyle(this.notifyList.parentNode, "max-height", (Game.GetSize().h - 125) + "px");
+                });
+                this.Display.render();
+            }
+        },
+        _getHtml : function() {
+            return [
+            '    <div class="hd" style="background:transparent;">Incoming Ships!</div>',
+            '    <div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
+            '        <div style="overflow:auto;">',
+            '            <ul id="notifyList"></ul>',
+            '        </div>',
+            '    </div>'
+            ].join('');
+        },
+        _updating : function() {
+            var list = this.Display.notifyList;
             var incoming_own = this.incoming_own[this.planetId] || [],
                 incoming_ally = this.incoming_ally[this.planetId] || [],
                 incoming_enemy = this.incoming_enemy[this.planetId] || [],
@@ -122,23 +122,23 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                     arr = arr.concat(['<li><span style="color:#0f0;">',arrTime,'</span></li>']);
                 }
             }
-			
-			list.innerHTML = arr.join('');
-			if(num_incoming_own + num_incoming_ally + num_incoming_enemy == 0) {
-				Game.onTick.unsubscribe(this._updating);
-				delete this.subscribed;
+            
+            list.innerHTML = arr.join('');
+            if(num_incoming_own + num_incoming_ally + num_incoming_enemy == 0) {
+                Game.onTick.unsubscribe(this._updating);
+                delete this.subscribed;
                 this.incoming_own = {};
                 this.num_incoming_own = {};
                 this.incoming_ally = {};
                 this.num_incoming_ally = {};
                 this.incoming_enemy = {};
                 this.num_incoming_enemy = {};
-				this.Hide();
-			}
-			else {
-				this.Display.show();
-			}
-		},
+                this.Hide();
+            }
+            else {
+                this.Display.show();
+            }
+        },
         Load : function(planet) {
             var incoming_own        = planet.incoming_own_ships || [],
                 incoming_ally       = planet.incoming_ally_ships || [],
@@ -169,28 +169,28 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             }
         },
 
-		Show : function(planetId) {
-			this.planetId = planetId;
-			if(this.Display) {
-				if(this.subscribed && (this.num_incoming_own[planetId] + this.num_incoming_ally[planetId] + this.num_incoming_enemy[planetId] > 0)) {
-					this.Display.show();
-					this.Display.bringToTop();
-				}
-				else {
-					this.Display.hide();
-				}
-			}
-		},
-		Hide : function() {
-			if(this.Display) {
-				this.Display.hide();
-			}
-			delete this.planetId;
-		}
-	};
-	
-	Lacuna.Notify = new Notify();
-		
+        Show : function(planetId) {
+            this.planetId = planetId;
+            if(this.Display) {
+                if(this.subscribed && (this.num_incoming_own[planetId] + this.num_incoming_ally[planetId] + this.num_incoming_enemy[planetId] > 0)) {
+                    this.Display.show();
+                    this.Display.bringToTop();
+                }
+                else {
+                    this.Display.hide();
+                }
+            }
+        },
+        Hide : function() {
+            if(this.Display) {
+                this.Display.hide();
+            }
+            delete this.planetId;
+        }
+    };
+    
+    Lacuna.Notify = new Notify();
+        
 })();
 YAHOO.register("notify", YAHOO.lacuna.Notify, {version: "1", build: "0"}); 
 
