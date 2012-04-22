@@ -299,6 +299,35 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 					
 				}
 			},
+                        BlackHoleGenerator : {
+				"SMDVersion":"2.0",
+				"description": "Black Hole Generator",
+				"envelope":"JSON-RPC-2.0",
+				"transport":"POST",
+				"target":"/blackholegenerator",
+				
+				"services": {
+					"get_actions_for" : {
+						"description": "Provides a list of actions that the BHG can do. Use with generate_singularity.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target", "type":"object", "optional":false}
+						],
+						"returns":{"type":"object"},
+					},
+					"generate_singularity" : {
+						"description": "Performs action on specified target.",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+							{"name":"target", "type":"object", "optional":false},
+							{"name":"planet_type", "type":"number", "optional":true}
+						],
+						"returns":{"type":"object"},
+					}
+				}
+                        },
 			Capitol : {
 				"SMDVersion":"2.0",
 				"description": "Capitol",
@@ -1225,7 +1254,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"id" : "id-goes-here",
 									"task" : "Mining",
 									"speed" : 350,
-									"hold_size" : 5600
+									"hold_size" : 5600,
+									"berth_level" : 1
 								},
 								...
 							],
@@ -1733,6 +1763,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 										"id" : "id-goes-here",
 										"name" : "CS4",
 										"hold_size" : 1100,
+										"berth_level" : 1,
 										"speed" : 400,
 										"type" : "cargo_ship",
 										...
@@ -1867,6 +1898,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"speed" : "1200",
 									"stealth" : "0",
 									"hold_size" : "0",
+									"berth_level" : "1",
 									"date_started" : "01 31 2010 13:09:05 +0600",
 									"date_available" : "02 01 2010 10:08:33 +0600",
 									"date_arrives" : "02 01 2010 10:08:33 +0600",
@@ -1893,6 +1925,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"speed" : "700",
 									"stealth" : "0",
 									"hold_size" : "0",
+									"berth_level" : "1",
 									"date_started" : "01 31 2010 13:09:05 +0600",
 									"date_available" : "01 31 2010 13:09:05 +0600"
 								},
@@ -2323,6 +2356,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"name" : "Enterprise",
 									"type" : "probe",
 									"hold_size" : 0,
+									"berth_level" : 1,
 									"speed" : 3900
 								},
 								...
@@ -2564,6 +2598,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 									"name" : "Enterprise",
 									"type" : "probe",
 									"hold_size" : 0,
+									"berth_level" : 1,
 									"speed" : 3900
 								},
 								...

@@ -1020,6 +1020,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 					'		</div>',
 					'		<div><label style="font-weight:bold;">Attributes:</label>',
 					'			<span>Speed:<span>',ship.speed,'</span></span>,',
+					'			<span>Berth Level:<span>',ship.berth_level,'</span></span>,',
 					'			<span>Hold Size:<span>',ship.hold_size,'</span></span>,',
 					'			<span>Stealth:<span>',ship.stealth,'</span></span>',
 					'			<span>Combat:<span>',ship.combat,'</span></span>',
