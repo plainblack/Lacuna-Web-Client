@@ -31,10 +31,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 			});
 			userMenu.addItems([
                                 { text: "Alliance Map", url: "/starmap/", target:"_blank" },
-                                { text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_blank" },
-				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" },
+				{ text: "Server Clock", onclick: { fn: Lacuna.Info.Clock.Show, scope:Lacuna.Info.Clock } },
 				{ text: "Ideas", url: "http://ideas.lacunaexpanse.com/", target:"_blank" },
-				{ text: "Server Clock", onclick: { fn: Lacuna.Info.Clock.Show, scope:Lacuna.Info.Clock } }
+				{ text: "Help", url: "http://www.lacunaexpanse.com/help/", target:"_blank" },
+                                { text: "Wiki", url: "http://community.lacunaexpanse.com/wiki/", target:"_blank" },
+                                { text: "Changes", url: "/changes.txt", target:"_blank" }
 			]);
 			userMenu.subscribe("beforeShow", function() {
 				if (this.getRoot() == this) {
