@@ -314,7 +314,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"target", "type":"object", "optional":false}
 						],
-						"returns":{"type":"object"},
+						"returns":{"type":"object"}
 					},
 					"generate_singularity" : {
 						"description": "Performs action on specified target.",
@@ -324,7 +324,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"target", "type":"object", "optional":false},
 							{"name":"planet_type", "type":"number", "optional":true}
 						],
-						"returns":{"type":"object"},
+						"returns":{"type":"object"}
 					}
 				}
                         },
