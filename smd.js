@@ -322,6 +322,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false},
 							{"name":"target", "type":"object", "optional":false},
+                            {"name":"task_name", "type":"string", "optional":false},
 							{"name":"planet_type", "type":"number", "optional":true}
 						],
 						"returns":{"type":"object"}
