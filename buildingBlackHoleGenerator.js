@@ -125,11 +125,12 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           }
           
           var canGenerate = 1;
-          if ( task.success == 0 ) {
-            canGenerate = 0;
-          }
+          
           if ( Game.GetCurrentPlanet().waste_stored < task.waste_cost ) {
             canGenerate = 0;
+          }
+          else if ( task.success == 0 ) {
+            continue;
           }
           
           var typeSelector = "";
@@ -149,8 +150,6 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           nLi.innerHTML = [
             '<div class="yui-gd" style="margin-bottom:2px;">',
             '  <div style="border:2px gold solid;" class="yui-u" style="width:80%">',
-                 canGenerate == 1 ?
-            '    <button type="button">Generate</button>' : '',
             '    <label style="font-weight:bold;">',task.name,'</label>',
                  typeSelector,
             '    <div>',
@@ -158,6 +157,9 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '      Success Chance: ',task.success,'%,<br>',
             '      Waste Needed: ',waste_out,
             '      Recovery Time: ',Lib.formatTime(task.recovery),
+                 canGenerate == 1
+                ? '<button type="button" style="float: right;">Generate</button>'
+                : '<div style="float: right; font-weight:bold;">Insufficient Waste</div>',
             '    </div>',
             '  <div>',
             '</div>'].join('');
