@@ -135,7 +135,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           var typeSelector = "";
           if ( task.name === "Change Type" ) {
-            typeSelector = '<span><b>:</b><select id="bhgChangeTypeSelect" />';
+            typeSelector = '<b>New Type:</b> <select id="bhgChangeTypeSelect" />';
             
             for (var j=1; j<=20; j++) {
               typeSelector = typeSelector + [
@@ -143,25 +143,26 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
               ].join('');
             }
             
-            typeSelector = typeSelector + '</select></span>';
+            typeSelector = typeSelector + '</select>';
           }
           
           nLi.Task = task;
           nLi.innerHTML = [
-            '<div class="yui-gd" style="margin-bottom:2px;">',
-            '  <div style="border:2px gold solid;" class="yui-u" style="width:80%">',
+            '<div class="yui-gd" style="margin-bottom:2px; border: 1px white solid; padding: 2px">',
+            '  <div class="yui-u first" style="width:70%">',
             '    <label style="font-weight:bold;">',task.name,'</label>',
-                 typeSelector,
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
-            '      Success Chance: ',task.success,'%,<br>',
+            '      Success Chance: ',task.success,'%,<br/>',
             '      Waste Needed: ',waste_out,
             '      Recovery Time: ',Lib.formatTime(task.recovery),
-                 canGenerate == 1
-                ? '<button type="button" style="float: right;">Generate</button>'
-                : '<div style="float: right; font-weight:bold;">Insufficient Waste</div>',
             '    </div>',
-            '  <div>',
+            '  </div>',
+            '  <div class="yui-u" style="width:25%; text-align:right;">',
+                 canGenerate == 1
+                   ? typeSelector + '<button type="button">Generate</button>'
+                   : '<b>Insufficient Waste</b>',
+            '  </div>',
             '</div>'].join('');
           
           details.appendChild(nLi);
@@ -236,7 +237,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       if (effect.fail) {
         var nLi = li.cloneNode(false);
         nLi.innerHTML = [ '<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:100%">',
+          '  <div style="border:1px white solid;" class="yui-u" style="width:100%">',
           '    <label style="font-weight:bold;">Failure</label>',
           '    <div>',effect.fail.message,' at ',effect.fail.name,'</div>',
           '  </div></div>',
@@ -267,7 +268,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     },
     bhgParseResult : function(result, type) {
         var out = [ '<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:100%">',
+          '  <div style="border:1px white solid;" class="yui-u" style="width:100%">',
           '    <label style="font-weight:bold;">',type,'</label>',
           '    <div>'
         ].join('');
