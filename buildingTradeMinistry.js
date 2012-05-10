@@ -37,8 +37,8 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		if(this.building.level > 0) {
 			this.subscribe("onLoad", function() {
 				this.getStoredResources();
-				this.mine.subscribe("activeChange", this.getMine, this, true);
-				this.avail.subscribe("activeChange", this.getAvailable, this, true);
+				this.mine.subscribe("activeChange", this.getMyTrades, this, true);
+				this.avail.subscribe("activeChange", this.getAvailableTrades, this, true);
 				this.push.subscribe("activeChange", function(e) {
 					if(e.newValue) {
 						this.getPushShips();
@@ -167,7 +167,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getChildTabs : function() {
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
-			return [this._getPushTab(), this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+			return [this._getPushTab(), this._getAvailableTradesTab(), this._getMyTradesTab(), this._getAddTradeTab()];
 			},
 _getPushTab : function() {
 this.push = new YAHOO.widget.Tab({ label: "Push", content: [
@@ -230,7 +230,7 @@ Event.on("tradePushSend", "click", this.Push, this, true);
 
 return this.push;
 			  },
-_getAvailTab : function() {
+_getAvailableTradesTab : function() {
 				   this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
 						   '<div>',
 						   '	<div style="border-bottom: 1px solid #52ACFF; padding-bottom: 5px; margin-bottom: 5px;"><label>Filter:</label><select id="tradeFilter"><option value="">All</option><option value="energy">Energy</option><option value="food">Food</option><option value="ore">Ore</option>',
@@ -248,11 +248,11 @@ _getAvailTab : function() {
 						   '	<div id="tradeAvailablePaginator"></div>',
 						   '</div>'].join('')});
 
-				   Event.on("tradeFilter", "change", function(e) { this.getAvailable({newValue:true}); }, this, true);
+				   Event.on("tradeFilter", "change", function(e) { this.getAvailableTrades({newValue:true}); }, this, true);
 
 				   return this.avail;
 			   },
-_getMineTab : function() {
+_getMyTradesTab : function() {
 				  this.mine = new YAHOO.widget.Tab({ label: "My Trades", content: ['<div class="myTrades">',
 						  '	<ul class="tradeHeader tradeInfo clearafter">',
 						  '		<li class="tradeOfferedDate">Offered Date</li>',
@@ -266,7 +266,7 @@ _getMineTab : function() {
 
 				  return this.mine;
 			  },
-_getAddTab : function() {
+_getAddTradeTab : function() {
 				 this.add = new YAHOO.widget.Tab({ label: "Add Trade", content: [
 						 '<div id="aHt"><div class="tradeStash yui-g">',
 						 '	<div class="yui-u first">',
@@ -401,7 +401,7 @@ _getAddTab : function() {
 		},
 		
 		//View Available
-		getAvailable : function(e) {
+		getAvailableTrades : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
 				var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:1},
@@ -544,7 +544,7 @@ _getAddTab : function() {
 					YAHOO.log(o, "info", "Trade.accept_trade.success");
 					this.Self.rpcSuccess(o);
 					//force get the new availabe list after accepting so we get a new captcha
-					this.Self.getAvailable({newValue:true});
+					this.Self.getAvailableTrades({newValue:true});
 					Lacuna.Pulser.Hide();
 				},
 				scope:this
@@ -575,7 +575,7 @@ _getAddTab : function() {
 		
 		
 		//View Mine
-		getMine : function(e) {
+		getMyTrades : function(e) {
 			if(e.newValue) {
 				Lacuna.Pulser.Show();
 				this.service.view_my_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
