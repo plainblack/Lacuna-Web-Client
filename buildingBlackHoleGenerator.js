@@ -223,9 +223,6 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           scope:this
           });
       }
-      else {
-        btn.disabled = false;
-      }
     },
     PopulateBHGResult : function(target, effect) {
       var details = Dom.get("bhgResult"),
