@@ -44,7 +44,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
         '    <ul id="bhgActionsAvail"></ul>',
         '  </div>',
-        '  <div id="bhgResult"></div>',
+        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '    <ul id="bhgResult"></ul>',
         '</div>'
       ].join('')});
 
@@ -73,12 +74,10 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         target.x = Dom.get("bhgTargetX").value;
         target.y = Dom.get("bhgTargetY").value;
         Dom.get("bhgTargetNote").innerHTML = ['X: ', target.x, ', Y: ', target.y].join('');
-        target.method = "xy";
       }
       else {
         target[type] = Dom.get("bhgTargetText").value;
         Dom.get("bhgTargetNote").innerHTML = target[type];
-        target.method = type;
       }
       
       this.service.get_actions_for({
@@ -105,13 +104,15 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       details.innerHTML = "";
       
       Dom.setStyle("bhgActions", "display", "");
+      Dom.setStyle(detailsParent, "display", "");
+      Dom.setStyle( Dom.get("bhgResult").parentNode, "display", "none");
       
       if(actions.length === 0) {
         details.innerHTML = "No available actions for singularity.";
       }
       else {        
         Dom.get("bhgTargetDist").innerHTML = [
-          ' ; Dist: ', actions[0].dist, ' Range: ', actions[0].range, ' <b>Note: The Generate Buttons do not work</b>'].join('');
+          ' ; Dist: ', actions[0].dist, ' Range: ', actions[0].range].join('');
         for(var i=0; i<actions.length; i++) {
           var task = actions[i],
               nLi = li.cloneNode(false);
@@ -122,16 +123,36 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           else {
             waste_out = [ Lib.formatNumber(task.waste_cost/1000000000), 'B' ].join('');
           }
+          
+          var canGenerate = 1;
+          if ( task.success == 0 ) {
+            canGenerate = 0;
+          }
+          if ( Game.GetCurrentPlanet().waste_stored < task.waste_cost ) {
+            canGenerate = 0;
+          }
+          
+          var typeSelector = "";
+          if ( task.name === "Change Type" ) {
+            typeSelector = '<span><b>:</b><select id="bhgChangeTypeSelect" />';
             
+            for (var j=1; j<=20; j++) {
+              typeSelector = typeSelector + [
+                '<option value="', j, '">', j, '</option>'
+              ].join('');
+            }
+            
+            typeSelector = typeSelector + '</select></span>';
+          }
+          
           nLi.Task = task;
           nLi.innerHTML = [
             '<div class="yui-gd" style="margin-bottom:2px;">',
             '  <div style="border:2px gold solid;" class="yui-u" style="width:80%">',
-                 task.success > 0 ?
-            '    <button type="button" id="bhgGenerateButton">Generate</button>' : '',
-            '    <label style="font-weight:bold;"><span id="bhgTaskName">',task.name,'</span></label>',
-                 task.name === "Change Type" ? 
-            '    <span id="bhgChangeTypeSelectText"><b>:</b><input type="number" id="bhgChangeTypeText" /></span>' : '',
+                 canGenerate == 1 ?
+            '    <button type="button">Generate</button>' : '',
+            '    <label style="font-weight:bold;">',task.name,'</label>',
+                 typeSelector,
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
             '      Success Chance: ',task.success,'%,<br>',
@@ -142,12 +163,17 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '</div>'].join('');
           
           details.appendChild(nLi);
+          
+          if ( task.success > 1 ) {
+            Event.on(Sel.query("button", nLi, true),
+                     "click",
+                     this.bhgGenerate,
+                     {Self:this, Target:target, Task:task, building_id: this.building_id},
+                     true);
+          }
         }
       }
       detailsParent.appendChild(details); //add back as child
-//      Event.on("bhgGenerateButton",
-//               "click",
-//               this.bhgGenerate(target), true);
 
       //wait for tab to display first
       setTimeout(function() {
@@ -158,36 +184,34 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       },10);
       return this.tab;
     },
-    bhgGenerate   : function(target) {
-       var params = {};
-
+    bhgGenerate   : function(e) {
+      var oSelf = this.Self,
+        target = this.Target,
+        task = this.Task;
       
-      params.newtype = 11;
-      var mytask = Lib.getSelectedOptionValue("bhgTaskName");
-      if (mytask === "Change Type") {
-        params.newtype = Lib.getSelectedOptionValue("bhgChangeTypeText");
-      }
-      else {
-        params.newtype = 9;
-      }
-      alert('task: ' + mytask + '\n' +
-            'target: ' + target.method + '\n' +
-            'params: ' + params.newtype);
       if (target) {
-        this.service.generate_singularity({
+        var serviceParams = {
           session_id:Game.GetSession(),
-          building_id:this.building.id,
+          building_id:oSelf.building.id,
           target:target,
-          task:mytask,
-          params:params,
-        }, {
-        success : function(o){
-          Lacuna.Pulser.Hide();
-          this.rpcSuccess(o);
-          this.PopulateBHGResult(target, o.result.effect);
-        },
+          task_name:task.name
+        };
+        
+        if (task.name === "Change Type") {
+          serviceParams.planet_type = {
+            newtype: Lib.getSelectedOptionValue("bhgChangeTypeSelect")
+          };
+        }
+        
+        this.Self.service.generate_singularity(
+          serviceParams,
+          {success : function(o){
+            Lacuna.Pulser.Hide();
+            this.Self.rpcSuccess(o);
+            this.Self.PopulateBHGResult(target, o.result.effect);
+          },
           scope:this
-        });
+          });
       }
       else {
         btn.disabled = false;
@@ -202,29 +226,33 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       details = detailsParent.removeChild(details); //remove from DOM to make this faster
       details.innerHTML = "";
       
-      Dom.setStyle("bhgResult", "display", "");
+      Dom.setStyle( Dom.get("bhgActionsAvail").parentNode, "display", "none");
+      
+      Dom.setStyle(detailsParent, "display", "");
       detailsParent.appendChild(details); //add back as child
       
-      if (effect.target) {
-        var details = effect.target;
-        nLi.innerHTML = [ '<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:67%">',
-          '    <div><label style="font-weight:bold;">',details.message,'</label></div>',
-        ].join('');
-      }
-      if (effect.side) {
-        var details = effect.target;
-        nLi.innerHTML = [ '<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:67%">',
-          '    <div><label style="font-weight:bold;">',details.message,'</label></div>',
-        ].join('');
-      }
       if (effect.fail) {
-        var details = effect.target;
+        var nLi = li.cloneNode(false);
         nLi.innerHTML = [ '<div class="yui-gd" style="margin-bottom:2px;">',
-          '  <div style="border:2px gold solid;" class="yui-u" style="width:67%">',
-          '    <div><label style="font-weight:bold;">',details.message,'</label></div>',
+          '  <div style="border:2px gold solid;" class="yui-u" style="width:100%">',
+          '    <label style="font-weight:bold;">Failure</label>',
+          '    <div>',effect.fail.message,' at ',effect.fail.name,'</div>',
+          '  </div></div>',
         ].join('');
+        details.appendChild(nLi);
+      }
+      else {
+        // success
+        if (effect.target) {
+          var nLi = li.cloneNode(false);
+          nLi.innerHTML = this.bhgParseResult(effect.target, 'Success');
+          details.appendChild(nLi);
+        }
+        if (effect.side) {
+          var nLi = li.cloneNode(false);
+          nLi.innerHTML = this.bhgParseResult(effect.side, 'Side-Effect');
+          details.appendChild(nLi);
+        }
       }
               
       //wait for tab to display first
@@ -234,6 +262,54 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         Dom.setStyle(detailsParent,"height",Ht + "px");
         Dom.setStyle(detailsParent,"overflow-y","auto");
       },10);
+    },
+    bhgParseResult : function(result, type) {
+        var out = [ '<div class="yui-gd" style="margin-bottom:2px;">',
+          '  <div style="border:2px gold solid;" class="yui-u" style="width:100%">',
+          '    <label style="font-weight:bold;">',type,'</label>',
+          '    <div>'
+        ].join('');
+        
+        if ( result.message === "Swapped Places" ) {
+            out = out + [
+                result.message, ' with ', result.swapname,
+                ' at orbit ', result.orbit
+            ].join('');
+        }
+        else if ( result.message === "Changed Size" ) {
+            out = out + [
+                result.name, ' changed size from ', result.old_size, ' to ', result.size
+            ].join('');
+        }
+        else if ( result.message === "Changed Type" ) {
+            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            out = out + [
+                result.name, ' changed to type ', newtype, ' planet'
+            ].join('');
+        }
+        else if ( result.message === "Made Asteroid" ) {
+            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            out = out + [
+                result.name, ' is now a type ', newtype, ' asteroid of size ',
+                result.size
+            ].join('');
+        }
+        else if ( result.message === "Made Planet" ) {
+            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            out = out + [
+                result.name, ' is now a type ', newtype, ' planet of size ',
+                result.size
+            ].join('');
+        }
+        else {
+            out = out + [
+                result.message, ' at ', result.name
+            ].join('');
+        }
+        
+        out = out + '  </div></div></div>';
+        
+        return out;
     }
   });
   
