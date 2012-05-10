@@ -2495,6 +2495,50 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
 					},
+                    "get_waste_ships" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "view_waste_chains" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "update_waste_chain" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"waste_chain_id", "type":"number", "optional":false},
+                            {"name":"waste_hour", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "add_waste_ship_to_fleet" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"ship_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "remove_waste_ship_from_fleet" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"ship_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
 					"get_stored_resources" : {
 						"description": "Returns a list of the resources you have stored to make it easier to identify what you want to trade.",
 						"parameters": [
