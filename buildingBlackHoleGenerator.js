@@ -135,7 +135,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           var typeSelector = "";
           if ( task.name === "Change Type" ) {
-            typeSelector = '<b>New Type:</b> <select id="bhgChangeTypeSelect" />';
+            typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New Planet Type</option>';
             
             for (var j=1; j<=20; j++) {
               typeSelector = typeSelector + [
@@ -201,8 +201,15 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         };
         
         if (task.name === "Change Type") {
+          var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
+          
+          if ( selectValue == "" ) {
+            alert("Please select New Planet Type");
+            return;
+          }
+          
           serviceParams.planet_type = {
-            newtype: Lib.getSelectedOptionValue("bhgChangeTypeSelect")
+            newtype: selectValue
           };
         }
         
