@@ -167,7 +167,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getChildTabs : function() {
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
-			return [this._getPushTab(), this._getAvailableTradesTab(), this._getMyTradesTab(), this._getAddTradeTab()];
+			return [this._getPushTab(), this._getAvailableTradesTab(), this._getMyTradesTab(), this._getAddTradeTab(), this._getWasteChainTab()];
 			},
 _getPushTab : function() {
 this.push = new YAHOO.widget.Tab({ label: "Push", content: [
@@ -308,6 +308,25 @@ _getAddTradeTab : function() {
 			Event.on("tradeAdd", "click", this.AddTrade, this, true);
 			return this.add;
 		},
+_getWasteChainTab : function() {
+    this.wasteChainTab = new YAHOO.widget.Tab({ label: "Waste Chain", content: [
+        '<div id="wasteChainDetails" style="margin-bottom: 2px"></div>',
+        '<div id="wasteChainShips">',
+        '	<ul class="shipHeader shipInfo clearafter">',
+        '		<li class="shipName">Name</li>',
+        '		<li class="shipTask">Task</li>',
+        '		<li class="shipSpeed">Speed</li>',
+        '		<li class="shipHold">Hold</li>',
+        '		<li class="shipAction"></li>',
+        '	</ul>',
+        '	<div><div id="wasteChainShipsDetails"></div></div>',
+        '</div>'
+    ].join('')});
+    
+    this.wasteChainTab.subscribe("activeChange", this.viewWasteChainInfo, this, true);
+
+    return this.wasteChainTab;
+},
 		
         getGlyphSummary : function(force) {
             if(force || !this.glyph_summary) {
@@ -1773,6 +1792,244 @@ _getAddTradeTab : function() {
 					scope:this
 				});
 			}
+		},
+        viewWasteChainInfo : function(e) {
+			if(e.newValue) {
+                this.WasteChainDetails();
+                
+				if(!this.waste_chain_ships) {
+					this.WasteChainShipsView();
+				}
+				else {
+					this.WasteChainShipsPopulate();
+				}
+			}
+		},
+        WasteChainDetails : function() {
+            Lacuna.Pulser.Show();
+			this.service.view_waste_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
+				success : function(o){
+					YAHOO.log(o, "info", "Trade.WasteChainDetails.success");
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					this.waste_chain = o.result.waste_chain[0];
+					
+					this.WasteChainDetailsPopulate();
+				},
+				scope:this
+			});
+        },
+        WasteChainDetailsPopulate : function() {
+            var waste_chain = this.waste_chain,
+                details = Dom.get("wasteChainDetails");
+            
+            if (details) {
+                details.innerHTML = [
+                    '<b>Local Star Waste Chain</b><br/>',
+                    'Waste/hr: ',
+                    '<input id="chainWasteHourInput" type="text" value="', waste_chain.waste_hour, '"/> ',
+                    '<button id="chainWasteHourButton">Update</button>',
+                    Game.GetCurrentPlanet().waste_hour > 1
+                      ? '<button id="chainWasteEqualizeButton">Add Current Waste Production to Chain</button><br/>'
+                      : '<br/>',
+                    'Percent Transferred: ', waste_chain.percent_transferred, '&#37;',
+                    '<hr>'
+                ].join('');
+                
+                Event.on("chainWasteHourButton", "click", this.WasteChainUpdateWasteHour, {Self:this}, true);
+                Event.on("chainWasteEqualizeButton", "click", this.WasteChainEqualize, {Self:this}, true);
+            }
+        },
+        WasteChainUpdateWasteHour : function() {
+            var waste_chain_id = this.Self.waste_chain.id,
+                waste_hour = Dom.get("chainWasteHourInput").value;
+            
+            Lacuna.Pulser.Show();
+			this.Self.service.update_waste_chain({
+                session_id: Game.GetSession(),
+                building_id: this.Self.building.id,
+                waste_chain_id: waste_chain_id,
+                waste_hour: waste_hour
+            }, {
+				success : function(o){
+					YAHOO.log(o, "info", "Trade.WasteChainUpdateWasteHour.success");
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+					
+                    this.Self.WasteChainDetails();
+				},
+				scope:this
+			});
+        },
+        WasteChainEqualize : function() {
+            var waste_chain_id = this.Self.waste_chain.id,
+                waste_hour = Dom.get("chainWasteHourInput").value,
+                body_waste_hour = Game.GetCurrentPlanet().waste_hour;
+            
+            if ( body_waste_hour <= 0 )
+                return;
+            
+            waste_hour = parseInt(waste_hour) + parseInt(body_waste_hour);
+            
+            Lacuna.Pulser.Show();
+			this.Self.service.update_waste_chain({
+                session_id: Game.GetSession(),
+                building_id: this.Self.building.id,
+                waste_chain_id: waste_chain_id,
+                waste_hour: waste_hour
+            }, {
+				success : function(o){
+					YAHOO.log(o, "info", "Trade.WasteChainEqualize.success");
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+					
+                    this.Self.WasteChainDetails();
+				},
+				scope:this
+			});
+        },
+        WasteChainShipsView : function() {
+			Lacuna.Pulser.Show();
+			this.service.get_waste_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
+				success : function(o){
+					YAHOO.log(o, "info", "Trade.WasteChainShipsView.success");
+					Lacuna.Pulser.Hide();
+					this.rpcSuccess(o);
+					this.waste_chain_ships = o.result.ships;
+					
+					this.WasteChainShipsPopulate();
+				},
+				scope:this
+			});
+		},
+		WasteChainShipsPopulate : function() {
+			var ships = this.waste_chain_ships,
+				details = Dom.get("wasteChainShipsDetails");
+			
+			if(details) {
+				var ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					availShips = [],
+					workingShips = [];
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					if(ship.task == "Docked") {
+						availShips.push(ship);
+					}
+					else {
+						workingShips.push(ship);
+					}
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = ship.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipTask");
+					nLi.innerHTML = ship.task;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipSpeed");
+					nLi.innerHTML = ship.speed;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipHold");
+					nLi.innerHTML = ship.hold_size;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipAction");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					bbtn.innerHTML = ship.task == "Docked" ? "Add to Chain" : "Remove from Chain";
+					bbtn = nLi.appendChild(bbtn);
+					nUl.appendChild(nLi);
+					
+					if(ship.task == "Docked") {
+						Event.on(bbtn, "click", this.WasteChainShipAdd, {Self:this,Ship:ship,Line:nUl}, true);
+					}
+					else {
+						Event.on(bbtn, "click", this.WasteChainShipRemove, {Self:this,Ship:ship,Line:nUl}, true);
+					}
+								
+					details.appendChild(nUl);
+					
+				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 175;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
+				},10);
+			}
+		},
+        WasteChainShipAdd : function() {
+            Lacuna.Pulser.Show();
+            
+            this.Self.service.add_waste_ship_to_fleet({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                ship_id:this.Ship.id
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.WasteChainShipAdd.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    var ships = this.Self.waste_chain_ships;
+                    for(var i=0; i<ships.length; i++) {
+                        if(ships[i].id == this.Ship.id) {
+                            ships.splice(i,1);
+                            break;
+                        }
+                    }
+                    this.Line.parentNode.removeChild(this.Line);
+                    
+                    this.Self.WasteChainDetails();
+                },
+                scope:this
+            });
+		},
+        WasteChainShipRemove : function() {
+            Lacuna.Pulser.Show();
+            
+            this.Self.service.remove_waste_ship_from_fleet({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                ship_id:this.Ship.id
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.WasteChainShipRemove.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    var ships = this.Self.waste_chain_ships;
+                    for(var i=0; i<ships.length; i++) {
+                        if(ships[i].id == this.Ship.id) {
+                            ships.splice(i,1);
+                            break;
+                        }
+                    }
+                    this.Line.parentNode.removeChild(this.Line);
+                    
+                    this.Self.WasteChainDetails();
+                },
+                scope:this
+            });
 		}
 	
 	});
