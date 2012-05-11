@@ -289,20 +289,20 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             ].join('');
         }
         else if ( result.message === "Changed Type" ) {
-            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            var newtype = result['class'].replace( new RegExp(".*::", "g"), "" );
             out = out + [
                 result.name, ' changed to type ', newtype, ' planet'
             ].join('');
         }
         else if ( result.message === "Made Asteroid" ) {
-            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            var newtype = result['class'].replace( new RegExp(".*::", "g"), "" );
             out = out + [
                 result.name, ' is now a type ', newtype, ' asteroid of size ',
                 result.size
             ].join('');
         }
         else if ( result.message === "Made Planet" ) {
-            var newtype = result.class.replace( new RegExp(".*::", "g"), "" );
+            var newtype = result['class'].replace( new RegExp(".*::", "g"), "" );
             out = out + [
                 result.name, ' is now a type ', newtype, ' planet of size ',
                 result.size
