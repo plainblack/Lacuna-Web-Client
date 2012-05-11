@@ -1879,22 +1879,7 @@ _getWasteChainTab : function() {
             
             waste_hour = parseInt(waste_hour) + parseInt(body_waste_hour);
             
-            Lacuna.Pulser.Show();
-			this.Self.service.update_waste_chain({
-                session_id: Game.GetSession(),
-                building_id: this.Self.building.id,
-                waste_chain_id: waste_chain_id,
-                waste_hour: waste_hour
-            }, {
-				success : function(o){
-					YAHOO.log(o, "info", "Trade.WasteChainEqualize.success");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcSuccess(o);
-					
-                    this.Self.WasteChainDetails();
-				},
-				scope:this
-			});
+            Dom.get("chainWasteHourInput").value = waste_hour;
         },
         WasteChainShipsView : function() {
 			Lacuna.Pulser.Show();
