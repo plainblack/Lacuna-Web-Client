@@ -2503,11 +2503,58 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
                     },
+                    "get_supply_ships" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "view_supply_chains" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
                     "view_waste_chains" : {
                         "description": "",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
 							{"name":"building_id", "type":"string", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "create_supply_chain" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"target_id", "type":"number", "optional":false},
+                            {"name":"resource_type", "type":"number", "optional":false},
+                            {"name":"resource_hour", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "delete_supply_chain" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"supply_chain_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "update_supply_chain" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"supply_chain_id", "type":"number", "optional":false},
+                            {"name":"resource_type", "type":"number", "optional":false},
+                            {"name":"resource_hour", "type":"number", "optional":false}
 						],
 						"returns":{"type":"object"}
                     },
@@ -2521,7 +2568,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 						],
 						"returns":{"type":"object"}
                     },
+                    "add_supply_ship_to_fleet" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"ship_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
                     "add_waste_ship_to_fleet" : {
+                        "description": "",
+						"parameters": [
+							{"name":"session_id", "type":"string", "optional":false},
+							{"name":"building_id", "type":"string", "optional":false},
+                            {"name":"ship_id", "type":"number", "optional":false}
+						],
+						"returns":{"type":"object"}
+                    },
+                    "remove_supply_ship_from_fleet" : {
                         "description": "",
 						"parameters": [
 							{"name":"session_id", "type":"string", "optional":false},
