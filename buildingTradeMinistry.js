@@ -1824,13 +1824,21 @@ _getWasteChainTab : function() {
                 details = Dom.get("wasteChainDetails");
             
             if (details) {
+                var show_equalize_button;
+                
+                if ( Game.GetCurrentPlanet().waste_hour > 0
+                    && this.waste_chain.percent_transferred >= 100 )
+                {
+                    show_equalize_button = 1;
+                }
+                
                 details.innerHTML = [
                     '<b>Local Star Waste Chain</b><br/>',
                     'Waste/hr: ',
                     '<input id="chainWasteHourInput" type="text" value="', waste_chain.waste_hour, '"/> ',
                     '<button id="chainWasteHourButton">Update</button>',
-                    Game.GetCurrentPlanet().waste_hour > 1
-                      ? '<button id="chainWasteEqualizeButton">Add Current Waste Production to Chain</button><br/>'
+                    show_equalize_button
+                      ? '<button id="chainWasteEqualizeButton">Equalize Body Waste Production</button><br/>'
                       : '<br/>',
                     'Percent Transferred: ', waste_chain.percent_transferred, '&#37;',
                     '<hr>'
