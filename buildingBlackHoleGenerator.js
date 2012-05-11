@@ -326,4 +326,5 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
 YAHOO.register("blackholegenerator", YAHOO.lacuna.buildings.BlackHoleGenerator, {version: "1", build: "0"}); 
 
 }
+
 // vim: noet:ts=4:sw=4
