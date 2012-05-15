@@ -91,7 +91,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 		},
 		_getPlanTab : function() {
 			this.planTab = new YAHOO.widget.Tab({ label: "Plans", content: [
-				'<ul class="plan planHeader clearafter"><li class="planName">Name</li><li class="planLevel">Level</li><li class="planExtra">Extra Level</li></ul>',
+				'<ul class="plan planHeader clearafter"><li class="planQuan">Quantity</li><li class="planName">Name</li><li class="planLevel">Level</li><li class="planExtra">Extra Level</li></ul>',
 				'<div>',
 				'	<div id="planDetails">',
 				'	</div>',
@@ -225,6 +225,11 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 						Dom.addClass(nUl, "plan");
 						Dom.addClass(nUl, "clearafter");
 
+						Dom.addClass(nLi,"planQuan");
+						nLi.innerHTML = plan.quantity;
+						nUl.appendChild(nLi);
+						
+						nLi = li.cloneNode(false);
 						Dom.addClass(nLi,"planName");
 						nLi.innerHTML = plan.name;
 						nUl.appendChild(nLi);
