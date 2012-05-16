@@ -167,7 +167,7 @@ if (typeof YAHOO.lacuna.buildings.Trade == "undefined" || !YAHOO.lacuna.building
 		},
 		getChildTabs : function() {
 			this.mineTabIndex = 3; //array location plus 1 since Production tab is always first
-			return [this._getPushTab(), this._getAvailableTradesTab(), this._getMyTradesTab(), this._getAddTradeTab(), this._getWasteChainTab()];
+			return [this._getPushTab(), this._getAvailableTradesTab(), this._getMyTradesTab(), this._getAddTradeTab(), this._getSupplyChainTab(), this._getSupplyShipsTab(), this._getWasteChainTab()];
 			},
 _getPushTab : function() {
 this.push = new YAHOO.widget.Tab({ label: "Push", content: [
@@ -308,8 +308,74 @@ _getAddTradeTab : function() {
 			Event.on("tradeAdd", "click", this.AddTrade, this, true);
 			return this.add;
 		},
+_getSupplyChainTab : function() {
+    var planets = Lib.planetarySort(Game.EmpireData.planets),
+        current_planet = Game.GetCurrentPlanet(),
+        target_options = "";
+
+    for(var p=0; p<planets.length; p++) {
+      if(planets[p].id != current_planet.id){
+        target_options += [
+            '<option value="', planets[p].id, '">', planets[p].name, '</option>'
+        ].join('');
+      }
+    }
+    
+    this.supplyChainTab = new YAHOO.widget.Tab({ label: "Auto Supply", content: [
+        '<div id="supplyChainInfo" style="margin-bottom: 2px">',
+        '	<div id="supplyChainAddNew">',
+        '     <b>Add New Supply Chain</b><br/>',
+        '     Target: <select id="supplyChainAddTargetId">',
+                target_options,
+        '     </select>',
+        '     Resource: <select id="supplyChainAddResourceType">',
+                this.resourceOptions(),
+        '     </select>',
+        '     Resources/hr: <input id="supplyChainAddResourceHour" type="text"/>',
+        '     <button id="supplyChainAddButton">Add</button>',
+        '   </div>',
+        '   <div id="supplyChainMetric"></div><hr/>',
+        '   <div id="supplyChainList">',
+        '	  <ul id="supplyChainListHeader" class="supplyChainHeader supplyChainInfo clearafter">',
+        '		<li class="supplyChainBody">Name</li>',
+        '		<li class="supplyChainResource">Task</li>',
+        '		<li class="supplyChainHour">Speed</li>',
+        '		<li class="supplyChainTransferred">Hold</li>',
+        '		<li class="supplyChainAction"></li>',
+        '	  </ul>',
+        '	  <div><div id="supplyChainListDetails"></div></div>',
+        '   </div>',
+        '   <div id="supplyChainListNone"><b>No Supply Chains In Use</b></div>',
+        '</div>',
+    ].join('')});
+    
+    Event.on("supplyChainAddButton", "click", this.SupplyChainAddNew, {Self:this}, true);
+    
+    this.supplyChainTab.subscribe("activeChange", this.viewSupplyChainInfo, this, true);
+
+    return this.supplyChainTab;
+},
+_getSupplyShipsTab : function() {
+    this.supplyShipsTab = new YAHOO.widget.Tab({ label: "Supply Ships", content: [
+        '<div id="supplyChainShipsInfo"></div><hr/>',
+        '<div id="supplyChainShipsHeader">',
+        '  <ul class="shipHeader shipInfo clearafter">',
+        '    <li class="shipName">Name</li>',
+        '    <li class="shipTask">Task</li>',
+        '    <li class="shipSpeed">Speed</li>',
+        '    <li class="shipHold">Hold</li>',
+        '    <li class="shipAction"></li>',
+        '  </ul>',
+        '  <div><div id="supplyChainShipsDetails"></div></div>',
+        '</div>',
+    ].join('')});
+    
+    this.supplyShipsTab.subscribe("activeChange", this.viewSupplyShips, this, true);
+
+    return this.supplyShipsTab;
+},
 _getWasteChainTab : function() {
-    this.wasteChainTab = new YAHOO.widget.Tab({ label: "Waste Chain", content: [
+    this.wasteChainTab = new YAHOO.widget.Tab({ label: "Auto Scow", content: [
         '<div id="wasteChainDetails" style="margin-bottom: 2px"></div>',
         '<div id="wasteChainShips">',
         '	<ul class="shipHeader shipInfo clearafter">',
@@ -1792,6 +1858,406 @@ _getWasteChainTab : function() {
 					scope:this
 				});
 			}
+		},
+        resourceOptions : function(selected) {
+            var resource_options = "";
+    
+            for(r in Lib.ResourceTypes) {
+                if(Lib.ResourceTypes.hasOwnProperty(r)) {
+                    resource = Lib.ResourceTypes[r];
+                    if(Lang.isArray(resource)) {
+                        resource_options += [
+                            '<optgroup label="', r.titleCaps(), '">'
+                        ].join('');
+                        
+                        for(x=0; x < resource.length; x++) {
+                            name = resource[x];
+                            resource_options += [
+                                '<option value="', name, '"'
+                            ].join('');
+                            
+                            if ( selected && name == selected ) {
+                                resource_options += ' selected="selected"';
+                            }
+                            
+                            resource_options += [
+                            '>', name.titleCaps(), '</option>'
+                        ].join('');
+                        }
+                        resource_options += '</optgroup>';
+                    }
+                    else if(resource) {
+                        resource_options += [
+                            '<option value="', r, '"'
+                        ].join('');
+                        
+                        if ( selected && name == selected ) {
+                            resource_options += ' selected="selected"';
+                        }
+                        
+                        resource_options += [
+                            '>', r.titleCaps(), '</option>'
+                        ].join('');
+                    }
+                }
+            }
+            
+            return resource_options;
+        },
+        viewSupplyChainInfo : function(e) {
+            Dom.setStyle("supplyChainList", "display", "none");
+            Dom.setStyle("supplyChainListNone", "display", "none");
+            
+            if ( !this.supply_chains ) {
+                Lacuna.Pulser.Show();
+                this.service.view_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
+                        Lacuna.Pulser.Hide();
+                        this.rpcSuccess(o);
+                        this.supply_chains = o.result.supply_chains;
+                        
+                        this.SupplyChainList();
+                    },
+                    scope:this
+                });
+            }
+            else {
+                this.SupplyChainList();
+            }
+		},
+        SupplyChainList : function() {
+          var supply_chains = this.supply_chains;
+          
+          if ( supply_chains.length == 0 ) {
+            Dom.setStyle("supplyChainList", "display", "none");
+            Dom.setStyle("supplyChainListNone", "display", "");
+            return;
+          }
+          else {
+            Dom.setStyle("supplyChainList", "display", "");
+            Dom.setStyle("supplyChainListNone", "display", "none");
+          }
+          
+          var metric = Dom.get("supplyChainMetric"),
+              details = Dom.get("supplyChainListDetails"),
+              detailsParent = details.parentNode,
+              ul = document.createElement("ul"),
+              li = document.createElement("li"),
+              supply_chains = this.supply_chains;
+          
+          // chains metric text
+          metric.innerHTML =
+            this.SupplyMetricDescription( supply_chains[0].percent_transferred );
+          
+          // chains list
+          Event.purgeElement(details, true); //clear any events before we remove
+          details = detailsParent.removeChild(details); //remove from DOM to make this faster
+          details.innerHTML = "";
+          
+          //Dom.setStyle(detailsParent, "display", "");
+          detailsParent.appendChild(details); //add back as child
+          
+          for (var i=0; i<supply_chains.length; i++) {
+            var chain = supply_chains[i],
+                nUl = ul.cloneNode(false);
+            
+            Dom.addClass(nUl, "supplyChainInfo");
+            Dom.addClass(nUl, "clearafter");
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "supplyChainBody");
+            nLi.innerHTML = chain.body.name;
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "supplyChainResource");
+            nLi.innerHTML = chain.resource_type.titleCaps();
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "supplyChainHour");
+            nLi.innerHTML = chain.resource_hour;
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "supplyChainTransferred");
+            nLi.innerHTML = chain.percent_transferred;
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi,"supplyChainAction");
+            var bbtn = document.createElement("button");
+            bbtn.setAttribute("type", "button");
+            bbtn.innerHTML = "Delete Chain";
+            bbtn = nLi.appendChild(bbtn);
+            nUl.appendChild(nLi);
+            
+            Event.on(bbtn, "click", this.SupplyChainRemove, {Self:this,Chain:chain,Line:nUl}, true);
+            
+            details.appendChild(nUl);
+          }
+          
+          //wait for tab to display first
+          setTimeout(function() {
+            var Ht = Game.GetSize().h - 250;
+            if(Ht > 250) { Ht = 250; }
+            Dom.setStyle(detailsParent,"height",Ht + "px");
+            Dom.setStyle(detailsParent,"overflow-y","auto");
+          },10);
+        },
+        SupplyMetricDescription : function(percent_transferred) {
+			var output = ['Current supply capacity is ', percent_transferred, '&#37;. '];
+			if(percent_transferred == 0) {
+				output.push('You have no ships servicing your supply chains.');
+			}
+			else if(percent_transferred > 100) {
+				output.push('You have excess ships servicing your supply chains. You can increase your chain hourly rate, or you may be able to remove some ships to get closer to 100&#37;.');
+			}
+			else if(percent_transferred < 100) {
+				output.push('You have insufficient ships servicing your supply chains. You should reduce your chain hourly rate or add more supply ships.');
+			}
+			else if(percent_transferred == 100) {
+				output.push('Your shipping capacity and supply chains requirements are exactly in sync.');
+			}
+			return output.join('');
+		},
+        SupplyChainAddNew : function() {
+            var target_id = Lib.getSelectedOptionValue("supplyChainAddTargetId"),
+                resource_type = Lib.getSelectedOptionValue("supplyChainAddResourceType"),
+                resource_hour = Dom.get("supplyChainAddResourceHour").value;
+            
+            Lacuna.Pulser.Show();
+			this.Self.service.create_supply_chain({
+                session_id: Game.GetSession(),
+                building_id: this.Self.building.id,
+                target_id: target_id,
+                resource_type: resource_type,
+                resource_hour: resource_hour
+            }, {
+				success : function(o){
+					YAHOO.log(o, "info", "Trade.SupplyChainAddNew.success");
+					Lacuna.Pulser.Hide();
+					this.Self.rpcSuccess(o);
+					
+                    delete this.Self.supply_chains;
+                    this.Self.viewSupplyChainInfo();
+				},
+				scope:this
+			});
+        },
+        SupplyChainRemove : function() {
+            Lacuna.Pulser.Show();
+            this.Self.service.delete_supply_chain({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                supply_chain_id:this.Chain.id
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.SupplyChainRemove.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    
+                    delete this.Self.supply_chains;
+                    this.Self.viewSupplyChainInfo();
+                },
+                scope:this
+            });
+        },
+        viewSupplyShips : function(e) {
+            // we have 2 asynchronous functions below both wanting to hide
+            // the pulsar - keep a count of requests so it only gets hidden
+            // once they've both completed
+            var request_count = 0;
+            
+            if ( !this.supply_chains ) {
+                Lacuna.Pulser.Show();
+                request_count++;
+                
+                this.service.view_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
+                        request_count--;
+                        if ( request_count == 0 ) {
+                            Lacuna.Pulser.Hide();
+                        }
+                        this.rpcSuccess(o);
+                        this.supply_chains = o.result.supply_chains;
+                        
+                        this.SupplyChainShipsInfo();
+                    },
+                    scope:this
+                });
+            }
+            else {
+                this.SupplyChainShipsInfo();
+            }
+            
+            if ( !this.supply_chain_ships ) {
+                Lacuna.Pulser.Show();
+                request_count++;
+                
+                this.service.get_supply_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "Trade.viewSupplyShipsInfo.success");
+                        request_count--;
+                        if ( request_count == 0 ) {
+                            Lacuna.Pulser.Hide();
+                        }
+                        this.rpcSuccess(o);
+                        this.supply_chain_ships = o.result.ships;
+                        
+                        this.SupplyChainShipsPopulate();
+                    },
+                    scope:this
+                });
+            }
+            else {
+                this.SupplyChainShipsPopulate();
+            }
+		},
+        SupplyChainShipsInfo : function() {
+            var metric = Dom.get("supplyChainShipsInfo");
+            
+            metric.innerHTML =
+                this.SupplyMetricDescription( this.supply_chains[0].percent_transferred );
+        },
+		SupplyChainShipsPopulate : function() {
+			var ships = this.supply_chain_ships,
+				details = Dom.get("supplyChainShipsDetails"),
+                detailsParent = details.parentNode;
+			
+            Event.purgeElement(details, true); //clear any events before we remove
+            details = detailsParent.removeChild(details); //remove from DOM to make this faster
+            details.innerHTML = "";
+            
+            Dom.setStyle(detailsParent, "display", "");
+            detailsParent.appendChild(details); //add back as child
+            
+			if(details) {
+				var ul = document.createElement("ul"),
+					li = document.createElement("li"),
+					availShips = [],
+					workingShips = [];
+					
+				Event.purgeElement(details);
+				details.innerHTML = "";
+				
+				for(var i=0; i<ships.length; i++) {
+					var ship = ships[i],
+						nUl = ul.cloneNode(false),
+						nLi = li.cloneNode(false);
+						
+					if(ship.task == "Docked") {
+						availShips.push(ship);
+					}
+					else {
+						workingShips.push(ship);
+					}
+						
+					nUl.Ship = ship;
+					Dom.addClass(nUl, "shipInfo");
+					Dom.addClass(nUl, "clearafter");
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipName");
+					nLi.innerHTML = ship.name;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipTask");
+					nLi.innerHTML = ship.task;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipSpeed");
+					nLi.innerHTML = ship.speed;
+					nUl.appendChild(nLi);
+
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipHold");
+					nLi.innerHTML = ship.hold_size;
+					nUl.appendChild(nLi);
+					
+					nLi = li.cloneNode(false);
+					Dom.addClass(nLi,"shipAction");
+					var bbtn = document.createElement("button");
+					bbtn.setAttribute("type", "button");
+					bbtn.innerHTML = ship.task == "Docked" ? "Add to Chain" : "Remove from Chain";
+					bbtn = nLi.appendChild(bbtn);
+					nUl.appendChild(nLi);
+					
+					if(ship.task == "Docked") {
+						Event.on(bbtn, "click", this.SupplyChainShipAdd, {Self:this,Ship:ship,Line:nUl}, true);
+					}
+					else {
+						Event.on(bbtn, "click", this.SupplyChainShipRemove, {Self:this,Ship:ship,Line:nUl}, true);
+					}
+								
+					details.appendChild(nUl);
+					
+				}
+				
+				//wait for tab to display first
+				setTimeout(function() {
+					var Ht = Game.GetSize().h - 175;
+					if(Ht > 300) { Ht = 300; }
+					Dom.setStyle(details.parentNode,"height",Ht + "px");
+					Dom.setStyle(details.parentNode,"overflow-y","auto");
+				},10);
+			}
+		},
+        SupplyChainShipAdd : function() {
+            Lacuna.Pulser.Show();
+            
+            this.Self.service.add_supply_ship_to_fleet({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                ship_id:this.Ship.id
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.SupplyChainShipAdd.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    var ships = this.Self.supply_chain_ships;
+                    for(var i=0; i<ships.length; i++) {
+                        if(ships[i].id == this.Ship.id) {
+                            ships.splice(i,1);
+                            break;
+                        }
+                    }
+                    
+                    delete this.Self.supply_chains;
+                    this.Self.viewSupplyShips();
+                },
+                scope:this
+            });
+		},
+        SupplyChainShipRemove : function() {
+            Lacuna.Pulser.Show();
+            
+            this.Self.service.remove_supply_ship_from_fleet({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                ship_id:this.Ship.id
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.SupplyChainShipRemove.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    var ships = this.Self.supply_chain_ships;
+                    for(var i=0; i<ships.length; i++) {
+                        if(ships[i].id == this.Ship.id) {
+                            ships.splice(i,1);
+                            break;
+                        }
+                    }
+                    
+                    delete this.Self.supply_chains;
+                    this.Self.viewSupplyShips();
+                },
+                scope:this
+            });
 		},
         viewWasteChainInfo : function(e) {
 			if(e.newValue) {
