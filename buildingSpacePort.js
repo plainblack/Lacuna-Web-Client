@@ -1380,7 +1380,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 							this.service.send_fleet({
 								session_id:Game.GetSession(),
 								ship_ids:shipIds,
-								target:this.FleetTarget
+								target:this.FleetTarget,
+								set_speed:speed
 							}, {
 								success : function(o){
 									Lacuna.Pulser.Hide();
