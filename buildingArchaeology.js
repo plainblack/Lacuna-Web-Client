@@ -180,7 +180,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
         '    <ul id="archaeologyGlyphCombine" class="archaeologyGlyphInfo">',
         '    </ul>',
         '  </div>',
-        '</div><button type="button" id="archaeologyCombine">Combine</button>'
+        '</div><span title="How many times should the specified glyphs be combined (max 50)"> Quantity: <input type="text" id="combineQuantity" value="1" size="2"></span> <button type="button" id="archaeologyCombine">Combine</button>'
       ].join('')});
       tab.subscribe("activeChange", function(e) {
         if(e.newValue) {
@@ -521,12 +521,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
     assembleGlyph : function() {
       Lacuna.Pulser.Show();
       var glyphs = Sel.query("li", "archaeologyGlyphCombine"),
-        glyphIds = [];
+        glyphTypes = [],
+        quantity = parseInt(Dom.get("combineQuantity").value,10);
       for(var g=0, len=glyphs.length; g<len; g++) {
-        glyphIds.push(glyphs[g].Glyph.id);
+        glyphTypes.push(glyphs[g].Glyph.type);
       }
       
-      this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, ids:glyphIds}, {
+      this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, glyphs:glyphTypes, quantity:quantity}, {
         success : function(o){
           YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
           alert("You have found a " + o.result.item_name + "!");
