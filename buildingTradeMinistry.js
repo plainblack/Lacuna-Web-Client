@@ -461,7 +461,7 @@ _getWasteChainTab : function() {
                         this.shipSize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadShipSummary");
                         Lacuna.Pulser.Hide();
-                    },
+                    }, 
                     scope:this
                 });
             }
