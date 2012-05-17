@@ -1941,23 +1941,19 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 .supplyChainInfo .supplyChainBody {
-    width:165px;
+    width:55%;
 }
 
 .supplyChainInfo .supplyChainResource {
-    width:100px;
+    width:15%;
 }
 
 .supplyChainInfo .supplyChainHour {
-    width:75px;
-}
-
-.supplyChainInfo .supplyChainTransferred {
-    width:75px;
+    width:15%;
 }
 
 .supplyChainInfo .supplyChainAction {
-    width:100px;
+    width:15%;
 }
 
 .tradeInfo {

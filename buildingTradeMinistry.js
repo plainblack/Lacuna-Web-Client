@@ -337,10 +337,9 @@ _getSupplyChainTab : function() {
         '   <div id="supplyChainMetric"></div><hr/>',
         '   <div id="supplyChainList">',
         '	  <ul id="supplyChainListHeader" class="supplyChainHeader supplyChainInfo clearafter">',
-        '		<li class="supplyChainBody">Name</li>',
-        '		<li class="supplyChainResource">Task</li>',
-        '		<li class="supplyChainHour">Speed</li>',
-        '		<li class="supplyChainTransferred">Hold</li>',
+        '		<li class="supplyChainBody">Target</li>',
+        '		<li class="supplyChainResource">Resource</li>',
+        '		<li class="supplyChainHour">/hr</li>',
         '		<li class="supplyChainAction"></li>',
         '	  </ul>',
         '	  <div><div id="supplyChainListDetails"></div></div>',
@@ -1978,11 +1977,6 @@ _getWasteChainTab : function() {
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainHour");
             nLi.innerHTML = chain.resource_hour;
-            nUl.appendChild(nLi);
-            
-            nLi = li.cloneNode(false);
-            Dom.addClass(nLi, "supplyChainTransferred");
-            nLi.innerHTML = chain.percent_transferred;
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
