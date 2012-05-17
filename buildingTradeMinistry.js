@@ -231,7 +231,7 @@ Event.on("tradePushSend", "click", this.Push, this, true);
 return this.push;
 			  },
 _getAvailableTradesTab : function() {
-				   this.avail = new YAHOO.widget.Tab({ label: "Available Trades", content: [
+				   this.avail = new YAHOO.widget.Tab({ label: "Trades", content: [
 						   '<div>',
 						   '	<div style="border-bottom: 1px solid #52ACFF; padding-bottom: 5px; margin-bottom: 5px;"><label>Filter:</label><select id="tradeFilter"><option value="">All</option><option value="energy">Energy</option><option value="food">Food</option><option value="ore">Ore</option>',
 						   '	<option value="water">Water</option><option value="waste">Waste</option><option value="glyph">Glyph</option><option value="prisoner">Prisoner</option>',
@@ -321,7 +321,7 @@ _getSupplyChainTab : function() {
       }
     }
     
-    this.supplyChainTab = new YAHOO.widget.Tab({ label: "Auto Supply", content: [
+    this.supplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chain", content: [
         '<div id="supplyChainInfo" style="margin-bottom: 2px">',
         '	<div id="supplyChainAddNew">',
         '     <b>Add New Supply Chain</b><br/>',
@@ -374,7 +374,7 @@ _getSupplyShipsTab : function() {
     return this.supplyShipsTab;
 },
 _getWasteChainTab : function() {
-    this.wasteChainTab = new YAHOO.widget.Tab({ label: "Auto Scow", content: [
+    this.wasteChainTab = new YAHOO.widget.Tab({ label: "Waste Chain", content: [
         '<div id="wasteChainDetails" style="margin-bottom: 2px"></div>',
         '<div id="wasteChainShips">',
         '	<ul class="shipHeader shipInfo clearafter">',
