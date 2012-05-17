@@ -321,7 +321,7 @@ _getSupplyChainTab : function() {
       }
     }
     
-    this.supplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chain", content: [
+    this.supplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chains", content: [
         '<div id="supplyChainInfo" style="margin-bottom: 2px">',
         '	<div id="supplyChainAddNew">',
         '     <b>Add New Supply Chain</b><br/>',
@@ -367,6 +367,7 @@ _getSupplyShipsTab : function() {
         '  </ul>',
         '  <div><div id="supplyChainShipsDetails"></div></div>',
         '</div>',
+        '<div id="supplyChainShipsNone">There are no supply ships available.</div>'
     ].join('')});
     
     this.supplyShipsTab.subscribe("activeChange", this.viewSupplyShips, this, true);
@@ -385,7 +386,8 @@ _getWasteChainTab : function() {
         '		<li class="shipAction"></li>',
         '	</ul>',
         '	<div><div id="wasteChainShipsDetails"></div></div>',
-        '</div>'
+        '</div>',
+        '<div id="wasteChainShipsNone">There are no scows available.</div>'
     ].join('')});
     
     this.wasteChainTab.subscribe("activeChange", this.viewWasteChainInfo, this, true);
@@ -2118,9 +2120,20 @@ _getWasteChainTab : function() {
         },
 		SupplyChainShipsPopulate : function() {
 			var ships = this.supply_chain_ships,
-				details = Dom.get("supplyChainShipsDetails"),
+				no_ships = Dom.get("supplyChainShipsNone"),
+                details = Dom.get("supplyChainShipsDetails"),
                 detailsParent = details.parentNode;
 			
+            if ( ships.length == 0 ) {
+                Dom.setStyle(details, "display", "none");
+                Dom.setStyle(no_ships, "display", "");
+                return;
+            }
+            else {
+                Dom.setStyle(details, "display", "");
+                Dom.setStyle(no_ships, "display", "none");
+            }
+            
             Event.purgeElement(details, true); //clear any events before we remove
             details = detailsParent.removeChild(details); //remove from DOM to make this faster
             details.innerHTML = "";
@@ -2357,8 +2370,19 @@ _getWasteChainTab : function() {
 		},
 		WasteChainShipsPopulate : function() {
 			var ships = this.waste_chain_ships,
+                no_ships = Dom.get("wasteChainShipsNone"),
 				details = Dom.get("wasteChainShipsDetails");
 			
+            if ( ships.length == 0 ) {
+                Dom.setStyle(details, "display", "none");
+                Dom.setStyle(no_ships, "display", "");
+                return;
+            }
+            else {
+                Dom.setStyle(details, "display", "");
+                Dom.setStyle(no_ships, "display", "none");
+            }
+            
 			if(details) {
 				var ul = document.createElement("ul"),
 					li = document.createElement("li"),
