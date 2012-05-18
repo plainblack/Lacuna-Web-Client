@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna");
 if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
-	
+      	
 (function(){
 	var Util = YAHOO.util,
 		Lang = YAHOO.lang,
