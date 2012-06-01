@@ -58,6 +58,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
 			this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
 			this.skipAttackMessages = Dom.get("profileSkipAttackMessages");
+            this.skipIncomingShips = Dom.get("profileSkipIncomingShips");
 			Event.on(this.skipFoundNothing, 'change', function() {
 				if(!this.checked) {
 					Dom.get("profileSkipAllExcavator").checked = false;
@@ -239,8 +240,9 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li>',
 			'									<li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
 			'									<li><input id="profileSkipAttackMessages" type="checkbox" /> Stop Attack Messages</li></ul></div>',
-			'								<div class="yui-u">',
-			'									<ul id="profileCheckboxes"><li><input id="profileSkipAllExcavator" type="checkbox" /> Stop All Excavator Messages</li>',
+            '                               <div class="yui-u">',
+            '                                   <ul id="profileCheckboxes"><li><input id="profileSkipIncomingShips" type="checkbox" /> Stop Incoming Ships Notification</li>',
+			'									<li><input id="profileSkipAllExcavator" type="checkbox" /> Stop All Excavator Messages</li>',
 			'									<li><input id="profileSkipFoundNothing" type="checkbox" /> Stop Excavator Found Nothing</li>',
 			'									<li><input id="profileSkipExcavatorGlyph" type="checkbox" /> Stop Excavator Glyph</li>',
 			'									<li><input id="profileSkipExcavatorResources" type="checkbox" /> Stop Excavator Resources</li>',
@@ -403,7 +405,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						skip_excavator_destroyed:this.skipExcavatorDestroyed.checked ? 1 : 0,
 						skip_spy_recovery:this.skipSpyRecovery.checked ? 1 : 0,
 						skip_probe_detected:this.skipProbeDetected.checked ? 1 : 0,
-						skip_attack_messages:this.skipAttackMessages.checked ? 1 : 0
+						skip_attack_messages:this.skipAttackMessages.checked ? 1 : 0,
+                        skip_incoming_ships:this.skipIncomingShips.checked ? 1 : 0
 					}
 				},{
 				success : function(o){
@@ -458,6 +461,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipSpyRecovery.checked = p.skip_spy_recovery == "1";
 			this.skipProbeDetected.checked = p.skip_probe_detected == "1";
 			this.skipAttackMessages.checked = p.skip_attack_messages == "1";
+            this.skipIncomingShips.checked = p.skip_incoming_ships == "1";
 			this.skipAllExcavator.checked = this.skipFoundNothing.checked && this.skipExcavatorResources.checked && this.skipExcavatorGlyph.checked;
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
