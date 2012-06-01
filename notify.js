@@ -74,7 +74,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                 num_incoming_enemy = this.num_incoming_enemy[this.planetId] || 0;
                 arr = [];
             if(skip_incoming_ships==1) {
-                arr = arr.concat(['<li><span style="color:#f00">DISABLED</span></li>']);
+                arr = arr.concat(['<li><span style="color:#f00">DISABLED (see profile)</span></li>']);
             }
 
             if(num_incoming_enemy > 0) {
