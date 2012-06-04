@@ -59,6 +59,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
 			this.skipAttackMessages = Dom.get("profileSkipAttackMessages");
             this.skipIncomingShips = Dom.get("profileSkipIncomingShips");
+            this.skipExcavatorReplaceMsg = Dom.get("profileSkipExcavatorReplaceMsg");
+            this.dontReplaceExcavator = Dom.get("profileDontReplaceExcavator");
 			Event.on(this.skipFoundNothing, 'change', function() {
 				if(!this.checked) {
 					Dom.get("profileSkipAllExcavator").checked = false;
@@ -89,14 +91,20 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 					Dom.get("profileSkipAllExcavator").checked = false;
 				}
 			});
+			Event.on(this.skipExcavatorReplaceMsg, 'change', function() {
+				if(!this.checked) {
+					Dom.get("profileSkipExcavatorReplaceMsg").checked = false;
+				}
+			});
 			Event.on(this.skipAllExcavator, 'change', function() {
 				if(this.checked) {
 					Dom.get("profileSkipFoundNothing").checked = true;
 					Dom.get("profileSkipExcavatorResources").checked = true;
 					Dom.get("profileSkipExcavatorGlyph").checked = true;
 					Dom.get("profileSkipExcavatorPlan").checked = true;
-			                Dom.get("profileSkipExcavatorArtifact").checked = true;
-			                Dom.get("profileSkipExcavatorDestroyed").checked = true;
+			    Dom.get("profileSkipExcavatorArtifact").checked = true;
+			    Dom.get("profileSkipExcavatorDestroyed").checked = true;
+          Dom.get("profileSkipExcavatorReplaceMsg").checked = true;
 				}
 			});
 
@@ -239,16 +247,21 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			'									<li><input id="profileSkipResource" type="checkbox" /> Stop Resource Warnings</li>',
 			'									<li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li>',
 			'									<li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
-			'									<li><input id="profileSkipAttackMessages" type="checkbox" /> Stop Attack Messages</li></ul></div>',
-            '                               <div class="yui-u">',
-            '                                   <ul id="profileCheckboxes"><li><input id="profileSkipIncomingShips" type="checkbox" /> Stop Incoming Ships Notification</li>',
+			'									<li><input id="profileSkipAttackMessages" type="checkbox" /> Stop Attack Messages</li>',
+      '                 <li><input id="profileSkipIncomingShips" type="checkbox" /> Stop Incoming Ships Notification</li>',
+      '                 </ul></div>',
+      '               <div class="yui-u">',
+      '               <ul id="profileCheckboxes">',
 			'									<li><input id="profileSkipAllExcavator" type="checkbox" /> Stop All Excavator Messages</li>',
 			'									<li><input id="profileSkipFoundNothing" type="checkbox" /> Stop Excavator Found Nothing</li>',
 			'									<li><input id="profileSkipExcavatorGlyph" type="checkbox" /> Stop Excavator Glyph</li>',
 			'									<li><input id="profileSkipExcavatorResources" type="checkbox" /> Stop Excavator Resources</li>',
 			'									<li><input id="profileSkipExcavatorPlan" type="checkbox" /> Stop Excavator Plan</li>',
 			'									<li><input id="profileSkipExcavatorArtifact" type="checkbox" /> Stop Excavator Artifact</li>',
-			'									<li><input id="profileSkipExcavatorDestroyed" type="checkbox" /> Stop Excavator Destroyed</li></ul></div>',
+			'									<li><input id="profileSkipExcavatorDestroyed" type="checkbox" /> Stop Excavator Destroyed</li>',
+			'									<li><input id="profileSkipExcavatorReplaceMsg" type="checkbox" /> Stop Excavator Replace Alert</li>',
+			'									<li><input id="profileDontReplaceExcavator" type="checkbox" /> Do not replace Excavator automatically</li>',
+      '               </ul></div>',
 			'							</div></li>',
 			'							<li><hr />Today\'s RPC Usage:<span id="profileRpc" style="margin-left:5px;"></span></li>',
 			'						</ul>',
@@ -403,6 +416,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 						skip_excavator_plan:this.skipExcavatorPlan.checked ? 1 : 0,
 						skip_excavator_artifact:this.skipExcavatorArtifact.checked ? 1 : 0,
 						skip_excavator_destroyed:this.skipExcavatorDestroyed.checked ? 1 : 0,
+						skip_excavator_replace_msg:this.skipExcavatorReplaceMsg.checked ? 1 : 0,
+						dont_replace_excavator:this.dontReplaceExcavator.checked ? 1 : 0,
 						skip_spy_recovery:this.skipSpyRecovery.checked ? 1 : 0,
 						skip_probe_detected:this.skipProbeDetected.checked ? 1 : 0,
 						skip_attack_messages:this.skipAttackMessages.checked ? 1 : 0,
@@ -462,7 +477,16 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 			this.skipProbeDetected.checked = p.skip_probe_detected == "1";
 			this.skipAttackMessages.checked = p.skip_attack_messages == "1";
             this.skipIncomingShips.checked = p.skip_incoming_ships == "1";
-			this.skipAllExcavator.checked = this.skipFoundNothing.checked && this.skipExcavatorResources.checked && this.skipExcavatorGlyph.checked;
+            this.skipExcavatorReplaceMsg.checked = p.skip_excavator_replace_msg == "1";
+            this.dontReplaceExcavator.checked = p.dont_replace_excavator == "1";
+			this.skipAllExcavator.checked = this.skipFoundNothing.checked &&
+                                      this.skipExcavatorResources.checked &&
+                                      this.skipExcavatorGlyph.checked &&
+			                                this.skipExcavatorPlan.checked &&
+			                                this.skipExcavatorArtifact.checked &&
+			                                this.skipExcavatorDestroyed.checked &&
+                                      this.skipExcavatorReplaceMsg.checked;
+
 			this.stopAnim.checked = Game.GetCookieSettings("disableDialogAnim","0") == "1";
 			this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
 			this.hidePlanets.checked = Game.GetCookieSettings("hidePlanets","0") == "1";
