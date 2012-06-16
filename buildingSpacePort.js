@@ -69,7 +69,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         _getViewTab : function() {
             this.viewShipsTab = new YAHOO.widget.Tab({ label: "View", content: [
                 '<div>',
-                '    <div class="yui-ge" style="border-bottom:1px solid #52acff;"><div id="shipsCount" class="yui-u first"></div><div class="yui-u"><button type="button" id="shipsRecallAll" style="display:none;">Recall All</button></div></div>',    
+                '    <div class="yui-ge" style="border-bottom:1px solid #52acff;"><div id="fleetsCount" class="yui-u first"></div><div class="yui-u"><button type="button" id="shipsRecallAll" style="display:none;">Recall All</button></div></div>',    
                 '    <div style="overflow:auto;margin-top:2px;"><ul id="shipsViewDetails"></ul></div>',
                 '    <div id="shipsViewPaginator"></div>',
                 '</div>'
@@ -471,41 +471,41 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             Sel.query("span.shipArrives",elLine,true).innerHTML = arrTime;
         },
         
-        ViewActionDetails : function(nLi, ship, noEvent) {
-            var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',ship.task,'</label></li>'];
+        ViewActionDetails : function(nLi, fleet, noEvent) {
+            var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',fleet.task,'</label></li>'];
 
-            if(ship.task == "Docked") {
-                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" style="width:25px;" value="'+ship.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
+            if(fleet.task == "Docked") {
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
                 
                 if(!noEvent) {
-                    Event.delegate(nLi, 'click', this.ShipScuttle, 'button.scuttle', {Self:this,Ship:ship,Line:nLi}, true);
+                    Event.delegate(nLi, 'click', this.FleetScuttle, 'button.scuttle', {Self:this,Fleet:fleet,Line:nLi}, true);
                 }
             }
-            else if(ship.task == "Travelling") {
+            else if(fleet.task == "Travelling") {
                 var serverTime = Lib.getTime(Game.ServerData.time),
-                    sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
+                    sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
 
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">Arrives In: </label><span class="shipArrives">';
                 ulDet[ulDet.length] = Lib.formatTime(sec);
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="shipFrom">';
-                ulDet[ulDet.length] = ship.from.name;
+                ulDet[ulDet.length] = fleet.from.name;
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="shipTo">';
-                ulDet[ulDet.length] = ship.to.name;
+                ulDet[ulDet.length] = fleet.to.name;
                 ulDet[ulDet.length] = '</span></li>';
                 
                 this.addQueue(sec, this.SpacePortQueue, nLi);
             }
-            else if(ship.task == "Defend" || ship.task == "Orbiting") {
+            else if(fleet.task == "Defend" || fleet.task == "Orbiting") {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="shipTo">';
-                ulDet[ulDet.length] = ship.orbiting.name;
+                ulDet[ulDet.length] = fleet.orbiting.name;
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><button type="button" class="recall">Recall</button></li>';
                 
                 if(!noEvent) {
-                    Event.delegate(nLi, 'click', this.ShipRecall, 'button.recall', {Self:this,Ship:ship,Line:nLi}, true);
+                    Event.delegate(nLi, 'click', this.ShipRecall, 'button.recall', {Self:this,Ship:fleet,Line:nLi}, true);
                 }
             }
             
-            if(ship.payload && ship.payload.length > 0) {
+            if(fleet.payload && fleet.payload.length > 0) {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="payload">Payload</button></li>';
                 
                 if(!noEvent) {
@@ -526,7 +526,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 var fleets = this.shipsView.fleets,
                     parentEl = details.parentNode,
                     li = document.createElement("li"),
-                    info = Dom.get("shipsCount"),
+                    info = Dom.get("fleetsCount"),
                     displayRecallAll;
                     
                 Event.purgeElement(details, true);
@@ -1036,33 +1036,29 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         EmpireProfile : function(e, empire) {
             Lacuna.Info.Empire.Load(empire.id);
         },
-        ShipScuttle : function(e, matchedEl, container) {
-            if(confirm(["Are you sure you want to Scuttle ",this.Ship.name,"?"].join(''))) {
+        FleetScuttle : function(e, matchedEl, container) {
+            var to_delete = Dom.get("fleet_action_"+this.Fleet.id);
+            if(confirm(["Are you sure you want to Scuttle ",to_delete.value," ships of type ",this.Fleet.name,"?"].join(''))) {
                 var btn = Event.getTarget(e);
                 btn.disabled = true;
                 Lacuna.Pulser.Show();
-                
-                this.Self.service.scuttle_ship({
+                var qty = to_delete.value * 1.0;
+
+                this.Self.service.scuttle_fleet({ args: {
                     session_id:Game.GetSession(),
                     building_id:this.Self.building.id,
-                    ship_id:this.Ship.id
-                }, {
+                    fleet_id:this.Fleet.id,
+                    quantity: qty
+                }}, {
                     success : function(o){
-                        YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
+                        YAHOO.log(o, "info", "SpacePort.FleetScuttle.success");
                         Lacuna.Pulser.Hide();
                         this.Self.rpcSuccess(o);
                         var fleets = this.Self.shipsView.fleets,
-                            info = Dom.get("shipsCount");
-                        for(var i=0; i<ships.length; i++) {
-                            if(ships[i].id == this.Ship.id) {
-                                ships.splice(i,1);
-                                break;
-                            }
-                        }
-                        if(info) {
-                            this.Self.result.docks_available++;
-                            info.innerHTML = ['This SpacePort can dock a maximum of ', this.Self.result.max_ships, ' ships. There are ', this.Self.result.docks_available, ' docks available.'].join(''); 
-                        }
+                            info = Dom.get("fleetsCount");
+
+                        delete this.Self.shipsView;
+                        this.Self.getShips({newValue:true});
                         Event.removeDelegate(this.Line, 'click');
                         this.Line.parentNode.removeChild(this.Line);
                     },
@@ -1087,7 +1083,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     this.Self.rpcSuccess(o);
                     
                     var fleets = this.Self.shipsView.fleets,
-                        info = Dom.get("shipsCount");
+                        info = Dom.get("fleetsCount");
                     for(var i=0; i<ships.length; i++) {
                         if(ships[i].id == this.Ship.id) {
                             ships[i] = o.result.ship;

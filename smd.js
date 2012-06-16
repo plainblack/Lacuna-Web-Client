@@ -1730,8 +1730,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "returns":{"type":"object"}
                     },
                     
-                    "scuttle_ship" : {
-                        "description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
+                    "scuttle_fleet" : {
+                        "description": "Destroy ships that you no longer need. The fleet must be docked to scuttle ships.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
