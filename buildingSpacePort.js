@@ -229,14 +229,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             if(e.newValue) {
                 if(!this.shipsView) {
                     Lacuna.Pulser.Show();
-                    this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,paging:{page_number:1}}, {
+                    this.service.view_all_fleets({args: {
+                        session_id: Game.GetSession(),
+                        building_id: this.building.id,
+                        paging: {page_number:1}
+                    }}, {
                         success : function(o){
-                            YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
+                            YAHOO.log(o, "info", "SpacePort.view_all_fleets.success");
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
                             this.shipsView = {
                                 number_of_ships: o.result.number_of_ships,
-                                ships: o.result.ships
+                                fleets: o.result.fleets
                             };
                             this.viewPager = new Pager({
                                 rowsPerPage : 25,
@@ -471,7 +475,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',ship.task,'</label></li>'];
 
             if(ship.task == "Docked") {
-                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="scuttle">Scuttle</button></li>';
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" style="width:25px;" value="'+ship.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
                 
                 if(!noEvent) {
                     Event.delegate(nLi, 'click', this.ShipScuttle, 'button.scuttle', {Self:this,Ship:ship,Line:nLi}, true);
@@ -519,7 +523,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var details = Dom.get("shipsViewDetails");
             
             if(details) {
-                var ships = this.shipsView.ships,
+                var fleets = this.shipsView.fleets,
                     parentEl = details.parentNode,
                     li = document.createElement("li"),
                     info = Dom.get("shipsCount"),
@@ -533,8 +537,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     info.innerHTML = ['<div>This SpacePort can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
                 }               
 
-                for(var i=0; i<ships.length; i++) {
-                    var ship = ships[i],
+                for(var i=0; i<fleets.length; i++) {
+                    var ship = fleets[i],
                         nLi = li.cloneNode(false);
                 
                     Dom.setStyle(nLi, "margin-top", "3px");
@@ -565,6 +569,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '    </div>',
                     '    <div class="yui-u">',
                     '        <ul>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',ship.quantity,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',ship.max_occupants,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',ship.stealth,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',ship.combat,'</li>',
@@ -612,18 +617,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         },
         ViewHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
-            this.service.view_all_ships({
+            this.service.view_all_fleets({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
                 paging:{page_number:newState.page}
             }, {
                 success : function(o){
-                    YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_ships.success");
+                    YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_fleets.success");
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.shipsView = {
                         number_of_ships: o.result.number_of_ships,
-                        ships: o.result.ships
+                        fleets: o.result.fleets
                     };
                     this.ViewPopulate();
                 },
@@ -1046,7 +1051,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                         YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
                         Lacuna.Pulser.Hide();
                         this.Self.rpcSuccess(o);
-                        var ships = this.Self.shipsView.ships,
+                        var fleets = this.Self.shipsView.fleets,
                             info = Dom.get("shipsCount");
                         for(var i=0; i<ships.length; i++) {
                             if(ships[i].id == this.Ship.id) {
@@ -1081,7 +1086,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Lacuna.Pulser.Hide();
                     this.Self.rpcSuccess(o);
                     
-                    var ships = this.Self.shipsView.ships,
+                    var fleets = this.Self.shipsView.fleets,
                         info = Dom.get("shipsCount");
                     for(var i=0; i<ships.length; i++) {
                         if(ships[i].id == this.Ship.id) {
