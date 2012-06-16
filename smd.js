@@ -1648,19 +1648,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"page_number", "type":"number", "optional":true}
                         ],
                         "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { ... },
-                            "spies" : [
-                                {
-                                    "name" : "James Bond",
-                                    "level" : 11,
-                                    "next_mission" : "01 31 2010 13:09:05 +0600"
-                                },
-                                ...
-                            ]
-                         }
-                        */
                     }
                 }
             },
@@ -1674,78 +1661,23 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "services": {
                     "view_build_queue" : {
                         "description": "Retrieves what is already being built at this shipyard.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"page_number", "type":"number", "optional":true}
-                        ],
+                        "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
                     "subsidize_build_queue" : {
                         "description": "Will spend 1 essentia per ship to complete the current build queue immediately.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false}
-                        ],
+                        "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
                     "get_buildable" : {
                         "description": "Returns a list of buildable ships and their costs, and if they're not buildable, gives a reason why not in the form of an exception.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false}
-                        ],
+                        "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
-                        /*
-                             {
-                                "buildable" : {
-                                    "probe" : {
-                                        "can" : 1,             # can it be built or not
-                                        "reason" : null,       # if it can't an array ref will be here with the exception for why not
-                                        "cost" : {
-                                            "seconds" : 900,
-                                            "food" : 1100,
-                                            "water" : 1000,
-                                            "energy" : 1200,
-                                            "ore" : 1200,
-                                            "waste" : 100,
-                                        },
-                                        attributes : {
-                                            "speed" : 1000,    # 100 roughly equals 1 star in 1 hour
-                                        }
-                                    },
-                                    ...
-                                },
-                                "docks_available" : 7,         # you can only build ships up to the number of docks you have available
-                                "status" : { get_status() },
-                             }
-                        */
                     },
-                    "build_ship" : {
-                        "description": "Adds a ship to the build queue.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"type", "type":"string", "optional":false}, //'probe','colony_ship','spy_pod','cargo_ship','space_station','smuggler_ship','mining_platform_ship','terraforming_platform_ship', or 'gas_giant_settlement_ship'
-                            {"name":"quantity", "type":"number", "optional":false}
-                        ],
+                    "build_fleet" : {
+                        "description": "Adds a fleet to the build queue.",
+                        "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
-                        /*
-                             {
-                                "ship_build_queue" : {
-                                    "next_completed" : "01 31 2010 13:09:05 +0600",
-                                    "queue" : [
-                                        {
-                                           "type" : "probe",
-                                           "seconds_each" : 120,
-                                           "quantity" : 12
-                                        },
-                                        ...
-                                    ]
-                                },
-                                "status" : { get_status() }
-                             }
-                        */
                     }
                 }                
             },
