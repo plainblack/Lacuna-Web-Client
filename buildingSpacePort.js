@@ -27,8 +27,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             if(this.viewPager) {
                 this.viewPager.destroy();
             }
-            if(this.foreignPager) {
-                this.foreignPager.destroy();
+            if(this.incomingPager) {
+                this.incomingPager.destroy();
             }
             if(this.orbitingPager) {
                 this.orbitingPager.destroy();
@@ -36,7 +36,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             SpacePort.superclass.destroy.call(this);
         },
         getChildTabs : function() {
-            return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getForeignTab(), this._getLogsTab(), this._getSendTab(), this._getSendFleetTab()];
+            return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getIncomingTab(), this._getLogsTab(), this._getSendTab(), this._getSendFleetTab()];
         },
         _getTravelTab : function() {
             this.travelTab = new YAHOO.widget.Tab({ label: "Travelling", content: [
@@ -97,8 +97,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             
             return this.viewOrbitingTab;
         },
-        _getForeignTab : function() {
-            this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Incoming", content: [
+        _getIncomingTab : function() {
+            this.incomingFleetsTab = new YAHOO.widget.Tab({ label: "Incoming", content: [
                 '<div>',
                 '    <ul class="shipHeader shipInfo clearafter">',
                 '        <li class="shipTypeImage">&nbsp;</li>',
@@ -106,14 +106,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '        <li class="shipArrives">Arrives</li>',
                 '        <li class="shipFrom">From</li>',
                 '    </ul>',
-                '    <div><div id="shipsForeignDetails"></div></div>',
-                '    <div id="shipsForeignPaginator"></div>',
+                '    <div><div id="fleetsIncomingDetails"></div></div>',
+                '    <div id="fleetsIncomingPaginator"></div>',
                 '</div>'
             ].join('')});
             //subscribe after adding so active doesn't fire
-            this.foreignShipsTab.subscribe("activeChange", this.getForeign, this, true);
+            this.incomingFleetsTab.subscribe("activeChange", this.getIncoming, this, true);
             
-            return this.foreignShipsTab;
+            return this.incomingFleetsTab;
         },
         _getLogsTab : function() {
             this.battleLogsTab = new YAHOO.widget.Tab({ label: "Battle Logs", content: [
@@ -263,37 +263,41 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 }
             }
         },
-        getForeign : function(e) {
+        getIncoming : function(e) {
             if(e.newValue) {
-                if(!this.shipsForeign) {
+                if(!this.fleetsIncoming) {
                     Lacuna.Pulser.Show();
-                    this.service.view_foreign_ships({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
+                    this.service.get_incoming_for({args: {
+                        session_id:Game.GetSession(),
+                        target: {body_id: Game.GetCurrentPlanet().id },
+                        page_number:1
+                    }}, {
                         success : function(o){
-                            YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
+                            YAHOO.log(o, "info", "SpacePort.get_incoming_for.success");
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
-                            this.shipsForeign = {
-                                number_of_ships: o.result.number_of_ships,
-                                ships: o.result.ships
+                            this.fleetsIncoming = {
+                                number_of_fleets: o.result.number_of_fleets,
+                                fleets: o.result.fleets
                             };
-                            this.foreignPager = new Pager({
+                            this.incomingPager = new Pager({
                                 rowsPerPage : 25,
-                                totalRecords: o.result.number_of_ships,
-                                containers  : 'shipsForeignPaginator',
+                                totalRecords: o.result.number_of_fleets,
+                                containers  : 'fleetsIncomingPaginator',
                                 template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
                                 alwaysVisible : false
 
                             });
-                            this.foreignPager.subscribe('changeRequest',this.ForeignHandlePagination, this, true);
-                            this.foreignPager.render();
+                            this.incomingPager.subscribe('changeRequest',this.IncomingHandlePagination, this, true);
+                            this.incomingPager.render();
                             
-                            this.ForeignPopulate();
+                            this.IncomingPopulate();
                         },
                         scope:this
                     });
                 }
                 else {
-                    this.ForeignPopulate();
+                    this.IncomingPopulate();
                 }
             }
         },
@@ -415,7 +419,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '</div>',
                     '</div>'].join('');
                     var sn = Sel.query("span.shipName",nLi,true);
-                    Event.on(sn, "click", this.ShipName, {Self:this,Ship:ship,el:sn}, true);
+                    Event.on(sn, "click", this.FleetRename, {Self:this,Fleet:ship,el:sn}, true);
                     //Event.on(Sel.query("span.shipFrom",nLi,true), "click", this.EmpireProfile, ship.from);
                     //Event.on(Sel.query("span.shipTo",nLi,true), "click", this.EmpireProfile, ship.to);
                     
@@ -586,7 +590,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     }
                     
                     var sn = Sel.query("span.shipName",nLi,true);
-                    Event.on(sn, "click", this.ShipName, {Self:this,Ship:ship,el:sn}, true);
+                    Event.on(sn, "click", this.FleetRename, {Self:this,Fleet:ship,el:sn}, true);
                     //Event.on(Sel.query("span.shipFrom",nLi,true), "click", this.EmpireProfile, ship.from);
                     //Event.on(Sel.query("span.shipTo",nLi,true), "click", this.EmpireProfile, ship.to);
 
@@ -639,82 +643,87 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             this.viewPager.setState(newState);
         },
         
-        ShipName : function() {
+        FleetRename : function() {
             this.el.innerHTML = "";
             
             var inp = document.createElement("input"),
+                inp_qty = document.createElement("input"),
                 bSave = document.createElement("button"),
                 bCancel = bSave.cloneNode(false);
             inp.type = "text";
-            inp.value = this.Ship.name;
+            inp.value = this.Fleet.name;
             this.Input = inp;
+
+            inp_qty.type = "text";
+            inp_qty.value = this.Fleet.quantity;
+            inp_qty.setAttribute("style", "width:25px;");
+            this.InputQty = inp_qty;
+
             bSave.setAttribute("type", "button");
             bSave.innerHTML = "Save";
-            Event.on(bSave,"click",this.Self.ShipNameSave,this,true);
+            Event.on(bSave,"click",this.Self.FleetRenameSave,this,true);
             bCancel.setAttribute("type", "button");
             bCancel.innerHTML = "Cancel";
-            Event.on(bCancel,"click",this.Self.ShipNameClear,this,true);
+            Event.on(bCancel,"click",this.Self.FleetRenameClear,this,true);
                         
             Event.removeListener(this.el, "click");        
                 
             this.el.appendChild(inp);
+            this.el.appendChild(inp_qty);
             this.el.appendChild(document.createElement("br"));
             this.el.appendChild(bSave);
             this.el.appendChild(bCancel);
         },
-        ShipNameSave : function(e) {
+        FleetRenameSave : function(e) {
             Event.stopEvent(e);
             Lacuna.Pulser.Show();
             var newName = this.Input.value;
-            
-            this.Self.service.name_ship({
+            var qty = this.InputQty.value; 
+            this.Self.service.rename_fleet({ args: {
                 session_id:Game.GetSession(),
                 building_id:this.Self.building.id,
-                ship_id:this.Ship.id,
+                fleet_id:this.Fleet.id,
+                quantity:qty,
                 name:newName
-            }, {
+            }}, {
                 success : function(o){
-                    YAHOO.log(o, "info", "SpacePort.ShipNameSave.success");
+                    YAHOO.log(o, "info", "SpacePort.FleetRenameSave.success");
                     Lacuna.Pulser.Hide();
                     this.Self.rpcSuccess(o);
                     delete this.Self.shipsView;
                     delete this.Self.shipsTravelling;
-                    this.Ship.name = newName;
-                    if(this.Input) {
-                        this.Input.value = newName;
-                    }
-                    this.Self.ShipNameClear.call(this);
+                    this.Self.getShips({newValue:true});
                 },
                 failure : function(o){
                     if(this.Input) {
-                        this.Input.value = this.Ship.name;
+                        this.Input.value = this.Fleet.name;
                     }
                 },
                 scope:this
             });
         },
-        ShipNameClear : function(e) {
+        FleetRenameClear : function(e) {
             if(e) { Event.stopEvent(e); }
             if(this.Input) {
                 delete this.Input;
             }
             if(this.el) {
                 Event.purgeElement(this.el, true);
-                this.el.innerHTML = this.Ship.name;
-                Event.on(this.el, "click", this.Self.ShipName, this, true);
+                this.el.innerHTML = this.Fleet.name;
+                Event.on(this.el, "click", this.Self.FleetRename, this, true);
             }
         },
         
-        ForeignPopulate : function() {
-            var details = Dom.get("shipsForeignDetails");
+        IncomingPopulate : function() {
+            var details = Dom.get("fleetsIncomingDetails");
             
             if(details) {
-                var ships = this.shipsForeign.ships,
+                var fleets = this.fleetsIncoming.fleets,
                     ul = document.createElement("ul"),
                     li = document.createElement("li");
                 
-                ships = ships.slice(0);
-                ships.sort(function(a,b) {
+                fleets = fleets.slice(0);
+                fleets.sort(function(a,b) {
                     if (a.date_arrives > b.date_arrives) {
                         return 1;
                     }
@@ -731,8 +740,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 
                 var serverTime = Lib.getTime(Game.ServerData.time);
 
-                for(var i=0; i<ships.length; i++) {
-                    var ship = ships[i],
+                for(var i=0; i<fleets.length; i++) {
+                    var ship = fleets[i],
                         nUl = ul.cloneNode(false),
                         nLi = li.cloneNode(false),
                         sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
@@ -773,7 +782,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     }
                     nUl.appendChild(nLi);
 
-                    this.addQueue(sec, this.ForeignQueue, nUl);
+                    this.addQueue(sec, this.IncomingQueue, nUl);
                                 
                     details.appendChild(nUl);
                     
@@ -870,28 +879,28 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 },10);
             }
         },
-        ForeignHandlePagination : function(newState) {
+        IncomingHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
-            this.service.view_foreign_ships({
+            this.service.get_incoming_for({ args: {
                 session_id:Game.GetSession(),
-                building_id:this.building.id,
+                target: {body_id: Game.GetCurrentPlanet().id },
                 page_number:newState.page
-            }, {
+            }}, {
                 success : function(o){
-                    YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
+                    YAHOO.log(o, "info", "SpacePort.get_incoming_for.success");
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
-                    this.shipsForeign = {
+                    this.fleetsIncoming = {
                         number_of_ships: o.result.number_of_ships,
                         ships: o.result.ships
                     };
-                    this.ForeignPopulate();
+                    this.IncomingPopulate();
                 },
                 scope:this
             });
      
             // Update the Paginator's state
-            this.foreignPager.setState(newState);
+            this.incomingPager.setState(newState);
         },
         LogsHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
@@ -916,7 +925,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             // Update the Paginator's state
             this.logsPager.setState(newState);
         },
-        ForeignQueue : function(remaining, elLine){
+        IncomingQueue : function(remaining, elLine){
             var arrTime;
             if(remaining <= 0) {
                 arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));

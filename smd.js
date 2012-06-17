@@ -1714,8 +1714,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
-                    "name_ship" : {
-                        "description": "Set the name of a ship.",
+                    "rename_fleet" : {
+                        "description": "Change the name for some ships in a fleet.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
@@ -1747,6 +1747,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     },
                     "view_all_fleets" : {
                         "description": "Returns a list of all fleets, whatever they are doing",
+                        "parameters": [{"name":"args","type":"object", "optional":false}],
+                        "returns":{"type":"object"}
+                    },
+                    "get_incoming_for" : {
+                        "description": "Returns a list of all fleets which are incoming to a target.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
