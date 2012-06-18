@@ -277,12 +277,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
                             this.fleetsIncoming = {
-                                number_of_fleets: o.result.number_of_fleets,
-                                fleets: o.result.fleets
+                                number_of_incoming: o.result.number_of_incoming,
+                                incoming: o.result.incoming
                             };
                             this.incomingPager = new Pager({
                                 rowsPerPage : 25,
-                                totalRecords: o.result.number_of_fleets,
+                                totalRecords: o.result.number_of_incoming,
                                 containers  : 'fleetsIncomingPaginator',
                                 template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
                                 alwaysVisible : false
@@ -718,7 +718,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var details = Dom.get("fleetsIncomingDetails");
             
             if(details) {
-                var fleets = this.fleetsIncoming.fleets,
+                var fleets = this.fleetsIncoming.incoming,
                     ul = document.createElement("ul"),
                     li = document.createElement("li");
                 
@@ -891,8 +891,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.fleetsIncoming = {
-                        number_of_ships: o.result.number_of_ships,
-                        ships: o.result.ships
+                        number_of_incoming: o.result.number_of_incoming,
+                        incoming: o.result.incoming
                     };
                     this.IncomingPopulate();
                 },
