@@ -1968,21 +1968,28 @@ _getWasteChainTab : function() {
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainBody");
+            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
             nLi.innerHTML = chain.body.name;
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainResource");
+            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
             nLi.innerHTML = chain.resource_type.titleCaps();
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainHour");
+            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
             nLi.innerHTML = chain.resource_hour;
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi,"supplyChainAction");
+            if ( chain.stalled == 1 ) {
+                Dom.addClass(nLi, "supplyChainStalled");
+                nLi.appendChild( document.createTextNode("Chain Stalled<br/>") );
+            }
             var bbtn = document.createElement("button");
             bbtn.setAttribute("type", "button");
             bbtn.innerHTML = "Delete Chain";

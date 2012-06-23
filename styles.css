@@ -1956,6 +1956,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
     width:15%;
 }
 
+.supplyChainInfo .supplyChainStalled {
+    color: #f00;
+}
+
 .tradeInfo {
 	margin-bottom:10px;
 }
