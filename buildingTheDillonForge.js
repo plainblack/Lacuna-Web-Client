@@ -78,7 +78,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             
             for (var i=0; i<make_plan.length; i++) {
                 var nOpt = option.cloneNode(false);
-                nOpt.setAttribute("value", make_plan[i].class);
+                nOpt.setAttribute("value", make_plan[i]['class']);
                 nOpt.innerHTML = [
                     make_plan[i].name, ' (',
                     make_plan[i].max_level, ') &#91;',
@@ -160,7 +160,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             for (var i=0; i<split_plan.length; i++) {
                 var nOpt = option.cloneNode(false);
                 var value = [
-                    split_plan[i].class, ';',
+                    split_plan[i]['class'], ';',
                     split_plan[i].level, ';',
                     split_plan[i].extra_build_level
                 ].join('');
