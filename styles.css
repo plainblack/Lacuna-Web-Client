@@ -1941,11 +1941,11 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 .supplyChainInfo .supplyChainBody {
-    width:55%;
+    width:35%;
 }
 
 .supplyChainInfo .supplyChainResource {
-    width:15%;
+    width:20%;
 }
 
 .supplyChainInfo .supplyChainHour {
@@ -1953,7 +1953,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 .supplyChainInfo .supplyChainAction {
-    width:15%;
+    width:30%;
 }
 
 .supplyChainInfo .supplyChainStalled {

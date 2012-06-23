@@ -1892,7 +1892,7 @@ _getWasteChainTab : function() {
                             '<option value="', r, '"'
                         ].join('');
                         
-                        if ( selected && name == selected ) {
+                        if ( selected && r == selected ) {
                             resource_options += ' selected="selected"';
                         }
                         
@@ -1975,13 +1975,19 @@ _getWasteChainTab : function() {
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainResource");
             if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
-            nLi.innerHTML = chain.resource_type.titleCaps();
+            nSel = document.createElement("select");
+            nSel.innerHTML = this.resourceOptions(chain.resource_type);
+            nLi.appendChild(nSel);
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainHour");
             if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
-            nLi.innerHTML = chain.resource_hour;
+            nText = document.createElement("input");
+            nText.type = "text";
+            nText.size = 10;
+            nText.value = chain.resource_hour;
+            nLi.appendChild(nText);
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
@@ -1990,13 +1996,18 @@ _getWasteChainTab : function() {
                 Dom.addClass(nLi, "supplyChainStalled");
                 nLi.appendChild( document.createTextNode("Chain Stalled<br/>") );
             }
-            var bbtn = document.createElement("button");
-            bbtn.setAttribute("type", "button");
-            bbtn.innerHTML = "Delete Chain";
-            bbtn = nLi.appendChild(bbtn);
+            var editBtn = document.createElement("button");
+            editBtn.setAttribute("type", "button");
+            editBtn.innerHTML = "Update Chain";
+            nLi.appendChild(editBtn);
+            var delBtn = document.createElement("button");
+            delBtn.setAttribute("type", "button");
+            delBtn.innerHTML = "Delete Chain";
+            nLi.appendChild(delBtn);
             nUl.appendChild(nLi);
             
-            Event.on(bbtn, "click", this.SupplyChainRemove, {Self:this,Chain:chain,Line:nUl}, true);
+            Event.on(editBtn, "click", this.SupplyChainUpdate, {Self:this,Chain:chain,Type:nSel,Hour:nText,Line:nUl}, true);
+            Event.on(delBtn, "click", this.SupplyChainRemove, {Self:this,Chain:chain,Line:nUl}, true);
             
             details.appendChild(nUl);
           }
@@ -2040,6 +2051,26 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainAddNew.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    
+                    delete this.Self.supply_chains;
+                    this.Self.viewSupplyChainInfo();
+                },
+                scope:this
+            });
+        },
+        SupplyChainUpdate : function() {
+            Lacuna.Pulser.Show();
+            this.Self.service.update_supply_chain({
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                supply_chain_id:this.Chain.id,
+                resource_type: Lib.getSelectedOptionValueFromSelectElement(this.Type),
+                resource_hour:this.Hour.value
+            }, {
+                success : function(o){
+                    YAHOO.log(o, "info", "Trade.SupplyChainUpdate.success");
                     Lacuna.Pulser.Hide();
                     this.Self.rpcSuccess(o);
                     
