@@ -2306,7 +2306,28 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "target":"/thedillonforge",
 
                 "services": {
-                    "operate" : {
+                     "make_plan" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"plan_class", "type":"string", "optional":false},
+                            {"name":"level", "type":"number", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "split_plan" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"plan_class", "type":"string", "optional":false},
+                            {"name":"level", "type":"number", "optional":false},
+                            {"name":"extra_build_level", "type":"number", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "subsidize" : {
                         "description": "",
                         "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},
