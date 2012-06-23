@@ -1,28 +1,28 @@
 YAHOO.namespace("lacuna.buildings");
 
 if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna.buildings.TheDillonForge) {
-	
+    
 (function(){
-	var Lang = YAHOO.lang,
-		Util = YAHOO.util,
-		Dom = Util.Dom,
-		Event = Util.Event,
-		Lacuna = YAHOO.lacuna,
-		Game = Lacuna.Game,
-		Lib = Lacuna.Library;
+    var Lang = YAHOO.lang,
+        Util = YAHOO.util,
+        Dom = Util.Dom,
+        Event = Util.Event,
+        Lacuna = YAHOO.lacuna,
+        Game = Lacuna.Game,
+        Lib = Lacuna.Library;
 
-	var TheDillonForge = function(result){
-		TheDillonForge.superclass.constructor.call(this, result);
-		
-		this.service = Game.Services.Buildings.TheDillonForge;
-	};
-	
-	Lang.extend(TheDillonForge, Lacuna.buildings.Building, {
-		getChildTabs : function() {
-			return [this._getForgeTab()];
-		},
-		_getForgeTab : function() {
-			this.splitTab = new YAHOO.widget.Tab({ label: "Forge", content: [
+    var TheDillonForge = function(result){
+        TheDillonForge.superclass.constructor.call(this, result);
+        
+        this.service = Game.Services.Buildings.TheDillonForge;
+    };
+    
+    Lang.extend(TheDillonForge, Lacuna.buildings.Building, {
+        getChildTabs : function() {
+            return [this._getForgeTab()];
+        },
+        _getForgeTab : function() {
+            this.splitTab = new YAHOO.widget.Tab({ label: "Forge", content: [
                 '<div id="forgeSplitPlan">',
                 '  <div><b>Split a plan into glyphs.</b></div>',
                 '  <div id="forgeSplitPlanForm"></div><hr/>',
@@ -35,12 +35,12 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 '  <div><b>Subsidize current task.</b></div>',
                 '  <div id="forgeSubsidizeForm"><div>',
                 '</div>'
-			].join('')});
-			
+            ].join('')});
+            
             this.splitTab.subscribe("activeChange", this.viewForgeTab, this, true);
             
-			return this.splitTab;
-		},
+            return this.splitTab;
+        },
         viewForgeTab : function() {
             if ( this.result.tasks.can == 1 ) {
                 Dom.setStyle("forgeMakePlan", "display", "");
@@ -227,24 +227,24 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             form.appendChild(button);
             
             Event.on(button, "click", this.Subsidize, {Self:this}, true);
-		},
+        },
         Subsidize : function() {
             Lacuna.Pulser.Show();
-			this.Self.service.subsidize({session_id:Game.GetSession(),building_id:this.Self.building.id}, {
-				success : function(o){
-					YAHOO.log(o, "info", "TheDillonForge.Subsidize.success");
-					Lacuna.Pulser.Hide();
-					this.Self.rpcSuccess(o);
-					this.Self.result = o.result;
-					this.Self.viewForgeTab();
-				},
-				scope:this
-			});
+            this.Self.service.subsidize({session_id:Game.GetSession(),building_id:this.Self.building.id}, {
+                success : function(o){
+                    YAHOO.log(o, "info", "TheDillonForge.Subsidize.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    this.Self.result = o.result;
+                    this.Self.viewForgeTab();
+                },
+                scope:this
+            });
         }
 
-	});
-	
-	YAHOO.lacuna.buildings.TheDillonForge = TheDillonForge;
+    });
+    
+    YAHOO.lacuna.buildings.TheDillonForge = TheDillonForge;
 
 })();
 YAHOO.register("TheDillonForge", YAHOO.lacuna.buildings.TheDillonForge, {version: "1", build: "0"}); 
