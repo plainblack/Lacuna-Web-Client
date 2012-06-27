@@ -35,7 +35,7 @@
 /** DEBUG */
 	var host = window.lacuna_code_base_url || window.lacuna_s3_base_url;
 	var loader = new YAHOO.util.YUILoader({
-		base: "//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/",
+		base: "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
 		filter: "RAW",
 		allowRollup: false,
 		combine: false
