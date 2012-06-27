@@ -2096,6 +2096,11 @@ _getWasteChainTab : function() {
             });
         },
         SupplyChainRemove : function() {
+            var chain = this.Chain;
+            
+            if (!confirm(['Are you sure you want to delete the supply chain of', chain.resource_hour, chain.resource_type.titleCaps(), 'to', chain.body.name].join(' ')))
+                return;
+            
             Lacuna.Pulser.Show();
             this.Self.service.delete_supply_chain({
                 session_id:Game.GetSession(),
