@@ -323,6 +323,7 @@ _getSupplyChainTab : function() {
     
     this.supplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chains", content: [
         '<div id="supplyChainInfo" style="margin-bottom: 2px">',
+        '    <div id="supplyChainMaxCount"></div><hr/>',
         '    <div id="supplyChainAddNew">',
         '     <b>Add New Supply Chain</b><br/>',
         '     Target: <select id="supplyChainAddTargetId">',
@@ -1916,16 +1917,30 @@ _getWasteChainTab : function() {
                         YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
                         Lacuna.Pulser.Hide();
                         this.rpcSuccess(o);
+                        this.max_supply_chains = o.result.max_supply_chains;
                         this.supply_chains = o.result.supply_chains;
                         
+                        this.SupplyChainMaxCount();
                         this.SupplyChainList();
                     },
                     scope:this
                 });
             }
             else {
+                this.supplyChainMaxCount();
                 this.SupplyChainList();
             }
+        },
+        SupplyChainMaxCount : function() {
+            var max_container = Dom.get("supplyChainMaxCount");
+            
+            max_container.innerHTML = [
+                "<b>Total of",
+                this.supply_chains.length,
+                "supply chains in use. This ministry can control a maximum of",
+                this.max_supply_chains,
+                "supply chains.</b>"
+            ].join( " ");
         },
         SupplyChainList : function() {
           var supply_chains = this.supply_chains;
