@@ -25,7 +25,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             return tabs;
         },
         getChildTabs : function() {
-            return [this._getPlanTab()];
+            return [this._getPlanTab(), this._getResourcesTab()];
         },
         _getPlanetTab : function() {
             var planet = this.result.planet,
@@ -119,6 +119,59 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             }, this, true);
                 
             return this.planTab;
+        },
+        _getResourcesTab : function() {
+            
+            var food_items = '',
+                foods      = Lib.ResourceTypes.food;
+            
+            for(x=0; x < foods.length; x++) {
+                food = foods[x];
+                
+                food_items += [
+                    '<li><label>',
+                    food.titleCaps(),
+                    '</label><span class="pcStored">',
+                    this.result.food[food+"_stored"],
+                    '</span> @ <span class="pcPerHour">',
+                    Lib.convertNumDisplay(this.result.food[food+"_hour"]),
+                    '</span>/hr</li>',
+                ].join('');
+            }
+            
+            var ore_items = '',
+                ores      = Lib.ResourceTypes.ore;
+            
+            for(x=0; x < ores.length; x++) {
+                ore = ores[x];
+                
+                ore_items += [
+                    '<li><label>',
+                    ore.titleCaps(),
+                    '</label><span class="pcStored">',
+                    this.result.ore[ore+"_stored"],
+                    '</span> @ <span class="pcPerHour">',
+                    Lib.convertNumDisplay(this.result.ore[ore+"_hour"]),
+                    '</span>/hr</li>',
+                ].join('');
+            }
+            
+            this.resourcesTab = new YAHOO.widget.Tab({ label: "Resources", content: [
+                    '<div class="yui-g buildingDetailsExtra">',
+                    '    <div class="yui-u first">',
+                    '        <ul class="buildingDetailsPC">',
+                    food_items,
+                    '        </ul>',
+                    '    </div>',
+                    '    <div class="yui-u first">',
+                    '        <ul class="buildingDetailsPC">',
+                    ore_items,
+                    '        </ul>',
+                    '    </div>',
+                    '</div>'
+                ].join('')});
+                
+            return this.resourcesTab;
         },
         Abandon : function() {
             var cp = Game.GetCurrentPlanet();
