@@ -1968,7 +1968,13 @@ _getWasteChainTab : function() {
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainBody");
-            nLi.innerHTML = chain.body.name;
+            if (chain.stalled == 1) {
+                Dom.addClass(nUl, "supplyChainStalled");
+                nLi.innerHTML = chain.body.name + " (Stalled)";
+            }
+            else {
+                nLi.innerHTML = chain.body.name;
+            }
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
