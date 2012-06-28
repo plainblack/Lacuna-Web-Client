@@ -319,13 +319,20 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
         getSelectedOption : function(select) {
             //just making sure
             select = Dom.get(select);
-
+            
+            return Library.getSelectedOptionFromSelectElement(select);
+        },
+        getSelectedOptionFromSelectElement : function(select) {
             var opts = select.options,
                 ind = select.selectedIndex;
             return ind >= 0 && opts.length > ind ? opts[ind] : null;
         },
         getSelectedOptionValue : function(select) {
             var opt = Library.getSelectedOption(select);
+            return opt ? opt.value : null;
+        },
+        getSelectedOptionValueFromSelectElement : function(select) {
+            var opt = Library.getSelectedOptionFromSelectElement(select);
             return opt ? opt.value : null;
         },
         
