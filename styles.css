@@ -1977,7 +1977,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
     width:15%;
 }
 
-.incomingSupplyChainInfo .incomingSupplyChainStalled {
+.incomingSupplyChainStalled {
     color: #f00;
     font-weight: bold;
 }

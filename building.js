@@ -395,7 +395,13 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "incomingSupplyChainBody");
-            nLi.innerHTML = chain.from_body.name;
+            if (chain.stalled == 1) {
+                Dom.addClass( nUl, "incomingSupplyChainStalled")
+                nLi.innerHTML = chain.from_body.name + " (Stalled)";
+            }
+            else {
+                nLi.innerHTML = chain.from_body.name;
+            }
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
@@ -410,13 +416,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi,"incomingSupplyChainEfficiency");
-            if (chain.stalled == 1) {
-                Dom.addClass( nLi, "incomingSupplyChainStalled")
-                nLi.innerHTML = "Stalled";
-            }
-            else {
-                nLi.innerHTML = chain.percent_transferred;
-            }
+            nLi.innerHTML = chain.percent_transferred;
             nUl.appendChild(nLi);
             
             details.appendChild(nUl);
