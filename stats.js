@@ -73,6 +73,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
             this.statsGeneralShips = Dom.get("statsGeneralShips");
             this.statsGeneralSpies = Dom.get("statsGeneralSpies");
             this.statsGeneralStars = Dom.get("statsGeneralStars");
+            this.statsGeneralGlyphs = Dom.get("statsGeneralGlyphs");
         }, this, true);
         this.Panel.render();
         Game.OverlayManager.register(this.Panel);
@@ -107,6 +108,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
             '                            <li><a href="#statsGeneralShips"><em>Ships</em></a></li>',
             '                            <li><a href="#statsGeneralSpies"><em>Spies</em></a></li>',
             '                            <li><a href="#statsGeneralStars"><em>Stars</em></a></li>',
+            '                            <li><a href="#statsGeneralGlyphs"><em>Glyphs</em></a></li>',
             '                        </ul>',
             '                        <div id="sHt" class="yui-content" style="overflow:auto;">',
             '                            <div id="statsGeneralBodies">',
@@ -122,6 +124,8 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
             '                            <div id="statsGeneralSpies">',
             '                            </div>',
             '                            <div id="statsGeneralStars">',
+            '                            </div>',
+            '                            <div id="statsGeneralGlyphs">',
             '                            </div>',
             '                        </div>',
             '                    </div>',
@@ -165,6 +169,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
             this.statsGeneralShips.innerHTML = this._getShipsHtml();
             this.statsGeneralSpies.innerHTML = this._getSpiesHtml();
             this.statsGeneralStars.innerHTML = this._getStarsHtml();
+            this.statsGeneralGlyphs.innerHTML = this._getGlyphsHtml();
             
             Event.delegate(this.statsGeneralBodies, "click", this.expander, "label.statsSubHeader");
             Event.delegate(this.statsGeneralBuildings, "click", this.expander, "label.statsSubHeader");
@@ -285,180 +290,196 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
                 '<li><label>Empires Using Essentia:</label>', Lib.formatNumber(data.essentia_using_count), '</li>',
                 '<li><label>Isolationist Empires:</label>', Lib.formatNumber(data.isolationist_count), '</li>',
                 '</ul>'
-            ].join('');
-        },
-        _getOrbitsHtml : function() {
-            var data = this._serverOverview.orbits;
-            
-            return  ['<ul class="statsList">',
-                '<li><label>Orbits</label><ul class="statsSubList">',
-                '<li><label class="statsSubHeader">One</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["1"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["1"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Two</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["2"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["2"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Three</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["3"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["3"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Four</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["4"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["4"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Five</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["5"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["5"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Six</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["6"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["6"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Seven</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["7"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["7"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '<li><label class="statsSubHeader">Eight</label>',
-                '    <ul style="display:none;">',
-                '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["8"].bodies), '</li>',
-                '    <li><label>Inhabited:</label>', Lib.formatNumber(data["8"].inhabited), '</li>',
-                '    </ul>',
-                '</li>',
-                '</ul></li></ul>'].join('');
-        },
-        _getShipsHtml : function() {
-            var data = this._serverOverview.ships,
-                output = ['<ul class="statsList">',
-                '<li><label>Total Ships:</label>', Lib.formatNumber(data.count), '</li>',
-                '<li><label>Types</label><ul class="statsSubList">'];
-                
-            for(var bt in data.types) {
-                if(data.types.hasOwnProperty(bt)) {
-                    output.push(['<li><label class="statsSubHeader">',bt.titleCaps("_"," "),'</label>',
-                    '    <ul style="display:none;">',
-                    '    <li><label>Total:</label>', Lib.formatNumber(data.types[bt].count), '</li>',
-                    '    <li><label>Smallest Hold Size:</label>', Lib.formatNumber(data.types[bt].smallest_hold_size), '</li>',
-                    '    <li><label>Average Hold Size:</label>', Lib.formatNumber(data.types[bt].average_hold_size), '</li>',
-                    '    <li><label>Largest Hold Size:</label>', Lib.formatNumber(data.types[bt].largest_hold_size), '</li>',
-                    '    <li><label>Slowest Speed:</label>', Lib.formatNumber(data.types[bt].slowest_speed), '</li>',
-                    '    <li><label>Average Speed:</label>', Lib.formatNumber(data.types[bt].average_speed), '</li>',
-                    '    <li><label>Fastest Speed:</label>', Lib.formatNumber(data.types[bt].fastest_speed), '</li>',
-                    '    </ul>',
-                    '</li>'].join(''));
-                }
-            }
-                
-            output.push('</ul></li></ul>');
-            return output.join('');
-        },
-        _getSpiesHtml : function() {
-            var data = this._serverOverview.spies;
-            return ['<ul class="statsList">',
-                '<li><label>Total Spies:</label>', Lib.formatNumber(data.count), '</li>',
-                '<li><label>Average Defense:</label>', Lib.formatNumber(data.average_defense), '</li>',
-                '<li><label>Highest Defense:</label>', Lib.formatNumber(data.highest_defense), '</li>',
-                '<li><label>Average Offense:</label>', Lib.formatNumber(data.average_offense), '</li>',
-                '<li><label>Highest Offense:</label>', Lib.formatNumber(data.highest_offense), '</li>',
-                '<li><label>Appropriating Technology:</label>', Lib.formatNumber(data.appropriating_technology_count), '</li>',
-                '<li><label>Countering Espionage:</label>', Lib.formatNumber(data.countering_espionage_count), '</li>',
-                '<li><label>Gathering Intelligence:</label>', Lib.formatNumber(data.gathering_intelligence_count), '</li>',
-                '<li><label>Hacking Networks:</label>', Lib.formatNumber(data.hacking_networks_count), '</li>',
-                '<li><label>Idle:</label>', Lib.formatNumber(data.idle_count), '</li>',
-                '<li><label>In Prison:</label>', Lib.formatNumber(data.in_prison_count), '</li>',
-                '<li><label>Inciting Rebellion:</label>', Lib.formatNumber(data.inciting_rebellion_count), '</li>',
-                '<li><label>Sabotaging Infrastructure:</label>', Lib.formatNumber(data.sabotaging_infrastructure_count), '</li>',
-                '<li><label>Training:</label>', Lib.formatNumber(data.training_count), '</li>',
-                '<li><label>Travelling:</label>', Lib.formatNumber(data.travelling_count), '</li>',
-                '<li><label>Unconscious:</label>', Lib.formatNumber(data.unconscious_count), '</li>',
-                '</ul>'
-            ].join('');
-        },
-        _getStarsHtml : function() {
-            var data = this._serverOverview.stars;
-            return ['<ul class="statsList">',
-                '<li><label>Total Stars:</label>', Lib.formatNumber(data.count), '</li>',
-                '<li><label>Probed Stars:</label>', Lib.formatNumber(data.probed_count), '</li>',
-                '<li><label>Total Probes:</label>', Lib.formatNumber(data.probes_count), '</li>',
-                '</ul>'
-            ].join('');
-        },
-        
-        formatPercent : function(el, oRecord, oColumn, oData) {
-            el.innerHTML = Util.Number.format(Math.round(oData*100),{thousandsSeparator:",",suffix:"%"});
-        },
-        EmpireStats : function(){
-            if(this.EmpireTable) {
-                this.EmpireTable.requery();
-            }
-            else {
-                this.EmpireFindCreate();
-            
-                this.EmpireColumns = [
-                    {key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
-                        var oState = this.getState();
-                        el.innerHTML = Math.floor(oState.pagination.recordOffset + this.rankCounter++);
-                    }},
-                    {key:"empire_name", label:"Empire"},
-                    {key:"alliance_name", label:"Alliance"},
-                    {key:"colony_count", label:"Colonies", formatter:"number"},
-                    {key:"population", label:"Pop", formatter:"number"},
-                    {key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
-                    {key:"building_count", label:"Buildings", formatter:"number"},
-                    {key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
-                    {key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
-                    {key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
-                    {key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
-                ];
-                
-                this.EmpireData = new Util.XHRDataSource("/stats");
-                this.EmpireData.connMethodPost = "POST";
-                this.EmpireData.maxCacheEntries = 2;
-                this.EmpireData.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
-                this.EmpireData.responseSchema = {
-                    resultsList : "result.empires",
-                    fields : [    "empire_id","empire_name",
-                                "alliance_id","alliance_name",
-                                {key:"colony_count",parser:"number"},
-                                {key:"population",parser:"number"},
-                                {key:"empire_size",parser:"number"},
-                                {key:"building_count",parser:"number"},
-                                {key:"average_building_level",parser:"number"},
-                                {key:"offense_success_rate",parser:"number"},
-                                {key:"defense_success_rate",parser:"number"},
-                                {key:"dirtiest",parser:"number"}
-                            ], 
-                    metaFields: { 
-                        totalRecords: "result.total_empires", // Access to value in the server response 
-                        pageNumber: "result.page_number"
-                    } 
-                };
+                    ].join('');
+                          },
+_getOrbitsHtml : function() {
+                     var data = this._serverOverview.orbits;
 
-                var eHt = Game.GetSize().h - 115;
-                if(eHt > 375) { eHt = 375; }
-                this.EmpireTable = new YAHOO.widget.ScrollingDataTable("statsEmpireTable", this.EmpireColumns, this.EmpireData, {
-                    width:"100%",
-                    height:eHt + "px",
-                    initialRequest: Lang.JSON.stringify({
-                            "id": YAHOO.rpc.Service._requestId++,
-                            "method": "empire_rank",
-                            "jsonrpc": "2.0",
-                            "params": [
+                     return  ['<ul class="statsList">',
+                             '<li><label>Orbits</label><ul class="statsSubList">',
+                             '<li><label class="statsSubHeader">One</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["1"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["1"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Two</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["2"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["2"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Three</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["3"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["3"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Four</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["4"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["4"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Five</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["5"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["5"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Six</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["6"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["6"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Seven</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["7"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["7"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '<li><label class="statsSubHeader">Eight</label>',
+                             '    <ul style="display:none;">',
+                             '    <li><label>Total Bodies:</label>', Lib.formatNumber(data["8"].bodies), '</li>',
+                             '    <li><label>Inhabited:</label>', Lib.formatNumber(data["8"].inhabited), '</li>',
+                             '    </ul>',
+                             '</li>',
+                             '</ul></li></ul>'].join('');
+                 },
+_getShipsHtml : function() {
+                    var data = this._serverOverview.ships,
+                    output = ['<ul class="statsList">',
+                    '<li><label>Total Ships:</label>', Lib.formatNumber(data.count), '</li>',
+                    '<li><label>Types</label><ul class="statsSubList">'];
+
+                    for(var bt in data.types) {
+                        if(data.types.hasOwnProperty(bt)) {
+                            output.push(['<li><label class="statsSubHeader">',bt.titleCaps("_"," "),'</label>',
+                                    '    <ul style="display:none;">',
+                                    '    <li><label>Total:</label>', Lib.formatNumber(data.types[bt].count), '</li>',
+                                    '    <li><label>Smallest Hold Size:</label>', Lib.formatNumber(data.types[bt].smallest_hold_size), '</li>',
+                                    '    <li><label>Average Hold Size:</label>', Lib.formatNumber(data.types[bt].average_hold_size), '</li>',
+                                    '    <li><label>Largest Hold Size:</label>', Lib.formatNumber(data.types[bt].largest_hold_size), '</li>',
+                                    '    <li><label>Slowest Speed:</label>', Lib.formatNumber(data.types[bt].slowest_speed), '</li>',
+                                    '    <li><label>Average Speed:</label>', Lib.formatNumber(data.types[bt].average_speed), '</li>',
+                                    '    <li><label>Fastest Speed:</label>', Lib.formatNumber(data.types[bt].fastest_speed), '</li>',
+                                    '    </ul>',
+                                    '</li>'].join(''));
+                        }
+                    }
+
+                    output.push('</ul></li></ul>');
+                    return output.join('');
+                },
+_getSpiesHtml : function() {
+                    var data = this._serverOverview.spies;
+                    return ['<ul class="statsList">',
+                           '<li><label>Total Spies:</label>', Lib.formatNumber(data.count), '</li>',
+                           '<li><label>Average Defense:</label>', Lib.formatNumber(data.average_defense), '</li>',
+                           '<li><label>Highest Defense:</label>', Lib.formatNumber(data.highest_defense), '</li>',
+                           '<li><label>Average Offense:</label>', Lib.formatNumber(data.average_offense), '</li>',
+                           '<li><label>Highest Offense:</label>', Lib.formatNumber(data.highest_offense), '</li>',
+                           '<li><label>Appropriating Technology:</label>', Lib.formatNumber(data.appropriating_technology_count), '</li>',
+                           '<li><label>Countering Espionage:</label>', Lib.formatNumber(data.countering_espionage_count), '</li>',
+                           '<li><label>Gathering Intelligence:</label>', Lib.formatNumber(data.gathering_intelligence_count), '</li>',
+                           '<li><label>Hacking Networks:</label>', Lib.formatNumber(data.hacking_networks_count), '</li>',
+                           '<li><label>Idle:</label>', Lib.formatNumber(data.idle_count), '</li>',
+                           '<li><label>In Prison:</label>', Lib.formatNumber(data.in_prison_count), '</li>',
+                           '<li><label>Inciting Rebellion:</label>', Lib.formatNumber(data.inciting_rebellion_count), '</li>',
+                           '<li><label>Sabotaging Infrastructure:</label>', Lib.formatNumber(data.sabotaging_infrastructure_count), '</li>',
+                           '<li><label>Training:</label>', Lib.formatNumber(data.training_count), '</li>',
+                           '<li><label>Travelling:</label>', Lib.formatNumber(data.travelling_count), '</li>',
+                           '<li><label>Unconscious:</label>', Lib.formatNumber(data.unconscious_count), '</li>',
+                           '</ul>'
+                               ].join('');
+                },
+_getStarsHtml : function() {
+                    var data = this._serverOverview.stars;
+                    return ['<ul class="statsList">',
+                           '<li><label>Total Stars:</label>', Lib.formatNumber(data.count), '</li>',
+                           '<li><label>Probed Stars:</label>', Lib.formatNumber(data.probed_count), '</li>',
+                           '<li><label>Total Probes:</label>', Lib.formatNumber(data.probes_count), '</li>',
+                           '</ul>'
+                               ].join('');
+                },
+_getGlyphsHtml : function() {
+                    var data = this._serverOverview.glyphs;
+
+                    output = ['<ul class="statsList">'];
+                    var glyphs = new Array;
+                    var i = 0;
+                    for (var bt in data.types) {
+                        glyphs[i]= {type: bt, count: data.types[bt]};
+                        i++;
+                    }
+                    glyphs.sort(function(a,b){return a.count - b.count});
+                    for (var i = 0; i < glyphs.length; i++) {
+                        output.push(['<li><label>',glyphs[i].type,':</label>',Lib.formatNumber(glyphs[i].count),'</li>'].join(''));
+                    }
+                    return output.join('');
+                },
+
+formatPercent : function(el, oRecord, oColumn, oData) {
+                    el.innerHTML = Util.Number.format(Math.round(oData*100),{thousandsSeparator:",",suffix:"%"});
+                },
+EmpireStats : function(){
+                  if(this.EmpireTable) {
+                      this.EmpireTable.requery();
+                  }
+                  else {
+                      this.EmpireFindCreate();
+
+                      this.EmpireColumns = [
+                      {key:"rank", label:"Rank",formatter:function(el, oRecord, oColumn, oData) {
+                                                                                                    var oState = this.getState();
+                                                                                                    el.innerHTML = Math.floor(oState.pagination.recordOffset + this.rankCounter++);
+                                                                                                }},
+                      {key:"empire_name", label:"Empire"},
+                      {key:"alliance_name", label:"Alliance"},
+                      {key:"colony_count", label:"Colonies", formatter:"number"},
+                      {key:"population", label:"Pop", formatter:"number"},
+                      {key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
+                      {key:"building_count", label:"Buildings", formatter:"number"},
+                      {key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
+                      {key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
+                      {key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
+                      {key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
+                      ];
+
+                      this.EmpireData = new Util.XHRDataSource("/stats");
+                      this.EmpireData.connMethodPost = "POST";
+                      this.EmpireData.maxCacheEntries = 2;
+                      this.EmpireData.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                      this.EmpireData.responseSchema = {
+resultsList : "result.empires",
+              fields : [    "empire_id","empire_name",
+              "alliance_id","alliance_name",
+              {key:"colony_count",parser:"number"},
+              {key:"population",parser:"number"},
+              {key:"empire_size",parser:"number"},
+              {key:"building_count",parser:"number"},
+              {key:"average_building_level",parser:"number"},
+              {key:"offense_success_rate",parser:"number"},
+              {key:"defense_success_rate",parser:"number"},
+              {key:"dirtiest",parser:"number"}
+              ], 
+                  metaFields: { 
+totalRecords: "result.total_empires", // Access to value in the server response 
+              pageNumber: "result.page_number"
+                  } 
+                      };
+
+                      var eHt = Game.GetSize().h - 115;
+                      if(eHt > 375) { eHt = 375; }
+                      this.EmpireTable = new YAHOO.widget.ScrollingDataTable("statsEmpireTable", this.EmpireColumns, this.EmpireData, {
+width:"100%",
+height:eHt + "px",
+initialRequest: Lang.JSON.stringify({
+    "id": YAHOO.rpc.Service._requestId++,
+    "method": "empire_rank",
+    "jsonrpc": "2.0",
+    "params": [
                                 Game.GetSession(""),
                                 "empire_size_rank"
                             ]
