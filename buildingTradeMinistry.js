@@ -1995,10 +1995,6 @@ _getWasteChainTab : function() {
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi,"supplyChainAction");
-            if ( chain.stalled == 1 ) {
-                Dom.addClass(nLi, "supplyChainStalled");
-                nLi.appendChild( document.createTextNode("Chain Stalled<br/>") );
-            }
             var editBtn = document.createElement("button");
             editBtn.setAttribute("type", "button");
             editBtn.innerHTML = "Update Chain";
