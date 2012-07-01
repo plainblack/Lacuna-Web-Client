@@ -323,13 +323,14 @@ _getSupplyChainTab : function() {
     
     this.supplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chains", content: [
         '<div id="supplyChainInfo" style="margin-bottom: 2px">',
+        '    <div id="supplyChainMaxCount"></div><hr/>',
         '    <div id="supplyChainAddNew">',
         '     <b>Add New Supply Chain</b><br/>',
         '     Target: <select id="supplyChainAddTargetId">',
                 target_options,
         '     </select>',
         '     Resource: <select id="supplyChainAddResourceType">',
-                this.resourceOptions(),
+                this.resourceOptionsHTML(),
         '     </select>',
         '     Resources/hr: <input id="supplyChainAddResourceHour" type="text"/>',
         '     <button id="supplyChainAddButton">Add</button>',
@@ -1860,7 +1861,42 @@ _getWasteChainTab : function() {
                 });
             }
         },
-        resourceOptions : function(selected) {
+        addResourceOptions : function(selectElement, selected) {
+            for(r in Lib.ResourceTypes) {
+                if(Lib.ResourceTypes.hasOwnProperty(r)) {
+                    resource = Lib.ResourceTypes[r];
+                    if(Lang.isArray(resource)) {
+                        var optGroup = document.createElement("optgroup");
+                        optGroup.setAttribute("label", r.titleCaps());
+                        
+                        for(x=0; x < resource.length; x++) {
+                            name = resource[x];
+                            option = document.createElement("option");
+                            option.setAttribute("value", name);
+                            option.innerHTML = name.titleCaps();
+                            
+                            if ( selected && name == selected ) {
+                                option.setAttribute("selected", "selected");
+                            }
+                            optGroup.appendChild(option);
+                        }
+                        selectElement.appendChild(optGroup);
+                    }
+                    else if(resource) {
+                        option = document.createElement("option");
+                        option.setAttribute("value", r);
+                        option.innerHTML = r.titleCaps();
+                        
+                        if ( selected && r == selected ) {
+                            option.setAttribute("selected", "selected");
+                        }
+                        
+                        selectElement.appendChild(option);
+                    }
+                }
+            }
+        },
+        resourceOptionsHTML : function(selected) {
             var resource_options = "";
     
             for(r in Lib.ResourceTypes) {
@@ -1916,16 +1952,30 @@ _getWasteChainTab : function() {
                         YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
                         Lacuna.Pulser.Hide();
                         this.rpcSuccess(o);
+                        this.max_supply_chains = o.result.max_supply_chains;
                         this.supply_chains = o.result.supply_chains;
                         
+                        this.SupplyChainMaxCount();
                         this.SupplyChainList();
                     },
                     scope:this
                 });
             }
             else {
+                this.supplyChainMaxCount();
                 this.SupplyChainList();
             }
+        },
+        SupplyChainMaxCount : function() {
+            var max_container = Dom.get("supplyChainMaxCount");
+            
+            max_container.innerHTML = [
+                "<b>Total of",
+                this.supply_chains.length,
+                "supply chains in use. This ministry can control a maximum of",
+                this.max_supply_chains,
+                "supply chains.</b>"
+            ].join( " ");
         },
         SupplyChainList : function() {
           var supply_chains = this.supply_chains;
@@ -1968,21 +2018,24 @@ _getWasteChainTab : function() {
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainBody");
-            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
-            nLi.innerHTML = chain.body.name;
+            if (chain.stalled == 1) {
+                Dom.addClass(nUl, "supplyChainStalled");
+                nLi.innerHTML = chain.body.name + " (Stalled)";
+            }
+            else {
+                nLi.innerHTML = chain.body.name;
+            }
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainResource");
-            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
             nSel = document.createElement("select");
-            nSel.innerHTML = this.resourceOptions(chain.resource_type);
+            this.addResourceOptions(nSel, chain.resource_type);
             nLi.appendChild(nSel);
             nUl.appendChild(nLi);
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi, "supplyChainHour");
-            if ( chain.stalled == 1 ) { Dom.addClass(nLi, "supplyChainStalled") }
             nText = document.createElement("input");
             nText.type = "text";
             nText.size = 10;
@@ -1992,10 +2045,6 @@ _getWasteChainTab : function() {
             
             nLi = li.cloneNode(false);
             Dom.addClass(nLi,"supplyChainAction");
-            if ( chain.stalled == 1 ) {
-                Dom.addClass(nLi, "supplyChainStalled");
-                nLi.appendChild( document.createTextNode("Chain Stalled<br/>") );
-            }
             var editBtn = document.createElement("button");
             editBtn.setAttribute("type", "button");
             editBtn.innerHTML = "Update Chain";
@@ -2081,6 +2130,11 @@ _getWasteChainTab : function() {
             });
         },
         SupplyChainRemove : function() {
+            var chain = this.Chain;
+            
+            if (!confirm(['Are you sure you want to delete the supply chain of', chain.resource_hour, chain.resource_type.titleCaps(), 'to', chain.body.name].join(' ')))
+                return;
+            
             Lacuna.Pulser.Show();
             this.Self.service.delete_supply_chain({
                 session_id:Game.GetSession(),
