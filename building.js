@@ -55,6 +55,11 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                     tabs = tabs.concat(childTabs);
                 }
                 
+                // incoming supply-chains tab
+                if (this.building.url == "/planetarycommand" || this.building.url == "/stationcommand") {
+                    tabs[tabs.length] = this._getIncomingSupplyChainsTab();
+                }
+                
                 //create storage tab last
                 if(this.building.upgrade.production && ((this.building.food_capacity*1 + this.building.ore_capacity*1 + this.building.water_capacity*1 + this.building.energy_capacity*1 + this.building.waste_capacity*1) > 0)) {
                     tabs[tabs.length] = this._getStorageTab();
@@ -312,6 +317,119 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             });
         },
         
+        _getIncomingSupplyChainsTab : function() {            
+            this.incomingSupplyChainTab = new YAHOO.widget.Tab({ label: "Supply Chains", content: [
+                '<div id="incomingSupplyChainInfo" style="margin-bottom: 2px">',
+                '   <div id="incomingSupplyChainList">',
+                '      <b>Incoming Supply Chains</b><hr/>',
+                '      <ul id="incomingSupplyChainListHeader" class="incomingSupplyChainHeader incomingSupplyChainInfo clearafter">',
+                '        <li class="incomingSupplyChainBody">From Body</li>',
+                '        <li class="incomingSupplyChainResource">Resource</li>',
+                '        <li class="incomingSupplyChainHour">/hr</li>',
+                '        <li class="incomingSupplyChainEfficiency">Effiency</li>',
+                '      </ul>',
+                '      <div><div id="incomingSupplyChainListDetails"></div></div>',
+                '   </div>',
+                '   <div id="incomingSupplyChainListNone"><b>No Incoming Supply Chains</b></div>',
+                '</div>',
+            ].join('')});
+            
+            this.incomingSupplyChainTab.subscribe("activeChange", this.viewIncomingSupplyChainInfo, this, true);
+
+            return this.incomingSupplyChainTab;
+        },
+        viewIncomingSupplyChainInfo : function(e) {
+            Dom.setStyle("incomingSupplyChainList", "display", "none");
+            Dom.setStyle("incomingSupplyChainListNone", "display", "none");
+            
+            if ( !this.incoming_supply_chains ) {
+                Lacuna.Pulser.Show();
+                this.service.view_incoming_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "building.viewIncomingSupplyChainInfo.success");
+                        Lacuna.Pulser.Hide();
+                        this.rpcSuccess(o);
+                        this.incoming_supply_chains = o.result.supply_chains;
+                        
+                        this.incomingSupplyChainList();
+                    },
+                    scope:this
+                });
+            }
+            else {
+                this.incomingSupplyChainList();
+            }
+        },
+        incomingSupplyChainList : function() {
+          var supply_chains = this.incoming_supply_chains;
+          
+          if ( supply_chains.length == 0 ) {
+            Dom.setStyle("incomingSupplyChainList", "display", "none");
+            Dom.setStyle("incomingSupplyChainListNone", "display", "");
+            return;
+          }
+          else {
+            Dom.setStyle("incomingSupplyChainList", "display", "");
+            Dom.setStyle("incomingSupplyChainListNone", "display", "none");
+          }
+          
+          var details = Dom.get("incomingSupplyChainListDetails"),
+              detailsParent = details.parentNode,
+              ul = document.createElement("ul"),
+              li = document.createElement("li");
+          
+          // chains list
+          Event.purgeElement(details, true); //clear any events before we remove
+          details = detailsParent.removeChild(details); //remove from DOM to make this faster
+          details.innerHTML = "";
+          
+          //Dom.setStyle(detailsParent, "display", "");
+          detailsParent.appendChild(details); //add back as child
+          
+          for (var i=0; i<supply_chains.length; i++) {
+            var chain = supply_chains[i],
+                nUl = ul.cloneNode(false);
+            
+            Dom.addClass(nUl, "incomingSupplyChainInfo");
+            Dom.addClass(nUl, "clearafter");
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "incomingSupplyChainBody");
+            if (chain.stalled == 1) {
+                Dom.addClass( nUl, "incomingSupplyChainStalled")
+                nLi.innerHTML = chain.from_body.name + " (Stalled)";
+            }
+            else {
+                nLi.innerHTML = chain.from_body.name;
+            }
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "incomingSupplyChainResource");
+            nLi.innerHTML = chain.resource_type.titleCaps();
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi, "incomingSupplyChainHour");
+            nLi.innerHTML = chain.resource_hour;
+            nUl.appendChild(nLi);
+            
+            nLi = li.cloneNode(false);
+            Dom.addClass(nLi,"incomingSupplyChainEfficiency");
+            nLi.innerHTML = chain.percent_transferred;
+            nUl.appendChild(nLi);
+            
+            details.appendChild(nUl);
+          }
+          
+          //wait for tab to display first
+          setTimeout(function() {
+            var Ht = Game.GetSize().h - 250;
+            if(Ht > 250) { Ht = 250; }
+            Dom.setStyle(detailsParent,"height",Ht + "px");
+            Dom.setStyle(detailsParent,"overflow-y","auto");
+          },10);
+        },
         _getStorageTab : function() {            
             var p = this.building.upgrade.production,
                 output = [

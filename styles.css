@@ -1603,11 +1603,11 @@ planet details
 
 
 /* shared display headers */
-.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader, .excavatorHeader, .planHeader, .supplyChainHeader {
+.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader, .excavatorHeader, .planHeader, .supplyChainHeader, .incomingSupplyChainHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .excavatorInfo li , .archaeologyGlyphInfo li, .plan li, .supplyChainInfo li {
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .excavatorInfo li , .archaeologyGlyphInfo li, .plan li, .supplyChainInfo li, .incomingSupplyChainInfo li {
 	float:left;
 }
 
@@ -1958,6 +1958,32 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 
 .supplyChainInfo .supplyChainStalled {
     color: #f00;
+}
+
+.supplyChainStalled {
+    color: #f00;
+    font-weight: bold;
+}
+
+.incomingSupplyChainInfo .incomingSupplyChainBody {
+    width:55%;
+}
+
+.incomingSupplyChainInfo .incomingSupplyChainResource {
+    width:15%;
+}
+
+.incomingSupplyChainInfo .incomingSupplyChainHour {
+    width:15%;
+}
+
+.incomingSupplyChainInfo .incomingSupplyChainEfficiency {
+    width:15%;
+}
+
+.incomingSupplyChainStalled {
+    color: #f00;
+    font-weight: bold;
 }
 
 .tradeInfo {
