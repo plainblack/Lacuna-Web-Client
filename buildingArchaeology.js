@@ -40,6 +40,10 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
       Dom.setStyle(dragEl, "border", "2px solid gray");
       Dom.setStyle(dragEl, "zIndex", Dom.getStyle("buildingDetails_c", "zIndex")*1+1);
+
+      if (!fromCombineList) {
+        this._removeGlyphCount(dragEl);
+      }
     },
     endDrag: function(e) {
       var srcEl = this.getEl();
@@ -112,6 +116,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
             // moving from 'details' list to 'combine' list
             // clone it - don't just move it
             var clone = El.cloneNode(true);
+            this._removeGlyphCount(clone);
             clone.id = Dom.generateId();
             clone.Glyph = El.Glyph;
             destEl.appendChild(clone);
@@ -171,6 +176,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 
         DDM.refreshCache();
       }
+    },
+    _removeGlyphCount: function(element) {
+      // remove glyph count from header text
+      var container = Dom.getFirstChildBy(element, function(el){return Dom.hasClass(el,"archaeologyGlyphContainer")});
+      var header = Dom.getFirstChildBy(container, function(el){return Dom.hasClass(el,"archaeologyGlyphHeader")});
+      var text = header.innerHTML;
+      header.innerHTML = text.replace(/ \([0-9]+\)/, "");
     }
   });
 
