@@ -579,7 +579,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, glyphs:glyphTypes, quantity:quantity}, {
         success : function(o){
           YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
-          alert("You have found a " + o.result.item_name + "!");
+          var article = (quantity==1) ? "a" : quantity;
+          var suffix = (quantity==1) ? "plan" : "plans";
+          alert("You have found " + article + " " + o.result.item_name + " " + suffix + "!");
           Lacuna.Pulser.Hide();
           this.rpcSuccess(o);
           delete this.glyphs;
