@@ -27,7 +27,12 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       // make the proxy look like the source element
       var dragEl = this.getDragEl();
       var clickEl = this.getEl();
-      Dom.setStyle(clickEl, "visibility", "hidden");
+
+      // only hide original when moving with the 'combine' list
+      var fromCombineList = Dom.getAncestorBy(clickEl, function(el){return el.id=="archaeologyGlyphCombine"});
+      if (fromCombineList) {
+        Dom.setStyle(clickEl, "visibility", "hidden");
+      }
 
       dragEl.innerHTML = clickEl.innerHTML;
 
@@ -35,6 +40,10 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
       Dom.setStyle(dragEl, "border", "2px solid gray");
       Dom.setStyle(dragEl, "zIndex", Dom.getStyle("buildingDetails_c", "zIndex")*1+1);
+
+      if (!fromCombineList) {
+        this._removeGlyphCount(dragEl);
+      }
     },
     endDrag: function(e) {
       var srcEl = this.getEl();
@@ -62,7 +71,31 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       a.animate();
     },
     onDragDrop: function(e, id) {
-      if (id == "archaeologyGlyphDetails" || id == "archaeologyGlyphCombine") {
+      if (id == "archaeologyGlyphDetails") {
+
+        // The position of the cursor at the time of the drop (YAHOO.util.Point)
+        var pt = DDM.interactionInfo.point; 
+
+        // The region occupied by the source element at the time of the drop
+        var region = DDM.interactionInfo.sourceRegion; 
+
+        // Check to see if we are over the source element's location.  We will
+        // append to the bottom of the list once we are sure it was a drop in
+        // the negative space (the area of the list without any list items)
+        if (!region.intersect(pt)) {
+          var El = this.getEl();
+
+          var fromCombineList = Dom.getAncestorBy(El, function(el){return el.id=="archaeologyGlyphCombine"});
+          if (fromCombineList) {
+            // moving from 'combine' list to 'details' list
+            // just remove it from the 'combine' list - don't copy it over
+            El.parentNode.removeChild(El);
+            DDM.refreshCache();
+          }
+        }
+
+      }
+      else if (id == "archaeologyGlyphCombine") {
 
         // The position of the cursor at the time of the drop (YAHOO.util.Point)
         var pt = DDM.interactionInfo.point; 
@@ -76,9 +109,22 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
         if (!region.intersect(pt)) {
           var destEl = Dom.get(id);
           var destDD = DDM.getDDById(id);
-          destEl.appendChild(this.getEl());
-          destDD.isEmpty = false;
-          DDM.refreshCache();
+          var El = this.getEl();
+          
+          var fromAvailableList = Dom.getAncestorBy(El, function(el){return el.id=="archaeologyGlyphDetails"});
+          if (fromAvailableList) {
+            // moving from 'details' list to 'combine' list
+            // clone it - don't just move it
+            var clone = El.cloneNode(true);
+            this._removeGlyphCount(clone);
+            clone.id = Dom.generateId();
+            clone.Glyph = El.Glyph;
+            destEl.appendChild(clone);
+            clone.DD = new DDList(clone);
+
+            destDD.isEmpty = false;
+            DDM.refreshCache();
+          }
         }
 
       }
@@ -108,6 +154,14 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       var srcEl = this.getEl();
       var destEl = Dom.get(id);
 
+      // only allow reordering when rearranging the 'combine' list
+      // moves from 'details' to 'combine' always just get added to the end of the 'combine' list
+      var fromDetailsList = Dom.getAncestorBy(srcEl, function(el){return el.id=="archaeologyGlyphDetails"});
+      var toCombineList = Dom.getAncestorBy(destEl, function(el){return el.id=="archaeologyGlyphCombine"});
+      if (fromDetailsList || !toCombineList) {
+        return;
+      }
+
       // We are only concerned with list items, we ignore the dragover
       // notifications for the list.
       if (destEl.nodeName.toLowerCase() == "li") {
@@ -122,6 +176,13 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
 
         DDM.refreshCache();
       }
+    },
+    _removeGlyphCount: function(element) {
+      // remove glyph count from header text
+      var container = Dom.getFirstChildBy(element, function(el){return Dom.hasClass(el,"archaeologyGlyphContainer")});
+      var header = Dom.getFirstChildBy(container, function(el){return Dom.hasClass(el,"archaeologyGlyphHeader")});
+      var text = header.innerHTML;
+      header.innerHTML = text.replace(/ \([0-9]+\)/, "");
     }
   });
 
@@ -453,7 +514,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
           
           nLi.innerHTML = [
             '<div class="archaeologyGlyphContainer">',
-            '  <div class="archaeologyGlyphHeader">',obj.type,'</div>',
+            '  <div class="archaeologyGlyphHeader">',obj.type,' (',obj.quantity,')</div>',
             '  <img src="',Lib.AssetUrl,'glyphs/',obj.type,'.png" alt="',obj.type,'" title="',obj.type,'" style="width:79px;height:100px;" />', //"width:119px;height:150px;"
             '</div>'
           ].join('');
@@ -530,7 +591,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
       this.service.assemble_glyphs({session_id:Game.GetSession(),building_id:this.building.id, glyphs:glyphTypes, quantity:quantity}, {
         success : function(o){
           YAHOO.log(o, "info", "Archaeology.assembleGlyph.success");
-          alert("You have found a " + o.result.item_name + "!");
+          var article = (quantity==1) ? "a" : quantity;
+          var suffix = (quantity==1) ? "plan" : "plans";
+          alert("You have found " + article + " " + o.result.item_name + " " + suffix + "!");
           Lacuna.Pulser.Hide();
           this.rpcSuccess(o);
           delete this.glyphs;
