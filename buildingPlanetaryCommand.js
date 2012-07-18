@@ -155,7 +155,21 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '</span>/hr</li>',
                 ].join('');
             }
-            
+            ore_items += [
+                    '<li><label>Water</label><span class="pcStored">',
+                    this.result.planet.water_stored,
+                    '</span> @ <span class="pcPerHour">',
+                    Lib.convertNumDisplay(this.result.planet.water_hour),
+                    '</span>/hr</li>',
+                ].join('');
+            ore_items += [
+                    '<li><label>Energy</label><span class="pcStored">',
+                    this.result.planet.energy_stored,
+                    '</span> @ <span class="pcPerHour">',
+                    Lib.convertNumDisplay(this.result.planet.energy_hour),
+                    '</span>/hr</li>',
+                ].join('');
+
             this.resourcesTab = new YAHOO.widget.Tab({ label: "Resources", content: [
                     '<div class="yui-g buildingDetailsExtra">',
                     '    <div class="yui-u first">',
