@@ -428,7 +428,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
                             * session_id
                             * building_id
-                            * name
+                            * name.
                         */
                         "returns":{"type":"object"}
                         /*
