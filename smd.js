@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                     "start" : "01 31 2010 11:08:03 +0600",
                                     "end" : "01 31 2010 13:09:05 +0600",
                                 },
-                                ...
+                                ....
                             },
                             "status" : "get_status",
                          }
