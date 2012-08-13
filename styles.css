@@ -1418,10 +1418,10 @@ planet details
 	text-align:right;
 	width:120px;
 }
-#buildingDetailsName, .buildingName, .shipName {
+#buildingDetailsName, .buildingName, .shipName, .fleetName {
 	font-weight:bold;
 }
-.shipName {
+.shipName, .fleetName {
 	cursor:pointer;
 	text-decoration:underline;
 }
@@ -1438,10 +1438,10 @@ planet details
 .buildingStats .low-resource, .buildingDetailsNum.low-resource {
 	color: #f00;
 }
-.buildingDesc, .shipDesc, .missionDesc, .missionPosted, .missionUniversity  {
+.buildingDesc, .shipDesc, .fleetDesc, .missionDesc, .missionPosted, .missionUniversity  {
 	font-size:85%;
 }
-.shipDesc  {
+.shipDesc, .fleetDesc  {
 	border-bottom:1px solid #52acff;
 }
 .buildingDesc a {
@@ -1603,11 +1603,11 @@ planet details
 
 
 /* shared display headers */
-.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .shipQueueHeader, .tradeHeader, .platformHeader, .excavatorHeader, .planHeader, .supplyChainHeader, .incomingSupplyChainHeader {
+.buildQueueHeader, .embassyHeader, .probeHeader , .spiesHeader, .shipHeader, .fleetHeader, .shipQueueHeader, .fleetQueueHeader, .tradeHeader, .platformHeader, .excavatorHeader, .planHeader, .supplyChainHeader, .incomingSupplyChainHeader {
 	font-weight:bold;
 	border-bottom:1px solid #52acff;
 }
-.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .shipQueue li , .tradeInfo li, .planetsInfo li, .platformInfo li , .excavatorInfo li , .archaeologyGlyphInfo li, .plan li, .supplyChainInfo li, .incomingSupplyChainInfo li {
+.buildQueue li , .embassyInfo li, .probeInfo li , .securityInfo li, .spyInfo li , .shipInfo li, .fleetInfo li, .shipQueue li , .fleetQueue li, .tradeInfo li, .planetsInfo li, .platformInfo li , .excavatorInfo li , .archaeologyGlyphInfo li, .plan li, .supplyChainInfo li, .incomingSupplyChainInfo li {
 	float:left;
 }
 
@@ -1890,53 +1890,53 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 }
 
-.shipInfo .shipType {
+.shipInfo .shipType, .fleetInfo .fleetType {
 	width:180px;
 }
-.shipInfo .shipCost {
+.shipInfo .shipCost, .fleetInfo .fleetCost {
 	width:310px;
 }
-.shipInfo .shipAttributes {
+.shipInfo .shipAttributes, .fleetInfo .fleetAttributes {
 	width:100px;
 }
-.shipInfo .shipBuild {
+.shipInfo .shipBuild, .fleetInfo .fleetBuild {
 	width:60px;
 }
-.shipInfo .shipArrives {
+.shipInfo .shipArrives, .fleetInfo .fleetArrives {
 	width:180px;
 }
-.shipInfo .shipFrom {
+.shipInfo .shipFrom, .fleetInfo .fleetFrom {
 	width:140px;
 }
-.shipInfo .shipTo {
+.shipInfo .shipTo, .fleetInfo .fleetTo {
 	width:140px;
 }
-.shipInfo .shipTypeImage {
+.shipInfo .shipTypeImage, .fleetInfo .fleetTypeImage {
 	width:54px;
 }
-.shipInfo .shipName {
+.shipInfo .shipName, .fleetInfo .fleetName {
 	width:165px;
 }
-.shipInfo .shipTask{
+.shipInfo .shipTask, .fleetInfo .fleetTask {
 	width:100px;
 }
-.shipInfo .shipSpeed {
+.shipInfo .shipSpeed, .fleetInfo .fleetSpeed {
 	width:75px;
 }
-.shipInfo .shipHold {
+.shipInfo .shipHold, .fleetInfo .fleetHold {
 	width:75px;
 }
-.shipInfo .shipAction {
+.shipInfo .shipAction, .fleetInfo .fleetAction {
 	width:100px;
 }
-.shipInfo .shipReason {
+.shipInfo .shipReason, .fleetInfo .fleetReason {
 	width:150px;
 }
 
-.shipQueue .shipQueueType {
+.shipQueue .shipQueueType, .fleetQueue .fleetQueueType {
 	width:180px;
 }
-.shipQueue .shipQueueEach {
+.shipQueue .shipQueueEach, .fleetQueue .fleetQueueEach {
 	width:150px;
 }
 

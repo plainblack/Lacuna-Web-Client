@@ -1774,6 +1774,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "description": "Shows you the battle logs for your empire with the most recent action listed first. This data will be cleaned out every seven days.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
+                    },
+                    "view_incoming_fleets" : {
+                        "description" : "",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
+                    },
+                    "view_orbiting_fleets" : {
+                        "description" : "",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
                     }
 
                 }
