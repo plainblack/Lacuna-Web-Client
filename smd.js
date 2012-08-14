@@ -1784,6 +1784,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "description" : "",
                         "parameters" : [{"name":"args","type":"object","optional":false}],
                         "returns":{"type":"object"}
+                    },
+                    "view_available_fleets" : {
+                        "description" : "",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
                     }
 
                 }

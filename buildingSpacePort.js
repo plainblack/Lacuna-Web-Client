@@ -36,7 +36,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             SpacePort.superclass.destroy.call(this);
         },
         getChildTabs : function() {
-            return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getIncomingTab(), this._getLogsTab(), this._getSendTab(), this._getSendFleetTab()];
+            return [this._getTravelTab(), this._getViewTab(), this._getOrbitingTab(), this._getIncomingTab(), this._getLogsTab(), this._getSendTab()];
         },
         _getTravelTab : function() {
             this.travelTab = new YAHOO.widget.Tab({ label: "Travelling", content: [
@@ -143,6 +143,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '</div>',
                 '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
                 '    Sending fleets to: <span id="sendFleetNote"></span>',
+                '    <div class="yui-u" style="text-align:right;">',
+                '        To Arrive On - Date:<input type="text" id="setDate" value="0" size="4">',
+                '        Hour:<input type="text" id="setHour" value="0" size="4">',
+                '        Minute:<input type="text" id="setMinute" value="0" size="4">',
+                '        Second:<select id="setSecond"><option value="0">0</option><option value="15">15</option><option value="30">30</option><option value="45">45</option></select>',
+                '    </div>',
                 '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
                 '</div>'
             ].join('')});
@@ -161,36 +167,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             
             return this.sendTab;
         },
-        _getSendFleetTab : function() {
-            this.sendFleetTab = new YAHOO.widget.Tab({ label: "Fleet", content: [
-                '<div id="sendFleetPick">',
-                '    Send To <select id="sendFleetType"><option value="body_name">Planet Name</option><option value="body_id">Planet Id</option><option value="star_name">Star Name</option><option value="star_id">Star Id</option><option value="xy">X,Y</option></select>',
-                '    <span id="sendFleetTargetSelectText"><input type="text" id="sendFleetTargetText" /></span>',
-                '    <span id="sendFleetTargetSelectXY" style="display:none;">X:<input type="text" id="sendFleetTargetX" /> Y:<input type="text" id="sendFleetTargetY" /></span>',
-                '    <button type="button" id="sendFleetGet">Get Available Fleets For Target</button>',
-                '</div>',
-                '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-                '    <div class="yui-g"><div class="yui-u first">Sending fleets to: <span id="sendFleetNote"></span></div><div class="yui-u" style="text-align:right;">Set speed:<input type="text" id="setSpeed" value="0" size="6"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
-                '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
-                '</div>'
-            ].join('')});
-            
-            Event.on("sendFleetType", "change", function(){
-                if(Lib.getSelectedOptionValue(this) == "xy") {
-                    Dom.setStyle("sendFleetTargetSelectText", "display", "none");
-                    Dom.setStyle("sendFleetTargetSelectXY", "display", "");
-                }
-                else {
-                    Dom.setStyle("sendFleetTargetSelectText", "display", "");
-                    Dom.setStyle("sendFleetTargetSelectXY", "display", "none");
-                }
-            });
-            Event.on("sendFleetGet", "click", this.GetFleetFor, this, true);
-            Event.on("sendFleetSubmit", "click", this.FleetSend, this, true);
-            
-            return this.sendFleetTab;
-        },
-        
         getTravel : function(e) {
             if(e.newValue) {
                 if(!this.fleetsTravelling) {
@@ -1161,11 +1137,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 Dom.get("sendFleetNote").innerHTML = target[type];
             }
             
-            this.service.get_fleets_for({
+            this.service.view_available_fleets({ args : {
                 session_id:Game.GetSession(),
-                from_body_id:Game.GetCurrentPlanet().id,
+                body_id: Game.GetCurrentPlanet().id,
                 target:target
-            }, {
+            }}, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
@@ -1197,28 +1173,34 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     nLi.Fleet = fleet;
                     nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',fleet.type,'.png" style="width:60px;height:60px;" />',
+                    '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:60px;height:60px;" />',
                     '    </div>',
                     '    <div class="yui-u" style="width:67%">',
-                    '        <div class="buildingName">[',fleet.type_human,'] ',fleet.name,'</div>',
+                    '        <div class="buildingName">[',fleet.details.type_human,'] ',fleet.details.name,' Quantity ',fleet.quantity,'</div>',
                     '        <div><label style="font-weight:bold;">Details:</label>',
                     '            <span>Task:<span>',fleet.task,'</span></span>,',
-                    '            <span>Travel Time:<span>',Lib.formatTime(fleet.estimated_travel_time),'</span></span>',
+                    '            <span>Earliest Arrival: <span>',
+									fleet.earliest_arrival.month,'-',
+									fleet.earliest_arrival.day,' ',
+									fleet.earliest_arrival.hour, ':',
+									fleet.earliest_arrival.minute, ':',
+									fleet.earliest_arrival.second,
+					'            </span></span>',
                     '        </div>',
                     '        <div><label style="font-weight:bold;">Attributes:</label>',
-                    '            <span>Speed:<span>',fleet.speed,'</span></span>,',
-                    '            <span>Hold Size:<span>',fleet.hold_size,'</span></span>,',
-                    '            <span>Stealth:<span>',fleet.stealth,'</span></span>',
-                    '            <span>Combat:<span>',fleet.combat,'</span></span>',
+                    '            <span>Speed:<span>',fleet.details.speed,'</span></span>,',
+                    '            <span>Hold Size:<span>',fleet.details.hold_size,'</span></span>,',
+                    '            <span>Stealth:<span>',fleet.details.stealth,'</span></span>',
+                    '            <span>Combat:<span>',fleet.details.combat,'</span></span>',
                     '        </div>',
                     '    </div>',
                     '    <div class="yui-u" style="width:8%">',
-                    fleet.task == "Docked" ? '        <button type="button">Send</button>' : '',
+                    fleet.task == "Docked" ? '        <span style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_send_'+fleet.id+'" style="width:35px;" value="'+fleet.quantity+'"></span><button type="button">Send</button>' : '',
                     '    </div>',
                     '</div>'].join('');
                     
-                    if(fleet.task == "Docked") {
-                        Event.on(Sel.query("button", nLi, true), "click", this.FleetSend, {Self:this,Fleet:fleet,Target:target,Line:nLi}, true);
+                    if (fleet.task == "Docked") {
+                        Event.on(Sel.query("button", nLi, true), "click", this.FleetSend, {Self:this, Fleet:fleet, Target:target, Line:nLi}, true);
                     }
                     
                     details.appendChild(nLi);
@@ -1240,15 +1222,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         
             var oSelf = this.Self,
                 fleet = this.Fleet,
-                target = this.Target;
+                target = this.Target,
+				quantity = Dom.get("fleet_send_"+fleet.id).value;
+			alert("Send "+quantity);
             
             if(target && fleet.id && Lacuna.MapStar.NotIsolationist(fleet)) {
                 Lacuna.Pulser.Show();
-                oSelf.service.send_fleet({
+                oSelf.service.send_fleet({ args: {
                     session_id:Game.GetSession(),
                     fleet_id:fleet.id,
                     target:target
-                }, {
+                }}, {
                     success : function(o){
                         Lacuna.Pulser.Hide();
                         this.Self.rpcSuccess(o);
@@ -1269,38 +1253,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             }
         },
                 
-        GetFleetFor : function() {
-            Lacuna.Pulser.Show();
-            
-            Dom.setStyle("sendFleetSend", "display", "none");
-            
-            var type = Lib.getSelectedOptionValue("sendFleetType"),
-                target = {};
-            
-            if(type == "xy") {
-                target.x = Dom.get("sendFleetTargetX").value;
-                target.y = Dom.get("sendFleetTargetY").value;
-                Dom.get("sendFleetNote").innerHTML = ['X: ', target.x, ' - Y: ', target.y].join('');
-            }
-            else {
-                target[type] = Dom.get("sendFleetTargetText").value;
-                Dom.get("sendFleetNote").innerHTML = target[type];
-            }
-            
-            this.service.get_fleets_for({
-                session_id:Game.GetSession(),
-                from_body_id:Game.GetCurrentPlanet().id,
-                target:target
-            }, {
-                success : function(o){
-                    Lacuna.Pulser.Hide();
-                    this.rpcSuccess(o);
-                    this.PopulateFleetSendTab(target, o.result.available);
-                },
-                scope:this
-            });
-            
-        },
         PopulateFleetSendTab : function(target, fleets) {
             var details = Dom.get("sendFleetAvail"),
                 detailsParent = details.parentNode,
@@ -1360,62 +1312,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 Dom.setStyle(detailsParent,"height",Ht + "px");
                 Dom.setStyle(detailsParent,"overflow-y","auto");
             },10);
-        },
-        FleetSend : function(e) {
-            var btn = Event.getTarget(e);
-            btn.disabled = true;
-
-            var speed = parseInt(Dom.get("setSpeed").value,10);
-            var selected = Sel.query("input:checked", "sendFleetAvail");
-            if(selected.length > 0) {
-                var fleets = [], fleetIds = [], minSpeed = 999999999;
-                for(var n=0; n<selected.length; n++) {
-                    var s = selected[n].Fleet;
-                    s.speed = parseInt(s.speed,10); // probably not needed but play it safe
-                    fleets.push(s);
-                    fleetIds.push(s.id);
-                    if (s.speed < minSpeed) {
-                        minSpeed = s.speed;
-                    }
-                }
-                
-                if(this.FleetTarget && Lacuna.MapStar.NotFleetIsolationist(fleets)) {                    
-                    if (speed < 0) {
-                        alert('Set speed cannot be less than zero.');
-                        btn.disabled = false;
-                    }
-                    else {
-                        if (speed > 0 && speed > minSpeed) {
-                            alert('Set speed cannot exceed the speed of the slowest fleet.');
-                            btn.disabled = false;
-                        } else {
-                            this.service.send_fleet({
-                                session_id:Game.GetSession(),
-                                fleet_ids:fleetIds,
-                                target:this.FleetTarget,
-                                set_speed:speed
-                            }, {
-                                success : function(o){
-                                    Lacuna.Pulser.Hide();
-                                    this.rpcSuccess(o);
-                                    btn.disabled = false;
-                                    delete this.FleetTarget;
-                                    delete this.fleetsView;
-                                    delete this.fleetsTravelling;
-                                    this.GetFleetFor();
-                                },
-                                failure : function(o){
-                                    btn.disabled = false;
-                                },
-                                scope:this
-                            });
-                        }
-                    }
-                }
-            }
-            else {
-                btn.disabled = false;
-            }
         }
     });
     
