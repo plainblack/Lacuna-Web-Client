@@ -1719,7 +1719,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
-                    "recall_ship" : {
+                    "recall_fleet" : {
                         "description": "",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}

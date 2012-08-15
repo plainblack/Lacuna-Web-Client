@@ -480,7 +480,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             }
             else if(fleet.task == "Defend" || fleet.task == "Orbiting") {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="fleetTo">';
-                ulDet[ulDet.length] = fleet.orbiting.name;
+                ulDet[ulDet.length] = fleet.name;
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><button type="button" class="recall">Recall</button></li>';
                 
                 if(!noEvent) {
@@ -1061,11 +1061,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             matchedEl.disabled = true;
             Lacuna.Pulser.Show();
             
-            this.Self.service.recall_fleet({
+            this.Self.service.recall_fleet({ args: {
                 session_id:Game.GetSession(),
-                building_id:this.Self.building.id,
-                fleet_id:this.Fleet.id
-            }, {
+                fleet_id:this.Fleet.id,
+				quantity:1
+            }}, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
                     this.Self.rpcSuccess(o);
