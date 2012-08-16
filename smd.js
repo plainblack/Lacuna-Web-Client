@@ -1760,8 +1760,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
-                    "view_ships_travelling" : {
-                        "description": "Returns a list of the ships that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
+                    "view_fleets_travelling" : {
+                        "description": "Returns a list of the fleets that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },

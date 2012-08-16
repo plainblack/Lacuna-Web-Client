@@ -201,6 +201,11 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
                 return Library.parseServerDate(dt).getTime();
             }
         },
+        parseArrivalTime : function(strDate) {
+            var pieces = strDate.split(' '); //[day month year hr:min:sec timez]
+            var dt = pieces[1]+'-'+pieces[0]+' '+pieces[3];
+            return dt;
+        },
         parseServerDate : function(strDate) {
             if(strDate instanceof Date) {
                 return strDate;
