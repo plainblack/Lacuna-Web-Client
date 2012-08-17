@@ -188,7 +188,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                             this.rpcSuccess(o);
                             this.fleetsTravelling = {
                                 number_of_fleets_travelling: o.result.number_of_fleets_travelling,
-								number_of_ships_travelling: o.result.number_of_ships_travelling,
+                                number_of_ships_travelling: o.result.number_of_ships_travelling,
                                 travelling: o.result.travelling
                             };
                             this.fleetsPager = new Pager({
@@ -408,8 +408,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '</div>'].join('');
                     var sn = Sel.query("span.fleetName",nLi,true);
                     Event.on(sn, "click", this.FleetRename, {Self:this,Fleet:fleet,el:sn}, true);
-                    //Event.on(Sel.query("span.fleetFrom",nLi,true), "click", this.EmpireProfile, fleet.from);
-                    //Event.on(Sel.query("span.fleetTo",nLi,true), "click", this.EmpireProfile, fleet.to);
 
                     this.addQueue(sec, this.SpacePortQueue, nLi);
 
@@ -421,186 +419,184 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
                 //wait for tab to display first
                 setTimeout(function() {
-                        var Ht = Game.GetSize().h - 220;
-                        if(Ht > 300) { Ht = 300; }
-                        var tC = details.parentNode;
-                        Dom.setStyle(tC,"height",Ht + "px");
-                        Dom.setStyle(tC,"overflow-y","auto");
-                        },10);
-                    }
-                },
-                FleetHandlePagination : function(newState) {
-                    Lacuna.Pulser.Show();
-                    this.service.view_fleets_travelling({ args: {
-                        session_id:Game.GetSession(),
-                        building_id:this.building.id,
-                        page_number:newState.page
-                    }}, {
-                        success : function(o){
-                            YAHOO.log(o, "info", "SpacePort.FleetHandlePagination.view_fleets_travelling.success");
-                            Lacuna.Pulser.Hide();
-                            this.rpcSuccess(o);
-                            this.fleetsTravelling = {
-                                number_of_fleets_travelling: o.result.number_of_fleets_travelling,
-								number_of_ships_travelling: o.result.number_of_ships_travelling,
-                                travelling: o.result.travelling
-                            };
-                            this.SpacePortPopulate();
-                        },
-                        scope:this
-                    });
-
-                    // Update the Paginator's state
-                    this.fleetsPager.setState(newState);
-                },
-                SpacePortQueue : function(remaining, elLine){
-                     var arrTime;
-                     if(remaining <= 0) {
-                         arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
-                     }
-                     else {
-                         arrTime = Lib.formatTime(Math.round(remaining));
-                     }
-                     Sel.query("span.fleetArrives",elLine,true).innerHTML = arrTime;
-                 },
-
-ViewActionDetails : function(nLi, fleet, noEvent) {
-                        var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',fleet.task,'</label></li>'];
-
-                        if(fleet.task == "Docked") {
-                            ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
-
-                            if(!noEvent) {
-                                Event.delegate(nLi, 'click', this.FleetScuttle, 'button.scuttle', {Self:this,Fleet:fleet,Line:nLi}, true);
-                            }
-                        }
-                        else if(fleet.task == "Travelling") {
-                            var serverTime = Lib.getTime(Game.ServerData.time),
-                                sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
-                                ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="fleetFrom">';
-                            ulDet[ulDet.length] = fleet.from.name;
-                            ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="fleetTo">';
-                            ulDet[ulDet.length] = fleet.to.name;
-                            ulDet[ulDet.length] = '</span></li>';
-
-                            ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">Arrives In: </label><span class="fleetArrives">';
-                            ulDet[ulDet.length] = Lib.formatTime(sec);
-                            ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">Arrives At: </label><span class="fleetArrives">';
-                            ulDet[ulDet.length] = Lib.parseArrivalTime(fleet.date_arrives);
-                            ulDet[ulDet.length] = '</span></li>',
-
-                            this.addQueue(sec, this.SpacePortQueue, nLi);
-                        }
-                        else if(fleet.task == "Defend" || fleet.task == "Orbiting") {
-                            ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="fleetTo">';
-                            ulDet[ulDet.length] = fleet.name;
-                            ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="recall">Recall</button></li>';
-
-                            if(!noEvent) {
-                                Event.delegate(nLi, 'click', this.FleetRecall, 'button.recall', {Self:this,Fleet:fleet,Line:nLi}, true);
-                            }
-                        }
-
-                        if(fleet.payload && fleet.payload.length > 0) {
-                            ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="payload">Payload</button></li>';
-
-                            if(!noEvent) {
-                                Event.delegate(nLi, 'click', function(e, matchedEl, container){
-                                        var div = Sel.query('div.fleetPayload', container);
-                                        curDis = Dom.getStyle(div[0], "display");
-                                        Dom.setStyle(div, "display", curDis == "none" ? "" : "none");
-                                        }, 'button.payload', this, true);
-                            }
-                        }
-
-                        return ulDet.join('');
+                    var Ht = Game.GetSize().h - 220;
+                    if(Ht > 300) { Ht = 300; }
+                    var tC = details.parentNode;
+                    Dom.setStyle(tC,"height",Ht + "px");
+                    Dom.setStyle(tC,"overflow-y","auto");
                     },
-ViewPopulate : function() {
-                   var details = Dom.get("fleetsViewDetails");
+                    10
+                );
+            }
+        },
+        FleetHandlePagination : function(newState) {
+            Lacuna.Pulser.Show();
+            this.service.view_fleets_travelling({ args: {
+                session_id:Game.GetSession(),
+                building_id:this.building.id,
+                page_number:newState.page
+            }}, {
+                success : function(o){
+                    YAHOO.log(o, "info", "SpacePort.FleetHandlePagination.view_fleets_travelling.success");
+                    Lacuna.Pulser.Hide();
+                    this.rpcSuccess(o);
+                    this.fleetsTravelling = {
+                        number_of_fleets_travelling: o.result.number_of_fleets_travelling,
+                        number_of_ships_travelling: o.result.number_of_ships_travelling,
+                        travelling: o.result.travelling
+                    };
+                    this.SpacePortPopulate();
+                },
+                scope:this
+            });
 
-                   if(details) {
-                       var fleets = this.fleetsView.fleets,
-                           parentEl = details.parentNode,
-                           li = document.createElement("li"),
-                           info = Dom.get("fleetsCount"),
-                           displayRecallAll;
+            // Update the Paginator's state
+            this.fleetsPager.setState(newState);
+        },
+        SpacePortQueue : function(remaining, elLine){
+            var arrTime;
+            if(remaining <= 0) {
+                arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
+            }
+            else {
+                arrTime = Lib.formatTime(Math.round(remaining));
+            }
+            Sel.query("span.fleetArrives",elLine,true).innerHTML = arrTime;
+        },
 
-                       Event.purgeElement(details, true);
-                       details = parentEl.removeChild(details);
-                       details.innerHTML = "";
+        ViewActionDetails : function(nLi, fleet, noEvent) {
+            var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',fleet.task,'</label></li>'];
 
-                       if(info && this.result.max_ships > 0) {
-                           info.innerHTML = ['<div>This Space Port can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
-                       }               
+            if (fleet.task == "Docked") {
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
 
-                       for(var i=0; i<fleets.length; i++) {
-                           var fleet = fleets[i],
-                               nLi = li.cloneNode(false);
+                if(!noEvent) {
+                    Event.delegate(nLi, 'click', this.FleetScuttle, 'button.scuttle', {Self:this,Fleet:fleet,Line:nLi}, true);
+                }
+            }
+            else if(fleet.task == "Travelling") {
+                var serverTime = Lib.getTime(Game.ServerData.time),
+                    sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
+                    ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="fleetFrom">';
+                ulDet[ulDet.length] = fleet.from.name;
+                ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="fleetTo">';
+                ulDet[ulDet.length] = fleet.to.name;
+                ulDet[ulDet.length] = '</span></li>';
 
-                           Dom.setStyle(nLi, "margin-top", "3px");
-                           nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
-                    '<div class="yui-g first">',
-                    '    <div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" title="',fleet.details.type_human,'" style="width:115px;height:115px;" />',
-                    '    </div>',
-                    '    <div class="yui-u">',
-                    '        <span class="fleetName">',fleet.details.name,'</span>: ',
-                    '        <ul class="fleetActionDetails">',
-                    this.ViewActionDetails(nLi, fleet),
-                    '        </ul>',
-                    '    </div>',
-                    '</div>',
-                    '<div class="yui-g">',
-                    '    <div class="yui-u first">',
-                    '        <ul>',
-                    '        <li><label style="font-weight:bold;">Attributes:</label></li>',
-                    (fleet.details.fleet_speed > 0 && fleet.details.fleet_speed < fleet.details.speed) ? '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Speed: </label>'+fleet.details.fleet_speed+'</li>' : '',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',fleet.details.speed,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.details.hold_size,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Berth Level: </label>',fleet.details.berth_level,'</li>',
-                    '        </ul>',
-                    '        <div class="fleetPayload" style="display:none;margin-top:5px"><div><label style="font-weight:bold;">Payload:</label></div>',
-                    Lib.formatInlineList(fleet.details.payload, 0, 3),
-                    '</div>',
-                    '    </div>',
-                    '    <div class="yui-u">',
-                    '        <ul>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',fleet.quantity,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',fleet.details.max_occupants,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',fleet.details.stealth,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',fleet.details.combat,'</li>',
-                    '        </ul>',
-                    '        <div class="fleetPayload" style="display:none;margin-top:5px">',
-                    Lib.formatInlineList(fleet.details.payload, 3),
-                    '        </div>',
-                    '    </div>',
-                    '</div>',
-                    '</div>'].join('');
-                    
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">Arrives In: </label><span class="fleetArrives">';
+                ulDet[ulDet.length] = Lib.formatTime(sec);
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">Arrives At: </label><span class="fleetArrives">';
+                ulDet[ulDet.length] = Lib.parseArrivalTime(fleet.date_arrives);
+                ulDet[ulDet.length] = '</span></li>',
+
+                this.addQueue(sec, this.SpacePortQueue, nLi);
+            }
+            else if(fleet.task == "Defend" || fleet.task == "Orbiting") {
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="fleetTo">';
+                ulDet[ulDet.length] = fleet.name;
+                ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="recall">Recall</button></li>';
+                if(!noEvent) {
+                    Event.delegate(nLi, 'click', this.FleetRecall, 'button.recall', {Self:this,Fleet:fleet,Line:nLi}, true);
+                }
+            }
+
+            if(fleet.payload && fleet.payload.length > 0) {
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="payload">Payload</button></li>';
+
+                if(!noEvent) {
+                    Event.delegate(nLi, 'click', function(e, matchedEl, container){
+                        var div = Sel.query('div.fleetPayload', container);
+                        curDis = Dom.getStyle(div[0], "display");
+                        Dom.setStyle(div, "display", curDis == "none" ? "" : "none");
+                        }, 'button.payload', this, true);
+                }
+            }
+
+            return ulDet.join('');
+        },
+        ViewPopulate : function() {
+            var details = Dom.get("fleetsViewDetails");
+
+            if(details) {
+                var fleets = this.fleetsView.fleets,
+                    parentEl = details.parentNode,
+                    li = document.createElement("li"),
+                    info = Dom.get("fleetsCount"),
+                    displayRecallAll;
+
+                Event.purgeElement(details, true);
+                details = parentEl.removeChild(details);
+                details.innerHTML = "";
+
+                if(info && this.result.max_ships > 0) {
+                    info.innerHTML = ['<div>This Space Port can dock a maximum of ', this.result.max_ships, ' ships. There are ', this.result.docks_available, ' docks available.'].join(''); 
+                }               
+
+                for(var i=0; i<fleets.length; i++) {
+                    var fleet = fleets[i],
+                        nLi = li.cloneNode(false);
+
+                    Dom.setStyle(nLi, "margin-top", "3px");
+                    nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
+                        '<div class="yui-g first">',
+                        '    <div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+                        '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" title="',fleet.details.type_human,'" style="width:115px;height:115px;" />',
+                        '    </div>',
+                        '    <div class="yui-u">',
+                        '        <span class="fleetName">',fleet.details.name,'</span>: ',
+                        '        <ul class="fleetActionDetails">',
+                        this.ViewActionDetails(nLi, fleet),
+                        '        </ul>',
+                        '    </div>',
+                        '</div>',
+                        '<div class="yui-g">',
+                        '    <div class="yui-u first">',
+                        '        <ul>',
+                        '        <li><label style="font-weight:bold;">Attributes:</label></li>',
+                        (fleet.details.fleet_speed > 0 && fleet.details.fleet_speed < fleet.details.speed) ? '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Speed: </label>'+fleet.details.fleet_speed+'</li>' : '',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',fleet.details.speed,'</li>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.details.hold_size,'</li>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Berth Level: </label>',fleet.details.berth_level,'</li>',
+                        '        </ul>',
+                        '        <div class="fleetPayload" style="display:none;margin-top:5px"><div><label style="font-weight:bold;">Payload:</label></div>',
+                        Lib.formatInlineList(fleet.details.payload, 0, 3),
+                        '</div>',
+                        '    </div>',
+                        '    <div class="yui-u">',
+                        '        <ul>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',fleet.quantity,'</li>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',fleet.details.max_occupants,'</li>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',fleet.details.stealth,'</li>',
+                        '        <li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',fleet.details.combat,'</li>',
+                        '        </ul>',
+                        '        <div class="fleetPayload" style="display:none;margin-top:5px">',
+                        Lib.formatInlineList(fleet.details.payload, 3),
+                        '        </div>',
+                        '    </div>',
+                        '</div>',
+                        '</div>'].join('');
+           
                     if(fleet.task == "Defend" || fleet.task == "Orbiting") {
                         displayRecallAll = true;
                     }
-                    
+           
                     var sn = Sel.query("span.fleetName",nLi,true);
                     Event.on(sn, "click", this.FleetRename, {Self:this,Fleet:fleet,el:sn}, true);
-                    //Event.on(Sel.query("span.fleetFrom",nLi,true), "click", this.EmpireProfile, fleet.from);
-                    //Event.on(Sel.query("span.fleetTo",nLi,true), "click", this.EmpireProfile, fleet.to);
 
-                                
+                       
                     details.appendChild(nLi);
-                    
                 }
-                
+       
                 if(displayRecallAll) {
                     Dom.setStyle("fleetsRecallAll","display","");
                 }
                 else {
                     Dom.setStyle("fleetsRecallAll","display","none");
                 }
-                
+       
                 //add child back in
                 parentEl.appendChild(details);
-                
+       
                 //wait for tab to display first
                 setTimeout(function() {
                     var Ht = Game.GetSize().h - 230;
