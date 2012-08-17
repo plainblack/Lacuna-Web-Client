@@ -47,20 +47,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    <div id="fleetsPaginator"></div>',
                 '</div>'
             ].join('')});
-            /*
-            
-                '    <ul class="fleetHeader pInfo clearafter">',
-                '        <li class="fleetTypeImage">&nbsp;</li>',
-                '        <li class="fleetName">Name</li>',
-                '        <li class="fleetArrives">Arrives</li>',
-                '        <li class="fleetFrom">From</li>',
-                '        <li class="fleetTo">To</li>',
-                '        <li class="fleetSpeed">Speed</li>',
-                '        <li class="fleetHold">Hold Size</li>',
-                '        <li class="fleetHold">Stealth</li>',
-                '    </ul>',
-                '    <div><div id="fleetDetails"></div></div>',
-            */
             //subscribe after adding so active doesn't fire
             this.travelTab.subscribe("activeChange", this.getTravel, this, true);
             
@@ -69,7 +55,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         _getViewTab : function() {
             this.viewFleetsTab = new YAHOO.widget.Tab({ label: "View", content: [
                 '<div>',
-                '    <div class="yui-ge" style="border-bottom:1px solid #52acff;"><div id="fleetsCount" class="yui-u first"></div><div class="yui-u"><button type="button" id="fleetsRecallAll" style="display:none;">Recall All</button></div></div>',    
+                '    <div class="yui-ge" style="border-bottom:1px solid #52acff;">',
+                '      <div id="fleetsCount" class="yui-u first"></div>',
+                '      <div class="yui-u">',
+                '        <button type="button" id="fleetsRecallAll" style="display:none;">Recall All</button>',
+                '      </div>',
+                '    </div>',    
                 '    <div style="overflow:auto;margin-top:2px;"><ul id="fleetsViewDetails"></ul></div>',
                 '    <div id="fleetsViewPaginator"></div>',
                 '</div>'
@@ -136,21 +127,35 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         _getSendTab : function() {
             this.sendTab = new YAHOO.widget.Tab({ label: "Send", content: [
                 '<div id="sendFleetPick">',
-                '    Send To <select id="sendFleetType"><option value="body_name">Planet Name</option><option value="body_id">Planet Id</option><option value="star_name">Star Name</option><option value="star_id">Star Id</option><option value="xy">X,Y</option></select>',
+                '    Send To <select id="sendFleetType">',
+                '      <option value="body_name">Planet Name</option>',
+                '      <option value="body_id">Planet Id</option>',
+                '      <option value="star_name">Star Name</option>',
+                '      <option value="star_id">Star Id</option>',
+                '      <option value="xy">X,Y</option>',
+                '    </select>',
                 '    <span id="sendFleetTargetSelectText"><input type="text" id="sendFleetTargetText" /></span>',
-                '    <span id="sendFleetTargetSelectXY" style="display:none;">X:<input type="text" id="sendFleetTargetX" /> Y:<input type="text" id="sendFleetTargetY" /></span>',
+                '    <span id="sendFleetTargetSelectXY" style="display:none;">',
+                '      X:<input type="text" id="sendFleetTargetX" />',
+                '      Y:<input type="text" id="sendFleetTargetY" />',
+                '    </span>',
                 '    <button type="button" id="sendFleetGet">Get Available Fleets For Target</button>',
                 '</div>',
                 '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
                 '    Sending fleets to: <span id="sendFleetNote"></span><br/>',
                 '    <div class="yui-u" style="text-align:right;">',
                 '        To Arrive Soonest - <input type="checkbox" id="sendFleetSoonest" checked> ',
-                '        Or to Arrive On - ',
-                '         Month:<input type="text" id="sendFleetMonth" value="0" size="4">',
-                '         Date:<input type="text" id="sendFleetDate" value="0" size="4">',
+                '       Or to Arrive On - ',
+                '        Month:<input type="text" id="sendFleetMonth" value="0" size="4">',
+                '        Date:<input type="text" id="sendFleetDate" value="0" size="4">',
                 '        Hour:<input type="text" id="sendFleetHour" value="0" size="4">',
                 '        Minute:<input type="text" id="sendFleetMinute" value="0" size="4">',
-                '        Second:<select id="sendFleetSecond"><option value="0">0</option><option value="15">15</option><option value="30">30</option><option value="45">45</option></select>',
+                '        Second:<select id="sendFleetSecond">',
+                '          <option value="0">0</option>',
+                '          <option value="15">15</option>',
+                '          <option value="30">30</option>',
+                '          <option value="45">45</option>',
+                '        </select>',
                 '    </div>',
                 '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
                 '</div>'
@@ -681,6 +686,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     delete this.Self.fleetsView;
                     delete this.Self.fleetsTravelling;
                     this.Self.getFleets({newValue:true});
+                    this.Self.getTravel({newValue:true});
                 },
                 failure : function(o){
                     if(this.Input) {
@@ -1083,6 +1089,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     delete this.Self.fleetsTravelling;
                     delete this.Self.fleetsView;
                     this.Self.getFleets({newValue:true});
+                    this.Self.getTravel({newValue:true});
                 },
                 failure : function(o){
                     matchedEl.disabled = false;
@@ -1106,6 +1113,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     delete this.fleetsTravelling;
                     delete this.fleetsView;
                     this.getFleets({newValue:true});
+                    this.getTravel({newValue:true});
                 },
                 failure : function(o){
                     btn.disabled = false;
