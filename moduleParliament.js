@@ -319,7 +319,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             }
             
             if(getAllianceMembers) {
-                Game.Services.Alliance.view_profile({session_id:Game.GetSession(""),alliance_id:Game.GetCurrentPlanet().alliance.id},{
+                Game.Services.Alliance.view_profile({ args: {session_id:Game.GetSession(""),alliance_id:Game.GetCurrentPlanet().alliance.id}},{
                     success:function(o){
                         var el = Dom.get('proposeTransferTo');
                         if(el) {

@@ -14,18 +14,12 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
             "services": {
                 "find" : {
                     "description": "Find an alliance by name. Returns a hash reference containing alliance ids and alliance names",
-                    "parameters": [
-                        {"name":"session_id", "type":"string", "optional":false},
-                        {"name":"name", "type":"string", "optional":false}
-                    ],
+                    "parameters": [{"name":"args","type":"object", "optional":false}],
                     "returns":{"type":"object"}
                 },
                 "view_profile" : {
                     "description": "Provides a list of the data that's publicly known about this alliance.",
-                    "parameters": [
-                        {"name":"session_id", "type":"string", "optional":false},
-                        {"name":"alliance_id", "type":"string", "optional":false}
-                    ],
+                    "parameters": [{"name":"args","type":"object", "optional":false}],
                     "returns":{"type":"object"}
                 }
             }
@@ -1760,7 +1754,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}
                     },
-                    "view_fleets_travelling" : {
+                    "view_travelling_fleets" : {
                         "description": "Returns a list of the fleets that are travelling to or from this planet. NOTE: All inbound/outbound ships are shown regardless of which space port they will eventually land at.",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
                         "returns":{"type":"object"}

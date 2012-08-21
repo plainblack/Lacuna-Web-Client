@@ -395,7 +395,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '    <div class="yui-u first">',
                     '        <ul>',
                     '        <li><label style="font-weight:bold;">Attributes:</label></li>',
-					'<li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',fleet.quantity,'</li>',
+                    '<li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',fleet.quantity,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>', fleet.details.speed,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.details.hold_size,'</li>',
                     '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',fleet.details.stealth,'</li>',
@@ -479,7 +479,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 }
             }
             if(fleet.task == "Defend" || fleet.task == "Orbiting") {
-			}
+            }
             if(fleet.task == "Travelling") {
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
@@ -751,28 +751,38 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Dom.addClass(nLi,"fleetTypeImage");
                     Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
                     Dom.setStyle(nLi, "text-align", "center");
-                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" title="',fleet.details.type_human,'" style="width:50px;height:50px;" />'].join('');
+                    if (fleet.details) {
+                        nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" title="',fleet.details.type_human,'" style="width:50px;height:50px;" />'].join('');
+                    }
+                    else {
+                        nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/unknown.png" title="Unknown" style="width:50px;height:50px;" />'].join('');
+                    }
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetName");
-                    nLi.innerHTML = fleet.details.name;
+                    if (fleet.details) {
+                        nLi.innerHTML = fleet.details.name+' ('+fleet.quantity+')';
+                    }
+                    else {
+                        nLi.innerHTML = 'Unknown ('+fleet.quantity+')';
+                    }
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetArrives");
-                    nLi.innerHTML = Lib.formatTime(sec);
+                    nLi.innerHTML = Lib.formatTime(sec) + ' ' + Lib.parseArrivalTime(fleet.date_arrives);
                     nUl.appendChild(nLi);
                     
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetFrom");
                     if (fleet.from && fleet.from.name) {
                         if (fleet.from.empire && fleet.from.empire.name) {
-                            nLi.innerHTML = fleet.from.name + ' <span style="cursor:pointer;">[' + fleet.from.empire.name + ']</span>';
+                            nLi.innerHTML = fleet.from.owner + ' - ' + fleet.from.name + ' <span style="cursor:pointer;">[' + fleet.from.empire.name + ']</span>';
                             Event.on(nLi, "click", this.EmpireProfile, fleet.from.empire);
                         }
                         else {
-                            nLi.innerHTML = fleet.from.name;
+                            nLi.innerHTML = fleet.from.owner + ' - ' + fleet.from.name;
                         }
                     }
                     else {
@@ -1064,9 +1074,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                         this.Self.rpcSuccess(o);
 
                         delete this.Self.fleetsView;
-						delete this.Self.fleetsTravelling;
+                        delete this.Self.fleetsTravelling;
                         this.Self.getFleets({newValue:true});
-						this.Self.getTravel({newValue:true});
+                        this.Self.getTravel({newValue:true});
                     },
                     failure : function(o){
                         btn.disabled = false;

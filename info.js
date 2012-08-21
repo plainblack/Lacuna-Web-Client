@@ -74,7 +74,7 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
             this._createPanel();
             
             Lacuna.Pulser.Show();
-            Game.Services.Alliance.view_profile({session_id:Game.GetSession(""),alliance_id:allianceId},{
+            Game.Services.Alliance.view_profile({args: {session_id:Game.GetSession(""),alliance_id:allianceId}},{
                 success:function(o){
                     Lacuna.Pulser.Hide();
                     //show now so there is a bit quicker response
