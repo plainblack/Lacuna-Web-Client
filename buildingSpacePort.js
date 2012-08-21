@@ -182,13 +182,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 }
                 else {
                     Lacuna.Pulser.Show();
-                    this.service.view_fleets_travelling({ args: {
+                    this.service.view_travelling_fleets({ args: {
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
                         page_number:1
                         }}, {
                         success : function(o){
-                            YAHOO.log(o, "info", "SpacePort.view_fleets_travelling.success");
+                            YAHOO.log(o, "info", "SpacePort.view_travelling_fleets.success");
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
                             this.fleetsTravelling = {
@@ -387,11 +387,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '    <div class="yui-u">',
                     '        <span class="fleetName">',fleet.details.name,'</span>: ',
                     '        <ul>',
-                    '            <li><label style="font-weight:bold;">Travel:</label></li>',
-                    '            <li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="fleetFrom">',fleet.from.name,'</span></li>',
-                    '            <li style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="fleetTo">',fleet.to.name,'</span></li>',
-                     '            <li style="white-space:nowrap;"><label style="font-style:italic">Arrives In: </label><span class="fleetArrives">',Lib.formatTime(sec),'</span></li>',
-                    '            <li style="white-space:nowrap;"><label style="font-style:italic">Arrives At: </label><span class="fleetArrives">',Lib.parseArrivalTime(fleet.date_arrives),'</span></li>',
+                    this.ViewActionDetails(nLi, fleet),
                     '        </ul>',
                     '    </div>',
                     '</div>',
@@ -399,11 +395,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '    <div class="yui-u first">',
                     '        <ul>',
                     '        <li><label style="font-weight:bold;">Attributes:</label></li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',(fleet.fleet_speed > 0 && fleet.fleet_speed < fleet.speed) ? fleet.fleet_speed : fleet.speed,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.hold_size,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',fleet.stealth,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',fleet.combat,'</li>',
-                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',fleet.max_occupants,'</li>',                    '        </ul>',
+					'<li style="white-space:nowrap;"><label style="font-style:italic">Fleet Size: </label>',fleet.quantity,'</li>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>', fleet.details.speed,'</li>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.details.hold_size,'</li>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Stealth: </label>',fleet.details.stealth,'</li>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Combat: </label>',fleet.details.combat,'</li>',
+                    '        <li style="white-space:nowrap;"><label style="font-style:italic">Occupants: </label>',fleet.details.max_occupants,'</li>',                    '        </ul>',
                     '    </div>',
                     '    <div class="yui-u">',
                     '        <div><label style="font-weight:bold;">Payload:</label></div>',
@@ -436,13 +433,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         },
         FleetHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
-            this.service.view_fleets_travelling({ args: {
+            this.service.view_travelling_fleets({ args: {
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
                 page_number:newState.page
             }}, {
                 success : function(o){
-                    YAHOO.log(o, "info", "SpacePort.FleetHandlePagination.view_fleets_travelling.success");
+                    YAHOO.log(o, "info", "SpacePort.FleetHandlePagination.view_travelling_fleets.success");
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.fleetsTravelling = {
@@ -472,17 +469,21 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         ViewActionDetails : function(nLi, fleet, noEvent) {
             var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',fleet.task,'</label></li>'];
 
-            if (fleet.task == "Docked") {
-                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="scuttle">Scuttle</button></li>';
+            if (fleet.details.can_scuttle) {
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px">';
+                ulDet[ulDet.length] = '<input type="text" class="scuttle_qty" style="width:25px;" value="'+fleet.quantity+'">';
+                ulDet[ulDet.length] = '<button type="button" class="scuttle">Scuttle</button></li>';
 
                 if(!noEvent) {
                     Event.delegate(nLi, 'click', this.FleetScuttle, 'button.scuttle', {Self:this,Fleet:fleet,Line:nLi}, true);
                 }
             }
-            else if(fleet.task == "Travelling") {
+            if(fleet.task == "Defend" || fleet.task == "Orbiting") {
+			}
+            if(fleet.task == "Travelling") {
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
-                    ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="fleetFrom">';
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;"><label style="font-style:italic">From: </label><span class="fleetFrom">';
                 ulDet[ulDet.length] = fleet.from.name;
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;"><label style="font-style:italic">To: </label><span class="fleetTo">';
                 ulDet[ulDet.length] = fleet.to.name;
@@ -496,12 +497,16 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
                 this.addQueue(sec, this.SpacePortQueue, nLi);
             }
-            else if(fleet.task == "Defend" || fleet.task == "Orbiting") {
+
+            if (fleet.details.can_recall) {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="fleetTo">';
                 ulDet[ulDet.length] = fleet.name;
-                ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_action_'+fleet.id+'" style="width:25px;" value="'+fleet.quantity+'"><button type="button" class="recall">Recall</button></li>';
+                ulDet[ulDet.length] = '</span></li>';
+                ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px">';
+                ulDet[ulDet.length] = '<input type="text" class="recall_qty" style="width:25px;" value="'+fleet.quantity+'">';
+                ulDet[ulDet.length] = '<button type="button" class="recall">Recall</button></li>';
                 if(!noEvent) {
-                    Event.delegate(nLi, 'click', this.FleetRecall, 'button.recall', {Self:this,Fleet:fleet,Line:nLi}, true);
+                    Event.delegate(nLi, 'click', this.FleetRecall, 'button.recall', {Self:this,Fleet:fleet,Line:nLi,QtyDom:'fleet_action_'+fleet.id}, true);
                 }
             }
 
@@ -558,7 +563,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                         '    <div class="yui-u first">',
                         '        <ul>',
                         '        <li><label style="font-weight:bold;">Attributes:</label></li>',
-                        (fleet.details.fleet_speed > 0 && fleet.details.fleet_speed < fleet.details.speed) ? '        <li style="white-space:nowrap;"><label style="font-style:italic">Fleet Speed: </label>'+fleet.details.fleet_speed+'</li>' : '',
                         '        <li style="white-space:nowrap;"><label style="font-style:italic">Speed: </label>',fleet.details.speed,'</li>',
                         '        <li style="white-space:nowrap;"><label style="font-style:italic">Hold Size: </label>',fleet.details.hold_size,'</li>',
                         '        <li style="white-space:nowrap;"><label style="font-style:italic">Berth Level: </label>',fleet.details.berth_level,'</li>',
@@ -1040,30 +1044,29 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             Lacuna.Info.Empire.Load(empire.id);
         },
         FleetScuttle : function(e, matchedEl, container) {
-            var to_delete = Dom.get("fleet_action_"+this.Fleet.id).value;
-            if(confirm(["Are you sure you want to Scuttle ",to_delete.value," ships of type ",this.Fleet.name,"?"].join(''))) {
+            var xxx = Dom.getElementsByClassName('scuttle_qty','input', this.Line);
+            var to_delete = xxx[0].value;
+            if(confirm(["Are you sure you want to Scuttle ",to_delete," ships of type ",this.Fleet.name,"?"].join(''))) {
                 var btn = Event.getTarget(e);
                 btn.disabled = true;
                 Lacuna.Pulser.Show();
-                var qty = to_delete.value * 1.0;
+                to_delete = to_delete * 1.0;
 
                 this.Self.service.scuttle_fleet({ args: {
                     session_id:Game.GetSession(),
                     building_id:this.Self.building.id,
                     fleet_id:this.Fleet.id,
-                    quantity: qty
+                    quantity: to_delete
                 }}, {
                     success : function(o){
                         YAHOO.log(o, "info", "SpacePort.FleetScuttle.success");
                         Lacuna.Pulser.Hide();
                         this.Self.rpcSuccess(o);
-                        var fleets = this.Self.fleetsView.fleets,
-                            info = Dom.get("fleetsCount");
 
                         delete this.Self.fleetsView;
+						delete this.Self.fleetsTravelling;
                         this.Self.getFleets({newValue:true});
-                        Event.removeDelegate(this.Line, 'click');
-                        this.Line.parentNode.removeChild(this.Line);
+						this.Self.getTravel({newValue:true});
                     },
                     failure : function(o){
                         btn.disabled = false;
@@ -1075,12 +1078,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         FleetRecall : function(e, matchedEl, container) {
             matchedEl.disabled = true;
             Lacuna.Pulser.Show();
-            var to_recall = Dom.get("fleet_action_"+this.Fleet.id).value;
+            var xxx = Dom.getElementsByClassName('recall_qty','input', this.Line);
+            var to_recall = xxx[0].value;
 
             this.Self.service.recall_fleet({ args: {
                 session_id:Game.GetSession(),
                 fleet_id:this.Fleet.id,
-                quantity:to_delete
+                quantity:to_recall
             }}, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
