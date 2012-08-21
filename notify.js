@@ -12,7 +12,6 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
         Lib = Lacuna.Library;
         
     var Notify = function(){
-        this.skip_incoming_ships = {};
         this.incoming_own = {};
         this.num_incoming_own = {};
         this.incoming_ally = {};
@@ -68,14 +67,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             var incoming_own = this.incoming_own[this.planetId] || [],
                 incoming_ally = this.incoming_ally[this.planetId] || [],
                 incoming_enemy = this.incoming_enemy[this.planetId] || [],
-                skip_incoming_ships = this.skip_incoming_ships[this.planetId] || 0,
                 num_incoming_own = this.num_incoming_own[this.planetId] || 0,
                 num_incoming_ally = this.num_incoming_ally[this.planetId] || 0,
                 num_incoming_enemy = this.num_incoming_enemy[this.planetId] || 0;
                 arr = [];
-            if(skip_incoming_ships==1) {
-                arr = arr.concat(['<li><span style="color:#f00">DISABLED (see profile)</span></li>']);
-            }
 
             if(num_incoming_enemy > 0) {
                 arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' foreign</span></li>']);
@@ -128,7 +123,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                     arr = arr.concat(['<li><span style="color:#0f0;">',arrTime,'</span></li>']);
                 }
             }
-            if(num_incoming_own + num_incoming_ally + num_incoming_enemy + skip_incoming_ships == 0) {
+            if(num_incoming_own + num_incoming_ally + num_incoming_enemy) {
                 arr = arr.concat(['<li><span style="color:#0f0">none</span></li>']);
             }            
             list.innerHTML = arr.join('');
@@ -138,17 +133,14 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             var incoming_own        = planet.incoming_own_ships || [],
                 incoming_ally       = planet.incoming_ally_ships || [],
                 incoming_enemy      = planet.incoming_enemy_ships || [],
-                skip_incoming_ships = planet.skip_incoming_ships || 0,
                 num_incoming_own    = planet.num_incoming_own || 0,
                 num_incoming_ally   = planet.num_incoming_ally || 0,
                 num_incoming_enemy  = planet.num_incoming_enemy || 0;
-                planet_skip_incoming_ships = this.skip_incoming_ships[planet.id] || 0;
                 planet_num_own      = this.num_incoming_own[planet.id] || 0;
                 planet_num_ally     = this.num_incoming_ally[planet.id] || 0;
                 planet_num_enemy    = this.num_incoming_enemy[planet.id] || 0;
 
                 this._createDisplay();
-                this.skip_incoming_ships[planet.id] = skip_incoming_ships;
                 this.incoming_own[planet.id] = incoming_own;
                 this.num_incoming_own[planet.id] = num_incoming_own;
                 this.incoming_ally[planet.id] = incoming_ally;

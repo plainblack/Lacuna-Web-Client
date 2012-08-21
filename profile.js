@@ -58,7 +58,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
             this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
             this.skipAttackMessages = Dom.get("profileSkipAttackMessages");
-            this.skipIncomingShips = Dom.get("profileSkipIncomingShips");
             this.skipExcavatorReplaceMsg = Dom.get("profileSkipExcavatorReplaceMsg");
             this.dontReplaceExcavator = Dom.get("profileDontReplaceExcavator");
             Event.on(this.skipFoundNothing, 'change', function() {
@@ -248,7 +247,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             '                                    <li><input id="profileSkipPollution" type="checkbox" /> Stop Pollution Warnings</li>',
             '                                    <li><input id="profileSkipHappiness" type="checkbox" /> Stop Happiness Warnings</li>',
             '                                    <li><input id="profileSkipAttackMessages" type="checkbox" /> Stop Attack Messages</li>',
-      '                 <li><input id="profileSkipIncomingShips" type="checkbox" /> Stop Incoming Ships Notification</li>',
       '                 </ul></div>',
       '               <div class="yui-u">',
       '               <ul id="profileCheckboxes">',
@@ -421,7 +419,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
                         skip_spy_recovery:this.skipSpyRecovery.checked ? 1 : 0,
                         skip_probe_detected:this.skipProbeDetected.checked ? 1 : 0,
                         skip_attack_messages:this.skipAttackMessages.checked ? 1 : 0,
-                        skip_incoming_ships:this.skipIncomingShips.checked ? 1 : 0
                     }
                 },{
                 success : function(o){
@@ -476,7 +473,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             this.skipSpyRecovery.checked = p.skip_spy_recovery == "1";
             this.skipProbeDetected.checked = p.skip_probe_detected == "1";
             this.skipAttackMessages.checked = p.skip_attack_messages == "1";
-            this.skipIncomingShips.checked = p.skip_incoming_ships == "1";
             this.skipExcavatorReplaceMsg.checked = p.skip_excavator_replace_msg == "1";
             this.dontReplaceExcavator.checked = p.dont_replace_excavator == "1";
             this.skipAllExcavator.checked = this.skipFoundNothing.checked &&
