@@ -331,7 +331,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             if(e.newValue) {
                 if(!this.fleetsOrbiting) {
                     Lacuna.Pulser.Show();
-                    this.service.view_fleets_orbiting({session_id:Game.GetSession(),building_id:this.building.id}, {
+                    this.service.view_orbiting_fleets({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
@@ -1029,7 +1029,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         },
         OrbitingHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
-            this.service.view_fleets_orbiting({
+            this.service.view_orbiting_fleets({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
                 page_number:newState.page
