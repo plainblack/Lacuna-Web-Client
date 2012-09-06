@@ -137,7 +137,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           if ( task.name === "Change Type" ) {
             typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New Planet Type</option>';
             
-            for (var j=1; j<=20; j++) {
+            for (var j=1; j<=40; j++) {
               typeSelector = typeSelector + [
                 '<option value="', j, '">', j, '</option>'
               ].join('');
