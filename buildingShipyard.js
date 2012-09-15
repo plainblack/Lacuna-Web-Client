@@ -315,7 +315,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     this.Self.ship_build_queue = o.result;
                     this.Self.ShipyardDisplay();
                     
-                    this.Self.ships.docks_available--;
+                    this.Self.ships.docks_available-=qty.value;
                     if(this.Self.ships.docks_available < 0) {
                         this.Self.ships.docks_available = 0;
                     }
