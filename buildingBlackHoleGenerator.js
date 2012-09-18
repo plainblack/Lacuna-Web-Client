@@ -27,25 +27,36 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     _getBHGTab : function() {
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
         '<div id="bhg">',
-        '  Target <select id="bhgTargetType">',
-        '    <option value="body_name">Body Name</option>',
-        '    <option value="body_id">Body Id</option>',
-        '    <option value="xy">X,Y</option>',
-        '  </select>',
-        '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
-        '  <span id="bhgTargetSelectXY" style="display:none;">',
-        '    X:<input size="5" type="text" id="bhgTargetX" />',
-        '    Y:<input size="5" type="text" id="bhgTargetY" />',
-        '  </span>',
-        '  <button type="button" id="bhgGetActions">Get Actions</button>',
-        '  <div id="bhgTaskInfo"></div>',
-        '  <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-        '  Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
-        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
-        '    <ul id="bhgActionsAvail"></ul>',
+		'  <div id="bhgTaskContainer">',
+        '    Target <select id="bhgTargetType">',
+        '      <option value="body_name">Body Name</option>',
+        '      <option value="body_id">Body Id</option>',
+        '      <option value="xy">X,Y</option>',
+        '    </select>',
+        '    <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
+        '    <span id="bhgTargetSelectXY" style="display:none;">',
+        '      X:<input size="5" type="text" id="bhgTargetX" />',
+        '      Y:<input size="5" type="text" id="bhgTargetY" />',
+        '    </span>',
+		'    Subsidize <input type="checkbox" checked id="bhgPerfectSubsidize">',
+        '    <button type="button" id="bhgGetActions">Get Actions</button>',
+        '    <div id="bhgTaskInfo"></div>',
+        '    <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
+        '    Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
+        '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '      <ul id="bhgActionsAvail"></ul>',
+        '    </div>',
+        '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '      <ul id="bhgResult"></ul>',
+		'    </div>',
+		'  </div>',
+        '  <div id="bhgWorkingContainer">',
+        '    <ul>',
+        '      <li>Time left on cooldown: <span id="bhgSearchTime"></span></li>',
+        '      <li>You may subsidize the search for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
+        '      <li><button type="button" id="bhgSearchSubsidize">Subsidize</button></li>',
+        '    </ul>',
         '  </div>',
-        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
-        '    <ul id="bhgResult"></ul>',
         '</div>'
       ].join('')});
 
@@ -81,9 +92,9 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       }
       
       this.service.get_actions_for({
-        session_id:Game.GetSession(),
-        building_id:this.building.id,
-        target:target
+        session_id: Game.GetSession(),
+        building_id: this.building.id,
+        target: target
       }, {
         success : function(o){
           Lacuna.Pulser.Hide();
@@ -153,7 +164,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '    <label style="font-weight:bold;">',task.name,'</label>',
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
-            '      Success Chance: ',task.success,'%,<br/>',
+            '      Success Chance: ',task.success,'%,',
+            '      Perfect Subsidize: ',task.essentia_cost,'E<br/>',
             '      Waste Needed: ',waste_out,
             '      Recovery Time: ',Lib.formatTime(task.recovery),
             '    </div>',
@@ -193,11 +205,11 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         task = this.Task;
       
       if (target) {
-        var serviceParams = {
-          session_id:Game.GetSession(),
-          building_id:oSelf.building.id,
-          target:target,
-          task_name:task.name
+        var args = {
+          session_id: Game.GetSession(),
+          building_id: oSelf.building.id,
+          target: target,
+          task_name: task.name
         };
         
         if (task.name === "Change Type") {
@@ -208,13 +220,13 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             return;
           }
           
-          serviceParams.planet_type = {
+          args.planet_type = {
             newtype: selectValue
           };
         }
         
         this.Self.service.generate_singularity(
-          serviceParams,
+          { "args": args },
           {success : function(o){
             Lacuna.Pulser.Hide();
             this.Self.rpcSuccess(o);
