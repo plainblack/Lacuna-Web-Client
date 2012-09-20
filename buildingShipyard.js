@@ -83,7 +83,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         this.rpcSuccess(o);
                         this.ships = {
                             buildable: o.result.buildable,
-                            docks_available: o.result.docks_available
+                            docks_available: o.result.docks_available,
+                            build_queue_max: o.result['build_queue_max'],
+                            build_queue_used: o.result['build_queue_used']
                         };
                         this.SetDocksAvailableMessage();
                         this.ShipPopulate();
@@ -201,7 +203,14 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             var sda = Dom.get("shipDocksAvailable");
             if(sda) {
                 if(this.ships.docks_available) {
-                    sda.innerHTML = 'There are ' + this.ships.docks_available + ' docks available for new ships.';
+                    var message = 'There are ' + this.ships.docks_available + ' docks available for new ships.';
+                    if (this.ships.build_queue_max && this.ships.build_queue_max > this.ships.build_queue_used) {
+                        message += '  You can queue ' + (this.ships.build_queue_max - this.ships.build_queue_used) + (this.ships.build_queue_used ? ' additional' : '') + ' ships.';
+                    }
+                    else if (this.ships.build_queue_max) {
+                        message += '  However, your build queue is full.';
+                    }
+                    sda.innerHTML = message;
                 }
                 else {
                     sda.innerHTML = 'You have no docks available.  Do you still have a Space Port?';
