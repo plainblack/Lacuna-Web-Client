@@ -205,7 +205,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 if(this.ships.docks_available) {
                     var message = 'There are ' + this.ships.docks_available + ' docks available for new ships.';
                     if (this.ships.build_queue_max && this.ships.build_queue_max > this.ships.build_queue_used) {
-                        message += '  You can queue ' + (this.ships.build_queue_max - this.ships.build_queue_used) + (this.ships.build_queue_used ? ' additional' : '') + ' ships.';
+                        message += '  You can queue ' + (this.ships.build_queue_max - this.ships.build_queue_used) + (this.ships.build_queue_used && this.ships.build_queue_used-0 ? ' additional' : '') + ' ships.';
                     }
                     else if (this.ships.build_queue_max) {
                         message += '  However, your build queue is full.';
