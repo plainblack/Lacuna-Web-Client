@@ -42,6 +42,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                 '        <li class="securityName">Name</li>',
                 '        <li class="securityLevel">Level</li>',
                 '        <li class="securitySentence">Sentence Expires</li>',
+                '        <li class="securityStatus">Status</li>',
                 '        <li class="securityExecute">Execute</li>',
                 '        <li class="securityRelease">Release</li>',
                 '    </ul>',
@@ -61,6 +62,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                 '        <li class="securityName">Name</li>',
                 '        <li class="securityLevel">Level</li>',
                 '        <li class="securityNextMisson">Next Misson</li>',
+                '        <li class="securityNextMisson">Current Misson</li>',
                 '    </ul>',
                 '    <div><div id="securityDetails"></div></div>',
                 '    <div id="securityPaginator"></div>',
@@ -135,6 +137,11 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"securitySentence");
                     nLi.innerHTML = Lib.formatServerDate(prisoner.sentence_expires);
+                    nUl.appendChild(nLi);
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"securityStatus");
+                    nLi.innerHTML = prisoner.task;
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
@@ -307,6 +314,11 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"securityNextMisson");
                     nLi.innerHTML = Lib.formatServerDate(spy.next_mission);
+                    nUl.appendChild(nLi);
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"securityTask");
+                    nLi.innerHTML = spy.task;
                     nUl.appendChild(nLi);
                     nDiv.appendChild(nUl);
 

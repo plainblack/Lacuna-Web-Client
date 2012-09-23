@@ -1,7 +1,7 @@
 YAHOO.namespace("lacuna");
-
+// Some comment to see if that will bump
 if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
-
+ 	 
 (function(){
     var smd = {
         Alliance : {
