@@ -153,14 +153,15 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '    <label style="font-weight:bold;">',task.name,'</label>',
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
-            '      Success Chance: ',task.success,'%,<br/>',
+            '      Success Chance: ',task.success,'%,',
+			'      Cost to subsidize: ',task.essentia_cost,'<br/>',
             '      Waste Needed: ',waste_out,
             '      Recovery Time: ',Lib.formatTime(task.recovery),
             '    </div>',
             '  </div>',
             '  <div class="yui-u" style="width:25%; text-align:right;">',
                  canGenerate == 1
-                   ? typeSelector + '<button type="button">Generate</button>'
+                   ? typeSelector + '<button type="button" name="generate">Generate</button><button type="button" name="subsidize">Subsidize</button>'
                    : '<b>Insufficient Waste</b>',
             '  </div>',
             '</div>'].join('');
@@ -168,10 +169,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           details.appendChild(nLi);
           
           if ( task.success > 1 ) {
-            Event.on(Sel.query("button", nLi, true),
+            Event.on(Sel.query("button[name=generate]", nLi, true),
                      "click",
                      this.bhgGenerate,
                      {Self:this, Target:target, Task:task, building_id: this.building_id},
+                     true);
+			
+			Event.on(Sel.query("button[name=subsidize]", nLi, true),
+                     "click",
+                     this.bhgGenerate,
+                     {Self:this, Target:target, Task:task, building_id: this.building_id, subsidize: true},
                      true);
           }
         }
@@ -193,12 +200,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         task = this.Task;
       
       if (target) {
-        var serviceParams = {
+        var rpcParams = {
           session_id:Game.GetSession(),
           building_id:oSelf.building.id,
           target:target,
           task_name:task.name
         };
+		
+		if (this.subsidize) {
+			rpcParams.subsidize = 1;
+		}
         
         if (task.name === "Change Type") {
           var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
@@ -208,13 +219,13 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             return;
           }
           
-          serviceParams.planet_type = {
+          rpcParams.params = {
             newtype: selectValue
           };
         }
         
         this.Self.service.generate_singularity(
-          serviceParams,
+          {params : rpcParams },
           {success : function(o){
             Lacuna.Pulser.Hide();
             this.Self.rpcSuccess(o);
