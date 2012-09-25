@@ -26,22 +26,20 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     },
     _getBHGTab : function() {
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
-        '<div id="bhg">',
-		'  <div id="bhgTaskContainer">',
-        '    Target <select id="bhgTargetType">',
-        '      <option value="body_name">Body Name</option>',
-        '      <option value="body_id">Body Id</option>',
-        '      <option value="xy">X,Y</option>',
-        '    </select>',
-        '    <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
-        '    <span id="bhgTargetSelectXY" style="display:none;">',
-        '      X:<input size="5" type="text" id="bhgTargetX" />',
-        '      Y:<input size="5" type="text" id="bhgTargetY" />',
-        '    </span>',
-		'    Subsidize <input type="checkbox" checked id="bhgPerfectSubsidize">',
-        '    <button type="button" id="bhgGetActions">Get Actions</button>',
-        '    <div id="bhgTaskInfo"></div>',
-        '    <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
+        '<div id="bhgContainer">',
+        '  Target <select id="bhgTargetType">',
+        '    <option value="body_name">Body Name</option>',
+        '    <option value="body_id">Body Id</option>',
+        '    <option value="xy">X,Y</option>',
+        '  </select>',
+        '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
+        '  <span id="bhgTargetSelectXY" style="display:none;">',
+        '    X:<input size="5" type="text" id="bhgTargetX" />',
+        '    Y:<input size="5" type="text" id="bhgTargetY" />',
+        '  </span>',
+        '  <button type="button" id="bhgGetActions">Get Actions</button>',
+        '  <div id="bhgTaskInfo"></div>',
+        '  <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
         '    Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
         '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
         '      <ul id="bhgActionsAvail"></ul>',
@@ -50,15 +48,21 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '      <ul id="bhgResult"></ul>',
 		'    </div>',
 		'  </div>',
-        '  <div id="bhgWorkingContainer">',
-        '    <ul>',
-        '      <li>Time left on cooldown: <span id="bhgSearchTime"></span></li>',
-        '      <li>You may subsidize the search for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
-        '      <li><button type="button" id="bhgSearchSubsidize">Subsidize</button></li>',
-        '    </ul>',
-        '  </div>',
+        '</div>',
+		'<div id="bhgWorkingContainer">',
+        '  <ul>',
+        '    <li>Cool-down time remaining: <span id="bhgCooldownTime"></span></li>',
+        '    <li>You may subsidize the cool-down for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
+        '    <li><button type="button" id="bhgCooldownSubsidize">Subsidize</button></li>',
+        '  </ul>',
         '</div>'
       ].join('')});
+	  
+	  this.tab.subscribe("activeChange", function(e) {
+        if(e.newValue) {
+          this.checkIfWorking();
+        }
+      }, this, true);
 
       Event.on("bhgTargetType", "change", function(){
         if(Lib.getSelectedOptionValue(this) == "xy") {
@@ -71,6 +75,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         }
       });
       Event.on("bhgGetActions", "click", this.bhgGetActions, this, true);
+	  Event.on("bhgCooldownSubsidize", "click", this.cooldownSubsidize, this, true);
+	  
       return this.tab;
     },
     bhgGetActions : function() {
@@ -165,14 +171,14 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
             '      Success Chance: ',task.success,'%,',
-            '      Perfect Subsidize: ',task.essentia_cost,'E<br/>',
+			'      Cost to subsidize: ',task.essentia_cost,'<br/>',
             '      Waste Needed: ',waste_out,
             '      Recovery Time: ',Lib.formatTime(task.recovery),
             '    </div>',
             '  </div>',
             '  <div class="yui-u" style="width:25%; text-align:right;">',
                  canGenerate == 1
-                   ? typeSelector + '<button type="button">Generate</button>'
+                   ? typeSelector + '<button type="button" name="generate">Generate</button><button type="button" name="subsidize">Subsidize</button>'
                    : '<b>Insufficient Waste</b>',
             '  </div>',
             '</div>'].join('');
@@ -180,10 +186,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           details.appendChild(nLi);
           
           if ( task.success > 1 ) {
-            Event.on(Sel.query("button", nLi, true),
+            Event.on(Sel.query("button[name=generate]", nLi, true),
                      "click",
                      this.bhgGenerate,
                      {Self:this, Target:target, Task:task, building_id: this.building_id},
+                     true);
+			
+			Event.on(Sel.query("button[name=subsidize]", nLi, true),
+                     "click",
+                     this.bhgGenerate,
+                     {Self:this, Target:target, Task:task, building_id: this.building_id, subsidize: true},
                      true);
           }
         }
@@ -205,12 +217,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         task = this.Task;
       
       if (target) {
-        var args = {
-          session_id: Game.GetSession(),
-          building_id: oSelf.building.id,
-          target: target,
-          task_name: task.name
+        var rpcParams = {
+          session_id:Game.GetSession(),
+          building_id:oSelf.building.id,
+          target:target,
+          task_name:task.name
         };
+		
+		if (this.subsidize) {
+			rpcParams.subsidize = 1;
+		}
         
         if (task.name === "Change Type") {
           var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
@@ -220,13 +236,13 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             return;
           }
           
-          args.planet_type = {
+          rpcParams.params = {
             newtype: selectValue
           };
         }
         
         this.Self.service.generate_singularity(
-          { "args": args },
+          {params : rpcParams },
           {success : function(o){
             Lacuna.Pulser.Hide();
             this.Self.rpcSuccess(o);
@@ -329,6 +345,51 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         out = out + '  </div></div></div>';
         
         return out;
+    },
+	checkIfWorking : function() {
+      if(this.work && this.work.seconds_remaining) {
+        Dom.setStyle("bhgContainer", "display", "none");
+        Dom.setStyle("bhgWorkingContainer", "display", "");
+        this.populateCooldownTimer(this.work.seconds_remaining);
+      }
+      else {
+        Dom.setStyle("bhgContainer", "display", "");
+        Dom.setStyle("bhgWorkingContainer", "display", "none");
+      }
+    },
+	populateCooldownTimer : function(seconds_remaining) {
+      this.addQueue(seconds_remaining, this.cooldownQueue, "bhgCooldownTime");
+    },
+	cooldownQueue : function(remaining, el){
+      if(remaining <= 0) {
+        var span = Dom.get(el),
+          p = span.parentNode;
+        p.removeChild(span);
+        p.innerHTML = "Cool-down Complete";
+      }
+      else {
+        Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
+      }
+    },
+	cooldownSubsidize : function() {
+      Lacuna.Pulser.Show();
+      
+      this.service.subsidize_cooldown({
+        session_id:Game.GetSession(),
+        building_id:this.building.id
+      }, {
+        success : function(o){
+          Lacuna.Pulser.Hide();
+          this.rpcSuccess(o);
+
+          delete this.work;
+          this.updateBuildingTile(o.result.building);
+          this.resetQueue();
+          Dom.get("bhgCooldownTime").innerHTML = "";
+          this.checkIfWorking();
+        },
+        scope:this
+      });
     }
   });
   

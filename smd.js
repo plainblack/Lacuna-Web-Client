@@ -300,7 +300,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     
                 }
             },
-                        BlackHoleGenerator : {
+            BlackHoleGenerator : {
                 "SMDVersion":"2.0",
                 "description": "Black Hole Generator",
                 "envelope":"JSON-RPC-2.0",
@@ -319,7 +319,17 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     },
                     "generate_singularity" : {
                         "description": "Performs action on specified target.",
-                        "parameters": [{"name": "args", "type":"object", "optional":false}],
+                        "parameters": [
+                            {"name":"params", "type":"object", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "subsidize_cooldown" : {
+                        "description": "Will spend 2 essentia to cool down the BHG immediately.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
                         "returns":{"type":"object"}
                     }
                 }
