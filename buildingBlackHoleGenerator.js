@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     },
     _getBHGTab : function() {
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
-        '<div id="bhg">',
+        '<div id="bhgContainer">',
         '  Target <select id="bhgTargetType">',
         '    <option value="body_name">Body Name</option>',
         '    <option value="body_id">Body Id</option>',
@@ -40,14 +40,29 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '  <button type="button" id="bhgGetActions">Get Actions</button>',
         '  <div id="bhgTaskInfo"></div>',
         '  <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-        '  Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
-        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
-        '    <ul id="bhgActionsAvail"></ul>',
-        '  </div>',
-        '  <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
-        '    <ul id="bhgResult"></ul>',
+        '    Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
+        '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '      <ul id="bhgActionsAvail"></ul>',
+        '    </div>',
+        '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
+        '      <ul id="bhgResult"></ul>',
+		'    </div>',
+		'  </div>',
+        '</div>',
+		'<div id="bhgWorkingContainer">',
+        '  <ul>',
+        '    <li>Cool-down time remaining: <span id="bhgCooldownTime"></span></li>',
+        '    <li>You may subsidize the cool-down for 2 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" />.</li>',
+        '    <li><button type="button" id="bhgCooldownSubsidize">Subsidize</button></li>',
+        '  </ul>',
         '</div>'
       ].join('')});
+	  
+	  this.tab.subscribe("activeChange", function(e) {
+        if(e.newValue) {
+          this.checkIfWorking();
+        }
+      }, this, true);
 
       Event.on("bhgTargetType", "change", function(){
         if(Lib.getSelectedOptionValue(this) == "xy") {
@@ -60,6 +75,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         }
       });
       Event.on("bhgGetActions", "click", this.bhgGetActions, this, true);
+	  Event.on("bhgCooldownSubsidize", "click", this.cooldownSubsidize, this, true);
+	  
       return this.tab;
     },
     bhgGetActions : function() {
@@ -328,6 +345,51 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         out = out + '  </div></div></div>';
         
         return out;
+    },
+	checkIfWorking : function() {
+      if(this.work && this.work.seconds_remaining) {
+        Dom.setStyle("bhgContainer", "display", "none");
+        Dom.setStyle("bhgWorkingContainer", "display", "");
+        this.populateCooldownTimer(this.work.seconds_remaining);
+      }
+      else {
+        Dom.setStyle("bhgContainer", "display", "");
+        Dom.setStyle("bhgWorkingContainer", "display", "none");
+      }
+    },
+	populateCooldownTimer : function(seconds_remaining) {
+      this.addQueue(seconds_remaining, this.cooldownQueue, "bhgCooldownTime");
+    },
+	cooldownQueue : function(remaining, el){
+      if(remaining <= 0) {
+        var span = Dom.get(el),
+          p = span.parentNode;
+        p.removeChild(span);
+        p.innerHTML = "Cool-down Complete";
+      }
+      else {
+        Dom.get(el).innerHTML = Lib.formatTime(Math.round(remaining));
+      }
+    },
+	cooldownSubsidize : function() {
+      Lacuna.Pulser.Show();
+      
+      this.service.subsidize_cooldown({
+        session_id:Game.GetSession(),
+        building_id:this.building.id
+      }, {
+        success : function(o){
+          Lacuna.Pulser.Hide();
+          this.rpcSuccess(o);
+
+          delete this.work;
+          this.updateBuildingTile(o.result.building);
+          this.resetQueue();
+          Dom.get("bhgCooldownTime").innerHTML = "";
+          this.checkIfWorking();
+        },
+        scope:this
+      });
     }
   });
   
