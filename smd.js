@@ -1,5 +1,4 @@
 YAHOO.namespace("lacuna");
-// Some comment to see if that will bump
 if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
       
 (function(){
@@ -246,7 +245,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             "status" : { ... },
                             "ore" : {
                                 "bauxite" : 39949,
-                                "rutile" : 19393
+                                "gold" : 19393
                             }
                          }
                         */
