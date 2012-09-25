@@ -1814,10 +1814,13 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:100px;
 }
 .securityInfo .securityLevel {
-	width:100px;
+	width:80px;
 }
 .securityInfo .securityNextMisson, .securityInfo .securitySentence {
 	width:180px;
+}
+.securityInfo .securityStatus {
+	width:140px;
 }
 .securityInfo .securityExecute {
 	width:100px;

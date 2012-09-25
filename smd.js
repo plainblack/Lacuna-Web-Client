@@ -1,7 +1,7 @@
 YAHOO.namespace("lacuna");
-
+// Some comment to see if that will bump
 if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
-
+      
 (function(){
     var smd = {
         Alliance : {
@@ -74,7 +74,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                     "start" : "01 31 2010 11:08:03 +0600",
                                     "end" : "01 31 2010 13:09:05 +0600",
                                 },
-                                ...
+                                ....
                             },
                             "status" : "get_status",
                          }
@@ -294,7 +294,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     
                 }
             },
-                        BlackHoleGenerator : {
+            BlackHoleGenerator : {
                 "SMDVersion":"2.0",
                 "description": "Black Hole Generator",
                 "envelope":"JSON-RPC-2.0",
@@ -314,11 +314,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "generate_singularity" : {
                         "description": "Performs action on specified target.",
                         "parameters": [
+                            {"name":"params", "type":"object", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "subsidize_cooldown" : {
+                        "description": "Will spend 2 essentia to cool down the BHG immediately.",
+                        "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"target", "type":"object", "optional":false},
-                            {"name":"task_name", "type":"string", "optional":false},
-                            {"name":"planet_type", "type":"number", "optional":true}
+                            {"name":"building_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"}
                     }
