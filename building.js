@@ -326,7 +326,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                 '        <li class="incomingSupplyChainBody">From Body</li>',
                 '        <li class="incomingSupplyChainResource">Resource</li>',
                 '        <li class="incomingSupplyChainHour">/hr</li>',
-                '        <li class="incomingSupplyChainEfficiency">Effiency</li>',
+                '        <li class="incomingSupplyChainEfficiency">Efficiency</li>',
                 '      </ul>',
                 '      <div><div id="incomingSupplyChainListDetails"></div></div>',
                 '   </div>',
