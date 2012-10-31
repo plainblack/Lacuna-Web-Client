@@ -82,7 +82,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '            <ul class="yui-nav">',
             '                <li><a href="#essentiaTabBoost"><em>Boosts</em></a></li>',
             '                <li><a href="#essentiaGetMore"><em>Get More Essentia</em></a></li>',
-            '                <li><a href="#essentiaGiveEssentia"><em>Give Essentia</em></a></li>',
+/*            '                <li><a href="#essentiaGiveEssentia"><em>Give Essentia</em></a></li>', */
             '            </ul>',
             '            <div class="yui-content">',
             '                <div id="essentiaTabBoost">',
@@ -157,7 +157,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '                        </table>',
             '                    </div>',
             '                </div>',
-            '                <div id="essentiaGetMore">',
+/*            '                <div id="essentiaGetMore">',
             '                    <p><b>Give the gift of Essentia.</b><br />Simply choose the amount you want, and pay for at it at PayPal with a credit card, or with your PayPal account. You\'ll then receive an email with an essentia code that can be redeemed in the game.</p>',
             '                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">',
             '                    <input type="hidden" name="cmd" value="_s-xclick">',
@@ -173,7 +173,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '                    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">',
             '                    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">',
             '                    </form>',
-            '                </div>',
+            '                </div>', */
             '            </div>',
             '        </div>',
             '    </div>'
