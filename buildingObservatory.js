@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         ProbeInfoDisplay : function(data) {
             var info = Dom.get("observatoryInfo");
             if(info) {
-                info.innerHTML = ['Total of ', data.star_count, ' probes in use.  This observatory can control a maximum of ', data.max_probes, ' probes.'].join('');
+                info.innerHTML = ['Total of ', data.star_count, ' probes in use.  ', ( "travelling" in data ? data.travelling + ' en route.  ' : '' ), 'This observatory can control a maximum of ', data.max_probes, ' probes.'].join('');
             }
         },
         ProbesDisplay : function() {
