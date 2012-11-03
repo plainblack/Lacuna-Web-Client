@@ -115,7 +115,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
                             this.rpcSuccess(o);
                             this.spies = o.result;
                             this.pager = new Pager({
-                                rowsPerPage : 25,
+                                rowsPerPage : 30,
                                 totalRecords: o.result.spy_count,
                                 containers  : 'spyPaginator',
                                 template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
