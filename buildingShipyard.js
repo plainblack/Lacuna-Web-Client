@@ -204,7 +204,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             if(sda) {
                 if(this.ships.docks_available) {
                     var message = 'There are ' + this.ships.docks_available + ' docks available for new ships.';
-                    if (this.ships.build_queue_max && this.ships.build_queue_max > this.ships.build_queue_used) {
+                    if (this.ships.build_queue_max && this.ships.build_queue_max - this.ships.build_queue_used > 0) {
                         message += '  You can queue ' + (this.ships.build_queue_max - this.ships.build_queue_used) + (this.ships.build_queue_used && this.ships.build_queue_used-0 ? ' additional' : '') + ' ships.';
                     }
                     else if (this.ships.build_queue_max) {
