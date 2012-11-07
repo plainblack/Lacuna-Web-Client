@@ -1250,7 +1250,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    <li><label>X: </label>',data.x,'</li>',
                 '    <li><label>Y: </label>',data.y,'</li>',
                 '    <li><label>Zone: </label>',data.zone,'</li>',
-                data.station ? ('    <li><label>Station: </label>'+data.station.name+'</li>') : '',
+                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+')</li>') : '',
                 '</ul>'
             ].join('');
             
