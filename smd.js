@@ -1392,6 +1392,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"} // status
                     },
+                    "abandon_all_probes" : {
+                        "description": "All probes are deactivated, and allowed to burn up in the stars.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"} // status
+                    },
                     "get_probed_stars" : {
                         "description": "Returns a list of the stars that have been probed by this planet.",
                         "parameters": [
