@@ -31,6 +31,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '    <option value="body_name">Body Name</option>',
         '    <option value="body_id">Body Id</option>',
         '    <option value="xy">X,Y</option>',
+        '    <option value="zone">Zone (X|Y)</option>',
         '  </select>',
         '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
         '  <span id="bhgTargetSelectXY" style="display:none;">',
