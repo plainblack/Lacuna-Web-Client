@@ -153,11 +153,17 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           var typeSelector = "";
           if ( task.name === "Change Type" ) {
-            typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New Planet Type</option>';
+            var label = task.body_type == 'asteroid' ? 'Asteroid'
+                      :                                'Planet';
             
-            for (var j=1; j<=40; j++) {
+            typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New '+label+' Type</option>';
+            
+            var options = task.body_type == 'asteroid' ? this.result.task_options.asteroid_types
+                        :                                this.result.task_options.planet_types;
+            
+            for (var j=0; j<options.length; j++) {
               typeSelector = typeSelector + [
-                '<option value="', j, '">', j, '</option>'
+                '<option value="', options[j], '">', options[j], '</option>'
               ].join('');
             }
             
@@ -233,7 +239,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
           
           if ( selectValue == "" ) {
-            alert("Please select New Planet Type");
+            alert("Please select Type");
             return;
           }
           
