@@ -54,7 +54,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '  <button type="button" id="bhgGetActions">Get Actions</button>',
         '  <div id="bhgTaskInfo"></div>',
         '  <div id="bhgActions" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-        '    Singularity Target: <span id="bhgTargetNote"></span><span id="bhgTargetDist"></span>',
+        '    Singularity Target: <span id="bhgTargetNote"></span>',
         '    <div style="border-top:1px solid #52ACFF;margin-top:5px;">',
         '      <ul id="bhgActionsAvail"></ul>',
         '    </div>',
@@ -153,8 +153,6 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         details.innerHTML = "No available actions for singularity.";
       }
       else {        
-        Dom.get("bhgTargetDist").innerHTML = [
-          ' ; Dist: ', actions[0].dist, ' Range: ', actions[0].range].join('');
         for(var i=0; i<actions.length; i++) {
           var task = actions[i],
               nLi = li.cloneNode(false);
@@ -199,6 +197,10 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '<div class="yui-gd" style="margin-bottom:2px; border: 1px white solid; padding: 2px">',
             '  <div class="yui-u first" style="width:70%">',
             '    <label style="font-weight:bold;">',task.name,'</label>',
+            '    <div>',
+            '      Distance: ',task.dist,', ',
+            '      Range: ',task.range,
+            '    </div>',
             '    <div>',
             '      Base Chance: ',100-task.base_fail,'%,',
             '      Success Chance: ',task.success,'%,',
