@@ -25,17 +25,31 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       return [this._getBHGTab()];
     },
     _getBHGTab : function() {
+      var zoneOptions = "";
+      var zones = this.result.task_options.zones;
+      for (var i=0; i<zones.length; i++) {
+        zoneOptions += '<option value="' + zones[i] + '">' + zones[i] + '</option>';
+      }
+      
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
         '<div id="bhgContainer">',
         '  Target <select id="bhgTargetType">',
         '    <option value="body_name">Body Name</option>',
         '    <option value="body_id">Body Id</option>',
+        '    <option value="star_name">Star Name</option>',
+        '    <option value="star_id">Star Id</option>',
         '    <option value="xy">X,Y</option>',
+        '    <option value="zone">Zone (X|Y)</option>',
         '  </select>',
         '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
         '  <span id="bhgTargetSelectXY" style="display:none;">',
         '    X:<input size="5" type="text" id="bhgTargetX" />',
         '    Y:<input size="5" type="text" id="bhgTargetY" />',
+        '  </span>',
+        '  <span id="bhgTargetSelectZone" style="display:none;">',
+        '    <select id="bhgTargetZone"><option value="">Select Zone</option>',
+               zoneOptions,
+        '    </select>',
         '  </span>',
         '  <button type="button" id="bhgGetActions">Get Actions</button>',
         '  <div id="bhgTaskInfo"></div>',
@@ -68,10 +82,17 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         if(Lib.getSelectedOptionValue(this) == "xy") {
           Dom.setStyle("bhgTargetSelectText", "display", "none");
           Dom.setStyle("bhgTargetSelectXY", "display", "");
+          Dom.setStyle("bhgTargetSelectZone", "display", "none");
+        }
+        else if(Lib.getSelectedOptionValue(this) == "zone") {
+          Dom.setStyle("bhgTargetSelectText", "display", "none");
+          Dom.setStyle("bhgTargetSelectXY", "display", "none");
+          Dom.setStyle("bhgTargetSelectZone", "display", "");
         }
         else {
           Dom.setStyle("bhgTargetSelectText", "display", "");
           Dom.setStyle("bhgTargetSelectXY", "display", "none");
+          Dom.setStyle("bhgTargetSelectZone", "display", "none");
         }
       });
       Event.on("bhgGetActions", "click", this.bhgGetActions, this, true);
@@ -91,6 +112,10 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         target.x = Dom.get("bhgTargetX").value;
         target.y = Dom.get("bhgTargetY").value;
         Dom.get("bhgTargetNote").innerHTML = ['X: ', target.x, ', Y: ', target.y].join('');
+      }
+      else if (type == "zone") {
+        target.zone = Dom.get("bhgTargetZone").value;
+        Dom.get("bhgTargetNote").innerHTML = ['Zone: ', target.zone].join('');
       }
       else {
         target[type] = Dom.get("bhgTargetText").value;
@@ -152,11 +177,17 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           var typeSelector = "";
           if ( task.name === "Change Type" ) {
-            typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New Planet Type</option>';
+            var label = task.body_type == 'asteroid' ? 'Asteroid'
+                      :                                'Planet';
             
-            for (var j=1; j<=40; j++) {
+            typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New '+label+' Type</option>';
+            
+            var options = task.body_type == 'asteroid' ? this.result.task_options.asteroid_types
+                        :                                this.result.task_options.planet_types;
+            
+            for (var j=0; j<options.length; j++) {
               typeSelector = typeSelector + [
-                '<option value="', j, '">', j, '</option>'
+                '<option value="', options[j], '">', options[j], '</option>'
               ].join('');
             }
             
@@ -232,7 +263,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
           
           if ( selectValue == "" ) {
-            alert("Please select New Planet Type");
+            alert("Please select Type");
             return;
           }
           
