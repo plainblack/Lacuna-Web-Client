@@ -196,7 +196,9 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
                         Lacuna.Pulser.Hide();
                         this.rpcSuccess(o);
                         this.probes = null;
-                        Dom.get("observatoryBigRedButton").disabled = true;
+                        
+                        //close buildingDetails
+                        this.fireEvent("onHide");
                     },
                     scope:this
                 });
