@@ -36,6 +36,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '  Target <select id="bhgTargetType">',
         '    <option value="body_name">Body Name</option>',
         '    <option value="body_id">Body Id</option>',
+        '    <option value="star_name">Star Name</option>',
+        '    <option value="star_id">Star Id</option>',
         '    <option value="xy">X,Y</option>',
         '    <option value="zone">Zone (X|Y)</option>',
         '  </select>',
