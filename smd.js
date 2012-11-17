@@ -3853,6 +3853,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "propose_neutralize_bhg" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "propose_fire_bfg" : {
                         "description": "",
                         "parameters": [
