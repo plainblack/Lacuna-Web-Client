@@ -1,0 +1,14 @@
+This is a list of things that need to be done in the Web Client
+so that the new API for fleet-action can be supported.
+
+TO DO:
+shipyard:
+  Although all the API changes to shipyard have been done (see t/470_fleet_shipyard.t)
+  and (I think) the Lacuna-Web-Client has been changed, I can't get it to work as I
+  remember it used to work. I don't know what has changed.
+
+spaceport:
+  The spaceport is in an indeterminate state, I can't get it to work but some of the
+  API has been done (see t/460_fleet_spaceport.t) for working code.
+
+
