@@ -307,6 +307,16 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 '    </div>'
                 ].join('');
             }
+            if(this.building.level >= 23) {
+                opts[opts.length] = '<option value="proposeNeutralizeBHG">Neutralize BHG</option>';
+                dis[dis.length] = [
+                '    <div id="proposeNeutralizeBHG" class="proposeOption" style="display:none;">',
+                '        Neutralizes all Black Hole Generators under this stations jurisdiction.<br />',
+                '        <button type="button" id="proposeNeutralizeBHGSubmit">Propose</button>',
+                '    </div>'
+                ].join('');
+                Event.on("proposeNeutralizeBHGSubmit", "click", this.NeutralizeBHG, this, true);
+            }
             if(this.building.level >= 25) {
                 opts[opts.length] = '<option value="proposeFireBfg">Fire BFG</option>';
                 dis[dis.length] = [
@@ -507,6 +517,27 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 success : function(o) {
                     this.rpcSuccess(o);
                     this.proposeMessage.innerHTML = "Proposal for Members Only Colonization successful.";
+                    Lib.fadeOutElm(this.proposeMessage);
+                    btn.disabled = false;
+                },
+                failure : function(o) {
+                    btn.disabled = false;
+                },
+                scope:this
+            });
+        },
+        NeutralizeBHG : function(e) {
+            var btn = Event.getTarget(e);
+            btn.disabled = true;
+            
+            this.service.propose_neutralize_bhg({
+                session_id : Game.GetSession(''),
+                building_id : this.building.id
+            },
+            {
+                success : function(o) {
+                    this.rpcSuccess(o);
+                    this.proposeMessage.innerHTML = "Proposal for Neutralize Black Hold Generators successful.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },

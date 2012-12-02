@@ -27,7 +27,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
             Observatory.superclass.destroy.call(this);
         },
         getChildTabs : function() {
-            return [this._getProbesTab()];
+            return [this._getProbesTab(), this._getAbandonAllProbesTab()];
         },
         _getProbesTab : function() {
             this.probesTab = new YAHOO.widget.Tab({ label: "Probes", content: [
@@ -42,6 +42,17 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
                 ].join('')});
             this.probesTab.subscribe("activeChange", this.GetProbes, this, true);
                     
+            return this.probesTab;
+        },
+        _getAbandonAllProbesTab : function() {
+            this.probesTab = new YAHOO.widget.Tab({ label: "Abandon All Probes", content: [
+                    '<div>',
+                    '    <button type="button" id="observatoryBigRedButton">Abandon All Probes!</button>',
+                    '</div>'
+                ].join('')});
+            
+            Event.on("observatoryBigRedButton", "click", this.AbandonAllProbes, this, true);
+            
             return this.probesTab;
         },
         
@@ -80,7 +91,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         ProbeInfoDisplay : function(data) {
             var info = Dom.get("observatoryInfo");
             if(info) {
-                info.innerHTML = ['Total of ', data.star_count, ' probes in use.  This observatory can control a maximum of ', data.max_probes, ' probes.'].join('');
+                info.innerHTML = ['Total of ', data.star_count, ' probes in use.  ', ( "travelling" in data ? data.travelling + ' en route.  ' : '' ), 'This observatory can control a maximum of ', data.max_probes, ' probes.'].join('');
             }
         },
         ProbesDisplay : function() {
@@ -171,6 +182,26 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         ProbeJump : function(e, matchedEl, container) {
             if(container.Star) {
                 Game.StarJump(container.Star);
+            }
+        },
+        AbandonAllProbes : function(e) {
+            if(confirm("Are you sure you want to abandon all probes controlled by this Observatory?")) {
+                Lacuna.Pulser.Show();
+                this.service.abandon_all_probes({
+                        session_id:Game.GetSession(),
+                        building_id:this.building.id
+                    }, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "Observatory.AbandonAllProbes.abandon_all_probes.success");
+                        Lacuna.Pulser.Hide();
+                        this.rpcSuccess(o);
+                        this.probes = null;
+                        
+                        //close buildingDetails
+                        this.fireEvent("onHide");
+                    },
+                    scope:this
+                });
             }
         }
 

@@ -1,5 +1,4 @@
 YAHOO.namespace("lacuna");
-// Some comment to see if that will bump
 if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
       
 (function(){
@@ -240,7 +239,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             "status" : { ... },
                             "ore" : {
                                 "bauxite" : 39949,
-                                "rutile" : 19393
+                                "gold" : 19393
                             }
                          }
                         */
@@ -1384,6 +1383,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"session_id", "type":"string", "optional":false},
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"star_id", "type":"number", "optional":false}
+                        ],
+                        "returns":{"type":"object"} // status
+                    },
+                    "abandon_all_probes" : {
+                        "description": "All probes are deactivated, and allowed to burn up in the stars.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"} // status
                     },
@@ -3464,6 +3471,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "returns":{"type":"object"}
                     },
                     "propose_members_only_colonization" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "propose_neutralize_bhg" : {
                         "description": "",
                         "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},

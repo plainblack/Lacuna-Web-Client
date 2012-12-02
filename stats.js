@@ -380,6 +380,14 @@ _getSpiesHtml : function() {
                            '<li><label>Highest Defense:</label>', Lib.formatNumber(data.highest_defense), '</li>',
                            '<li><label>Average Offense:</label>', Lib.formatNumber(data.average_offense), '</li>',
                            '<li><label>Highest Offense:</label>', Lib.formatNumber(data.highest_offense), '</li>',
+                           '<li><label>Average Intel XP:</label>', Lib.formatNumber(data.average_intel), '</li>',
+                           '<li><label>Highest Intel XP:</label>', Lib.formatNumber(data.highest_intel), '</li>',
+                           '<li><label>Average Mayhem XP:</label>', Lib.formatNumber(data.average_mayhem), '</li>',
+                           '<li><label>Highest Mayhem XP:</label>', Lib.formatNumber(data.highest_mayhem), '</li>',
+                           '<li><label>Average Politics XP:</label>', Lib.formatNumber(data.average_politics), '</li>',
+                           '<li><label>Highest Politics XP:</label>', Lib.formatNumber(data.highest_politics), '</li>',
+                           '<li><label>Average Theft XP:</label>', Lib.formatNumber(data.average_theft), '</li>',
+                           '<li><label>Highest Theft XP:</label>', Lib.formatNumber(data.highest_theft), '</li>',
                            '<li><label>Appropriating Technology:</label>', Lib.formatNumber(data.appropriating_technology_count), '</li>',
                            '<li><label>Countering Espionage:</label>', Lib.formatNumber(data.countering_espionage_count), '</li>',
                            '<li><label>Gathering Intelligence:</label>', Lib.formatNumber(data.gathering_intelligence_count), '</li>',
@@ -398,6 +406,7 @@ _getStarsHtml : function() {
                     var data = this._serverOverview.stars;
                     return ['<ul class="statsList">',
                            '<li><label>Total Stars:</label>', Lib.formatNumber(data.count), '</li>',
+                           '<li><label>Seized Stars:</label>', Lib.formatNumber(data.seized_count), '</li>',
                            '<li><label>Probed Stars:</label>', Lib.formatNumber(data.probed_count), '</li>',
                            '<li><label>Total Probes:</label>', Lib.formatNumber(data.probes_count), '</li>',
                            '</ul>'
