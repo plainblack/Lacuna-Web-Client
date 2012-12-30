@@ -1667,7 +1667,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	text-align:right;
 }
 .buildQueue .buildQueueTime  {
-	width:50px;
+	width:100px;
 	text-align:right;
 }
 .buildQueue .buildQueueCoords  {
