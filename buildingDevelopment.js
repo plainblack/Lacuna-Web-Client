@@ -43,7 +43,7 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
             div.appendChild(subDiv);
 
             Dom.addClass(hUl, "buildQueue buildQueueHeader clearafter");
-            hUl.innerHTML = '<li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li>';
+            hUl.innerHTML = '<li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li><li class="buildQueueSubsidy">Subsidy</li><li class="buildQueueAction">Action</li>';
             div.appendChild(hUl);
             
             for(var i=0; i<bq.length; i++) {
@@ -71,6 +71,24 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
                 Dom.addClass(nLi,"buildQueueCoords");
                 nLi.innerHTML = [bqo.x,',',bqo.y].join('');
                 nUl.appendChild(nLi);
+
+                nLi = li.cloneNode(false);
+                Dom.addClass(nLi,"buildQueueSubsidy");
+                nLi.innerHTML = bqo.subsidy_cost;
+                nUl.appendChild(nLi);
+
+                var btn_cancel = document.createElement("button");
+                btn_cancel.setAttribute("type", "button");
+                btn_cancel.innerHTML = "Cancel";
+                btn_cancel = subDiv.appendChild(btn_cancel);
+                nUl.appendChild(btn_cancel);
+
+                var btn_subsidy = document.createElement("button");
+                btn_subsidy.setAttribute("type", "button");
+                btn_subsidy.innerHTML = "Subsidize";
+                btn_subsidy = subDiv.appendChild(btn_subsidy);
+                nUl.appendChild(btn_subsidy);
+
 
                 div.appendChild(nUl);
                 
