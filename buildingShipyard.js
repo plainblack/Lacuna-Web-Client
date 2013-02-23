@@ -164,7 +164,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
 
                         div.appendChild(nUl);
-                        Event.on(sbtn, "click", this.SubsidizeShip, {Self:this,Ship:bqp, Item:nUl}, true);
+                        Event.on(sbtn, "click", this.SubsidizeShip, {Self:this,Ship:bqo, Item:nUl}, true);
                         this.addQueue(ncs, this.ShipyardQueue, nUl);
                     }
                 }
