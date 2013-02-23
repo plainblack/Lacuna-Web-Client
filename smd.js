@@ -1704,6 +1704,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "subsidize_ship" : {
+                        "description": "Will spend 1 essentia to build the ship immediately.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"ship_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "get_buildable" : {
                         "description": "Returns a list of buildable ships and their costs, and if they're not buildable, gives a reason why not in the form of an exception.",
                         "parameters": [
