@@ -156,7 +156,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
                         nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"shipQueueEach");
-                        sbtn = Dom.createElement('button');
+                        sbtn = document.createElement('button');
                         sbtn.setAttribute('type', 'button');
                         sbtn.innerHTML = 'Subsidize';
                         nLi.appendChild(sbtn);
