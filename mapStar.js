@@ -748,7 +748,19 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
         },
         
         PopulateShipsSendTab : function(panel) {
-            var ships = this.currentShips.available,
+            this.service.view_available_fleets({ args : {
+                session_id: Game.GetSession(),
+                body_id: Game.GetCurrentPlanet().id,
+                target: target
+            }}, {
+                success : function(o){
+                    Lacuna.Pulser.Hide();
+                    this.rpcSuccess(o);
+					
+					var ships = o.result.available;
+                },
+                scope:this
+            });
                 details = Dom.get(panel.isStarPanel ? "starDetailSendShips" : "planetDetailSendShips"),
                 detailsParent = details.parentNode,
                 li = document.createElement("li");
@@ -757,11 +769,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             details = detailsParent.removeChild(details); //remove from DOM to make this faster
             details.innerHTML = "";
             
-            if(ships.length === 0) {
+            if (ships.length === 0) {
                 details.innerHTML = "No available ships to send.";
             }
             else {
-                for(var i=0; i<ships.length; i++) {
+                for (var i = 0; i < ships.length; i++) {
                     var ship = ships[i],
                         nLi = li.cloneNode(false);
                         
@@ -1194,10 +1206,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             if(!this.currentShips) {
                 Lacuna.Pulser.Show();
                 
-                Game.Services.Buildings.SpacePort.get_ships_for({
-                    session_id:Game.GetSession(),
-                    from_body_id:Game.GetCurrentPlanet().id,
-                    target:target
+                Game.Services.Buildings.SpacePort.view_available_fleets({
+                    session_id: Game.GetSession(),
+                    from_body_id: Game.GetCurrentPlanet().id,
+                    target: target
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "MapStar.ShowStar.get_ships_for.success");

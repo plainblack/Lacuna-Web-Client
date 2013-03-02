@@ -24,9 +24,12 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         _getQueueTab : function() {
             var div = document.createElement("div");
-            div.innerHTML = ['<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
+            div.innerHTML = [
+				'<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
                 '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Qty - Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
-                '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
+				'<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'
+			].join('');
+			
             Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
         
             var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
@@ -127,7 +130,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             var bq = this.ship_build_queue,
                 div = Dom.get("shipsBuilding");
 
-            if(div) {
+            if (div) {
                 var divParent = div.parentNode,
                     ul = document.createElement("ul"),
                     li = document.createElement("li"),
@@ -135,10 +138,10 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
                 this.resetQueue();
                 div = divParent.removeChild(div);
-                div.innerHTML = "";
+                div.innerHTML = '';
                 
                 if(bq && bq.fleets_building && bq.fleets_building.length > 0) {
-                    for(var i=0; i<bq.fleets_building.length; i++) {
+                    for(var i = 0; i < bq.fleets_building.length; i++) {
                         var bqo = bq.fleets_building[i],
                             nUl = ul.cloneNode(false),
                             nLi = li.cloneNode(false),

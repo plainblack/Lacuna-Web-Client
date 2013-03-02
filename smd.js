@@ -1781,12 +1781,12 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "returns":{"type":"object"}
                     },
                     "view_orbiting_fleets" : {
-                        "description" : "",
+                        "description" : "Shows the fleets that are orbiting the specified body.",
                         "parameters" : [{"name":"args","type":"object","optional":false}],
                         "returns":{"type":"object"}
                     },
                     "view_available_fleets" : {
-                        "description" : "",
+                        "description" : "Shows that fleets that can be sent to the specified body.",
                         "parameters" : [{"name":"args","type":"object","optional":false}],
                         "returns":{"type":"object"}
                     }

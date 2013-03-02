@@ -39,7 +39,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
         _generateService: function(serviceName, method) {
 
             if(this[method]){
-                throw new Error("WARNING: "+ serviceName+ " already exists for service. Unable to generate function");
+                throw new Error("WARNING: " + serviceName + " already exists for service. Unable to generate function");
             }
             method.name = serviceName;
 
@@ -47,16 +47,20 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
             var func = function(oParams, opts) {
                 var smd = self._smd;
                 var baseUrl = self._baseUrl;
+				
+				console.log(method.envelope); //debug
+				console.log(smd.envelope); //debug
                 
                 var envelope = YAHOO.rpc.Envelope[method.envelope || smd.envelope];
+				
                 var callback = {
                     success: function(o) {
-                        //YAHOO.log(o, "debug", "RPC.SUCCESS");
+                        YAHOO.log(o, "debug", "RPC.SUCCESS"); //debug
                         var results = envelope.deserialize(o);
                         opts.success.call(opts.scope || self, results);
                     },
                     failure: function(o) {
-                        //YAHOO.log(o, "debug", "RPC.FAILURE");
+                        YAHOO.log(o, "debug", "RPC.FAILURE"); //debug
                         if(Lang.isFunction(opts.failure) ) {
                             var results;
                             try {
@@ -74,6 +78,8 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                 if(opts.timeout) {
                     callback.timeout = opts.timeout;
                 }
+				
+				console.log(method.parameters); //debug
 
                 var params, //will be either an Array or an Object depending on the type that method.parameters is
                     pKey, i, p;
@@ -105,6 +111,8 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                     //augment with passing params after additional so we overwrite if we have to
                     Lang.augmentObject(params, oParams, true);
                 }
+				
+				console.log('Calling ' + method.name + ' with the parameters of ' + Lang.JSON.stringify(params) + '.'); //debug
                 
                 /* 1.1 implementation
                 var params = {};
@@ -172,7 +180,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                     // handles "namespaced" services by breaking apart by '.'
                     var current = this;
                     var pieces = serviceName.split("."); 
-                    for(var i=0; i< pieces.length-1; i++){
+                    for(var i = 0; i < pieces.length-1; i++){
                         current = current[pieces[i]] || (current[pieces[i]] = {});
                     }
 

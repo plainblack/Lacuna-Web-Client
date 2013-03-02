@@ -359,7 +359,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             "water":1
         },
         Ships :  {
-            bomber:"Bomber",
+            bomber:"Bomber", // What's a Bomber?
             cargo_ship:"Cargo Ship",
             colony_ship:"Colony Ship",
             detonator:"Detonator",
