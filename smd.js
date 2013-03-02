@@ -354,20 +354,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "target":"/development",
                 
                 "services": {
+                    "subsidize_one_build" : {
+                        "description": "Instantly finish any one building on the build queue.",
+                        "parameters": [{"name":"args", "type":"object", "optional":false}],
+						"returns":{"type":"object"}
+                    },
+                    "cancel_build" : {
+                        "description": "Cancel any one building on the build queue.",
+                        "parameters": [{"name":"args", "type":"object", "optional":false}],
+						"returns":{"type":"object"}
+                    },
                     "subsidize_build_queue" : {
-                        "description": "Allows a player to instantly finish any buildings in their build queue. The cost is returned by the view method.",
+                        "description": "Allows a player to instantly finish all buildings in their build queue. The cost is returned by the view method.",
                         "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},
                             {"name":"building_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"}
                     }
-                    /*
-                    {
-                        "status" : { get_status() },
-                        "essentia_spent" : 8
-                     }
-                    */
                 }
             },
             DistributionCenter : {
