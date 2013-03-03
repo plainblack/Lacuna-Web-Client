@@ -32,4 +32,5 @@ API CALLS
 		
 Other Issues
 ============
-	1. Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
+	1.  Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
+	    This causes the server to return error 1006 (Session Expired) but not giving any information about why.
