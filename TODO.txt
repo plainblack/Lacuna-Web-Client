@@ -11,10 +11,8 @@ spaceport:
   The spaceport is in an indeterminate state, I can't get it to work but some of the
   API has been done (see t/460_fleet_spaceport.t) for working code.
 
-API CALLS
-=========
-	SpacePort
-	=========
+API CALLS:
+	SpacePort:
 		view_travelling_fleets()  - Seems to work fine - not tested fully.
 		view_all_fleets()         - Seems to work fine - not tested fully.
 		view_available_fleets()   - Untested.
@@ -26,11 +24,9 @@ API CALLS
 		view_orbiting_fleets()    - Not working - getting "Session Expired" when a call is attempted; more work underway.
 		view_incoming_fleets()    - Seems to work fine - not tested fully.
 		
-	ShipYard
-	========
-		build_fleet() - is throwing "Can't locate object method "start_construction" via package "Lacuna::DB::Result::Fleet::Scanner" at /data/Lacuna-Server/lib/Lacuna/DB/Result/Building/Shipyard.pm line 299."
+	ShipYard:
+		build_fleet() - is throwing "Can't locate object method "start_construction" via package "Lacuna::DB::Result::Fleet::Type" at /data/Lacuna-Server/lib/Lacuna/DB/Result/Building/Shipyard.pm line 299."
 		
-Other Issues
-============
+Other Issues:
 	1.  Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
-	    This causes the server to return error 1006 (Session Expired) but not giving any information about why.
+	    This causes the server to return error 1006 (Session Expired) but not give any information about why.
