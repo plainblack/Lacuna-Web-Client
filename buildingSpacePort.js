@@ -333,13 +333,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 if(!this.fleetsOrbiting) {
                     Lacuna.Pulser.Show();
 					console.log({session_id: Game.GetSession(), target: Game.GetCurrentPlanet().id, building_id: this.building.id});
-                    this.service.view_orbiting_fleets({session_id: Game.GetSession(), target: Game.GetCurrentPlanet().id, building_id: this.building.id}, {
+                    this.service.view_orbiting_fleets({args:{
+                            session_id: Game.GetSession(),
+                            target: { body_id: Game.GetCurrentPlanet().id },
+                            building_id: this.building.id
+                        }}, {
                         success : function(o){
                             Lacuna.Pulser.Hide();
                             this.rpcSuccess(o);
                             this.fleetsOrbiting = {
-                                number_of_fleets: o.result.number_of_fleets,
-                                fleets: o.result.fleets
+                                //number_of_fleets: o.result.number_of_fleets,
+                                fleets: o.result.orbiting
                             };
                             this.orbitingPager = new Pager({
                                 rowsPerPage : 25,
@@ -953,13 +957,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     ul = document.createElement("ul"),
                     li = document.createElement("li");
                 
-                fleets = fleets.slice(0);
+                //fleets = fleets.slice(0);
                 fleets.sort(function(a,b) {
-                    if(a.date_arrives || b.date_arrives) {
-                        if (a.date_arrives > b.date_arrives) {
+                    if(a.details.date_available || b.details.date_available) {
+                        if (a.details.date_available > b.details.date_available) {
                             return 1;
                         }
-                        else if (a.date_arrives < b.date_arrives) {
+                        else if (a.details.date_available < b.details.date_available) {
                             return -1;
                         }
                         else {
@@ -976,8 +980,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 for(var i=0; i<fleets.length; i++) {
                     var fleet = fleets[i],
                         nUl = ul.cloneNode(false),
-                        nLi = li.cloneNode(false),
-                        sec = (Lib.getTime(fleet.date_arrived) - serverTime) / 1000;
+                        nLi = li.cloneNode(false);
                     nUl.Fleet = fleet;
                     Dom.addClass(nUl, "fleetInfo");
                     Dom.addClass(nUl, "clearafter");
@@ -985,17 +988,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Dom.addClass(nLi,"fleetTypeImage");
                     Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
                     Dom.setStyle(nLi, "text-align", "center");
-                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',fleet.type,'.png" title="',fleet.type_human,'" style="width:50px;height:50px;" />'].join('');
+                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" title="',fleet.details.type_human,'" style="width:50px;height:50px;" />'].join('');
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetName");
-                    nLi.innerHTML = fleet.name;
+                    nLi.innerHTML = fleet.details.name;
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetArrives");
-                    nLi.innerHTML = Lib.formatServerDate(fleet.date_arrived);
+                    nLi.innerHTML = Lib.formatServerDate(fleet.details.date_available);
                     nUl.appendChild(nLi);
                     
                     nLi = li.cloneNode(false);
