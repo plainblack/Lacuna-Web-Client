@@ -65,7 +65,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 return;
             }
             
-            make_form.innerHTML = "";
+            make_form.innerHTML = '';
             
             var select = document.createElement("select");
             var option = document.createElement("option");
@@ -76,7 +76,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             emptyFirst.innerHTML = "Select plan (maximum level) &#91;time to make&#93;";
             select.appendChild(emptyFirst);
             
-            for (var i=0; i<make_plan.length; i++) {
+            for (var i = 0; i < make_plan.length; i++) {
                 var nOpt = option.cloneNode(false);
                 nOpt.setAttribute("value", make_plan[i]['class']);
                 nOpt.innerHTML = [

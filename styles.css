@@ -1659,6 +1659,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width: 300px;
 }
 
+#buildingDetailsExtra {
+	overflow: auto;
+}
+
 .buildQueue .buildQueueName {
 	width:200px;
 }
