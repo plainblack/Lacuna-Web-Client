@@ -3197,8 +3197,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         {"name":"x1", "type":"number", "optional":false},
                         {"name":"y1", "type":"number", "optional":false},
                         {"name":"x2", "type":"number", "optional":false},
-                        {"name":"y2", "type":"number", "optional":false},
-                        {"name":"z", "type":"number", "optional":false}
+                        {"name":"y2", "type":"number", "optional":false}
                     ],
                     "returns":{"type":"object"}
                     /*

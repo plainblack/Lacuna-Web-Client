@@ -21,12 +21,12 @@ API CALLS:
 		recall_fleet()            - Untested.
 		rename_fleet()            - Is working - tested.
 		scuttle_fleet()           - Is working - tested.
-		view_orbiting_fleets()    - Not working - getting "Session Expired" when a call is attempted; more work underway.
+		view_orbiting_fleets()    - making the request now succeeds. More work to be done.
 		view_incoming_fleets()    - Seems to work fine - not tested fully.
 		
 	ShipYard:
 		build_fleet() - is throwing "Can't locate object method "start_construction" via package "Lacuna::DB::Result::Fleet::Type" at /data/Lacuna-Server/lib/Lacuna/DB/Result/Building/Shipyard.pm line 299."
 		
 Other Issues:
-	1.  Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
+	1.  SOLVED: Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
 	    This causes the server to return error 1006 (Session Expired) but not give any information about why.

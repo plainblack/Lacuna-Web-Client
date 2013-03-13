@@ -65,7 +65,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    <div id="fleetsViewPaginator"></div>',
                 '</div>'
             ].join('')});
-			
+            
             //subscribe after adding so active doesn't fire
             this.viewFleetsTab.subscribe("activeChange", this.getFleets, this, true);
             Event.on("fleetsRecallAll", "click", this.FleetRecallAll, this, true);
@@ -332,17 +332,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             if(e.newValue) {
                 if(!this.fleetsOrbiting) {
                     Lacuna.Pulser.Show();
-					console.log({session_id: Game.GetSession(), target: Game.GetCurrentPlanet().id, building_id: this.building.id});
-                    this.service.view_orbiting_fleets({args:{
-                            session_id: Game.GetSession(),
-                            target: { body_id: Game.GetCurrentPlanet().id },
-                            building_id: this.building.id
-                        }}, {
+                    this.service.view_orbiting_fleets({args : {
+                        session_id: Game.GetSession(),
+                        target: {body_id: Game.GetCurrentPlanet().id},
+                        building_id: this.building.id
+                    }}, {
                         success : function(o){
                             Lacuna.Pulser.Hide();
+                            console.log(o); //debug
                             this.rpcSuccess(o);
                             this.fleetsOrbiting = {
-                                //number_of_fleets: o.result.number_of_fleets,
+                                number_of_fleets: o.result.orbiting.length,
                                 fleets: o.result.orbiting
                             };
                             this.orbitingPager = new Pager({
@@ -484,7 +484,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Event.delegate(nLi, 'click', this.FleetScuttle, 'button.scuttle', {Self:this,Fleet:fleet,Line:nLi}, true);
                 }
             }
-			
+            
             if (fleet.task == "Travelling") {
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     sec = (Lib.getTime(fleet.date_arrives) - serverTime) / 1000;
@@ -1033,11 +1033,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         },
         OrbitingHandlePagination : function(newState) {
             Lacuna.Pulser.Show();
-            this.service.view_orbiting_fleets({
+            this.service.view_orbiting_fleets({args : {
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
                 page_number:newState.page
-            }, {
+            }}, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
@@ -1059,8 +1059,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         },
         FleetScuttle : function(e, matchedEl, container) {
             var to_delete = Dom.getElementsByClassName('scuttle_qty', 'input', this.Line)[0].value;
-			var fleetName = Dom.getElementsByClassName('fleetName', 'span', this.Line)[0].childNodes[0].data;
-			
+            var fleetName = Dom.getElementsByClassName('fleetName', 'span', this.Line)[0].childNodes[0].data;
+            
             if(confirm('Are you sure you want to Scuttle ' + parseInt(to_delete) + ' ' + fleetName + '?')) {
                 var btn = Event.getTarget(e);
                 btn.disabled = true;

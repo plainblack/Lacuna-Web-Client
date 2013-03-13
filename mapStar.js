@@ -751,7 +751,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             this.service.view_available_fleets({ args : {
                 session_id: Game.GetSession(),
                 body_id: Game.GetCurrentPlanet().id,
-                target: target
+                target: {body_id: target}
             }}, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
@@ -989,7 +989,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             if(Game.EmpireData.is_isolationist == "1") {
                 var hasIsoShip;
                 for(var n=0; n<ships.length; n++) {
-                    if(ships[n].type == "colony_ship" || ships[n].type == "short_range_colony_ship") {
+                    if(ships[n].type == "colony_ship" || ships[n].type == "short_range_colony_ship" || ships[n].type == "space_station_hull") { // Although it's uncommon, SS's break ISO.
                         hasIsoShip = true;
                         break;
                     }
@@ -1208,11 +1208,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 
                 Game.Services.Buildings.SpacePort.view_available_fleets({
                     session_id: Game.GetSession(),
-                    from_body_id: Game.GetCurrentPlanet().id,
-                    target: target
+                    body_id: Game.GetCurrentPlanet().id,
+                    target: {star_id: target.star_id} // target already has star_id appended to it.
                 }, {
                     success : function(o){
-                        YAHOO.log(o, "info", "MapStar.ShowStar.get_ships_for.success");
+                        YAHOO.log(o, "info", "MapStar.ShowStar.get_fleets_for.success");
                         Lacuna.Pulser.Hide();
                         this.fireEvent("onMapRpc", o.result);
                         this.currentShips = o.result;
