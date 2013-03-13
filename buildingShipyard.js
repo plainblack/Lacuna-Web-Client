@@ -25,11 +25,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         _getQueueTab : function() {
             var div = document.createElement("div");
             div.innerHTML = [
-				'<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
+                '<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
                 '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Qty - Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
-				'<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'
-			].join('');
-			
+                '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'
+            ].join('');
+            
             Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
         
             var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
@@ -324,18 +324,18 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         SubsidizeShip : function() {
              Lacuna.Pulser.Show();
              this.Self.service.subsidize_ship({
-				    session_id:Game.GetSession(),
+                    session_id:Game.GetSession(),
                     building_id:this.Self.building.id,
-					ship_id: this.Ship.id
-			 },{
-					success: function(o) {
-						Lacuna.Pulser.Hide();
-						this.Self.rpcsuccess(o);
-						this.Item.parentNode.removeChild(this.Item);
-						
-					}, scope: this
-				});
-		}
+                    ship_id: this.Ship.id
+             },{
+                    success: function(o) {
+                        Lacuna.Pulser.Hide();
+                        this.Self.rpcsuccess(o);
+                        this.Item.parentNode.removeChild(this.Item);
+                        
+                    }, scope: this
+                });
+        }
         ShipBuild : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
