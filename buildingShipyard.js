@@ -328,7 +328,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						
 					}, scope: this
 				});
-		}
+		},
         ShipBuild : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
