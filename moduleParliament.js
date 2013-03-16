@@ -565,30 +565,32 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				reason = Dom.get('proposeFireBfgReason').value;
 			
 			if (body && reason) {
-				button.disabled = true;
+				if (confirm('WARNING: The BFG is an extremly powerful weapon - do not point at face!!\n Are you sure you want to fire it?')) {
+					button.disabled = true;
 				
-				Lacuna.Pulser.Show();
-				this.service.propose_fire_bfg({
-					session_id: Game.GetSession(),
-					building_id: this.building.id,
-					body_id: body,
-					reason: reason
-				}, {
-					success : function(o) {
-						Lacuna.Pulser.Hide();
-						this.rpcSuccess(o);
-						this.proposeMessage.innerHTML = "Proposal to Fire BFG successful.";
-						Lib.fadeOutElm(this.proposeMessage);
-						button.disabled = false;
-					},
-					failure : function(o) {
-						button.disabled = false;
-					},
-					scope: this
-				});
+					Lacuna.Pulser.Show();
+					this.service.propose_fire_bfg({
+						session_id: Game.GetSession(),
+						building_id: this.building.id,
+						body_id: body,
+						reason: reason
+					}, {
+						success : function(o) {
+							Lacuna.Pulser.Hide();
+							this.rpcSuccess(o);
+							this.proposeMessage.innerHTML = "Proposal to Fire BFG successful.";
+							Lib.fadeOutElm(this.proposeMessage);
+							button.disabled = false;
+						},
+						failure : function(o) {
+							button.disabled = false;
+						},
+						scope: this
+					});
+				}
 			}
 			else {
-				alert('Must provide a Body and Rason!');
+				alert('Must provide a Body and Reason!');
 			}
 		},
         NeutralizeBHG : function(e) {
