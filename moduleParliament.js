@@ -321,21 +321,54 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 opts[opts.length] = '<option value="proposeFireBfg">Fire BFG</option>';
                 dis[dis.length] = [
                 '    <div id="proposeFireBfg" class="proposeOption" style="display:none;">',
-                '        <ul><li><label>Body:</label><select id="proposeFireBfgJurisdiction"></select></li>',
+				'		<ul><li><label>Star:</label><select id="proposeFireBfgStars"></select></li>',
+                '        <li><label>Body:</label><select id="proposeFireBfgBody"></select></li>',
                 '        <li><label>Reason:</label><textarea id="proposeFireBfgReason" rows="4" cols="80"></textarea></li></ul><br />',
-                '        <button type="button" id="proposeFireBfgSubmit">Propose to Fire BFG</button>',
+                '        <button type="button" id="proposeFireBfgSubmit">Propose to Fire BFG!</button>',
                 '    </div>'
                 ].join('');
+				
+				this.subscribe("onLoad", function() {
+                    this.service.get_stars_in_jurisdiction({
+						session_id: Game.GetSession(),
+						building_id: this.building.id,
+					},{
+                        success: function(o){
+                            var el = Dom.get('proposeFireBfgStars');
+                            if (el) {
+                                var stars = o.result.stars;
+                                var opts = [];
+                                for(var m = 0; m < stars.length; m++) {
+                                    var obj = stars[m];
+                                    opts[opts.length] = '<option value="' + obj.id + '">' + obj.name + '</option>';
+                                }
+                                
+                                el.innerHTML = opts.join('');
+                                el.selectedIndex = -1;
+                            }
+                        },
+                        scope: this
+                    });
+                }, this, true);
+				
+				Event.on("proposeFireBfgStars", "change", this.PopulateBodiesForStar, {
+					starElement: 'proposeFireBfgStars',
+					bodyElement: 'proposeFireBfgBody',
+					self: this}, true);
+				Event.on("proposeFireBfgSubmit", "click", this.FireBFG, this, true);
             }
             
-            if(getAllianceMembers) {
-                Game.Services.Alliance.view_profile({session_id:Game.GetSession(""),alliance_id:Game.GetCurrentPlanet().alliance.id},{
-                    success:function(o){
+            if (getAllianceMembers) {
+                Game.Services.Alliance.view_profile({
+					session_id: Game.GetSession(),
+					alliance_id: Game.GetCurrentPlanet().alliance.id
+				}, {
+                    success: function(o) {
                         var el = Dom.get('proposeTransferTo');
-                        if(el) {
+                        if (el) {
                             var profile = o.result.profile;
                             var memberArray = [];
-                            for(var m=0; m<profile.members.length; m++) {
+                            for (var m = 0; m < profile.members.length; m++) {
                                 var member = profile.members[m];
                                 member.isLeader = member.id == profile.leader_id
                                 memberArray[memberArray.length] = member;
@@ -344,7 +377,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                             this.fireEvent("onAllianceMembers");
                         }
                     },
-                    scope:this
+                    scope: this
                 });
             }
             
@@ -526,6 +559,38 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 scope:this
             });
         },
+		FireBFG : function(e) {
+			var button = Event.getTarget(e),
+				body   = Lib.getSelectedOptionValue('proposeFireBfgBody'),
+				reason = Dom.get('proposeFireBfgReason').value;
+			
+			if (body && reason) {
+				button.disabled = true;
+				
+				Lacuna.Pulser.Show();
+				this.service.propose_fire_bfg({
+					session_id: Game.GetSession(),
+					building_id: this.building.id,
+					body_id: body,
+					reason: reason
+				}, {
+					success : function(o) {
+						Lacuna.Pulser.Hide();
+						this.rpcSuccess(o);
+						this.proposeMessage.innerHTML = "Proposal to Fire BFG successful.";
+						Lib.fadeOutElm(this.proposeMessage);
+						button.disabled = false;
+					},
+					failure : function(o) {
+						button.disabled = false;
+					},
+					scope: this
+				});
+			}
+			else {
+				alert('Must provide a Body and Rason!');
+			}
+		},
         NeutralizeBHG : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
@@ -665,6 +730,36 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 scope:this
             });
         },
+		PopulateBodiesForStar : function(e, options) {
+			var starId   = Lib.getSelectedOptionValue(options.starElement),
+				bodyList = Dom.get(options.bodyElement);
+			
+			Lacuna.Pulser.Show()
+			options.self.service.get_bodies_for_star_in_jurisdiction({
+				session_id: Game.GetSession(''),
+				building_id: options.self.building.id, // this.building.id is undefind
+				star_id: starId
+			}, {
+				success: function(o) {
+					Lacuna.Pulser.Hide();
+					//self.building.rpcSuccess(o); Meh...
+					
+					if (bodyList) {
+						var bodies = o.result.bodies;
+					
+						var opts = [];
+						for (var i = 0; i < bodies.length; i++) {
+							var obj = bodies[i];
+							opts[opts.length] = '<option value="' + obj.id + '">' + obj.name + '</option>';
+						}
+					
+						bodyList.innerHTML = opts.join('');
+						bodyList.selectedIndex = -1;
+					}
+				},
+				scope: this
+			});
+		},
         ProposeWrit : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
