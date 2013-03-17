@@ -1707,9 +1707,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "subsidize_ship" : {
                         "description": "Will spend 1 essentia to build the ship immediately.",
                         "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"ship_id", "type":"string", "optional":false}
+                            {"name":"args", "type":"object", "optional":false}
                         ],
                         "returns":{"type":"object"}
                     },
