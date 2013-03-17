@@ -816,8 +816,13 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 						var opts = [];
 						for (var i = 0; i < bodies.length; i++) {
 							var obj = bodies[i];
-
-							if (obj.type == this.type) {
+							
+							if (this.type) {
+								if (obj.type == this.type) {
+									opts[opts.length] = '<option value="' + obj.id + '">' + obj.name + '</option>';
+								}
+							}
+							else {
 								opts[opts.length] = '<option value="' + obj.id + '">' + obj.name + '</option>';
 							}
 						}
@@ -857,8 +862,6 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			var button = Event.getTarget(e),
 				body = Lib.getSelectedOptionValue('proposeRenameAsteroidName'),
 				newName = Dom.get('proposeRenameAsteroidNewName').value;
-
-			console.log(body + ' ' + newName);
 
 			button.disabled = true;
 
