@@ -162,6 +162,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '</div>'
             ].join('')});
             
+            Event.on("sendFleetMonth",  "change", function(){Dom.get("sendFleetSoonest").checked = ""});
+            Event.on("sendFleetDate",   "change", function(){Dom.get("sendFleetSoonest").checked = ""});
+            Event.on("sendFleetHour",   "change", function(){Dom.get("sendFleetSoonest").checked = ""});
+            Event.on("sendFleetMinute", "change", function(){Dom.get("sendFleetSoonest").checked = ""});
+            Event.on("sendFleetSecone", "change", function(){Dom.get("sendFleetSoonest").checked = ""});
+            
             Event.on("sendFleetType", "change", function(){
                 if(Lib.getSelectedOptionValue(this) == "xy") {
                     Dom.setStyle("sendFleetTargetSelectText", "display", "none");
