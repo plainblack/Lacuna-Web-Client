@@ -316,14 +316,14 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         SubsidizeShip : function() {
              Lacuna.Pulser.Show();
-             this.Self.service.subsidize_ship({
-				    session_id:Game.GetSession(),
-                    building_id:this.Self.building.id,
+             this.Self.service.subsidize_ship({args: {
+				    session_id: Game.GetSession(),
+                    building_id: this.Self.building.id,
 					ship_id: this.Ship.id
-			 },{
+			 }},{
 					success: function(o) {
 						Lacuna.Pulser.Hide();
-						this.Self.rpcsuccess(o);
+						this.Self.rpcSuccess(o);
 						this.Item.parentNode.removeChild(this.Item);
 						
 					}, scope: this
