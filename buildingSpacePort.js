@@ -1192,12 +1192,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     var fleet = fleets[i],
                         nLi = li.cloneNode(false);
                         
-                    nLi.Fleet = fleet;
                     nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
                     '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:60px;height:60px;" />',
                     '    </div>',
-                    '    <div class="yui-u" style="width:67%">',
+                    '    <div class="yui-u" style="width:52%">',
                     '        <div class="buildingName">[',fleet.details.type_human,'] ',fleet.details.name,' Quantity ',fleet.quantity,'</div>',
                     '        <div><label style="font-weight:bold;">Details:</label>',
                     '            <span>Task:<span>',fleet.task,'</span></span>,',
@@ -1216,16 +1215,19 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '            <span>Combat:<span>',fleet.details.combat,'</span></span>',
                     '        </div>',
                     '    </div>',
-                    '    <div class="yui-u" style="width:8%">',
-                    fleet.task == "Docked" ? '        <span style="white-space:nowrap;margin-top:5px"><input type="text" id="fleet_send_'+fleet.id+'" style="width:35px;" value="'+fleet.quantity+'"></span><button type="button">Send</button>' : '',
+                    '    <div class="yui-u" style="width:5%">',
+                    fleet.task == "Docked"
+                                ? '<span style="white-space:nowrap;margin-top:5px"><input type="text" id="send_fleet_quantity_'+fleet.id+'" style="width:35px;" value="'+Math.floor(fleet.quantity)+'"></span></div><div class="yui-u" style="width:15%"><button type="button" id="send_fleet_'+fleet.id+'">Send Fleet</button><button type="button" id="send_ship_'+fleet.id+'">Send 1 Ship</button>'
+                                : '</div><div class="yui-u" style="width:15%">',
                     '    </div>',
                     '</div>'].join('');
                     
-                    if (fleet.task == "Docked") {
-                        Event.on(Sel.query("button", nLi, true), "click", this.FleetSend, {Self:this, Fleet:fleet, Target:target, Line:nLi}, true);
-                    }
-                    
                     details.appendChild(nLi);
+                    
+                    if (fleet.task == "Docked") {
+                        Event.on("send_fleet_"+fleet.id, "click", this.FleetSend, {Self:this, Fleet:fleet, Target:target, Line:nLi}, true);
+                        Event.on("send_ship_"+fleet.id,  "click", this.FleetSend, {Self:this, Fleet:fleet, Target:target, Line:nLi, Quantity:1}, true);
+                    }
                 }
             }
             detailsParent.appendChild(details); //add back as child
@@ -1245,7 +1247,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var oSelf = this.Self,
                 fleet = this.Fleet,
                 target = this.Target,
-                quantity = Dom.get("fleet_send_"+fleet.id).value,
+                quantity = this.Quantity,
                 arriveSoonest = Dom.get("sendFleetSoonest").checked,
                 arriveMonth = Dom.get("sendFleetMonth").value,
                 arriveDate = Dom.get("sendFleetDate").value,
@@ -1253,6 +1255,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 arriveMinute = Dom.get("sendFleetMinute").value,
                 arriveSecond = Dom.get("sendFleetSecond").value,
                 arrival_date;
+            if ( !quantity ) {
+                quantity = Dom.get("send_fleet_quantity_"+fleet.id).value;
+            }
+            
             if (arriveSoonest) {
                 arrival_date = {soonest: 1 };
             }
