@@ -176,7 +176,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
 
                         div.appendChild(nUl);
-                        Event.on(sbtn, "click", this.SubsidizeShip, {Self:this,Ship:bqo, Item:nUl}, true);
+                        Event.on(sbtn, "click", this.SubsidizeFleet, {Self:this, Fleet:bqo, Item:nUl}, true);
                         this.addQueue(ncs, this.ShipyardQueue, nUl);
                     }
                 }
@@ -326,18 +326,25 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
             }
         },
-        SubsidizeShip : function() {
+        SubsidizeFleet : function() {
              Lacuna.Pulser.Show();
-             this.Self.service.subsidize_ship({
+             this.Self.service.subsidize_fleet({"args":{
                     session_id:Game.GetSession(),
                     building_id:this.Self.building.id,
-                    ship_id: this.Ship.id
-             },{
+                    fleet_id: this.Fleet.id
+             }},{
                     success: function(o) {
                         Lacuna.Pulser.Hide();
-                        this.Self.rpcsuccess(o);
-                        this.Item.parentNode.removeChild(this.Item);
+                        this.Self.rpcSuccess(o);
                         
+                        var queue = this.Self.ship_build_queue.fleets_building;
+                        for(var i = 0; i < queue.length; i++) {
+                            if ( queue[i].id == this.Fleet.id ){
+                                queue.splice(i,1);
+                                break;
+                            }
+                        }
+                        this.Self.ShipyardDisplay();
                     }, scope: this
                 });
         },
