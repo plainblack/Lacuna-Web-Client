@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             var div = document.createElement("div");
             div.innerHTML = [
                 '<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
-                '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Qty - Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
+                '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueQty">Qty</li><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
                 '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'
             ].join('');
             
@@ -152,8 +152,13 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         Dom.addClass(nUl, "shipQueue");
                         Dom.addClass(nUl, "clearafter");
 
+                        Dom.addClass(nLi,"shipQueueQty");
+                        nLi.innerHTML = bqo.quantity;
+                        nUl.appendChild(nLi);
+                        
+                        nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"shipQueueType");
-                        nLi.innerHTML = bqo.quantity + " - " +bqo.type_human;
+                        nLi.innerHTML = bqo.type_human;
                         nUl.appendChild(nLi);
                         
                         nLi = li.cloneNode(false);
@@ -335,7 +340,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         
                     }, scope: this
                 });
-        }
+        },
         ShipBuild : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;

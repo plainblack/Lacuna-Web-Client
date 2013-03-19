@@ -1948,6 +1948,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width:150px;
 }
 
+.shipQueue .shipQueueQty {
+	width:50px;
+}
 .shipQueue .shipQueueType, .fleetQueue .fleetQueueType {
 	width:180px;
 }
