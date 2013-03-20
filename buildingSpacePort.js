@@ -783,7 +783,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetQty");
-                    nLi.innerHTML = fleet.quantity
+                    nLi.innerHTML = fleet.quantity;
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
