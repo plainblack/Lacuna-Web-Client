@@ -96,6 +96,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    <ul class="fleetHeader fleetInfo clearafter">',
                 '        <li class="fleetTypeImage">&nbsp;</li>',
                 '        <li class="fleetName">Name</li>',
+                '        <li class="fleetQty">Quantity</li>',
                 '        <li class="fleetArrives">Arrives</li>',
                 '        <li class="fleetFrom">From</li>',
                 '    </ul>',
@@ -778,6 +779,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     else {
                         nLi.innerHTML = 'Unknown ('+fleet.quantity+')';
                     }
+                    nUl.appendChild(nLi);
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"fleetQty");
+                    nLi.innerHTML = fleet.quantity
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
