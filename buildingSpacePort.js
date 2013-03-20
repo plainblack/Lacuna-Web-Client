@@ -78,6 +78,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    <ul class="fleetHeader fleetInfo clearafter">',
                 '        <li class="fleetTypeImage">&nbsp;</li>',
                 '        <li class="fleetName">Name</li>',
+                '        <li class="fleetQty">Quantity</li>',
                 '        <li class="fleetArrives">Arrived</li>',
                 '        <li class="fleetFrom">From</li>',
                 '    </ul>',
@@ -340,8 +341,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Lacuna.Pulser.Show();
                     this.service.view_orbiting_fleets({args : {
                         session_id: Game.GetSession(),
-                        target: {body_id: Game.GetCurrentPlanet().id},
-                        building_id: this.building.id
+                        target: {body_id: Game.GetCurrentPlanet().id}
                     }}, {
                         success : function(o){
                             Lacuna.Pulser.Hide();
@@ -1000,6 +1000,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"fleetName");
                     nLi.innerHTML = fleet.details.name;
+                    nUl.appendChild(nLi);
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"fleetQty");
+                    nLi.innerHTML = fleet.quantity;
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);

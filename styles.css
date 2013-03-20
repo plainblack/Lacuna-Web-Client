@@ -1418,11 +1418,10 @@ planet details
 	text-align:right;
 	width:120px;
 }
-#buildingDetailsName, .buildingName, .shipName, .fleetName {
+#buildingDetailsName, .buildingName, .shipName, .fleetName, .fleetQty {
 	font-weight:bold;
 }
 .shipName, .fleetName {
-	cursor:pointer;
 	text-decoration:underline;
 }
 #buildingDetailsDesc{
@@ -1931,6 +1930,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .shipInfo .shipName, .fleetInfo .fleetName {
 	width:165px;
+}
+.fleetInfo .fleetQty {
+	width:75px;
 }
 .shipInfo .shipTask, .fleetInfo .fleetTask {
 	width:100px;
