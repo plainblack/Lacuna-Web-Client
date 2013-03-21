@@ -6,10 +6,16 @@ shipyard:
   Although all the API changes to shipyard have been done (see t/470_fleet_shipyard.t)
   and (I think) the Lacuna-Web-Client has been changed, I can't get it to work as I
   remember it used to work. I don't know what has changed.
+  
+  As far as I can tell, everything's working in the shipyard. -fireartist
 
 spaceport:
   The spaceport is in an indeterminate state, I can't get it to work but some of the
   API has been done (see t/460_fleet_spaceport.t) for working code.
+  
+  'travelling' view - working
+  'view'            - working
+  'send'            - working
 
 API CALLS:
 	SpacePort:
@@ -30,3 +36,8 @@ API CALLS:
 Other Issues:
 	1.  SOLVED: Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
 	    This causes the server to return error 1006 (Session Expired) but not give any information about why.
+    
+    2.  Mining Platform Ships - on arrival, a fleet of multiple ships is treated as a single ship.
+    
+    3.  Fighters sent to orbit / defend a body are not merged into a single fleet with any other fleets
+        with identical stats already orbiting / defending the body. - Is this by design?

@@ -1711,6 +1711,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "fetch_spies" : {
                         "description": "Sends a specified ship to fetch specified spies from on_body_id, and bring them back to to_body_id. See also prepare_fetch_spies",
                         "parameters": [{"name":"args","type":"object", "optional":false}],
+                        "returns":{"type":"object"}
                     },
                     "prepare_send_spies" : {
                         "description": "Gathers the information needed to call the send_spies method.",
@@ -1795,7 +1796,22 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "returns":{"type":"object"}
                     },
                     "view_available_fleets" : {
-                        "description" : "Shows that fleets that can be sent to the specified body.",
+                        "description" : "Shows fleets that can be sent to the specified body.",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
+                    },
+                    "view_unavailable_fleets" : {
+                        "description" : "Shows fleets that cannot be sent to the specified body.",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
+                    },
+                    "view_mining_platforms" : {
+                        "description" : "Returns the empire owning each Mining Platform deployed at the specified body.",
+                        "parameters" : [{"name":"args","type":"object","optional":false}],
+                        "returns":{"type":"object"}
+                    },
+                    "view_excavators" : {
+                        "description" : "Returns the empire owning each Excavator deployed at the specified body.",
                         "parameters" : [{"name":"args","type":"object","optional":false}],
                         "returns":{"type":"object"}
                     }

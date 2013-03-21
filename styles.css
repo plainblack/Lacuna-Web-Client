@@ -1345,6 +1345,10 @@ planet details
 #planetDetailRename label {
 	width:150px;
 }
+#planetDetailMiningShips li,
+#planetDetailExcavators li {
+	list-style: decimal inside none;
+}
 #planetDetailFetchSpies,
 #planetDetailSendSpies {
 }
@@ -1354,7 +1358,7 @@ planet details
 	float: left;
 }
 .planetDetailSelectSpies button,
-.planetDetailSpyShipHeader button {
+.planetDetailSelectSpyShip button {
 	float: right;
 }
 .planetDetailSpiesList,
@@ -1373,9 +1377,6 @@ planet details
 /*.planetDetailSpiesList li {
 	position:relative;
 }*/
-.planetDetailSpyShipList li button {
-	float: right;
-}
 .planetDetailSpiesList li .description {
 	display: inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
@@ -1395,11 +1396,21 @@ planet details
 .planetDetailSpiesList li input {
 	float:right;
 }
+.planetDetailListHeader,
 .planetDetailSpiesList strong,
 .planetDetailSpyShipList strong {
 	font-weight: bold;
 }
-
+#planetDetailMiningShips .empireName,
+#planetDetailExcavators .empireName {
+	text-decoration:underline;
+	cursor:pointer;
+}
+.planetDetailListHeader,
+#planetDetailNoMining,
+#planetDetailNoExcavators {
+	display: none;
+}
 
 
 .smallImg {
