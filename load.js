@@ -185,12 +185,6 @@
         requires : ["building"]
     });
     loader.addModule({
-        name: "hallsofvrbansk",
-        type: "js",
-        fullpath: urlBuilder("buildingHallsOfVrbansk.js"),
-        requires : ["building"]
-    });
-    loader.addModule({
         name: "intelligence",
         type: "js",
         fullpath: urlBuilder("buildingIntelligence.js"),
@@ -394,7 +388,6 @@
             "entertainment",
             "foodreserve",
             "geneticslab",
-            "hallsofvrbansk",
             "intelligence",
             "inteltraining",
             "libraryofjith",

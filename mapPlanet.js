@@ -23,7 +23,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/energyreserve": Lacuna.buildings.EnergyReserve,
         "/entertainment": Lacuna.buildings.Entertainment,
         "/foodreserve": Lacuna.buildings.FoodReserve,
-        "/hallsofvrbansk": Lacuna.buildings.HallsOfVrbansk,
         "/geneticslab": Lacuna.buildings.GeneticsLab,
         "/intelligence": Lacuna.buildings.Intelligence,
         "/inteltraining": Lacuna.buildings.IntelTraining,
