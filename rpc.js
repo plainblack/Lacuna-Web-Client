@@ -83,8 +83,8 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 				if (smd.additionalParameters && Lang.isArray(smd.parameters)) {
 					for (var i = 0; i < smd.parameters.length; i++) {
                         p = smd.parameters[i];
-						console.log('smd.parameters[i]'); //debug
-						console.log( smd.parameters[i] ); //debug
+//						console.log('smd.parameters[i]'); //debug
+//						console.log( smd.parameters[i] ); //debug
                         params.push(p["default"]);
                     }
 				}
@@ -104,7 +104,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 					params = oParams;
 				}
 
-				console.log('Calling ' + method.name + ' with the parameters of ' + Lang.JSON.stringify(params) + '.'); //debug
+//				console.log('Calling ' + method.name + ' with the parameters of ' + Lang.JSON.stringify(params) + '.'); //debug
                 var url = opts.target || method.target || smd.target;
                 var urlRegexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/i;
                
