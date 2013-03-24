@@ -1659,6 +1659,10 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	width: 300px;
 }
 
+#buildingDetailsExtra {
+	overflow: auto;
+}
+
 .buildQueue .buildQueueName {
 	width:200px;
 }
@@ -1673,6 +1677,14 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 .buildQueue .buildQueueCoords  {
 	width:100px;
 	text-align:right;
+}
+.buildQueue .buildQueueSubsidy {
+	width:100px;
+	text-align:right;
+}
+.buildQueue .buildQueueAction {
+	text-align:right;
+	width:200px;
 }
 .buildQueueHeader .buildQueueLevel , .buildQueueHeader .buildQueueTime  {
 	text-align:center;

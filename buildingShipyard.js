@@ -154,8 +154,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         nLi.innerHTML = Lib.formatTime(ncs);
                         nUl.appendChild(nLi);
 
+                        nLi = li.cloneNode(false);
+                        Dom.addClass(nLi,"shipQueueEach");
+                        sbtn = document.createElement('button');
+                        sbtn.setAttribute('type', 'button');
+                        sbtn.innerHTML = 'Subsidize';
+                        nLi.appendChild(sbtn);
+                        nUl.appendChild(nLi);
+
+
                         div.appendChild(nUl);
-                        
+                        Event.on(sbtn, "click", this.SubsidizeShip, {Self:this,Ship:bqo, Item:nUl}, true);
                         this.addQueue(ncs, this.ShipyardQueue, nUl);
                     }
                 }
@@ -305,6 +314,21 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
             }
         },
+        SubsidizeShip : function() {
+             Lacuna.Pulser.Show();
+             this.Self.service.subsidize_ship({args: {
+				    session_id: Game.GetSession(),
+                    building_id: this.Self.building.id,
+					ship_id: this.Ship.id
+			 }},{
+					success: function(o) {
+						Lacuna.Pulser.Hide();
+						this.Self.rpcSuccess(o);
+						this.Item.parentNode.removeChild(this.Item);
+						
+					}, scope: this
+				});
+		},
         ShipBuild : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;

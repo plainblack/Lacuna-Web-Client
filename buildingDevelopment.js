@@ -43,7 +43,7 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
             div.appendChild(subDiv);
 
             Dom.addClass(hUl, "buildQueue buildQueueHeader clearafter");
-            hUl.innerHTML = '<li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li>';
+            hUl.innerHTML = '<li class="buildQueueName">Building</li><li class="buildQueueLevel">Level</li><li class="buildQueueTime">Time</li><li class="buildQueueCoords">Coordinates</li><li class="buildQueueSubsidy">Subsidy</li><li class="buildQueueAction">Action</li>';
             div.appendChild(hUl);
             
             for(var i=0; i<bq.length; i++) {
@@ -72,6 +72,26 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
                 nLi.innerHTML = [bqo.x,',',bqo.y].join('');
                 nUl.appendChild(nLi);
 
+                nLi = li.cloneNode(false);
+                Dom.addClass(nLi,"buildQueueSubsidy");
+                nLi.innerHTML = bqo.subsidy_cost;
+                nUl.appendChild(nLi);
+
+                var btn_subsidy = document.createElement("button");
+                btn_subsidy.setAttribute("type", "button");
+                btn_subsidy.innerHTML = "Subsidize";
+                btn_subsidy = subDiv.appendChild(btn_subsidy);
+                Event.on(btn_subsidy, "click", this.DevSubsidizeOneBuild, {Self:this,ScheduledId:bqo.building_id}, true);
+                nUl.appendChild(btn_subsidy);
+
+                var btn_cancel = document.createElement("button");
+                btn_cancel.setAttribute("type", "button");
+                btn_cancel.innerHTML = "Cancel";
+                btn_cancel = subDiv.appendChild(btn_cancel);
+                Event.on(btn_cancel, "click", this.DevCancelOneBuild, {Self:this,ScheduledId:bqo.building_id}, true);
+                nUl.appendChild(btn_cancel);
+
+
                 div.appendChild(nUl);
                 
                 this.addQueue(bqo.seconds_remaining, this.DevMinistryQueue, tLi);
@@ -94,6 +114,57 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
                 el.innerHTML = Lib.formatTime(Math.round(remaining));
             }
         },
+
+        DevCancelOneBuild : function(e) {
+            Lacuna.Pulser.Show();
+
+            this.Self.service.cancel_build({ args: {
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                scheduled_id:this.ScheduledId
+            }}, {
+                success : function(o) {
+                    YAHOO.log(o, "info", "Development.DevCancelOneBuild.success");
+                    Lacuna.Pulser.Hide();
+                    this.Self.rpcSuccess(o);
+                    if(this.Self.queueTab) {
+                        Event.purgeElement(this.Self.queueTab.get("contentEl"));
+                        this.Self.removeTab(this.Self.queueTab);
+                    }
+                    this.Self.fireEvent("onHide");
+                    this.Self.fireEvent("onUpdateMap");
+                },
+                scope:this
+            });
+        },
+
+        DevSubsidizeOneBuild : function(e) {
+            Lacuna.Pulser.Show();
+
+            this.Self.service.subsidize_one_build({ args: {
+                session_id:Game.GetSession(),
+                building_id:this.Self.building.id,
+                scheduled_id:this.ScheduledId
+            }}, {
+                success : function(o) {
+                    YAHOO.log(o, "info", "Development.DevSubsidizeOneBuild.success");
+                    Lacuna.Pulser.Hide();
+                    var e = Game.EmpireData.essentia*1;
+                    Game.EmpireData.essentia = e - o.result.essentia_spent*1;
+                    this.Self.rpcSuccess(o);
+                    if(this.Self.queueTab) {
+                        Event.purgeElement(this.Self.queueTab.get("contentEl"));
+                        this.Self.removeTab(this.Self.queueTab);
+                    }
+                    this.Self.fireEvent("onHide");
+                    this.Self.fireEvent("onUpdateMap");
+                },
+                scope:this
+            });
+        },
+
+
+
         DevSubsidize : function(e) {
             Lacuna.Pulser.Show();
             

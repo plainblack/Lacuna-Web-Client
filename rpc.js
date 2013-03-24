@@ -39,25 +39,27 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
         _generateService: function(serviceName, method) {
 
             if(this[method]){
-                throw new Error("WARNING: "+ serviceName+ " already exists for service. Unable to generate function");
+                throw new Error("WARNING: " + serviceName + " already exists for service. Unable to generate function");
             }
             method.name = serviceName;
 
             var self = this;
             var func = function(oParams, opts) {
+				// Note: oParams = Object Parameters.
                 var smd = self._smd;
                 var baseUrl = self._baseUrl;
                 
                 var envelope = YAHOO.rpc.Envelope[method.envelope || smd.envelope];
+
                 var callback = {
                     success: function(o) {
-                        //YAHOO.log(o, "debug", "RPC.SUCCESS");
+                        //YAHOO.log(o, "debug", "RPC.SUCCESS"); //debug
                         var results = envelope.deserialize(o);
                         opts.success.call(opts.scope || self, results);
                     },
                     failure: function(o) {
-                        //YAHOO.log(o, "debug", "RPC.FAILURE");
-                        if(Lang.isFunction(opts.failure) ) {
+                        //YAHOO.log(o, "debug", "RPC.FAILURE"); //debug
+                        if (Lang.isFunction(opts.failure) ) {
                             var results;
                             try {
                                 results = envelope.deserialize(o);
@@ -71,65 +73,52 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                     scope: self
                 };
                 
-                if(opts.timeout) {
+                if (opts.timeout) {
                     callback.timeout = opts.timeout;
                 }
 
-                var params, //will be either an Array or an Object depending on the type that method.parameters is
-                    pKey, i, p;
-                //if this is array params
-                if(Lang.isArray(method.parameters)) {
-                    params = [];
-                    if(smd.additionalParameters && Lang.isArray(smd.parameters)) {
-                        for(i = 0 ; i < smd.parameters.length ; i++) {
-                            p = smd.parameters[i];
-                            params.push(p["default"]);
-                        }
-                    }
-                    //push method params in correct order 
-                    for(i = 0 ; i < method.parameters.length ; i++) {
-                        p = method.parameters[i];
-                        params.push(oParams[p.name]);
-                    }
-                }
-                else {
-                    //other wise it's an object format and we don't care what order they are in
-                    params = {};
-                    //apply any additonal params
-                    if(smd.additionalParameters && Lang.isArray(smd.parameters)) {
-                        for(i = 0 ; i < smd.parameters.length ; i++) {
-                            p = smd.parameters[i];
-                            params[p.name] = p["default"];
-                        }
-                    }
-                    //augment with passing params after additional so we overwrite if we have to
-                    Lang.augmentObject(params, oParams, true);
-                }
-                
-                /* 1.1 implementation
-                var params = {};
-                if(smd.additionalParameters && Lang.isArray(smd.parameters) ) {
-                    for(var i = 0 ; i < smd.parameters.length ; i++) {
-                        var p = smd.parameters[i];
-                        params[p.name] = p["default"];
-                    }
-                }
-                Lang.augmentObject(params, data, true);
-                */
+				var params = [], p;
 
+				// Handle any SMD parameters.
+				if (smd.additionalParameters && Lang.isArray(smd.parameters)) {
+					for (var i = 0; i < smd.parameters.length; i++) {
+                        p = smd.parameters[i];
+//						console.log('smd.parameters[i]'); //debug
+//						console.log( smd.parameters[i] ); //debug
+                        params.push(p["default"]);
+                    }
+				}
+
+				// Then make sure that all the other params are in order.
+				for (var i = 0; i < method.parameters.length; i++) {
+					params.push(oParams[method.parameters[i].name]);
+				}
+
+				// Now make sure that it all came out right.
+				if (params) {
+					if (!params[0] || params[0].name == 'args') {
+						params = oParams;
+					}
+				}
+				else {
+					params = oParams;
+				}
+
+//				console.log('Calling ' + method.name + ' with the parameters of ' + Lang.JSON.stringify(params) + '.'); //debug
                 var url = opts.target || method.target || smd.target;
                 var urlRegexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/i;
-                if(smd.target && !url.match(urlRegexp) && url != smd.target) {
+               
+			   	if(smd.target && !url.match(urlRegexp) && url != smd.target) {
                     url = smd.target+url;
                 }
 
-                if( !!this.smdUrl && !url.match(urlRegexp) ) {
+                if (!!this.smdUrl && !url.match(urlRegexp)) {
                     // URL is still relative !
                     var a=this.smdUrl.split('/');
                     a[a.length-1]="";
                     url = a.join("/")+url;
                 }
-                else if ( baseUrl ) {
+                else if (baseUrl) {
                     baseUrl = baseUrl.replace(/\/?$/,'/');
                     url = url.replace(/^\//, baseUrl);
                 }
@@ -143,6 +132,9 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                     callbackParamName: method.callbackParamName || smd.callbackParamName,
                     transport: method.transport || smd.transport
                 };
+
+				//YAHOO.log('Sending ' + r.data + '.', 'debug', 'RPC._generateService');//debug
+
                 var serialized = envelope.serialize(smd, method, params);
                 Lang.augmentObject(r, serialized, true);
                 
@@ -154,6 +146,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
             func._parameters = method.parameters;
             
             return func;
+
         },
        
         /**
