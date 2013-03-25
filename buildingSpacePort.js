@@ -1213,7 +1213,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
                     '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:60px;height:60px;" />',
                     '    </div>',
-                    '    <div class="yui-u" style="width:52%">',
+                    '    <div class="yui-u" style="width:57%">',
                     '        <div class="buildingName">[',fleet.details.type_human,'] ',fleet.details.name,' Quantity ',fleet.quantity,'</div>',
                     '        <div><label style="font-weight:bold;">Details:</label>',
                     '            <span>Task:<span>',fleet.task,'</span></span>,',
