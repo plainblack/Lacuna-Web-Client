@@ -1258,11 +1258,9 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             },10);
         },
         FleetSend : function(e) {
-            var btn = Event.getTarget(e);
-            btn.disabled = true;
-        
             var oSelf = this.Self,
                 fleet = this.Fleet,
+                fleet_line = this.Line,
                 target = this.Target,
                 quantity = this.Quantity,
                 arriveSoonest = Dom.get("sendFleetSoonest").checked,
@@ -1271,7 +1269,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 arriveHour = Dom.get("sendFleetHour").value,
                 arriveMinute = Dom.get("sendFleetMinute").value,
                 arriveSecond = Dom.get("sendFleetSecond").value,
+                sendFleetBtn = Dom.get("send_fleet_"+fleet.id),
+                sendShipBtn = Dom.get("send_ship_"+fleet.id),
                 arrival_date;
+            
+            // disable buttons
+            sendFleetBtn.disabled = true;
+            sendShipBtn.disabled  = true;
+            
             if ( !quantity ) {
                 quantity = Dom.get("send_fleet_quantity_"+fleet.id).value;
             }
@@ -1303,11 +1308,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                         delete this.Self.fleetsView;
                         delete this.Self.fleetsTravelling;
                         this.Self.GetFleetsFor();
-                        Event.purgeElement(this.Line, true);
-                        this.Line.innerHTML = "Successfully sent " + this.Fleet.type_human + ".";
                     },
                     failure : function(o){
-                        btn.disabled = false;
+                        var msg = document.createElement("span");
+                        if ( o.error && o.error.message ) {
+                            msg.innerHTML = "Failed to send fleet!<br/>" + o.error.message;
+                        }
+                        else {
+                            msg.innerHTML = "Failed to send fleet!";
+                        }
+                        fleet_line.appendChild(msg);
+                        sendFleetBtn.disabled = false;
+                        sendShipBtn.disabled  = false;
                     },
                     scope:this
                 });
