@@ -363,12 +363,12 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "subsidize_one_build" : {
                         "description": "Instantly finish any one building on the build queue.",
                         "parameters": [{"name":"args", "type":"object", "optional":false}],
-						"returns":{"type":"object"}
+                        "returns":{"type":"object"}
                     },
                     "cancel_build" : {
                         "description": "Cancel any one building on the build queue.",
                         "parameters": [{"name":"args", "type":"object", "optional":false}],
-						"returns":{"type":"object"}
+                        "returns":{"type":"object"}
                     },
                     "subsidize_build_queue" : {
                         "description": "Allows a player to instantly finish all buildings in their build queue. The cost is returned by the view method.",
@@ -3544,6 +3544,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "status" : { ... }
                      }
                     */
+                },
+                "get_star_map" : {
+                    "description" : "Retrieves a chunk of the star map (lite version).",
+                    "parameters" : [{"name":"args", "type":"object", "optional":false}],
+                    "returns" : {"type" : "object"}
                 },
                 "get_stars" : {
                     "description": "Retrieves a chunk of the map and returns it as an array of hashes.",

@@ -1339,16 +1339,15 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
                 }
             }
             else {
-                var data = {
-                    session_id : Game.GetSession(""),
-                    x1 : x1, 
-                    x2 : x2, 
-                    y1 : y1, 
-                    y2 : y2
-                };
                 //YAHOO.log(data, "debug", "StarMap.getTileData.requestData");
                 Lacuna.Pulser.Show();
-                Game.Services.Map.get_stars(data,{
+                Game.Services.Map.get_star_map({ args: {
+                    session_id : Game.GetSession(""),
+                    left : x1,
+                    right : x2,
+                    top : y1,
+                    bottom : y2
+                }},{
                     success : function(o){
                         //YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.success");
                         Lacuna.Pulser.Hide();
