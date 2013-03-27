@@ -68,7 +68,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
                             this.ProbeInfoDisplay(o.result);
                             this.probes = o.result.stars;
                             this.pager = new Pager({
-                                rowsPerPage : 25,
+                                rowsPerPage : 30,
                                 totalRecords: o.result.star_count*1,
                                 containers  : 'probePaginator',
                                 template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
