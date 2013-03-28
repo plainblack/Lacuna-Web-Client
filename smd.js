@@ -174,12 +174,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"ore_type", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"}
-                        /*
-                        {
-                            "status" : { get_status() },
-                            "seconds_remaining" : 10800
-                         }
-                        */
                     },
                     "get_glyph_summary" : {
                         "description": "Returns a list of glyphs that may be traded. Used with the add_trade method.",
