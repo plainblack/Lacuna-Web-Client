@@ -190,18 +190,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"building_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { ... },
-                            "glyphs" : [
-                                {
-                                    "id" : "id-goes-here",
-                                    "type" : "bauxite",
-                                },
-                                ...
-                            ]
-                         }
-                        */
                     },
                     "assemble_glyphs" : {
                         "description": "Turns glyphs into rare ancient items.",
