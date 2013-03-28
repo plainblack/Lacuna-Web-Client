@@ -71,19 +71,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         {"name":"body_id", "type":"string", "optional":false}
                     ],
                     "returns":{"type":"object"}
-                    /*
-                         {
-                            "build_queue" : {
-                                "building-id-goes-here" : {
-                                    "seconds_remaining" : 60,
-                                    "start" : "01 31 2010 11:08:03 +0600",
-                                    "end" : "01 31 2010 13:09:05 +0600",
-                                },
-                                ....
-                            },
-                            "status" : "get_status",
-                         }
-                    */
                 },
                 "get_body_status" : {
                     "description" : "Retrieves the status of a body to display in the star map.",
