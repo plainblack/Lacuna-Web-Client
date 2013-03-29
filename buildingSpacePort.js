@@ -73,7 +73,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             return this.viewFleetsTab;
         },
         _getOrbitingTab : function() {
-            this.viewOrbitingTab = new YAHOO.widget.Tab({ label: "Orbiting Fleets", content: [
+            this.viewOrbitingTab = new YAHOO.widget.Tab({ label: "Foreign Orbiting", content: [
                 '<div>',
                 '    <ul class="fleetHeader fleetInfo clearafter">',
                 '        <li class="fleetTypeImage">&nbsp;</li>',
@@ -514,6 +514,16 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="fleetTo">';
                 ulDet[ulDet.length] = fleet.name;
                 ulDet[ulDet.length] = '</span></li>';
+                
+                if (fleet.task != "Travelling") {
+                    ulDet[ulDet.length] = '<li><label style="font-style:italic">Orbiting:</label> <span class="fleetTo">';
+                    ulDet[ulDet.length] = fleet.to.name;
+                    ulDet[ulDet.length] = '</span></li>';
+                    
+                    ulDet[ulDet.length] = '<li><span class="fleetTo">';
+                    ulDet[ulDet.length] = fleet.to.x + ' : ' + fleet.to.y;
+                    ulDet[ulDet.length] = '</span></li>';
+                }
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px">';
                 ulDet[ulDet.length] = '<input type="text" class="recall_qty" style="width:25px;" value="'+fleet.quantity+'">';
                 ulDet[ulDet.length] = '<button type="button" class="recall">Recall</button></li>';
