@@ -1303,7 +1303,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     second: arriveSecond
                 };
             }
-            if(target && fleet.id && Lacuna.MapStar.NotIsolationist(fleet)) {
+            if(target && fleet.id && Lacuna.MapStar.NotFleetIsolationist(fleet)) {
                 Lacuna.Pulser.Show();
                 oSelf.service.send_fleet({ args: {
                     session_id:Game.GetSession(),
