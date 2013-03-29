@@ -1328,14 +1328,16 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                             msg.innerHTML = "Failed to send fleet!";
                         }
                         fleet_line.appendChild(msg);
-                        sendFleetBtn.disabled = false;
-                        sendShipBtn.disabled  = false;
                     },
                     scope:this
                 });
+                
+                sendFleetBtn.disabled = false;
+                sendShipBtn.disabled  = false;
             }
             else {
-                btn.disabled = false;
+                sendFleetBtn.disabled = false;
+                sendShipBtn.disabled  = false;
             }
         },
                 
