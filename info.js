@@ -238,16 +238,19 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
                     this.country.innerHTML = profile.country;
                     this.skype.innerHTML = profile.skype ? ['<a href="callto:',profile.skype,'">',profile.skype,'</a>'].join('') : '';
                     
-                    var medalArray = [];
-                    for(var medalId in profile.medals) {
-                        var medal = profile.medals[medalId];
-                        medalArray = medalArray.concat(['<li class="medal">',
-                        '    <div class="medalContainer">',
-                        '        <img src="',Lib.AssetUrl,'medal/',medal.image,'.png" alt="',medal.name,'" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
-                        '    </div>',
-                        '</li>'
-                        ]);
-                    }
+					var medalsKeys = Object.keys(profile.medals).sort();
+					var medalArray = [];
+					for (var i = 0; i < medalsKeys.length; i++) {
+						var medal = profile.medals[medalsKeys[i]];
+						
+						medalArray[medalArray.length] = ([
+							'<li class="medal">',
+							'    <div class="medalContainer">',
+							'        <img src="',Lib.AssetUrl,'medal/',medal.image,'.png" alt="',medal.name,'" title="',medal.name,' on ',Lib.formatServerDate(medal.date),'" />',
+							'    </div>',
+							'</li>'
+						].join(''));
+					}
                     this.medalsList.innerHTML = medalArray.join('');
                     
                     var colonyArray = [];
