@@ -1962,7 +1962,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 
 .shipQueue .shipQueueQty {
-	width:50px;
+	width:80px;
 }
 .shipQueue .shipQueueType, .fleetQueue .fleetQueueType {
 	width:180px;
