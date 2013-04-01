@@ -76,7 +76,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    </div>',
                 '</div>'].join('');
             
-			/*		The events don'e tctually fire until the text boxes lose focus. Not really helpful.
+			/*		The events don't tctually fire until the text boxes lose focus. Not really helpful.
             Event.on("sendStarFleetMonth",  "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetDate",   "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetHour",   "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
