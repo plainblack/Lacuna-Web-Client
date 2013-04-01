@@ -218,7 +218,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           details.appendChild(nLi);
           
-          if ( task.success > 1 ) {
+          if ( task.success > 0 ) {
             Event.on(Sel.query("button[name=generate]", nLi, true),
                      "click",
                      this.bhgGenerate,
@@ -248,7 +248,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       var oSelf = this.Self,
         target = this.Target,
         task = this.Task;
-      
+	  
       if (target) {
         var rpcParams = {
           session_id:Game.GetSession(),
