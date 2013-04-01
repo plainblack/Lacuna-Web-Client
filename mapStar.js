@@ -54,18 +54,20 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '        <div class="yui-content">',
                 '            <div id="starDetailSendShips">',
                 '                <div>',
-                '                    To Arrive Soonest: <input type="checkbox" id="sendStarFleetSoonest" checked="checked"><br />',
-                '                    Or to Arrive On: ',
-                '                    Month:<input type="text" id="sendStarFleetMonth" value="0" size="4">',
-                '                    Date:<input type="text" id="sendStarFleetDate" value="0" size="4">',
-                '                    Hour:<input type="text" id="sendStarFleetHour" value="0" size="4">',
-                '                    Minute:<input type="text" id="sendStarFleetMinute" value="0" size="4">',
-                '                    Second:<select id="sendStarFleetSecond">',
-                '                        <option value="0">0</option>',
-                '                        <option value="15">15</option>',
-                '                        <option value="30">30</option>',
-                '                        <option value="45">45</option>',
-                '                    </select>',
+                '                    To Arrive Soonest <input type="checkbox" id="sendStarFleetSoonest" checked="checked"><br />',
+				'					<span id="starDetailsSendShipSpecificTime" style="display:none">',
+                '                    	Or to Arrive On: ',
+                '                    	Month: <input type="text" id="sendStarFleetMonth" value="0" size="4">',
+                '                    	Date: <input type="text" id="sendStarFleetDate" value="0" size="4">',
+                '                    	Hour: <input type="text" id="sendStarFleetHour" value="0" size="4">',
+                '                    	Minute: <input type="text" id="sendStarFleetMinute" value="0" size="4">',
+                '                    	Second: <select id="sendStarFleetSecond">',
+                '                        	<option value="0">0</option>',
+                '                        	<option value="15">15</option>',
+                '                        	<option value="30">30</option>',
+                '                        	<option value="45">45</option>',
+                '                    	</select>',
+				'					</span>',
                 '                </div>',
                 '                <div><ul class="responseContainer"></ul></div></div>',
                 '            <div id="starDetailUnavailShips"><div><ul class="responseContainer"></ul></div></div>',
@@ -74,12 +76,23 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    </div>',
                 '</div>'].join('');
             
+			/*		The events don'e tctually fire until the text boxes lose focus. Not really helpful.
             Event.on("sendStarFleetMonth",  "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetDate",   "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetHour",   "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetMinute", "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
             Event.on("sendStarFleetSecone", "change", function(){Dom.get("sendStarFleetSoonest").checked = ""});
-            
+            */
+			
+			var checkboxState = true; // Sadly, this is the way to go.
+			Event.on("sendStarFleetSoonest", "change", function(e) {
+				var checkbox = Dom.get("sendStarFleetSoonest");
+				var sendDetails = Dom.get("starDetailsSendShipSpecificTime");
+				checkboxState = !checkboxState;
+				
+				sendDetails.style.display = checkboxState ? 'none' : '';
+			});
+			
             document.body.insertBefore(panel, document.body.firstChild);
             Dom.addClass(panel, "nofooter");
             
