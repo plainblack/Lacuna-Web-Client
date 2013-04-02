@@ -28,7 +28,7 @@ API CALLS:
 		rename_fleet()            - Is working - tested.
 		scuttle_fleet()           - Is working - tested.
 		view_orbiting_fleets()    - making the request now succeeds. More work to be done.
-		view_incoming_fleets()    - Works fully, UI completed.
+		view_incoming_fleets()    - Works fully, UI almost completed; need to test what a large Payload looks like.
 	
 Other Issues:
 	1.  SOLVED: Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
