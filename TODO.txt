@@ -21,14 +21,14 @@ API CALLS:
 	SpacePort:
 		view_travelling_fleets()  - Seems to work fine - not tested fully.
 		view_all_fleets()         - Seems to work fine - not tested fully.
-		view_available_fleets()   - Untested.
-		view_unavailable_fleets() - Untested.
-		send_fleet()              - Untested.
+		view_available_fleets()   - Works fully, UI completed.
+		view_unavailable_fleets() - Works fully, UI completed.
+		send_fleet()              - Works fully, UI completed.
 		recall_fleet()            - Untested.
 		rename_fleet()            - Is working - tested.
 		scuttle_fleet()           - Is working - tested.
 		view_orbiting_fleets()    - making the request now succeeds. More work to be done.
-		view_incoming_fleets()    - Seems to work fine - not tested fully.
+		view_incoming_fleets()    - Works fully, UI completed.
 	
 Other Issues:
 	1.  SOLVED: Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
