@@ -1068,31 +1068,50 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                     }
                     
                     //nLi.Fleet = fleet;
-                    nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:5px;">',
-                    '    <div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:75px;height:75px;" />',
-                    '    </div>',
-                    '    <div class="yui-u" style="width:75%">',
-                    '        <div class="buildingName">',fleet.details.type_human,'</div>',
-                    '        <div><label style="font-weight:bold;">Details:</label>',
-                    '            <span><span>Task:</span><span>',fleet.details.task,'</span></span>',
-                    '        </div>',
-                    '        <div><label style="font-weight:bold;">Attributes:</label>',
-                    '            <span>Speed:<span>',fleet.details.speed,'</span></span>,',
-                    '            <span>Berth Level:<span>',fleet.details.berth_level,'</span></span>,',
-                    '            <span>Hold Size:<span>',fleet.details.hold_size,'</span></span>,',
-                    '            <span>Stealth:<span>',fleet.details.stealth,'</span></span>',
-                    '            <span>Combat:<span>',fleet.details.combat,'</span></span>',
-                    '        </div>',
-                    '        <div style="font-style:italic;">',fleet.reason[1],'</div>',
-                    '    </div>',
-                    '</div>'].join('');
+                    nLi.innerHTML = [
+						'<div>',
+						'<table>',
+						'	<colgroup>',
+						'		<col>',
+						'		<col style="width:200px">',
+						'		<col span="4" style="width:70px">',
+						'	</colgroup>',
+						'	<tr>',
+						'		<td rowspan="4">',
+						'			<div style="width:100px;height:100px;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;display:table-cell;vertical-align:middle;">',
+						'        		<img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:80px;height:80px;" />',
+						'    		</div>',
+						'		</td>',
+						'		<td><span style="font-weight:bold;">', fleet.details.type_human, '</span></td>',
+						'		<td colspan="4">&nbsp;</td>',
+						'	</tr>',
+						'	<tr>',
+						'		<td><span style="font-weight:bold;">Attributes:</span></td>',
+						'		<td>Speed:</td>',
+						'		<td>', fleet.details.speed, '</td>',
+						'		<td>Hold Size:</td>',
+						'		<td>', fleet.details.hold_size, '</td>',
+						'	</tr>',
+						'	<tr>',
+						'		<td>&nbsp;</td>',
+						'		<td>Stealth:</td>',
+						'		<td>', fleet.details.stealth, '</td>',
+						'		<td>Combat:</td>',
+						'		<td>', fleet.details.combat, '</td>',
+						'	</tr>',
+						'	<tr>',
+						'		<td colspan="5" style="text-align:center;"><span style="font-style:italic;">', fleet.reason[1], '</span></td>',
+						'	</tr>',
+						'</table>',
+						'<hr />',
+						'</div>'
+					].join('');
                     
                     details.appendChild(nLi);
                 }
             }
             else {
-                details.innerHTML = '<li>No Unavailable fleets</li>';
+                details.innerHTML = '<li>No Unavailable fleets.</li>';
             }
             detailsParent.appendChild(details); //add back as child
             
