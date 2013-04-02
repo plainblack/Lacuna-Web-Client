@@ -1241,45 +1241,15 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 						'		<td>Combat:</td>',
 						'		<td>', fleet.details.combat, '</td>',
 						'	</tr>',
-						'	<tr>',
-						'		<td>&nbsp;</td>',
-						'		<td><span style="font-weight:bold;">Payload:</span></td>',
-						'		<td colspan="4">', fleet.details.payload.join(', '), '</td>',
-						'	</tr>',
+						fleet.details.payload[0] ? 
+						'	<tr>'+
+						'		<td>&nbsp;</td>'+
+						'		<td><span style="font-weight:bold;">Payload:</span></td>'+
+						'		<td colspan="4">' + fleet.details.payload.join(', ') + '</td>'+
+						'	</tr>' : '',
 						'</table>',
 						'<hr />',
 						'</div>'
-					
-					
-					
-					/*
-					'<div class="yui-gd" style="margin-bottom:2px;">',
-                    '    <div class="yui-u first" style="width:20%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',fleet.details.type,'.png" style="width:75px;height:75px;" />',
-                    '    </div>',
-                    '    <div class="yui-u" style="width:75%">',
-                    '        <div class="buildingName">',fleet.details.type_human,' - Arrives in: <span class="shipArrives">',Lib.formatTime(sec),'</span></div>',
-                    '        <div><label style="font-weight:bold;">Quantity:</label> ',fleet.quantity, '</div>',
-                    '        <div><label style="font-weight:bold;">Details:</label>',
-                    '            <span><span>Task:</span><span>',fleet.task,'</span></span>',
-                    '            <span><span>From:</span><span>',fleet.from.name,'</span></span>',
-                    '            <span><span>To:</span><span>',fleet.to.name,'</span></span>',
-                    '        </div>',
-                    '        <div><label style="font-weight:bold;">Attributes:</label>',
-                    '            <span>Speed:<span>',fleet.details.speed,'</span></span>,',
-                    '            <span>Hold Size:<span>',fleet.details.hold_size,'</span></span>',
-                    '            <span>Stealth:<span>',fleet.details.stealth,'</span></span>',
-                    '            <span>Combat:<span>',fleet.details.combat,'</span></span>',
-                    '        </div>',
-                        fleet.details.payload ? [
-                                                    '<div><label style="font-weight:bold;">Payload:</label> ',
-                                                    fleet.details.payload.join(', '),
-                                                    '</div>'
-                                                ].join('')
-                                              : '',
-                    '    </div>',
-                    '</div>'
-					*/
 					].join('');
                     
                     panel.addQueue(sec, this.ArrivesQueue, nLi);

@@ -8,6 +8,8 @@ shipyard:
   remember it used to work. I don't know what has changed.
   
   As far as I can tell, everything's working in the shipyard. -fireartist
+  
+  It is, just need to make the 'Build Ships' tab easier to read, see the style I have started in sending of shipd in the Starmap. -Vas
 
 spaceport:
   The spaceport is in an indeterminate state, I can't get it to work but some of the
@@ -28,7 +30,7 @@ API CALLS:
 		rename_fleet()            - Is working - tested.
 		scuttle_fleet()           - Is working - tested.
 		view_orbiting_fleets()    - making the request now succeeds. More work to be done.
-		view_incoming_fleets()    - Works fully, UI almost completed; need to test what a large Payload looks like.
+		view_incoming_fleets()    - Works fully, UI almost completed; need to test what a large Payload looks like, also test weather it displays if there's a payload.
 	
 Other Issues:
 	1.  SOLVED: Something in rpc.js is making the parameters empty. Need to do a very close analysis for find the bug.
