@@ -721,7 +721,17 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                     hour > 0 ?
                         'Full In '+Lib.formatTime(3600 * (cap - store) / hour) :
                     'Will Never Fill'
-                ) + '</div>' : '')
+                ) + '</div>' 
+                : // Else there is no cap; in other words, looking at happiness
+                '<div><img alt="" class="smallTime" src="'+Lib.AssetUrl+'ui/s/time.png" />' + (
+                    hour < 0 && store > 0 ?
+                        'Negative In'+Lib.formatTime(-3600 * store / hour) :
+                    hour >= 0 && store >= 0 ? 
+                        'Onward And Upward' :
+                    hour < 0 && store < 0 ?
+                        'Deep Trouble' :
+                    'Positive In'+Lib.formatTime(3600 * store / hour)
+                ) + '</div>'
             ];
         },
         getTextFor : function(id) {
