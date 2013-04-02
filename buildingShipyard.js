@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             var div = document.createElement("div");
             div.innerHTML = [
                 '<div>You may subsidize the build queue for 1 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> per ship. <button type="button" class="shipQueueSubsidize">Subsidize</button> </div>',
-                '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueQty">Qty</li><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
+                '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueQty">Quantity</li><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
                 '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'
             ].join('');
             
@@ -153,7 +153,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         Dom.addClass(nUl, "clearafter");
 
                         Dom.addClass(nLi,"shipQueueQty");
-                        nLi.innerHTML = bqo.quantity;
+                        nLi.innerHTML = parseInt(bqo.quantity); // Integer, right?
                         nUl.appendChild(nLi);
                         
                         nLi = li.cloneNode(false);
@@ -200,7 +200,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             this.service.subsidize_build_queue({"args": {
                 session_id:Game.GetSession(),
                 building_id:this.building.id
-                }}, {
+            }}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Shipyard.SubsidizeBuildQueue.success");
                     Lacuna.Pulser.Hide();
