@@ -47,11 +47,26 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             return queueTab;
         },
         _getBuildTab : function() {
-            var buildTab = new YAHOO.widget.Tab({ label: "Build Ships", content: [
+            var buildTab = new YAHOO.widget.Tab({ label: "Build Fleets", content: [
                 '<div>',
                 '    <div class="clearafter" style="font-weight:bold;">',
                 '        <span id="shipDocksAvailable" style="float:left;"></span>',
-                '        <span style="float:right;"><select id="shipBuildView"><option value="All">All</option><option value="Now" selected="selected">Now</option><option value="Later">Later</option></select></span>',
+                '        <span style="float:right;">',
+				'			<select id="shipBuildView">',
+				'				<option value="All">All</option>',
+				'				<option value="Now" selected="selected">Now</option>',
+				'				<option value="Later">Later</option>',
+				'			</select>',
+				'			<select id="shipBuildTag">',
+				'				<option value="all" selected="selected">All</option>',
+				'				<option value="Colonization">Colonization</option>',
+				'				<option value="Exploration">Exploration</option>',
+				'				<option value="Intelligence">Intelligence</option>',
+				'				<option value="Mining">Mining</option>',
+				'				<option value="Trade">Trade</option>',
+				'				<option value="War">War</option>',
+				'			</select>',
+				'		</span>',
                 '    </div>',
                 '    <div id="shipBuildMessage" class="error"></div>',
                 '    <div id="bHt" style="overflow:auto;margin-top:2px;border-top:1px solid #52acff;">',
@@ -71,7 +86,8 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             }, this, true);
             
             Event.on("shipBuildView", "change", this.ShipPopulate, this, true);
-
+			Event.on("shipBuildTag", "change", this.ShipPopulate, this, true);
+			
             this.buildTab = buildTab;
             
             return buildTab;
@@ -82,8 +98,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 this.service.get_buildable({"args": {
                     session_id:Game.GetSession(),
                     building_id:this.building.id
-                    }}, {
-
+                }}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Shipyard.getBuild.get_buildable.success");
                         Lacuna.Pulser.Hide();
@@ -245,23 +260,36 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 var ships = this.ships.buildable,
                     li = document.createElement("li"),
                     shipNames = [],
-                    filter = Lib.getSelectedOptionValue("shipBuildView"),
+                    filter = Lib.getSelectedOptionValue("shipBuildView") || '',
+					tag = Lib.getSelectedOptionValue('shipBuildTag') || '',
                     defReason = !this.ships.docks_available ? "No docks available at Space Port." : undefined;
                     
                 Event.purgeElement(details);
                 details.innerHTML = "";
-                        
+                
                 for(var shipType in ships) {
                     if(ships.hasOwnProperty(shipType)) {
-                        if(filter == "All") {
-                            shipNames.push(shipType);
-                        }
-                        else if(filter == "Now" && ships[shipType].can) {
-                            shipNames.push(shipType);
-                        }
-                        else if(filter == "Later" && !ships[shipType].can) {
-                            shipNames.push(shipType);
-                        }
+						// If a tag was selected, ignore filter.
+						if (tag === "all") {
+							if(filter == "All") {
+								shipNames.push(shipType);
+							}
+							else if(filter == "Now" && ships[shipType].can) {
+								shipNames.push(shipType);
+							}
+							else if(filter == "Later" && !ships[shipType].can) {
+								shipNames.push(shipType);
+							}
+						}
+						else {
+							// Handle the selected tag.
+							for (shipTagIndex in ships[shipType].tags) {
+								var shipTag = ships[shipType].tags[shipTagIndex];
+								if (shipTag === tag) {
+									shipNames.push(shipType);
+								}
+							}
+						}
                     }
                 }
                 shipNames.sort();
@@ -269,45 +297,63 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 for(var i=0; i<shipNames.length; i++) {
                     var shipName = shipNames[i],
                         ship = ships[shipName],
-                        nLi = li.cloneNode(false),
-                        reason="", attributes = [];
-                    
-                    if(ship.reason) {
-                        reason = '<div style="font-style:italic;">'+ship.reason[1]+'</div>';
-                        //reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
-                    }
-                    
-                    for(var a in ship.attributes) {
-                        attributes[attributes.length] = '<span style="white-space:nowrap;margin-left:5px;"><label style="font-style:italic">';
-                        attributes[attributes.length] = a.titleCaps('_',' ');
-                        attributes[attributes.length] = ': </label>';
-                        attributes[attributes.length] = ship.attributes[a];
-                        attributes[attributes.length] = '</span> ';
-                    }
-                    
-                    nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
-                    '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" class="shipImage" />',
-                    '    </div>',
-                    '    <div class="yui-u" style="width:63%">',
-                    '        <span class="shipName">',ship.type_human,'</span>: ',
-                    '        <div class="shipDesc" style="display:none;">',Game.GetShipDesc(shipName),'</div>',
-                    '        <div><label style="font-weight:bold;">Cost:</label>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" />',ship.cost.food,'</span>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" />',ship.cost.ore,'</span>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" />',ship.cost.water,'</span>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" />',ship.cost.energy,'</span>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" />',ship.cost.waste,'</span>',
-                    '            <span style="white-space:nowrap;"><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" />',Lib.formatTime(ship.cost.seconds),'</span>',
-                    '        </div>',
-                    '        <div><label style="font-weight:bold;">Attributes:</label>',attributes.join(''),'</div>',
-                    !ship.can ? reason : '',
-                    '    </div>',
-                    '    <div class="yui-u" style="width:18%">',
-                    ship.can ? ' <input type="text" style="width:25px;" id="ship_'+shipName+'" value="1"> <button type="button">Build</button>' : 
-                    '    </div>',
-                    '</div>'].join('');
-                    if(ship.can) {
+                        nLi = li.cloneNode(false);
+					
+					nLi.innerHTML = [
+						'<div class="yui-gb">',
+						'<table>',
+						'	<colgroup>',
+						'		<col style="width:100px;height:100px;">',
+						'		<col style="width:200px;">',
+						'		<col span="6" style="width:75px">',
+						'	</colgroup>',
+						'	<tr>',
+						'		<td rowspan="4">',
+						'			<div style="width:100px;height:100px;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;display:table-cell;vertical-align:middle;">',
+						'        		<img src="', Lib.AssetUrl, 'ships/', shipName, '.png" style="width:80px;height:80px;" />',
+						'			</div>',
+						'		</td>',
+						'		<td><span style="font-weight:bold;">', ship.type_human, '</span></td>',
+						'		<td colspan="4"></td>',
+								// Only display the Build Button and Quantity field if the ship is buildable!
+								ship.can ?
+								'<td><input type="text" style="width:75px;" id="ship_' + shipName+'" value="1"></td>'+
+								'<td><button type="button" style="width:75px;">Build</button></td>' : '',
+						'	</tr>',
+						'	<tr>',
+						'		<td><span style="font-weight:bold;">Cost:</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/food.png" title="Food" class="smallFood" />', ship.cost.food, '</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/ore.png" title="Ore" class="smallOre" />', ship.cost.ore, '</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/water.png" title="Water" class="smallWater" />', ship.cost.water, '</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/energy.png" title="Energy" class="smallEnergy" />', ship.cost.energy, '</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/waste.png" title="Waste" class="smallWaste" />', ship.cost.waste, '</span></td>',
+						'		<td><span style="white-space:nowrap;"><img src="', Lib.AssetUrl, 'ui/s/time.png" title="Time" class="smallTime" />', Lib.formatTime(ship.cost.seconds), '</span></td>',
+						'	</tr>',
+						'	<tr>',
+						'		<td><span style="font-weight:bold;">Attributes:</span></td>',
+						'		<td>Speed:</td>',
+						'		<td>', ship.attributes.speed, '</td>',
+						'		<td>Berth:</td>', // 'Berth Level:' takes up two rows in a cell, which messes things up.
+						'		<td>', ship.attributes.berth_level, '</td>',
+						'		<td>Hold Size:</td>',
+						'		<td>', ship.attributes.hold_size, '</td>',
+						'	</tr>',
+						'	<tr>',
+						'		<td>&nbsp;</td>',
+						'		<td>Occupants:</td>', // 'Max Occumapnts:' takes up two rows in a cell, which messes things up.
+						'		<td>', ship.attributes.max_occupants, '</td>',
+						'		<td>Stealth:</td>',
+						'		<td>', ship.attributes.stealth, '</td>',
+						'		<td>Combat:</td>',
+						'		<td>', ship.attributes.combat, '</td>',
+						'	</tr>',
+						ship.reason[1] ? '<tr><td colspan="5" style="text-align:center;"><span style="font-style:italic;">' + ship.reason[1] + '</span></td></tr>' : '',
+						'</table>',
+						'<hr />',
+						'</div>'
+					].join('');
+					
+					if(ship.can) {
                         Event.on(Sel.query("button", nLi, true), "click", this.ShipBuild, {Self:this,Type:shipName,Ship:ship}, true);
                     }
                     
@@ -315,12 +361,13 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     
                 }
                 
-                Event.delegate(details, "click", this.ShipExpandDesc, ".shipName");
-                Event.delegate(details, "click", this.ShipExpandDesc, ".shipImage");
+				/*    TODO!!    */
+                //Event.delegate(details, "click", this.ShipExpandDesc, ".shipName");
+                //Event.delegate(details, "click", this.ShipExpandDesc, ".shipImage");
             }
         },
         ShipExpandDesc : function(e, matchedEl, container) {
-            var desc = Sel.query('div.shipDesc', matchedEl.parentNode.parentNode, true);
+            var desc = Sel.query('span.shipDesc', matchedEl.parentNode.parentNode, true);
             if(desc) {
                 var dis = Dom.getStyle(desc, "display");
                 Dom.setStyle(desc, "display", dis == "none" ? "" : "none");
