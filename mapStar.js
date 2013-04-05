@@ -1264,11 +1264,20 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             if(!keepOpen) {
                 Game.OverlayManager.hideAllBut(this.planetDetails.id);
             }
+			var panel = this.planetDetails;
+
+            Game.Services.Body.get_body_status({ args: {
+                    session_id: Game.GetSession(""),
+                    body_id: tile.data.id
+                }},{
+                    success : function(o){
+                        YAHOO.log(o, "info", "ShowPlanet.get_status.success");
+
+			var body = o.result.body,
+				tab, tabs,
+				empire = body.empire || {alignment:"none", name:""};
+
             
-            var body = tile.data,
-                tab, tabs,
-                panel = this.planetDetails,
-                empire = body.empire || {alignment:"none", name:""};
                 
             panel.resetDisplay(this);
             
@@ -1394,6 +1403,20 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             this.selectedTile = tile;
             panel.tabView.selectTab(0);
             panel.show();
+
+
+
+
+                    },
+                    failure : function(o){
+                        YAHOO.log(o, "info","ShowPlanet.get_status.fail");
+
+                        return true;
+                    },
+                    scope:this
+                }
+            );
+
         },
         
         Rename : function() {

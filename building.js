@@ -182,7 +182,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                 currentLevel = this.building.level*1,
                 planet = Game.GetCurrentPlanet();
             this.productionTab = new YAHOO.widget.Tab({ label: "Production", content: [
-                '<div id="detailsProduction">',
+                '<div id="detailsProduction"><p id="extraBuildingDetails"></p>',
                 '    <div id="buildingDetailsProduction" class="yui-gb">',
                 '        <div class="yui-u first">',
                 '            <ul>',
@@ -227,6 +227,12 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                 '    </div>',
                 '</div>'
                 ].join('')});
+			
+			Event.onAvailable('extraBuildingDetails', function(o) {
+				if (o.building.upgrade.cost.halls) {
+					Dom.get('extraBuildingDetails').innerHTML = 'Can upgrade to level ' + (parseInt(o.building.level) + 1) + ' by sacrificing ' + (parseInt(o.building.level) + 1) + ' Halls of Vrbansk.';
+				}
+			}, this);
             
             Event.on("buildingDetailsDemolish", "click", this.Demolish, this, true);
             if(up.can) {
@@ -288,33 +294,45 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             }
         },
         Upgrade : function() {
-            Lacuna.Pulser.Show();
             var building = this.building,
-                BuildingServ = Game.Services.Buildings.Generic,
-                data = {
-                    session_id: Game.GetSession(""),
-                    building_id: building.id
-                };
+				userUpgrade = false;
+			
+			if (building.upgrade.cost.halls) {
+				userUpgrade = confirm('Are you sure you want to sacrifice ' + building.upgrade.cost.halls + ' Halls of Vrbansk?');
+			}
+			else {
+				userUpgrade = true;
+			}
+			
+			
+			if (userUpgrade) {
+				Lacuna.Pulser.Show();
+				var BuildingServ = Game.Services.Buildings.Generic,
+					data = {
+						session_id: Game.GetSession(""),
+						building_id: building.id
+					};
             
-            BuildingServ.upgrade(data,{
-                success : function(o){
-                    YAHOO.log(o, "info", "Building.Upgrade.success");
-                    Lacuna.Pulser.Hide();
-                    this.fireEvent("onMapRpc", o.result);
+				BuildingServ.upgrade(data,{
+					success : function(o){
+						YAHOO.log(o, "info", "Building.Upgrade.success");
+						Lacuna.Pulser.Hide();
+						this.fireEvent("onMapRpc", o.result);
                     
-                    var b = building; //originally passed in building data from currentBuilding
-                    b.id = o.result.building.id;
-                    b.level = o.result.building.level;
-                    b.pending_build = o.result.building.pending_build;
-                    YAHOO.log(b, "info", "Building.Upgrade.success.building");
+						var b = building; //originally passed in building data from currentBuilding
+						b.id = o.result.building.id;
+						b.level = o.result.building.level;
+						b.pending_build = o.result.building.pending_build;
+						YAHOO.log(b, "info", "Building.Upgrade.success.building");
                     
-                    this.updateBuildingTile(b);
+						this.updateBuildingTile(b);
                     
-                    this.fireEvent("onHide");
-                },
-                scope:this,
-                target:building.url
-            });
+						this.fireEvent("onHide");
+					},
+					scope:this,
+					target:building.url
+				});
+			}
         },
         
         _getIncomingSupplyChainsTab : function() {            
