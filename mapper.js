@@ -300,6 +300,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
                 Dom.setStyle(image, "left", "0");
                 this.imageHolder = image;
             }
+            this._buildFissureHolder();
+            this._buildLogoHolder();
             if(this.data.orbit) {
                 if(this.map.hidePlanets) {
                     switch(this.data.type) {
@@ -323,10 +325,21 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
                 else {
                     var pSize = ((100 - Math.abs(this.data.size - 100)) / (100 / this.tileSizeInPx)) + 15;
                     this.imageHolder.innerHTML = ['<img src="',this.image,'" class="planet planet',this.data.orbit,'" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+
+
+                    if (this.data.body_has_fissure) {
+                        this.fissureHolder.innerHTML = ['<img src="',Lib.AssetUrl,'star_map/fissure_icon.png" class="planet" style="width:',pSize,'px;height:',pSize,'px;margin-top:',Math.floor(((this.tileSizeInPx - pSize) / 2)),'px;" />'].join('');
+                    }
                 }
                 
             }
             else {
+                if (this.data.station) {
+
+                    var station = this.data.station;
+                    var pSize = this.tileSizeInPx;
+                    this.logoHolder.innerHTML= ['<img src="',Lib.AssetUrl,'alliances/',station.alliance.image,'.png" class="star" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+                }
                 this.imageHolder.innerHTML = ['<img src="',this.image,'" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
             }
         },
@@ -350,6 +363,30 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             else if(this.map.hidePlanets && this.data.orbit){
                 this._buildAlignmentHolder();
                 Dom.addClass(this.alignHolder, 'probed');
+            }
+        },
+        _buildLogoHolder : function() {
+            if(!this.logoHolder) {
+                var logo = this.domElement.appendChild(document.createElement('div'));
+                Dom.setStyle(logo, "width", this.tileSizeInPx + 'px');
+                Dom.setStyle(logo, "height", this.tileSizeInPx + 'px');
+                Dom.setStyle(logo, "position", "absolute");
+                Dom.setStyle(logo, "top", "0");
+                Dom.setStyle(logo, "left", "0");
+                Dom.setStyle(logo, "z-index", '3');
+                this.logoHolder = logo;
+            }
+        },
+        _buildFissureHolder : function() {
+            if(!this.fissureHolder) {
+                var fissure = this.domElement.appendChild(document.createElement('div'));
+                Dom.setStyle(fissure, "width", this.tileSizeInPx + 'px');
+                Dom.setStyle(fissure, "height", this.tileSizeInPx + 'px');
+                Dom.setStyle(fissure, "position", "absolute");
+                Dom.setStyle(fissure, "top", "0");
+                Dom.setStyle(fissure, "left", "0");
+                Dom.setStyle(fissure, "z-index", '3');
+                this.fissureHolder = fissure;
             }
         },
         _buildAlignmentHolder : function() {
