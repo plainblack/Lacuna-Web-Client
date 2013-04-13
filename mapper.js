@@ -1260,7 +1260,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
     };
     Lang.augmentProto(Map, Util.EventProvider);
     
-    var MAX_STAR_AREA = 900;
+    var MAX_STAR_AREA = 3001;
     Mapper.StarMap = function( divId, options ) {
         Mapper.StarMap.superclass.constructor.call(this, divId, options);
         Dom.setStyle(this.mapDiv, 'background-image', 'url("'+Lib.AssetUrl+'star_system/field.png")');
