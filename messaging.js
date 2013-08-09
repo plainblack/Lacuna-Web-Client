@@ -58,6 +58,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '                    <option value="Colonization">Colonization</option>',
                 '                    <option value="Complaint">Complaints</option>',
                 '                    <option value="Excavator">Excavators</option>',
+                '                    <option value="Fissure">Fissure</option>',
                 '                    <option value="Mission">Mission</option>',
                 '                    <option value="Parliament">Parliament</option>',
                 '                    <option value="Probe">Probe</option>',
