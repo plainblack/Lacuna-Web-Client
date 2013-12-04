@@ -33,15 +33,14 @@ if (typeof YAHOO.lacuna.buildings.IntelTraining == "undefined" || !YAHOO.lacuna.
                 '    <div class="yui-u first">',
                 '        <ul>',
                 '            <li><span style="font-weight:bold;">Spies Training:</span> <span id="spiesCurrent">',spies.in_training,'</span></li>',
-                '            <li><span style="font-weight:bold;">Spies Training:</span> <span id="pointsper">',spies.points_per,'</span></li>',
-                '            <li id="spiesTrainOptions"><span style="font-weight:bold;">Train Spy:</span><br><select id="spiesTrainId"></select> <button type="button" id="spiesTrain">Train</button></li>',
+                '            <li><span style="font-weight:bold;">Points per:</span> <span id="pointsper">',spies.points_per,'</span></li>',
                 '        </ul>',
                 '    </div>',
                 '</div>'
             ].join('')});
             
             return this.trainTab;
-        },
+        }
         
     });
     
