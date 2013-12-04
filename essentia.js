@@ -295,7 +295,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
                 this.updateTime(this.timeBuilding, results.building_boost);
             }
             else if(results.spy_training_boost) {
-                this.updateTime(this.timeBuilding, results.spy_training_boost);
+                this.updateTime(this.timeSpyTraining, results.spy_training_boost);
             }
         },
         populate : function(results) {
@@ -308,7 +308,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             this.updateTime(this.timeHappiness, boosts.happiness);
             this.updateTime(this.timeStorage, boosts.storage);
             this.updateTime(this.timeBuilding, boosts.building);
-            this.updateTime(this.timeBuilding, boosts.spy_training);
+            this.updateTime(this.timeSpyTraining, boosts.spy_training);
         },
         updateTime : function(el, sDate) {
             var timers = this.timers;
