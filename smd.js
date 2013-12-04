@@ -3209,6 +3209,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     ],
                     "returns":{"type":"object"}
                 },
+                "boost_spy_training" : {
+                    "description": "Spends 5 essentia, and boosts spy training on all planets for 7 days. If a boost is already underway, calling again will add 7 more days.",
+                    "parameters": [
+                        {"name":"session_id", "type":"string", "optional":false}
+                    ],
+                    "returns":{"type":"object"}
+                },
                 "enable_self_destruct" : {
                     "description": "Enables a destruction countdown of 24 hours. Sometime after the timer runs out, the empire will vaporize.",
                     "parameters": [
