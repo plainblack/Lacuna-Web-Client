@@ -44,6 +44,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
             this.timeStorage = Dom.get("essentialDetailsTimeStorage");
             this.timeBuilding = Dom.get("essentialDetailsTimeBuilding");
+            this.timeSpyTraining = Dom.get("essentialDetailsTimeSpyTraining");
             this.elCode = Dom.get("essentiaRedeemCode");
             this.elEssentiaAmount = Dom.get("essentiaAmount");
             this.tabView = new YAHOO.widget.TabView('essentiaTabs');
@@ -136,6 +137,13 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '                           <td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
             '                           <td class="essentiaDetailsBoost"><button id="essentiaBoostBuilding" type="button">Boost</button></td>',
             '                           <td class="essentiaDetailsTime" id="essentialDetailsTimeBuilding"></td>',
+            '                       </tr>',
+            '                       <tr>',
+            '                           <td class="essentiaDetailsImg"><img class="smallSpy" title="Spy" src="',Lib.AssetUrl,'ui/s/spy.png" /></td>',
+            '                           <td class="essentiaDetailsText">+50% spy training speed</td>',
+            '                           <td class="essentiaDetailsCost">5 <img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /></td>',
+            '                           <td class="essentiaDetailsBoost"><button id="essentiaBoostSpyTraining" type="button">Boost</button></td>',
+            '                           <td class="essentiaDetailsTime" id="essentialDetailsTimeSpyTraining"></td>',
             '                       </tr>',
             '                    </table>',
             '                </div>',
