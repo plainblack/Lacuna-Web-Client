@@ -34,6 +34,7 @@ if (typeof YAHOO.lacuna.buildings.TheftTraining == "undefined" || !YAHOO.lacuna.
                 '        <ul>',
                 '            <li><span style="font-weight:bold;">Spies Training : </span> <span id="spiesCurrent">',spies.in_training,'</span></li>',
                 '            <li><span style="font-weight:bold;">Points per hour : </span> <span id="pointsper">',spies.points_per,'</span></li>',
+                '            <li><span style="font-weight:bold;">Max Points : </span> <span id="pointsper">',spies.max_points,'</span></li>',
                 '        </ul>',
                 '    </div>',
                 '</div>'
