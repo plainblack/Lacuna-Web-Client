@@ -231,7 +231,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 '                        <option value="">All</option>',
                 '                        <option value="Now" selected="selected">Now</option>',
                 '                        <option value="Soon">Soon</option>',
-                '                        <option value="Never">Never</option>',
+                '                        <option value="Later">Later</option>',
                 '                    </select>',
                 '                </div>',
                 '                <a href="#" id="builderBuildLink">Build</a><span id="builderFilterTrail"> &gt; <a href="#Resources" class="buildMenuLink">Resources</a> &gt; <span class="buildMenuLink">Ore</span></span>',
@@ -403,9 +403,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                         costs = bd.build.cost,
                         prod = bd.production,
                         noPlots = (isMaxPlots && ! bd.build.no_plot_use),
-                        isNever = bd.build.tags.indexOf('Never') > -1,
+                        isLater = bd.build.tags.indexOf('Later') > -1,
                         isPlan = bd.build.tags.indexOf('Plan') > -1,
-                        isNotBuildable = (isNever || isQueueFull || noPlots );
+                        isNotBuildable = (isLater || isQueueFull || noPlots );
                         
                     bd.name = names[i];
                     
