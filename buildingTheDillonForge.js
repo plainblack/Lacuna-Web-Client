@@ -174,6 +174,11 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 select.appendChild(nOpt);
             }
             
+            var button = document.createElement("input");
+            input.setAttribute("id", "forgeSplitPlanQuantity");
+            input.setAttribute("size", 6);
+            option.appendChild(input);
+
             var button = document.createElement("button");
             button.innerHTML = "Split Plan";
             Dom.setStyle(button, "margin-left", "1em");
