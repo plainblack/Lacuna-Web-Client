@@ -25,7 +25,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             this.splitTab = new YAHOO.widget.Tab({ label: "Forge", content: [
                 '<div id="forgeSplitPlan">',
                 '  <div><b>Split a plan into glyphs.</b></div>',
-                '  <div id="forgeSplitPlanForm"></div><hr/>',
+                '  <div id="forgeSplitPlanForm"></div>',
                 '</div>',
                 '<div id="forgeMakePlan">',
                 '  <div><b>Combine level 1 plans into a higher level plan.</b></div>',
