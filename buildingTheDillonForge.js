@@ -26,6 +26,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 '<div id="forgeSplitPlan">',
                 '  <div><b>Split a plan into glyphs.</b></div>',
                 '  <div id="forgeSplitPlanForm"></div>',
+                '<hr/>,
                 '</div>',
                 '<div id="forgeMakePlan">',
                 '  <div><b>Combine level 1 plans into a higher level plan.</b></div>',
@@ -194,8 +195,8 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             Event.on(button, "click", this.SplitPlan, {Self:this}, true);
         },
         SplitPlan : function() {
-            var selected = Lib.getSelectedOptionValue("forgeSplitPlanSelect");
-            var quantity = Dom.get("forgeSplitPlanQuantity").value;
+            var selected = Lib.getSelectedOptionValue("forgeSplitPlanSelect"),
+                quantity = Dom.get("forgeSplitPlanQuantity").value;
             
             if ( selected == "" ) {
                 alert("Select a plan");
