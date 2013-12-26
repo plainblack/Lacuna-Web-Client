@@ -163,15 +163,14 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 var value = [
                     split_plan[i]['class'], ';',
                     split_plan[i].level, ';',
-                    split_plan[i].extra_build_level,
-                    split_plan[i].quantity
+                    split_plan[i].extra_build_level
                 ].join('');
                 nOpt.setAttribute("value", value);
                 nOpt.innerHTML = [
                     split_plan[i].name, ' (',
                     split_plan[i].level, '+',
-                    split_plan[i].extra_build_level, ') &#91;',
-                    split_plan[i].quantity, ' - ',
+                    split_plan[i].extra_build_level, ') : ',
+                    split_plan[i].quantity, ' &#91;',
                     Lib.formatTime( split_plan[i].reset_seconds ), '&#93;'
                 ].join('');
                 select.appendChild(nOpt);
