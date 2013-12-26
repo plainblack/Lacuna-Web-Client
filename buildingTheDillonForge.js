@@ -186,10 +186,14 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
         },
         SplitPlan : function() {
             var selected = Lib.getSelectedOptionValue("forgeSplitPlanSelect");
+            var quantity = Dom.get("forgeSplitPlanQuantity").value;
             
             if ( selected == "" ) {
                 alert("Select a plan");
                 return;
+            }
+            if ( quantity < 2 ) {
+                quantity = 1;
             }
             
             selected = selected.split(";");
@@ -202,7 +206,8 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                         building_id:this.Self.building.id,
                         plan_class: selected[0],
                         level: selected[1],
-                        extra_build_level: selected[2]
+                        extra_build_level: selected[2],
+                        quantity: quantity,
                     },
                     {
                         success : function(o){
