@@ -179,7 +179,9 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             Dom.setStyle(button, "margin-left", "1em");
             option.appendChild(button);
             
-            split_form.appendChild(select);
+            make_form.appendChild(select);
+            make_form.appendChild( document.createTextNode(" Quantity: ") );
+            make_form.appendChild(input);
             split_form.appendChild(button);
             
             Event.on(button, "click", this.SplitPlan, {Self:this}, true);
