@@ -26,7 +26,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 '<div id="forgeSplitPlan">',
                 '  <div><b>Split a plan into glyphs.</b></div>',
                 '  <div id="forgeSplitPlanForm"></div>',
-                '<hr/>,
+                '<hr/>',
                 '</div>',
                 '<div id="forgeMakePlan">',
                 '  <div><b>Combine level 1 plans into a higher level plan.</b></div>',
