@@ -2300,7 +2300,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"plan_class", "type":"string", "optional":false},
                             {"name":"level", "type":"number", "optional":false},
-                            {"name":"extra_build_level", "type":"number", "optional":false}
+                            {"name":"extra_build_level", "type":"number", "optional":false},
                             {"name":"quantity", "type":"number", "optional":false}
                         ],
                         "returns":{"type":"object"}
