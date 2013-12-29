@@ -178,7 +178,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             
             var input = document.createElement("input");
             input.setAttribute("id", "forgeSplitPlanQuantity");
-            input.setAttribute("size", 3);
+            input.setAttribute("size", 6);
             option.appendChild(input);
 
             var button = document.createElement("button");
@@ -186,9 +186,9 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             Dom.setStyle(button, "margin-left", "1em");
             option.appendChild(button);
             
-            make_form.appendChild(select);
-            make_form.appendChild( document.createTextNode(" Quantity: ") );
-            make_form.appendChild(input);
+            split_form.appendChild(select);
+            split_form.appendChild( document.createTextNode(" Quantity: ") );
+            split_form.appendChild(input);
             split_form.appendChild(button);
             
             Event.on(button, "click", this.SplitPlan, {Self:this}, true);
@@ -232,9 +232,11 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
         },
         viewForgeSubsidize : function() {
             var form = Dom.get("forgeSubsidizeForm"),
-                cost = this.result.tasks.subsidy_cost;
+                cost = this.result.tasks.subsidy_cost,
+                work = this.result.tasks.working,
+                seconds = this.result.tasks.seconds_remaining;
             
-            form.innerHTML = "";
+            form.innerHTML = ['<div>',work," for ",Lib.formatTime(seconds),'</div>'].join('');
             
             var button = document.createElement("button");
             button.innerHTML = "Subsidize for " + cost + "E";
