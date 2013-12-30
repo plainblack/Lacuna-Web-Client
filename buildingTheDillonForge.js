@@ -76,6 +76,41 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             emptyFirst.setAttribute("value","");
             emptyFirst.innerHTML = "Select plan (maximum level) &#91;time to make&#93;";
             select.appendChild(emptyFirst);
+            make_plan.sort(function(a,b) {
+              if(a.class > b.class) {
+                return 1;
+              }
+              else if(a.class < b.class) {
+                return -1;
+              }
+              else {
+                if(a.name > b.name) {
+                  return 1;
+                }
+                else if(a.name < b.name) {
+                  return -1;
+                }
+                else {
+                  if (a.level > b.level) {
+                    return 1;
+                  }
+                  else if (a.level < b.level) {
+                    return -1;
+                  }
+                  else {
+                    if (a.extra_build_level > b.extra_build_level) {
+                      return 1;
+                    }
+                    else if (a.extra_build_level < b.extra_build_level) {
+                      return -1;
+                    }
+                    else {
+                      return 0;
+                    }
+                  }
+                }
+              }
+            });
             
             for (var i = 0; i < make_plan.length; i++) {
                 var nOpt = option.cloneNode(false);
@@ -157,6 +192,34 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             emptyFirst.setAttribute("value","");
             emptyFirst.innerHTML = "Select plan (levels) &#91;time to split&#93;";
             select.appendChild(emptyFirst);
+
+            split_plan.sort(function(a,b) {
+              if(a.name > b.name) {
+                return 1;
+              }
+              else if(a.name < b.name) {
+                return -1;
+              }
+              else {
+                if (a.level > b.level) {
+                  return 1;
+                }
+                else if (a.level < b.level) {
+                  return -1;
+                }
+                else {
+                  if (a.extra_build_level > b.extra_build_level) {
+                    return 1;
+                  }
+                  else if (a.extra_build_level < b.extra_build_level) {
+                    return -1;
+                  }
+                  else {
+                    return 0;
+                  }
+                }
+              }
+            });
             
             for (var i=0; i<split_plan.length; i++) {
                 var nOpt = option.cloneNode(false);
