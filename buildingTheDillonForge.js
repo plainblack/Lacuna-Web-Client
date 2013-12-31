@@ -77,10 +77,10 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             emptyFirst.innerHTML = "Select plan (maximum level) &#91;time to make&#93;";
             select.appendChild(emptyFirst);
             make_plan.sort(function(a,b) {
-              if(a.class > b.class) {
+              if(a["class"] > b["class"]) {
                 return 1;
               }
-              else if(a.class < b.class) {
+              else if(a["class"] < b["class"]) {
                 return -1;
               }
               else {
