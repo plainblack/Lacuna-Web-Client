@@ -392,7 +392,7 @@ _getSpiesHtml : function() {
                            '<li><label>Travelling:</label>', Lib.formatNumber(data.travelling_count), '</li>',
                            '<li><label>Countering Espionage:</label>', Lib.formatNumber(data.countering_espionage_count), '</li>',
                            '<li><label>Doing Sweeps:</label>', Lib.formatNumber(data.security_count), '</li>',
-                           '<li><label>At the Ministry of Truth:</label>', Lib.formatNumber(data.propaganda), '</li>',
+                           '<li><label>At the Ministry of Truth:</label>', Lib.formatNumber(data.propaganda_count), '</li>',
                            '<li><label>Training:</label>', Lib.formatNumber(data.training_count), '</li>',
                            '<li><label>Extra Training:</label>', Lib.formatNumber(data.extra_training_count), '</li>',
                            '<li><label>Gathering Intelligence:</label>', Lib.formatNumber(data.gathering_intelligence_count), '</li>',
