@@ -30,7 +30,7 @@
         "/hallsofvrbansk" : { "description" : "The source of ancient wisdom.", "wiki" : "http://community.lacunaexpanse.com/wiki/halls-of-vrbansk" },
         "/libraryofjith" : { "description" : "Where the Great Race kept records of their experiments.", "wiki" : "http://community.lacunaexpanse.com/wiki/library-of-jith" },
         "/thedillonforge" : { "description" : "Where raw ore formed into glyphs and the glyph buildings were born.", "wiki" : "http://community.lacunaexpanse.com/wiki/the-dillon-forge" },
-        "/blackholegenerator" : { "description" : "An experimental signularity lab engineered by the Great Race.", "wiki" : "http://community.lacunaexpanse.com/wiki/black-hole-generator" },
+        "/blackholegenerator" : { "description" : "An experimental singularity lab engineered by the Great Race.", "wiki" : "http://community.lacunaexpanse.com/wiki/black-hole-generator" },
         "/supplypod" : { "description" : "Used to hold emergency supplies on a damaged colony or on a fledgling colony.", "wiki" : "http://community.lacunaexpanse.com/wiki/supply-pod" },
         "/subspacesupplydepot" : { "description" : "Helps give a fledgling colony a kickstart.", "wiki" : "http://community.lacunaexpanse.com/wiki/subspace-supply-depot" },
         "/pantheonofhagness" : { "description" : "Increases the number of available plots on your planet.", "wiki" : "http://community.lacunaexpanse.com/wiki/pantheon-of-hagness" },
