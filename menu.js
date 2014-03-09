@@ -34,7 +34,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
 				{ text: "Changes Log",  url: "/changes.txt",                              target: "_blank" },
 				{ text: "Forums",       url: "http://community.lacunaexpanse.com/forums", target: "_blank" },
 				{ text: "Help",         url: "http://www.lacunaexpanse.com/help/",        target: "_blank" },
-                { text: "Ideas Board",  url: "http://ideas.lacunaexpanse.com/",           target: "_blank" },
+                { text: "Ideas",  url: "http://community.lacunaexpanse.com/forums/general",           target: "_blank" },
                 { text: "Server Clock", onclick: { fn: Lacuna.Info.Clock.Show, scope:Lacuna.Info.Clock } },
                 { text: "Wiki",         url: "http://community.lacunaexpanse.com/wiki/",  target: "_blank" }
             ]);
