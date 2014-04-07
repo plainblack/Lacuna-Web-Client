@@ -1514,6 +1514,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 if (ship.max_occupants > maxSpies) {
                     maxSpies = ship.max_occupants;
                 }
+                if (maxSpies > 100) {
+                    maxSpies = 100;
+                }
             }
             if (maxSpies == 0) {
                 tab.elMessage.innerHTML = 'No ships available.';
