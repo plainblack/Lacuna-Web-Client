@@ -852,6 +852,23 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     nUl.appendChild(nLi);
 
                     details.appendChild(nUl);
+
+                    nUl = ul.cloneNode(false),
+                    Dom.addClass(nUl, "shipInfo");
+                    Dom.addClass(nUl, "clearafter");
+                    Dom.addClass(nUl, "attacked");
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"shipTask");
+                    nLi.innerHTML = 'Attacked';
+                    nUl.appendChild(nLi);
+
+                    nLi = li.cloneNode(false);
+                    Dom.addClass(nLi,"shipFrom");
+                    nLi.innerHTML = log.attacked_body + ' [' + log.attacked_empire + ']';
+                    nUl.appendChild(nLi);
+
+                    details.appendChild(nUl);
                     
                 }
                 

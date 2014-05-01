@@ -2103,6 +2103,9 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	padding: 5px;
 	border-top: 1px solid #52acff;
 }
+#battleLogsDetails .attacked {
+	padding: 5px;
+}
 #battleLogsDetails .defender {
 	padding: 5px;
 }
