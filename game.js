@@ -156,6 +156,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     var result = oArgs.result;
                     //remember session
                     Game.SetSession(result.session_id);
+                    Game.SetChatAuth(result);
 
                     Game.RemoveCookie("locationId");
                     Game.RemoveCookie("locationView");
@@ -644,6 +645,25 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     }
                 },
                 scope:callback && callback.scope || this
+            });
+        },
+        SetChatAuth : function(result) {
+            Game.chat_auth = result.chat_auth;
+            var chatRef = new Firebase('https://lacuna.firebaseio.com');
+            chatRef.auth(result.chat_auth, function(error) {
+                if (error) {
+                    console.log("Chisel Chat login failed!", error);
+                }
+                else {
+                    console.log("Chisel Chat login successful!");
+                    var chat = new ChiselchatUI(chatRef, document.getElementById("chiselchat-wrapper"));
+                    chat.setUser({
+                        userId:         result.status.empire.id,
+                        userName:       result.status.empire.name,
+                        isModerator:    1,
+                        AvatarUri:      'http://d16cbq0l6kkf21.cloudfront.net/assets/alliances/us1/logo_26_003.png'
+                    });
+                }
             });
         },
         GetSession : function(replace) {
