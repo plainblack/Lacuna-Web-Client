@@ -649,6 +649,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         },
         SetChatAuth : function(result) {
             Game.chat_auth = result.chat_auth;
+            Game.gravatar_url = result.gravatar_url;
             var chatRef = new Firebase('https://lacuna.firebaseio.com');
             chatRef.auth(result.chat_auth, function(error) {
                 if (error) {
@@ -661,7 +662,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         userId:         result.status.empire.id,
                         userName:       result.status.empire.name,
                         isModerator:    1,
-                        AvatarUri:      'http://d16cbq0l6kkf21.cloudfront.net/assets/alliances/us1/logo_26_003.png'
+                        avatarUri:      Game.gravatar_url
                     });
                     chat.addCommand({
                         match : /^\/wiki\s/,
