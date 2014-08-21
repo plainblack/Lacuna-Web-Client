@@ -664,9 +664,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         AvatarUri:      'http://d16cbq0l6kkf21.cloudfront.net/assets/alliances/us1/logo_26_003.png'
                     });
                     chat.addCommand({
-                        match : /^\/wiki$/,
-                        func : function(message, chatui) {
-                            message.content = 'http://community.lacunaexpanse.com/wiki';
+                        match : /^\/wiki\s/,
+                        func : function(e) {
+                            var msg=e.content.replace(/^\/wiki/, "");
+                            msg = msg.trim();
+                            e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
                         },
                         name : "/wiki",
                         help : "Quick link to the Lacuna Expanse wiki.",
