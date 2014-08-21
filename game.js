@@ -663,6 +663,25 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         isModerator:    1,
                         AvatarUri:      'http://d16cbq0l6kkf21.cloudfront.net/assets/alliances/us1/logo_26_003.png'
                     });
+                    chat.addCommand({
+                        match : /^\/wiki$/,
+                        func : function(message, chatui) {
+                            message.content = 'http://community.lacunaexpanse.com/wiki';
+                        },
+                        name : "/wiki",
+                        help : "Quick link to the Lacuna Expanse wiki.",
+                        moderatorOnly : false
+                    });
+                    chat.addCommand({
+                        match : /^\/planet$/,
+                        func : function(message, chatui) {
+                            var body = Game.GetCurrentPlanet();
+                            message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
+                        },
+                        name : "/planet",
+                        help : "Show everyone where your current planet is.",
+                        moderatorOnly : false
+                    });
                 }
             });
         },
