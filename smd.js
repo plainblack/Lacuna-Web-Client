@@ -2938,7 +2938,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
             "target":"/chat/rpc",
 
             "services": {
-                "get_commands" : {
+                "init_chat" : {
                     "description": "Get chat login data.",
                     "parameters": [
                         {"name":"session_id", "type":"string", "optional":false}
