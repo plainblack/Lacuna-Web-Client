@@ -266,7 +266,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                                 userId:         result.status.empire.id,
                                 userName:       result.status.empire.name,
                                 isModerator:    1,
-                                avatarUri:      Game.gravatar_url
+                                avatarUri:      Game.gravatar_url,
+                                profileUri:     Game.gravatar_url
                             });
                             Game.chat.addCommand({
                                 match : /^\/wiki/,
@@ -301,6 +302,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     });
                 },
                 failure : function(o) {
+                    console.log("Chisel Chat init_chat failure.");
                     return true;
                 }
             });
