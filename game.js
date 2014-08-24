@@ -838,7 +838,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         Reset : function() {
             //clearInterval(Game.recInt);
 
-            Game.chat.unsetUser();
+            if (Game.chat) {
+                Game.chat.unsetUser();
+            }
             delete Game.isRunning;
             clearInterval(Game.planetRefreshInterval);
             delete Game.planetRefreshInterval;
