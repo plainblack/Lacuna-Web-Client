@@ -270,7 +270,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                                 avatarUri:      Game.gravatar_url,
                                 profileUri:     Game.gravatar_url
                             });
-
                             Game.chat.addCommand({
                                 match : /^\/wiki/,
                                 func : function(e) {
