@@ -262,9 +262,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         else {
                             console.log("Chisel Chat login successful!");
                             Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
+                            
                             Game.chat.setUser({
                                 userId:         result.status.empire.id,
-                                userName:       result.status.empire.name,
+                                userName:       result.chat_name,
                                 isModerator:    1,
                                 avatarUri:      Game.gravatar_url,
                                 profileUri:     Game.gravatar_url
