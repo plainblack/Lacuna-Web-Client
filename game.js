@@ -81,7 +81,35 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     expires: new Date(now.setFullYear(now.getFullYear() + 1))
                 });
             }
-            
+            Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
+            Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
+            Game.chat.addCommand({
+                match : /^\/wiki/,
+                func : function(e) {
+                    var msg=e.content.replace(/^\/wiki/, "");
+                    msg = msg.trim();
+                    if (msg.length) {
+                        e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
+                    }
+                    else {
+                        e.content = "http://community.lacunaexpanse.com/wiki";
+                    }
+                },
+                name : "/wiki",
+                help : "Quick link to the Lacuna Expanse wiki.",
+                moderatorOnly : false
+            });
+            Game.chat.addCommand({
+                match : /^\/planet$/,
+                func : function(message, chatui) {
+                    var body = Game.GetCurrentPlanet();
+                    message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
+                },
+                name : "/planet",
+                help : "Show everyone where your current planet is.",
+                moderatorOnly : false
+            });
+             
             if (query.reset_password) {
                 Game.InitLogin();
                 Game.LoginDialog.resetPassword(query.reset_password);
@@ -254,14 +282,14 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     Game.chat_auth = result.chat_auth;
                     Game.gravatar_url = result.gravatar_url;
                     Game.private_room = result.private_room;
-                    Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
+
+
                     Game.chatRef.auth(result.chat_auth, function(error) {
                         if (error) {
                             console.log("Chisel Chat login failed!", error);
                         }
                         else {
                             console.log("Chisel Chat login successful!");
-                            Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
                             
                             Game.chat.setUser({
                                 userId:         result.status.empire.id,
@@ -271,33 +299,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                                 profileUri:     Game.gravatar_url
                             });
                             
-                            Game.chat.addCommand({
-                                match : /^\/wiki/,
-                                func : function(e) {
-                                    var msg=e.content.replace(/^\/wiki/, "");
-                                    msg = msg.trim();
-                                    if (msg.length) {
-                                        e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
-                                    }
-                                    else {
-                                        e.content = "http://community.lacunaexpanse.com/wiki";
-                                    }
-                                },
-                                name : "/wiki",
-                                help : "Quick link to the Lacuna Expanse wiki.",
-                                moderatorOnly : false
-                            });
-                            Game.chat.addCommand({
-                                match : /^\/planet$/,
-                                func : function(message, chatui) {
-                                    var body = Game.GetCurrentPlanet();
-                                    message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
-                                },
-                                name : "/planet",
-                                help : "Show everyone where your current planet is.",
-                                moderatorOnly : false
-                            });
-                            if (Game.private_room) {
+                           if (Game.private_room) {
                                 Game.chat._chat.enterRoom(Game.private_room.id, Game.private_room.name);
                             }
                         }
