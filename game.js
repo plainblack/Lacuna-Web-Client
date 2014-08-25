@@ -66,7 +66,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             };
             Game.escListener = new Util.KeyListener(document, { keys:27 }, { fn:Game.OverlayManager.hideAll, scope:Game.OverlayManager, correctScope:true } );
             
-            //get resources right away since they don't depend on anything
+            //get resources right away since they don't depend on anything.
             Game.GetResources();
             Game.PreloadUI();
             
