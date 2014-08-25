@@ -188,10 +188,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     Game.RemoveCookie("locationId");
                     Game.RemoveCookie("locationView");
                     
-                    Game.InitChat();
                     //store empire data
                     Lacuna.Game.ProcessStatus(result.status);
                     //Run rest of UI now that we're logged in
+
+                    Game.InitChat();
                     Lacuna.Game.Run();
                     if (result.welcome_message_id) {
                         Game.QuickDialog({
