@@ -150,7 +150,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                 Game.Reset();
                 Game.DoLogin(o.error);
             }
-            // Game over
+            // Game over.
             else if(o.error.code == 1200) {
                 alert(o.error.message);
                 Game.Reset();
