@@ -292,15 +292,19 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         else {
                             console.log("Chisel Chat login successful!");
                             
-                            Game.chat.setUser({
-                                userId:         result.status.empire.id,
-                                userName:       result.chat_name,
-                                isModerator:    result.chat_admin,
-                                avatarUri:      Game.gravatar_url,
-                                profileUri:     Game.gravatar_url
-                            });
-                            
-                           if (Game.private_room) {
+                            try {
+                                Game.chat.setUser({
+                                    userId:         result.status.empire.id,
+                                    userName:       result.chat_name,
+                                    isModerator:    result.chat_admin,
+                                    avatarUri:      Game.gravatar_url,
+                                    profileUri:     Game.gravatar_url
+                                });
+                            }
+                            catch(err) {
+                                 console.log("cannot setUser "+err);
+                            }
+                            if (Game.private_room) {
                                 Game.chat._chat.enterRoom(Game.private_room.id, Game.private_room.name);
                             }
                         }
@@ -844,7 +848,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             //clearInterval(Game.recInt);
 
             if (Game.chat) {
-                Game.chat.unsetUser();
+                try {
+                    Game.chat.unsetUser();
+                }
+                catch(err) {
+                    console.log("Cannot unsetuser "+err);
+                } 
             }
             delete Game.isRunning;
             clearInterval(Game.planetRefreshInterval);
