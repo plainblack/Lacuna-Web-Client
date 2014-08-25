@@ -294,7 +294,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                             Game.chat.setUser({
                                 userId:         result.status.empire.id,
                                 userName:       result.chat_name,
-                                isModerator:    1,
+                                isModerator:    result.chat_admin,
                                 avatarUri:      Game.gravatar_url,
                                 profileUri:     Game.gravatar_url
                             });
