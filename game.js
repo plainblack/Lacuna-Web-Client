@@ -81,6 +81,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     expires: new Date(now.setFullYear(now.getFullYear() + 1))
                 });
             }
+            try {
             Game.chatRef = new Firebase('https://lacunapt.firebaseio.com');
             Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
             Game.chat.addCommand({
@@ -109,7 +110,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                 help : "Show everyone where your current planet is.",
                 moderatorOnly : false
             });
-             
+            } catch(err){} // no chat (e.g., private server)
             if (query.reset_password) {
                 Game.InitLogin();
                 Game.LoginDialog.resetPassword(query.reset_password);
@@ -280,6 +281,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         InitChat : function() {
             Game.Services.Chat.init_chat({session_id: Game.GetSession()},{
                 success : function(o) {
+                    if (!Game.chat) { return true; }
                     var result = o.result;
                     Game.chat_auth = result.chat_auth;
                     Game.gravatar_url = result.gravatar_url;
