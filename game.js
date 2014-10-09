@@ -81,35 +81,36 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     expires: new Date(now.setFullYear(now.getFullYear() + 1))
                 });
             }
-            Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
-            Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
-            Game.chat.addCommand({
-                match : /^\/wiki/,
-                func : function(e) {
-                    var msg=e.content.replace(/^\/wiki/, "");
-                    msg = msg.trim();
-                    if (msg.length) {
-                        e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
-                    }
-                    else {
-                        e.content = "http://community.lacunaexpanse.com/wiki";
-                    }
-                },
-                name : "/wiki",
-                help : "Quick link to the Lacuna Expanse wiki.",
-                moderatorOnly : false
-            });
-            Game.chat.addCommand({
-                match : /^\/planet$/,
-                func : function(message, chatui) {
-                    var body = Game.GetCurrentPlanet();
-                    message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
-                },
-                name : "/planet",
-                help : "Show everyone where your current planet is.",
-                moderatorOnly : false
-            });
-             
+            try {
+                Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
+                Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
+                Game.chat.addCommand({
+                    match : /^\/wiki/,
+                    func : function(e) {
+                        var msg=e.content.replace(/^\/wiki/, "");
+                        msg = msg.trim();
+                        if (msg.length) {
+                            e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
+                        }
+                        else {
+                            e.content = "http://community.lacunaexpanse.com/wiki";
+                        }
+                    },
+                    name : "/wiki",
+                    help : "Quick link to the Lacuna Expanse wiki.",
+                    moderatorOnly : false
+                });
+                Game.chat.addCommand({
+                    match : /^\/planet$/,
+                    func : function(message, chatui) {
+                        var body = Game.GetCurrentPlanet();
+                        message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
+                    },
+                    name : "/planet",
+                    help : "Show everyone where your current planet is.",
+                    moderatorOnly : false
+                });
+            } catch(err) { }; // no chat?
             if (query.reset_password) {
                 Game.InitLogin();
                 Game.LoginDialog.resetPassword(query.reset_password);
@@ -280,6 +281,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         InitChat : function() {
             Game.Services.Chat.init_chat({session_id: Game.GetSession()},{
                 success : function(o) {
+                    if (!Game.chat) { return true; }
                     var result = o.result;
                     Game.chat_auth = result.chat_auth;
                     Game.gravatar_url = result.gravatar_url;
