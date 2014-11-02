@@ -81,7 +81,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     expires: new Date(now.setFullYear(now.getFullYear() + 1))
                 });
             }
-            Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
+            Game.chatRef = new Firebase('https://lacunapt.firebaseio.com');
             Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
             Game.chat.addCommand({
                 match : /^\/wiki/,
@@ -286,7 +286,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     Game.private_room = result.private_room;
 
 
-                    Game.chatRef.auth(result.chat_auth, function(error) {
+                    Game.chatRef.authWithCustomToken(result.chat_auth, function(error) {
                         if (error) {
                             console.log("Chisel Chat login failed!", error);
                         }
@@ -295,11 +295,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                             
                             try {
                                 Game.chat.setUser({
-                                    userId:         result.status.empire.id,
-                                    userName:       result.chat_name,
-                                    isModerator:    result.chat_admin,
-                                    avatarUri:      Game.gravatar_url,
-                                    profileUri:     Game.gravatar_url
+                                    userId  : ‘empire id goes here',
+      								userName : ‘empire name goes here',
+      								isGuest : false,
+      								isModerator : false,
+      								isStaff : false,
+      								avatarUri : ‘url for empire logo goes here',
                                 });
                             }
                             catch(err) {
