@@ -295,12 +295,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                             
                             try {
                                 Game.chat.setUser({
-                                    userId  : ‘empire id goes here',
-      								userName : ‘empire name goes here',
-      								isGuest : false,
-      								isModerator : false,
-      								isStaff : false,
-      								avatarUri : ‘url for empire logo goes here',
+                                    userId  :     result.status.empire.id,
+      				    userName :    result.chat_name,
+      				    isGuest :     false, // for now
+      				    isModerator : result.isModerator,
+      				    isStaff :     result.isStaff,
+      				    avatarUri :   Game.gravatar_url,
+                                    profileUri :  Game.gravatar_url
                                 });
                             }
                             catch(err) {
