@@ -81,7 +81,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     expires: new Date(now.setFullYear(now.getFullYear() + 1))
                 });
             }
-            Game.chatRef = new Firebase('https://lacunapt.firebaseio.com');
+            Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
             Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
             Game.chat.addCommand({
                 match : /^\/wiki/,
