@@ -1177,4 +1177,5 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 YAHOO.register("game", YAHOO.lacuna.Game, {version: "1", build: "0"}); 
 
 }
+
 // vim: noet:ts=4:sw=4
