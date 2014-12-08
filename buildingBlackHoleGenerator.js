@@ -166,11 +166,8 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           
           var canGenerate = 1;
           
-          if ( Game.GetCurrentPlanet().waste_stored < task.waste_cost ) {
+          if ( task.success == 0 ) {
             canGenerate = 0;
-          }
-          else if ( task.success == 0 ) {
-            continue;
           }
           
           var typeSelector = "";
@@ -212,7 +209,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
             '  <div class="yui-u" style="width:25%; text-align:right;">',
                  canGenerate == 1
                    ? typeSelector + '<button type="button" name="generate">Generate</button><button type="button" name="subsidize">Subsidize</button>'
-                   : '<b>Insufficient Waste</b>',
+                   : '<b>'.task.reason.'</b>',
             '  </div>',
             '</div>'].join('');
           
