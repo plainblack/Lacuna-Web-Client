@@ -165,7 +165,6 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           }
           
           var canGenerate = 1;
-          
           if ( task.success == 0 ) {
             canGenerate = 0;
           }
