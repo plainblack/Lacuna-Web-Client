@@ -294,25 +294,8 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             }
         },
         Upgrade : function() {
+        	Lacuna.Pulser.Show();
             var building = this.building,
-				userUpgrade = false;
-			
-			if (building.upgrade.cost.halls) {
-				userUpgrade = confirm('Are you sure you want to sacrifice ' + building.upgrade.cost.halls + ' Halls of Vrbansk?');
-			}
-			else {
-				userUpgrade = true;
-			}
-			
-			
-			if (userUpgrade) {
-				Lacuna.Pulser.Show();
-				var BuildingServ = Game.Services.Buildings.Generic,
-					data = {
-						session_id: Game.GetSession(""),
-						building_id: building.id
-					};
-            
 				BuildingServ.upgrade(data,{
 					success : function(o){
 						YAHOO.log(o, "info", "Building.Upgrade.success");
