@@ -314,9 +314,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                     b.level = o.result.building.level;
                     b.pending_build = o.result.building.pending_build;
                     YAHOO.log(b, "info", "Building.Upgrade.success.building");
-                
                     this.updateBuildingTile(b);
-                    
                     this.fireEvent("onHide");
                 },
                 scope:this,
