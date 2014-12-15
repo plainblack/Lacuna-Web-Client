@@ -1392,9 +1392,21 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                     }
                 }
             }
-            if(panel.excavTab) {
-                panel.tabView.addTab(panel.excavTab);
-                delete panel.excavTab;
+            if (body.type !== "gas giant" && !body.empire) {
+                if(panel.excavTab) {
+                    panel.tabView.addTab(panel.excavTab);
+                    delete panel.excavTab;
+                }
+            }
+            else {
+                tabs = panel.tabView.get("tabs");
+                for(var mnt = tabs.length; mnt >= 0; mnt--) {
+                    tab = panel.tabView.getTab(mnt);
+                    if(tab && tab.get("label") == this._excavLabel) {
+                        panel.excavTab = tab;
+                        panel.tabView.removeTab(tab);
+                    }
+                }
             }
             
             //this.GetShips(panel,{body_id:body.id});
