@@ -82,7 +82,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                 });
             }
             try {
-            Game.chatRef = new Firebase('https://lacuna.firebaseio.com');
+            Game.chatRef = new Firebase('https://lacunapt.firebaseio.com');
             Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
             Game.chat.addCommand({
                 match : /^\/wiki/,
