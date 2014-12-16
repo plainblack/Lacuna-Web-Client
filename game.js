@@ -1059,7 +1059,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         Game.QueueFire(toFire[fId], fId);
                     }
                 }
-            
             }
         },
         QueueTick : function(type, id, ms) {
