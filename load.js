@@ -173,6 +173,12 @@
         requires : ["building"]
     });
     loader.addModule({
+        name: "essentiavein",
+        type: "js",
+        fullpath: urlBuilder("buildingEssentiaVein.js"),
+        requires : ["building"]
+    });
+    loader.addModule({
         name: "foodreserve",
         type: "js",
         fullpath: urlBuilder("buildingFoodReserve.js"),
@@ -386,6 +392,7 @@
             "embassy",
             "energyreserve",
             "entertainment",
+            "essentiavein",
             "foodreserve",
             "geneticslab",
             "intelligence",

@@ -22,6 +22,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/embassy": Lacuna.buildings.Embassy,
         "/energyreserve": Lacuna.buildings.EnergyReserve,
         "/entertainment": Lacuna.buildings.Entertainment,
+        "/essentiavein": Lacuna.buildings.EssentiaVein,
         "/foodreserve": Lacuna.buildings.FoodReserve,
         "/geneticslab": Lacuna.buildings.GeneticsLab,
         "/intelligence": Lacuna.buildings.Intelligence,

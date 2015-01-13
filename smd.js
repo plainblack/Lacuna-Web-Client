@@ -793,6 +793,25 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     }
                 }
             },
+            EssentiaVein : {
+                "SMDVersion":"2.0",
+                "description": "Essentia Vein",
+                "envelope":"JSON-RPC-2.0",
+                "transport":"POST",
+                "target":"/essentiavein",
+
+                "services": {
+                    "drain" : {
+                        "description": "Drain the evein for an immediate, but smaller, amount of Essentia.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"times", "type":"number", "optional":true},
+                        ],
+                        "returns":{"type":"object"},
+                    }
+                }
+            },
             Exchanger : {
                 "SMDVersion":"2.0",
                 "description": "Waste Exchanger",
