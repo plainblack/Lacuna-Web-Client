@@ -54,18 +54,18 @@ if (typeof YAHOO.lacuna.buildings.EssentiaVein == "undefined" || !YAHOO.lacuna.b
                     elOption.value = n;
                     elOption.innerHTML = n * 30;
                     elNumSelect.appendChild(elOption);
-
                 }
             }
             else {
-                this.Self.removeTab(this.Self.drainTab);
+                this.removeTab(this.drainTab);
             }
         },
         DrainVein : function () {
             var select = Dom.get("essentiaveinDrainNumber"),
                 num    = select[select.selectedIndex].value*1;
 
-            if(Lang.isNumber(num) && num <= this.result.building.drain_capable) {
+            if(this.result.building.drain_capable > 0 &&
+               Lang.isNumber(num) && num <= this.result.building.drain_capable) {
                 Lacuna.Pulser.Show();
                 this.service.drain({session_id:Game.GetSession(),building_id:this.building.id,times:num}, {
                     success: function(o){
