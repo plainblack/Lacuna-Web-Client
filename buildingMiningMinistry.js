@@ -384,7 +384,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                 },
                 scope:this.Self
             });
-        }
+        },
         AbandonAllPlatforms : function(e) {
             if(confirm("Are you sure you want to abandon all platforms controlled by this Mining Ministry?")) {
                 Lacuna.Pulser.Show();

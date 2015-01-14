@@ -654,7 +654,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
         },
         scope:this
       });
-    }
+    },
     AbandonAllExcavators : function(e) {
         if(confirm("Are you sure you want to abandon all excavators controlled by this Archaeology Ministry?")) {
             Lacuna.Pulser.Show();
