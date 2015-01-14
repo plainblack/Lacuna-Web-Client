@@ -194,7 +194,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
   
   Lang.extend(Archaeology, Lacuna.buildings.Building, {
     getChildTabs : function() {
-      return [this._getSearchTab(), this._getViewTab(), this._getExcavatorTab() ];
+      return [this._getSearchTab(), this._getViewTab(), this._getExcavatorTab(), this._getAbandonExcavatorTab() ];
     },
     _getSearchTab : function() {
       var tab = new YAHOO.widget.Tab({ label: "Search", content: [
@@ -282,8 +282,11 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
         '    <button type="button" id="archaeologyMinistryBigRedButton">Abandon All Excavators!</button>',
         '</div>'
       ].join('')});
-      Event.on("archaeologyMinistryBigRedButton", "click", this.AbandonAllExcavators, this, true);
-          
+      var btn = Sel.query("button", this.excavatorTab.get("contentEl"), true);
+      if (btn) {
+          Event.on(btn, "click", this.AbandonAllExcavators, this, true);
+      }
+
       return this.excavatorTab;
     },
     viewExcavators : function(e) {

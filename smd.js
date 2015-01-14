@@ -269,6 +269,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"excavator_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"} //status
+                    },
+                    "mass_abandon_excavator" : {
+                        "description": "Close down all existing excavator sites.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"} //status
                     }
                     
                 }
@@ -1262,6 +1270,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"session_id", "type":"string", "optional":false},
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"platform_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"} //status
+                    },
+                    "mass_abandon_platform" : {
+                        "description": "Close down all existing mining platforms.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"} //status
                     }

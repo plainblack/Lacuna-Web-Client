@@ -19,7 +19,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
     
     Lang.extend(MiningMinistry, Lacuna.buildings.Building, {
         getChildTabs : function() {
-            return [this._getPlatformTab(), this._getShipsTab()];
+            return [this._getPlatformTab(), this._getShipsTab(), this._getAbandonAllPlatformsTab() ];
         },
         _getPlatformTab : function() {
             this.platformTab = new YAHOO.widget.Tab({ label: "Platforms", content: [
@@ -380,7 +380,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
                     this.MiningMinistryShipsView();
-                    delete this.platforms; //reset platforms so we geto the new correct info
+                    delete this.platforms; //reset platforms so we go get the new correct info
                 },
                 scope:this.Self
             });
@@ -397,7 +397,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                         Lacuna.Pulser.Hide();
                         this.rpcSuccess(o);
                         this.probes = null;
-                        
+
                         //close buildingDetails
                         this.fireEvent("onHide");
                     },
