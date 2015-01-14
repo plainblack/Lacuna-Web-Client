@@ -276,6 +276,18 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
           
       return this.excavatorTab;
     },
+    _getAbandonExcavatorTab : function() {
+      this.excavatorTab = new YAHOO.widget.Tab({ label: "Abandon All Excavators", content: [
+        '<div id="excavatorInfo"></div>',
+        '<div class="excavatorContainer">',
+        '  <div id="excavatorDetails">',
+        '  </div>',
+        '</div>'
+      ].join('')});
+      this.excavatorTab.subscribe("activeChange", this.AbandonAllExcavators, this, true);
+          
+      return this.excavatorTab;
+    },
     viewExcavators : function(e) {
       if(e.newValue) {
         if(!this.excavators) {
@@ -645,6 +657,26 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
         scope:this
       });
     }
+    AbandonAllExcavators : function(e) {
+        if(confirm("Are you sure you want to abandon all excavators controlled by this Archaeology Ministry?")) {
+            Lacuna.Pulser.Show();
+            this.service.mass_abandon_excavator({
+                    session_id:Game.GetSession(),
+                    building_id:this.building.id
+                 }, {
+                success : function(o){
+                     YAHOO.log(o, "info", "Archaeology.AbandonAllExcavators.mass_abandon_excavator.success");
+                     Lacuna.Pulser.Hide();
+                     this.rpcSuccess(o);
+                     this.probes = null;
+                        
+        	          //close buildingDetails
+                     this.fireEvent("onHide");
+                 },
+                 scope:this
+               });
+            }
+        }
   });
   
   Lacuna.buildings.Archaeology = Archaeology;
