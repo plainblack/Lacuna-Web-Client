@@ -278,13 +278,11 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
     },
     _getAbandonExcavatorTab : function() {
       this.excavatorTab = new YAHOO.widget.Tab({ label: "Abandon All Excavators", content: [
-        '<div id="excavatorInfo"></div>',
-        '<div class="excavatorContainer">',
-        '  <div id="excavatorDetails">',
-        '  </div>',
+    	'<div>',
+        '    <button type="button" id="archaeologyMinistryBigRedButton">Abandon All Excavators!</button>',
         '</div>'
       ].join('')});
-      this.excavatorTab.subscribe("activeChange", this.AbandonAllExcavators, this, true);
+      Event.on("archaeologyMinistryBigRedButton", "click", this.AbandonAllExcavators, this, true);
           
       return this.excavatorTab;
     },

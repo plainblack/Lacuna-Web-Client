@@ -53,11 +53,11 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
         _getAbandonAllPlatformsTab : function() {
             this.probesTab = new YAHOO.widget.Tab({ label: "Abandon All Platforms", content: [
                     '<div>',
-                    '    <button type="button" id="observatoryBigRedButton">Abandon All Platforms!</button>',
+                    '    <button type="button" id="miningMinistryBigRedButton">Abandon All Platforms!</button>',
                     '</div>'
                 ].join('')});
             
-            Event.on("observatoryBigRedButton", "click", this.AbandonAllPlatforms, this, true);
+            Event.on("miningMinistryBigRedButton", "click", this.AbandonAllPlatforms, this, true);
             
             return this.probesTab;
         },
