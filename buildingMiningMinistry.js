@@ -50,6 +50,17 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                     
             return this.shipsTab;
         },
+        _getAbandonAllPlatformsTab : function() {
+            this.probesTab = new YAHOO.widget.Tab({ label: "Abandon All Platforms", content: [
+                    '<div>',
+                    '    <button type="button" id="observatoryBigRedButton">Abandon All Platforms!</button>',
+                    '</div>'
+                ].join('')});
+            
+            Event.on("observatoryBigRedButton", "click", this.AbandonAllPlatforms, this, true);
+            
+            return this.probesTab;
+        },
         
         viewPlatforms : function(e) {
             if(e.newValue) {
@@ -373,6 +384,26 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                 },
                 scope:this.Self
             });
+        }
+        AbandonAllPlatforms : function(e) {
+            if(confirm("Are you sure you want to abandon all platforms controlled by this Mining Ministry?")) {
+                Lacuna.Pulser.Show();
+                this.service.mass_abandon_platform({
+                        session_id:Game.GetSession(),
+                        building_id:this.building.id
+                    }, {
+                    success : function(o){
+                        YAHOO.log(o, "info", "Observatory.AbandonAllPlatforms.mass_abandon_platform.success");
+                        Lacuna.Pulser.Hide();
+                        this.rpcSuccess(o);
+                        this.probes = null;
+                        
+                        //close buildingDetails
+                        this.fireEvent("onHide");
+                    },
+                    scope:this
+                });
+            }
         }
 
     });
