@@ -114,6 +114,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             this.species = Dom.get("profileSpecies");
             this.notes = Dom.get("profileNotes");
             this.sitter_password = Dom.get("profileSitterPassword");
+            this.userID = Dom.get("profileUserID");
+            this.allianceID = Dom.get("profileAllianceID");
             this.new_password = Dom.get("profileNewPassword");
             this.confirm_password = Dom.get("profileConfirmPassword");
             this.account_tab = Dom.get('detailsAccount');
@@ -288,6 +290,12 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             '                            <li><label>New Password:<input id="profileNewPassword" type="password" /></label></li>',
             '                            <li><label>Confirm:<input id="profileConfirmPassword" type="password" /></label></li>',
             '                        </ul>',
+            '                        <hr />',
+            '                        <ul id="profileAccountInfo">',
+            '                            <li style="text-align: center; margin-bottom: 2px;">Account information:</li>',
+                    '                            <li style="text-align: left"><label>User&nbsp;ID <span style="text-align: left" id="profileUserID"></span></label></li>',
+            '                            <li style="text-align: left"><label>Alliance&nbsp;ID <span style="text-align: left" id="profileAllianceID"><i>none</i></span></li></label>',
+            '                        </ul>',
             '                    </div>',
             '                    <div id="detailsBrowser">',
             '                        <ul>',
@@ -461,6 +469,10 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             this.country.value = p.country;
             this.skype.value = p.skype;
             this.player_name.value = p.player_name;
+            this.userID.innerHTML = [ '#', results.status.empire.id ].join('');
+            if (results.status.empire.alliance_id) {
+                this.allianceID.innerHTML = results.status.empire.alliance_id;
+            }
             
             this.skipFacebook.checked = p.skip_facebook_wall_posts == "1";
             this.skipMedal.checked = p.skip_medal_messages == "1";

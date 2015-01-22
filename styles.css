@@ -2206,7 +2206,7 @@ PROFILE
 	padding:2px;
 	margin: 2px 0;
 }
-#profileSpecies label , #geneticsLabDetails label {
+#profileSpecies label , #geneticsLabDetails label , #profileAccountInfo label {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
@@ -2214,7 +2214,7 @@ PROFILE
 	vertical-align:top;
 	font-weight:bold;
 }
-#profileSpecies span, #geneticsLabDetails span {
+#profileSpecies span, #geneticsLabDetails span , #profileAccountInfo span {
 	display:inline-block;
 	width:250px;
 }
