@@ -937,7 +937,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                         
                 this.currentBuilding = oResults; //assign new building            
                 //fill production tab
-                panel.name.innerHTML = [building.name, ' ', building.level].join('');
+                panel.name.innerHTML = [building.name, ' ', building.level, ' (ID: ', building.id, ')'].join('');
                 panel.img.src = [Lib.AssetUrl, "planet_side/100/", building.image, ".png"].join('');
                 panel.desc.innerHTML = Game.GetBuildingDesc(building.url);
                 if(building.pending_build) {
