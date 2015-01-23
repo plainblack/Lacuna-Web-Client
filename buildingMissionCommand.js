@@ -94,6 +94,7 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
                         nLi.innerHTML = ['<div class="yui-ge">',
                         '    <div class="yui-u first">',
                         '        <div class="missionName">',ms.name,'</div>',
+                        '        <span style="float:right">Mission ID: ',ms.id,'</span>',
                         '        <div class="missionPosted">Posted: ',Lib.formatServerDate(ms.date_posted),'</div>',
                         '        <div class="missionUniversity">Max University: ',ms.max_university_level,'</div>',
                         '    </div>',
