@@ -1892,6 +1892,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         */
                     },
 
+                    "get_fleet_for" : {
+                        "description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship_types.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"from_body_id", "type":"string", "optional":false},
+                            {"name":"target", "type":"object", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "get_ships_for" : {
                         "description": "Provides a list of incoming ships and ships that are available to send to a specific target. Use with send_ship.",
                         "parameters": [
@@ -2006,6 +2015,17 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"ship_ids", "type":"array", "optional":false},
                             {"name":"target", "type":"string", "optional":false},
                             {"name":"set_speed", "type":"number", "optional":true}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "send_ship_types" : {
+                        "description": "Sends a group of ships to a specified body or star. Use with get_fleet_for.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"body_id", "type":"string", "optional":false},
+                            {"name":"target", "type":"string", "optional":false},
+                            {"name":"type_params", "type":"object", "optional":false},
+                            {"name":"arrival", "type":"object", "optional":false}
                         ],
                         "returns":{"type":"object"}
                     },
