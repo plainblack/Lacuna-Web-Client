@@ -1250,7 +1250,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    <li><label>X: </label>',data.x,'</li>',
                 '    <li><label>Y: </label>',data.y,'</li>',
                 '    <li><label>Zone: </label>',data.zone,'</li>',
-                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+')</li>') : '',
+                '    <li><label>Star ID: </label>',data.id,'</li>',
+                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+') ID: '+data.station.id+'</li>') : '',
                 '</ul>'
             ].join('');
             
@@ -1292,7 +1293,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    <li><label>Planet Size:</label>',body.size,'</li>',
                 '    <li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
                 '    <li><label>Zone:</label>',body.zone,'</li>',
-                '    <li><label>Star:</label>',body.star_name,'</li>',
+                '    <li><label>Body ID:</label>',body.id,'</li>',
+                '    <li><label>Star:</label>',body.star_name,' ID: ', body.star_id, '</li>',
                 '    <li><label>Orbit:</label>',body.orbit,'</li>',
                 (empire.alignment == "self" || (empire.alignment == "ally" && body.type == "space station")) ? '    <li><button type="button">View</button></li>' : '',
                 '</ul>'
