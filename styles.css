@@ -1331,17 +1331,18 @@ body.yui-skin-sam  .yui-pg-page {
 /*
 planet details
 */
-#planetDetailsName {
+#planetDetailsName , #starDetailsName {
 	font-family:impact;
 	font-size:120%;	
 }
-#planetDetailsInfo label , #planetDetailOre label {
+#planetDetailsInfo label , #planetDetailOre label, #starDetailsInfo label {
 	font-weight:bold;
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
 	width:100px;
 }
+
 #planetDetailRename label {
 	width:150px;
 }

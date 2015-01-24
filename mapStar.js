@@ -36,7 +36,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             panel.innerHTML = ['<div class="hd">Details</div>',
                 '<div class="bd">',
                 '    <div class="yui-g">',
-                '        <div class="yui-u first" id="starDetailsImg" class="background:black:width:100px;">',
+                '        <div class="yui-u first" id="starDetailsImg" class="background:black;">',
                 '        </div>',
                 '        <div class="yui-u" id="starDetailsInfo">',
                 '        </div>',
@@ -1251,7 +1251,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    <li><label>Y: </label>',data.y,'</li>',
                 '    <li><label>Zone: </label>',data.zone,'</li>',
                 '    <li><label>Star ID: </label>',data.id,'</li>',
-                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+') ID: '+data.station.id+'</li>') : '',
+                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+')</li><li><label>Station ID: </label>'+data.station.id+'</li>') : '',
                 '</ul>'
             ].join('');
             
@@ -1291,10 +1291,10 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 empire.id ? ('<li><label>Isolationist: </label>'+(empire.is_isolationist=="1" ? 'Yes' : 'No')+'</li>') : '',
                 '    <li><label>Water: </label>',body.water,'</li>',
                 '    <li><label>Planet Size:</label>',body.size,'</li>',
-                '    <li><label>Location in Universe:</label>',body.x,'x : ',body.y,'y</li>',
+                '    <li><label>Location:</label>',body.x,'x : ',body.y,'y</li>',
                 '    <li><label>Zone:</label>',body.zone,'</li>',
                 '    <li><label>Body ID:</label>',body.id,'</li>',
-                '    <li><label>Star:</label>',body.star_name,' ID: ', body.star_id, '</li>',
+                '    <li><label>Star:</label>',body.star_name,' (<b>ID:</b> ', body.star_id, ')</li>',
                 '    <li><label>Orbit:</label>',body.orbit,'</li>',
                 (empire.alignment == "self" || (empire.alignment == "ally" && body.type == "space station")) ? '    <li><button type="button">View</button></li>' : '',
                 '</ul>'
