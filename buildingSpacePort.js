@@ -167,10 +167,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    Send To <select id="sendFleetType"><option value="body_name">Planet Name</option><option value="body_id">Planet Id</option><option value="star_name">Star Name</option><option value="star_id">Star Id</option><option value="xy">X,Y</option></select>',
                 '    <span id="sendFleetTargetSelectText"><input type="text" id="sendFleetTargetText" /></span>',
                 '    <span id="sendFleetTargetSelectXY" style="display:none;">X:<input type="text" id="sendFleetTargetX" /> Y:<input type="text" id="sendFleetTargetY" /></span>',
-                '    <button type="button" id="sendFleetGet">Get Available Ships For Target</button>',
+                '    <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
                 '</div>',
                 '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-                '    <div class="yui-g"><div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div><div class="yui-u" style="text-align:right;">Set speed:<input type="text" id="setSpeed" value="0" size="6"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
+                '    <div class="yui-g"><div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div>',
+                '    <div class="yui-g">Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
+                '    <div class="yui-u" style="text-align:right;">Set Arrival time (GMT) YYYY:MM:DD:HH:MM <input type="text" id="setArrival" value="0" size="16"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
                 '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
                 '</div>'
             ].join('')});
@@ -1296,7 +1298,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 Dom.get("sendFleetNote").innerHTML = target[type];
             }
 
-            this.service.get_ships_for({
+            this.service.get_fleet_for({
                 session_id:Game.GetSession(),
                 from_body_id:Game.GetCurrentPlanet().id,
                 target:target
@@ -1304,7 +1306,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 success : function(o){
                     Lacuna.Pulser.Hide();
                     this.rpcSuccess(o);
-                    this.PopulateFleetSendTab(target, o.result.available);
+                    this.PopulateFleetSendTab(target, o.result.ships);
                 },
                 scope:this
             });
@@ -1346,17 +1348,15 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '            <span>Hold Size:<span>',ship.hold_size,'</span></span>,',
                     '            <span>Stealth:<span>',ship.stealth,'</span></span>',
                     '            <span>Combat:<span>',ship.combat,'</span></span>',
-                    '            <span>ID:<span>',ship.id,'</span></span>',
+                    '            <span>#:<span>',ship.quantity,'</span></span>',
                     '        </div>',
                     '    </div>',
                     '    <div class="yui-u" style="width:8%">',
-                    ship.task == "Docked" ? '<input type="checkbox" />' : '',
+                            '<input type="text" />',
                     '    </div>',
                     '</div>'].join('');
 
-                    if(ship.task == "Docked") {
-                        Sel.query("input", nLi, true).Ship = ship;
-                    }
+                    Sel.query("input", nLi, true).Ship = ship;
 
                     details.appendChild(nLi);
                 }
@@ -1375,15 +1375,16 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var btn = Event.getTarget(e);
             btn.disabled = true;
 
-            var speed = parseInt(Dom.get("setSpeed").value,10);
+//Need to change speed setting to arrival text and convert to arrival date
+//And grab quantities of each ship group being sent
+            var arrival = parseADate(Dom.get("setArrival").value);
             var selected = Sel.query("input:checked", "sendFleetAvail");
             if(selected.length > 0) {
-                var ships = [], shipIds = [], minSpeed = 999999999;
+                var ships = [], shipIds = [];
                 for(var n=0; n<selected.length; n++) {
-                    var s = selected[n].Ship;
-                    s.speed = parseInt(s.speed,10); // probably not needed but play it safe
+                    var q = selected[n].Ship;
+                    s.quantity = parseInt(s.speed,10); // probably not needed but play it safe
                     ships.push(s);
-                    shipIds.push(s.id);
                     if (s.speed < minSpeed) {
                         minSpeed = s.speed;
                     }
@@ -1399,11 +1400,15 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                             alert('Set speed cannot exceed the speed of the slowest ship.');
                             btn.disabled = false;
                         } else {
-                            this.service.send_fleet({
+                            this.service.send_ship_types({
                                 session_id:Game.GetSession(),
-                                ship_ids:shipIds,
-                                target:this.FleetTarget,
-                                set_speed:speed
+// Sending Colony id
+// Target
+// Sending array [ { type, speed, stealth, combat, name, quantity } ]
+// Arrival Date
+//                                ship_ids:shipIds,
+//                                target:this.FleetTarget,
+//                                set_speed:speed
                             }, {
                                 success : function(o){
                                     Lacuna.Pulser.Hide();
