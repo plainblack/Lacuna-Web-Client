@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna.buildings");
 
-if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buildings.SpacePort) {
+if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.buildings.SpacePort) {
 
 (function(){
     var Lang = YAHOO.lang,
@@ -148,7 +148,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             ].join('')});
 
             Event.on("sendShipType", "change", function(){
-                if(Lib.getSelectedOptionValue(this) == "xy") {
+                if(Lib.getSelectedOptionValue(this) === "xy") {
                     Dom.setStyle("sendShipTargetSelectText", "display", "none");
                     Dom.setStyle("sendShipTargetSelectXY", "display", "");
                 }
@@ -170,15 +170,26 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                 '    <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
                 '</div>',
                 '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-                '    <div class="yui-g"><div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div>',
-                '    <div class="yui-g">Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
-                '    <div class="yui-u" style="text-align:right;">Set Arrival time (GMT) YYYY:MM:DD:HH:MM <input type="text" id="setArrival" value="0" size="16"><button type="button" id="sendFleetSubmit">Send Fleet</button></div></div>',
+                '    <div class="yui-g">',
+                '        <div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div>',
+                '        <div class="yui-g">Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
+                '        <div class="yui-g">Set Arrival time (GMT) YYYY:MM:DD:HH:MM',
+                '            <div>',
+                '                <input type="text" id="setArrivalYear" value="" size="4">:',
+                '                <input type="text" id="setArrivalMon" value="" size="2">:',
+                '                <input type="text" id="setArrivalDay" value="" size="2">:',
+                '                <input type="text" id="setArrivalHour" value="" size="2">:',
+                '                <input type="text" id="setArrivalMin" value="" size="2">',
+                '                <button type="button" id="sendFleetSubmit">Send Fleet</button>',
+                '            </div>',
+                '        </div>',
+                '    </div>',
                 '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
                 '</div>'
             ].join('')});
 
             Event.on("sendFleetType", "change", function(){
-                if(Lib.getSelectedOptionValue(this) == "xy") {
+                if(Lib.getSelectedOptionValue(this) === "xy") {
                     Dom.setStyle("sendFleetTargetSelectText", "display", "none");
                     Dom.setStyle("sendFleetTargetSelectXY", "display", "");
                 }
@@ -474,14 +485,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
         ViewActionDetails : function(nLi, ship, noEvent) {
             var ulDet = ['<li style="white-space:nowrap;"><label style="font-weight:bold;">',ship.task,'</label></li>'];
 
-            if(ship.task == "Docked") {
+            if(ship.task === "Docked") {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;margin-top:5px"><button type="button" class="scuttle">Scuttle</button></li>';
 
                 if(!noEvent) {
                     Event.delegate(nLi, 'click', this.ShipScuttle, 'button.scuttle', {Self:this,Ship:ship,Line:nLi}, true);
                 }
             }
-            else if(ship.task == "Travelling") {
+            else if(ship.task === "Travelling") {
                 var serverTime = Lib.getTime(Game.ServerData.time),
                     sec = (Lib.getTime(ship.date_arrives) - serverTime) / 1000;
 
@@ -495,7 +506,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
 
                 this.addQueue(sec, this.SpacePortQueue, nLi);
             }
-            else if(ship.task == "Defend" || ship.task == "Orbiting") {
+            else if(ship.task === "Defend" || ship.task === "Orbiting") {
                 ulDet[ulDet.length] = '<li style="white-space:nowrap;"><span class="shipTo">';
                 ulDet[ulDet.length] = ship.orbiting.name;
                 ulDet[ulDet.length] = '</span></li><li style="white-space:nowrap;margin-top:5px"><button type="button" class="recall">Recall</button></li>';
@@ -512,7 +523,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     Event.delegate(nLi, 'click', function(e, matchedEl, container){
                         var div = Sel.query('div.shipPayload', container);
                             curDis = Dom.getStyle(div[0], "display");
-                        Dom.setStyle(div, "display", curDis == "none" ? "" : "none");
+                        Dom.setStyle(div, "display", curDis === "none" ? "" : "none");
                     }, 'button.payload', this, true);
                 }
             }
@@ -581,7 +592,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '</div>',
                     '</div>'].join('');
 
-                    if(ship.task == "Defend" || ship.task == "Orbiting") {
+                    if(ship.task === "Defend" || ship.task === "Orbiting") {
                         displayRecallAll = true;
                     }
 
@@ -1071,7 +1082,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                         var ships = this.Self.shipsView.ships,
                             info = Dom.get("shipsCount");
                         for(var i=0; i<ships.length; i++) {
-                            if(ships[i].id == this.Ship.id) {
+                            if(ships[i].id === this.Ship.id) {
                                 ships.splice(i,1);
                                 break;
                             }
@@ -1106,7 +1117,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     var ships = this.Self.shipsView.ships,
                         info = Dom.get("shipsCount");
                     for(var i=0; i<ships.length; i++) {
-                        if(ships[i].id == this.Ship.id) {
+                        if(ships[i].id === this.Ship.id) {
                             ships[i] = o.result.ship;
                             break;
                         }
@@ -1161,7 +1172,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var type = Lib.getSelectedOptionValue("sendShipType"),
                 target = {};
 
-            if(type == "xy") {
+            if(type === "xy") {
                 target.x = Dom.get("sendShipTargetX").value;
                 target.y = Dom.get("sendShipTargetY").value;
                 Dom.get("sendShipNote").innerHTML = ['X: ', target.x, ' - Y: ', target.y].join('');
@@ -1224,11 +1235,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '        </div>',
                     '    </div>',
                     '    <div class="yui-u" style="width:8%">',
-                    ship.task == "Docked" ? '        <button type="button">Send</button>' : '',
+                    ship.task === "Docked" ? '        <button type="button">Send</button>' : '',
                     '    </div>',
                     '</div>'].join('');
 
-                    if(ship.task == "Docked") {
+                    if(ship.task === "Docked") {
                         Event.on(Sel.query("button", nLi, true), "click", this.ShipSend, {Self:this,Ship:ship,Target:target,Line:nLi}, true);
                     }
 
@@ -1288,7 +1299,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var type = Lib.getSelectedOptionValue("sendFleetType"),
                 target = {};
 
-            if(type == "xy") {
+            if(type === "xy") {
                 target.x = Dom.get("sendFleetTargetX").value;
                 target.y = Dom.get("sendFleetTargetY").value;
                 Dom.get("sendFleetNote").innerHTML = ['X: ', target.x, ' - Y: ', target.y].join('');
@@ -1352,7 +1363,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
                     '        </div>',
                     '    </div>',
                     '    <div class="yui-u" style="width:8%">',
-                            '<input type="text" />',
+                            '<input type="text" id="FleetQuantity" size="4" />',
                     '    </div>',
                     '</div>'].join('');
 
@@ -1375,57 +1386,57 @@ if (typeof YAHOO.lacuna.buildings.SpacePort == "undefined" || !YAHOO.lacuna.buil
             var btn = Event.getTarget(e);
             btn.disabled = true;
 
-//Need to change speed setting to arrival text and convert to arrival date
-//And grab quantities of each ship group being sent
-            var arrival = parseADate(Dom.get("setArrival").value);
-            var selected = Sel.query("input:checked", "sendFleetAvail");
+            var currUTC  = Lacuna.Game.ServerData.time.toUTCString();
+            var currDMY = currUTC.split(' ');
+            var currHMS = currDMY[3].split(':');
+            var arrivalYear = Dom.get("setArrivalYear").value;
+            if (isNaN(arrivalYear)) { arrivalYear = currDMY[2]; }
+            var arrivalMon  = Dom.get("setArrivalMon").value;
+            if (isNaN(arrivalMon)) { arrivalMon = currDMY[1]; }
+            var arrivalDay  = Dom.get("setArrivalDay").value;
+            if (isNaN(arrivalDay)) { arrivalDay = currDMY[0]; }
+            var arrivalHour = Dom.get("setArrivalHour").value;
+            if (isNaN(arrivalHour)) { arrivalHour = currHMS[0]; }
+            var arrivalMin  = Dom.get("setArrivalMin").value;
+            if (isNaN(arrivalMin)) { arrivalMin = currDMY[1]; }
+            var arrivalDateStr = arrivalDay.concat(' ',arrivalMon,' ',arrivalYear,' ',arrivalHour,':',arrivalMin,':0');
+            var arrivalDate = Lib.parseServerDate(arrivalDateStr);
+
+            var selected = Sel.query("input", "FleetQuantity");
             if(selected.length > 0) {
-                var ships = [], shipIds = [];
+                var success_send = 0;
                 for(var n=0; n<selected.length; n++) {
-                    var q = selected[n].Ship;
-                    s.quantity = parseInt(s.speed,10); // probably not needed but play it safe
-                    ships.push(s);
-                    if (s.speed < minSpeed) {
-                        minSpeed = s.speed;
+                    var s = selected[n].Ship;
+                    s.quantity = parseInt(s.quantity,10); // probably not needed but play it safe
+                    if (s.quantity > 500) {
+                        s.quantity = 500;
+                    }
+                    if (s.quantity > 0) {
+                       this.service.send_ship_types({
+                           session_id:Game.GetSession(),
+                           body_id:Game.GetCurrentPlanet().id,
+                           target:this.FleetTarget,
+                           type_params:s,
+                           arrival:arrivalDate
+                        }, {
+                            success : function(o){
+                                this.rpcSuccess(o);
+                                success_send = 1;
+                            },
+                            scope:this
+                        });
                     }
                 }
-
-                if(this.FleetTarget && Lacuna.MapStar.NotFleetIsolationist(ships)) {
-                    if (speed < 0) {
-                        alert('Set speed cannot be less than zero.');
-                        btn.disabled = false;
-                    }
-                    else {
-                        if (speed > 0 && speed > minSpeed) {
-                            alert('Set speed cannot exceed the speed of the slowest ship.');
-                            btn.disabled = false;
-                        } else {
-                            this.service.send_ship_types({
-                                session_id:Game.GetSession(),
-// Sending Colony id
-// Target
-// Sending array [ { type, speed, stealth, combat, name, quantity } ]
-// Arrival Date
-//                                ship_ids:shipIds,
-//                                target:this.FleetTarget,
-//                                set_speed:speed
-                            }, {
-                                success : function(o){
-                                    Lacuna.Pulser.Hide();
-                                    this.rpcSuccess(o);
-                                    btn.disabled = false;
-                                    delete this.FleetTarget;
-                                    delete this.shipsView;
-                                    delete this.shipsTravelling;
-                                    this.GetFleetFor();
-                                },
-                                failure : function(o){
-                                    btn.disabled = false;
-                                },
-                                scope:this
-                            });
-                        }
-                    }
+                if (success_send) {
+                    Lacuna.Pulser.Hide();
+                    btn.disabled = false;
+                    delete this.FleetTarget;
+                    delete this.shipsView;
+                    delete this.shipsTravelling;
+                    this.GetFleetFor();
+                }
+                else {
+                    btn.disabled = false;
                 }
             }
             else {
