@@ -163,27 +163,37 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         },
         _getSendFleetTab : function() {
             this.sendFleetTab = new YAHOO.widget.Tab({ label: "Fleet", content: [
-                '<div id="sendFleetPick">',
-                '    Send To <select id="sendFleetType"><option value="body_name">Planet Name</option><option value="body_id">Planet Id</option><option value="star_name">Star Name</option><option value="star_id">Star Id</option><option value="xy">X,Y</option></select>',
-                '    <span id="sendFleetTargetSelectText"><input type="text" id="sendFleetTargetText" /></span>',
-                '    <span id="sendFleetTargetSelectXY" style="display:none;">X:<input type="text" id="sendFleetTargetX" /> Y:<input type="text" id="sendFleetTargetY" /></span>',
-                '    <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
-                '</div>',
-                '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
-                '    <div class="yui-g">',
-                '        <div class="yui-u first">Sending ships to: <span id="sendFleetNote"></span></div>',
-                '        <div class="yui-g">Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
-                '        <div class="yui-g">Set Arrival time (GMT) YYYY:MM:DD:HH:MM',
-                '            <div>',
-                '                <input type="text" id="setArrivalYear" value="" size="4">:',
-                '                <input type="text" id="setArrivalMon" value="" size="2">:',
-                '                <input type="text" id="setArrivalDay" value="" size="2">:',
-                '                <input type="text" id="setArrivalHour" value="" size="2">:',
-                '                <input type="text" id="setArrivalMin" value="" size="2">',
-                '                <button type="button" id="sendFleetSubmit">Send Fleet</button>',
-                '            </div>',
+                '<div class="yui-g">',
+                '    <div class="yui-u-1-4 first" id="sendFleetPick">',
+                '        Send To <select id="sendFleetType">',
+                '            <option value="body_name">Planet Name</option>',
+                '            <option value="body_id">Planet Id</option>',
+                '            <option value="star_name">Star Name</option>',
+                '            <option value="star_id">Star Id</option>',
+                '            <option value="xy">X,Y</option>',
+                '        </select>',
+                '        <span id="sendFleetTargetSelectText"><input type="text" id="sendFleetTargetText" /></span>',
+                '        <span id="sendFleetTargetSelectXY" style="display:none;">X:',
+                '            <input type="text" size="3" id="sendFleetTargetX" /> Y:<input type="text" size="3" id="sendFleetTargetY" />',
+                '        </span>',
+                '        <div>Earliest Time:',
+                '            <input type="checkbox" id="setEarliest" />',
+                '        </div>',
+                '        <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
+                '    </div>',
+                '    <div class="yui-u-1-3" style="text-align:right;">',
+                '        <div>Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
+                '        <div>Set Arrival time (GMT) YYYY:MM:DD:HH:MM</div>',
+                '        <div><input type="text" id="setArrivalYear" value="" size="4">:',
+                '             <input type="text" id="setArrivalMon" value="" size="2">:',
+                '             <input type="text" id="setArrivalDay" value="" size="2">:',
+                '             <input type="text" id="setArrivalHour" value="" size="2">:',
+                '             <input type="text" id="setArrivalMin" value="" size="2">',
                 '        </div>',
                 '    </div>',
+                '</div>',
+                '<div id="sendFleetSend" style="display:none;border-top:1px solid #52ACFF;margin-top:5px;padding-top:5px">',
+                '    Sending ships to: <span id="sendFleetNote"></span>',
                 '    <div style="border-top:1px solid #52ACFF;margin-top:5px;"><ul id="sendFleetAvail"></ul></div>',
                 '</div>'
             ].join('')});
@@ -199,7 +209,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 }
             });
             Event.on("sendFleetGet", "click", this.GetFleetFor, this, true);
-            Event.on("sendFleetSubmit", "click", this.FleetSend, this, true);
 
             return this.sendFleetTab;
         },
@@ -1344,30 +1353,40 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     var ship = ships[i],
                         nLi = li.cloneNode(false);
 
-                    nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
-                    '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
-                    '    </div>',
-                    '    <div class="yui-u" style="width:67%">',
-                    '        <div class="buildingName">[',ship.type_human,'] ',ship.name,'</div>',
-                    '        <div><label style="font-weight:bold;">Details:</label>',
-                    '            <span>Task:<span>',ship.task,'</span></span>,',
-                    '            <span>Travel Time:<span>',Lib.formatTime(ship.estimated_travel_time),'</span></span>',
+                    var skey = 'flt_'+ship.type+':'+ship.speed+':'+ship.hold_size+':'+ship.stealth+':'+ship.combat;
+                    nLi.innerHTML = [
+                    '<div class="yui-ge" style="margin-bottom:2px;">',
+                    '    <div class="yui-g first">',
+                    '        <div class="yui-u first" style="width:64px;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
+                    '            <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
                     '        </div>',
-                    '        <div><label style="font-weight:bold;">Attributes:</label>',
-                    '            <span>Speed:<span>',ship.speed,'</span></span>,',
-                    '            <span>Hold Size:<span>',ship.hold_size,'</span></span>,',
-                    '            <span>Stealth:<span>',ship.stealth,'</span></span>',
-                    '            <span>Combat:<span>',ship.combat,'</span></span>',
-                    '            <span>#:<span>',ship.quantity,'</span></span>',
+                    '        <div class="yui-u-7-8">',
+                    '                <span class="buildingName">[',ship.type_human,'] ',ship.name,'</span>',
+                    '                <div><label style="font-weight:bold;">Details:</label>',
+                    '                    <span>Task:<span>',ship.task,'</span></span>,',
+                    '                    <span>Travel Time:<span>',Lib.formatTime(ship.estimated_travel_time),'</span></span>',
+                    '                </div>',
+                    '                <div><label style="font-weight:bold;">Attributes:</label>',
+                    '                    <span>Speed:<span>',ship.speed,'</span></span>,',
+                    '                    <span>Hold Size:<span>',ship.hold_size,'</span></span>,',
+                    '                    <span>Stealth:<span>',ship.stealth,'</span></span>',
+                    '                    <span>Combat:<span>',ship.combat,'</span></span>',
+                    '                    <span>#:<span>',ship.quantity,'</span></span>',
+                    '                </div>',
                     '        </div>',
                     '    </div>',
-                    '    <div class="yui-u" style="width:8%">',
-                            '<input type="text" id="FleetQuantity" size="4" />',
+                    '    <div class="yui-g">',
+                    '        <div class="yui-u-1">',
+                    '            <input type="text"',
+                    '            id="'+skey+'" value=0 style="width:32px" />',
+                    '            <button type="button" id="sendFleetSubmit">Send</button>',
+                    '        </div>',
                     '    </div>',
                     '</div>'].join('');
 
-                    Sel.query("input", nLi, true).Ship = ship;
+//            Event.on("sendFleetSubmit", "click", this.FleetSend, this, true);
+//                    Event.on(Sel.query("sendFleetSubmit", nLi, true), "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
+                    Event.on("sendFleetSubmit", "click", this.FleetSend, {Self:this,Ship:ship,Key:skey,Line:nLi}, true);
 
                     details.appendChild(nLi);
                 }
@@ -1385,7 +1404,18 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         FleetSend : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
+            var oSelf = this.Self,
+                ship = this.Ship,
+                target = this.Target,
+                skey   = this.Key;
+            Lacuna.Pulser.Show();
+            var qty = Dom.get(skey);
+            if (qty > 500) {
+                qty = 500;
+            }
+            ship.quantity = qty;
 
+            var earliest = Dom.get("setEarliest");
             var currUTC  = Lacuna.Game.ServerData.time.toUTCString();
             var currDMY = currUTC.split(' ');
             var currHMS = currDMY[3].split(':');
@@ -1401,47 +1431,32 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             if (isNaN(arrivalMin)) { arrivalMin = currDMY[1]; }
             var arrivalDateStr = arrivalDay.concat(' ',arrivalMon,' ',arrivalYear,' ',arrivalHour,':',arrivalMin,':0');
             var arrivalDate = Lib.parseServerDate(arrivalDateStr);
+            if (earliest) {
+                arrivalDate.earliest = 1;
+            }
+            var ship_arr = [ ship ];
 
-            var selected = Sel.query("input", "FleetQuantity");
-            if(selected.length > 0) {
-                var success_send = 0;
-                for(var n=0; n<selected.length; n++) {
-                    var s = selected[n].Ship;
-                    s.quantity = parseInt(s.quantity,10); // probably not needed but play it safe
-                    if (s.quantity > 500) {
-                        s.quantity = 500;
-                    }
-                    if (s.quantity > 0) {
-                       this.service.send_ship_types({
-                           session_id:Game.GetSession(),
-                           body_id:Game.GetCurrentPlanet().id,
-                           target:this.FleetTarget,
-                           type_params:s,
-                           arrival:arrivalDate
-                        }, {
-                            success : function(o){
-                                this.rpcSuccess(o);
-                                success_send = 1;
-                            },
-                            scope:this
-                        });
-                    }
-                }
-                if (success_send) {
-                    Lacuna.Pulser.Hide();
+            oSelf.service.send_ship_types({
+                session_id:Game.GetSession(),
+                body_id:Game.GetCurrentPlanet().id,
+                target:target,
+                type_params:ship_arr,
+                arrival:arrivalDate
+            }, {
+                success : function(o){
                     btn.disabled = false;
+                    Lacuna.Pulser.Hide();
+                    this.rpcSuccess(o);
                     delete this.FleetTarget;
                     delete this.shipsView;
                     delete this.shipsTravelling;
                     this.GetFleetFor();
-                }
-                else {
+                },
+                failure : function(o) {
                     btn.disabled = false;
-                }
-            }
-            else {
-                btn.disabled = false;
-            }
+                },
+                scope:this
+            });
         }
     });
 
