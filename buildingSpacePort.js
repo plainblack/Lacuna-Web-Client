@@ -162,6 +162,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             return this.sendTab;
         },
         _getSendFleetTab : function() {
+            var currYear  = Lacuna.Game.ServerData.time.getUTCFullYear();
+            var currMon   = Lacuna.Game.ServerData.time.getUTCMonth() + 1;
+            var currDay   = Lacuna.Game.ServerData.time.getUTCDate();
+            var currHour  = Lacuna.Game.ServerData.time.getUTCHours();
+            var currMin   = Lacuna.Game.ServerData.time.getUTCMinutes();
+            var earlyset  = true;
             this.sendFleetTab = new YAHOO.widget.Tab({ label: "Fleet", content: [
                 '<div class="yui-g">',
                 '    <div class="yui-u-1-4 first" id="sendFleetPick">',
@@ -182,13 +188,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 '        <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
                 '    </div>',
                 '    <div class="yui-u-1-3" style="text-align:right;">',
-                '        <div>Current Time:',Lacuna.Game.ServerData.time.toUTCString(),'</div>',
-                '        <div>Set Arrival time (GMT) YYYY:MM:DD:HH:MM</div>',
-                '        <div><input type="text" id="setArrivalYear" value="" size="4">:',
-                '             <input type="text" id="setArrivalMon" value="" size="2">:',
-                '             <input type="text" id="setArrivalDay" value="" size="2">:',
-                '             <input type="text" id="setArrivalHour" value="" size="2">:',
-                '             <input type="text" id="setArrivalMin" value="" size="2">',
+                '        <div>    Current Time: (GMT) '+currYear+':'+currMon+':'+currDay+':'+currHour+':'+currMin+'</div>',
+                '        <div>Set Arrival time: (GMT) YYYY:MM:DD:HH:MM</div>',
+                '        <div>',
+                '             <input type="text" id="setArrivalYear" value="'+currYear+'" size="4">:',
+                '             <input type="text" id="setArrivalMon" value="'+currMon+'" size="2">:',
+                '             <input type="text" id="setArrivalDay" value="'+currDay+'" size="2">:',
+                '             <input type="text" id="setArrivalHour" value="'+currHour+'" size="2">:',
+                '             <input type="text" id="setArrivalMin" value="'+currMin+'" size="2">',
                 '        </div>',
                 '    </div>',
                 '</div>',
@@ -829,7 +836,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
 
                     Dom.addClass(nUl, "shipInfo");
                     Dom.addClass(nUl, "clearafter");
-                    if (!details.children.length) Dom.addClass(nUl, "first");
+                    if (!details.children.length) { Dom.addClass(nUl, "first"); }
                     Dom.addClass(nUl, "attacker");
 
                     Dom.addClass(nLi,"shipTask");
@@ -1361,7 +1368,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '            <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
                     '        </div>',
                     '        <div class="yui-u-7-8">',
-                    '                <span class="buildingName">[',ship.type_human,'] ',ship.name,'</span>',
+                    '                <div>',
+                    '                    <span class="buildingName">[',ship.type_human,'] ',ship.name,'</span>',
+                    '                    <span>(Available: <span>',ship.quantity,'</span>)</span>',
+                    '                </div>',
                     '                <div><label style="font-weight:bold;">Details:</label>',
                     '                    <span>Task:<span>',ship.task,'</span></span>,',
                     '                    <span>Travel Time:<span>',Lib.formatTime(ship.estimated_travel_time),'</span></span>',
@@ -1371,7 +1381,6 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '                    <span>Hold Size:<span>',ship.hold_size,'</span></span>,',
                     '                    <span>Stealth:<span>',ship.stealth,'</span></span>',
                     '                    <span>Combat:<span>',ship.combat,'</span></span>',
-                    '                    <span>#:<span>',ship.quantity,'</span></span>',
                     '                </div>',
                     '        </div>',
                     '    </div>',
@@ -1379,14 +1388,12 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '        <div class="yui-u-1">',
                     '            <input type="text"',
                     '            id="'+skey+'" value=0 style="width:32px" />',
-                    '            <button type="button" id="sendFleetSubmit">Send</button>',
+                    '            <button type="button" id="sendFleet:'+skey+'">Send</button>',
                     '        </div>',
                     '    </div>',
                     '</div>'].join('');
 
-//            Event.on("sendFleetSubmit", "click", this.FleetSend, this, true);
-//                    Event.on(Sel.query("sendFleetSubmit", nLi, true), "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
-                    Event.on("sendFleetSubmit", "click", this.FleetSend, {Self:this,Ship:ship,Key:skey,Line:nLi}, true);
+                    Event.on("sendFleet:"+skey, "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
 
                     details.appendChild(nLi);
                 }
@@ -1406,51 +1413,68 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             btn.disabled = true;
             var oSelf = this.Self,
                 ship = this.Ship,
-                target = this.Target,
+                targ = this.Target,
                 skey   = this.Key;
             Lacuna.Pulser.Show();
+            var t_param = {};
+            t_param.type    = ship.type;
+            t_param.speed   = ship.speed;
+            t_param.stealth = ship.stealth;
+            t_param.combat  = ship.combat;
+            t_param.name    = ship.name;
             var qty = Dom.get(skey);
-            if (qty > 500) {
-                qty = 500;
+            if (qty.value > 500) {
+                t_param.quantity = 500;
             }
-            ship.quantity = qty;
+            else {
+                t_param.quantity = qty.value;
+            }
+            if (t_param.quantity >= ship.quantity) {
+                t_param.quantity = ship.quantity;
+            }
 
+            var ship_arr = [ t_param ];
             var earliest = Dom.get("setEarliest");
-            var currUTC  = Lacuna.Game.ServerData.time.toUTCString();
-            var currDMY = currUTC.split(' ');
-            var currHMS = currDMY[3].split(':');
-            var arrivalYear = Dom.get("setArrivalYear").value;
-            if (isNaN(arrivalYear)) { arrivalYear = currDMY[2]; }
-            var arrivalMon  = Dom.get("setArrivalMon").value;
-            if (isNaN(arrivalMon)) { arrivalMon = currDMY[1]; }
-            var arrivalDay  = Dom.get("setArrivalDay").value;
-            if (isNaN(arrivalDay)) { arrivalDay = currDMY[0]; }
-            var arrivalHour = Dom.get("setArrivalHour").value;
-            if (isNaN(arrivalHour)) { arrivalHour = currHMS[0]; }
-            var arrivalMin  = Dom.get("setArrivalMin").value;
-            if (isNaN(arrivalMin)) { arrivalMin = currDMY[1]; }
-            var arrivalDateStr = arrivalDay.concat(' ',arrivalMon,' ',arrivalYear,' ',arrivalHour,':',arrivalMin,':0');
-            var arrivalDate = Lib.parseServerDate(arrivalDateStr);
-            if (earliest) {
+            var arrivalDate = {};
+            if ( earliest === true ) {
                 arrivalDate.earliest = 1;
             }
-            var ship_arr = [ ship ];
+            else {
+                var currYear  = Lacuna.Game.ServerData.time.getUTCFullYear();
+                var currMon   = Lacuna.Game.ServerData.time.getUTCMonth() + 1;
+                var currDay   = Lacuna.Game.ServerData.time.getUTCDate();
+                var currHour  = Lacuna.Game.ServerData.time.getUTCHours();
+                var currMin   = Lacuna.Game.ServerData.time.getUTCMinutes();
+
+                arrivalDate.year = Dom.get("setArrivalYear").value;
+                if (isNaN(arrivalDate.year)) { arrivalDate.year = currYear; }
+                arrivalDate.month  = Dom.get("setArrivalMon").value;
+                if (isNaN(arrivalDate.month)) { arrivalDate.month = currMon; }
+                arrivalDate.day  = Dom.get("setArrivalDay").value;
+                if (isNaN(arrivalDate.day)) { arrivalDate.day = currDay; }
+                arrivalDate.hour = Dom.get("setArrivalHour").value;
+                if (isNaN(arrivalDate.hour)) { arrivalDate.hour = currHour; }
+                arrivalDate.minute  = Dom.get("setArrivalMin").value;
+                if (isNaN(arrivalDate.minute)) { arrivalDate.minute = currMin; }
+                arrivalDate.second = 0;
+            }
 
             oSelf.service.send_ship_types({
                 session_id:Game.GetSession(),
                 body_id:Game.GetCurrentPlanet().id,
-                target:target,
+                target:targ,
                 type_params:ship_arr,
                 arrival:arrivalDate
             }, {
                 success : function(o){
-                    btn.disabled = false;
                     Lacuna.Pulser.Hide();
-                    this.rpcSuccess(o);
+                    this.Self.rpcSuccess(o);
                     delete this.FleetTarget;
                     delete this.shipsView;
                     delete this.shipsTravelling;
                     this.GetFleetFor();
+                    Event.purgeElement(this.Line, true);
+                    this.Line.innerHTML = "Successfully sent "+t_param.quantity+" of "+t_param.name+".";
                 },
                 failure : function(o) {
                     btn.disabled = false;
