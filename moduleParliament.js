@@ -124,19 +124,6 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                     Event.on("proposeTransferSubmit", "click", this.TransferOwner, this, true);
                 }, this, true);
             }
-            if(this.building.level >= 7) {
-                opts[opts.length] = '<option value="proposeSeizeStar">Seize Star</option>';
-                dis[dis.length] = [
-                '    <div id="proposeSeizeStar" class="proposeOption" style="display:none;">',
-                '        <label>Star:</label><input type="text" id="proposeSeizeStarFind" /><br />',
-                '        <button type="button" id="proposeSeizeStarSubmit">Propose Seize Star</button>',
-                '    </div>'
-                ].join('');
-                this.subscribe("onLoad", function() {
-                    this.seizeStarTextboxList = this.CreateStarSearch("proposeSeizeStarFind");
-                    Event.on("proposeSeizeStarSubmit", "click", this.SeizeStar, this, true);
-                }, this, true);
-            }
             if(this.building.level >= 8) {
                 opts[opts.length] = '<option value="proposeRenameStar">Rename Star</option>';
                 dis[dis.length] = [
@@ -1115,32 +1102,6 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				button.disabled = false;
 			}
 		},
-        SeizeStar : function(e) {
-            if(this.seizeStarTextboxList._oTblSingleSelection) {
-                var btn = Event.getTarget(e);
-                btn.disabled = true;
-                var selObj = this.seizeStarTextboxList._oTblSingleSelection.Object;
-                
-                this.service.propose_seize_star({
-                    session_id : Game.GetSession(''),
-                    building_id : this.building.id,
-                    star_id : selObj.id
-                },
-                {
-                    success : function(o) {
-                    this.rpcSuccess(o);
-                        this.proposeMessage.innerHTML = "Proposal to Seize star successful.";
-                        Lib.fadeOutElm(this.proposeMessage);
-                        this.seizeStarTextboxList.ResetSelections();
-                        btn.disabled = false;
-                    },
-                    failure : function(o) {
-                        btn.disabled = false;
-                    },
-                    scope:this
-                });
-            }
-        },
         TransferOwner : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;

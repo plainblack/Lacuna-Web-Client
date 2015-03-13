@@ -723,6 +723,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "view_propositions" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "cast_vote" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"proposition_id", "type":"string", "optional":false},
+                            {"name":"vote", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "donate_to_stash" : {
                         "description": "",
                         "parameters": [
@@ -3764,15 +3782,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"session_id", "type":"string", "optional":false},
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"to_empire_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                    },
-                    "propose_seize_star" : {
-                        "description": "",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"star_id", "type":"string", "optional":false}
                         ],
                         "returns":{"type":"object"}
                     },
