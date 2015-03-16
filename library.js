@@ -166,6 +166,15 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
         formatMillisecondTime : function(totalMs) {
             return Library.formatTime(totalMs / 1000);
         },
+        padit : function(x, pad, r) {
+            if(typeof r === 'undefined') {
+                r=10;
+            }
+            for( ; parseInt(x, 10)<r && r>1; r/=10) {
+                x = pad.toString() + x;
+            }
+            return x.toString();
+        },
         formatTime : function(totalSeconds) {
             if(totalSeconds < 0) {
                 return "";

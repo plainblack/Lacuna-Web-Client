@@ -1,3 +1,7 @@
+// Stuff to finish:
+// Make sure clicking send only sends the correct ship
+// Get arrival time working
+// On click of "Get Available Groups of Ships for Target" disable sends that would not arrive before arrival time.
 YAHOO.namespace("lacuna.buildings");
 
 if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.buildings.SpacePort) {
@@ -188,7 +192,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 '        <button type="button" id="sendFleetGet">Get Available Groups of Ships For Target</button>',
                 '    </div>',
                 '    <div class="yui-u-1-3" style="text-align:right;">',
-                '        <div>    Current Time: (GMT) '+currYear+':'+currMon+':'+currDay+':'+currHour+':'+currMin+'</div>',
+                '        <div>    Current Time: (GMT) '+currYear+':',Lib.padit(currMon,"0"),':',Lib.padit(currDay,"0"),':',
+                         Lib.padit(currHour,"0"),':',Lib.padit(currMin,"0"),'</div>',
                 '        <div>Set Arrival time: (GMT) YYYY:MM:DD:HH:MM</div>',
                 '        <div>',
                 '             <input type="text" id="setArrivalYear" value="'+currYear+'" size="4">:',
@@ -1384,16 +1389,19 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '                </div>',
                     '        </div>',
                     '    </div>',
+// Where to put test if send time is valid
                     '    <div class="yui-g">',
                     '        <div class="yui-u-1">',
                     '            <input type="text"',
-                    '            id="'+skey+'" value=0 style="width:32px" />',
-                    '            <button type="button" id="sendFleet:'+skey+'">Send</button>',
+                    '            id="FS'+skey+'" value=0 style="width:32px" />',
+                    '            <button type="button" id="sendFleetFS'+skey+'">Send</button>',
                     '        </div>',
                     '    </div>',
+//end test
                     '</div>'].join('');
 
-                    Event.on("sendFleet:"+skey, "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
+// Disable if send time invalid?
+                    Event.on("sendFleetFS"+skey, "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
 
                     details.appendChild(nLi);
                 }
@@ -1422,7 +1430,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             t_param.stealth = ship.stealth;
             t_param.combat  = ship.combat;
             t_param.name    = ship.name;
-            var qty = Dom.get(skey);
+            var qty = Dom.get("FS"+skey);
             if (qty.value > 500) {
                 t_param.quantity = 500;
             }
