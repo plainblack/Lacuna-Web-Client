@@ -1,6 +1,5 @@
-// Stuff to finish:
+// Stuff to do for FleetSend:
 // Make sure clicking send only sends the correct ship
-// Get arrival time working
 // On click of "Get Available Groups of Ships for Target" disable sends that would not arrive before arrival time.
 YAHOO.namespace("lacuna.buildings");
 
@@ -1365,7 +1364,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     var ship = ships[i],
                         nLi = li.cloneNode(false);
 
-                    var skey = 'flt_'+ship.type+':'+ship.speed+':'+ship.hold_size+':'+ship.stealth+':'+ship.combat;
+                    var skey = 'flt_'+i+'_'+ship.type+'_'+ship.speed+'_'+ship.hold_size+'_'+ship.stealth+'_'+ship.combat;
                     nLi.innerHTML = [
                     '<div class="yui-ge" style="margin-bottom:2px;">',
                     '    <div class="yui-g first">',
@@ -1394,14 +1393,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '        <div class="yui-u-1">',
                     '            <input type="text"',
                     '            id="FS'+skey+'" value=0 style="width:32px" />',
-                    '            <button type="button" id="sendFleetFS'+skey+'">Send</button>',
+                    '            <button type="button">Send</button>',
                     '        </div>',
                     '    </div>',
 //end test
                     '</div>'].join('');
 
 // Disable if send time invalid?
-                    Event.on("sendFleetFS"+skey, "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
+                    Event.on(Sel.query("button", nLi, true), "click", this.FleetSend, {Self:this,Ship:ship,Target:target,Key:skey,Line:nLi}, true);
 
                     details.appendChild(nLi);
                 }
@@ -1430,19 +1429,17 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             t_param.stealth = ship.stealth;
             t_param.combat  = ship.combat;
             t_param.name    = ship.name;
-            var qty = Dom.get("FS"+skey);
-            if (qty.value > 500) {
-                t_param.quantity = 500;
-            }
-            else {
-                t_param.quantity = qty.value;
-            }
+            var qty = Dom.get("FS"+this.Key);
+            t_param.quantity = qty.value;
             if (t_param.quantity >= ship.quantity) {
                 t_param.quantity = ship.quantity;
             }
+            if (t_param.quantity > 500) {
+                t_param.quantity = 500;
+            }
 
             var ship_arr = [ t_param ];
-            var earliest = Dom.get("setEarliest");
+            var earliest = Dom.get("setEarliest").checked;
             var arrivalDate = {};
             if ( earliest === true ) {
                 arrivalDate.earliest = 1;
@@ -1466,6 +1463,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 if (isNaN(arrivalDate.minute)) { arrivalDate.minute = currMin; }
                 arrivalDate.second = 0;
             }
+//            alert("Key: "+skey+" Name: "+t_param.name+" Q: "+t_param.quantity+":"+qty.value+" .\n"+
+//                  "Early: "+earliest+"\n"+
+//                  "Date: "+arrivalDate.year+":"+arrivalDate.month+":"+arrivalDate.day+" "+arrivalDate.hour+":"+arrivalDate.minute+":"+arrivalDate.second
+//                 );
 
             oSelf.service.send_ship_types({
                 session_id:Game.GetSession(),
@@ -1476,11 +1477,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     Lacuna.Pulser.Hide();
+                    btn.disabled = false;
                     this.Self.rpcSuccess(o);
                     delete this.FleetTarget;
                     delete this.shipsView;
                     delete this.shipsTravelling;
-                    this.GetFleetFor();
+                    delete t_param;
+                    delete ship_arr;
+                    this.Self.GetFleetFor();
                     Event.purgeElement(this.Line, true);
                     this.Line.innerHTML = "Successfully sent "+t_param.quantity+" of "+t_param.name+".";
                 },
