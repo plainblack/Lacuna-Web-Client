@@ -49,6 +49,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                 div.innerHTML = ['<div>',
                 '    <ul>',
                 '        <li><label>Founded: </label>', Lib.formatServerDate(this.alliance.date_created),'</li>',
+                '        <li><label>Alliance ID: </label>', this.alliance.id,'</li>',
                 '        <li><label>Description: </label><input type="text" id="embassyAllianceDesc" value="', this.alliance.description,'" size="50" /></li>',
                 '        <li><label>Forums: </label><input type="text" id="embassyAllianceForums" value="', this.alliance.forum_uri,'" size="50" /></li>',
                 '        <li><label>Announcements: </label><textarea id="embassyAllianceAnnoucements" rows="2" cols="80">', this.alliance.announcements,'</textarea></li>',

@@ -65,6 +65,7 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
                 '                <th><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></th>',
                 '                <th><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></th>',
                 '                <th><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></th>',
+                '                <th><img src="',Lib.AssetUrl,'ui/s/time.png" title="Time" class="smallTime" /></th>',
                 '                <th></th>',
                 '            </tr>',
                 '        </table>',
@@ -114,6 +115,7 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
                     '    <td class=',costs.water > planet.water_stored ? 'low-resource' : '','>',costs.water,'</td>',
                     '    <td class=',costs.energy > planet.energy_stored ? 'low-resource' : '','>',costs.energy,'</td>',
                     '    <td>',costs.waste,'</td>',
+                    '    <td>',Lib.formatTime(costs.time),'</td>',
                     //'    <td><input type="radio" name="stationLabSelectLevel" value="',costs.level,'" /></td>',
                     '    <td><button type="button" value="',costs.level,'">Make</button></td>',
                     '</tr>'
