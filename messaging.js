@@ -51,6 +51,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '                <button id="messagingSelectAll" type="button">Select All</button>',
                 '                <select id="inboxTag">',
                 '                    <option value="">Inbox</option>',
+                '                    <option value="Unread">Unread</option>',
                 '                    <option value="Correspondence">Correspondence</option>',
                 '                    <option value="Alert">Alerts</option>',
                 '                    <option value="Intelligence">Intel</option>',
@@ -386,37 +387,46 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 data = {
                     session_id: Game.GetSession(""),
                     options:{page_number: 1}
-                };
-            if(this.tag) {
-                data.options.tags = [this.tag];
-            }
-            
-            Lacuna.Pulser.Show();
-            InboxServ.view_inbox(data, {
-                success : function(o){
-                    this.fireEvent("onRpc", o.result);
-                    if(o.result.message_count > 25) {
-                        this.pager = new Pager({
-                            rowsPerPage : 25,
-                            totalRecords: o.result.message_count,
-                            containers  : 'messagingPaginator',
-                            template : "{PreviousPageLink} {PageLinks} {NextPageLink}",
-                            pageLinks : 5,
-                            alwaysVisible : false
-                        });
-                        this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
-                        this.pager.render();
-                    }
-                    else {
-                        delete this.pager;
-                    }
-
-                    this.processMessages(o.result,{inbox:1});
-                    this.fireEvent("onPageLoaded", o);
-                    Lacuna.Pulser.Hide();
                 },
-                scope:this
-            });
+                cb ={
+                    success : function(o){
+                        this.fireEvent("onRpc", o.result);
+                        if(o.result.message_count > 25) {
+                            var template = "{PreviousPageLink} {PageLinks} {NextPageLink}";
+                            if (o.result.message_count > 149) {
+                                template = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}";
+                            }
+                            this.pager = new Pager({
+                                rowsPerPage : 25,
+                                totalRecords: o.result.message_count,
+                                containers  : 'messagingPaginator',
+                                template : template,
+                                pageLinks : 5,
+                                alwaysVisible : false
+                            });
+                            this.pager.subscribe('changeRequest',this.handleInboxPagination, this, true);
+                            this.pager.render();
+                        }
+                        else {
+                            delete this.pager;
+                        }
+
+                        this.processMessages(o.result,{inbox:1});
+                        this.fireEvent("onPageLoaded", o);
+                        Lacuna.Pulser.Hide();
+                    },
+                    scope:this
+                };
+
+            Lacuna.Pulser.Show();
+            if(this.tag && this.tag == "Unread") {
+                InboxServ.view_unread(data, cb);
+            } else {
+                if(this.tag) {
+                    data.options.tags = [this.tag];
+                }
+                InboxServ.view_inbox(data, cb);
+            }
         },
         loadSentMessages : function() {
             this._setTab(this.sent);
@@ -529,20 +539,24 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 data = {
                     session_id: Game.GetSession(""),
                     options:{page_number: newState.page}
+                }, cb = {
+                    success : function(o){
+                        this.fireEvent("onRpc", o.result);
+                        this.processMessages(o.result,{inbox:1});
+                        Lacuna.Pulser.Hide();
+                    },
+                    scope:this
                 };
-            if(this.tag) {
-                data.options.tags = [this.tag];
-            }
             Lacuna.Pulser.Show();
-            InboxServ.view_inbox(data, {
-                success : function(o){
-                    this.fireEvent("onRpc", o.result);
-                    this.processMessages(o.result,{inbox:1});
-                    Lacuna.Pulser.Hide();
-                },
-                scope:this
-            });
-     
+            if(this.tag && this.tag == "Unread") {
+                InboxServ.view_unread(data, cb);
+            } else {
+                if(this.tag) {
+                    data.options.tags = [this.tag];
+                }
+                InboxServ.view_inbox(data, cb);
+            }
+
             // Update the Paginator's state
             this.pager.setState(newState);
         },
