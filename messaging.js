@@ -1045,8 +1045,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             body = body.replace(/&/g,'&amp;');
             body = body.replace(/</g,'&lt;');
             body = body.replace(/>/g,'&gt;');
+            body = body.replace(/\*([^* \n][^*\n]*)\*/gi,'<b>$1</b>');
             body = body.replace(/\n/g,'<br />');
-            body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
             body = body.replace(/\{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)\}/gi, function(str,icon){
                 var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
                 return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
