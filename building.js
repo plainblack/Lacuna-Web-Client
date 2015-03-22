@@ -229,8 +229,8 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                 ].join('')});
             
             Event.onAvailable('extraBuildingDetails', function(o) {
-                if (o.building.upgrade.cost.halls) {
-                    Dom.get('extraBuildingDetails').innerHTML = 'Can upgrade to level ' + (parseInt(o.building.level) + 1) + ' by sacrificing ' + (parseInt(o.building.level) + 1) + ' Halls of Vrbansk.';
+                if (o.building.upgrade.cost.halls && (parseInt(o.building.level)) < 30) {
+                    Dom.get('extraBuildingDetails').innerHTML = 'Upgrade to level ' + (parseInt(o.building.level) + 1) + ' by sacrificing ' + (parseInt(o.building.level) + 1) + ' Halls of Vrbansk.';
                 }
             }, this);
             
