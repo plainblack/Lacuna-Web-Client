@@ -54,7 +54,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '            <li><label>Plots Available:</label>',(planet.plots_available || 0)*1,'</li>',
                     '            <li><label>Population:</label>',Lib.formatNumber(planet.population),'</li>',
                     '            <li><label>Next Colony Cost:</label>',Lib.formatNumber(this.result.next_colony_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>',
-                    '            <li><label>Next Station Cost:</label>',Lib.formatNumber(this.result.next_station_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>',
+                    this.result.next_station_cost ? ['<li><label>Next Station Cost:</label>',Lib.formatNumber(this.result.next_station_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>'].join('') : '',
                     '            <li><label>Location:</label>',planet.x,'x : ',planet.y,'y</li>',
                     '            <li><label>Zone:</label>',planet.zone,'</li>',
                     '            <li><label>Star:</label>',planet.star_name,' (Star ID: ',planet.star_id,')</li>',
