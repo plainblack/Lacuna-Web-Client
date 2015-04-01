@@ -586,8 +586,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             }
             
             items.sort(function(a,b){
-                var nameA = a.text.toLowerCase( );
-                var nameB = b.text.toLowerCase( );
+                var nameA = a.text;
+                var nameB = b.text;
+                if (ED.coloniesByName[nameA] && ED.stationsByName[nameB]) { return -1 }
+                if (ED.stationsByName[nameA] && ED.coloniesByName[nameB]) { return 1 }
+                nameA = nameA.toLowerCase( );
+                nameB = nameB.toLowerCase( );
                 if (nameA < nameB) {return -1;}
                 if (nameA > nameB) {return 1;}
                 return 0;
