@@ -723,6 +723,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "view_propositions" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "cast_vote" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"proposition_id", "type":"string", "optional":false},
+                            {"name":"vote", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "donate_to_stash" : {
                         "description": "",
                         "parameters": [
@@ -3451,6 +3469,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     ],
                     "returns":{"type":"object"}
                 },
+                "view_unread" : {
+                    "description": "Displays a list of the unread messages in the empire's inbox.",
+                    "parameters": [
+                        {"name":"session_id", "type":"string", "optional":false},
+                        {"name":"options", "type":"object", "optional":true}
+                    ],
+                    "returns":{"type":"object"}
+                },
                 "view_sent" : {
                     "description": "Displays a list of the messages in the empire's outbox.",
                     "parameters": [
@@ -3759,15 +3785,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
-                    "propose_seize_star" : {
-                        "description": "",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"star_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                    },
                     "propose_rename_star" : {
                         "description": "",
                         "parameters": [
@@ -3876,6 +3893,23 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         "parameters": [
                             {"name":"session_id", "type":"string", "optional":false},
                             {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "propose_members_only_stations" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false}
+                        ],
+                        "returns":{"type":"object"}
+                    },
+                    "allow_bhg_by_alliance" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"alliance_id", "type":"string", "optional":false},
                         ],
                         "returns":{"type":"object"}
                     },

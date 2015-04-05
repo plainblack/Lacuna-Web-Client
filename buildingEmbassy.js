@@ -33,7 +33,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
         },*/
         getChildTabs : function() {
             if(this.alliance) {
-                var tabs =  [this._getStashTab(),this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab()];
+                var tabs =  [this._getStashTab(),this._getAllianceTab(),this._getMemberTab(),this._getInvitesTab(),this._getPropsTab()];
                 if(this.isLeader) {
                     tabs.push(this._getSendTab());
                 }
@@ -120,6 +120,38 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
             this.invitesTab.subscribe("activeChange", this.getInvites, this, true);
             
             return this.invitesTab;
+        },
+        _getPropsTab : function() {
+            var tab = new YAHOO.widget.Tab({ label: "Propositions", content: [
+                '<div>',
+                '    <div style="overflow:auto;"><ul id="propsDetails"></ul></div>',
+                '</div>'
+            ].join('')});
+            tab.subscribe("activeChange", function(e) {
+                if(e.newValue) {
+                    if(!this.props) {
+                        Lacuna.Pulser.Show();
+                        this.service.view_propositions({session_id:Game.GetSession(),building_id:this.building.id}, {
+                            success : function(o){
+                                Lacuna.Pulser.Hide();
+                                this.rpcSuccess(o);
+                                this.props = o.result.propositions;
+                                
+                                this.PropsPopulate();
+                            },
+                            scope:this
+                        });
+                    }
+                }
+            }, this, true);
+            
+            Event.delegate("propsDetails", "click", this.PropClick, "button", this, true);
+            Event.delegate("propsDetails", "click", this.handleProfileLink, "a.profile_link", this, true);
+            Event.delegate("propsDetails", "click", this.handleStarmapLink, "a.starmap_link", this, true);
+            Event.delegate("propsDetails", "click", this.handlePlanetLink, "a.planet_link", this, true);
+            Event.delegate("propsDetails", "click", this.handleAllianceLink, "a.alliance_link", this, true);
+            
+            return tab;
         },
         _getSendTab : function() {
             this.sendTab = new YAHOO.widget.Tab({ label: "Send Invites", content: ['<div>',
@@ -1025,6 +1057,199 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                     scope:this
                 });
             }
+        },
+        PropsPopulate : function() {
+            var details = Dom.get("propsDetails");
+            
+            if(details) {
+                var props = this.props,
+                    parentEl = details.parentNode,
+                    li = document.createElement("li");
+                    
+                //Event.purgeElement(details, true);
+                details = parentEl.removeChild(details);
+                details.innerHTML = "";
+                
+                var serverTime = Lib.getTime(Game.ServerData.time);
+
+                for(var i=0; i<props.length; i++) {
+                    var prop = props[i],
+                        nLi = li.cloneNode(false),
+                        sec = (Lib.getTime(prop.date_ends) - serverTime) / 1000;
+                
+                    nLi.Prop = prop;
+                    nLi.innerHTML = this.PropLineDetails(prop, sec);
+                    
+                    this.addQueue(sec, this.PropQueue, nLi);
+                                
+                    details.appendChild(nLi);
+                    
+                }
+                
+                //add child back in
+                parentEl.appendChild(details);
+                
+                //wait for tab to display first
+                setTimeout(function() {
+                    var Ht = Game.GetSize().h - 230;
+                    if(Ht > 300) { Ht = 300; }
+                    var tC = details.parentNode;
+                    Dom.setStyle(tC,"height",Ht + "px");
+                    Dom.setStyle(tC,"overflow-y","auto");
+                },10);
+            }
+        },
+        PropLineDetails : function(prop, sec) {
+            if(prop.status == "Passed" || prop.status == "Failed") {
+                return ['<div style="margin-bottom:2px;">',
+                    '<div class="yui-gb">',
+                    '    <div class="yui-u first"><label>',prop.name,'</label></div>',
+                    '    <div class="yui-u">Proposed by <a class="profile_link" href="#',prop.proposed_by.id,'">',prop.proposed_by.name,'</a></div>',
+                    '    <div class="yui-u"><label>',prop.status,'</label></div>',
+                    '</div>',
+                    '<div class="yui-gc">',
+                    '    <div class="yui-u first"><div class="propDesc">',this.formatBody(prop.description),'</div></div>',
+                    '    <div class="yui-u"><div class="propMyVote">',this.PropVoteDetails(prop),'</div></div>',
+                    '</div>',
+                    '<table style="width:100%"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;">',
+                    '<tr><th>Needed</th><th>Yes</th><th>No</th></tr>',
+                    '<tr><td>',prop.votes_needed,'</td><td>',prop.votes_yes,'</td><td>',prop.votes_no,'</td></tr>',
+                    '</table>',
+                    '</div>'].join('');
+
+            }
+            else {
+                return ['<div style="margin-bottom:2px;">',
+                    '<div class="yui-gb">',
+                    '    <div class="yui-u first"><label>',prop.name,'</label></div>',
+                    '    <div class="yui-u">Proposed by <a class="profile_link" href="#',prop.proposed_by.id,'">',prop.proposed_by.name,'</a></div>',
+                    '    <div class="yui-u">',prop.status,': <span class="propTime">',Lib.formatTime(sec),'</span></div>',
+                    '</div>',
+                    '<div class="yui-gc">',
+                    '    <div class="yui-u first"><div class="propDesc">',this.formatBody(prop.description),'</div></div>',
+                    '    <div class="yui-u"><div class="propMyVote">',this.PropVoteDetails(prop),'</div></div>',
+                    '</div>',
+                    '<table style="width:100%"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;"><col style="width:25%;text-align:center;">',
+                    '<tr><th>Needed</th><th>Yes</th><th>No</th></tr>',
+                    '<tr><td>',prop.votes_needed,'</td><td>',prop.votes_yes,'</td><td>',prop.votes_no,'</td></tr>',
+                    '</table>',
+                    '</div>'].join('');
+            }
+        },
+        PropVoteDetails : function(prop) {
+            if(prop.my_vote !== undefined) {
+                return '<label>Voted ' + (prop.my_vote*1 === 1 ? 'Yes' : 'No') + '</label>';
+            }
+            else {
+                return '<button type="button">Yes</button><button type="button">No</button>';
+            }
+        },
+        PropQueue : function(remaining, elLine){
+            var arrTime;
+            if(remaining <= 0) {
+                arrTime = 'Overdue ' + Lib.formatTime(Math.round(-remaining));
+            }
+            else {
+                arrTime = Lib.formatTime(Math.round(remaining));
+            }
+            var el = Sel.query("span.propTime",elLine,true);
+            if(el) {
+                el.innerHTML = arrTime;
+            }
+            else {
+                return true;
+            }
+        },
+        PropClick : function(e, matchedEl, container){
+            var type = matchedEl.innerHTML;
+            if(type == "Yes" || type == "No") {
+                var el = Dom.getAncestorByTagName(matchedEl, "li"),
+                    func = this["PropVote"+type];
+                if(el && func) {
+                    func.call(this, el.Prop, el);
+                }
+            }
+            
+        },
+        PropVoteYes : function(prop, line) {
+            this.service.cast_vote({
+                session_id:Game.GetSession(""),
+                building_id:this.building.id,
+                proposition_id:prop.id,
+                vote:1
+            },{
+                success : this.PropVoteSuccess,
+                scope:{Self:this,Line:line}
+            });
+        },
+        PropVoteNo : function(prop, line) {
+            this.service.cast_vote({
+                session_id:Game.GetSession(""),
+                building_id:this.building.id,
+                proposition_id:prop.id,
+                vote:0
+            },{
+                success : this.PropVoteSuccess,
+                scope:{Self:this,Line:line}
+            });
+        },
+        PropVoteSuccess  : function(o){
+            this.Self.rpcSuccess(o);
+            var newProp = o.result.proposition;
+            for(var i=0; i<this.Self.props.length; i++) {
+                if(this.Self.props[i].id == newProp.id) {
+                    this.Self.props[i] = newProp;
+                    break;
+                }
+            }
+            this.Line.Prop = newProp;
+            this.Line.innerHTML = this.Self.PropLineDetails(newProp, 0);
+        },
+        
+        formatBody : function(body) {
+            body = body.replace(/&/g,'&amp;');
+            body = body.replace(/</g,'&lt;');
+            body = body.replace(/>/g,'&gt;');
+            body = body.replace(/\n/g,'<br />');
+            body = body.replace(/\*([^*]+)\*/gi,'<b>$1</b>');
+            body = body.replace(/\{(food|water|ore|energy|waste|happiness|time|essentia|plots|build)\}/gi, function(str,icon){
+                var cl = 'small' + icon.substr(0,1).toUpperCase() + icon.substr(1);
+                return '<img src="' + Lib.AssetUrl + 'ui/s/' + icon + '.png" class="' + cl + '" />';
+            });
+            body = body.replace(/\[(https?:\/\/[a-z0-9_.\/\-]+)\]/gi,'<a href="$1">$1</a>');
+            body = body.replace(/\{Empire\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="profile_link" href="#$1">$2</a>');
+            //body = body.replace(/\{Empire\s+(\d+)\s+([^\}]+)}/gi,'$2');
+            body = body.replace(/\{Starmap\s+(-?\d+)\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="starmap_link" href="#$1x$2">$3</a>');
+            body = body.replace(/\{Planet\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="planet_link" href="#$1">$2</a>');
+            body = body.replace(/\{Alliance\s+(-?\d+)\s+([^\}]+)\}/gi,'<a class="alliance_link" href="#$1">$2</a>');
+            body = body.replace(/\{VoteYes\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteyes_link" href="#$1&$2&$3">Yes!</a>');
+            body = body.replace(/\{VoteNo\s(-*\d+)\s(-*\d+)\s(-*\d+)\}/gi,'<a class="voteno_link" href="#$1&$2&$3">No!</a>');
+            //body = body.replace(/\{Alliance\s+(\d+)\s+([^\}]+)}/gi,'$2');
+            return body;
+        },
+        handleProfileLink : function(e, el) {
+            Event.stopEvent(e);
+            var res = el.href.match(/\#(-?\d+)$/);
+            if(res) {
+                Lacuna.Info.Empire.Load(res[1]);
+            }
+        },
+        handleStarmapLink : function(e, el) {
+            Event.stopEvent(e);
+            var res = el.href.match(/\#(-?\d+)x(-?\d+)$/);
+            Game.StarJump({x:res[1],y:res[2]});
+        },
+        handlePlanetLink : function(e, el) {
+            Event.stopEvent(e);
+            var res = el.href.match(/\#(-?\d+)$/);
+            this.hide();
+            var planet = Game.EmpireData.planets[res[1]];
+            Game.PlanetJump(planet);
+        },
+        handleAllianceLink : function(e, el) {
+            Event.stopEvent(e);
+            var res = el.href.match(/\#(-?\d+)$/);
+            Lacuna.Info.Alliance.Load(res[1]);
         }
     });
     

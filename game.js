@@ -602,6 +602,18 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     if(!Lacuna.Game.EmpireData.planetsByName){
                         Lacuna.Game.EmpireData.planetsByName = {};
                     }
+                    if(!Lacuna.Game.EmpireData.coloniesByName){
+                        Lacuna.Game.EmpireData.coloniesByName = {};
+                    }
+                    if(!Lacuna.Game.EmpireData.stationsByName){
+                        Lacuna.Game.EmpireData.stationsByName = {};
+                    }
+                    for(var pKey in status.empire.colonies) {
+                        Lacuna.Game.EmpireData.coloniesByName[status.empire.colonies[pKey]] = pKey;
+                    }
+                    for(var pKey in status.empire.stations) {
+                        Lacuna.Game.EmpireData.stationsByName[status.empire.stations[pKey]] = pKey;
+                    }
                     for(var pKey in status.empire.planets) {
                         if(status.empire.planets.hasOwnProperty(pKey)){
                             var ePlanet = Lacuna.Game.EmpireData.planets[pKey];

@@ -1251,7 +1251,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '    <li><label>Y: </label>',data.y,'</li>',
                 '    <li><label>Zone: </label>',data.zone,'</li>',
                 '    <li><label>Star ID: </label>',data.id,'</li>',
-                data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+')</li><li><label>Station ID: </label>'+data.station.id+'</li>') : '',
+                '    <li><label>Net Influence: </label>',data.influence,'</li>',
+                                                    data.station ? ('    <li><label>Station: </label>'+data.station.name+' ('+data.station.x+' : '+data.station.y+')</li><li><label>Station ID: </label>'+data.station.id+'</li><li><label>Alliance: </label>'+data.station.alliance.name+'</li>') : '',
                 '</ul>'
             ].join('');
             
