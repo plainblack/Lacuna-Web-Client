@@ -373,6 +373,16 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 ].join('');
                 Event.on("proposeMembersColonizeSubmit", "click", this.ColonizeOnly, this, true);
             }
+            if(this.building.level >= 18) {
+                opts[opts.length] = '<option value="proposeMembersStations">Members Only Stations</option>';
+                dis[dis.length] = [
+                '    <div id="proposeMembersStations" class="proposeOption" style="display:none;">',
+                '        Allow only members to setup stations under this stations jurisdiction.<br />',
+                '        <button type="button" id="proposeMembersStationsSubmit">Propose</button>',
+                '    </div>'
+                ].join('');
+                Event.on("proposeMembersStationsSubmit", "click", this.StationsOnly, this, true);
+            }
             if(this.building.level >= 20) {
                 opts[opts.length] = '<option value="proposeMembersExcavation">Members Only Excavation</option>';
                 dis[dis.length] = [
@@ -649,6 +659,27 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                     this.proposeMessage.innerHTML = "Proposal of Broadcast successful.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeBroadcastMessage").value = "";
+                    btn.disabled = false;
+                },
+                failure : function(o) {
+                    btn.disabled = false;
+                },
+                scope:this
+            });
+        },
+        StationsOnly : function(e) {
+            var btn = Event.getTarget(e);
+            btn.disabled = true;
+            
+            this.service.propose_members_only_stations({
+                session_id : Game.GetSession(''),
+                building_id : this.building.id
+            },
+            {
+                success : function(o) {
+                    this.rpcSuccess(o);
+                    this.proposeMessage.innerHTML = "Proposal for Members Only Stations successful.";
+                    Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
                 failure : function(o) {
