@@ -3904,6 +3904,15 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "allow_bhg_by_alliance" : {
+                        "description": "",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"alliance_id", "type":"string", "optional":false},
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "propose_neutralize_bhg" : {
                         "description": "",
                         "parameters": [
