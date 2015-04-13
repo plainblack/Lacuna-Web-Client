@@ -14,12 +14,12 @@
     else if (l.hash != '') {
         l.hash = '';
     }
-    
+
     var p = document.getElementById("pulsing");
     if(p.className.indexOf('hidden') < 0) {
         p.className += ' hidden';
     }
-    
+
 /** BUILD
     var host = '**CODEROOT';
     var loader = new YAHOO.util.YUILoader({
@@ -529,7 +529,7 @@
 
     //pre calc so we can discover how many files are getting loaded for the progress bar
     loader.calculate();
-    
+
     var status = [
             'loading ships',
             'starting engines',
@@ -625,7 +625,7 @@
         status[s] = tempj;
         status[j] = tempi;
     }
-    
+
     //container
     progressLoaderC.id = "loadingProgress";
     progressLoaderC.style.backgroundColor = '#FFD800';
@@ -636,18 +636,40 @@
     //progress bar
     progressLoader.counter = 0;
     progressLoader.style.backgroundColor = "#fff";
-    progressLoader.style.textAlign = "left"; 
-    progressLoader.style.paddingLeft = "10px"; 
-    progressLoader.style.color = "black"; 
-    progressLoader.style.height = "30px"; 
-    progressLoader.style.lineHeight = "30px"; 
+    progressLoader.style.textAlign = "left";
+    progressLoader.style.paddingLeft = "10px";
+    progressLoader.style.color = "black";
+    progressLoader.style.height = "30px";
+    progressLoader.style.lineHeight = "30px";
     progressLoader.style.width = "1px";
     progressLoader.style.overflow = "visible";
     progressLoader.style.whiteSpace = "nowrap";
     progressLoader.innerHTML = status[progressLoader.counter];
-    
+
     document.body.insertBefore(progressLoaderC, document.body.firstChild);
 
+
+    var appendScripts = function(sources, callback) {
+      if (source = sources.shift()) {
+          var scriptTag = document.createElement('script');
+          scriptTag.src = source;
+          scriptTag.onload = function() {
+            appendScripts(sources, callback);
+          };
+          document.body.appendChild(scriptTag);
+      } else {
+        callback();
+      }
+    }
+
+    appendScripts([
+      // Insert js libraries to load here.
+      'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'
+
+  ], function() {
+    // This kicks off the load process for all the YUI stuff.
     loader.insert();
+  });
+
 })();
 // vim: noet:ts=4:sw=4
