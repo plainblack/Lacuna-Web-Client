@@ -363,7 +363,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
             nLi = li.cloneNode(false);
             var ptype = obj.body.image.slice(0,obj.body.image.indexOf('-'));
             Dom.addClass(nLi,"excavatorChances");
-            var outChance = ['<ul><li><label>Body Type: </label>',ptype,' <label>Chances:</label></li>'];
+            var outChance = ['<ul><li><label>Body Type: </label>',ptype,' <label>Distance:</label>',obj.distance,' <label>Chances:</label></li>'];
             var total = 0;
             var ctypes = ["artifact", "glyph", "plan", "resource" ];
             for (var chance_i in ctypes) {
@@ -378,9 +378,9 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
               }
             }
             if(total > 0) {
-              outChance.splice(3, 0, '<li><label>Total:</label> ');
-              outChance.splice(4, 0, parseInt(total));
-              outChance.splice(5, 0, '</li>');
+              outChance.splice(5, 0, '<li><label>Total:</label> ');
+              outChance.splice(6, 0, parseInt(total));
+              outChance.splice(7, 0, '</li>');
             }
             outChance.push('</ul>');
             nLi.innerHTML = outChance.join('');

@@ -338,7 +338,16 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
                     var station = this.data.station;
                     var pSize = this.tileSizeInPx;
-                    this.logoHolder.innerHTML= ['<img src="',Lib.AssetUrl,'alliances/',station.alliance.image,'.png" class="star" style="width:',pSize,'px;height:',pSize,'px;" />'].join('');
+                    var opacity = this.data.influence * 9 / 19000 + 0.1;
+                    if (opacity > 1)
+                    {
+                        opacity = 1;
+                    }
+                    else if (opacity < 0.1)
+                    {
+                        opacity = 0.1;
+                    }
+                    this.logoHolder.innerHTML= ['<img src="',Lib.AssetUrl,'alliances/',station.alliance.image,'.png" class="star" style="width:',pSize,'px;height:',pSize,'px;opacity:', opacity, '" />'].join('');
                 }
                 this.imageHolder.innerHTML = ['<img src="',this.image,'" class="star" style="width:',this.tileSizeInPx,'px;height:',this.tileSizeInPx,'px;" />'].join('');
             }
