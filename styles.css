@@ -1021,8 +1021,18 @@ Info dialogs for Empire and Alliance
 	width:700px;*/
 	border:0 none;
 	clear:both;
-	cursor: url(//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/openhand.cur), default;
+	cursor: move;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
 }
+
+#starMap:active, #planetMap:active { 
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
+
 #planetMap .tile:hover {
 	border: 1px dashed #fff;
 	margin: -1px;
