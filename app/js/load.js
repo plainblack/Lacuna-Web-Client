@@ -12,7 +12,7 @@
     var vars = l.hash.substring(1).split('&');
     if (vars.length > 0) {
         for (var i=0; i<vars.length; i++) {
-            var pair = vars[i].split("=");
+            var pair = vars[i].split('=');
             query[pair[0]] = decodeURIComponent(pair[1]);
         }
     }
@@ -24,49 +24,40 @@
     }
 
     // Ensure the Blue Wheel of Death is hiding.
-    var p = document.getElementById("pulsing");
+    var p = document.getElementById('pulsing');
     if (p.className.indexOf('hidden') < 0) {
         p.className += ' hidden';
     }
 
-    // Figure out where we're going to download YUI from.
-    var basePath = '';
-    if (process.env.NODE_ENV === 'production') {
-        basePath = '//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/';
-    } else {
-        // Warning: this may break - we'll see!
-        basePath = 'http://localhost/lacuna/lib/yui2/build/';
-    }
-
     var loader = new YAHOO.util.YUILoader({
-        base: basePath,
-        filter: "MIN",
+        base: '//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/',
+        filter: 'MIN',
         allowRollup: false,
-        combine: false
+        combine: true
     });
 
     // List of YUI2 components that need to be loaded.
     loader.require([
-        "animation",
-        "autocomplete",
-        "connection",
-        "container",
-        "cookie",
-        "datatable",
-        "dom",
-        "dragdrop",
-        "event-delegate",
-        "event-mouseenter",
-        "event",
-        "get",
-        "json",
-        "logger",
-        "menu",
-        "paginator",
-        "selector",
-        "slider",
-        "tabview",
-        "yahoo"
+        'animation',
+        'autocomplete',
+        'connection',
+        'container',
+        'cookie',
+        'datatable',
+        'dom',
+        'dragdrop',
+        'event-delegate',
+        'event-mouseenter',
+        'event',
+        'get',
+        'json',
+        'logger',
+        'menu',
+        'paginator',
+        'selector',
+        'slider',
+        'tabview',
+        'yahoo'
     ]);
 
     loader.onSuccess = function(o) {
