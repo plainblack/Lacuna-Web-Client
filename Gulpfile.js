@@ -2,7 +2,6 @@
 
 var browserify = require('browserify');
 var source     = require('vinyl-source-stream');
-var envify     = require('envify/custom');
 
 var cssConcat = require('gulp-concat-css');
 var cssMin    = require('gulp-minify-css');
@@ -39,14 +38,10 @@ gulp.task('browserify', function() {
         ]
     });
 
-    b.transform(envify({
-        NODE_ENV: process.env.PRODUCTION === 1 ? 'production' : 'development'
-    }));
-
     var stream = b
         .bundle()
-        .pipe(source('load.js'))
-        .pipe(gulp.dest('./public'));
+        .pipe(source('lacuna.js'))
+        .pipe(gulp.dest('./build'));
 
     return stream;
 });
@@ -54,37 +49,37 @@ gulp.task('browserify', function() {
 gulp.task('cssify', ['browserify'], function() {
     var stream = gulp.src('app/css/styles.css')
         .pipe(cssConcat(''))
-        .pipe(gulp.dest('public/styles.css'));
+        .pipe(gulp.dest('build/styles.css'));
 
     return stream;
 })
 
 gulp.task('minify-js', ['browserify', 'cssify'], function() {
-    var stream =  gulp.src('./public/load.js')
+    var stream =  gulp.src('./build/lacuna.js')
         .pipe(uglify())
         .pipe(rename({
             extname: '.min.js'
         }))
-        .pipe(gulp.dest('./public'));
+        .pipe(gulp.dest('./build'));
 
     return stream;
 });
 
 gulp.task('minify-css', ['browserify', 'cssify', 'minify-js'], function() {
-    var stream = gulp.src('./public/styles.css')
+    var stream = gulp.src('./build/styles.css')
     .pipe(cssMin())
     .pipe(rename({
         extname: '.min.css'
     }))
-    .pipe(gulp.dest('./public'));
+    .pipe(gulp.dest('./build'));
 
     return stream;
 });
 
 gulp.task('serve', ['browserify', 'cssify'], function(done) {
     var app = express();
-    var port = process.env.PORT || 80;
-    app.use('/lacuna', express.static(path.join(__dirname, 'public')));
+    var port = process.env.PORT || 8080;
+    app.use(express.static(path.join(__dirname)));
 
     app.listen(port, function() {
       console.log('Listening on http://localhost:' + port + ' for requests.');
