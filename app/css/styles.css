@@ -4,6 +4,9 @@ pink: pink
 light blue: #52ACFF
 */
 
+/* Load the font used by Material UI. */
+@import url('http://fonts.googleapis.com/css?family=Roboto:400,300,500');
+
 html {
 	background: black url('//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png');
 	color:#fff;
@@ -169,7 +172,7 @@ body.yui-skin-sam .nofooter .bd {
 	border-width: 2px;
 	border-style:solid;
 	border-color:#000;
-} 
+}
 body.yui-skin-sam .container-close {
 	background:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/close.png") no-repeat scroll 0 0 transparent;
 	cursor:pointer;
@@ -186,7 +189,7 @@ body.yui-skin-sam .yui-panel hr {
 	border-top: 1px solid rgb(82, 172, 255);
 }
 
-/*#pulsing_c { 
+/*#pulsing_c {
 	width:99%;
 }*/
 #pulsing .bd {
@@ -496,16 +499,16 @@ body.yui-skin-sam  #usersCenter .yuimenu .bd .yuimenu .bd {
 }
 #footer .menuItem {
 	width:100px;
-} 
+}
 #footer .ore.menuItem {
 	width: 94px;
-} 
+}
 #footer .water.menuItem {
 	width: 91px;
-} 
+}
 #footer .energy.menuItem {
 	width: 76px;
-} 
+}
 #header .essentia{
 	width:110px;
 }
@@ -547,12 +550,12 @@ body.yui-skin-sam  #usersCenter .yuimenu .bd .yuimenu .bd {
 .change img {
 	width:40px;
 	height:45px;
-	
+
 }
 .plots img {
 	width:45px;
 	height:45px;
-	
+
 }
 .profile img {
 	width:45px;
@@ -666,16 +669,16 @@ SHINEY
 	cursor:pointer;
 }
 #usersArrow {
-	width: 100%; 
-	height: 100%; 
+	width: 100%;
+	height: 100%;
 	background: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/down.png") no-repeat scroll center 55px transparent;
 	position:absolute;
 	top:0;
 	left:0;
 }
 #planetsArrow {
-	width: 100%; 
-	height: 100%; 
+	width: 100%;
+	height: 100%;
 	background: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/up.png") no-repeat scroll center 10px transparent;
 	position:absolute;
 	top:0;
@@ -947,7 +950,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 .speciesHO_highlight {
 	position: absolute;
 	background: #103060;
-	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */
 	top: 10px;
 	left: 12px;
 	height: 13px;
@@ -962,7 +965,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 .speciesSlider_lock {
 	position: absolute;
 	border-right: 1px solid red;
-	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */
 	top: 8px;
 	left: 12px;
 	height: 20px;
@@ -972,7 +975,7 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 .speciesSlider_lock_bg {
 	position: relative;
 	background: #bfbfbf;
-	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */ 
+	_font-size: 5px; /* prevent IE6 expanding the box height to font-size */
 	top: 2px;
 	height: 13px;
 	width: 100%;
@@ -1021,8 +1024,18 @@ Info dialogs for Empire and Alliance
 	width:700px;*/
 	border:0 none;
 	clear:both;
-	cursor: url(//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/openhand.cur), default;
+	cursor: move;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
 }
+
+#starMap:active, #planetMap:active { 
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
+
 #planetMap .tile:hover {
 	border: 1px dashed #fff;
 	margin: -1px;
@@ -1296,11 +1309,11 @@ body.yui-skin-sam .yui-navset .yui-navset-top .yui-content {
 body.yui-skin-sam .yui-navset .yui-content {
 	background-color:transparent;
 }
-body.yui-skin-sam .yui-navset .yui-nav .selected a, 
+body.yui-skin-sam .yui-navset .yui-nav .selected a,
 body.yui-skin-sam .yui-navset .yui-nav .selected a em {
 	border-color:#52acff;
 }
-body.yui-skin-sam .yui-navset .yui-nav a, 
+body.yui-skin-sam .yui-navset .yui-nav a,
 body.yui-skin-sam .yui-navset .yui-navset-top .yui-nav a {
 	background:none repeat scroll 0 0 #D8D8D8;
 }
@@ -1308,8 +1321,8 @@ body.yui-skin-sam .yui-navset .yui-nav a:focus,
 body.yui-skin-sam .yui-navset .yui-nav a:hover {
 	background:none repeat scroll 0 0 #BFDAFF;
 }
-body.yui-skin-sam .yui-navset .yui-nav .selected a, 
-body.yui-skin-sam .yui-navset .yui-nav .selected a:focus, 
+body.yui-skin-sam .yui-navset .yui-nav .selected a,
+body.yui-skin-sam .yui-navset .yui-nav .selected a:focus,
 body.yui-skin-sam .yui-navset .yui-nav .selected a:hover {
 	background:none repeat scroll 0 0 #52acff;
 }
@@ -1333,7 +1346,7 @@ planet details
 */
 #planetDetailsName , #starDetailsName {
 	font-family:impact;
-	font-size:120%;	
+	font-size:120%;
 }
 #planetDetailsInfo label , #planetDetailOre label, #starDetailsInfo label {
 	font-weight:bold;
@@ -1412,7 +1425,7 @@ planet details
 	text-align:center;
 }
 
-.buildingDetailsNum { 
+.buildingDetailsNum {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
@@ -2338,10 +2351,10 @@ ul.statsSubList, ul.statsSubList ul {
 /*
 TextboxList
 */
-.TextboxList { 
-    position:relative; 
-    font-size:inherit; 
-    font-family:inherit; 
+.TextboxList {
+    position:relative;
+    font-size:inherit;
+    font-family:inherit;
     width:100%;
     display:-moz-inline-stack; /*mozilla 2.0*/
     display:inline-block; /*mozilla 3.0, ie 8*/
@@ -2373,8 +2386,8 @@ TextboxList
     padding:0 0 0 2px;
 	min-width:5px; /* override any other min-width settings */
 }
-.TextboxList .TextboxListBitBox { 
-    background:#52acff none repeat scroll 0 0; 
+.TextboxList .TextboxListBitBox {
+    background:#52acff none repeat scroll 0 0;
     border:1px solid #CAD8F3;
     position:relative;
     font-size:85%;
@@ -2424,6 +2437,6 @@ TextboxList
     *display:inline; /*ie hack to make it think this is an inline-block*/
     overflow:hidden;
 }
-/* 
- * vim: noet:ts=4:sw=4 
+/*
+ * vim: noet:ts=4:sw=4
  */
