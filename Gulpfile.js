@@ -41,7 +41,7 @@ gulp.task('browserify', function() {
     var stream = b
         .bundle()
         .pipe(source('lacuna.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./lacuna'));
 
     return stream;
 });
@@ -49,7 +49,7 @@ gulp.task('browserify', function() {
 gulp.task('cssify', ['browserify'], function() {
     var stream = gulp.src('app/css/styles.css')
         .pipe(cssConcat(''))
-        .pipe(gulp.dest('build/styles.css'));
+        .pipe(gulp.dest('lacuna/styles.css'));
 
     return stream;
 })
@@ -60,7 +60,7 @@ gulp.task('minify-js', ['browserify', 'cssify'], function() {
         .pipe(rename({
             extname: '.min.js'
         }))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./lacuna'));
 
     return stream;
 });
@@ -71,7 +71,7 @@ gulp.task('minify-css', ['browserify', 'cssify', 'minify-js'], function() {
     .pipe(rename({
         extname: '.min.css'
     }))
-    .pipe(gulp.dest('./build'));
+    .pipe(gulp.dest('./lacuna'));
 
     return stream;
 });
