@@ -1430,12 +1430,13 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             t_param.combat  = ship.combat;
             t_param.name    = ship.name;
             var qty = Dom.get("FS"+this.Key);
-            t_param.quantity = qty.value;
-            if (t_param.quantity >= ship.quantity) {
-                t_param.quantity = ship.quantity;
+            t_param.quantity = parseInt(qty.value, 10);
+            var ship_quantity = parseInt(ship.quantity, 10);
+            if (t_param.quantity >= ship_quantity) {
+                t_param.quantity = ship_quantity;
             }
-            if (t_param.quantity > 500) {
-                t_param.quantity = 500;
+            if (t_param.quantity > 600) {
+                t_param.quantity = 600;
             }
 
             var ship_arr = [ t_param ];
