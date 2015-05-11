@@ -10,7 +10,10 @@ The files contained herein are the front end code that make up the game called "
 
 # Hacking
 
-Lacuna-Web-Client requires [Nodejs](https://nodejs.org) to hack on. Setup should look something like this:
+Lacuna-Web-Client requires [Nodejs](https://nodejs.org) to hack on. For
+installing, see [their wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager).
+
+Setup of this client should look something like this:
 
 ```bash
 git clone https://github.com/plainblack/Lacuna-Web-Client
