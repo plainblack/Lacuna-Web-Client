@@ -656,7 +656,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal of Broadcast successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed broadcast.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeBroadcastMessage").value = "";
                     btn.disabled = false;
@@ -678,7 +678,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal for Members Only Stations successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to limit stations to members only.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
@@ -699,7 +699,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal for Members Only Colonization successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to limit colonization to members only.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
@@ -724,7 +724,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 					success: function(o) {
 						Lacuna.Pulsar.Hide();
 						this.rpcSuccess(o);
-						this.proposeMessage.innerHTML = "Proposal for Eviction of Mining Platform successful.";
+						this.proposeMessage.innerHTML = "Successfully proposed to evict mining platforms.";
 						Lib.fadeOutElm(this.proposeMessage);
             			button.disabled = false;
 					},
@@ -758,7 +758,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 						success : function(o) {
 							Lacuna.Pulser.Hide();
 							this.rpcSuccess(o);
-							this.proposeMessage.innerHTML = "Proposal to Fire BFG successful.";
+							this.proposeMessage.innerHTML = "Successfully proposed to fire BFG.";
 							Lib.fadeOutElm(this.proposeMessage);
 							button.disabled = false;
 						},
@@ -844,7 +844,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal for Neutralize Black Hold Generators successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to neutralize Black Hole Generators.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
@@ -867,7 +867,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal to Expel Member successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to expel member.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeExpelMember").selectedIndex = -1;
                     Dom.get('proposeExpelReason').value = "";
@@ -894,7 +894,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                 {
                     success : function(o) {
                         this.rpcSuccess(o);
-                        this.proposeMessage.innerHTML = "Proposal to Induct Member successful.";
+                        this.proposeMessage.innerHTML = "Successfully proposed to induct member.";
                         Lib.fadeOutElm(this.proposeMessage);
                         this.inductMemberTextboxList.ResetSelections();
                         Dom.get('proposeInductMessage').value = "";
@@ -919,7 +919,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal to Elect New Leader successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to elect new leader.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeElectLeaderMember").selectedIndex = -1;
                     btn.disabled = false;
@@ -941,7 +941,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal for Members Only Mining Rights successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to limit mining rights to members only.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
@@ -962,7 +962,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal for Members Only Excavation successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to limit excavation to members only.";
                     Lib.fadeOutElm(this.proposeMessage);
                     btn.disabled = false;
                 },
@@ -1023,7 +1023,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal of Writ successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed writ.";
                     Lib.fadeOutElm(this.proposeMessage);
                     this.ProposeWritTemplateChange();
                     btn.disabled = false;
@@ -1053,7 +1053,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
 
-						this.proposeMessage.innerHTML = "Proposal to Rename asteroid successful.";
+						this.proposeMessage.innerHTML = "Successfully proposed to rename asteroid.";
                     	Lib.fadeOutElm(this.proposeMessage);
 
 						button.disabled = false;
@@ -1084,7 +1084,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal to Rename star successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to rename star.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeRenameStarSelect").selectedIndex = -1;
                     btn.disabled = false;
@@ -1115,7 +1115,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 						Lacuna.Pulser.Hide();
 						this.rpcSuccess(o);
 
-						this.proposeMessage.innerHTML = "Proposal to Rename uninhabited successful.";
+						this.proposeMessage.innerHTML = "Successfully proposed to rename uninhabited.";
                     	Lib.fadeOutElm(this.proposeMessage);
 
 						button.disabled = false;
@@ -1145,7 +1145,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             {
                 success : function(o) {
                     this.rpcSuccess(o);
-                    this.proposeMessage.innerHTML = "Proposal to Transfer Ownership successful.";
+                    this.proposeMessage.innerHTML = "Successfully proposed to transfer ownership of station.";
                     Lib.fadeOutElm(this.proposeMessage);
                     Dom.get("proposeTransferTo").selectedIndex = -1;
                     btn.disabled = false;
