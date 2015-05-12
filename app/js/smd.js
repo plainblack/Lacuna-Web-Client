@@ -1768,8 +1768,21 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                 "status" : { get_status() }
                              }
                         */
+                    },
+                    "build_ships" : {
+                        "description": "Adds ships to build queues.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"options", "type":"object", "optional":false},
+                        ],
+                        "returns":{"type":"object"}
+                        /*
+                             {
+                                "status" : { get_status() }
+                             }
+                        */
                     }
-                }                
+                }
             },
             SpacePort : {
                 "SMDVersion":"2.0",
