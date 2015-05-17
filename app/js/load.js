@@ -31,9 +31,9 @@
 
     var loader = new YAHOO.util.YUILoader({
         base: '//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/',
-        filter: 'MIN',
+        //filter: 'MIN',
         allowRollup: true,
-        combine: true
+        combine: false
     });
 
     // List of YUI2 components that need to be loaded.
