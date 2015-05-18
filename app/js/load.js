@@ -70,6 +70,7 @@
 
         // RPC and core stuff
         require('js/library');
+        require('js/textboxList');
         require('js/game');
         require('js/rpc');
         require('js/smd');
@@ -131,7 +132,6 @@
         // Menu stuff
         require('js/mapPlanet');
         require('js/about');
-        require('js/textboxList');
         require('js/messaging');
         require('js/essentia');
         require('js/invite');
