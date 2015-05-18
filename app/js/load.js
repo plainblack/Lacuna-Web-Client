@@ -71,9 +71,10 @@
         // RPC and core stuff
         require('js/library');
         require('js/textboxList');
-        require('js/game');
-        require('js/rpc');
+        require('js/pulse');
         require('js/smd');
+        require('js/rpc');
+        require('js/game');
 
         // Empire management and star map
         require('js/announce');
@@ -133,11 +134,12 @@
         require('js/mapPlanet');
         require('js/about');
         require('js/messaging');
-        require('js/essentia');
+
+        // invite has to come before essentia for some reason.
         require('js/invite');
+        require('js/essentia');
         require('js/profile');
         require('js/stats');
-        require('js/pulse');
         require('js/info');
         require('js/notify');
         require('js/captcha');
