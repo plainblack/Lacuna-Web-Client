@@ -2421,6 +2421,11 @@ TextboxList
     *display:inline; /*ie hack to make it think this is an inline-block*/
     overflow:hidden;
 }
+
+#reactWindowContainer {
+	top: 0;
+	position: absolute;
+}
 /*
  * vim: noet:ts=4:sw=4
  */

@@ -4,18 +4,21 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var ReactPanels = require('react-panels');
-var FloatingPanel = ReactPanels.FloatingPanel;
-var Tab = ReactPanels.Tab;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-
 var Game = YAHOO.lacuna.Game;
 var AboutStore = require('js/stores/menu/about');
 var CreditsStore = require('js/stores/menu/credits');
 var AboutActions = require('js/actions/menu/about');
 
+var Panel = require('js/components/panel');
+
 var About = React.createClass({
+    propTypes: {
+        date: React.PropTypes.instanceOf(Date).isRequired,
+        serverVersion: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.number
+        ]).isRequired
+    },
     render: function() {
         return (
             <div>
@@ -23,7 +26,7 @@ var About = React.createClass({
                     Copyright {this.props.date.getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
-                    Server Version: {Game.ServerData.version}.
+                    Server Version: {this.props.serverVersion}.
                 </p>
             </div>
         );
@@ -31,6 +34,9 @@ var About = React.createClass({
 });
 
 var NamesList = React.createClass({
+    propTypes: {
+        names: React.PropTypes.arrayOf(React.PropTypes.string)
+    },
     render: function() {
         var list = [];
 
@@ -84,25 +90,16 @@ var AboutWindow = React.createClass({
     },
     render: function() {
         return (
-            <FloatingPanel theme="flexbox"
-                style={{zIndex: '9999999999', display: this.state.display}}>
-                <Tab title="About">
-                    <Content>
-                        <div style={{overflow: 'auto', height: '400px'}}>
-                            <h2>The Lacuna Expanse</h2>
-                            <About date={this.props.date} />
+            <Panel title="About" height={400} onClose={this.handleClose}
+                display={this.state.display}>
+                <h2>The Lacuna Expanse</h2>
+                <About date={this.props.date} serverVersion={Game.ServerData.version} />
 
-                            <br />
+                <br />
 
-                            <h2>Credits</h2>
-                            <Credits credits={this.state.credits} />
-                        </div>
-                    </Content>
-                    <Footer>
-                        <button type="button" onClick={this.handleClose}>Close</button>
-                    </Footer>
-                </Tab>
-            </FloatingPanel>
+                <h2>Credits</h2>
+                <Credits credits={this.state.credits} />
+            </Panel>
         );
     }
 });
