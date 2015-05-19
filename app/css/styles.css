@@ -2232,10 +2232,10 @@ PROFILE
 	display:inline-block;
 	width:250px;
 }
-#detailsAccount, #detailsPlayer, #detailsNotes, #detailsBrowser {
+#detailsAccount, #detailsPlayer, #detailsNotes, #detailsBrowser, #pccNotes {
 	padding : 5px;
 }
-#profileNotes {
+#profileNotes, #pccNotesText {
 	width: 100%;
 	height: 200px;
 }

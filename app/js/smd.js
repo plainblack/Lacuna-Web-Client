@@ -93,7 +93,16 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         {"name":"name", "type":"string", "optional":false}
                     ],
                     "returns":{"type":"object"}
-                }
+                },
+                "set_colony_notes" : {
+                    "description": "Sets the colony notes",
+                    "parameters": [
+                        {"name":"session_id", "type":"string", "optional":false},
+                        {"name":"body_id", "type":"string", "optional":false},
+                        {"name":"options", "type":"object", "optional":false}
+                    ],
+                    "returns":{"type":"object"}
+                },
 
             }
         },
