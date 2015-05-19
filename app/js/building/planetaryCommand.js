@@ -190,9 +190,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             return this.resourcesTab;
         },
         _getNotesTab : function() {
+            var notes = Game.GetCurrentPlanet().notes;
             this.notesTab = new YAHOO.widget.Tab({ label: "Notes", content: [
             '<div id="pccNotes">',
-            '    <textarea id="pccNotesText" title="Write down anything you would like to store with this body.">', $('<div/>').text(Game.GetCurrentPlanet().notes).html(), '</textarea>',
+            '    <textarea id="pccNotesText" title="Write down anything you would like to store with this body.">', $('<div/>').text(notes ? notes : '').html(), '</textarea>',
             '    <button type="button" id="saveColonyNotes">Save</button>',
             '</div>'
             ].join('')});
