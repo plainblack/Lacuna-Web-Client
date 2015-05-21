@@ -4,9 +4,6 @@ pink: pink
 light blue: #52ACFF
 */
 
-/* Load the font used by Material UI. */
-@import url('http://fonts.googleapis.com/css?family=Roboto:400,300,500');
-
 html {
 	background: black url('//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png');
 	color:#fff;
