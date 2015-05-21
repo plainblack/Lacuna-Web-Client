@@ -10,7 +10,7 @@ var Tab = ReactPanels.Tab;
 var Content = ReactPanels.Content;
 var Footer = ReactPanels.Footer;
 
-module.exports = React.createClass({
+var Panel = React.createClass({
     propTypes: {
         title: React.PropTypes.string.isRequired,
         height: React.PropTypes.number,
@@ -42,3 +42,5 @@ module.exports = React.createClass({
         );
     }
 });
+
+module.exports = Panel;

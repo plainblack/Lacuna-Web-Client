@@ -5,19 +5,19 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var Game = YAHOO.lacuna.Game;
+
+var AboutActions = require('js/actions/menu/about');
+
+var ServerStore = require('js/stores/server');
 var AboutStore = require('js/stores/menu/about');
 var CreditsStore = require('js/stores/menu/credits');
-var AboutActions = require('js/actions/menu/about');
 
 var Panel = require('js/components/panel');
 
 var About = React.createClass({
+    mixins: [Reflux.connect(ServerStore, 'server')],
     propTypes: {
-        date: React.PropTypes.instanceOf(Date).isRequired,
-        serverVersion: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.number
-        ]).isRequired
+        date: React.PropTypes.instanceOf(Date).isRequired
     },
     render: function() {
         return (
@@ -26,7 +26,7 @@ var About = React.createClass({
                     Copyright {this.props.date.getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
-                    Server Version: {this.props.serverVersion}.
+                    Server Version: {this.state.server.version}.
                 </p>
             </div>
         );
