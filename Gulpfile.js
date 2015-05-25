@@ -1,6 +1,7 @@
 'use strict';
 
 var browserify = require('browserify');
+var reactify = require('reactify');
 var source     = require('vinyl-source-stream');
 
 var cssConcat = require('gulp-concat-css');
@@ -32,11 +33,17 @@ gulp.task('browserify', function() {
         noParse: [
             'jquery'
         ],
-        insertGlobals : true,
+        extensions: [
+            // Include React files in the bundle.
+            '.jsx'
+        ],
         paths: [
             path.join(__dirname, 'app')
         ]
     });
+
+    // This transforms all the .jsx files into JavaScript.
+    b.transform(reactify);
 
     var stream = b
         .bundle()

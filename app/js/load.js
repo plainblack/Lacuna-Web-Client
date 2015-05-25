@@ -1,7 +1,7 @@
 'use strict';
 
 (function(){
-    // These libs are really important. Grab them before anything else moves.
+    // These libs are really important. Grab them before anything else happens.
     window.React = require('react');
     window.$ = window.jQuery = require('jquery');
     window._ = require('lodash');
@@ -132,7 +132,11 @@
 
         // Menu stuff
         require('js/mapPlanet');
+<<<<<<< HEAD
         require('js/about');
+=======
+        require('js/textboxList');
+>>>>>>> 492aff48ca8b529f5ce8938f7ab1f517f25c1646
         require('js/messaging');
 
         // invite has to come before essentia for some reason.
@@ -143,7 +147,7 @@
         require('js/info');
         require('js/notify');
         require('js/captcha');
-        require('js/menu');
+        require('js/components/menu');
 
         // Start everything!
         YAHOO.widget.Logger.enableBrowserConsole();

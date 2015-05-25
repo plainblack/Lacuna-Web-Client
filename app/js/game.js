@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 YAHOO.namespace("lacuna");
 if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
@@ -43,6 +45,15 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     window.location = 'http://www.lacunaexpanse.com';
                 }
             }
+
+            // This is some glue code to make the server, body and empire stores listen for changes.
+            // Normally, React Components should do this automatically, but since we need these
+            // stores operating immeadiatly we do it here.
+            // TODO: remove this!
+            require('js/stores/server').listen(_.noop);
+            require('js/stores/body').listen(_.noop);
+            require('js/stores/empire').listen(_.noop);
+
 
             if(!Lacuna.Pulser) {
                 Lacuna.Pulser = new Lacuna.Pulse();
@@ -657,10 +668,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     if(!doMenuUpdate) {
                         Lacuna.Menu.updateTick();
                     }
-
-                    /*if(status.empire.full_status_update_required == 1) {
-                        Lacuna.Game.GetStatus();
-                    }*/
                 }
                 if(status.body) {
                     var planet = status.body,
