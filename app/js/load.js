@@ -132,11 +132,6 @@
 
         // Menu stuff
         require('js/mapPlanet');
-<<<<<<< HEAD
-        require('js/about');
-=======
-        require('js/textboxList');
->>>>>>> 492aff48ca8b529f5ce8938f7ab1f517f25c1646
         require('js/messaging');
 
         // invite has to come before essentia for some reason.
