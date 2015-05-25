@@ -721,22 +721,6 @@ SHINEY
 }
 
 /*
-about
-*/
-#aboutCredits {
-	padding-left:20px
-}
-#aboutCredits ul {
-	padding-left:20px
-}
-#aboutCredits li {
-	list-style: none inside;
-}
-#aboutCredits ul li {
-	list-style: disc inside;
-}
-
-/*
 * Messaging
 */
 #messagingTabs #messagingCreate {
@@ -1030,7 +1014,7 @@ Info dialogs for Empire and Alliance
 	cursor: -webkit-grab;
 }
 
-#starMap:active, #planetMap:active { 
+#starMap:active, #planetMap:active {
 	cursor: grabbing;
 	cursor: -moz-grabbing;
 	cursor: -webkit-grabbing;
@@ -2436,6 +2420,11 @@ TextboxList
     zoom:1; /*force ie layout so we can use the display:inline below*/
     *display:inline; /*ie hack to make it think this is an inline-block*/
     overflow:hidden;
+}
+
+#reactWindowContainer {
+	top: 0;
+	position: absolute;
 }
 /*
  * vim: noet:ts=4:sw=4

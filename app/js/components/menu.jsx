@@ -1,7 +1,7 @@
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
-        
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -10,23 +10,28 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
         Lacuna = YAHOO.lacuna,
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
-        
+
     var UserMenu = function() {
         this.id = "userMenu";
         this.container = Dom.get("header");
         this.clickId = "userClick";
         this.elClick = Dom.get(this.clickId);
         this.elText = Dom.get("users");
-        
+
         this.createEvent("onChangeClick");
         this.createEvent("onInboxClick");
         this.createEvent("onDestructClick");
     };
     UserMenu.prototype = {
         create : function() {
-            var userMenu = new YAHOO.widget.Menu(this.id, { 
-                zindex: 1006, 
-                shadow:false, 
+
+            // Create a div for all the React-based windows and stuff to hide in.
+            // TODO: one day this should have a reasonable location and name.
+            $(document.body).append('<div id="reactWindowContainer"></div>');
+
+            var userMenu = new YAHOO.widget.Menu(this.id, {
+                zindex: 1006,
+                shadow:false,
                 context:[this.clickId, "tl", "bl",[11, -14]]
             });
             userMenu.addItems([
@@ -55,10 +60,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 }
                 Event.stopEvent(ev);
             }, userMenu, true);
-            
+
             this.Menu = userMenu;
             Dom.removeClass(this.container, Lib.Styles.HIDDEN);
-            
+
             this.createLeft();
             this.createRight();
 
@@ -72,7 +77,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 var context = args[0];
                 this.cfg.setProperty("text", Lacuna.Menu.UserMenu.getTextFor(context.id));
             });
-            
+
             this.userMenuTT = userMenuTT;
 
             this.update();
@@ -95,7 +100,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 destruct = document.createElement("div"),
                 destructClick = destruct.cloneNode(false),
                 destructImg = destruct.appendChild(document.createElement("img"));
-                
+
                 //bookmark = document.createElement("div"),
                 //bookmarkClick = bookmark.cloneNode(false),
                 //bookmarkImg = bookmark.appendChild(document.createElement("img"));
@@ -109,7 +114,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([change,changeClick], "change");
             Dom.addClass([change,changeClick], "menuItem");
             Dom.addClass(changeClick, "click");
-            
+
             inboxImg.src = Lib.AssetUrl + (Game.EmpireData.has_new_messages ? 'ui/l/inbox_new.png' : 'ui/l/inbox.png');
             inboxImg.alt = inboxImg.title = "Inbox";
             inboxClick.id = "userMenuInbox";
@@ -123,7 +128,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([inbox,inboxClick], "inbox");
             Dom.addClass([inbox,inboxClick], "menuItem");
             Dom.addClass(inboxClick, "click");
-            
+
             profileImg.src = Lib.AssetUrl + 'ui/l/profile.png';
             profileImg.alt = "profile";
             profileClick.id = "userMenuProfile";
@@ -131,7 +136,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([profile,profileClick], "profile");
             Dom.addClass([profile,profileClick], "menuItem");
             Dom.addClass(profileClick, "click");
-            
+
             essentiaImg.src = Lib.AssetUrl + 'ui/l/essentia.png';
             essentiaImg.alt = essentiaImg.title = "Essentia";
             essentiaClick.id = "userMenuEssentia";
@@ -139,7 +144,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([essentia,essentiaClick], "essentia");
             Dom.addClass([essentia,essentiaClick], "menuItem");
             Dom.addClass(essentiaClick, "click");
-            
+
             /*bookmarkImg.src = Lib.AssetUrl + 'ui/l/bookmarks.png';
             bookmarkImg.alt = "Bookmark";
             Event.on(bookmarkClick, "click", function() {
@@ -157,7 +162,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             }, this, true);
             Dom.addClass([destruct,destructClick], "destruct menuItem");
             Dom.addClass(destructClick, "click");
-            
+
             this.elChange = this.container.appendChild(change);
             this.elChangeClick = this.container.appendChild(changeClick);
             this.elChangeImg = changeImg;
@@ -171,7 +176,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             this.elEssentiaText = essentiaTxt;
             //this.elBookmark = this.container.appendChild(bookmark);
             //this.elBookmarkClick = this.container.appendChild(bookmarkClick);
-            
+
             this.elDestruct = this.container.appendChild(destruct);
             this.elDestructClick = this.container.appendChild(destructClick);
             this.elDestructImg = destructImg;
@@ -195,14 +200,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 logout = this.container.appendChild(document.createElement("div")),
                 logoutClick = this.container.appendChild(logout.cloneNode(false)),
                 logoutImg = logout.appendChild(document.createElement("img"));
-                
+
             inviteImg.src = Lib.AssetUrl + 'ui/l/invite_friend.png';
             inviteImg.alt = inviteImg.title = "Invite Friend";
             inviteClick.id = "userMenuInvite";
             Event.on(inviteClick, "click", Lacuna.Invite.show, this, true);
             Dom.addClass([invite,inviteClick], "invite menuItem");
             Dom.addClass(inviteClick, "click");
-            
+
             tutorialImg.src = Lib.AssetUrl + 'ui/l/tutorial.png';
             tutorialImg.alt = tutorialImg.title = "Tutorial";
             tutorialClick.id = "userMenuTutorial";
@@ -210,7 +215,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             tutorialClick.target = "_blank";
             Dom.addClass([tutorial,tutorialClick], "tutorial menuItem");
             Dom.addClass(tutorialClick, "click");
-            
+
             supportImg.src = Lib.AssetUrl + 'ui/l/support.png';
             supportImg.alt = supportImg.title = "Support";
             supportClick.id = "userMenuSupport";
@@ -218,21 +223,33 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             supportClick.target = "_blank";
             Dom.addClass([support,supportClick], "support menuItem");
             Dom.addClass(supportClick, "click");
-            
+
             statsImg.src = Lib.AssetUrl + 'ui/l/stats.png';
             statsImg.alt = statsImg.title = "Stats";
             statsClick.id = "userMenuStats";
             Event.on(statsClick, "click", Lacuna.Stats.show, this, true);
             Dom.addClass([stats,statsClick], "stats menuItem");
             Dom.addClass(statsClick, "click");
-            
+
             aboutImg.src = Lib.AssetUrl + 'ui/l/about.png';
             aboutImg.alt = aboutImg.title = "About";
             aboutClick.id = "userMenuAbout";
-            Event.on(aboutClick, "click", Lacuna.Menu.UserMenu.showAbout, this, true);
+            Event.on(aboutClick, "click", function() {
+                var About = require('js/components/menu/about');
+                var AboutActions = require('js/actions/menu/about');
+
+                // TODO: this render shouldn't be here! The goal is to only call AboutActions.open()
+                React.render(
+                    <About date={new Date()}/>,
+                    document.getElementById('reactWindowContainer')
+                );
+
+                AboutActions.open();
+                AboutActions.load();
+            }, this, true);
             Dom.addClass([about,aboutClick], "about menuItem");
             Dom.addClass(aboutClick, "click");
-            
+
             logoutImg.src = Lib.AssetUrl + 'ui/l/logout.png';
             logoutImg.alt = logoutImg.title = "Logout";
             logoutClick.id = "userMenuLogout";
@@ -263,7 +280,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             if (this.elDestructImg.src != new_destruct_image) {
                 this.elDestructImg.src = new_destruct_image;
             }
-            
+
             this.elEssentiaText.innerHTML = Lib.convertNumDisplay(Game.EmpireData.essentia, true);
         },
         show : function() {
@@ -284,11 +301,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             this._planetVisible = true;
             this._starVisible = false;
         },
-        showAbout : function() {
-            Game.OverlayManager.hideAll();
-            Lacuna.About.show();
-        },
-        
+
         getTextFor : function(id) {
             var ED = Game.EmpireData,
                 output;
@@ -344,7 +357,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
         }
     };
     Lang.augmentProto(UserMenu, Util.EventProvider);
-    
+
     var PlanetMenu = function() {
         this.id = "planetMenu";
         this.container = Dom.get("footer");
@@ -354,9 +367,9 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
     };
     PlanetMenu.prototype = {
         create : function() {
-            var planetMenu = new YAHOO.widget.Menu(this.id, { 
-                zindex: 1006, 
-                shadow:false, 
+            var planetMenu = new YAHOO.widget.Menu(this.id, {
+                zindex: 1006,
+                shadow:false,
                 //effect:{effect:YAHOO.widget.ContainerEffect.SLIDE,duration:0.5},
                 context:[this.clickId, "bl", "tl",[9, 10]]
             });
@@ -374,14 +387,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 this.show();
                 Event.stopEvent(ev);
             }, planetMenu, true);
-            
+
             this.Menu = planetMenu;
-            
+
             /*var arrow = document.createElement("div");
             arrow.id = "planetsArrow";
             var pc = Dom.get("planetsCenter");
             pc.insertBefore(arrow, pc.firstChild);*/
-            
+
             this.createLeft();
             this.createRight();
 
@@ -395,10 +408,10 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 var context = args[0];
                 this.cfg.setProperty("text", Lacuna.Menu.PlanetMenu.getTextFor(context.id));
             });
-            
+
             this.planetMenuTT = planetMenuTT;
 
-            
+
             this.update();
         },
         createLeft : function() {
@@ -426,7 +439,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 energyTxt = energy.appendChild(document.createElement("span")),
                 energyPercent = energy.appendChild(document.createElement("div")),
                 energyHr = energy.appendChild(document.createElement("span"));
-            
+
             foodImg.src = Lib.AssetUrl + 'ui/l/food.png';
             foodImg.alt = foodImg.title = "Food";
             foodOver.id = "planetMenuFood";
@@ -435,7 +448,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass(foodOver, "click");
             Dom.addClass(foodTxt, "stored");
             Dom.addClass(foodHr, "perHr");
-            
+
             oreImg.src = Lib.AssetUrl + 'ui/l/ore.png';
             oreImg.alt = oreImg.title = "Ore";
             oreOver.id = "planetMenuOre";
@@ -444,7 +457,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass(oreOver, "click");
             Dom.addClass(oreTxt, "stored");
             Dom.addClass(oreHr, "perHr");
-            
+
             waterImg.src = Lib.AssetUrl + 'ui/l/water.png';
             waterImg.alt = waterImg.title = "Water";
             waterOver.id = "planetMenuWater";
@@ -453,7 +466,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass(waterOver, "click");
             Dom.addClass(waterTxt, "stored");
             Dom.addClass(waterHr, "perHr");
-                
+
             energyImg.src = Lib.AssetUrl + 'ui/l/energy.png';
             energyImg.alt = energyImg.title = "Energy";
             energyOver.id = "planetMenuEnergy";
@@ -462,7 +475,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass(energyOver, "click");
             Dom.addClass(energyTxt, "stored");
             Dom.addClass(energyHr, "perHr");
-            
+
             Dom.addClass([foodPercent,orePercent,waterPercent,energyPercent], 'menuPercent');
             foodPercent = foodPercent.appendChild(document.createElement('div'));
             orePercent = orePercent.appendChild(document.createElement('div'));
@@ -473,7 +486,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             orePercent.innerHTML = '&nbsp;';
             waterPercent.innerHTML = '&nbsp;';
             energyPercent.innerHTML = '&nbsp;';
-            
+
             this.elFood = this.container.appendChild(food);
             this.elFoodOver = this.container.appendChild(foodOver);
             this.elFoodText = foodTxt;
@@ -511,7 +524,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 plotsOver = plots.cloneNode(false),
                 plotsImg = plots.appendChild(document.createElement("img")),
                 plotsTxt = plots.appendChild(document.createElement("span"));
-            
+
             wasteImg.src = Lib.AssetUrl + 'ui/l/waste.png';
             wasteImg.alt = wasteImg.title = "Waste";
             wasteOver.id = "planetMenuWaste";
@@ -524,7 +537,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             wastePercent = wastePercent.appendChild(document.createElement('div'));
             Dom.addClass(wastePercent, 'menuPercentInner');
             wastePercent.innerHTML = '&nbsp;';
-            
+
             happyImg.src = Lib.AssetUrl + 'ui/l/happiness.png';
             happyImg.alt = happyImg.title = "Happiness";
             happyOver.id = "planetMenuHappiness";
@@ -533,7 +546,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass(happyOver, "click");
             Dom.addClass(happyTxt, "stored");
             Dom.addClass(happyHr, "perHr");
-            
+
             plotsImg.src = Lib.AssetUrl + 'ui/l/plots.png';
             plotsImg.alt = plotsImg.title = "plots";
             plotsOver.id = "planetMenuPlots";
@@ -541,7 +554,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([plots,plotsOver], "menuItem");
             Dom.addClass(plotsOver, "click");
             Dom.addClass(plotsTxt, "stored");
-            
+
             this.elWaste = this.container.appendChild(waste);
             this.elWasteOver = this.container.appendChild(wasteOver);
             this.elWasteText = wasteTxt;
@@ -561,16 +574,16 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 cpi = ED.current_planet_id || ED.home_planet_id,
                 cp = planets[cpi],
                 count = 0;
-                
+
             this.Menu.clearContent();
 
             var items = [];
             for(var pKey in planets) {
                 if(planets.hasOwnProperty(pKey)) {
                     var p = planets[pKey],
-                        pObj = { 
-                            text: p.name, 
-                            id: "planetMenuItem"+(count++), 
+                        pObj = {
+                            text: p.name,
+                            id: "planetMenuItem"+(count++),
                             onclick: { fn: this.menuClick, obj:p }
                         },
                         submenuItems = [{ text: "Go To Surface", onclick: { fn: this.menuPlanetClick, obj:p } }];
@@ -584,7 +597,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                     items.push(pObj);
                 }
             }
-            
+
             items.sort(function(a,b){
                 var nameA = a.text;
                 var nameB = b.text;
@@ -596,12 +609,12 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 if (nameA > nameB) {return 1;}
                 return 0;
             });
-            
+
             this.Menu.addItems(items);
             this.Menu.render();
-            
+
             this.elText.innerHTML = [cp.image ? '<img src="'+Lib.AssetUrl+'star_system/'+cp.image+'.png" class="menuPlanetThumb" />' : '', cp.name].join('');
-            
+
             this.updateTick();
         },
         updateElm : function(el, newVal, extra) {
@@ -620,7 +633,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 cpi = ED.current_planet_id || ED.home_planet_id,
                 cp = planets[cpi],
                 count = 0;
-            
+
             if(cp) {
                 //this.elText.innerHTML = ['<img src="', Lib.AssetUrl, 'star_system/', cp.image, '.png" class="menuPlanetThumb" />', cp.name].join('');
                 this.updateElm(this.elFoodText, cp.food_stored);
@@ -635,7 +648,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 this.updateElm(this.elEnergyText, cp.energy_stored);
                 this.updateElm(this.elEnergyHour, cp.energy_hour, '/hr');
                 this.updatePercent(this.elEnergyPercent, cp.energy_stored/cp.energy_capacity||0);
-                
+
                 this.updateElm(this.elWasteText, cp.waste_stored);
                 this.updateElm(this.elWasteHour, cp.waste_hour, '/hr');
                 this.updatePercent(this.elWastePercent, cp.waste_stored/cp.waste_capacity||0);
@@ -645,7 +658,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             }
             else {
                 this.elText.innerHTML = "Planet";
-            
+
                 this.elFoodText.innerHTML = "0";
                 this.elFoodHour.innerHTML = "0";
                 Dom.setStyle(this.elFoodPercent, 'width', 0);
@@ -658,7 +671,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 this.elEnergyText.innerHTML = "0";
                 this.elEnergyHour.innerHTML = "0";
                 Dom.setStyle(this.elEnergyPercent, 'width', 0);
-                
+
                 this.elWasteText.innerHTML = "0";
                 this.elWasteHour.innerHTML = "0";
                 Dom.setStyle(this.elWastePercent, 'width', 0);
@@ -672,7 +685,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 perc = 1;
             }
             Dom.setStyle(el, 'width', (Math.round(perc*10000)/100) + '%');
-            
+
             var colorPercent;
             if (perc < 0.8) {
                 colorPercent = 0;
@@ -680,7 +693,7 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             else {
                 colorPercent = 5 * perc - 4;
             }
-            
+
             var color = 'rgb(255,'+Math.round(255 - 127 * colorPercent)+','+Math.round(255 - 255 * colorPercent) + ')';
             Dom.setStyle(el, 'background-color', color);
             Dom.setStyle(el.parentNode, 'border-color', color);
@@ -704,14 +717,14 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Lacuna.Menu.PlanetMenu.Menu.hide();
             Game.PlanetJump(planet);
         },
-        
+
         show : function() {
             Dom.removeClass(this.container, Lib.Styles.HIDDEN);
         },
         hide : function() {
             Dom.addClass(this.container, Lib.Styles.HIDDEN);
         },
-        
+
         resourceTTText : function(name, icon, iconClass, hour, store, cap) {
             var wantCap = typeof cap !== 'undefined';
             return [
@@ -766,11 +779,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
     var Menu = function() {
         this.UserMenu = new UserMenu();
         this.PlanetMenu = new PlanetMenu();
-        
+
         this.createEvent("onChangeClick");
         this.createEvent("onInboxClick");
         this.createEvent("onDestructClick");
-        
+
         this.UserMenu.subscribe("onChangeClick", function() {
             this.fireEvent("onChangeClick");
         }, this, true);
@@ -834,11 +847,11 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
         }
     };
     Lang.augmentProto(Menu, Util.EventProvider);
-    
+
     Lacuna.Menu = new Menu();
-    
+
 })();
-YAHOO.register("menu", YAHOO.lacuna.Menu, {version: "1", build: "0"}); 
+YAHOO.register("menu", YAHOO.lacuna.Menu, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4
