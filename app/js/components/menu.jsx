@@ -33,6 +33,13 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             // TODO: one day this should have a reasonable location and name.
             $(document.body).append('<div id="reactWindowContainer"></div>');
 
+            // More hacky glue code so that we can get the React-based RPC counter into the DOM.
+            $(document.body).append('<div id="rpcCounter"></div>');
+            React.render(
+                <RPCCount />,
+                document.getElementById('rpcCounter')
+            );
+
             var userMenu = new YAHOO.widget.Menu(this.id, {
                 zindex: 1006,
                 shadow:false,
