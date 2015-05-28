@@ -14,16 +14,16 @@ var RPCCount = React.createClass({
     render: function() {
         return (
             <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
                 color: '#ffffff',
-                backgroundColor: '#0268AC',
-                height: '25px',
-                fontSize: '20px',
-                zIndex: 10000
+                left: '350px',
+                position: 'absolute',
+                marginTop: '8px',
+                fontSize: '1.2em',
+                zIndex: '2000' // Make sure it's on top.
             }}>
-                RPCs: {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
+                RPCs:
+                <br />
+                {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
             </div>
         );
     }

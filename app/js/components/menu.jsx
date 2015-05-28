@@ -33,13 +33,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             // TODO: one day this should have a reasonable location and name.
             $(document.body).append('<div id="reactWindowContainer"></div>');
 
-            // More hacky glue code so that we can get the React-based RPC counter into the DOM.
-            $(document.body).append('<div id="rpcCounter"></div>');
-            React.render(
-                <RPCCount />,
-                document.getElementById('rpcCounter')
-            );
-
             var userMenu = new YAHOO.widget.Menu(this.id, {
                 zindex: 1006,
                 shadow:false,
@@ -112,10 +105,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
                 destructClick = destruct.cloneNode(false),
                 destructImg = destruct.appendChild(document.createElement("img"));
 
-                //bookmark = document.createElement("div"),
-                //bookmarkClick = bookmark.cloneNode(false),
-                //bookmarkImg = bookmark.appendChild(document.createElement("img"));
-
             changeImg.src = Lib.AssetUrl + 'ui/l/star_map.png';
             changeImg.alt = "Change";
             changeClick.id = "userMenuChange";
@@ -156,15 +145,6 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             Dom.addClass([essentia,essentiaClick], "menuItem");
             Dom.addClass(essentiaClick, "click");
 
-            /*bookmarkImg.src = Lib.AssetUrl + 'ui/l/bookmarks.png';
-            bookmarkImg.alt = "Bookmark";
-            Event.on(bookmarkClick, "click", function() {
-                this.fireEvent("onBookmarkClick");
-            }, this, true);
-            Dom.addClass([bookmark,bookmarkClick], "bookmark");
-            Dom.addClass([bookmark,bookmarkClick], "menuItem");
-            Dom.addClass(bookmarkClick, "click");*/
-
             destructImg.src = Lib.AssetUrl + (Game.EmpireData.self_destruct_active*1 === 1 ? 'ui/l/disable_self_destruct.png' : 'ui/l/enable_self_destruct.png');
             destructImg.alt = destructImg.title = "Destruct";
             destructClick.id = "userMenuDestruct";
@@ -185,12 +165,19 @@ if (typeof YAHOO.lacuna.Menu == "undefined" || !YAHOO.lacuna.Menu) {
             this.elEssentia = this.container.appendChild(essentia);
             this.elEssentiaClick = this.container.appendChild(essentiaClick);
             this.elEssentiaText = essentiaTxt;
-            //this.elBookmark = this.container.appendChild(bookmark);
-            //this.elBookmarkClick = this.container.appendChild(bookmarkClick);
 
             this.elDestruct = this.container.appendChild(destruct);
             this.elDestructClick = this.container.appendChild(destructClick);
             this.elDestructImg = destructImg;
+
+            var rpcCountDiv = document.createElement('div');
+            rpcCountDiv.id = 'rpcCount';
+            this.container.appendChild(rpcCountDiv);
+
+            React.render(
+                <RPCCount />,
+                document.getElementById('rpcCount')
+            );
         },
         createRight : function() {
             var invite = this.container.appendChild(document.createElement("div")),
