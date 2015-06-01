@@ -1,10 +1,6 @@
 'use strict';
 
 (function(){
-    // These libs are really important. Grab them before anything else happens.
-    window.React = require('react');
-    window.$ = window.jQuery = require('jquery');
-    window._ = require('lodash');
 
     // TODO this code can be improved.
     var l = window.location;
