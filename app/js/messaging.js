@@ -1,3 +1,7 @@
+'use strict';
+
+var MailActions = require('js/actions/window/mail');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
@@ -160,6 +164,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 Event.delegate("messagingTabs", "click", this.tabClick, "li.tab", this, true);
             }, this, true);
             this.messagingPanel.hideEvent.subscribe(function(){
+                // Let the React component know that we are going away now.
+                MailActions.hide();
+
                 this.attachmentPanel.hide();
             }, this, true);
 

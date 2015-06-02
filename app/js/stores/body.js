@@ -93,8 +93,9 @@ var BodyStore = Reflux.createStore({
         } else {
             this.data = status.body;
 
-            // Possible things to do here:
-            //  ~ Stuff
+            // Simplify data.
+            this.data.x = parseInt(this.data.x, 10);
+            this.data.y = parseInt(this.data.y, 10);
 
             this.trigger(this.data);
         }

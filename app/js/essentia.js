@@ -1,7 +1,11 @@
+'use strict';
+
+var EssentiaActions = require('js/actions/window/essentia');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
-    
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -14,16 +18,16 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
 
     var Essentia = function() {
         this.createEvent("onRpc");
-        
+
         this.id = "essentia";
-        
+
         var container = document.createElement("div");
         container.id = this.id;
         Dom.addClass(container, Lib.Styles.HIDDEN);
         container.innerHTML = this._getHtml();
         document.body.insertBefore(container, document.body.firstChild);
         Dom.addClass(container, "nofooter");
-        
+
         this.Dialog = new YAHOO.widget.Panel(this.id, {
             constraintoviewport:true,
             fixedcenter:true,
@@ -67,6 +71,9 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
                 delete this._interval;
                 this.timers = {};
             }
+
+            // Let the React component know that we're going now.
+            EssentiaActions.hide();
         }, this, true);
         this.timers = {};
 
@@ -187,7 +194,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '    </div>'
             ].join('');
         },
-        
+
         show : function() {
             //this is called out of scope so make sure to pass the correct scope in
             Lacuna.Essentia.tabView.selectTab(0);
@@ -300,7 +307,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
         },
         populate : function(results) {
             var boosts = results.boosts;
-            
+
             this.updateTime(this.timeFood, boosts.food);
             this.updateTime(this.timeOre, boosts.ore);
             this.updateTime(this.timeWater, boosts.water);
@@ -337,11 +344,11 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
     };
 
     Lang.augmentProto(Essentia, Util.EventProvider);
-            
+
     Lacuna.Essentia = new Essentia();
 
 })();
-YAHOO.register("essentia", YAHOO.lacuna.Essentia, {version: "1", build: "0"}); 
+YAHOO.register("essentia", YAHOO.lacuna.Essentia, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

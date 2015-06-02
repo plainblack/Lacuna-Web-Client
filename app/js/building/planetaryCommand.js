@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna.buildings");
 
+var $ = require('jquery');
+
 if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacuna.buildings.PlanetaryCommand) {
 
 (function(){

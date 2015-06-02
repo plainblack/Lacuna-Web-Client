@@ -659,10 +659,6 @@ Info dialogs for Empire and Alliance
 * Star Map
 */
 #starMap, #planetMap {
-	margin: 0 auto;
-	position:relative;
-	/*height:700px;
-	width:700px;*/
 	border:0 none;
 	clear:both;
 	cursor: move;
@@ -672,7 +668,7 @@ Info dialogs for Empire and Alliance
 }
 
 /* Not sure about Starmap as yet so just going to do this to planet map. */
-#planetMap {
+#planetMap, #starMap {
 	position: absolute;
 	top: 0;
 	width: 100vw;

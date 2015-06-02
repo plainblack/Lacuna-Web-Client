@@ -4,9 +4,7 @@ var Reflux = require('reflux');
 
 var MenuActions = Reflux.createActions([
     'show',
-    'hide',
-    'showPlanet',
-    'showStarmap'
+    'hide'
 ]);
 
 module.exports = MenuActions;

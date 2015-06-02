@@ -6,10 +6,10 @@ var _ = require('lodash');
 
 var Game = YAHOO.lacuna.Game;
 
-var AboutActions = require('js/actions/menu/about');
+var AboutActions = require('js/actions/window/about');
 
 var ServerStore = require('js/stores/server');
-var AboutStore = require('js/stores/menu/about');
+var AboutStore = require('js/stores/window/about');
 var CreditsStore = require('js/stores/menu/credits');
 
 var Panel = require('js/components/panel');
@@ -79,28 +79,33 @@ var Credits = React.createClass({
 });
 
 var AboutWindow = React.createClass({
-    mixins: [Reflux.connect(AboutStore, 'display')],
+    mixins: [Reflux.connect(AboutStore, 'show')],
     getInitialState: function() {
         return {
-            display: 'none'
+            show: false
         }
     },
     handleClose: function() {
         AboutActions.close();
     },
     render: function() {
-        return (
-            <Panel title="About" height={400} onClose={this.handleClose}
-                display={this.state.display}>
-                <h2>The Lacuna Expanse</h2>
-                <About date={this.props.date} serverVersion={Game.ServerData.version} />
+        if (this.state.show) {
+            AboutActions.load();
+            return (
+                <Panel title="About" height={400} onClose={this.handleClose}
+                    display={this.state.display}>
+                    <h2>The Lacuna Expanse</h2>
+                    <About date={this.props.date} serverVersion={Game.ServerData.version} />
 
-                <br />
+                    <br />
 
-                <h2>Credits</h2>
-                <Credits credits={this.state.credits} />
-            </Panel>
-        );
+                    <h2>Credits</h2>
+                    <Credits credits={this.state.credits} />
+                </Panel>
+            );
+        } else {
+            return <div></div>;
+        }
     }
 });
 
