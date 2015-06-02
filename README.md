@@ -33,10 +33,6 @@ In this project, Gulp is used to manage building the code. All the tasks that ca
 
 Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them. This is also the default task, meaning that running just `gulp` in the command line will run this task.
 
-> `PRODUCTION=1 gulp build`
-
-This does the same as above but it prepares the code itself for *production*. For example, there are a few development-only bits that get removed in this process. A deploy on a production server would **need** to do this or the client won't load properly.
-
 ## dev
 
 > `gulp dev`
