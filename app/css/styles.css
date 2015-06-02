@@ -659,10 +659,6 @@ Info dialogs for Empire and Alliance
 * Star Map
 */
 #starMap, #planetMap {
-	margin: 0 auto;
-	position:relative;
-	/*height:700px;
-	width:700px;*/
 	border:0 none;
 	clear:both;
 	cursor: move;
@@ -671,8 +667,7 @@ Info dialogs for Empire and Alliance
 	cursor: -webkit-grab;
 }
 
-/* Not sure about Starmap as yet so just going to do this to planet map. */
-#planetMap {
+#planetMap, #starMap {
 	position: absolute;
 	top: 0;
 	width: 100vw;
@@ -815,7 +810,7 @@ Info dialogs for Empire and Alliance
 	z-index:30;
 	width:20px;
 	height:255px;
-	left:60px;
+	left:15px;
 	top:100px;
 }
 .mapiator_zoom_slider {
@@ -1999,10 +1994,29 @@ TextboxList
 /* Semantic UI */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css');
 
+/* Stuff related to the Chat bar */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css');
+
+/* The fact that we're using US1 *might* be bad here. */
+@import url('https://us1.lacunaexpanse.com/chiselchat/chiselchat.min.css');
+
 
 /* Semantic overrides everything in this file and manages to not make a mess. Except for this... */
 body {
 	color: #ffffff;
+}
+
+/* Don't make the color of text input white, though. */
+input, textarea, select, option {
+	color: black;
+}
+
+/* Fix incoming ships position. */
+#notify_c {
+	position: absolute;
+	right: 15px;
+	top: 100px;
+	z-index: 2000;
 }
 
 

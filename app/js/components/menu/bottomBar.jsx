@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 
 var BodyStore = require('js/stores/body');
 
-var CenterBar = require('js/components/mixins/centerBar');
+var CenterBar = require('js/components/mixin/centerBar');
 
 var util = require('js/util');
 

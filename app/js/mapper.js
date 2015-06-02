@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna");
 
+var $ = require('js/hacks/jquery');
+
 if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
 (function(){
@@ -1008,22 +1010,12 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
         },
         moveByPx : function( x,y ) {
             var n = this.visibleArea.move( x*-1,y*-1 );
+
             //move values back to positive for us to use
             x = n.x*-1;
             y = n.y*-1;
 
             this.movableContainer.move( x,y );
-            /*
-            this.diffX += x;
-            this.diffY += y;
-
-            var checkTileSize = this.tileSizeInPx;
-            if( Math.abs(this.diffX) > checkTileSize || Math.abs(this.diffY) > checkTileSize) {
-                //reset diff's
-                this.diffX = this.diffY = 0;
-                this.tileLayer.render();
-            }
-            */
             return {"x":x,"y":y};
         },
         setZoomLevel : function( level ) {
@@ -1034,10 +1026,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             }
         },
         redraw : function() {
-            this.width = this.mapDiv.offsetWidth;
-            this.height = this.mapDiv.offsetHeight;
-            //this.centerX = Math.floor(0.5 * this.width);
-            //this.centerY = Math.floor(0.5 * this.height);
+            this.width = $(window.document.body).width();
+            this.height = $(window.document.body).height();
 
             this.movableContainer.reset();
             this.visibleArea = new Mapper.VisibleArea(this);
@@ -1075,7 +1065,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             this.tileLayer.showTiles();
         },
         setCenterTo : function(locX, locY) {
-            if(Lang.isNumber(locX) && Lang.isNumber(locY) && this.tileLayer) {
+            if (Lang.isNumber(locX) && Lang.isNumber(locY) && this.tileLayer) {
+
                 var otherWidth = this.visibleArea.centerX,
                     otherHeight = this.visibleArea.centerY,
                     ox = locX * this.tileSizeInPx + (this.tileSizeInPx / 2) - otherWidth,
@@ -1083,19 +1074,6 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 
                 this.moveByPx(ox * -1, oy * -1);
                 this.tileLayer.render(true);
-
-                /*var otherWidth = this.visibleArea.centerX,
-                    otherHeight = this.visibleArea.centerY;
-                var locXm = locX,
-                    locYm = locY * -1;
-
-                var locXmPx = (locXm * this.tileSizeInPx) + (this.tileSizeInPx / 2),
-                    locYmPx = (locYm * this.tileSizeInPx) + (this.tileSizeInPx / 2);
-
-                var ox = locXmPx - otherWidth,
-                    oy = locYmPx - otherHeight;
-
-                this.moveByPx(ox * -1, oy * -1);*/
             }
         },
         setCenterToPx : function(pX, pY) {
@@ -1202,7 +1180,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             }
             else {
                 //YAHOO.log(data, "debug", "StarMap.getTileData.requestData");
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Map.get_star_map({ args: {
                     session_id : Game.GetSession(""),
                     left : x1,
@@ -1212,7 +1190,7 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
                 }},{
                     success : function(o){
                         //YAHOO.log(o, "debug", "StarMap.getTileData.get_stars.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         if(o && o.result) {
                             Game.ProcessStatus(o.result.status);
                             this.addTileData(o.result.stars);
@@ -1309,16 +1287,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             this._setTileSizeByZoom();
         },
         setCenterToCommand : function() {
-            if(this.command) { // && this.tileLayer) {
+            if(this.command) {
                 this.setCenterTo(this.command.x, this.command.y);
-                /*
-                var otherWidth = this.visibleArea.centerX,
-                    otherHeight = this.visibleArea.centerY;
-
-                var ox = this.command.x * this.tileSizeInPx + (this.tileSizeInPx / 2) - otherWidth,
-                    oy = (this.command.y * -1) * this.tileSizeInPx + (this.tileSizeInPx / 2) - otherHeight;
-
-                this.moveByPx(ox * -1, oy * -1);*/
             }
         },
         getTileImageSize : function() {

@@ -2,67 +2,67 @@
 Public Key:
 53137d8f-3544-4118-9001-b0acbec70b3d
 Private Key:
-d07c9bd4-fcb7-427f-9064-218064677fef 
+d07c9bd4-fcb7-427f-9064-218064677fef
 */
 YAHOO.namespace("lacuna");
 /*
-indexOf is a recent addition to the ECMA-262 standard; as such it may not be present in all browsers. You can work around this by inserting the 
-following code at the beginning of your scripts, allowing use of indexOf in implementations which do not natively support it. This algorithm is 
+indexOf is a recent addition to the ECMA-262 standard; as such it may not be present in all browsers. You can work around this by inserting the
+following code at the beginning of your scripts, allowing use of indexOf in implementations which do not natively support it. This algorithm is
 exactly the one used in Firefox and SpiderMonkey.
 */
-if (!Array.prototype.indexOf) {  
-    Array.prototype.indexOf = function(elt /*, from*/) {  
-        var len = this.length >>> 0;  
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function(elt /*, from*/) {
+        var len = this.length >>> 0;
 
-        var from = Number(arguments[1]) || 0;  
-        from = (from < 0) ? Math.ceil(from) : Math.floor(from);  
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0) ? Math.ceil(from) : Math.floor(from);
         if (from < 0) {
             from += len;
         }
 
-        for (; from < len; from++) {  
-            if (from in this && this[from] === elt) { 
+        for (; from < len; from++) {
+            if (from in this && this[from] === elt) {
                 return from;
             }
-        }  
-        return -1;  
-    };  
+        }
+        return -1;
+    };
 }
 if (!String.prototype.titleCaps) {
     String.small = "(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v[.]?|via|vs[.]?)";
     String.punct = "([!\"#$%&'()*+,./:;<=>?@[\\\\\\]^_`{|}~-]*)";
-  
+
     String.prototype.titleCaps = function(replaceVal, withVal){
-        var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0, processVal = this;
+        var parts = [], split = /[:.;?!] |(?: |^)["ï¿½]/g, index = 0, processVal = this;
         var fnUpper = function(all){
                 return (/[A-Za-z]\.[A-Za-z]/).test(all) ? all : String.upper(all);
             },
             fnPuntUpper = function(all, punct, word){
                 return punct + String.upper(word);
             };
-            
+
         if(replaceVal) {
             var rg = new RegExp(replaceVal, 'g');
             processVal = processVal.replace(rg, withVal || '');
         }
-            
+
         while (true) {
             var m = split.exec(processVal);
 
             parts.push( processVal.substring(index, m ? m.index : processVal.length)
-                .replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, fnUpper)
+                .replace(/\b([A-Za-z][a-z.'ï¿½]*)\b/g, fnUpper)
                 .replace(RegExp("\\b" + String.small + "\\b", "ig"), String.lower)
                 .replace(RegExp("^" + String.punct + String.small + "\\b", "ig"), fnPuntUpper)
                 .replace(RegExp("\\b" + String.small + String.punct + "$", "ig"), String.upper));
-            
+
             index = split.lastIndex;
-            
+
             if ( m ) { parts.push( m[0] ); }
             else { break; }
         }
-        
+
         return parts.join("").replace(/ V(s?)\. /ig, " v$1. ")
-            .replace(/(['Õ])S\b/ig, "$1s")
+            .replace(/(['ï¿½])S\b/ig, "$1s")
             .replace(/\b(AT&T|Q&A)\b/ig, function(all){
                 return all.toUpperCase();
             });
@@ -74,9 +74,9 @@ if (!String.prototype.titleCaps) {
       return word.substr(0,1).toUpperCase() + word.substr(1);
     };
 }
-    
+
 if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
-    
+
 (function(){
     var Util = YAHOO.util,
         Lang = YAHOO.lang,
@@ -131,16 +131,16 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             STAR : "2",
             SYSTEM : "3"
         },
-        
+
         formatInlineList : function(stringArray, start, end) {
             if(Lang.isArray(stringArray)) {
                 var offering = ['<ul class="inlineList">'];
-                
+
                 var len = stringArray.length,
                     begin = 0;
                 if(start) {
                     begin = start;
-                    
+
                     if(end) {
                         end += 1; //add one so we include the end index
                         len = end > len ? len : end;
@@ -152,7 +152,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
                     offering[offering.length] = stringArray[n];
                     offering[offering.length] = '</li>';
                 }
-                    
+
                 offering[offering.length] = '</ul>';
                 return offering.join('');
             }
@@ -179,7 +179,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             if(totalSeconds < 0) {
                 return "";
             }
-            
+
             var secondsInDay = 60 * 60 * 24,
                 secondsInHour = 60 * 60,
                 day = Math.floor(totalSeconds / secondsInDay),
@@ -188,7 +188,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
                 sleft = hleft % secondsInHour,
                 min = Math.floor(sleft / 60),
                 seconds = Math.floor(sleft % 60);
-            
+
             if(day > 0) {
                 return [day,xPad(hour,'0'),xPad(min,'0'),xPad(seconds,'0')].join(':');
             }
@@ -217,13 +217,6 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             //"23 03 2010 01:20:11 +0000"
             var pieces = strDate.split(' '), //[day month year hr:min:sec timez]
                 time = pieces[3].split(':');
-            //year, month, day, hours, minutes, seconds
-            /*var dt = new Date(pieces[2]*1,(pieces[1]*1)-1,pieces[0]*1,time[0]*1,time[1]*1,time[2]*1,0), //construct date
-                msTime = dt.getTime(), //get dt in milliseconds
-                offset = dt.getTimezoneOffset() * 60000, //get locale offset in milliseconds
-                correctTime = msTime - offset, //subtract from UTC server time
-                cd = new Date(correctTime);
-            return cd;*/
             var dt = new Date();
             dt.setUTCFullYear(pieces[2]*1);
             dt.setUTCMonth((pieces[1]*1-1), pieces[0]*1);
@@ -324,11 +317,11 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
                 return Math.floor(number) || "0";
             }
         },
-        
+
         getSelectedOption : function(select) {
             //just making sure
             select = Dom.get(select);
-            
+
             return Library.getSelectedOptionFromSelectElement(select);
         },
         getSelectedOptionFromSelectElement : function(select) {
@@ -344,7 +337,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             var opt = Library.getSelectedOptionFromSelectElement(select);
             return opt ? opt.value : null;
         },
-        
+
         fadeOutElm : function(id) {
             var a = new Util.Anim(id, {opacity:{from:1,to:0}}, 4);
             a.onComplete.subscribe(function(e, dur, arg){
@@ -353,7 +346,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             }, id);
             a.animate();
         },
-        
+
         ResourceTypes : {
             "energy":1,
             "essentia":0,
@@ -471,10 +464,10 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             return newplanets;
         }
     };
-    
+
     YAHOO.lacuna.Library = Library;
 })();
-YAHOO.register("library", YAHOO.lacuna.Library, {version: "1", build: "0"}); 
+YAHOO.register("library", YAHOO.lacuna.Library, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

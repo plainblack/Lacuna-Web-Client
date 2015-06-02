@@ -66,11 +66,11 @@ if (typeof YAHOO.lacuna.buildings.EssentiaVein == "undefined" || !YAHOO.lacuna.b
 
             if(this.result.building.drain_capable > 0 &&
                Lang.isNumber(num) && num <= this.result.building.drain_capable) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.drain({session_id:Game.GetSession(),building_id:this.building.id,times:num}, {
                     success: function(o){
                         YAHOO.log(o, "info", "EssentiaVein.DrainVein.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.result = o.result;
                         this.essentiaveinDrainTab();

@@ -398,7 +398,7 @@ _getWasteChainTab : function() {
         
         getGlyphSummary : function(force) {
             if(force || !this.glyph_summary) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_glyph_summary({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -408,7 +408,7 @@ _getWasteChainTab : function() {
                         this.glyph_summary = o.result.glyphs;
                         this.glyphSize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadGlyphSummary");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -417,7 +417,7 @@ _getWasteChainTab : function() {
 
         getPlanSummary : function(force) {
             if(force || !this.plan_summary) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_plan_summary({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -427,7 +427,7 @@ _getWasteChainTab : function() {
                         this.plan_summary = o.result.plans;
                         this.planSize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadPlanSummary");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -435,7 +435,7 @@ _getWasteChainTab : function() {
         },
         getPrisoners : function(force) {
             if(force || !this.prisoners) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_prisoners({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -445,7 +445,7 @@ _getWasteChainTab : function() {
                         this.prisoners = o.result.prisoners;
                         this.spySize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadPrisoners");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -453,7 +453,7 @@ _getWasteChainTab : function() {
         },
         getShipSummary : function(force) {
             if(force || !this.ship_summary) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_ship_summary({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -463,7 +463,7 @@ _getWasteChainTab : function() {
                         this.ship_summary = o.result.ships;
                         this.shipSize = o.result.cargo_space_used_each;
                         this.fireEvent("onLoadShipSummary");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     }, 
                     scope:this
                 });
@@ -471,7 +471,7 @@ _getWasteChainTab : function() {
         },
         getStoredResources : function(force) {
             if(force || !this.resources) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_stored_resources({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -480,7 +480,7 @@ _getWasteChainTab : function() {
                         this.rpcSuccess(o);
                         this.resources = o.result.resources;
                         this.fireEvent("onLoadResources");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -490,7 +490,7 @@ _getWasteChainTab : function() {
         //View Available
         getAvailableTrades : function(e) {
             if(e.newValue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:1},
                     selVal = Lib.getSelectedOptionValue("tradeFilter");
                 if(selVal) {
@@ -499,7 +499,7 @@ _getWasteChainTab : function() {
                 this.service.view_market(data, {
                     success : function(o){
                         YAHOO.log(o, "info", "Trade.view_available_trades.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         delete o.result.status; //get rid of status after we process it, since it's big
@@ -597,7 +597,7 @@ _getWasteChainTab : function() {
             }
         },
         AvailableHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:newState.page},
                 selVal = Lib.getSelectedOptionValue("tradeFilter");
             if(selVal) {
@@ -606,7 +606,7 @@ _getWasteChainTab : function() {
             this.service.view_market(data, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.view_available_trades.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     delete o.result.status; //get rid of status after we process it, since it's big
@@ -621,7 +621,7 @@ _getWasteChainTab : function() {
             this.availablePager.setState(newState);
         },
         AvailableAccept : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.accept_from_market({
                 session_id:Game.GetSession(""),
                 building_id:this.Self.building.id,
@@ -632,13 +632,13 @@ _getWasteChainTab : function() {
                     this.Self.rpcSuccess(o);
                     //force get the new availabe list after accepting so we get a new captcha
                     this.Self.getAvailableTrades({newValue:true});
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
         },
         AvailableReport : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.report_abuse({
                 session_id:Game.GetSession(""),
                 building_id:this.Self.building.id,
@@ -651,7 +651,7 @@ _getWasteChainTab : function() {
                         btn.parentNode.removeChild(btn);
                     }
                     this.Self.rpcSuccess(o);
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -664,11 +664,11 @@ _getWasteChainTab : function() {
         //View Mine
         getMyTrades : function(e) {
             if(e.newValue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_my_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Trade.view_my_trades.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         delete o.result.status; //get rid of status after we process it, since it's big
@@ -751,7 +751,7 @@ _getWasteChainTab : function() {
             }
         },
         MineHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_my_market({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -759,7 +759,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.view_available_trades.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     delete o.result.status; //get rid of status after we process it, since it's big
@@ -775,7 +775,7 @@ _getWasteChainTab : function() {
         },
         MineWithdraw : function() {
             if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask, ' essentia and offering ', this.Trade.offer.join(', '),'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.Self.service.withdraw_from_market({
                     session_id:Game.GetSession(""),
                     building_id:this.Self.building.id,
@@ -792,7 +792,7 @@ _getWasteChainTab : function() {
                             }
                         }
                         this.Line.parentNode.removeChild(this.Line);
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         
                         this.Self.getStoredResources(true);
                         this.Self.getPlanSummary(true);
@@ -943,7 +943,7 @@ _getWasteChainTab : function() {
             }
         },
         getAddShips : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.service.get_trade_ships({
                 session_id: Game.GetSession(""),
@@ -973,7 +973,7 @@ _getWasteChainTab : function() {
                         }
                     }
                     
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -1290,7 +1290,7 @@ _getWasteChainTab : function() {
                 }
             }
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.add_to_market(data, {
                 success : function(o){
                     this.rpcSuccess(o);
@@ -1318,7 +1318,7 @@ _getWasteChainTab : function() {
                     Dom.get("tradeAddAskingQuantity").value = "";
                     Dom.get("tradeAddCargo").innerHTML = "0";
                     this.fireEvent("onSelectTab", this.mineTabIndex);
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -1466,7 +1466,7 @@ _getWasteChainTab : function() {
         getPushShips : function() {
             var targetId = Lib.getSelectedOptionValue("tradePushColony");
             if(targetId) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_trade_ships({
                     session_id: Game.GetSession(""),
                     building_id: this.building.id,
@@ -1493,7 +1493,7 @@ _getWasteChainTab : function() {
                             }
                         }
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -1820,7 +1820,7 @@ _getWasteChainTab : function() {
             }
             else {
                 Dom.get("tradePushMessage").innerHTML = "";
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.push_items(data, {
                     success : function(o){
                         this.rpcSuccess(o);
@@ -1853,7 +1853,7 @@ _getWasteChainTab : function() {
                         var msg = Dom.get("tradePushMessage");
                         msg.innerHTML = ["Successfully pushed to ", Lib.getSelectedOption(Dom.get("tradePushColony")).innerHTML, '.'].join('');
                         Lib.fadeOutElm("tradePushMessage");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         //get new ships since we just sent one
                         this.getPushShips();
                     },
@@ -1946,11 +1946,11 @@ _getWasteChainTab : function() {
             Dom.setStyle("supplyChainListNone", "display", "none");
             
             if ( !this.supply_chains ) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.max_supply_chains = o.result.max_supply_chains;
                         this.supply_chains = o.result.supply_chains;
@@ -2090,7 +2090,7 @@ _getWasteChainTab : function() {
                 resource_type = Lib.getSelectedOptionValue("supplyChainAddResourceType"),
                 resource_hour = Dom.get("supplyChainAddResourceHour").value;
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.create_supply_chain({
                 session_id: Game.GetSession(),
                 building_id: this.Self.building.id,
@@ -2100,7 +2100,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainAddNew.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     
                     delete this.Self.supply_chains;
@@ -2110,7 +2110,7 @@ _getWasteChainTab : function() {
             });
         },
         SupplyChainUpdate : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.update_supply_chain({
                 session_id:Game.GetSession(),
                 building_id:this.Self.building.id,
@@ -2120,7 +2120,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainUpdate.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     
                     delete this.Self.supply_chains;
@@ -2135,7 +2135,7 @@ _getWasteChainTab : function() {
             if (!confirm(['Are you sure you want to delete the supply chain of', chain.resource_hour, chain.resource_type.titleCaps(), 'to', chain.body.name].join(' ')))
                 return;
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.delete_supply_chain({
                 session_id:Game.GetSession(),
                 building_id:this.Self.building.id,
@@ -2143,7 +2143,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainRemove.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     
                     delete this.Self.supply_chains;
@@ -2159,7 +2159,7 @@ _getWasteChainTab : function() {
             var request_count = 0;
             
             if ( !this.supply_chains ) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 request_count++;
                 
                 this.service.view_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
@@ -2167,7 +2167,7 @@ _getWasteChainTab : function() {
                         YAHOO.log(o, "info", "Trade.viewSupplyChainList.success");
                         request_count--;
                         if ( request_count == 0 ) {
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                         }
                         this.rpcSuccess(o);
                         this.supply_chains = o.result.supply_chains;
@@ -2182,7 +2182,7 @@ _getWasteChainTab : function() {
             }
             
             if ( !this.supply_chain_ships ) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 request_count++;
                 
                 this.service.get_supply_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
@@ -2190,7 +2190,7 @@ _getWasteChainTab : function() {
                         YAHOO.log(o, "info", "Trade.viewSupplyShipsInfo.success");
                         request_count--;
                         if ( request_count == 0 ) {
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                         }
                         this.rpcSuccess(o);
                         this.supply_chain_ships = o.result.ships;
@@ -2307,7 +2307,7 @@ _getWasteChainTab : function() {
             }
         },
         SupplyChainShipAdd : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.Self.service.add_supply_ship_to_fleet({
                 session_id:Game.GetSession(),
@@ -2316,7 +2316,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainShipAdd.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     var ships = this.Self.supply_chain_ships;
                     for(var i=0; i<ships.length; i++) {
@@ -2333,7 +2333,7 @@ _getWasteChainTab : function() {
             });
         },
         SupplyChainShipRemove : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.Self.service.remove_supply_ship_from_fleet({
                 session_id:Game.GetSession(),
@@ -2342,7 +2342,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.SupplyChainShipRemove.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     var ships = this.Self.supply_chain_ships;
                     for(var i=0; i<ships.length; i++) {
@@ -2371,11 +2371,11 @@ _getWasteChainTab : function() {
             }
         },
         WasteChainDetails : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_waste_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.WasteChainDetails.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.waste_chain = o.result.waste_chain[0];
                     
@@ -2417,7 +2417,7 @@ _getWasteChainTab : function() {
             var waste_chain_id = this.Self.waste_chain.id,
                 waste_hour = Dom.get("chainWasteHourInput").value;
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.update_waste_chain({
                 session_id: Game.GetSession(),
                 building_id: this.Self.building.id,
@@ -2426,7 +2426,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.WasteChainUpdateWasteHour.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     
                     this.Self.WasteChainDetails();
@@ -2447,11 +2447,11 @@ _getWasteChainTab : function() {
             Dom.get("chainWasteHourInput").value = waste_hour;
         },
         WasteChainShipsView : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.get_waste_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.WasteChainShipsView.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.waste_chain_ships = o.result.ships;
                     
@@ -2549,7 +2549,7 @@ _getWasteChainTab : function() {
             }
         },
         WasteChainShipAdd : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.Self.service.add_waste_ship_to_fleet({
                 session_id:Game.GetSession(),
@@ -2558,7 +2558,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.WasteChainShipAdd.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     var ships = this.Self.waste_chain_ships;
                     for(var i=0; i<ships.length; i++) {
@@ -2575,7 +2575,7 @@ _getWasteChainTab : function() {
             });
         },
         WasteChainShipRemove : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.Self.service.remove_waste_ship_from_fleet({
                 session_id:Game.GetSession(),
@@ -2584,7 +2584,7 @@ _getWasteChainTab : function() {
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Trade.WasteChainShipRemove.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     var ships = this.Self.waste_chain_ships;
                     for(var i=0; i<ships.length; i++) {

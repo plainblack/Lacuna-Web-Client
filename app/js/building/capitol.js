@@ -42,7 +42,7 @@ if (typeof YAHOO.lacuna.buildings.Capitol == "undefined" || !YAHOO.lacuna.buildi
             Event.stopEvent(e);
             var btn = Event.getTarget(e);
             var newName = Dom.get('capitolNewEmpireName').value;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             btn.disabled = true;
             this.service.rename_empire({
                 session_id:Game.GetSession(),
@@ -54,7 +54,7 @@ if (typeof YAHOO.lacuna.buildings.Capitol == "undefined" || !YAHOO.lacuna.buildi
                     btn.disabled = false;
                     Dom.get('capitolNewEmpireName').value = '';
                     Dom.get('capitolCurrentEmpireName').innerHTML = newName;
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     alert('Your empire name has been changed!');
                 },

@@ -58,7 +58,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                         var results = envelope.deserialize(o);
 
                         // Send the status block off to relevant stores to update UI.
-                        if (results.result.status) {
+                        if (results.result && results.result.status) {
                             StatusActions.update(results.result.status);
                         }
 

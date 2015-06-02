@@ -101,7 +101,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       return this.tab;
     },
     bhgGetActions : function() {
-      Lacuna.Pulser.Show();
+      require('js/actions/menu/loader').show();
       
       Dom.setStyle("bhgActions", "display", "none");
       
@@ -128,7 +128,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         target: target
       }, {
         success : function(o){
-          Lacuna.Pulser.Hide();
+          require('js/actions/menu/loader').hide();
           this.rpcSuccess(o);
           this.PopulateBHGTab(target, o.result.tasks);
         },
@@ -273,7 +273,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         this.Self.service.generate_singularity(
           {params : rpcParams },
           {success : function(o){
-            Lacuna.Pulser.Hide();
+            require('js/actions/menu/loader').hide();
             this.Self.rpcSuccess(o);
             this.Self.PopulateBHGResult(target, o.result.effect);
           },
@@ -401,14 +401,14 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       }
     },
 	cooldownSubsidize : function() {
-      Lacuna.Pulser.Show();
+      require('js/actions/menu/loader').show();
       
       this.service.subsidize_cooldown({
         session_id:Game.GetSession(),
         building_id:this.building.id
       }, {
         success : function(o){
-          Lacuna.Pulser.Hide();
+          require('js/actions/menu/loader').hide();
           this.rpcSuccess(o);
 
           delete this.work;

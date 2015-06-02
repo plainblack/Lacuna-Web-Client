@@ -122,10 +122,10 @@ if (typeof YAHOO.lacuna.buildings.OracleOfAnid == "undefined" || !YAHOO.lacuna.b
         },
         
         GetStar : function(starId) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.get_star({session_id:Game.GetSession(),building_id:this.building.id, star_id:starId}, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.star = o.result.star;
                     Dom.get("oracleMessage").innerHTML = this.star.name;

@@ -39,10 +39,10 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             tab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     if(!this.laws) {
-                        Lacuna.Pulser.Show();
+                        require('js/actions/menu/loader').show();
                         this.service.view_laws({session_id:Game.GetSession(),body_id:this.locationId}, {
                             success : function(o){
-                                Lacuna.Pulser.Hide();
+                                require('js/actions/menu/loader').hide();
                                 this.rpcSuccess(o);
                                 this.laws = o.result.laws;
                                 
@@ -71,10 +71,10 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             tab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     if(!this.props) {
-                        Lacuna.Pulser.Show();
+                        require('js/actions/menu/loader').show();
                         this.service.view_propositions({session_id:Game.GetSession(),building_id:this.building.id}, {
                             success : function(o){
-                                Lacuna.Pulser.Hide();
+                                require('js/actions/menu/loader').hide();
                                 this.rpcSuccess(o);
                                 this.props = o.result.propositions;
                                 
@@ -715,7 +715,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 
 			button.disabled = true;
 			if (platform) {
-				Lacuna.Pulser.Show();
+				require('js/actions/menu/loader').show();
 				this.service.propose_evict_mining_platform({
 					session_id: Game.GetSession(''),
 					building_id: this.building.id,
@@ -748,7 +748,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				if (confirm('WARNING: The BFG is an extremly powerful weapon - do not point at face!!\n Are you sure you want to fire it?')) {
 					button.disabled = true;
 				
-					Lacuna.Pulser.Show();
+					require('js/actions/menu/loader').show();
 					this.service.propose_fire_bfg({
 						session_id: Game.GetSession(),
 						building_id: this.building.id,
@@ -756,7 +756,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 						reason: reason
 					}, {
 						success : function(o) {
-							Lacuna.Pulser.Hide();
+							require('js/actions/menu/loader').hide();
 							this.rpcSuccess(o);
 							this.proposeMessage.innerHTML = "Successfully proposed to fire BFG.";
 							Lib.fadeOutElm(this.proposeMessage);
@@ -778,14 +778,14 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 				miningIdElem = Dom.get('proposeEvictMiningId');
 
 			if (bodyId) {
-				Lacuna.Pulser.Show();
+				require('js/actions/menu/loader').show();
 				this.service.get_mining_platforms_for_asteroid_in_jurisdiction({
 					session_id: Game.GetSession(''),
 					building_id: this.building.id,
 					asteroid_id: bodyId
 				}, {
 					success: function(o) {
-						Lacuna.Pulser.Hide();
+						require('js/actions/menu/loader').hide();
 						var optionValues = [];
 						var platforms = o.result.platforms;
 
@@ -976,14 +976,14 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			var starId   = Lib.getSelectedOptionValue(this.starElement),
 				bodyList = Dom.get(this.bodyElement);
 			
-			Lacuna.Pulser.Show()
+			require('js/actions/menu/loader').show()
 			this.Self.service.get_bodies_for_star_in_jurisdiction({
 				session_id: Game.GetSession(''),
 				building_id: this.Self.building.id,
 				star_id: starId
 			}, {
 				success: function(o) {
-					Lacuna.Pulser.Hide();
+					require('js/actions/menu/loader').hide();
 					this.Self.rpcSuccess(o);
 					
 					if (bodyList) {
@@ -1042,7 +1042,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			button.disabled = true;
 
 			if (body && newName) {
-				Lacuna.Pulser.Show();
+				require('js/actions/menu/loader').show();
 				this.service.propose_rename_uninhabited({
 					session_id: Game.GetSession(''),
 					building_id: this.building.id,
@@ -1050,7 +1050,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 					name: newName
 				}, {
 					success: function(o) {
-						Lacuna.Pulser.Hide();
+						require('js/actions/menu/loader').hide();
 						this.rpcSuccess(o);
 
 						this.proposeMessage.innerHTML = "Successfully proposed to rename asteroid.";
@@ -1104,7 +1104,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 			button.disabled = true;
 
 			if (body && newName) {
-				Lacuna.Pulser.Show();
+				require('js/actions/menu/loader').show();
 				this.service.propose_rename_uninhabited({
 					session_id: Game.GetSession(''),
 					building_id: this.building.id,
@@ -1112,7 +1112,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 					name: newName
 				}, {
 					success: function(o) {
-						Lacuna.Pulser.Hide();
+						require('js/actions/menu/loader').hide();
 						this.rpcSuccess(o);
 
 						this.proposeMessage.innerHTML = "Successfully proposed to rename uninhabited.";

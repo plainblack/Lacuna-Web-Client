@@ -77,7 +77,7 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                     Lib.fadeOutElm("dumpMessage");
                 }
                 else {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
@@ -85,7 +85,7 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "WaterStorage.Dump.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             if(this.dumpTab){
                                 var ce = this.dumpTab.get("contentEl");

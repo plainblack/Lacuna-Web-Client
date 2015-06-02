@@ -67,7 +67,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
         
         GetStoredResources : function() {
             if(!this.resources) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_stored_resources({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -76,7 +76,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
                         this.rpcSuccess(o);
                         this.resources = o.result.resources;
                         this.ReservePopulate();
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -251,7 +251,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
                 data.resources = reserveItems;
             
                 Dom.get("distribReserveMessage").innerHTML = "";
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.reserve(data, {
                     success : function(o){
                         this.rpcSuccess(o);
@@ -267,7 +267,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
                         delete o.result.status;
                         this.result = o.result;
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.CheckReserve({newValue:1});
                     },
                     scope:this
@@ -310,7 +310,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
         },
         StoreRelease : function() {
             Dom.get("distribReleaseMessage").innerHTML = "";
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.release_reserve({
                 session_id: Game.GetSession(""),
                 building_id: this.building.id
@@ -323,7 +323,7 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
                     delete o.result.status;
                     this.result = o.result;
                     
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.CheckReserve({newValue:1});
                 },
                 scope:this

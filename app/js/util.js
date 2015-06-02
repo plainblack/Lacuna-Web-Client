@@ -46,3 +46,16 @@ module.exports.reduceNumber = function(number, always) {
         return Math.floor(number) || "0";
     }
 };
+
+module.exports.serverDateToMs = function(serverDate) {
+    //"23 03 2010 01:20:11 +0000"
+    var pieces = serverDate.split(' '), //[day month year hr:min:sec timez]
+        time = pieces[3].split(':');
+    var dt = new Date();
+    dt.setUTCFullYear(pieces[2]*1);
+    dt.setUTCMonth((pieces[1]*1-1), pieces[0]*1);
+    dt.setUTCHours(time[0]*1);
+    dt.setUTCMinutes(time[1]*1);
+    dt.setUTCSeconds(time[2]*1);
+    return dt.getTime();
+};
