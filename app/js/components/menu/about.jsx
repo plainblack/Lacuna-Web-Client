@@ -23,7 +23,7 @@ var About = React.createClass({
         return (
             <div>
                 <p>
-                    Copyright {this.props.date.getFullYear()} Lacuna Expanse Corp.
+                    Copyright 2010, {this.props.date.getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
                     Server Version: {this.state.server.version}.
