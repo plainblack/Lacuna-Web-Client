@@ -3,7 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
-var $ = require('jquery');
+var $ = require('js/hacks/jquery');
 
 var Draggable = require('react-draggable');
 

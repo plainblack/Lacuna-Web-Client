@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna.buildings");
 
-var $ = require('jquery');
+var $ = require('js/hacks/jquery');
 
 if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacuna.buildings.PlanetaryCommand) {
 

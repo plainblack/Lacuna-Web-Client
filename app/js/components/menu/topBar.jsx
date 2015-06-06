@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var $ = require('jquery');
+var $ = require('js/hacks/jquery');
 
 var EmpireStore = require('js/stores/empire');
 
@@ -20,6 +20,12 @@ var TopBar = React.createClass({
         Reflux.connect(EmpireStore, 'empire'),
         CenterBar('bar')
     ],
+    componentDidUpdate: function() {
+        // Activate the popups.
+        $('a', this.refs.bar.getDOMNode()).popup({
+            variation: 'inverted'
+        });
+    },
     render: function() {
         return (
             <div className="ui blue inverted menu" ref="bar" style={{

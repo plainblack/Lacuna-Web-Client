@@ -19,9 +19,15 @@ Setup of this client should look something like this:
 git clone https://github.com/plainblack/Lacuna-Web-Client
 cd Lacuna-Web-Client
 npm install gulp -g # installs the build tool, gulp. This should be a once-off.
-npm install # installs the dependencies: jquery, express, etc..
+npm install # installs the dependencies for building and running the code.
 gulp dev # compiles js/css and launches dev server.
 ```
+
+# Notes
+
+The following are some quick things that need to kept in mind when working on moving to the new libraries
+
+- Do **not** `require('jquery')`! Instead `require('js/hacks/jquery')`. We have to do this because we need to manually attach the Semantic UI js code to the jQuery object. The details aren't really important, just remember to require the right one. :grinning:
 
 # Gulp Tasks
 
