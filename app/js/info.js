@@ -254,12 +254,13 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
                     var colonyArray = [];
                     for(var colonyId in profile.known_colonies) {
                         var colony = profile.known_colonies[colonyId];
+                        var homeworldclass = colony.homeworld ? " homeworld-highlight" : ""
                         colonyArray = colonyArray.concat(['<li>',
                         '    <div class="planetContainer yui-gf">',
                         '        <div class="yui-u first planetImage" style="background-color:black;">',
                         '            <img src="',Lib.AssetUrl,'star_system/',colony.image,'.png" alt="',colony.name,'" style="width:50px;height:50px;" />',
                         '        </div>',
-                        '        <div class="yui-u">',
+                        '        <div class="yui-u', homeworldclass, '">',
                         '            <div>',colony.name,'</div>',
                         '            <div>',colony.x,' : ',colony.y,'</div>',
                         '        </div>',
