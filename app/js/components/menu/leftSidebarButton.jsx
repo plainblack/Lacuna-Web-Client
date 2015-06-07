@@ -2,8 +2,10 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var $ = require('js/hacks/jquery');
 
 var EmpireStore = require('js/stores/empire');
+var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
 var LeftSidebarButton = React.createClass({
     mixins: [Reflux.connect(EmpireStore, 'empire')],
@@ -15,7 +17,7 @@ var LeftSidebarButton = React.createClass({
                 left: '15px',
                 top: '15px'
             }}>
-                <div className="ui blue big icon button">
+                <div className="ui blue big icon button" onClick={LeftSidebarActions.toggle}>
                     <i className="content icon"></i>
                 </div>
                 <div className="ui pointing left large teal label">

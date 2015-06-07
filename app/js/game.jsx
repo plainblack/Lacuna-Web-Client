@@ -63,16 +63,13 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             require('js/stores/body').listen(_.noop);
             require('js/stores/empire').listen(_.noop);
             require('js/stores/user').listen(_.noop);
+            require('js/stores/menu/leftSidebar').listen(_.noop);
+            require('js/stores/menu/rightSidebar').listen(_.noop);
 
-            // This is some glue code to get the React-based UI working with the old YUI crap.
-            var mainDiv = document.createElement('div');
-            mainDiv.id = 'main';
-            document.body.appendChild(mainDiv);
-
-            // Render the React component into this new div we made.
+            // Scrap anything that might be in <body> just do the render!
             React.render(
                 <Window />,
-                document.getElementById('main')
+                document.getElementById('body')
             );
 
 
@@ -637,7 +634,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         GetSize : function() {
             var content = document.getElementById("content"),
                 width = content.offsetWidth,
-                height = document.documentElement.clientHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight;
+                height = document.documentElement.clientHeight;
             return {w:width,h:height};
         },
         Resize : function() {

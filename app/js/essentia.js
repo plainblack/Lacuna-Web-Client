@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('lodash');
+
 var EssentiaActions = require('js/actions/window/essentia');
 
 YAHOO.namespace("lacuna");
@@ -16,71 +18,71 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
 
-    var Essentia = function() {
-        this.createEvent("onRpc");
-
-        this.id = "essentia";
-
-        var container = document.createElement("div");
-        container.id = this.id;
-        Dom.addClass(container, Lib.Styles.HIDDEN);
-        container.innerHTML = this._getHtml();
-        document.body.insertBefore(container, document.body.firstChild);
-        Dom.addClass(container, "nofooter");
-
-        this.Dialog = new YAHOO.widget.Panel(this.id, {
-            constraintoviewport:true,
-            fixedcenter:true,
-            visible:false,
-            draggable:true,
-            effect:Game.GetContainerEffect(),
-            underlay:false,
-            modal:true,
-            close:true,
-            width:"500px",
-            zIndex:9999
-        });
-        this.Dialog.renderEvent.subscribe(function(){
-            this.timeFood = Dom.get("essentialDetailsTimeFood");
-            this.timeOre = Dom.get("essentialDetailsTimeOre");
-            this.timeWater = Dom.get("essentialDetailsTimeWater");
-            this.timeEnergy = Dom.get("essentialDetailsTimeEnergy");
-            this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
-            this.timeStorage = Dom.get("essentialDetailsTimeStorage");
-            this.timeBuilding = Dom.get("essentialDetailsTimeBuilding");
-            this.timeSpyTraining = Dom.get("essentialDetailsTimeSpyTraining");
-            this.elCode = Dom.get("essentiaRedeemCode");
-            this.elEssentiaAmount = Dom.get("essentiaAmount");
-            this.tabView = new YAHOO.widget.TabView('essentiaTabs');
-            Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage","essentiaBoostBuilding","essentiaBoostSpyTraining"], "click", this.boost, this, true);
-            Event.on('essentiaRedeemButton', 'click', this.redeemClick, this, true);
-            Event.on('essentiaInvite', 'click', Lacuna.Invite.show, this, true);
-            Event.on("essentiaPurchaseButton", "click", function(e){
-                Event.stopEvent(e);
-                window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0");
-            });
-            Game.onTick.subscribe(function(){
-                this.elEssentiaAmount.innerHTML = Game.EmpireData.essentia;
-            }, this, true);
-            Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-        }, this, true);
-
-        this.Dialog.hideEvent.subscribe(function(){
-            if (this._interval) {
-                window.clearInterval(this._interval);
-                delete this._interval;
-                this.timers = {};
-            }
-
-            // Let the React component know that we're going now.
-            EssentiaActions.hide();
-        }, this, true);
-        this.timers = {};
-
-        this.Dialog.render();
-        Game.OverlayManager.register(this.Dialog);
-    };
+    var Essentia = function() {};
     Essentia.prototype = {
+        build: _.once(function() {
+            this.createEvent("onRpc");
+
+            this.id = "essentia";
+
+            var container = document.createElement("div");
+            container.id = this.id;
+            Dom.addClass(container, Lib.Styles.HIDDEN);
+            container.innerHTML = this._getHtml();
+            document.getElementById('oldYUIPanelContainer').appendChild(container);
+            Dom.addClass(container, "nofooter");
+
+            this.Dialog = new YAHOO.widget.Panel(this.id, {
+                constraintoviewport:true,
+                fixedcenter:true,
+                visible:false,
+                draggable:true,
+                effect:Game.GetContainerEffect(),
+                underlay:false,
+                close:true,
+                width:"500px",
+                zIndex:9999
+            });
+            this.Dialog.renderEvent.subscribe(function(){
+                this.timeFood = Dom.get("essentialDetailsTimeFood");
+                this.timeOre = Dom.get("essentialDetailsTimeOre");
+                this.timeWater = Dom.get("essentialDetailsTimeWater");
+                this.timeEnergy = Dom.get("essentialDetailsTimeEnergy");
+                this.timeHappiness = Dom.get("essentialDetailsTimeHappiness");
+                this.timeStorage = Dom.get("essentialDetailsTimeStorage");
+                this.timeBuilding = Dom.get("essentialDetailsTimeBuilding");
+                this.timeSpyTraining = Dom.get("essentialDetailsTimeSpyTraining");
+                this.elCode = Dom.get("essentiaRedeemCode");
+                this.elEssentiaAmount = Dom.get("essentiaAmount");
+                this.tabView = new YAHOO.widget.TabView('essentiaTabs');
+                Event.on(["essentiaBoostFood","essentiaBoostOre","essentiaBoostWater","essentiaBoostEnergy","essentiaBoostHappiness","essentiaBoostStorage","essentiaBoostBuilding","essentiaBoostSpyTraining"], "click", this.boost, this, true);
+                Event.on('essentiaRedeemButton', 'click', this.redeemClick, this, true);
+                Event.on('essentiaInvite', 'click', Lacuna.Invite.show, this, true);
+                Event.on("essentiaPurchaseButton", "click", function(e){
+                    Event.stopEvent(e);
+                    window.open("/pay?session_id=" + Game.GetSession(), "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0");
+                });
+                Game.onTick.subscribe(function(){
+                    this.elEssentiaAmount.innerHTML = Game.EmpireData.essentia;
+                }, this, true);
+                Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+            }, this, true);
+
+            this.Dialog.hideEvent.subscribe(function(){
+                if (this._interval) {
+                    window.clearInterval(this._interval);
+                    delete this._interval;
+                    this.timers = {};
+                }
+
+                // Let the React component know that we're going now.
+                EssentiaActions.hide();
+            }, this, true);
+            this.timers = {};
+
+            this.Dialog.render();
+            Game.OverlayManager.register(this.Dialog);
+        }),
         _getHtml : function() {
             return [
             '    <div class="hd">Essentia</div>',
@@ -172,23 +174,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             '                        </table>',
             '                    </div>',
             '                </div>',
-/*            '                <div id="essentiaGetMore">',
-            '                    <p><b>Give the gift of Essentia.</b><br />Simply choose the amount you want, and pay for at it at PayPal with a credit card, or with your PayPal account. You\'ll then receive an email with an essentia code that can be redeemed in the game.</p>',
-            '                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">',
-            '                    <input type="hidden" name="cmd" value="_s-xclick">',
-            '                    <input type="hidden" name="hosted_button_id" value="X66S44RDHKKS8">',
-            '                    <p style="margin: 10px 0;"><input type="hidden" name="on0" value="Buy an Essentia Code">Buy an Essentia Code: <select name="os0">',
-            '                    <option value="30 Essentia">30 Essentia $2.99</option>',
-            '                    <option value="100 Essentia">100 Essentia $5.99</option>',
-            '                    <option value="200 Essentia">200 Essentia $9.99</option>',
-            '                    <option value="600 Essentia">600 Essentia $24.99</option>',
-            '                    <option value="1300 Essentia">1300 Essentia $49.99</option>',
-            '                    </select></p>',
-            '                    <input type="hidden" name="currency_code" value="USD">',
-            '                    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">',
-            '                    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">',
-            '                    </form>',
-            '                </div>', */
             '            </div>',
             '        </div>',
             '    </div>'
@@ -196,6 +181,8 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
         },
 
         show : function() {
+            this.build();
+
             //this is called out of scope so make sure to pass the correct scope in
             Lacuna.Essentia.tabView.selectTab(0);
             Lacuna.Essentia.elCode.value = '';
@@ -216,8 +203,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
         },
         hide : function() {
             this.Dialog.hide();
-        },
-        paymentFinished : function(amount) {
         },
         redeemClick : function (e) {
             Event.stopEvent(e);

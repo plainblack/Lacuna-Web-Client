@@ -2,6 +2,8 @@
 
 var StatsActions = require('js/actions/window/stats');
 
+var _ = require('lodash');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
@@ -16,77 +18,78 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
 
-    var Stats = function() {
-        this.id = "stats";
-
-        var container = document.createElement("div");
-        container.id = this.id;
-        Dom.addClass(container, Lib.Styles.HIDDEN);
-        container.innerHTML = this._getHtml();
-        document.body.insertBefore(container, document.body.firstChild);
-
-        this.Panel = new YAHOO.widget.Panel(this.id, {
-            constraintoviewport:true,
-            visible:false,
-            draggable:true,
-            effect:Game.GetContainerEffect(),
-            underlay:false,
-            close:true,
-            width:"750px",
-            zIndex:9999
-        });
-        this.Panel.renderEvent.subscribe(function(){
-            Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-            this.tabView = new YAHOO.widget.TabView("statsTabs");
-            this.tabView.set('activeIndex',0);
-
-            //subscribe after adding so active doesn't fire
-            this.tabView.getTab(1).subscribe("activeChange", function(e) {
-                if(e.newValue) {
-                    this.AllianceStats();
-                }
-            }, this, true);
-            this.tabView.getTab(2).subscribe("activeChange", function(e) {
-                if(e.newValue) {
-                    this.ColonyStats();
-                }
-            }, this, true);
-            this.tabView.getTab(3).subscribe("activeChange", function(e) {
-                if(e.newValue) {
-                    this.SpyStats();
-                }
-            }, this, true);
-            this.tabView.getTab(4).subscribe("activeChange", function(e) {
-                if(e.newValue) {
-                    this.WeeklyMedalStats();
-                }
-            }, this, true);
-            this.tabView.getTab(5).subscribe("activeChange", function(e) {
-                if(e.newValue) {
-                    this.getServerStats();
-                }
-            }, this, true);
-
-            this.generalTabView = new YAHOO.widget.TabView("statsGeneralTabs", {orientation:"left"});
-            this.generalTabView.set('activeIndex',0);
-
-            this.statsGeneralBodies = Dom.get("statsGeneralBodies");
-            this.statsGeneralBuildings = Dom.get("statsGeneralBuildings");
-            this.statsGeneralEmpires = Dom.get("statsGeneralEmpires");
-            this.statsGeneralOrbits = Dom.get("statsGeneralOrbits");
-            this.statsGeneralShips = Dom.get("statsGeneralShips");
-            this.statsGeneralSpies = Dom.get("statsGeneralSpies");
-            this.statsGeneralStars = Dom.get("statsGeneralStars");
-            this.statsGeneralGlyphs = Dom.get("statsGeneralGlyphs");
-        }, this, true);
-
-        // Let the React component know that we're going away now.
-        this.Panel.hideEvent.subscribe(StatsActions.hide);
-
-        this.Panel.render();
-        Game.OverlayManager.register(this.Panel);
-    };
+    var Stats = function() {};
     Stats.prototype = {
+        build: _.once(function() {
+            this.id = "stats";
+
+            var container = document.createElement("div");
+            container.id = this.id;
+            Dom.addClass(container, Lib.Styles.HIDDEN);
+            container.innerHTML = this._getHtml();
+            document.body.insertBefore(container, document.body.firstChild);
+
+            this.Panel = new YAHOO.widget.Panel(this.id, {
+                constraintoviewport:true,
+                visible:false,
+                draggable:true,
+                effect:Game.GetContainerEffect(),
+                underlay:false,
+                close:true,
+                width:"750px",
+                zIndex:9999
+            });
+            this.Panel.renderEvent.subscribe(function(){
+                Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+                this.tabView = new YAHOO.widget.TabView("statsTabs");
+                this.tabView.set('activeIndex',0);
+
+                //subscribe after adding so active doesn't fire
+                this.tabView.getTab(1).subscribe("activeChange", function(e) {
+                    if(e.newValue) {
+                        this.AllianceStats();
+                    }
+                }, this, true);
+                this.tabView.getTab(2).subscribe("activeChange", function(e) {
+                    if(e.newValue) {
+                        this.ColonyStats();
+                    }
+                }, this, true);
+                this.tabView.getTab(3).subscribe("activeChange", function(e) {
+                    if(e.newValue) {
+                        this.SpyStats();
+                    }
+                }, this, true);
+                this.tabView.getTab(4).subscribe("activeChange", function(e) {
+                    if(e.newValue) {
+                        this.WeeklyMedalStats();
+                    }
+                }, this, true);
+                this.tabView.getTab(5).subscribe("activeChange", function(e) {
+                    if(e.newValue) {
+                        this.getServerStats();
+                    }
+                }, this, true);
+
+                this.generalTabView = new YAHOO.widget.TabView("statsGeneralTabs", {orientation:"left"});
+                this.generalTabView.set('activeIndex',0);
+
+                this.statsGeneralBodies = Dom.get("statsGeneralBodies");
+                this.statsGeneralBuildings = Dom.get("statsGeneralBuildings");
+                this.statsGeneralEmpires = Dom.get("statsGeneralEmpires");
+                this.statsGeneralOrbits = Dom.get("statsGeneralOrbits");
+                this.statsGeneralShips = Dom.get("statsGeneralShips");
+                this.statsGeneralSpies = Dom.get("statsGeneralSpies");
+                this.statsGeneralStars = Dom.get("statsGeneralStars");
+                this.statsGeneralGlyphs = Dom.get("statsGeneralGlyphs");
+            }, this, true);
+
+            // Let the React component know that we're going away now.
+            this.Panel.hideEvent.subscribe(StatsActions.hide);
+
+            this.Panel.render();
+            Game.OverlayManager.register(this.Panel);
+        }),
         _getHtml : function() {
             return [
             '    <div class="hd">Universe Stats</div>',
@@ -1303,6 +1306,7 @@ initialRequest: Lang.JSON.stringify({
         },
 
         show : function() {
+            Lacuna.Stats.build();
             //this is called out of scope so make sure to pass the correct scope in
             Lacuna.Stats.EmpireStats();
             Game.OverlayManager.hideAll();

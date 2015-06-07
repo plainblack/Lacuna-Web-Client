@@ -30,6 +30,14 @@ var Menu = React.createClass({
                     <RightSidebarButton />
                     <TopBar />
                     <Map />
+
+                    { /* This div is used by map. */ }
+                    <div id="content"></div>
+
+                    { /* More stuff for integrating with React */ }
+                    <div id="chiselchat-wrapper"></div>
+                    <div id="oldYUIPanelContainer"></div>
+
                     <BottomBar />
                 </div>
             );

@@ -2,6 +2,8 @@
 
 var MailActions = require('js/actions/window/mail');
 
+var _ = require('lodash');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
@@ -21,11 +23,9 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
         this.createEvent("onRpc");
         this.createEvent("onShow");
         this.createEvent("onPageLoaded");
-        this._buildPanel();
-        this._buildAttachmentPanel();
     };
     Messaging.prototype = {
-        _buildPanel : function() {
+        _buildPanel : _.once(function() {
             var panelId = "messagingPanel";
             var panel = document.createElement("div");
             panel.id = panelId;
@@ -99,7 +99,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '        </div>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+                document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.messagingPanel = new YAHOO.widget.Panel(panelId, {
@@ -108,7 +108,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 draggable:true,
                 effect:Game.GetContainerEffect(),
                 fixedcenter:true,
-                modal:true,
                 close:true,
                 underlay:false,
                 width:"700px",
@@ -172,8 +171,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 
             this.messagingPanel.render();
             Game.OverlayManager.register(this.messagingPanel);
-        },
-        _buildAttachmentPanel : function() {
+        }),
+        _buildAttachmentPanel : _.once(function() {
             var panelId = "attachmentPanel";
 
             var panel = document.createElement("div");
@@ -183,7 +182,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 '    <div id="attachmentMap">',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.attachmentPanel = new YAHOO.widget.Panel(panelId, {
@@ -192,7 +191,6 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 draggable:true,
                 effect:Game.GetContainerEffect(),
                 fixedcenter:true,
-                modal:true,
                 close:true,
                 underlay:false,
                 width:"575px",
@@ -238,7 +236,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             this.attachmentPanel.render();
             Game.OverlayManager.register(this.attachmentPanel);
 
-        },
+        }),
         _createToSelect : function() {
             var dataSource = new Util.XHRDataSource("/empire");
             dataSource.connMethodPost = "POST";
@@ -1129,6 +1127,10 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
         },
         show : function() {
             Game.OverlayManager.hideAll();
+
+            this._buildPanel();
+            this._buildAttachmentPanel();
+
             this.messagingPanel.show();
             this.currentTab = this.inbox.id;
             this.loadTab();

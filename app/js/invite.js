@@ -1,7 +1,11 @@
-YAHOO.namespace("lacuna");
+'use strict';
+
+var _ = require('lodash');
+
+var InviteActions = require('js/actions/window/invite');
 
 if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
-    
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -11,51 +15,54 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
 
-    var Invite = function() {
-        this.createEvent("onRpc");
-        
-        this.id = "invite";
-        
-        var container = document.createElement("div");
-        container.id = this.id;
-        Dom.addClass(container, Lib.Styles.HIDDEN);
-        Dom.addClass(container, "nofooter");
-        container.innerHTML = this._getHtml();
-        document.body.insertBefore(container, document.body.firstChild);
-        
-        this.Dialog = new YAHOO.widget.Panel(this.id, {
-            constraintoviewport:true,
-            fixedcenter:true,
-            visible:false,
-            draggable:true,
-            effect:Game.GetContainerEffect(),
-            underlay:false,
-            modal:true,
-            close:true,
-            width:"450px",
-            zIndex:9999
-        });
-        this.Dialog.renderEvent.subscribe(function(){
-            this.elFriendEmail = Dom.get("inviteFriendEmail");
-            this.elMessage = Dom.get("inviteMessage");
-            Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-            Event.on("inviteButton", "click", this.handleInvite, this, true);
-            this.inviteGenerate = Dom.get("inviteGenerate");
-            Event.on(this.inviteGenerate, "click", this.handleGenerate, this, true);
-            Event.on("inviteGenerateLink", "click", function(){ this.select(); });
-        }, this, true);
-
-        this.Dialog.render();
-        Game.OverlayManager.register(this.Dialog);
-    };
+    var Invite = function() {};
     Invite.prototype = {
+        build: _.once(function() {
+            this.createEvent("onRpc");
+
+            this.id = "invite";
+
+            var container = document.createElement("div");
+            container.id = this.id;
+            Dom.addClass(container, Lib.Styles.HIDDEN);
+            Dom.addClass(container, "nofooter");
+            container.innerHTML = this._getHtml();
+            document.getElementById('oldYUIPanelContainer').appendChild(container);
+
+            this.Dialog = new YAHOO.widget.Panel(this.id, {
+                constraintoviewport:true,
+                fixedcenter:true,
+                visible:false,
+                draggable:true,
+                effect:Game.GetContainerEffect(),
+                underlay:false,
+                close:true,
+                width:"450px",
+                zIndex:9999
+            });
+            this.Dialog.renderEvent.subscribe(function(){
+                this.elFriendEmail = Dom.get("inviteFriendEmail");
+                this.elMessage = Dom.get("inviteMessage");
+                Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+                Event.on("inviteButton", "click", this.handleInvite, this, true);
+                this.inviteGenerate = Dom.get("inviteGenerate");
+                Event.on(this.inviteGenerate, "click", this.handleGenerate, this, true);
+                Event.on("inviteGenerateLink", "click", function(){ this.select(); });
+            }, this, true);
+
+            // Let the React component know that we're going away now.
+            this.Dialog.hideEvent.subscribe(InviteActions.hide);
+
+            this.Dialog.render();
+            Game.OverlayManager.register(this.Dialog);
+        }),
         _getHtml : function() {
             return [
             '    <div class="hd">Invite a Friend</div>',
             '    <div class="bd">',
             '        <form name="inviteForm">',
             '            <ul>',
-            '                <li><label for="inviteFriendEmail">EMail:</label><input type="text" id="inviteFriendEmail"></li>',
+            '                <li><label for="inviteFriendEmail">Email:</label><input type="text" id="inviteFriendEmail"></li>',
             '                <li><label for="inviteMessage">Message:</label></li>',
             '                <li><textarea id="inviteMessage"></textarea></li>',
             '                <li style="text-align:right;"><button id="inviteButton" type="button">Invite</button></li>',
@@ -68,11 +75,12 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
             '    </div>'
             ].join('');
         },
-        
+
         show : function() {
+            Lacuna.Invite.build();
             //this is called out of scope so make sure to pass the correct scope in
             Lacuna.Invite.elFriendEmail.value = '';
-            Lacuna.Invite.elMessage.value = "I'm having a great time with this new game called Lacuna Expanse. Come play with me.";
+            Lacuna.Invite.elMessage.value = "I'm having a great time with this new game called 'Lacuna Expanse'. Come play with me!";
             Lacuna.Invite.Dialog.show();
         },
         hide : function() {
@@ -111,7 +119,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
         },
         handleGenerate : function (e) {
             this.inviteGenerate.disabled = true;
-            
+
             Lacuna.Pulser.Show();
             Game.Services.Empire.get_invite_friend_url({
                 session_id:Game.GetSession("")
@@ -134,11 +142,11 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
     };
 
     Lang.augmentProto(Invite, Util.EventProvider);
-    
+
     Lacuna.Invite = new Invite();
 
 })();
-YAHOO.register("invite", YAHOO.lacuna.Invite, {version: "1", build: "0"}); 
+YAHOO.register("invite", YAHOO.lacuna.Invite, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

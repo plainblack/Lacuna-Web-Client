@@ -2,8 +2,10 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var $ = require('js/hacks/jquery');
 
 var BodyStore = require('js/stores/body');
+var RightSidebarActions = require('js/actions/menu/rightSidebar')
 
 var RightSidebarButton = React.createClass({
     mixins: [Reflux.connect(BodyStore, 'body')],
@@ -18,7 +20,7 @@ var RightSidebarButton = React.createClass({
                 <div className="ui pointing right large teal label">
                     {this.state.body.name}
                 </div>
-                <div className="ui blue big icon button">
+                <div className="ui blue big icon button" onClick={RightSidebarActions.toggle}>
                     <i className="world icon"></i>
                 </div>
             </div>

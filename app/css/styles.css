@@ -811,7 +811,7 @@ Info dialogs for Empire and Alliance
 	z-index:30;
 	width:20px;
 	height:255px;
-	left:60px;
+	left:15px;
 	top:100px;
 }
 .mapiator_zoom_slider {
@@ -1999,6 +1999,11 @@ TextboxList
 /* Semantic overrides everything in this file and manages to not make a mess. Except for this... */
 body {
 	color: #ffffff;
+}
+
+/* Don't make the color of text input white, though. */
+input, textarea {
+	color: black;
 }
 
 

@@ -26,6 +26,10 @@ var TopBar = React.createClass({
             variation: 'inverted'
         });
     },
+    componentWillUnmount: function() {
+        // Destroy!
+        $('a', this.refs.bar.getDOMNode()).popup('destroy');
+    },
     render: function() {
         return (
             <div className="ui blue inverted menu" ref="bar" style={{

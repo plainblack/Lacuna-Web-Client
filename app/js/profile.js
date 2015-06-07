@@ -1,4 +1,10 @@
+'use strict';
+
 YAHOO.namespace("lacuna");
+
+var _ = require('lodash');
+
+var OptionsActions = require('js/actions/window/options');
 
 if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 
@@ -12,210 +18,212 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
 
-    var Profile = function() {
-        this.createEvent("onRpc");
-        this.id = "profile";
-
-        var container = document.createElement("div");
-        container.id = this.id;
-        Dom.addClass(container, Lib.Styles.HIDDEN);
-        container.innerHTML = this._getHtml();
-        document.body.insertBefore(container, document.body.firstChild);
-
-        this.Dialog = new YAHOO.widget.Dialog(this.id, {
-            constraintoviewport:true,
-            postmethod:"none",
-            buttons:[ { text:"Update", handler:{fn:this.handleUpdate, scope:this}, isDefault:true } ],
-            visible:false,
-            draggable:true,
-            effect:Game.GetContainerEffect(),
-            underlay:false,
-            modal:true,
-            close:true,
-            width:"500px",
-            zIndex:9999
-        });
-        this.Dialog.renderEvent.subscribe(function(){
-            this.description = Dom.get("profileDescription");
-            this.status = Dom.get("profileStatus");
-            this.email = Dom.get("profileEmail");
-            this.city = Dom.get("profileCity");
-            this.country = Dom.get("profileCountry");
-            this.skype = Dom.get("profileSkype");
-            this.player_name = Dom.get("profilePlayerName");
-            this.skipFacebook = Dom.get("profileSkipFacebookWallPosts");
-            this.skipMedal = Dom.get("profileSkipMedal");
-            this.skipHappiness = Dom.get("profileSkipHappiness");
-            this.skipResource = Dom.get("profileSkipResource");
-            this.skipPollution = Dom.get("profileSkipPollution");
-            this.skipFoundNothing = Dom.get("profileSkipFoundNothing");
-            this.skipExcavatorResources = Dom.get("profileSkipExcavatorResources");
-            this.skipExcavatorGlyph = Dom.get("profileSkipExcavatorGlyph");
-            this.skipExcavatorPlan = Dom.get("profileSkipExcavatorPlan");
-            this.skipExcavatorArtifact = Dom.get("profileSkipExcavatorArtifact");
-            this.skipExcavatorDestroyed = Dom.get("profileSkipExcavatorDestroyed");
-            this.skipAllExcavator = Dom.get("profileSkipAllExcavator");
-            this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
-            this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
-            this.skipAttackMessages = Dom.get("profileSkipAttackMessages");
-            this.skipIncomingShips = Dom.get("profileSkipIncomingShips");
-            this.skipExcavatorReplaceMsg = Dom.get("profileSkipExcavatorReplaceMsg");
-            this.dontReplaceExcavator = Dom.get("profileDontReplaceExcavator");
-            Event.on(this.skipFoundNothing, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorResources, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorGlyph, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorPlan, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorArtifact, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorDestroyed, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipAllExcavator").checked = false;
-                }
-            });
-            Event.on(this.skipExcavatorReplaceMsg, 'change', function() {
-                if(!this.checked) {
-                    Dom.get("profileSkipExcavatorReplaceMsg").checked = false;
-                }
-            });
-            Event.on(this.skipAllExcavator, 'change', function() {
-                if(this.checked) {
-                    Dom.get("profileSkipFoundNothing").checked = true;
-                    Dom.get("profileSkipExcavatorResources").checked = true;
-                    Dom.get("profileSkipExcavatorGlyph").checked = true;
-                    Dom.get("profileSkipExcavatorPlan").checked = true;
-                Dom.get("profileSkipExcavatorArtifact").checked = true;
-                Dom.get("profileSkipExcavatorDestroyed").checked = true;
-          Dom.get("profileSkipExcavatorReplaceMsg").checked = true;
-                }
-            });
-
-            this.rpc = Dom.get("profileRpc");
-
-            this.medals = Dom.get("profileMedalsList");
-            this.species = Dom.get("profileSpecies");
-            this.notes = Dom.get("profileNotes");
-            this.sitter_password = Dom.get("profileSitterPassword");
-            this.userID = Dom.get("profileUserID");
-            this.allianceID = Dom.get("profileAllianceID");
-            this.new_password = Dom.get("profileNewPassword");
-            this.confirm_password = Dom.get("profileConfirmPassword");
-            this.account_tab = Dom.get('detailsAccount');
-            Event.on(this.sitter_password, 'focus', function() {
-                this.type = 'text';
-            });
-            Event.on(this.sitter_password, 'blur', function() {
-                this.type = 'password';
-            });
-
-            this.stopAnim = Dom.get("profileDisableDialogAnim");
-            this.showLevels = Dom.get("profileShowBuildingLevels");
-            this.hidePlanets = Dom.get("profileHidePlanets");
-
-            this.tabView = new YAHOO.widget.TabView("profileTabs");
-            //species tab
-            this.hasSpecies = false;
-            this.tabView.getTab(2).subscribe("activeChange", function(e) {
-                if(e.newValue && !this.hasSpecies) {
-                    this.hasSpecies = true;
-                    var requests = 0;
-                    Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
-                        success : function(o){
-                            YAHOO.log(o, "info", "Profile.show.view_stats.success");
-                            this.fireEvent('onRpc', o.result);
-                            this.speciesStats = o.result.species;
-                            requests++;
-                            if (requests == 2) {
-                                this.populateSpecies();
-                            }
-                        },
-                        scope:this
-                    });
-                    Game.Services.Empire.redefine_species_limits({session_id:Game.GetSession("")},{
-                        success : function(o){
-                            YAHOO.log(o, "info", "Profile.redefine_species_limits.success");
-                            this.fireEvent('onRpc', o.result);
-                            this.speciesRedefineLimits = o.result;
-                            requests++;
-                            if (requests == 2) {
-                                this.populateSpecies();
-                            }
-                        },
-                        scope:this
-                    });
-                }
-            }, this, true);
-            this.tabView.set('activeIndex',0);
-            Dom.removeClass(this.id, Lib.Styles.HIDDEN);
-        }, this, true);
-        this.Dialog.render();
-        Game.OverlayManager.register(this.Dialog);
-
-        this.speciesId = 'profileSpeciesRedefine';
-        var speciesContainer = document.createElement("div");
-        speciesContainer.id = this.speciesId;
-        Dom.addClass(speciesContainer, Lib.Styles.HIDDEN);
-        speciesContainer.innerHTML = [
-            '    <div class="hd">Redefine Species</div>',
-            '    <div class="bd">',
-            '        <div id="profileSpeciesRedefineWarning">',
-            '            Changing your species affinities is risky business and will affect the game in many ways you cannot foresee. ',
-            '            In addition, you can only change your affinities once per month. Use at your own risk!',
-            '        </div>',
-            '        <form name="profileSpeciesRedefineForm">',
-            '            <div id="profileSpeciesDesigner"></div>',
-            '            <div id="profileSpeciesMessage" class="hidden"></div>',
-            '        </form>',
-            '    </div>',
-            '    <div class="ft"></div>'
-        ].join('');
-        document.body.insertBefore(speciesContainer, document.body.firstChild);
-        this.SpeciesDialog = new YAHOO.widget.Dialog(this.speciesId, {
-            constraintoviewport:true,
-            postmethod:"none",
-            buttons:[
-                { text:' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update', handler: { fn: this.redefineSpecies, scope:this }, isDefault:true },
-                { text:"Cancel", handler: { fn: function() { this.hide(); } } }
-            ],
-            visible:false,
-            draggable:true,
-            effect:Game.GetContainerEffect(),
-            underlay:false,
-            modal:true,
-            close:true,
-            width:"735px",
-            zIndex:99999
-        });
-        this.SpeciesDialog.renderEvent.subscribe(function(){
-            this.SpeciesDesigner = new Lacuna.SpeciesDesigner({ templates : false });
-            this.SpeciesDesigner.render('profileSpeciesDesigner');
-            Dom.removeClass(this.speciesId, Lib.Styles.HIDDEN);
-        }, this, true);
-        this.SpeciesDialog.render();
-        Game.OverlayManager.register(this.SpeciesDialog);
-    };
+    var Profile = function() {};
     Profile.prototype = {
+        build: _.once(function() {
+            this.createEvent("onRpc");
+            this.id = "profile";
+
+            var container = document.createElement("div");
+            container.id = this.id;
+            Dom.addClass(container, Lib.Styles.HIDDEN);
+            container.innerHTML = this._getHtml();
+            document.getElementById('oldYUIPanelContainer').appendChild(container);
+
+            this.Dialog = new YAHOO.widget.Dialog(this.id, {
+                constraintoviewport:true,
+                postmethod:"none",
+                buttons:[ { text:"Update", handler:{fn:this.handleUpdate, scope:this}, isDefault:true } ],
+                visible:false,
+                draggable:true,
+                effect:Game.GetContainerEffect(),
+                underlay:false,
+                close:true,
+                width:"500px",
+                zIndex:9999
+            });
+            this.Dialog.renderEvent.subscribe(function(){
+                this.description = Dom.get("profileDescription");
+                this.status = Dom.get("profileStatus");
+                this.email = Dom.get("profileEmail");
+                this.city = Dom.get("profileCity");
+                this.country = Dom.get("profileCountry");
+                this.skype = Dom.get("profileSkype");
+                this.player_name = Dom.get("profilePlayerName");
+                this.skipFacebook = Dom.get("profileSkipFacebookWallPosts");
+                this.skipMedal = Dom.get("profileSkipMedal");
+                this.skipHappiness = Dom.get("profileSkipHappiness");
+                this.skipResource = Dom.get("profileSkipResource");
+                this.skipPollution = Dom.get("profileSkipPollution");
+                this.skipFoundNothing = Dom.get("profileSkipFoundNothing");
+                this.skipExcavatorResources = Dom.get("profileSkipExcavatorResources");
+                this.skipExcavatorGlyph = Dom.get("profileSkipExcavatorGlyph");
+                this.skipExcavatorPlan = Dom.get("profileSkipExcavatorPlan");
+                this.skipExcavatorArtifact = Dom.get("profileSkipExcavatorArtifact");
+                this.skipExcavatorDestroyed = Dom.get("profileSkipExcavatorDestroyed");
+                this.skipAllExcavator = Dom.get("profileSkipAllExcavator");
+                this.skipSpyRecovery = Dom.get("profileSkipSpyRecovery");
+                this.skipProbeDetected = Dom.get("profileSkipProbeDetected");
+                this.skipAttackMessages = Dom.get("profileSkipAttackMessages");
+                this.skipIncomingShips = Dom.get("profileSkipIncomingShips");
+                this.skipExcavatorReplaceMsg = Dom.get("profileSkipExcavatorReplaceMsg");
+                this.dontReplaceExcavator = Dom.get("profileDontReplaceExcavator");
+                Event.on(this.skipFoundNothing, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorResources, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorGlyph, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorPlan, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorArtifact, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorDestroyed, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipAllExcavator").checked = false;
+                    }
+                });
+                Event.on(this.skipExcavatorReplaceMsg, 'change', function() {
+                    if(!this.checked) {
+                        Dom.get("profileSkipExcavatorReplaceMsg").checked = false;
+                    }
+                });
+                Event.on(this.skipAllExcavator, 'change', function() {
+                    if(this.checked) {
+                        Dom.get("profileSkipFoundNothing").checked = true;
+                        Dom.get("profileSkipExcavatorResources").checked = true;
+                        Dom.get("profileSkipExcavatorGlyph").checked = true;
+                        Dom.get("profileSkipExcavatorPlan").checked = true;
+                    Dom.get("profileSkipExcavatorArtifact").checked = true;
+                    Dom.get("profileSkipExcavatorDestroyed").checked = true;
+              Dom.get("profileSkipExcavatorReplaceMsg").checked = true;
+                    }
+                });
+
+                this.rpc = Dom.get("profileRpc");
+
+                this.medals = Dom.get("profileMedalsList");
+                this.species = Dom.get("profileSpecies");
+                this.notes = Dom.get("profileNotes");
+                this.sitter_password = Dom.get("profileSitterPassword");
+                this.userID = Dom.get("profileUserID");
+                this.allianceID = Dom.get("profileAllianceID");
+                this.new_password = Dom.get("profileNewPassword");
+                this.confirm_password = Dom.get("profileConfirmPassword");
+                this.account_tab = Dom.get('detailsAccount');
+                Event.on(this.sitter_password, 'focus', function() {
+                    this.type = 'text';
+                });
+                Event.on(this.sitter_password, 'blur', function() {
+                    this.type = 'password';
+                });
+
+                this.stopAnim = Dom.get("profileDisableDialogAnim");
+                this.showLevels = Dom.get("profileShowBuildingLevels");
+                this.hidePlanets = Dom.get("profileHidePlanets");
+
+                this.tabView = new YAHOO.widget.TabView("profileTabs");
+                //species tab
+                this.hasSpecies = false;
+                this.tabView.getTab(2).subscribe("activeChange", function(e) {
+                    if(e.newValue && !this.hasSpecies) {
+                        this.hasSpecies = true;
+                        var requests = 0;
+                        Game.Services.Empire.view_species_stats({session_id:Game.GetSession("")},{
+                            success : function(o){
+                                YAHOO.log(o, "info", "Profile.show.view_stats.success");
+                                this.fireEvent('onRpc', o.result);
+                                this.speciesStats = o.result.species;
+                                requests++;
+                                if (requests == 2) {
+                                    this.populateSpecies();
+                                }
+                            },
+                            scope:this
+                        });
+                        Game.Services.Empire.redefine_species_limits({session_id:Game.GetSession("")},{
+                            success : function(o){
+                                YAHOO.log(o, "info", "Profile.redefine_species_limits.success");
+                                this.fireEvent('onRpc', o.result);
+                                this.speciesRedefineLimits = o.result;
+                                requests++;
+                                if (requests == 2) {
+                                    this.populateSpecies();
+                                }
+                            },
+                            scope:this
+                        });
+                    }
+                }, this, true);
+                this.tabView.set('activeIndex',0);
+                Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+            }, this, true);
+            // Let the React component know that we're going away now.
+            this.Dialog.hideEvent.subscribe(OptionsActions.hide);
+            this.Dialog.render();
+            Game.OverlayManager.register(this.Dialog);
+
+            this.speciesId = 'profileSpeciesRedefine';
+            var speciesContainer = document.createElement("div");
+            speciesContainer.id = this.speciesId;
+            Dom.addClass(speciesContainer, Lib.Styles.HIDDEN);
+            speciesContainer.innerHTML = [
+                '    <div class="hd">Redefine Species</div>',
+                '    <div class="bd">',
+                '        <div id="profileSpeciesRedefineWarning">',
+                '            Changing your species affinities is risky business and will affect the game in many ways you cannot foresee. ',
+                '            In addition, you can only change your affinities once per month. Use at your own risk!',
+                '        </div>',
+                '        <form name="profileSpeciesRedefineForm">',
+                '            <div id="profileSpeciesDesigner"></div>',
+                '            <div id="profileSpeciesMessage" class="hidden"></div>',
+                '        </form>',
+                '    </div>',
+                '    <div class="ft"></div>'
+            ].join('');
+            document.getElementById('oldYUIPanelContainer').appendChild(speciesContainer);
+            this.SpeciesDialog = new YAHOO.widget.Dialog(this.speciesId, {
+                constraintoviewport:true,
+                postmethod:"none",
+                buttons:[
+                    { text:' <img src="'+Lib.AssetUrl+'ui/s/essentia.png" class="smallEssentia" /> Update', handler: { fn: this.redefineSpecies, scope:this }, isDefault:true },
+                    { text:"Cancel", handler: { fn: function() { this.hide(); } } }
+                ],
+                visible:false,
+                draggable:true,
+                effect:Game.GetContainerEffect(),
+                underlay:false,
+                close:true,
+                width:"735px",
+                zIndex:99999
+            });
+            this.SpeciesDialog.renderEvent.subscribe(function(){
+                this.SpeciesDesigner = new Lacuna.SpeciesDesigner({ templates : false });
+                this.SpeciesDesigner.render('profileSpeciesDesigner');
+                Dom.removeClass(this.speciesId, Lib.Styles.HIDDEN);
+            }, this, true);
+
+            this.SpeciesDialog.render();
+            Game.OverlayManager.register(this.SpeciesDialog);
+        }),
         _getHtml : function() {
             return [
-            '    <div class="hd">Profile</div>',
+            '    <div class="hd">Options</div>',
             '    <div class="bd">',
             '        <form name="profileForm" autocomplete="off">',
             '            <ul id="profileDetails">',
@@ -432,6 +440,8 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             });
         },
         show : function() {
+            Lacuna.Profile.build();
+
             //this is called out of scope so make sure to pass the correct scope in
             Game.Services.Empire.view_profile({session_id:Game.GetSession("")},{
                 success : function(o){
@@ -536,7 +546,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
         populateSpecies : function() {
             var frag = document.createDocumentFragment(),
                 li = document.createElement('li');
-            stat = this.speciesStats;
+            var stat = this.speciesStats;
 
             var nLi = li.cloneNode(false);
             nLi.innerHTML = [

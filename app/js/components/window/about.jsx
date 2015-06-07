@@ -16,14 +16,11 @@ var Panel = require('js/components/panel');
 
 var About = React.createClass({
     mixins: [Reflux.connect(ServerStore, 'server')],
-    propTypes: {
-        date: React.PropTypes.instanceOf(Date).isRequired
-    },
     render: function() {
         return (
             <div>
                 <p>
-                    Copyright 2010, {this.props.date.getFullYear()} Lacuna Expanse Corp.
+                    Copyright 2010, {(new Date()).getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
                     Server Version: {this.state.server.version}.
@@ -62,6 +59,10 @@ var Credits = React.createClass({
     render: function() {
         var credits = [];
 
+        if (this.state.credits.length === 0) {
+            AboutActions.load();
+        }
+
         _.each(this.state.credits, function(creditsObject) {
             _.each(creditsObject, function(names, category) {
                 credits.push(
@@ -85,17 +86,13 @@ var AboutWindow = React.createClass({
             show: false
         }
     },
-    handleClose: function() {
-        AboutActions.close();
-    },
     render: function() {
         if (this.state.show) {
-            AboutActions.load();
             return (
-                <Panel title="About" height={400} onClose={this.handleClose}
+                <Panel title="About" height={400} onClose={AboutActions.hide}
                     display={this.state.display}>
                     <h2>The Lacuna Expanse</h2>
-                    <About date={this.props.date} serverVersion={Game.ServerData.version} />
+                    <About />
 
                     <br />
 
