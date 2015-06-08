@@ -4,8 +4,6 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var Game = YAHOO.lacuna.Game;
-
 var AboutActions = require('js/actions/window/about');
 
 var ServerStore = require('js/stores/server');

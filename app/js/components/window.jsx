@@ -8,6 +8,7 @@ var BottomBar = require('js/components/menu/bottomBar');
 
 var LeftSidebar = require('js/components/menu/leftSidebar');
 var RightSidebar = require('js/components/menu/rightSidebar');
+var Map = require('js/components/menu/map');
 
 var Menu = require('js/components/window/menu');
 
@@ -36,6 +37,11 @@ var Window = React.createClass({
                 <div className="pusher">
 
                     <Menu />
+
+
+                    <Map />
+                    <div id="content"></div> { /* This div is used by map. */ }
+
 
                     { /* All windows in the game should end up here. */ }
                     <AboutWindow />

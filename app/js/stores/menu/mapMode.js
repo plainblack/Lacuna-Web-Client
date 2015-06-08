@@ -5,17 +5,18 @@ var Reflux = require('reflux');
 var MapActions = require('js/actions/menu/map');
 
 var PLANET_MAP_MODE = 'planetMap';
-var STAR_MAP_MODE = 'starmap';
+var STAR_MAP_MODE = 'starMap';
 
 var MapModeStore = Reflux.createStore({
     listenables: MapActions,
 
-    // Display the last mode that was used.
-    mapMode: localStorage.mapMode || PLANET_MAP_MODE,
+    mapMode: PLANET_MAP_MODE,
 
-    setMapMode: function(mode) {
-        this.mapMode = localStorage.mapMode = mode;
-        this.trigger(mode);
+    setMapMode: function(mapMode) {
+        if (mapMode !== this.mapMode) {
+            this.mapMode = mapMode;
+            this.trigger(this.mapMode);
+        }
     },
 
     onShowPlanetMap: function() {

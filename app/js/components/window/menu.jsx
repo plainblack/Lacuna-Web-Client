@@ -6,8 +6,6 @@ var Reflux = require('reflux');
 var TopBar = require('js/components/menu/topBar');
 var BottomBar = require('js/components/menu/bottomBar');
 
-var Map = require('js/components/menu/map');
-
 var LeftSidebarButton = require('js/components/menu/leftSidebarButton');
 var RightSidebarButton = require('js/components/menu/rightSidebarButton');
 
@@ -29,10 +27,6 @@ var Menu = React.createClass({
                     <LeftSidebarButton />
                     <RightSidebarButton />
                     <TopBar />
-                    <Map />
-
-                    { /* This div is used by map. */ }
-                    <div id="content"></div>
 
                     { /* More stuff for integrating with React */ }
                     <div id="chiselchat-wrapper"></div>

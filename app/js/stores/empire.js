@@ -1,8 +1,22 @@
 'use strict';
 
 var Reflux = require('reflux');
+var _ = require('lodash');
 
 var StatusActions = require('js/actions/status');
+
+function bodyObjectToArray(bodyObj) {
+    var arr = [];
+    _.each(bodyObj, function(value, key) {
+        arr.push({
+            id: key,
+            name: value
+        });
+    });
+
+    // Sort by name.
+    return _.sortBy(arr, 'name');
+}
 
 var EmpireStore = Reflux.createStore({
     listenables: StatusActions,
@@ -14,7 +28,7 @@ var EmpireStore = Reflux.createStore({
             return this.data;
         } else {
             return {
-                colonies : {},
+                colonies : [],
                 essentia: 0,
                 has_new_messages: 0,
                 home_planet_id: '',
@@ -25,12 +39,12 @@ var EmpireStore = Reflux.createStore({
                 name: '',
                 next_colony_cost: 0,
                 next_station_cost: 0,
-                planets: {},
+                planets: [],
                 primary_embassy_id: 0,
                 rpc_count: 0,
                 self_destruct_active: 0,
                 self_destruct_date: '',
-                stations: {},
+                stations: [],
                 status_message: '',
                 tech_level: 0
             };
@@ -46,6 +60,11 @@ var EmpireStore = Reflux.createStore({
             // Possible things to do here:
             //  ~ Turn self_destruct_date into a Date object.
             //  ~ See also: Game.ProcessStatus.
+
+            // Fix up all the planet lists.
+            this.data.colonies = bodyObjectToArray(this.data.colonies);
+            this.data.planets = bodyObjectToArray(this.data.planets);
+            this.data.stations = bodyObjectToArray(this.data.stations);
 
             this.trigger(this.data);
         }

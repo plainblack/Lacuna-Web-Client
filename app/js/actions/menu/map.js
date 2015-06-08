@@ -5,7 +5,8 @@ var Reflux = require('reflux');
 var MapActions = Reflux.createActions([
     'showPlanetMap',
     'showStarMap',
-    'toggleMapMode'
+    'toggleMapMode',
+    'changePlanet'
 ]);
 
 module.exports = MapActions;

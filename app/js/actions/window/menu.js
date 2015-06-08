@@ -2,9 +2,7 @@
 
 var Reflux = require('reflux');
 
-var MenuActions = Reflux.createActions([
-    'show',
-    'hide'
-]);
-
-module.exports = MenuActions;
+module.exports = {
+    show: Reflux.createAction({sync: true}),
+    hide: Reflux.createAction({sync: true})
+};
