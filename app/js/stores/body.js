@@ -4,6 +4,10 @@ var Reflux = require('reflux');
 
 var StatusActions = require('js/actions/status');
 
+function int(number) {
+    return parseInt(number, 10);
+}
+
 var BodyStore = Reflux.createStore({
     listenables: StatusActions,
 
@@ -89,8 +93,14 @@ var BodyStore = Reflux.createStore({
         var body = status.body;
 
         // Clean up numbers for the sake of simplicity.
-        body.x = parseInt(body.x, 10);
-        body.y = parseInt(body.y, 10);
+        body.x = int(body.x);
+        body.y = int(body.y);
+
+        body.num_incoming_own = int(body.num_incoming_own);
+        body.num_incoming_ally = int(body.num_incoming_ally);
+        body.num_incoming_enemy = int(body.num_incoming_enemy);
+
+        body.size = int(body.size);
 
         this.trigger(body);
     },

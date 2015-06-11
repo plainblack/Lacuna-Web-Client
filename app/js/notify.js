@@ -1,7 +1,9 @@
-YAHOO.namespace("lacuna");
+'use strict';
+
+var BodyStore = require('js/stores/body');
 
 if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
-    
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -10,52 +12,49 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
         Lacuna = YAHOO.lacuna,
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
-        
-    var Notify = function(){
-        this.skip_incoming_ships = {};
-        this.incoming_own = {};
-        this.num_incoming_own = {};
-        this.incoming_ally = {};
-        this.num_incoming_ally = {};
-        this.incoming_enemy = {};
-        this.num_incoming_enemy = {};
-    };
+
+    var Notify = function() {};
     Notify.prototype = {
-        _createDisplay : function() {
-            if(!this.Display) {
+        build : function() {
+            if (!this.Display) {
                 var container = document.createElement("div");
                 container.id = "notify";
                 Dom.addClass(container, Lib.Styles.HIDDEN);
                 Dom.addClass(container, "nofooter");
                 container.innerHTML = this._getHtml();
-                document.body.insertBefore(container, document.body.firstChild);
-                
+                document.getElementById('oldYUIPanelContainer').appendChild(container);
+
                 this.Display = new YAHOO.widget.Panel("notify", {
                     constraintoviewport:true,
                     visible:false,
-                    draggable:true,
+                    draggable:false,
                     effect:Game.GetContainerEffect(),
                     close:false,
                     underlay:false,
                     modal:false,
                     width:"180px",
-                    context:["header","tr","br", ["beforeShow", "windowResize"], [0,40]]
+                    zIndex: 20000
                 });
+                var self = this; // Please, no... :'(
                 this.Display.renderEvent.subscribe(function(){
                     this.notifyList = Dom.get('notifyList');
                     this.notify = Dom.get("notify");
-                    
+
+                    // Listen for new data.
+                    BodyStore.listen(self.update, self);
+
                     Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
                 });
                 this.Display.showEvent.subscribe(function(){
                     Dom.setStyle(this.notifyList.parentNode, "max-height", (Game.GetSize().h - 125) + "px");
                 });
+
                 this.Display.render();
             }
         },
         _getHtml : function() {
             return [
-            '    <div class="hd" style="background:transparent;">Incoming Ships.</div>',
+            '    <div class="hd" style="background:transparent;">Incoming Ships</div>',
             '    <div class="bd" style="background: url(',Lib.AssetUrl,'ui/transparent_black.png) repeat scroll 0pt 0pt transparent;">',
             '        <div style="overflow:auto;">',
             '            <ul id="notifyList"></ul>',
@@ -63,19 +62,16 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             '    </div>'
             ].join('');
         },
-        _updating : function() {
+        update : function(body) {
+
             var list = this.Display.notifyList;
-            var incoming_own = this.incoming_own[this.planetId] || [],
-                incoming_ally = this.incoming_ally[this.planetId] || [],
-                incoming_enemy = this.incoming_enemy[this.planetId] || [],
-                skip_incoming_ships = this.skip_incoming_ships[this.planetId] || 0,
-                num_incoming_own = this.num_incoming_own[this.planetId] || 0,
-                num_incoming_ally = this.num_incoming_ally[this.planetId] || 0,
-                num_incoming_enemy = this.num_incoming_enemy[this.planetId] || 0;
-                arr = [];
-            if(skip_incoming_ships==1) {
-                arr = arr.concat(['<li><span style="color:#f00">DISABLED (see profile)</span></li>']);
-            }
+            var incoming_own = body.incoming_own_ships || [],
+                incoming_ally = body.incoming_ally_ships || [],
+                incoming_enemy = body.incoming_enemy_ships || [],
+                num_incoming_own = body.num_incoming_own || 0,
+                num_incoming_ally = body.num_incoming_ally || 0,
+                num_incoming_enemy = body.num_incoming_enemy || 0;
+            var arr = [];
 
             if(num_incoming_enemy > 0) {
                 arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' foreign</span></li>']);
@@ -128,62 +124,33 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                     arr = arr.concat(['<li><span style="color:#0f0;">',arrTime,'</span></li>']);
                 }
             }
-            if(num_incoming_own + num_incoming_ally + num_incoming_enemy + skip_incoming_ships == 0) {
-                arr = arr.concat(['<li><span style="color:#0f0">none</span></li>']);
-            }            
+            if(num_incoming_own + num_incoming_ally + num_incoming_enemy == 0) {
+                arr = arr.concat(['<li><span style="color:#0f0">None! ^_^</span></li>']);
+            }
             list.innerHTML = arr.join('');
             this.Display.show();
         },
-        Load : function(planet) {
-            var incoming_own        = planet.incoming_own_ships || [],
-                incoming_ally       = planet.incoming_ally_ships || [],
-                incoming_enemy      = planet.incoming_enemy_ships || [],
-                skip_incoming_ships = planet.skip_incoming_ships || 0,
-                num_incoming_own    = planet.num_incoming_own || 0,
-                num_incoming_ally   = planet.num_incoming_ally || 0,
-                num_incoming_enemy  = planet.num_incoming_enemy || 0;
-                planet_skip_incoming_ships = this.skip_incoming_ships[planet.id] || 0;
-                planet_num_own      = this.num_incoming_own[planet.id] || 0;
-                planet_num_ally     = this.num_incoming_ally[planet.id] || 0;
-                planet_num_enemy    = this.num_incoming_enemy[planet.id] || 0;
 
-                this._createDisplay();
-                this.skip_incoming_ships[planet.id] = skip_incoming_ships;
-                this.incoming_own[planet.id] = incoming_own;
-                this.num_incoming_own[planet.id] = num_incoming_own;
-                this.incoming_ally[planet.id] = incoming_ally;
-                this.num_incoming_ally[planet.id] = num_incoming_ally;
-                this.incoming_enemy[planet.id] = incoming_enemy;
-                this.num_incoming_enemy[planet.id] = num_incoming_enemy;
-                this.planetId = planet.id;
-
-                if(!this.subscribed) {
-                    Game.onTick.subscribe(this._updating, this, true);
-                    this.subscribed = 1;
-                }
-                this.Display.show();
-                this.Display.bringToTop();
-        },
-
-        Show : function(planetId) {
-            this.planetId = planetId;
-            if(this.Display) {
-                this.Display.show();
-                this.Display.bringToTop();
-            }
+        Show : function() {
+            this.build();
+            this.Display.show();
+            this.Display.bringToTop();
         },
         Hide : function() {
-            if(this.Display) {
+            if (this.Display) {
                 this.Display.hide();
             }
-            delete this.planetId;
+        },
+        Destroy: function() {
+            this.Display.destroy();
+            delete this.Display;
         }
     };
-    
+
     Lacuna.Notify = new Notify();
-        
+
 })();
-YAHOO.register("notify", YAHOO.lacuna.Notify, {version: "1", build: "0"}); 
+YAHOO.register("notify", YAHOO.lacuna.Notify, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

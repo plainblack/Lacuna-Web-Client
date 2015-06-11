@@ -2006,6 +2006,14 @@ input, textarea {
 	color: black;
 }
 
+/* Fix incoming ships position. */
+#notify_c {
+	position: absolute;
+	right: 15px;
+	top: 100px;
+	z-index: 2000;
+}
+
 
 /*
  * vim: noet:ts=4:sw=4

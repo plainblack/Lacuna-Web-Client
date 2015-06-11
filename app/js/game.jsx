@@ -700,6 +700,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             Lacuna.MapStar.Reset();
             Lacuna.MapPlanet.Reset();
             Lacuna.Notify.Hide();
+            Lacuna.Notify.Destroy();
         },
 
         //Cookie helpers functions
