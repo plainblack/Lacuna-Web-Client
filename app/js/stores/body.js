@@ -1,18 +1,26 @@
 'use strict';
 
 var Reflux = require('reflux');
+var _ = require('lodash');
 
 var StatusActions = require('js/actions/status');
+
+var TickerActions = require('js/actions/ticker');
+
+var util = require('js/util');
 
 function int(number) {
     return parseInt(number, 10);
 }
 
 var BodyStore = Reflux.createStore({
-    listenables: StatusActions,
+    listenables: [
+        StatusActions,
+        TickerActions
+    ],
 
     getInitialState: function() {
-        return {
+        this.body = {
             "id" : '',
             "x" : 0,
             "y" : 0,
@@ -83,6 +91,8 @@ var BodyStore = Reflux.createStore({
                 "spent" : 0
             }
         };
+
+        return this.body;
     },
 
     onUpdate: function(status) {
@@ -90,23 +100,45 @@ var BodyStore = Reflux.createStore({
             return;
         }
 
-        var body = status.body;
+        this.body = status.body;
 
         // Clean up numbers for the sake of simplicity.
-        body.x = int(body.x);
-        body.y = int(body.y);
+        this.body.x = int(this.body.x);
+        this.body.y = int(this.body.y);
 
-        body.num_incoming_own = int(body.num_incoming_own);
-        body.num_incoming_ally = int(body.num_incoming_ally);
-        body.num_incoming_enemy = int(body.num_incoming_enemy);
+        this.body.num_incoming_own = int(this.body.num_incoming_own);
+        this.body.num_incoming_ally = int(this.body.num_incoming_ally);
+        this.body.num_incoming_enemy = int(this.body.num_incoming_enemy);
 
-        body.size = int(body.size);
+        var updateShip = function(ship) {
+            ship.arrival_ms =
+                util.serverDateToMs(status.server.time) - util.serverDateToMs(ship.date_arrives);
+        };
+        _.map(this.body.incoming_own_ships, updateShip);
+        _.map(this.body.incoming_ally_ships, updateShip);
+        _.map(this.body.incoming_enemy_ships, updateShip);
 
-        this.trigger(body);
+        this.body.size = int(this.body.size);
+
+        this.trigger(this.body);
     },
 
     onClear: function() {
         this.trigger(this.getInitialState());
+    },
+
+    onTick: function() {
+
+        var tickIncoming = function(ship) {
+            // This is the *remaining* time to arrival so we need to add.
+            ship.arrival_ms += 1000;
+        };
+
+        _.map(this.body.incoming_own_ships, tickIncoming);
+        _.map(this.body.incoming_ally_ships, tickIncoming);
+        _.map(this.body.incoming_enemy_ships, tickIncoming);
+
+        this.trigger(this.body);
     }
 });
 

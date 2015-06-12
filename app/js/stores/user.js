@@ -2,9 +2,10 @@
 
 var Reflux = require('reflux');
 
-var UserActions = require('js/actions/user');
-var StatusActions = require('js/actions/status');
 var MenuActions = require('js/actions/window/menu');
+var StatusActions = require('js/actions/status');
+var TickerActions = require('js/actions/ticker');
+var UserActions = require('js/actions/user');
 
 var EmpireStore = Reflux.createStore({
     listenables: UserActions,
@@ -17,8 +18,8 @@ var EmpireStore = Reflux.createStore({
     },
 
     onSignIn: function(obj) {
-        // TODO: Do interesting stuff.
         MenuActions.show();
+        TickerActions.start();
         this.trigger(obj);
     },
 
@@ -39,6 +40,7 @@ var EmpireStore = Reflux.createStore({
                 // Let the React stuff know what happened.
                 StatusActions.clear();
                 MenuActions.hide();
+                TickerActions.stop();
             }
         });
 

@@ -75,11 +75,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 
             if(num_incoming_enemy > 0) {
                 arr = arr.concat(['<li><span style="color:#fff">',num_incoming_enemy,' foreign</span></li>']);
-                var serverTime = Lib.getTime(Game.ServerData.time),
-                    len = incoming_enemy.length;
-                for(var s=0; s<len; s++) {
+                var len = incoming_enemy.length;
+                for (var s=0; s<len; s++) {
                     var ship = incoming_enemy[s],
-                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    ms = ship.arrival_ms,
                     arrTime;
                     if(ms > 0) {
                         arrTime = Lib.formatMillisecondTime(ms);
@@ -92,11 +91,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             }
             if(num_incoming_ally > 0) {
                 arr = arr.concat(['<li><span style="color:#b0b">',num_incoming_ally,' allied</span></li>']);
-                var serverTime = Lib.getTime(Game.ServerData.time),
-                    len = incoming_ally.length;
-                for(var s=0; s<len; s++) {
+                var len = incoming_ally.length;
+                for (var s=0; s<len; s++) {
                     var ship = incoming_ally[s],
-                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    ms = ship.arrival_ms,
                     arrTime;
                     if(ms > 0) {
                         arrTime = Lib.formatMillisecondTime(ms);
@@ -109,11 +107,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             }
             if(num_incoming_own > 0) {
                 arr = arr.concat(['<li><span style="color:#0f0">',num_incoming_own,' own</span></li>']);
-                var serverTime = Lib.getTime(Game.ServerData.time),
-                    len = incoming_own.length;
+                var len = incoming_own.length;
                 for(var s=0; s<len; s++) {
                     var ship = incoming_own[s],
-                    ms = Lib.getTime(ship.date_arrives) - serverTime,
+                    ms = ship.arrival_ms,
                     arrTime;
                     if(ms > 0) {
                         arrTime = Lib.formatMillisecondTime(ms);
