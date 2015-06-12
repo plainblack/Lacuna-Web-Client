@@ -577,8 +577,9 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     }
                 }
                 if(!visible) {
-                    this.buildingDetails.hide();
-                    this.buildingBuilder.hide();
+                    // These can sometimes get called before they exist, so watch out for that. :/
+                    this.buildingDetails && this.buildingDetails.hide();
+                    this.buildingBuilder && this.buildingBuilder.hide();
                 }
             }
         },

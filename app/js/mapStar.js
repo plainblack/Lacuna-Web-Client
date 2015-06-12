@@ -22,10 +22,6 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
         this._fetchSpiesLabel = "Fetch Spy";
         this._miningLabel = "Mining";
         this._excavLabel = "Excavators";
-
-        this._buildDetailsPanel();
-        this._buildPlanetDetailsPanel();
-        this._buildFindPanel();
     };
     MapStar.prototype = {
         _buildDetailsPanel : function() {
@@ -56,7 +52,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '        </div>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.starDetails = new YAHOO.widget.Panel(panelId, {
@@ -263,7 +259,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '        </div>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.planetDetails = new YAHOO.widget.Panel(panelId, {
@@ -462,7 +458,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 '        <button type="button" id="',panelId,'Jump">Jump</button>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.starFind = new YAHOO.widget.Panel(panelId, {
@@ -544,10 +540,16 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
         },
         MapVisible : function(visible) {
             if(visible) {
+                // Build panels
+                this._buildFindPanel();
+                this._buildDetailsPanel();
+                this._buildPlanetDetailsPanel();
+
                 this.starFind.show();
             }
             else {
-                this.starFind.hide();
+                // This can get called before the panels have been built. :/
+                this.starFind && this.starFind.hide();
             }
             if(this._isVisible != visible) {
                 if(this._elGrid) {
