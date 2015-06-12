@@ -64,6 +64,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
         },
         update : function(body) {
 
+            if (!this.Display) {
+                return; // Make sure we don't try to update something that isn't there.
+            }
+
             var list = this.Display.notifyList;
             var incoming_own = body.incoming_own_ships || [],
                 incoming_ally = body.incoming_ally_ships || [],

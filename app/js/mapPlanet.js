@@ -728,8 +728,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             if(this._map) {
                 this._map.reset();
             }
-            this.buildingDetails.resetQueue();
-            this.buildingBuilder.resetFilter();
+            this.buildingDetails && this.buildingDetails.resetQueue();
+            this.buildingBuilder && this.buildingBuilder.resetFilter();
             this.MapVisible(false);
         },
 
