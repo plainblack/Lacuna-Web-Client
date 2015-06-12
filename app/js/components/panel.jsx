@@ -13,7 +13,7 @@ var Panel = React.createClass({
         height: React.PropTypes.number,
         width: React.PropTypes.number,
         onClose: React.PropTypes.func.isRequired,
-        display: React.PropTypes.oneOf(['none', '']).isRequired
+        show: React.PropTypes.bool.isRequired
     },
     getDefaultProps: function() {
         return {
@@ -27,7 +27,7 @@ var Panel = React.createClass({
                 <div style={{
                     position: 'absolute',
                     zIndex: '999999999',
-                    display: this.props.display,
+                    display: this.props.show ? '' : 'none',
                     left: (($(window.document).width() - this.props.width) / 2) + 'px'
                 }}>
                     <div className="drag-handle" style={{
