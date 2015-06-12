@@ -61,9 +61,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
     var MapPlanet = function() {
         this.createEvent("onMapRpc");
-
-        this._buildDetailsPanel();
-        this._buildBuilderPanel();
     };
     MapPlanet.prototype = {
         _buildDetailsPanel : function() {
@@ -91,7 +88,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 '        </div>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.buildingDetails = new YAHOO.widget.Panel(panelId, {
@@ -241,7 +238,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 '        </div>',
                 '    </div>',
                 '</div>'].join('');
-            document.body.insertBefore(panel, document.body.firstChild);
+            document.getElementById('oldYUIPanelContainer').appendChild(panel);
             Dom.addClass(panel, "nofooter");
 
             this.buildingBuilder = new YAHOO.widget.Panel(panelId, {
@@ -738,6 +735,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         BuilderView : function(tile) {
             //YAHOO.log(tile, "info", "BuilderView");
 
+            this._buildBuilderPanel();
+
             Game.OverlayManager.hideAllBut(this.buildingBuilder.id);
             this.buildingBuilder.resetDisplay(this);
             this.buildingBuilder.setTile(tile);
@@ -865,6 +864,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             //YAHOO.log(tile, "info", "DetailsView");
 
             Lacuna.Pulser.Show();
+            this._buildDetailsPanel();
             var panel = this.buildingDetails;
             Game.OverlayManager.hideAllBut(panel.id);
             panel.resetDisplay(this);
@@ -873,16 +873,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             panel.img.src = this.surfaceUrl;
             panel.desc.innerHTML = "";
             panel.timeLeftLi.innerHTML = "";
-            /*panel.curEnergy.innerHTML = "";
-            panel.curFood.innerHTML = "";
-            panel.curHappiness.innerHTML = "";
-            panel.curOre.innerHTML = "";
-            panel.curWaste.innerHTML = "";
-            panel.curWater.innerHTML = "";
-            Event.purgeElement(panel.upgradeUl);
-            panel.upgradeUl.innerHTML = "";
-            Event.purgeElement(panel.upgradeProdUl);
-            panel.upgradeProdUl.innerHTML = "";*/
 
             panel.tabView.set('activeTab',null);
             while(panel.tabView.get("tabs").length > 0){
