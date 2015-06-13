@@ -94,7 +94,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             }
             try {
             Game.chatRef = new Firebase('https://lacunapt.firebaseio.com');
-            Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"));
+            Game.chat = new ChiselchatUI(Game.chatRef, document.getElementById("chiselchat-wrapper"), { numMaxMessages: 100 });
             Game.chat.addCommand({
                 match : /^\/wiki/,
                 func : function(e) {
