@@ -667,7 +667,6 @@ Info dialogs for Empire and Alliance
 	cursor: -webkit-grab;
 }
 
-/* Not sure about Starmap as yet so just going to do this to planet map. */
 #planetMap, #starMap {
 	position: absolute;
 	top: 0;
