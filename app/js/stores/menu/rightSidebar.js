@@ -9,7 +9,9 @@ var RightSidebarStore = Reflux.createStore({
     listenables: RightSidebarActions,
     onToggle: function() {
         console.log('Toggling right sidebar.');
-        $('.ui.sidebar.right').sidebar('toggle');
+        $('.ui.sidebar.right')
+            .sidebar('setting', 'transition', 'overlay')
+            .sidebar('toggle');
     }
 });
 
