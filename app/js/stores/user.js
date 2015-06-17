@@ -2,6 +2,7 @@
 
 var Reflux = require('reflux');
 
+var ChatActions = require('js/actions/menu/chat');
 var MenuActions = require('js/actions/window/menu');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
@@ -20,6 +21,7 @@ var EmpireStore = Reflux.createStore({
     onSignIn: function(obj) {
         MenuActions.show();
         TickerActions.start();
+        ChatActions.show();
         this.trigger(obj);
     },
 

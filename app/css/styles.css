@@ -1994,6 +1994,12 @@ TextboxList
 /* Semantic UI */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css');
 
+/* Stuff related to the Chat bar */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css');
+
+/* The fact that we're using US1 *might* be bad here. */
+@import url('https://us1.lacunaexpanse.com/chiselchat/chiselchat.min.css');
+
 
 /* Semantic overrides everything in this file and manages to not make a mess. Except for this... */
 body {

@@ -9,6 +9,8 @@ var BottomBar = require('js/components/menu/bottomBar');
 var LeftSidebarButton = require('js/components/menu/leftSidebarButton');
 var RightSidebarButton = require('js/components/menu/rightSidebarButton');
 
+var Chat = require('js/components/menu/chat');
+
 var MenuStore = require('js/stores/window/menu');
 
 var Menu = React.createClass({
@@ -29,8 +31,10 @@ var Menu = React.createClass({
                     <TopBar />
 
                     { /* More stuff for integrating with React */ }
-                    <div id="chiselchat-wrapper"></div>
                     <div id="oldYUIPanelContainer"></div>
+
+                    { /* Chat, yay! */ }
+                    <Chat />
 
                     <BottomBar />
                 </div>
