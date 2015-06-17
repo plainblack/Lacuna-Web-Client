@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var ChatStore = require('js/stores/menu/chat');
+var BodyStore = require('js/stores/body');
 
 var Chat = React.createClass({
     mixins: [
@@ -18,28 +19,44 @@ var Chat = React.createClass({
     hasRenderedChat: false,
     componentDidUpdate: function() {
 
-        // Only do this process once.
-        if (this.props.show === false || this.hasRenderedChat === true) {
-            return;
+        if (this.state.show !== this.hasRenderedChat) {
+            if (this.state.show === true && this.hasRenderedChat == false) {
+                this.loadChat();
+            } else if (this.state.show === false && this.hasRenderedChat == true) {
+                this.logoutChat();
+            } else {
+                return;
+            }
         }
-
+    },
+    logoutChat: function() {
+        try {
+            this.chat.unsetUser();
+            this.hasRenderedChat = false;
+        }
+        catch(err) {
+            console.error('Cannot unsetuser ' + err);
+        }
+    },
+    loadChat: function() {
         console.log('Loading chat!');
+
+        // ChiselChat needs these.
+        window.Firebase = require('firebase');
+        window.$ = window.jQuery = require('jquery');
+        window.PNotify = require('pnotify');
 
         if (!window.ChiselChat) {
             // ChiselChat is not on mpn so we need to pull some tricks to get it into the app.
-
-            // Firstly, add all its dependencies to `window`.
-            window.Firebase = require('firebase');
-            window.$ = window.jQuery = require('jquery');
-            window.PNotify = require('pnotify');
-
-            // Now manually load the script.
-            var self = this;
-            $.getScript('chiselchat/chiselchat.min.js', function(data, textStatus, jqXHR) {
+            $.getScript('chiselchat/chiselchat.min.js', _.bind(function(data, textStatus, jqXHR) {
                 if (textStatus === 'success' && jqXHR.status === 200) {
-                    self.renderChat.call(self);
+                    this.renderChat.call(self);
+                } else {
+                    console.error('Loading ChiselChat failed.');
                 }
-            });
+            }, this));
+        } else {
+            this.renderChat();
         }
     },
     renderChat: function() {
@@ -58,7 +75,13 @@ var Chat = React.createClass({
                 maxNumMessages: 100
             };
 
-            this.chatRef = new Firebase('https://lacuna.firebaseio.com');
+            // Make sure we go to the right server's Firebase.
+            var url = 'https://lacuna.firebaseio.com';
+            if (window.location.hostname.split('.')[0] === 'pt') {
+                url = 'httpspt://lacuna.firebaseio.com';
+            }
+
+            this.chatRef = new Firebase(url);
             this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper.getDOMNode(), config);
 
             this.chat.addCommand({
@@ -81,8 +104,8 @@ var Chat = React.createClass({
             this.chat.addCommand({
                 match : /^\/planet$/,
                 func : function(message, chatui) {
-                    var Game = YAHOO.lacuna.Game;
-                    var body = Game.GetCurrentPlanet();
+                    var body = BodyStore.getData();
+
                     message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
                 },
                 name : "/planet",

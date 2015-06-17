@@ -7,24 +7,26 @@ var StatusActions = require('js/actions/status');
 var ServerStore = Reflux.createStore({
     listenables: StatusActions,
 
-    data: undefined,
+    data: {},
 
     getInitialState: function() {
-        if (this.data) {
-            return this.data;
-        } else {
-            return {
-                time : '01 31 2010 13:09:05 +0600',
-                version : 123456789,
-                announcement : 0,
-                rpc_limit : 10000,
-                star_map_size : {
-                    x : [ -15, 15 ],
-                    y : [ -15, 15 ],
-                    z : [ -15, 15 ]
-                }
-            };
-        }
+        this.data = {
+            time : '01 31 2010 13:09:05 +0600',
+            version : 123456789,
+            announcement : 0,
+            rpc_limit : 10000,
+            star_map_size : {
+                x : [ -15, 15 ],
+                y : [ -15, 15 ],
+                z : [ -15, 15 ]
+            }
+        };
+
+        return this.data;
+    },
+
+    getData: function() {
+        return this.data;
     },
 
     onUpdate: function(status) {
@@ -41,8 +43,8 @@ var ServerStore = Reflux.createStore({
     },
 
     onClear: function() {
-        this.data = undefined;
-        this.trigger(this.getInitialState());
+        this.data = this.getInitialState();
+        this.trigger(this.data);
     }
 });
 

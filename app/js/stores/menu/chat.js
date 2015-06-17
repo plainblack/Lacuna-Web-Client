@@ -8,7 +8,11 @@ var ChatStore = Reflux.createStore({
     listenables: ChatActions,
 
     onShow: function() {
-      this.trigger(true);
+        this.trigger(true);
+    },
+
+    onHide: function() {
+        this.trigger(false);
     }
 });
 

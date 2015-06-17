@@ -19,8 +19,10 @@ var BodyStore = Reflux.createStore({
         TickerActions
     ],
 
+    data: {},
+
     getInitialState: function() {
-        this.body = {
+        this.data = {
             "id" : '',
             "x" : 0,
             "y" : 0,
@@ -92,7 +94,11 @@ var BodyStore = Reflux.createStore({
             }
         };
 
-        return this.body;
+        return this.data;
+    },
+
+    getData: function() {
+        return this.data;
     },
 
     onUpdate: function(status) {
@@ -100,31 +106,32 @@ var BodyStore = Reflux.createStore({
             return;
         }
 
-        this.body = status.body;
+        this.data = status.body;
 
         // Clean up numbers for the sake of simplicity.
-        this.body.x = int(this.body.x);
-        this.body.y = int(this.body.y);
+        this.data.x = int(this.data.x);
+        this.data.y = int(this.data.y);
 
-        this.body.num_incoming_own = int(this.body.num_incoming_own);
-        this.body.num_incoming_ally = int(this.body.num_incoming_ally);
-        this.body.num_incoming_enemy = int(this.body.num_incoming_enemy);
+        this.data.num_incoming_own = int(this.data.num_incoming_own);
+        this.data.num_incoming_ally = int(this.data.num_incoming_ally);
+        this.data.num_incoming_enemy = int(this.data.num_incoming_enemy);
 
         var updateShip = function(ship) {
             ship.arrival_ms =
                 util.serverDateToMs(status.server.time) - util.serverDateToMs(ship.date_arrives);
         };
-        _.map(this.body.incoming_own_ships, updateShip);
-        _.map(this.body.incoming_ally_ships, updateShip);
-        _.map(this.body.incoming_enemy_ships, updateShip);
+        _.map(this.data.incoming_own_ships, updateShip);
+        _.map(this.data.incoming_ally_ships, updateShip);
+        _.map(this.data.incoming_enemy_ships, updateShip);
 
-        this.body.size = int(this.body.size);
+        this.data.size = int(this.data.size);
 
-        this.trigger(this.body);
+        this.trigger(this.data);
     },
 
     onClear: function() {
-        this.trigger(this.getInitialState());
+        this.data = this.getInitialState();
+        this.trigger(this.data);
     },
 
     onTick: function() {
@@ -134,11 +141,11 @@ var BodyStore = Reflux.createStore({
             ship.arrival_ms += 1000;
         };
 
-        _.map(this.body.incoming_own_ships, tickIncoming);
-        _.map(this.body.incoming_ally_ships, tickIncoming);
-        _.map(this.body.incoming_enemy_ships, tickIncoming);
+        _.map(this.data.incoming_own_ships, tickIncoming);
+        _.map(this.data.incoming_ally_ships, tickIncoming);
+        _.map(this.data.incoming_enemy_ships, tickIncoming);
 
-        this.trigger(this.body);
+        this.trigger(this.data);
     }
 });
 

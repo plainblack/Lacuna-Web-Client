@@ -43,6 +43,7 @@ var EmpireStore = Reflux.createStore({
                 StatusActions.clear();
                 MenuActions.hide();
                 TickerActions.stop();
+                ChatActions.hide();
             }
         });
 
