@@ -78,8 +78,11 @@ var Chat = React.createClass({
             // Make sure we go to the right server's Firebase.
             var url = 'https://lacuna.firebaseio.com';
             if (window.location.hostname.split('.')[0] === 'pt') {
-                url = 'httpspt://lacuna.firebaseio.com';
+                url = 'https://lacunapt.firebaseio.com';
             }
+
+            console.log('Connecting to Firbase: ' + url);
+            debugger;
 
             this.chatRef = new Firebase(url);
             this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper.getDOMNode(), config);
