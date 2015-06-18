@@ -2,7 +2,7 @@
 
 var Reflux = require('reflux');
 
-var Window = require('js/stores/mixin/window');
+var Window = require('js/stores/mixins/window');
 
 var OptionsActions = require('js/actions/window/options');
 

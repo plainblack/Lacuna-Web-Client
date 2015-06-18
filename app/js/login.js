@@ -96,7 +96,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
     };
     Login.prototype = {
         handleLogin : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.setMessage("");
             var EmpireServ = Game.Services.Empire;
             EmpireServ.login({name:this.elName.value, password:this.elPass.value, api_key:Lib.ApiKey},{
@@ -351,11 +351,11 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
                 data.email = email;
             }
             this.EmailDialog.getButtons()[0].disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Empire.send_password_reset_message(data,{
                 success: function(o) {
                     YAHOO.log(o, "info", "ResetPassword.sendEmail.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.showReset();
                 },
                 failure: function(o) {
@@ -384,7 +384,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
                 alert("Passwords do not match!");
             }
             else {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Empire.reset_password({
                     reset_key: reset_key,
                     password1: password1,
@@ -393,7 +393,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
                 },{
                     success: function(o) {
                         YAHOO.log(o, "info", "ResetPassword.resetPassword.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.fireEvent('onResetSuccessful', o);
                         this.hide();
                     },

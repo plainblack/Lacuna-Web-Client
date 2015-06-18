@@ -59,11 +59,11 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         GetProbes : function(e) {
             if(e.newValue) {
                 if(!this.probes) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.get_probed_stars({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                         success : function(o){
                             YAHOO.log(o, "info", "Observatory.get_probed_stars.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.ProbeInfoDisplay(o.result);
                             this.probes = o.result.stars;
@@ -139,7 +139,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
             }
         },
         ProbesHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.get_probed_stars({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -147,7 +147,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Observatory.ProbesHandlePagination.get_probed_stars.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.probes = o.result.stars;
                     // Update the Paginator's state
@@ -160,7 +160,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         ProbeAbandon : function(e, matchedEl, container) {
             if(container.Star) {
                 if(confirm(["Are you sure you want to abandon the probe at ",container.Star.name,"?"].join(''))) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.abandon_probe({
                             session_id:Game.GetSession(),
                             building_id:this.building.id,
@@ -168,7 +168,7 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
                         }, {
                         success : function(o){
                             YAHOO.log(o, "info", "Observatory.ProbeAction.abandon_probe.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             Event.purgeElement(container);
                             container.parentNode.removeChild(container);
@@ -186,14 +186,14 @@ if (typeof YAHOO.lacuna.buildings.Observatory == "undefined" || !YAHOO.lacuna.bu
         },
         AbandonAllProbes : function(e) {
             if(confirm("Are you sure you want to abandon all probes controlled by this Observatory?")) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.abandon_all_probes({
                         session_id:Game.GetSession(),
                         building_id:this.building.id
                     }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Observatory.AbandonAllProbes.abandon_all_probes.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.probes = null;
                         

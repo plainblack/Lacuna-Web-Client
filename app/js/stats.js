@@ -149,11 +149,11 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
         },
 
         getServerStats : function(){
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Util.Connect.asyncRequest('GET', 'server_overview.json', {
                 success: function(o) {
                     YAHOO.log(o, "info", "Stats.populateServerStats.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     try {
                         this._serverOverview = Lang.JSON.parse(o.responseText);
                         this.populateServerStats();

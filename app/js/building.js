@@ -135,11 +135,11 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
         Repair : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Buildings.Generic.repair({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Building.Repair.repair.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     if(this.repairTab) {
                         Event.removeListener("repair", "click");
@@ -236,14 +236,14 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
         Demolish : function() {
             var building = this.building;
             if(confirm(['Are you sure you want to Demolish the level ',building.level,' ',building.name,'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Buildings.Generic.demolish({
                     session_id:Game.GetSession(),
                     building_id:building.id
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Building.Demolish.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.removeBuildingTile(building);
                         this.fireEvent("onHide");
@@ -256,14 +256,14 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
         Downgrade : function() {
             var building = this.building;
             if(confirm(['Are you sure you want to downgrade the level ',building.level,' ',building.name,'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Buildings.Generic.downgrade({
                     session_id:Game.GetSession(),
                     building_id:building.id
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Building.Downgrade.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.fireEvent("onMapRpc", o.result);
 
                         var b = building; //originally passed in building data from currentBuilding
@@ -284,7 +284,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
         Upgrade : function() {
             var building = this.building;
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var BuildingServ = Game.Services.Buildings.Generic,
                 data = {
                     session_id: Game.GetSession(""),
@@ -294,7 +294,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             BuildingServ.upgrade(data,{
                 success : function(o){
                     YAHOO.log(o, "info", "Building.Upgrade.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.fireEvent("onMapRpc", o.result);
 
                     var b = building; //originally passed in building data from currentBuilding
@@ -336,11 +336,11 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             Dom.setStyle("incomingSupplyChainListNone", "display", "none");
 
             if ( !this.incoming_supply_chains ) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_incoming_supply_chains({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
                         YAHOO.log(o, "info", "building.viewIncomingSupplyChainInfo.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.incoming_supply_chains = o.result.supply_chains;
 

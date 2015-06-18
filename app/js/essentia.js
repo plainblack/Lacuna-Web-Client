@@ -208,14 +208,14 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
             Event.stopEvent(e);
             var code = this.elCode.value;
             var currentEssentia = Game.EmpireData.essentia;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Empire.redeem_essentia_code({
                 session_id:Game.GetSession(""),
                 essentia_code: code
             },{
                 success : function(o){
                     YAHOO.log(o, "info", "EssentiaRedeem.show.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     var addedEssentia = o.result.status.empire.essentia - currentEssentia;
                     alert('Redeemed code for '+addedEssentia+' essentia.');
                     this.elCode.value = '';

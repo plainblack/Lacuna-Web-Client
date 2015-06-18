@@ -52,11 +52,11 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
                 isRestrict = 0;
             }
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.restrict_coverage({session_id:Game.GetSession(),building_id:this.result.building.id,onoff:isRestrict}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Network19.NewsCoverage.restrict_coverage.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     Dom.get("newsCoverageText").innerHTML = isRestrict ? 'Coverage is currently restricted' : 'News is flowing freely';
@@ -70,11 +70,11 @@ if (typeof YAHOO.lacuna.buildings.Network19 == "undefined" || !YAHOO.lacuna.buil
             });
         },
         NewsGet : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_news({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "Network19.NewsGet.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     var news = o.result.news,

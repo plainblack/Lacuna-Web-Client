@@ -81,14 +81,14 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
             this.refreshCaptcha();
         },
         solveCaptcha : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Captcha.solve({
                 session_id : Game.GetSession(),
                 captcha_guid : this._captcha_guid,
                 captcha_solution : this.captchaSolution.value
             },{
                 success : function(o) {
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Dialog.hide();
                     this._retry();
                 },
@@ -100,7 +100,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
             });
         },
         refreshCaptcha: function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Captcha.fetch({session_id:Game.GetSession()},{
                 success : function(o) {
                     var t = this;
@@ -109,7 +109,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                         t._captcha_guid = o.result.guid;
                         t.captchaImage.src = o.result.url;
                         t.captchaSolution.value = '';
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         t.Dialog.show();
                     };
                     image.src = o.result.url;

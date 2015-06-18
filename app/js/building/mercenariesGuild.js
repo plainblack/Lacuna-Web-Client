@@ -99,7 +99,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         
         getSpies : function(force) {
             if(force || !this.spies) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_spies({
                         session_id: Game.GetSession(""),
                         building_id: this.building.id
@@ -109,7 +109,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                         this.spies = o.result.spies;
                         this.spySize = o.result.cargo_space_used_each || this.spySize;
                         this.fireEvent("onLoadSpies");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -119,12 +119,12 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         //View Available
         getAvailable : function(e) {
             if(e.newValue && !this.availableMercs) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:1};
 
                 this.service.view_market(data, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         delete o.result.status; //get rid of status after we process it, since it's big
@@ -222,12 +222,12 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
             }
         },
         AvailableHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var data = {session_id:Game.GetSession(),building_id:this.building.id,page_number:newState.page};
 
             this.service.view_market(data, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     delete o.result.status; //get rid of status after we process it, since it's big
@@ -244,7 +244,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         AvailableAccept : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.accept_from_market({
                 session_id:Game.GetSession(""),
                 building_id:this.Self.building.id,
@@ -256,7 +256,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                     //force get the new availabe list after accepting so we get a new captcha
                     delete this.Self.availableMercs;
                     this.Self.getAvailable({newValue:true});
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 failure : function() {
                     btn.disabled = false;
@@ -267,7 +267,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         AvailableReport : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.report_abuse({
                 session_id:Game.GetSession(""),
                 building_id:this.Self.building.id,
@@ -278,7 +278,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                     btn.parentNode.removeChild(btn);
 
                     this.Self.rpcSuccess(o);
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 failure : function() {
                     btn.disabled = false;
@@ -293,10 +293,10 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         //View Mine
         getMine : function(e) {
             if(e.newValue && !this.mineMercs) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_my_market({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         delete o.result.status; //get rid of status after we process it, since it's big
@@ -379,7 +379,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
             }
         },
         MineHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_my_market({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -387,7 +387,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "MercenariesGuild.view_available_trades.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     delete o.result.status; //get rid of status after we process it, since it's big
@@ -405,7 +405,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
             var btn = Event.getTarget(e);
             btn.disabled = true;
             if(confirm(['Are you sure you want to withdraw the trade asking for ', this.Trade.ask, ' essentia and offering ', this.Trade.offer,'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.Self.service.withdraw_from_market({
                     session_id:Game.GetSession(""),
                     building_id:this.Self.building.id,
@@ -423,7 +423,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                         }
                         this.Line.parentNode.removeChild(this.Line);
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         //delete ships since we'll get one back on withdraw
                         delete this.Self.tradeShips;
                         this.Self.getSpies(true);
@@ -457,7 +457,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         },
         getAddShips : function(e) {
             if(e.newValue && !this.tradeShips) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 
                 this.service.get_trade_ships({
                     session_id: Game.GetSession(""),
@@ -486,7 +486,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                             }
                         }
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -518,7 +518,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                 ship_id: Lib.getSelectedOptionValue("tradeAddShip")
             };
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.add_to_market(data, {
                 success : function(o){
                     this.rpcSuccess(o);
@@ -528,7 +528,7 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
                     delete this.mineMercs;
                     this.fireEvent("onSelectTab", this.mineTabIndex);
                     btn.disabled = false;
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 failure : function() {
                     btn.disabled = false;

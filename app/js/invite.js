@@ -87,7 +87,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
             this.Dialog.hide();
         },
         handleInvite : function (e) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var email = this.elFriendEmail.value;
             email = email.split(/\s*[,;]\s*/).join(',');
             Game.Services.Empire.invite_friend({
@@ -97,7 +97,7 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
             },{
                 success : function(o){
                     YAHOO.log(o, "info", "InviteFriend.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     var not_sent = o.result.not_sent;
                     if (not_sent && not_sent.length > 0) {
                         var errorMessage = [];
@@ -120,13 +120,13 @@ if (typeof YAHOO.lacuna.Invite == "undefined" || !YAHOO.lacuna.Invite) {
         handleGenerate : function (e) {
             this.inviteGenerate.disabled = true;
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Empire.get_invite_friend_url({
                 session_id:Game.GetSession("")
             },{
                 success : function(o){
                     YAHOO.log(o, "info", "handleGenerate.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     Dom.setStyle(this.inviteGenerate,"display","none");
                     Dom.get("inviteGenerateDesc").innerHTML = 'Pass this url around to invite your friends, readers, or strangers!';
                     Dom.setStyle("inviteGenerateLink", 'display', 'inline');

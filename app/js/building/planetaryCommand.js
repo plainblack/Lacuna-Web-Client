@@ -104,10 +104,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             this.planTab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     if(!this.plans) {
-                        Lacuna.Pulser.Show();
+                        require('js/actions/menu/loader').show();
                         this.service.view_plans({session_id:Game.GetSession(),building_id:this.building.id}, {
                             success : function(o){
-                                Lacuna.Pulser.Hide();
+                                require('js/actions/menu/loader').hide();
                                 this.rpcSuccess(o);
                                 this.plans = o.result.plans;
 
@@ -207,7 +207,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
         Abandon : function() {
             var cp = Game.GetCurrentPlanet();
             if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Body.abandon({
                     session_id:Game.GetSession(""),
                     body_id:cp.id
@@ -244,7 +244,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     this.fireEvent("onHide");
                     Game.PlanetJump(); //jumps to home planet if nothing passed in
 
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -291,14 +291,14 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
         SaveColonyNotes : function(){
             var cp = Game.GetCurrentPlanet();
             var notes = Dom.get("pccNotesText").value;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Body.set_colony_notes({
                 session_id: Game.GetSession(""),
                 body_id: cp.id,
                 options: { notes: notes }
             }, {
                 success : function(o) {
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 }
             });
         },

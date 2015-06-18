@@ -149,7 +149,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     oSelf.currentBuildingObj = undefined;
                 }
                 if(oSelf.currentViewConnection) {
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     Util.Connect.abort(oSelf.currentViewConnection);
                 }
             };
@@ -331,7 +331,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             };
             this.buildingBuilder.resetDisplay = function(oSelf) {
                 if(oSelf.currentBuildConnection) {
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     Util.Connect.abort(oSelf.currentBuildConnection);
                 }
                 delete this.currentTile;
@@ -643,10 +643,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 this._map.refresh();
             }
 
-            Lacuna.Pulser.Hide();
+            require('js/actions/menu/loader').hide();
         },
         Load : function(planetId, showNotify, silent) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             if(showNotify) {
                 Lacuna.Notify.Show(planetId);
             }
@@ -690,7 +690,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                         //YAHOO.log(o, "info", "MapPlanet.ReLoad");
                         this.fireEvent("onMapRpc", o.result);
                         if(silent) {
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                         }
                         else {
                             this.Mapper(o.result);
@@ -749,7 +749,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             Dom.setStyle(Dom.get('builderList').parentNode,'height',Ht + 'px');
         },
         BuilderGet : function(data) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.currentBuildConnection = Game.Services.Body.get_buildable(data,{
                 success : function(o){
                     delete this.currentBuildConnection;
@@ -772,7 +772,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     this.buildingBuilder.load(b, q, request);
                 }
             }
-            Lacuna.Pulser.Hide();
+            require('js/actions/menu/loader').hide();
         },
         NotIsolationist : function(building) {
             if(Game.EmpireData.is_isolationist == "1") {
@@ -789,7 +789,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 return;
             }
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var BuildingServ = Game.Services.Buildings.Generic,
                 data = {
                     session_id: Game.GetSession(""),
@@ -801,7 +801,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             BuildingServ.build(data,{
                 success : function(o){
                     //YAHOO.log(o, "info", "MapPlanet.Build.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.fireEvent("onMapRpc", o.result);
                     this.buildingBuilder.hide();
 
@@ -849,7 +849,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     if(callback && callback.success) {
                         callback.success.call(this, o.result, callback.url, x, y);
                     }
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 failure : function(o){
                     if(callback && callback.failure) {
@@ -864,7 +864,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         DetailsView : function(tile) {
             //YAHOO.log(tile, "info", "DetailsView");
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this._buildDetailsPanel();
             var panel = this.buildingDetails;
             Game.OverlayManager.hideAllBut(panel.id);

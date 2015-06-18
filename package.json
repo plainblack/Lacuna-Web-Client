@@ -15,6 +15,7 @@
   "homepage": "https://lacunaexpanse.com/",
   "dependencies": {
     "browserify": "10.2.3",
+    "classnames": "^2.1.2",
     "firebase": "2.2.7",
     "gulp": "3.9.0",
     "gulp-concat-css": "2.2.0",

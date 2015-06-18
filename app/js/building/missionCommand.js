@@ -44,10 +44,10 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
         },
         getMissions : function() {
             if(!this.missions) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_missions({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.missions = o.result.missions;
                         this.displayMissions();
@@ -147,14 +147,14 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
         completeMission : function() {
             var btn = Dom.get('complete'+this.Mission.id);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.complete_mission({
                 session_id:Game.GetSession(),
                 building_id:this.Self.building.id,
                 mission_id:this.Mission.id
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
 
                     this.Self.missions = undefined;
@@ -169,14 +169,14 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
         skipMission : function() {
             var btn = Dom.get('skip'+this.Mission.id);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.skip_mission({
                 session_id:Game.GetSession(),
                 building_id:this.Self.building.id,
                 mission_id:this.Mission.id
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
 
                     this.Self.missions = undefined;

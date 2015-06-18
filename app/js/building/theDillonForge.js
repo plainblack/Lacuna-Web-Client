@@ -154,7 +154,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 return;
             }
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.make_plan(
                 {
                     session_id:Game.GetSession(),
@@ -165,7 +165,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                 {
                     success : function(o){
                         YAHOO.log(o, "info", "TheDillonForge.MakePlan.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         this.Self.result = o.result;
                         this.Self.viewForgeTab();
@@ -271,7 +271,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             selected = selected.split(";");
             
             if ( selected.length == 3 ) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.Self.service.split_plan(
                     {
                         session_id:Game.GetSession(),
@@ -284,7 +284,7 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
                     {
                         success : function(o){
                             YAHOO.log(o, "info", "TheDillonForge.SplitPlan.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.Self.rpcSuccess(o);
                             this.Self.result = o.result;
                             this.Self.viewForgeTab();
@@ -308,11 +308,11 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
             Event.on(button, "click", this.Subsidize, {Self:this}, true);
         },
         Subsidize : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.Self.service.subsidize({session_id:Game.GetSession(),building_id:this.Self.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "TheDillonForge.Subsidize.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     this.Self.result = o.result;
                     this.Self.viewForgeTab();

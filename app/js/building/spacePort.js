@@ -227,11 +227,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         getTravel : function(e) {
             if(e.newValue) {
                 if(!this.shipsTravelling) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_ships_travelling({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                         success : function(o){
                             YAHOO.log(o, "info", "SpacePort.view_ships_travelling.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.shipsTravelling = {
                                 number_of_ships_travelling: o.result.number_of_ships_travelling,
@@ -261,11 +261,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         getShips : function(e) {
             if(e.newValue) {
                 if(!this.shipsView) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_all_ships({session_id:Game.GetSession(),building_id:this.building.id,paging:{page_number:1}}, {
                         success : function(o){
                             YAHOO.log(o, "info", "SpacePort.view_all_ships.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.shipsView = {
                                 number_of_ships: o.result.number_of_ships,
@@ -295,11 +295,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         getForeign : function(e) {
             if(e.newValue) {
                 if(!this.shipsForeign) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_foreign_ships({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                         success : function(o){
                             YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.shipsForeign = {
                                 number_of_ships: o.result.number_of_ships,
@@ -329,11 +329,11 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         getLogs : function(e) {
             if(e.newValue) {
                 if(!this.battleLogs) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_battle_logs({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
                             YAHOO.log(o, "info", "SpacePort.view_battle_logs.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.battleLogs = {
                                 number_of_logs: o.result.number_of_logs,
@@ -363,10 +363,10 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         getOrbiting : function(e) {
             if(e.newValue) {
                 if(!this.shipsOrbiting) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_ships_orbiting({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.shipsOrbiting = {
                                 number_of_ships: o.result.number_of_ships,
@@ -469,7 +469,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }
         },
         ShipHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_ships_travelling({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -477,7 +477,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "SpacePort.ShipHandlePagination.view_ships_travelling.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.shipsTravelling = {
                         number_of_ships_travelling: o.result.number_of_ships_travelling,
@@ -647,7 +647,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }
         },
         ViewHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_all_ships({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -655,7 +655,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "SpacePort.ViewHandlePagination.view_all_ships.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.shipsView = {
                         number_of_ships: o.result.number_of_ships,
@@ -695,7 +695,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         },
         ShipNameSave : function(e) {
             Event.stopEvent(e);
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var newName = this.Input.value;
 
             this.Self.service.name_ship({
@@ -706,7 +706,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "SpacePort.ShipNameSave.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
                     delete this.Self.shipsView;
                     delete this.Self.shipsTravelling;
@@ -919,7 +919,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }
         },
         ForeignHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_foreign_ships({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -927,7 +927,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "SpacePort.view_foreign_ships.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.shipsForeign = {
                         number_of_ships: o.result.number_of_ships,
@@ -942,7 +942,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             this.foreignPager.setState(newState);
         },
         LogsHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_battle_logs({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -950,7 +950,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "SpacePort.view_battle_logs.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.battleLogs = {
                         number_of_logs: o.result.number_of_logs,
@@ -1059,14 +1059,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             }
         },
         OrbitingHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_ships_orbiting({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
                 page_number:newState.page
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.shipsOrbiting = {
                         number_of_ships: o.result.number_of_ships,
@@ -1088,7 +1088,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
             if(confirm(["Are you sure you want to Scuttle ",this.Ship.name,"?"].join(''))) {
                 var btn = Event.getTarget(e);
                 btn.disabled = true;
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
 
                 this.Self.service.scuttle_ship({
                     session_id:Game.GetSession(),
@@ -1097,7 +1097,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "SpacePort.ShipScuttle.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         var ships = this.Self.shipsView.ships,
                             info = Dom.get("shipsCount");
@@ -1123,7 +1123,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         },
         ShipRecall : function(e, matchedEl, container) {
             matchedEl.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
 
             this.Self.service.recall_ship({
                 session_id:Game.GetSession(),
@@ -1131,7 +1131,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 ship_id:this.Ship.id
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
 
                     var ships = this.Self.shipsView.ships,
@@ -1162,14 +1162,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         ShipRecallAll : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
 
             this.service.recall_all({
                 session_id:Game.GetSession(),
                 building_id:this.building.id
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
 
                     delete this.shipsTravelling;
@@ -1184,7 +1184,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         },
 
         GetShipsFor : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
 
             //Dom.setStyle("sendShipPick", "display", "none");
             Dom.setStyle("sendShipSend", "display", "none");
@@ -1208,7 +1208,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 target:target
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.PopulateShipsSendTab(target, o.result.available);
                 },
@@ -1285,14 +1285,14 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 target = this.Target;
 
             if(target && ship.id && Lacuna.MapStar.NotIsolationist(ship)) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 oSelf.service.send_ship({
                     session_id:Game.GetSession(),
                     ship_id:ship.id,
                     target:target
                 }, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         delete this.Self.shipsView;
                         delete this.Self.shipsTravelling;
@@ -1312,7 +1312,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
         },
 
         GetFleetFor : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
 
             Dom.setStyle("sendFleetSend", "display", "none");
 
@@ -1335,7 +1335,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 target:target
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.PopulateFleetSendTab(target, o.result.ships);
                 },
@@ -1422,7 +1422,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 ship = this.Ship,
                 targ = this.Target,
                 skey   = this.Key;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var t_param = {};
             t_param.type    = ship.type;
             t_param.speed   = ship.speed;
@@ -1477,7 +1477,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                 arrival:arrivalDate
             }, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     btn.disabled = false;
                     this.Self.rpcSuccess(o);
                     delete this.FleetTarget;

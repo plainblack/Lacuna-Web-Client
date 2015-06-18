@@ -76,11 +76,11 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
         prisonersView : function(e) {
             if(e.newValue) {
                 if(!this.prisoners) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_prisoners({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
                             YAHOO.log(o, "info", "Security.Security.view_prisoners.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.prisoners = o.result.prisoners;
                             this.pagerPrisoners = new Pager({
@@ -177,7 +177,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
             }
         },
         PrisonersHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_prisoners({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -185,7 +185,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Security.PrisonersHandlePagination.view_prisoners.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.prisoners = o.result.prisoners;
                     this.PrisonersPopulate();
@@ -198,7 +198,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
         },
         PrisonersExecute : function() {
             if(confirm(["Are you sure you want to execute ",this.Prisoner.name,"?"].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 
                 this.Self.service.execute_prisoner({
                     session_id:Game.GetSession(),
@@ -207,7 +207,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Security.PrisonersExecute.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         var prisoners = this.Self.prisoners;
                         for(var i=0; i<prisoners.length; i++) {
@@ -224,7 +224,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
         },
         PrisonersRelease : function() {
             if(confirm(["Are you sure you want to release ",this.Prisoner.name,"?"].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 
                 this.Self.service.release_prisoner({
                     session_id:Game.GetSession(),
@@ -233,7 +233,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Security.PrisonersRelease.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         var prisoners = this.Self.prisoners;
                         for(var i=0; i<prisoners.length; i++) {
@@ -252,11 +252,11 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
         spiesView : function(e) {
             if(e.newValue) {
                 if(!this.spies) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_foreign_spies({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
                             YAHOO.log(o, "info", "Security.Security.view_foreign_spies.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.spies = o.result.spies;
                             this.pagerSpies = new Pager({
@@ -334,7 +334,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
             }
         },
         SpyHandlePagination : function(newState) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_foreign_spies({
                 session_id:Game.GetSession(),
                 building_id:this.building.id,
@@ -342,7 +342,7 @@ if (typeof YAHOO.lacuna.buildings.Security == "undefined" || !YAHOO.lacuna.build
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Security.SpyHandlePagination.view_foreign_spies.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.spies = o.result.spies;
                     this.SpyPopulate();

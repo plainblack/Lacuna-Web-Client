@@ -78,11 +78,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         getBuild : function() {
             if(!this.ships) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_buildable({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Shipyard.getBuild.get_buildable.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.ships = {
                             buildable: o.result.buildable,
@@ -102,11 +102,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         getQueue : function() {
             if(!this.ship_build_queue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_build_queue({session_id:Game.GetSession(),building_id:this.building.id,page_number:1}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Shipyard.getQueue.view_build_queue.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.ship_build_queue = o.result;
                         this.ShipyardDisplay();
@@ -186,7 +186,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             Sel.query("li.shipQueueEach",elLine,true).innerHTML = compTime;
         },
         SubsidizeBuildQueue : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.service.subsidize_build_queue({
                 session_id:Game.GetSession(),
@@ -194,7 +194,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "Shipyard.SubsidizeBuildQueue.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
 
                     this.ship_build_queue = undefined;
@@ -318,14 +318,14 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             }
         },
         SubsidizeShip : function() {
-             Lacuna.Pulser.Show();
+             require('js/actions/menu/loader').show();
              this.Self.service.subsidize_ship({args: {
 				    session_id: Game.GetSession(),
                     building_id: this.Self.building.id,
 					ship_id: this.Ship.id
 			 }},{
 					success: function(o) {
-						Lacuna.Pulser.Hide();
+						require('js/actions/menu/loader').hide();
 						this.Self.rpcSuccess(o);
 						this.Item.parentNode.removeChild(this.Item);
 						
@@ -335,7 +335,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         ShipBuild : function(e) {
             var btn = Event.getTarget(e);
             btn.disabled = true;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             var qty = Dom.get("ship_"+this.Type);
             var use = Lib.getSelectedOptionValue("shipBuildYards");
             this.Self.service.build_ships({
@@ -349,7 +349,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
             }, {
                 success : function(o){
                     btn.disabled = false;
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
 
                     this.Self.ship_build_queue = o.result;

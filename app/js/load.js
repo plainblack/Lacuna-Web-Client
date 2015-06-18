@@ -19,12 +19,6 @@
         l.hash = '';
     }
 
-    // Ensure the Blue Wheel of Death is hiding.
-    var p = document.getElementById('pulsing');
-    if (p.className.indexOf('hidden') < 0) {
-        p.className += ' hidden';
-    }
-
     var loader = new YAHOO.util.YUILoader({
         base: '//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/',
         //filter: 'MIN',
@@ -67,7 +61,6 @@
         // RPC and core stuff
         require('js/library');
         require('js/textboxList');
-        require('js/pulse');
         require('js/smd');
         require('js/rpc');
         require('js/game');

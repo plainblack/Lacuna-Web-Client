@@ -697,11 +697,11 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
                 alert(e);
                 return;
             }
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Empire.redefine_species({session_id:Game.GetSession(""), params:data},{
                 success : function(o){
                     YAHOO.log(o, "info", "Profile.redefine_species.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.hasSpecies = false;
                     this.SpeciesDialog.hide();
                     this.fireEvent('onRpc', o.result);

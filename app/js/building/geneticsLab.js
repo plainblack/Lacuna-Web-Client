@@ -92,7 +92,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
                 empire_id:Game.EmpireData.id
             }, {
                 success:function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     var profile = o.result.profile;
                     Dom.get('currentSpeciesDesc').innerHTML = profile.description;
                     Dom.get('currentSpeciesName').innerHTML = profile.species;
@@ -105,7 +105,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
             var btn = Event.getTarget(e);
             var newName = Dom.get('newSpeciesName').value;
             var newDesc = Dom.get('newSpeciesDesc').value.substr(0,1024);
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             btn.disabled = true;
             this.service.rename_species({
                 session_id:Game.GetSession(),
@@ -122,7 +122,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
                     Dom.get('newSpeciesDesc').value = '';
                     Dom.get('currentSpeciesName').innerHTML = newName;
                     Dom.get('currentSpeciesDesc').innerHTML = newDesc;
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     alert('Your species name has been changed!');
                 },
@@ -241,7 +241,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
         },
         prepareExperiment : function(e) {
             if(e.newValue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 delete this.currentSpy;
                 
                 this.service.prepare_experiment({
@@ -249,7 +249,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
                     building_id:this.building.id
                 }, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         if(o.result.can_experiment == 1) {
@@ -270,7 +270,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
         },
         runExperiment : function() {
             if(this.currentSpy) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 
                 this.service.run_experiment({
                     session_id:Game.GetSession(),
@@ -279,7 +279,7 @@ if (typeof YAHOO.lacuna.buildings.GeneticsLab == "undefined" || !YAHOO.lacuna.bu
                     affinity:Lib.getSelectedOptionValue("geneticsLabAffinities")
                 }, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         Dom.get("geneticsLabExperimentMessage").innerHTML = o.result.experiment.message;

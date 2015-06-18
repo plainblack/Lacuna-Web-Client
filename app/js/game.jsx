@@ -75,10 +75,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             );
 
 
-            if(!Lacuna.Pulser) {
-                Lacuna.Pulser = new Lacuna.Pulse();
-            }
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             if (!query) {
                 query = {};
             }
@@ -220,7 +217,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             this.InitLogin();
             Lacuna.Game.LoginDialog.show(error);
             MenuActions.hide();
-            Lacuna.Pulser.Hide();
+            require('js/actions/menu/loader').hide();
         },
         Run : function() {
             //set our interval going for resource calcs since Logout clears it
@@ -328,7 +325,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                             }
                         };
                         YAHOO.log(o, "error", logNS);
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         Game.Failure(o, retry, failure);
                     }
                 };
@@ -585,7 +582,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         },
 
         Logout : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
 
             var EmpireServ = Game.Services.Empire,
                 session = Game.GetSession();
@@ -596,7 +593,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     //Dom.setStyle(Game._envolveContainer, "display", "none");
                     Game.Reset();
                     Game.DoLogin();
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 }
             });
         },

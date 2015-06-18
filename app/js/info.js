@@ -78,10 +78,10 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
         Load : function(allianceId) {
             this._createPanel();
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Alliance.view_profile({session_id:Game.GetSession(""),alliance_id:allianceId},{
                 success:function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     //show now so there is a bit quicker response
                     this.Panel.show();
                     this.Panel.bringToTop();
@@ -219,10 +219,10 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
         Load : function(empireId) {
             this._createPanel();
 
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Empire.view_public_profile({session_id:Game.GetSession(""),empire_id:empireId},{
                 success:function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     var profile = o.result.profile;
                     this.currentEmpire = profile;
                     this.empire.innerHTML = profile.name;
