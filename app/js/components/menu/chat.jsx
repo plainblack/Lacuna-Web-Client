@@ -82,7 +82,6 @@ var Chat = React.createClass({
             }
 
             console.log('Connecting to Firbase: ' + url);
-            debugger;
 
             this.chatRef = new Firebase(url);
             this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper.getDOMNode(), config);

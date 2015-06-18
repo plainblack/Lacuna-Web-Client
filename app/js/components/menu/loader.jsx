@@ -1,4 +1,3 @@
-
 'use strict';
 
 var React = require('react');
@@ -22,7 +21,7 @@ var Loader = React.createClass({
             <div className={classNames(
                 'ui large loader',
                 {active: this.state.show}
-            )} style={{zIndex: 9999999999}}>
+            )} style={{zIndex: 9999999999, top: '40vh'}}>
             </div>
         );
     }
