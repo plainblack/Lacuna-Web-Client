@@ -2007,7 +2007,7 @@ body {
 }
 
 /* Don't make the color of text input white, though. */
-input, textarea {
+input, textarea, select, option {
 	color: black;
 }
 

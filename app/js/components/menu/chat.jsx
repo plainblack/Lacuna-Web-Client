@@ -140,6 +140,11 @@ var Chat = React.createClass({
                     return true;
                 }
 
+                if (!o.result) {
+                    // Either the server does not have chat set up or we're logged in with a sitter.
+                    return true;
+                }
+
                 var result = o.result;
                 this.chat_auth = result.chat_auth;
                 this.gravatar_url = result.gravatar_url;

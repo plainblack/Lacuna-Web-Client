@@ -118,7 +118,7 @@ var BodyStore = Reflux.createStore({
 
         var updateShip = function(ship) {
             ship.arrival_ms =
-                util.serverDateToMs(status.server.time) - util.serverDateToMs(ship.date_arrives);
+            util.serverDateToMs(ship.date_arrives) - util.serverDateToMs(status.server.time);
         };
         _.map(this.data.incoming_own_ships, updateShip);
         _.map(this.data.incoming_ally_ships, updateShip);
@@ -137,8 +137,7 @@ var BodyStore = Reflux.createStore({
     onTick: function() {
 
         var tickIncoming = function(ship) {
-            // This is the *remaining* time to arrival so we need to add.
-            ship.arrival_ms += 1000;
+            ship.arrival_ms -= 1000;
         };
 
         _.map(this.data.incoming_own_ships, tickIncoming);

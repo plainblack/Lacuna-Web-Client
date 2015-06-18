@@ -11,19 +11,29 @@ The files contained herein are the front end code that make up the game called "
 # Hacking
 
 Lacuna-Web-Client requires [Nodejs](https://nodejs.org) to hack on. For
-installing, see [their wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager).
+installing, see [their installation guide](https://github.com/joyent/node/wiki/Installation).
 
 Setup of this client should look something like this:
 
 ```bash
-git clone https://github.com/plainblack/Lacuna-Web-Client
+git clone https://github.com/<your-username>/Lacuna-Web-Client
 cd Lacuna-Web-Client
 npm install gulp -g # installs the build tool, gulp. This should be a once-off.
 npm install # installs the dependencies for building and running the code.
 gulp dev # compiles js/css and launches dev server.
 ```
 
-# Notes
+## Note
+
+I ([1vasari](https://github.com/1vasari)) am doing most of the big changes. Because of that I have
+my own list of things I'm working on for the client. These things are not listed as issues on the
+[LSO repo](https://github.com/plainblack/Lacuna-Server-Open) because they are client-specific
+issues. You can find that list [here](https://www.wunderlist.com/lists/158378421).
+
+If you have any requests for the client it would most likely be best to send them to me via
+Lacuna Expanse's mail system. My empire name is `1vasari`.
+
+# Important Developer Notes!
 
 The following are some quick things that need to kept in mind when working on moving to the new libraries
 

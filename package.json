@@ -1,8 +1,8 @@
 {
-  "name": "Lacuna-Web-Client",
+  "name": "lacuna-web-client",
   "version": "0.0.1",
   "description": "The pure javascript client for The Lacuna Expanse.",
-  "main": "load.js",
+  "main": "app/js/load.js",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,13 +10,12 @@
   },
   "author": "Nathan McCallum <onevasari@gmail.com> (https://github.com/1vasari)",
   "bugs": {
-    "url": "https://github.com/plainblack/Lacuna-Web-Client/issues"
+    "url": "https://github.com/plainblack/Lacuna-Server-Open/issues"
   },
   "homepage": "https://lacunaexpanse.com/",
   "dependencies": {
     "browserify": "10.2.3",
-    "express": "4.12.3",
-    "firebase": "^2.2.7",
+    "firebase": "2.2.7",
     "gulp": "3.9.0",
     "gulp-concat-css": "2.2.0",
     "gulp-minify-css": "1.1.1",
