@@ -446,6 +446,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
         _buildFindPanel : function() {
             var panelId = "starFind";
 
+            // Deon't create twice.
+            if (this.starFind) {
+                return;
+            }
+
             var panel = document.createElement("div");
             panel.id = panelId;
             panel.innerHTML = ['<div class="hd">Find</div>',
