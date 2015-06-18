@@ -28,21 +28,3 @@ var Loader = React.createClass({
 });
 
 module.exports = Loader;
-
-/*
-{
-// <div style={{
-//     position: 'absolute',
-//     margin: '0px auto',
-//     textAlign: 'center',
-//     top: '40vh',
-//     zIndex: 9999999999,
-//     backgroundColor: '#ffffff',
-//     fontSize: '2em',
-//     display: this.state.show ? '' : 'none'
-// }}>
-//     Loading...
-// </div>
-}
-
-*/
