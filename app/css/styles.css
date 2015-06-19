@@ -2422,6 +2422,10 @@ TextboxList
     overflow:hidden;
 }
 
+.homeworld-highlight {
+    color: yellow;
+}
+
 #reactWindowContainer {
 	top: 0;
 	position: absolute;

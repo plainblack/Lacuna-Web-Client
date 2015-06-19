@@ -114,9 +114,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
                             opts = [];
                         for(var n=0; n<this.allianceMembers.length; n++) {
                             var member = this.allianceMembers[n];
-                            if(member.id != Game.EmpireData.id) {
-                                opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
-                            }
+                            opts[opts.length] = '<option value="'+member.id+'">'+member.name+'</option>';
                         }
                         sel.innerHTML = opts.join('');
                         sel.selectedIndex = -1;
