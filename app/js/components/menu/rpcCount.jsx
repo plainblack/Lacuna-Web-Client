@@ -6,6 +6,9 @@ var Reflux = require('reflux');
 var ServerStore = require('js/stores/server');
 var EmpireStore = require('js/stores/empire');
 
+// NOTE: this *was* implemented just before the introduction of the new UI. I (1vasari) will find a
+// place for it sometime. :P
+
 var RPCCount = React.createClass({
     mixins: [
         Reflux.connect(ServerStore, 'server'),
