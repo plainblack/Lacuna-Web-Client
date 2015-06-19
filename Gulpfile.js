@@ -59,7 +59,7 @@ gulp.task('cssify', ['browserify'], function() {
         .pipe(gulp.dest('lacuna/styles.css'));
 
     return stream;
-})
+});
 
 gulp.task('minify-js', ['browserify', 'cssify'], function() {
     var stream =  gulp.src('./lacuna/load.js')

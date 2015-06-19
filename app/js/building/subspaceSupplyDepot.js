@@ -80,7 +80,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
         Transmit : function(e, opt) {
             var btn = Event.getTarget(e);
             Event.stopEvent(e);
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             btn.disabled = true;
             this.service[opt.method]({
                 session_id:Game.GetSession(),
@@ -103,7 +103,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
                         elMessage.innerHTML = "&nbsp;";
                     }, this, true);
                     a.animate();
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                 },
                 failure : function(o){

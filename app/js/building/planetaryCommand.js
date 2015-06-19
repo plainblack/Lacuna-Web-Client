@@ -1,7 +1,9 @@
 YAHOO.namespace("lacuna.buildings");
 
+var $ = require('js/hacks/jquery');
+
 if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacuna.buildings.PlanetaryCommand) {
-    
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -14,10 +16,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
     var PlanetaryCommand = function(result){
         PlanetaryCommand.superclass.constructor.call(this, result);
-        
+
         this.service = Game.Services.Buildings.PlanetaryCommand;
     };
-    
+
     Lang.extend(PlanetaryCommand, Lacuna.buildings.Building, {
         getTabs : function() {
             var tabs = PlanetaryCommand.superclass.getTabs.call(this);
@@ -64,9 +66,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '    </div>',
                     '</div>'
                 ].join('')});
-                
+
             this.planetTab = tab;
-            
+
             return tab;
         },
         _getAbandonTab : function() {
@@ -74,9 +76,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             '    <div id="commandMessage" class="alert">This colony and everything on it will disappear if you abandon it.</div>',
             '    <button type="button" id="commandAbandon">Abandon Colony</button>',
             '</div>'].join('')});
-            
+
             Event.on("commandAbandon", "click", this.Abandon, this, true);
-            
+
             return this.abandonTab;
         },
         _getRenameTab : function() {
@@ -86,9 +88,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             '    <li class="alert" id="commandPlanetRenameMessage"></li>',
             '    <li><button type="button" id="commandRename">Rename</button></li>',
             '</ul></div>'].join('')});
-            
+
             Event.on("commandRename", "click", this.Rename, this, true);
-            
+
             return this.renameTab;
         },
         _getPlanTab : function() {
@@ -102,13 +104,13 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             this.planTab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     if(!this.plans) {
-                        Lacuna.Pulser.Show();
+                        require('js/actions/menu/loader').show();
                         this.service.view_plans({session_id:Game.GetSession(),building_id:this.building.id}, {
                             success : function(o){
-                                Lacuna.Pulser.Hide();
+                                require('js/actions/menu/loader').hide();
                                 this.rpcSuccess(o);
                                 this.plans = o.result.plans;
-                                
+
                                 this.PlanPopulate();
                             },
                             scope:this
@@ -119,17 +121,17 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     }
                 }
             }, this, true);
-                
+
             return this.planTab;
         },
         _getResourcesTab : function() {
-            
+
             var food_items = '',
                 foods      = Lib.ResourceTypes.food;
-            
+
             for(x=0; x < foods.length; x++) {
                 food = foods[x];
-                
+
                 food_items += [
                     '<li><label>',
                     food.titleCaps(),
@@ -140,13 +142,13 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '</span>/hr</li>',
                 ].join('');
             }
-            
+
             var ore_items = '',
                 ores      = Lib.ResourceTypes.ore;
-            
+
             for(x=0; x < ores.length; x++) {
                 ore = ores[x];
-                
+
                 ore_items += [
                     '<li><label>',
                     ore.titleCaps(),
@@ -186,7 +188,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '    </div>',
                     '</div>'
                 ].join('')});
-                
+
             return this.resourcesTab;
         },
         _getNotesTab : function() {
@@ -205,7 +207,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
         Abandon : function() {
             var cp = Game.GetCurrentPlanet();
             if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 Game.Services.Body.abandon({
                     session_id:Game.GetSession(""),
                     body_id:cp.id
@@ -241,8 +243,8 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
                     this.fireEvent("onHide");
                     Game.PlanetJump(); //jumps to home planet if nothing passed in
-                    
-                    Lacuna.Pulser.Hide();
+
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -260,13 +262,12 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     success : function(o){
                         YAHOO.log(o, "info", "PlanetaryCommand.Rename.success");
                         if(o.result && planetId) {
-                        
+
                             Dom.get("commandPlanetRenameMessage").innerHTML = ["Successfully renamed your planet from ", Game.EmpireData.planets[planetId].name," to ", newName, '.'].join('');
                             Lib.fadeOutElm("commandPlanetRenameMessage");
                             Dom.get("commandPlanetNewName").value = "";
                             Dom.get("commandPlanetCurrentName").innerHTML = newName;
                             Game.EmpireData.planets[planetId].name = newName;
-                            Lacuna.Menu.update();
 
                             if(Lacuna.MapStar._map) {
                                 Lacuna.MapStar._map.tileCache[cp.x][cp.y].name = newName; // Change the name in the cache
@@ -290,14 +291,14 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
         SaveColonyNotes : function(){
             var cp = Game.GetCurrentPlanet();
             var notes = Dom.get("pccNotesText").value;
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             Game.Services.Body.set_colony_notes({
                 session_id: Game.GetSession(""),
                 body_id: cp.id,
                 options: { notes: notes }
             }, {
                 success : function(o) {
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 }
             });
         },
@@ -307,9 +308,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                 var divParent = div.parentNode,
                     ul = document.createElement("ul"),
                     li = document.createElement("li");
-                    
+
                 div = divParent.removeChild(div);
-                
+
                 if(this.plans.length > 0) {
                     div.innerHTML = "";
 
@@ -317,24 +318,24 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                         var plan = this.plans[i],
                             nUl = ul.cloneNode(false),
                             nLi = li.cloneNode(false);
-                        
+
                         Dom.addClass(nUl, "plan");
                         Dom.addClass(nUl, "clearafter");
 
                         Dom.addClass(nLi,"planQuan");
                         nLi.innerHTML = plan.quantity;
                         nUl.appendChild(nLi);
-                        
+
                         nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"planName");
                         nLi.innerHTML = plan.name;
                         nUl.appendChild(nLi);
-                        
+
                         nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"planLevel");
                         nLi.innerHTML = plan.level;
                         nUl.appendChild(nLi);
-                        
+
                         nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"planExtra");
                         nLi.innerHTML = plan.extra_build_level;
@@ -346,10 +347,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                 else {
                     div.innerHTML = "No Plans currently available on this planet.";
                 }
-                
+
                 //add child back in
                 divParent.appendChild(div);
-                
+
                 //wait for tab to display first
                 setTimeout(function() {
                     var Ht = Game.GetSize().h - 170;
@@ -360,11 +361,11 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             }
         }
     });
-    
+
     Lacuna.buildings.PlanetaryCommand = PlanetaryCommand;
 
 })();
-YAHOO.register("planetarycommand", YAHOO.lacuna.buildings.PlanetaryCommand, {version: "1", build: "0"}); 
+YAHOO.register("planetarycommand", YAHOO.lacuna.buildings.PlanetaryCommand, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

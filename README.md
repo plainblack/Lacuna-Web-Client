@@ -11,17 +11,33 @@ The files contained herein are the front end code that make up the game called "
 # Hacking
 
 Lacuna-Web-Client requires [Nodejs](https://nodejs.org) to hack on. For
-installing, see [their wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager).
+installing, see [their installation guide](https://github.com/joyent/node/wiki/Installation).
 
 Setup of this client should look something like this:
 
 ```bash
-git clone https://github.com/plainblack/Lacuna-Web-Client
+git clone https://github.com/<your-username>/Lacuna-Web-Client
 cd Lacuna-Web-Client
 npm install gulp -g # installs the build tool, gulp. This should be a once-off.
-npm install # installs the dependencies: jquery, express, etc..
+npm install # installs the dependencies for building and running the code.
 gulp dev # compiles js/css and launches dev server.
 ```
+
+## Note
+
+I ([1vasari](https://github.com/1vasari)) am doing most of the big changes. Because of that I have
+my own list of things I'm working on for the client. These things are not listed as issues on the
+[LSO repo](https://github.com/plainblack/Lacuna-Server-Open) because they are client-specific
+issues. You can find that list [here](https://www.wunderlist.com/lists/158378421).
+
+If you have any requests for the client it would most likely be best to send them to me via
+Lacuna Expanse's mail system. My empire name is `1vasari`.
+
+# Important Developer Notes!
+
+The following are some quick things that need to kept in mind when working on moving to the new libraries
+
+- Do **not** `require('jquery')`! Instead `require('js/hacks/jquery')`. We have to do this because we need to manually attach the Semantic UI js code to the jQuery object. The details aren't really important, just remember to require the right one. :grinning:
 
 # Gulp Tasks
 
@@ -32,10 +48,6 @@ In this project, Gulp is used to manage building the code. All the tasks that ca
 > `gulp build`
 
 Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them. This is also the default task, meaning that running just `gulp` in the command line will run this task.
-
-> `PRODUCTION=1 gulp build`
-
-This does the same as above but it prepares the code itself for *production*. For example, there are a few development-only bits that get removed in this process. A deploy on a production server would **need** to do this or the client won't load properly.
 
 ## dev
 

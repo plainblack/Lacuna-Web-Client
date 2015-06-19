@@ -1,10 +1,6 @@
 'use strict';
 
 (function(){
-    // These libs are really important. Grab them before anything else happens.
-    window.React = require('react');
-    window.$ = window.jQuery = require('jquery');
-    window._ = require('lodash');
 
     // TODO this code can be improved.
     var l = window.location;
@@ -21,12 +17,6 @@
     }
     else if (l.hash != '') {
         l.hash = '';
-    }
-
-    // Ensure the Blue Wheel of Death is hiding.
-    var p = document.getElementById('pulsing');
-    if (p.className.indexOf('hidden') < 0) {
-        p.className += ' hidden';
     }
 
     var loader = new YAHOO.util.YUILoader({
@@ -71,7 +61,6 @@
         // RPC and core stuff
         require('js/library');
         require('js/textboxList');
-        require('js/pulse');
         require('js/smd');
         require('js/rpc');
         require('js/game');
@@ -142,7 +131,7 @@
         require('js/info');
         require('js/notify');
         require('js/captcha');
-        require('js/components/menu');
+        require('js/components/window/menu');
 
         // Start everything!
         YAHOO.widget.Logger.enableBrowserConsole();

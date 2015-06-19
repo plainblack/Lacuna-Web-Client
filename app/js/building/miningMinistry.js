@@ -65,11 +65,11 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
         viewPlatforms : function(e) {
             if(e.newValue) {
                 if(!this.platforms) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_platforms({session_id:Game.GetSession(),building_id:this.building.id}, {
                         success : function(o){
                             YAHOO.log(o, "info", "MiningMinistry.view_platforms.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.platforms = { 
                                 max_platforms:o.result.max_platforms,
@@ -234,7 +234,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
         },
         MiningMinistryPlatformAbandon : function() {
             if(confirm(["Are you sure you want to Abandon the mining platform at  ",this.Platform.asteroid.name,"?"].join(''))) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 
                 this.Self.service.abandon_platform({
                     session_id:Game.GetSession(),
@@ -243,7 +243,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
                 }, {
                     success : function(o){
                         YAHOO.log(o, "info", "MiningMinistry.MiningMinistryPlatformAbandon.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.Self.rpcSuccess(o);
                         var platforms = this.Self.platforms.platforms;
                         for(var i=0; i<platforms.length; i++) {
@@ -259,11 +259,11 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
             }
         },
         MiningMinistryShipsView : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.view_ships({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
                     YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsView.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.ships = o.result.ships;
                     
@@ -350,7 +350,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
             }
         },
         MiningMinistryShipsAdd : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
                 
             this.Self.service.add_cargo_ship_to_fleet({
                 session_id:Game.GetSession(),
@@ -359,7 +359,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsAdd.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.MiningMinistryShipsView();
                     delete this.platforms; //reset platforms so we geto the new correct info
@@ -368,7 +368,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
             });
         },
         MiningMinistryShipsRemove : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             
             this.Self.service.remove_cargo_ship_from_fleet({
                 session_id:Game.GetSession(),
@@ -377,7 +377,7 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "MiningMinistry.MiningMinistryShipsRemove.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.MiningMinistryShipsView();
                     delete this.platforms; //reset platforms so we go get the new correct info
@@ -387,14 +387,14 @@ if (typeof YAHOO.lacuna.buildings.MiningMinistry == "undefined" || !YAHOO.lacuna
         },
         AbandonAllPlatforms : function(e) {
             if(confirm("Are you sure you want to abandon all platforms controlled by this Mining Ministry?")) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.mass_abandon_platform({
                         session_id:Game.GetSession(),
                         building_id:this.building.id
                     }, {
                     success : function(o){
                         YAHOO.log(o, "info", "Observatory.AbandonAllPlatforms.mass_abandon_platform.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.probes = null;
 
