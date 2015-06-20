@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna.buildings");
 
+var BodyStore = require('js/stores/body');
+
 if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.buildings.Building) {
 
 (function(){
@@ -168,7 +170,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
             var up = this.building.upgrade,
                 down = this.building.downgrade,
                 currentLevel = this.building.level*1,
-                planet = Game.GetCurrentPlanet();
+                planet = BodyStore.getData();
             this.productionTab = new YAHOO.widget.Tab({ label: "Production", content: [
                 '<div id="detailsProduction"><p id="extraBuildingDetails"></p>',
                 '    <div id="buildingDetailsProduction" class="yui-gb">',
