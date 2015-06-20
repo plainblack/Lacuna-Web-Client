@@ -13,7 +13,7 @@ var RPCCount = React.createClass({
     ],
     render: function() {
         return (
-            <div style={{
+            <div id="RPCCount" style={{
                 color: 'black',
                 position: 'absolute',
                 bottom: '25px',

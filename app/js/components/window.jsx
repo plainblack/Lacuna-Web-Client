@@ -25,7 +25,7 @@ var StatsWindow = require('js/components/window/stats');
 var Window = React.createClass({
     render: function() {
         return (
-            <div>
+            <div id="lacunaMainDiv">
                 { /*
                     Semantic UI requires this structure for Sidebars to work.
                     See: http://semantic-ui.com/modules/sidebar.html#/usage

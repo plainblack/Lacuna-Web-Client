@@ -11,6 +11,7 @@ var LeftSidebarStore = Reflux.createStore({
         console.log('Toggling left sidebar.');
         $('.ui.sidebar.left')
             .sidebar('setting', 'transition', 'overlay')
+            .sidebar('setting', 'duration', 300)
             .sidebar('toggle');
     }
 });

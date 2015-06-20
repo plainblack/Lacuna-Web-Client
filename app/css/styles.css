@@ -2023,6 +2023,16 @@ input, textarea, select, option {
 	z-index: 2000;
 }
 
+/* Custom RPCCount stuff */
+
+#RPCCount {
+	opacity: 0.3;
+}
+
+#RPCCount:hover {
+	opacity: 1;
+}
+
 
 /*
  * vim: noet:ts=4:sw=4
