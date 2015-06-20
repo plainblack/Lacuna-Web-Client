@@ -92,7 +92,10 @@ var BottomBar = React.createClass({
                 <div className="item">
                     <i className="block layout big icon"></i>
                     <p style={storageStyle}>
-                        {this.state.body.building_count} / {this.state.body.size} Plots
+                        {this.state.body.building_count} /
+                        {this.state.body.building_count + this.state.body.plots_available} Buildings
+                        <br />
+                        {this.state.body.plots_available} Plots Available
                     </p>
                     {
                         // TODO: this bit can't be implemented until get_status has the data needed.

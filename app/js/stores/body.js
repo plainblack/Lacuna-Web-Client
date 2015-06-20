@@ -116,6 +116,9 @@ var BodyStore = Reflux.createStore({
         this.data.num_incoming_ally = int(this.data.num_incoming_ally);
         this.data.num_incoming_enemy = int(this.data.num_incoming_enemy);
 
+        this.data.plots_available = int(this.data.plots_available);
+        this.data.building_count = int(this.data.building_count);
+
         var updateShip = function(ship) {
             ship.arrival_ms =
             util.serverDateToMs(ship.date_arrives) - util.serverDateToMs(status.server.time);
