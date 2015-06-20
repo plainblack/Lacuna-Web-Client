@@ -3,7 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var classNames = require('classNames');
+var classNames = require('classnames');
 
 var LoaderStore = require('js/stores/menu/loader');
 
