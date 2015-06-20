@@ -126,7 +126,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                 }
             }
             if(num_incoming_own + num_incoming_ally + num_incoming_enemy == 0) {
-                arr = arr.concat(['<li><span style="color:#0f0">None! ^_^</span></li>']);
+                arr = arr.concat(['<li><span style="color:#0f0">None</span></li>']);
             }
             list.innerHTML = arr.join('');
             this.Display.show();
