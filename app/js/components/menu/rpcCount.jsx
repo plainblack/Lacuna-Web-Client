@@ -16,7 +16,7 @@ var RPCCount = React.createClass({
             <div id="RPCCount" style={{
                 color: 'black',
                 position: 'absolute',
-                bottom: '25px',
+                bottom: '40px',
                 left: '15px',
                 backgroundColor: 'yellow',
                 zIndex: '10000',
