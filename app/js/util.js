@@ -59,3 +59,7 @@ module.exports.serverDateToMs = function(serverDate) {
     dt.setUTCSeconds(time[2]*1);
     return dt.getTime();
 };
+
+module.exports.int = function(number) {
+    return parseInt(number, 10);
+};

@@ -8,10 +8,7 @@ var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 
 var util = require('js/util');
-
-function int(number) {
-    return parseInt(number, 10);
-}
+var int = util.int;
 
 var BodyStore = Reflux.createStore({
     listenables: [
@@ -108,16 +105,22 @@ var BodyStore = Reflux.createStore({
 
         this.data = status.body;
 
-        // Clean up numbers for the sake of simplicity.
+        //////////////
+        // CLEAN UP //
+        //////////////
+
         this.data.x = int(this.data.x);
         this.data.y = int(this.data.y);
+
 
         this.data.num_incoming_own = int(this.data.num_incoming_own);
         this.data.num_incoming_ally = int(this.data.num_incoming_ally);
         this.data.num_incoming_enemy = int(this.data.num_incoming_enemy);
 
+
         this.data.plots_available = int(this.data.plots_available);
         this.data.building_count = int(this.data.building_count);
+
 
         var updateShip = function(ship) {
             ship.arrival_ms =
@@ -127,7 +130,32 @@ var BodyStore = Reflux.createStore({
         _.map(this.data.incoming_ally_ships, updateShip);
         _.map(this.data.incoming_enemy_ships, updateShip);
 
+
         this.data.size = int(this.data.size);
+
+
+        this.data.food_hour = int(this.data.food_hour);
+        this.data.food_stored = int(this.data.food_stored);
+        this.data.food_capacity = int(this.data.food_capacity);
+
+        this.data.ore_hour = int(this.data.ore_hour);
+        this.data.ore_stored = int(this.data.ore_stored);
+        this.data.ore_capacity = int(this.data.ore_capacity);
+
+        this.data.water_hour = int(this.data.water_hour);
+        this.data.water_stored = int(this.data.water_stored);
+        this.data.water_capacity = int(this.data.water_capacity);
+
+        this.data.energy_hour = int(this.data.energy_hour);
+        this.data.energy_stored = int(this.data.energy_stored);
+        this.data.energy_capacity = int(this.data.energy_capacity);
+
+        this.data.waste_hour = int(this.data.waste_hour);
+        this.data.waste_stored = int(this.data.waste_stored);
+        this.data.waste_capacity = int(this.data.waste_capacity);
+
+        this.data.happiness_hour = int(this.data.happiness_hour);
+        this.data.happiness_stored = int(this.data.happiness_stored);
 
         this.trigger(this.data);
     },
