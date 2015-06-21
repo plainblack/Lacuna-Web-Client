@@ -7,9 +7,10 @@ var _ = require('lodash');
 
 var Window = require('js/components/window');
 
-var MenuActions = require('js/actions/window/menu');
-var UserActions = require('js/actions/user');
 var MapActions = require('js/actions/menu/map');
+var MenuActions = require('js/actions/window/menu');
+var SessionActions = require('js/actions/session');
+var UserActions = require('js/actions/user');
 
 if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
@@ -249,6 +250,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
 
             UserActions.signIn();
+            SessionActions.set(Game.GetSession(''));
 
             setTimeout(function() {
                 console.log('Firing up the planet view');

@@ -6,6 +6,7 @@ var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
 var AboutActions = require('js/actions/window/about');
 var InviteActions = require('js/actions/window/invite');
+var NotesActions = require('js/actions/window/notes');
 var OptionsActions = require('js/actions/window/options');
 var ServerClockActions = require('js/actions/window/serverClock');
 
@@ -76,6 +77,15 @@ var LeftSidebar = React.createClass({
                     onClick={LeftSidebarActions.toggle}>
                     <i className="share alternate icon"></i>
                     Wiki
+                </a>
+
+                <div className="ui horizontal inverted divider">
+                  Actions
+                </div>
+
+                <a className="item" onClick={toggle(NotesActions.show)}>
+                    <i className="edit icon"></i>
+                    Notes
                 </a>
 
             </div>

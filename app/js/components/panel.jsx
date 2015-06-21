@@ -63,7 +63,11 @@ var Panel = React.createClass({
                         borderRadius: '10px',
                         padding: '10px'
                     }}>
-                        <div style={{overflow: 'auto', height: this.props.height + 'px'}}>
+                        <div style={{
+                            overflow: 'auto',
+                            height: this.props.height + 'px',
+                            padding: '5px'
+                        }}>
                             {this.props.children}
                         </div>
                     </div>

@@ -16,6 +16,7 @@ var AboutWindow = require('js/components/window/about');
 var EssentiaWindow = require('js/components/window/essentia');
 var InviteWindow = require('js/components/window/invite');
 var MailWindow = require('js/components/window/mail');
+var NotesWindow = require('js/components/window/notes');
 var OptionsWindow = require('js/components/window/options');
 var ServerClockWindow = require('js/components/window/serverClock');
 var StatsWindow = require('js/components/window/stats');
@@ -25,7 +26,7 @@ var StatsWindow = require('js/components/window/stats');
 var Window = React.createClass({
     render: function() {
         return (
-            <div id="lacunaMainDiv">
+            <div>
                 { /*
                     Semantic UI requires this structure for Sidebars to work.
                     See: http://semantic-ui.com/modules/sidebar.html#/usage
@@ -48,6 +49,7 @@ var Window = React.createClass({
                     <EssentiaWindow />
                     <InviteWindow />
                     <MailWindow />
+                    <NotesWindow />
                     <OptionsWindow />
                     <ServerClockWindow />
                     <StatsWindow />

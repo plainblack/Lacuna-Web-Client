@@ -4,11 +4,12 @@ var Reflux = require('reflux');
 
 var ChatActions = require('js/actions/menu/chat');
 var MenuActions = require('js/actions/window/menu');
+var SessionActions = require('js/actions/session');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 var UserActions = require('js/actions/user');
 
-var EmpireStore = Reflux.createStore({
+var UserStore = Reflux.createStore({
     listenables: UserActions,
 
     getInitialState: function() {
@@ -18,11 +19,10 @@ var EmpireStore = Reflux.createStore({
         };
     },
 
-    onSignIn: function(obj) {
+    onSignIn: function() {
         MenuActions.show();
         TickerActions.start();
         ChatActions.show();
-        this.trigger(obj);
     },
 
     onSignOut: function() {
@@ -40,6 +40,7 @@ var EmpireStore = Reflux.createStore({
                 Game.DoLogin();
 
                 // Let the React stuff know what happened.
+                SessionActions.clear();
                 StatusActions.clear();
                 MenuActions.hide();
                 TickerActions.stop();
@@ -51,4 +52,4 @@ var EmpireStore = Reflux.createStore({
     }
 });
 
-module.exports = EmpireStore;
+module.exports = UserStore;
