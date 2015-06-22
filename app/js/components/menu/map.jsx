@@ -55,7 +55,6 @@ var Map = React.createClass({
     ],
     getInitialState: function() {
         return {
-            mapMode: MapModeStore.PLANET_MAP_MODE,
             planet: '',
             menuVisible: false
         };

@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var $ = require('js/hacks/jquery');
 
 var EmpireStore = require('js/stores/empire');
+var MapModeStore = require('js/stores/menu/mapMode');
 
 var CenterBar = require('js/components/mixin/centerBar');
 
@@ -18,12 +19,19 @@ var StatsActions = require('js/actions/window/stats');
 var TopBar = React.createClass({
     mixins: [
         Reflux.connect(EmpireStore, 'empire'),
+        Reflux.connect(MapModeStore, 'mapMode'),
         CenterBar('bar')
     ],
     componentDidUpdate: function() {
-        // Activate the popups.
+        // Now set it up.
         $('a', this.refs.bar.getDOMNode()).popup({
             variation: 'inverted'
+        });
+
+        $(this.refs.toggleMapButton.getDOMNode()).popup({
+            variation: 'inverted',
+            content: this.state.mapMode === MapModeStore.PLANET_MAP_MODE ?
+                'To Star Map' : 'To Planet Map'
         });
     },
     componentWillUnmount: function() {
@@ -31,6 +39,7 @@ var TopBar = React.createClass({
         $('a', this.refs.bar.getDOMNode()).popup('destroy');
     },
     render: function() {
+        console.log(this.state.mapMode);
         return (
             <div className="ui blue inverted menu" ref="bar" style={{
                 position: 'fixed',
@@ -41,7 +50,7 @@ var TopBar = React.createClass({
                 display: 'inline-block',
                 top: '15px'
             }}>
-                <a className="item" data-content="Star Map" onClick={MapActions.toggleMapMode}>
+                <a className="item" ref="toggleMapButton" onClick={MapActions.toggleMapMode}>
                     <i className="map big icon"></i>
                 </a>
                 <a className="item" data-content="Mail" onClick={MailActions.show}>
