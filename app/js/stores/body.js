@@ -81,6 +81,12 @@ var BodyStore = Reflux.createStore({
             "incoming_ally_ships" : [],
             "incoming_own_ships" : [],
 
+            "food_percent_full": 0,
+            "ore_percent_full": 0,
+            "water_percent_full": 0,
+            "energy_percent_full": 0,
+            "waste_percent_full": 0,
+
             "alliance" : {
                 "id" : '',
                 "name" : ''
@@ -132,7 +138,7 @@ var BodyStore = Reflux.createStore({
 
 
         this.data.size = int(this.data.size);
-
+        this.data.orbit = int(this.data.orbit);
 
         this.data.food_hour = int(this.data.food_hour);
         this.data.food_stored = int(this.data.food_stored);
@@ -155,7 +161,14 @@ var BodyStore = Reflux.createStore({
         this.data.waste_capacity = int(this.data.waste_capacity);
 
         this.data.happiness_hour = int(this.data.happiness_hour);
-        this.data.happiness_stored = int(this.data.happiness_stored);
+        this.data.happiness = int(this.data.happiness);
+
+
+        this.data.food_percent_full = (this.data.food_stored / this.data.food_capacity) * 100;
+        this.data.ore_percent_full = (this.data.ore_stored / this.data.ore_capacity) * 100;
+        this.data.water_percent_full = (this.data.water_stored / this.data.water_capacity) * 100;
+        this.data.energy_percent_full = (this.data.energy_stored / this.data.energy_capacity) * 100;
+        this.data.waste_percent_full = (this.data.waste_stored / this.data.waste_capacity) * 100;
 
         this.trigger(this.data);
     },

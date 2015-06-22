@@ -28,6 +28,7 @@
     "pnotify": "git://github.com/sciactive/pnotify",
     "react": "0.13.3",
     "react-draggable": "0.8.0",
+    "react-progress": "0.0.3",
     "reactify": "1.1.0",
     "reflux": "0.2.7",
     "vinyl-source-stream": "1.1.0"
