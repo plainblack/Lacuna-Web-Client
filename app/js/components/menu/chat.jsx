@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var ChatStore = require('js/stores/menu/chat');
-var BodyStore = require('js/stores/body');
+var BodyRPCStore = require('js/stores/rpc/body');
 
 var Chat = React.createClass({
     mixins: [
@@ -106,7 +106,7 @@ var Chat = React.createClass({
             this.chat.addCommand({
                 match : /^\/planet$/,
                 func : function(message, chatui) {
-                    var body = BodyStore.getData();
+                    var body = BodyRPCStore.getData();
 
                     message.content = "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'";
                 },

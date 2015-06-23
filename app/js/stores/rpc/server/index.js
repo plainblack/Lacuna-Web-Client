@@ -4,7 +4,7 @@ var Reflux = require('reflux');
 
 var StatusActions = require('js/actions/status');
 
-var ServerStore = Reflux.createStore({
+var ServerRPCStore = Reflux.createStore({
     listenables: StatusActions,
 
     data: {},
@@ -48,4 +48,4 @@ var ServerStore = Reflux.createStore({
     }
 });
 
-module.exports = ServerStore;
+module.exports = ServerRPCStore;

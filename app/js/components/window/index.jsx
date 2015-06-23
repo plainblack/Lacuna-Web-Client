@@ -10,7 +10,7 @@ var LeftSidebar = require('js/components/menu/leftSidebar');
 var RightSidebar = require('js/components/menu/rightSidebar');
 var Map = require('js/components/menu/map');
 
-var Menu = require('js/components/window/menu');
+var Menu = require('js/components/menu');
 
 var AboutWindow = require('js/components/window/about');
 var EssentiaWindow = require('js/components/window/essentia');

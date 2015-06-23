@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var MailStore = require('js/stores/window/mail');
+var MailWindowStore = require('js/stores/window/mail');
 
 var MailWindow = React.createClass({
-    mixins: [Reflux.connect(MailStore, 'show')],
+    mixins: [Reflux.connect(MailWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

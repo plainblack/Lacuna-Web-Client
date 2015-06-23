@@ -4,7 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var EmpireStore = require('js/stores/empire');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions = require('js/actions/menu/map');
@@ -61,7 +61,7 @@ var PlanetList = React.createClass({
 
 var RightSidebar = React.createClass({
     mixins: [
-        Reflux.connect(EmpireStore, 'empire')
+        Reflux.connect(EmpireRPCStore, 'empire')
     ],
     render: function() {
         return (

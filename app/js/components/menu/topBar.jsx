@@ -4,10 +4,10 @@ var React = require('react');
 var Reflux = require('reflux');
 var $ = require('js/hacks/jquery');
 
-var EmpireStore = require('js/stores/empire');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 var MapModeStore = require('js/stores/menu/mapMode');
 
-var CenterBar = require('js/components/mixin/centerBar');
+var centerBar = require('js/components/mixin/centerBar');
 
 var UserActions = require('js/actions/user');
 var MapActions = require('js/actions/menu/map');
@@ -18,9 +18,9 @@ var StatsActions = require('js/actions/window/stats');
 
 var TopBar = React.createClass({
     mixins: [
-        Reflux.connect(EmpireStore, 'empire'),
+        Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(MapModeStore, 'mapMode'),
-        CenterBar('bar')
+        centerBar('bar')
     ],
     componentDidUpdate: function() {
         // Now set it up.
@@ -39,7 +39,6 @@ var TopBar = React.createClass({
         $('a', this.refs.bar.getDOMNode()).popup('destroy');
     },
     render: function() {
-        console.log(this.state.mapMode);
         return (
             <div className="ui blue inverted menu" ref="bar" style={{
                 position: 'fixed',

@@ -6,9 +6,9 @@ var Window = require('js/stores/mixins/window');
 
 var OptionsActions = require('js/actions/window/options');
 
-var OptionsStore = Reflux.createStore({
+var OptionsWindowStore = Reflux.createStore({
     mixins: [Window],
     listenables: OptionsActions
 });
 
-module.exports = OptionsStore;
+module.exports = OptionsWindowStore;

@@ -19,5 +19,5 @@ module.exports = function(refName) {
     return {
         componentDidMount: _.partial(centerBar, refName),
         componentDidUpdate: _.partial(centerBar, refName)
-    }
+    };
 };

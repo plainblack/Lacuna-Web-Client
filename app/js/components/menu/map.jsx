@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var BodyStore = require('js/stores/body');
+var BodyRPCStore = require('js/stores/rpc/body');
 var MapModeStore = require('js/stores/menu/mapMode');
 var PlanetStore = require('js/stores/menu/planet');
-var MenuStore = require('js/stores/window/menu');
+var MenuStore = require('js/stores/menu');
 
 
 //                          .i;;;;i.
@@ -49,7 +49,7 @@ var MenuStore = require('js/stores/window/menu');
 var Map = React.createClass({
     mixins: [
         Reflux.connect(MapModeStore, 'mapMode'),
-        Reflux.connect(BodyStore, 'body'),
+        Reflux.connect(BodyRPCStore, 'body'),
         Reflux.connect(PlanetStore, 'planet'),
         Reflux.connect(MenuStore, 'menuVisible')
     ],

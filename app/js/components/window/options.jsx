@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var OptionsStore = require('js/stores/window/options');
+var OptionsWindowStore = require('js/stores/window/options');
 
 var OptionsWindow = React.createClass({
-    mixins: [Reflux.connect(OptionsStore, 'show')],
+    mixins: [Reflux.connect(OptionsWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

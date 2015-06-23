@@ -9,11 +9,13 @@ var SessionStore = require('js/stores/session');
 var StatusActions = require('js/actions/status');
 
 var defaults = {
-    meodule: '',
+    module: '',
     method: '',
     params: [],
+    addSession: true,
     success: _.noop,
-    error: _.noop
+    error: _.noop,
+    scope: window
 };
 
 /////////////////////////////////////////////////
@@ -21,7 +23,6 @@ var defaults = {
 /////////////////////////////////////////////////
 
 var call = function(config) {
-    console.log(config);
 
     LoaderActions.show();
 
@@ -35,7 +36,7 @@ var call = function(config) {
     }
 
     // Add in the session ID.
-    if (config.module + '/' + config.method !== 'empire/login') {
+    if (config.addSession === true) {
         if (_.isArray(config.params)) {
             config.params = [SessionStore.getData()].concat(config.params);
         } else {
@@ -75,7 +76,7 @@ var call = function(config) {
                 }
 
                 LoaderActions.hide();
-                config.success.call(config.scope);
+                config.success.call(config.scope, data.result);
             }
         },
 

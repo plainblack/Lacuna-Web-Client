@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var EssentiaStore = require('js/stores/window/essentia');
+var EssentiaWindowStore = require('js/stores/window/essentia');
 
 var EssentiaWindow = React.createClass({
-    mixins: [Reflux.connect(EssentiaStore, 'show')],
+    mixins: [Reflux.connect(EssentiaWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

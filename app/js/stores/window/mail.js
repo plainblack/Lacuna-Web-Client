@@ -6,9 +6,9 @@ var Window = require('js/stores/mixins/window');
 
 var MailActions = require('js/actions/window/mail');
 
-var MailStore = Reflux.createStore({
+var MailWindowStore = Reflux.createStore({
     mixins: [Window],
     listenables: MailActions
 });
 
-module.exports = MailStore;
+module.exports = MailWindowStore;

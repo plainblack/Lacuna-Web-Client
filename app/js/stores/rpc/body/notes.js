@@ -4,8 +4,7 @@ var Reflux = require('reflux');
 
 var NotesActions = require('js/actions/window/notes');
 
-var BodyStore = require('js/stores/body');
-window.BodyStore = BodyStore;
+var BodyRPCStore = require('js/stores/rpc/body');
 
 var server = require('js/server');
 
@@ -13,7 +12,7 @@ var NotesDataStore = Reflux.createStore({
     listenables: NotesActions,
 
     onLoad: function() {
-        this.trigger(BodyStore.getData().notes);
+        this.trigger(BodyRPCStore.getData().notes);
     },
 
     onSave: function(value) {
@@ -22,7 +21,7 @@ var NotesDataStore = Reflux.createStore({
             method: 'set_colony_notes',
             trigger: false,
             params: [
-                BodyStore.getData().id,
+                BodyRPCStore.getData().id,
                 {
                     notes: value
                 }

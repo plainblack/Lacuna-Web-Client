@@ -6,9 +6,9 @@ var Window = require('js/stores/mixins/window');
 
 var StatsActions = require('js/actions/window/stats');
 
-var StatsStore = Reflux.createStore({
+var StatsWindowStore = Reflux.createStore({
     mixins: [Window],
     listenables: StatsActions
 });
 
-module.exports = StatsStore;
+module.exports = StatsWindowStore;

@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var ServerClockStore = require('js/stores/window/serverClock');
+var ServerClockWindowStore = require('js/stores/window/serverClock');
 
 var ServerClockWindow = React.createClass({
-    mixins: [Reflux.connect(ServerClockStore, 'show')],
+    mixins: [Reflux.connect(ServerClockWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

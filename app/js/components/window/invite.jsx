@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var InviteStore = require('js/stores/window/invite');
+var InviteWindowStore = require('js/stores/window/invite');
 
 var InviteWindow = React.createClass({
-    mixins: [Reflux.connect(InviteStore, 'show')],
+    mixins: [Reflux.connect(InviteWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

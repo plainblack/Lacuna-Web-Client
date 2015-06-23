@@ -18,7 +18,7 @@ function bodyObjectToArray(bodyObj) {
     return _.sortBy(arr, 'name');
 }
 
-var EmpireStore = Reflux.createStore({
+var EmpireRPCStore = Reflux.createStore({
     listenables: StatusActions,
 
     data: {},
@@ -78,4 +78,4 @@ var EmpireStore = Reflux.createStore({
     }
 });
 
-module.exports = EmpireStore;
+module.exports = EmpireRPCStore;

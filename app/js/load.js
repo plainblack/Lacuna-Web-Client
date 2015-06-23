@@ -131,7 +131,7 @@
         require('js/info');
         require('js/notify');
         require('js/captcha');
-        require('js/components/window/menu');
+        require('js/components/menu');
 
         // Start everything!
         YAHOO.widget.Logger.enableBrowserConsole();

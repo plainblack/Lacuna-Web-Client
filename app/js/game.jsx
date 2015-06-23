@@ -8,7 +8,7 @@ var _ = require('lodash');
 var Window = require('js/components/window');
 
 var MapActions = require('js/actions/menu/map');
-var MenuActions = require('js/actions/window/menu');
+var MenuActions = require('js/actions/menu');
 var SessionActions = require('js/actions/session');
 var UserActions = require('js/actions/user');
 
@@ -61,9 +61,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             // Normally, React Components should do this automatically, but since we need these
             // stores operating immeadiatly we do it here.
             // TODO: remove this!
-            require('js/stores/server').listen(_.noop);
-            require('js/stores/body').listen(_.noop);
-            require('js/stores/empire').listen(_.noop);
+            require('js/stores/rpc/server').listen(_.noop);
+            require('js/stores/rpc/body').listen(_.noop);
+            require('js/stores/rpc/empire').listen(_.noop);
             require('js/stores/user').listen(_.noop);
             require('js/stores/ticker').listen(_.noop);
             require('js/stores/menu/leftSidebar').listen(_.noop);

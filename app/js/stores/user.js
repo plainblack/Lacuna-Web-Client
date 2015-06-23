@@ -3,21 +3,16 @@
 var Reflux = require('reflux');
 
 var ChatActions = require('js/actions/menu/chat');
-var MenuActions = require('js/actions/window/menu');
+var MenuActions = require('js/actions/menu');
 var SessionActions = require('js/actions/session');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 var UserActions = require('js/actions/user');
 
+var server = require('js/server');
+
 var UserStore = Reflux.createStore({
     listenables: UserActions,
-
-    getInitialState: function() {
-        return {
-            name: '',
-            password: ''
-        };
-    },
 
     onSignIn: function() {
         MenuActions.show();
@@ -26,18 +21,14 @@ var UserStore = Reflux.createStore({
     },
 
     onSignOut: function() {
-
-        var Lacuna = YAHOO.lacuna;
-        var Game = Lacuna.Game;
-
-        Game.Services.Empire.logout({
-            session_id: Game.GetSession()
-        }, {
-            success: function(o) {
-
+        server.call({
+            module: 'empire',
+            method: 'logout',
+            params: [],
+            success: function() {
                 // Here be the traditional code to reset the game...
-                Game.Reset();
-                Game.DoLogin();
+                YAHOO.lacuna.Game.Reset();
+                YAHOO.lacuna.Game.DoLogin();
 
                 // Let the React stuff know what happened.
                 SessionActions.clear();
@@ -47,8 +38,6 @@ var UserStore = Reflux.createStore({
                 ChatActions.hide();
             }
         });
-
-        this.trigger(this.getInitialState());
     }
 });
 

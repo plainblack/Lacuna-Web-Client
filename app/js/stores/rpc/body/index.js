@@ -10,7 +10,7 @@ var TickerActions = require('js/actions/ticker');
 var util = require('js/util');
 var int = util.int;
 
-var BodyStore = Reflux.createStore({
+var BodyRPCStore = Reflux.createStore({
     listenables: [
         StatusActions,
         TickerActions
@@ -192,4 +192,4 @@ var BodyStore = Reflux.createStore({
     }
 });
 
-module.exports = BodyStore;
+module.exports = BodyRPCStore;

@@ -14,7 +14,7 @@ var RPCCount = require('js/components/menu/rpcCount');
 
 var Loader = require('js/components/menu/loader');
 
-var MenuStore = require('js/stores/window/menu');
+var MenuStore = require('js/stores/menu');
 
 var Menu = React.createClass({
     mixins: [

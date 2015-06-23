@@ -3,13 +3,13 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var ServerStore = require('js/stores/server');
-var EmpireStore = require('js/stores/empire');
+var ServerRPCStore = require('js/stores/rpc/server');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 
 var RPCCount = React.createClass({
     mixins: [
-        Reflux.connect(ServerStore, 'server'),
-        Reflux.connect(EmpireStore, 'empire')
+        Reflux.connect(ServerRPCStore, 'server'),
+        Reflux.connect(EmpireRPCStore, 'empire')
     ],
     render: function() {
         return (

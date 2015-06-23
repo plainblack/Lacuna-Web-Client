@@ -1,6 +1,6 @@
 'use strict';
 
-var BodyStore = require('js/stores/body');
+var BodyRPCStore = require('js/stores/rpc/body');
 
 if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 
@@ -41,7 +41,7 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
                     this.notify = Dom.get("notify");
 
                     // Listen for new data.
-                    BodyStore.listen(self.update, self);
+                    BodyRPCStore.listen(self.update, self);
 
                     Dom.removeClass(this.notify, Lib.Styles.HIDDEN);
                 });

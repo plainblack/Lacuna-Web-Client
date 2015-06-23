@@ -6,9 +6,9 @@ var Window = require('js/stores/mixins/window');
 
 var EssentiaActions = require('js/actions/window/essentia');
 
-var EssentiaStore = Reflux.createStore({
+var EssentiaWindowStore = Reflux.createStore({
     mixins: [Window],
     listenables: EssentiaActions
 });
 
-module.exports = EssentiaStore;
+module.exports = EssentiaWindowStore;

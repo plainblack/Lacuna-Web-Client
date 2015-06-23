@@ -4,11 +4,11 @@ var React = require('react');
 var Reflux = require('reflux');
 var $ = require('js/hacks/jquery');
 
-var BodyStore = require('js/stores/body');
+var BodyRPCStore = require('js/stores/rpc/body');
 var RightSidebarActions = require('js/actions/menu/rightSidebar')
 
 var RightSidebarButton = React.createClass({
-    mixins: [Reflux.connect(BodyStore, 'body')],
+    mixins: [Reflux.connect(BodyRPCStore, 'body')],
     render: function() {
         return (
             <div style={{

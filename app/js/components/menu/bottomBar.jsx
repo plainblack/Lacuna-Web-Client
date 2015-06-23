@@ -5,9 +5,9 @@ var Reflux = require('reflux');
 
 var Progress = require('react-progress');
 
-var BodyStore = require('js/stores/body');
+var BodyRPCStore = require('js/stores/rpc/body');
 
-var CenterBar = require('js/components/mixin/centerBar');
+var centerBar = require('js/components/mixin/centerBar');
 
 var util = require('js/util');
 
@@ -23,8 +23,8 @@ var storageProgressStyle = {
 
 var BottomBar = React.createClass({
     mixins: [
-        Reflux.connect(BodyStore, 'body'),
-        CenterBar('bar')
+        Reflux.connect(BodyRPCStore, 'body'),
+        centerBar('bar')
     ],
     render: function() {
         return (

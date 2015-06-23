@@ -4,11 +4,11 @@ var React = require('react');
 var Reflux = require('reflux');
 var $ = require('js/hacks/jquery');
 
-var EmpireStore = require('js/stores/empire');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
 var LeftSidebarButton = React.createClass({
-    mixins: [Reflux.connect(EmpireStore, 'empire')],
+    mixins: [Reflux.connect(EmpireRPCStore, 'empire')],
     render: function() {
         return (
             <div style={{

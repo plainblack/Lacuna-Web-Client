@@ -3,10 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var StatsStore = require('js/stores/window/stats');
+var StatsWindowStore = require('js/stores/window/stats');
 
 var StatsWindow = React.createClass({
-    mixins: [Reflux.connect(StatsStore, 'show')],
+    mixins: [Reflux.connect(StatsWindowStore, 'show')],
     getInitialState: function() {
         return {
             show: false

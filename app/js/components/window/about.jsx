@@ -6,14 +6,17 @@ var _ = require('lodash');
 
 var AboutActions = require('js/actions/window/about');
 
-var ServerStore = require('js/stores/server');
-var AboutStore = require('js/stores/window/about');
-var CreditsStore = require('js/stores/menu/credits');
+var ServerRPCStore = require('js/stores/rpc/server');
+var AboutWindowStore = require('js/stores/window/about');
+
+var CreditsRPCStore = require('js/stores/rpc/stats/credits');
 
 var Panel = require('js/components/panel');
 
 var About = React.createClass({
-    mixins: [Reflux.connect(ServerStore, 'server')],
+    mixins: [
+        Reflux.connect(ServerRPCStore, 'server')
+    ],
     render: function() {
         return (
             <div>
@@ -48,18 +51,16 @@ var NamesList = React.createClass({
 });
 
 var Credits = React.createClass({
-    mixins: [Reflux.connect(CreditsStore, 'credits')],
-    getInitialState: function() {
-        return {
-            credits: []
-        };
-    },
-    render: function() {
-        var credits = [];
-
+    mixins: [
+        Reflux.connect(CreditsRPCStore, 'credits')
+    ],
+    componentDidUpdate: function() {
         if (this.state.credits.length === 0) {
             AboutActions.load();
         }
+    },
+    render: function() {
+        var credits = [];
 
         _.each(this.state.credits, function(creditsObject) {
             _.each(creditsObject, function(names, category) {
@@ -78,29 +79,23 @@ var Credits = React.createClass({
 });
 
 var AboutWindow = React.createClass({
-    mixins: [Reflux.connect(AboutStore, 'show')],
-    getInitialState: function() {
-        return {
-            show: false
-        }
-    },
+    mixins: [
+        Reflux.connect(AboutWindowStore, 'show')
+    ],
     render: function() {
-        if (this.state.show) {
-            return (
-                <Panel title="About" height={400} onClose={AboutActions.hide}
-                    show={this.state.show}>
-                    <h2>The Lacuna Expanse</h2>
-                    <About />
+        return (
+            <Panel title="About" height={400} onClose={AboutActions.hide} show={this.state.show}>
 
-                    <br />
+                <h2>The Lacuna Expanse</h2>
+                <About />
 
-                    <h2>Credits</h2>
-                    <Credits credits={this.state.credits} />
-                </Panel>
-            );
-        } else {
-            return <div></div>;
-        }
+                <br />
+
+                <h2>Credits</h2>
+                <Credits credits={this.state.credits} />
+
+            </Panel>
+        );
     }
 });
 
