@@ -11,6 +11,10 @@ var server = require('js/server');
 var NotesDataStore = Reflux.createStore({
     listenables: NotesActions,
 
+    getInitialState: function() {
+        return 'Write some notes here.';
+    },
+
     onLoad: function() {
         this.trigger(BodyRPCStore.getData().notes);
     },
