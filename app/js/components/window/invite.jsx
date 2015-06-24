@@ -6,12 +6,9 @@ var Reflux = require('reflux');
 var InviteWindowStore = require('js/stores/window/invite');
 
 var InviteWindow = React.createClass({
-    mixins: [Reflux.connect(InviteWindowStore, 'show')],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
+    mixins: [
+        Reflux.connect(InviteWindowStore, 'show')
+    ],
     render: function() {
         if (this.state.show) {
             YAHOO.lacuna.Invite.show();

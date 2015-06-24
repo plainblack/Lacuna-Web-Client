@@ -6,12 +6,9 @@ var Reflux = require('reflux');
 var MailWindowStore = require('js/stores/window/mail');
 
 var MailWindow = React.createClass({
-    mixins: [Reflux.connect(MailWindowStore, 'show')],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
+    mixins: [
+        Reflux.connect(MailWindowStore, 'show')
+    ],
     render: function() {
         if (this.state.show) {
             YAHOO.lacuna.Messaging.show();

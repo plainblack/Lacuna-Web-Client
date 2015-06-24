@@ -6,12 +6,9 @@ var Reflux = require('reflux');
 var OptionsWindowStore = require('js/stores/window/options');
 
 var OptionsWindow = React.createClass({
-    mixins: [Reflux.connect(OptionsWindowStore, 'show')],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
+    mixins: [
+        Reflux.connect(OptionsWindowStore, 'show')
+    ],
     render: function() {
         if (this.state.show) {
             YAHOO.lacuna.Profile.show();

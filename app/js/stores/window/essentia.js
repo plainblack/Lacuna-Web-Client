@@ -8,7 +8,12 @@ var EssentiaActions = require('js/actions/window/essentia');
 
 var EssentiaWindowStore = Reflux.createStore({
     mixins: [Window],
-    listenables: EssentiaActions
+    listenables: EssentiaActions,
+
+    getInitialState: function() {
+        this.data = false;
+        return this.data;
+    }
 });
 
 module.exports = EssentiaWindowStore;

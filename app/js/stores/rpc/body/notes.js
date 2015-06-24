@@ -6,6 +6,7 @@ var NotesActions = require('js/actions/window/notes');
 var MapActions = require('js/actions/menu/map');
 
 var BodyRPCStore = require('js/stores/rpc/body');
+var NotesWindowStore = require('js/stores/window/notes');
 
 var server = require('js/server');
 
@@ -62,8 +63,11 @@ var NotesDataStore = Reflux.createStore({
     },
 
     onChangePlanet: function() {
-        NotesActions.save();
-        NotesActions.clear();
+        // Only do this while the window is open.
+        if (NotesWindowStore.getData()) {
+            NotesActions.save();
+            NotesActions.clear();
+        }
     }
 });
 

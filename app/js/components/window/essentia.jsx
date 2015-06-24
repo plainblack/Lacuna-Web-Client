@@ -6,12 +6,9 @@ var Reflux = require('reflux');
 var EssentiaWindowStore = require('js/stores/window/essentia');
 
 var EssentiaWindow = React.createClass({
-    mixins: [Reflux.connect(EssentiaWindowStore, 'show')],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
+    mixins: [
+        Reflux.connect(EssentiaWindowStore, 'show')
+    ],
     render: function() {
         if (this.state.show) {
             YAHOO.lacuna.Essentia.show();
