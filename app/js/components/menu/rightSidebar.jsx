@@ -17,8 +17,8 @@ var PlanetListItem = React.createClass({
         };
     },
     propTypes: {
-        name: React.PropTypes.string,
-        id: React.PropTypes.string
+        name: React.PropTypes.string.isRequired,
+        id: React.PropTypes.string.isRequired
     },
     handleClick: function() {
         console.log('Chaning to planet (#' + this.props.id + ').');

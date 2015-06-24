@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var _ = require('lodash');
 
 var NotesActions = require('js/actions/window/notes');
 
@@ -17,21 +16,11 @@ var NotesWindow = React.createClass({
         Reflux.connect(NotesRPCStore, 'notes')
     ],
     handleClose: function() {
-        var value = _.trim(this.refs.notes.getDOMNode().value);
-
-        NotesActions.save(value);
+        NotesActions.save();
         NotesActions.hide();
-
-        // Reset notes
-        this.setState({notes: NotesRPCStore.getInitialState()});
-    },
-    componentDidUpdate: function() {
-        if (this.state.notes === this.getInitialState().notes) {
-            NotesActions.load();
-        }
     },
     handleChange: function(e) {
-        this.setState({notes: e.target.value});
+        NotesActions.set(e.target.value);
     },
     render: function() {
         return (
@@ -43,7 +32,6 @@ var NotesWindow = React.createClass({
                 <form className="ui form">
                     <div className="field">
                         <textarea
-                            ref="notes"
                             value={this.state.notes}
                             onChange={this.handleChange}
                             style={{

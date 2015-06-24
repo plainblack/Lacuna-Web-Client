@@ -7,6 +7,8 @@ var NotesActions = Reflux.createActions([
     'hide',
 
     'load',
+    'clear',
+    'set',
     'save'
 ]);
 
