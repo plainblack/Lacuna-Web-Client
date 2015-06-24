@@ -145,7 +145,7 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
                     Lib.fadeOutElm("dumpMessage");
                 }
                 else {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.dump({
                         session_id:Game.GetSession(),
                         building_id:this.building.id,
@@ -165,7 +165,7 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
                                 Dom.get("dumpMessage").innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
                                 Lib.fadeOutElm("dumpMessage");
                             }
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                         },
                         scope:this
                     });

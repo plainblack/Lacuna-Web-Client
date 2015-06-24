@@ -50,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.WasteExchanger == "undefined" || !YAHOO.lacuna
                     this.recycleMessageEl.innerHTML = "Can only recycle waste you have stored.";
                 }
                 else {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     
                     this.service.recycle({
                         session_id:Game.GetSession(),
@@ -62,7 +62,7 @@ if (typeof YAHOO.lacuna.buildings.WasteExchanger == "undefined" || !YAHOO.lacuna
                     }, {
                         success : function(o){
                             YAHOO.log(o, "info", "WasteExchanger.Recycle.success");
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.work = o.result.building.work;
                             //this.updateBuildingTile(o.result.building);
@@ -311,14 +311,14 @@ if (typeof YAHOO.lacuna.buildings.WasteExchanger == "undefined" || !YAHOO.lacuna
             this.SetTime();
         },
         RecycleSubsidize : function() {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.subsidize_recycling({
                 session_id:Game.GetSession(),
                 building_id:this.building.id
             }, {
                 success : function(o){
                     YAHOO.log(o, "info", "WasteExchanger.RecycleSubsidize.success");
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     
                     this.resetQueue();

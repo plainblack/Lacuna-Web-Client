@@ -3,27 +3,27 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var ServerStore = require('js/stores/server');
-var EmpireStore = require('js/stores/empire');
+var ServerRPCStore = require('js/stores/rpc/server');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 
 var RPCCount = React.createClass({
     mixins: [
-        Reflux.connect(ServerStore, 'server'),
-        Reflux.connect(EmpireStore, 'empire')
+        Reflux.connect(ServerRPCStore, 'server'),
+        Reflux.connect(EmpireRPCStore, 'empire')
     ],
     render: function() {
         return (
-            <div style={{
-                color: '#ffffff',
-                left: '350px',
+            <div id="RPCCount" style={{
+                color: 'black',
                 position: 'absolute',
-                marginTop: '8px',
-                fontSize: '1.2em',
-                zIndex: '2000' // Make sure it's on top.
-            }}>
-                RPCs:
-                <br />
-                {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
+                bottom: '40px',
+                left: '15px',
+                backgroundColor: 'yellow',
+                zIndex: '10000',
+                padding: '5px',
+                borderRadius: '2px'
+            }} title="Number of clicks you've made this 24 hour period.">
+                RPCs: {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
             </div>
         );
     }

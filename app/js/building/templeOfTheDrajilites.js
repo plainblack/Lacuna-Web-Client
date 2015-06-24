@@ -101,10 +101,10 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
         },
         
         GetPlanets : function(starId) {
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.list_planets({session_id:Game.GetSession(),building_id:this.building.id, star_id:starId}, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.planets = o.result.planets;
                     this.PlanetsDisplay();
@@ -149,10 +149,10 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
             var nLi = Event.getTarget(e);
             if(nLi.Planet) {
                 if(!this.maps[nLi.Planet.id]) {
-                    Lacuna.Pulser.Show();
+                    require('js/actions/menu/loader').show();
                     this.service.view_planet({session_id:Game.GetSession(),building_id:this.building.id,planet_id:nLi.Planet.id}, {
                         success : function(o){
-                            Lacuna.Pulser.Hide();
+                            require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.maps[nLi.Planet.id] = o.result.map;
                             Lacuna.Messaging.attachmentPanel.load(o.result.map);

@@ -130,10 +130,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
             tab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     if(!this.props) {
-                        Lacuna.Pulser.Show();
+                        require('js/actions/menu/loader').show();
                         this.service.view_propositions({session_id:Game.GetSession(),building_id:this.building.id}, {
                             success : function(o){
-                                Lacuna.Pulser.Hide();
+                                require('js/actions/menu/loader').hide();
                                 this.rpcSuccess(o);
                                 this.props = o.result.propositions;
                                 
@@ -259,10 +259,10 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
         //Stash 
         getStash : function(e) {
             if(e.newValue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.view_stash({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         delete o.result.status;
@@ -551,7 +551,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                 }
             
                 Dom.get("embassyStashMessage").innerHTML = "";
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 serviceFunc(data, {
                     success : function(o){
                         this.rpcSuccess(o);
@@ -579,7 +579,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         this.stash = o.result;
                         this.StashPopulate();
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -611,7 +611,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         this.addTab(this._getSendTab());
                         this.removeTab(this.createTab);
                         this.MembersPopulate();
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -621,11 +621,11 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
         //View Invites
         getInvites : function(e) {
             if(e.newValue) {
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_my_invites({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Embassy.get_my_invites.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         this.invites = o.result.invites;
@@ -723,7 +723,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         this.Self.removeTab(this.Self.createTab);
                         this.Self.MembersPopulate();
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -748,7 +748,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                             }
                         }
                         this.Line.parentNode.removeChild(this.Line);
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -776,7 +776,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         Dom.setStyle("embassyAllianceMessage", "opacity", 1);
                     });
                     a.animate();
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                 },
                 scope:this
             });
@@ -798,7 +798,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                             this.removeTab(this.sendTab);
                         }
                         this.addTab(this._getCreateTab());
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -820,7 +820,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                             this.removeTab(this.sendTab);
                         }
                         this.addTab(this._getCreateTab());
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -834,11 +834,11 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                     this._createSendToSelect();
                 }
                     
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.get_pending_invites({session_id:Game.GetSession(),building_id:this.building.id}, {
                     success : function(o){
                         YAHOO.log(o, "info", "Embassy.get_pending_invites.success");
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         
                         this.pendingInvites = o.result.invites;
@@ -919,7 +919,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                             }
                         }
                         this.Line.parentNode.removeChild(this.Line);
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -943,7 +943,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         Dom.get("embassySendMessage").value = "";
                         this.getPendingInvites({newValue:1});
                         
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -1026,7 +1026,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         this.Self.rpcSuccess(o);
                         this.Self.alliance = o.result.alliance;
                         this.Self.MembersPopulate();
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });
@@ -1052,7 +1052,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
                         this.Self.removeTab(this.Self.invitesTab);
                         this.Self.addTab(this.Self._getInvitesTab());
                         this.Self.removeTab(this.Self.sendTab);
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                     },
                     scope:this
                 });

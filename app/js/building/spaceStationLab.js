@@ -171,10 +171,10 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
             if(type && level) {
                 matchedEl.disabled = true;
                 
-                Lacuna.Pulser.Show();
+                require('js/actions/menu/loader').show();
                 this.service.make_plan({session_id:Game.GetSession(),building_id:this.building.id, type:type, level:level}, {
                     success : function(o){
-                        Lacuna.Pulser.Hide();
+                        require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
                         this.result = o.result;
                         matchedEl.disabled = false;
@@ -191,10 +191,10 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
             var btn = Event.getTarget(e);
             btn.disabled = true;
             
-            Lacuna.Pulser.Show();
+            require('js/actions/menu/loader').show();
             this.service.subsidize_plan({session_id:Game.GetSession(),building_id:this.building.id}, {
                 success : function(o){
-                    Lacuna.Pulser.Hide();
+                    require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
                     this.result = o.result;
                     btn.disabled = false;

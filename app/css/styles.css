@@ -4,9 +4,6 @@ pink: pink
 light blue: #52ACFF
 */
 
-/* Load the font used by Material UI. */
-@import url('//fonts.googleapis.com/css?family=Roboto:400,300,500');
-
 html {
 	background: black url('//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png');
 	color:#fff;
@@ -108,26 +105,6 @@ button[disabled], input[type="submit"][disabled], input[type="button"][disabled]
 	color:pink;
 }
 
-/*
-.panelTabs {
-}
-.panelTabs li {
-	background-color:#d2d2d2;
-	border-right:2px solid #F2F2F2;
-	float:left;
-	height:20px;
-	text-align:center;
-	width:100px;
-	cursor:pointer;
-}
-.panelTabs li.panelTabSelected {
-	background-color:gray;
-}
-.panelTabContainer  {
-	border:1px solid gray;
-	border-top-width:5px;
-}
-*/
 /*
 YUI dialog skin
 */
@@ -398,326 +375,6 @@ dialogs
 }
 #captchaRefresh {
 	margin: 32px 0 0 13px;
-}
-
-/*
-menu
-*/
-#planetMenuTT strong {
-	font-weight: bold;
-}
-#planetMenuTT img {
-	vertical-align: middle;
-}
-#userMenu, #planetMenu {
-	width:315px;
-}
-#users, #planets {
-	font-size:180%;
-	text-decoration:none;
-}
-#users {
-	display:block;
-	height:74px;
-	padding-top:15px;
-}
-#planets {
-	display:block;
-	height:74px;
-	padding-left:20px;
-	padding-top:25px;
-	text-align:left;
-	overflow: hidden;
-	width: 300px;
-	white-space: nowrap;
-}
-#planets img {
-	vertical-align: top;
-	margin-right:10px;
-}
-
-body.yui-skin-sam  #planetsCenter .yuimenu .bd {
-	-moz-border-radius:10px 10px 0 0;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-top-right-radius: 10px;
-	border-radius:10px 10px 0 0;
-	background-color:#52acff;
-	border:5px solid #52ACFF;
-}
-body.yui-skin-sam  #planetsCenter .yuimenu .bd .yuimenu .bd {
-	-moz-border-radius:10px 10px 10px 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-top-right-radius: 10px;
-	border-radius:10px 10px 10px 10px;
-}
-body.yui-skin-sam #usersCenter .yuimenu .bd {
-	-moz-border-radius: 0 0 10px 10px;
-	-webkit-border-bottom-left-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-	border-radius: 0 0 10px 10px;
-	background-color:#52acff;
-	border:5px solid #52ACFF;
-}
-body.yui-skin-sam  #usersCenter .yuimenu .bd .yuimenu .bd {
-	-moz-border-radius:10px 10px 10px 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-top-right-radius: 10px;
-	border-radius:10px 10px 10px 10px;
-}
-
-.menuPlanetThumb {
-	width:35px;
-	height:35px;
-}
-.menuItem {
-	display:inline-block; /*mozilla 3.0, ie 8*/
-    zoom:1; /*force ie layout so we can use the display:inline below*/
-    *display:inline; /*ie hack to make it think this is an inline-block*/
-	height:54px; /* 1 less than height of bar */
-	color:#fff; /*#ddd;*/
-	min-width:55px;
-	width:60px;
-	position:absolute;
-	padding-top:5px;
-	text-align:left;
-	overflow: hidden;
-}
-#header .menuItem {
-	text-align:center;
-}
-#header .essentia {
-	text-align:left;
-}
-#header .inbox span {
-	display: block;
-	position: absolute;
-	top: 26px;
-	left: 31px;
-	width: 21px;
-	font-size: 55%;
-	text-align: center;
-}
-#footer .menuItem {
-	width:100px;
-}
-#footer .ore.menuItem {
-	width: 94px;
-}
-#footer .water.menuItem {
-	width: 91px;
-}
-#footer .energy.menuItem {
-	width: 76px;
-}
-#header .essentia{
-	width:110px;
-}
-.food  img, .ore  img, .water  img, .essentia  img, .energy  img, .happiness  img, .waste  img , .plots img {
-	float:left;
-}
-.food img {
-	width:45px;
-	height:45px;
-}
-.ore img {
-	width:39px;
-	height:45px;
-}
-.water img {
-	width:36px;
-	height:45px;
-}
-.essentia img {
-	width:50px;
-	height:45px;
-}
-.energy img {
-	width:21px;
-	height:45px;
-}
-.happiness img {
-	width:38px;
-	height:45px;
-}
-.waste img {
-	width:31px;
-	height:45px;
-}
-.inbox img {
-	width:45px;
-	height:45px;
-}
-.change img {
-	width:40px;
-	height:45px;
-
-}
-.plots img {
-	width:45px;
-	height:45px;
-
-}
-.profile img {
-	width:45px;
-	height:45px;
-}
-.destruct img {
-	width:50px;
-	height:45px;
-}
-.tutorial img {
-	width:45px;
-	height:45px;
-}
-.support img {
-	width:45px;
-	height:45px;
-}
-.stats img {
-	width:45px;
-	height:45px;
-}
-.about img {
-	width:67px;
-	height:45px;
-}
-.logout img {
-	width:46px;
-	height:45px;
-}
-
-#footer .menuItem  .stored {
-	float:left;
-	font-size:150%;
-	margin-left:2px;
-	width:53px;
-	overflow:hidden;
-	white-space: nowrap;
-	/*font-size:25px;
-	margin-left:5px;
-	margin-top:8px;*/
-}
-.menuItem .perHr {
-	float:left;
-	font-size:110%;
-	margin-left:2px;
-	width:53px;
-	overflow:hidden;
-	white-space: nowrap;
-}
-#header .menuItem , #footer .plots .stored{
-	font-size:200%;
-}
-
-
-/*
-SHINEY
-*/
-
-#headerShine,#footerShine {
-	height:55px;
-	left:0;
-	position:absolute;
-	width:100%;
-	z-index:1001;
-}
-#headerShine {
-	background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/t.png");
-	top:0;
-}
-#footerShine {
-	background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/t.png");
-	bottom:0;
-}
-
-#planetsCenter, #usersCenter, #userCenterShine, #planetsCenterShine, #userClick, #planetsClick {
-	height:74px;
-	left:50%;
-	margin-left:-167px;
-	position:absolute;
-	text-align:center;
-	width:334px;
-}
-#usersCenter {
-	background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/selector_top.png");
-	top:0;
-	z-index:1003;
-}
-#planetsCenter {
-	background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/selector_bottom.png");
-	bottom:0;
-	z-index:1003;
-}
-#userCenterShine {
-	/*background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/selector_top_shine.png");*/
-	top:0;
-	z-index:1004;
-}
-#planetsCenterShine {
-	/*background-image:url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/web/selector_bottom_shine.png");*/
-	bottom:0;
-	z-index:1004;
-}
-#userClick {
-	top:0;
-	z-index:1005;
-	cursor:pointer;
-}
-#planetsClick {
-	bottom:0;
-	z-index:1005;
-	cursor:pointer;
-}
-#usersArrow {
-	width: 100%;
-	height: 100%;
-	background: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/down.png") no-repeat scroll center 55px transparent;
-	position:absolute;
-	top:0;
-	left:0;
-}
-#planetsArrow {
-	width: 100%;
-	height: 100%;
-	background: url("//d16cbq0l6kkf21.cloudfront.net/assets/ui/up.png") no-repeat scroll center 10px transparent;
-	position:absolute;
-	top:0;
-	left:0;
-}
-
-/* header menu */
-.change { left:0px; }
-.inbox { left:60px; }
-.profile { left:120px; }
-.essentia { left:180px; line-height:45px; }
-.destruct { left:280px; }
-.invite { right:300px; }
-.tutorial { right:240px; }
-.support { right:180px; }
-.stats { right:120px; }
-.about { right:60px; overflow: visible }
-.logout { right:0px; }
-/* footer menu */
-.food { left:0px; }
-.ore { left:100px; }
-.water { left:194px; }
-.energy { left:285px; }
-.waste { right:200px; }
-#footer .happiness { right:100px; }
-.plots  { right:0px; line-height:45px; }
-
-#header .click, #footer .click { z-index:1003; cursor:pointer; }
-
-.menuPercent {
-	height: 5px;
-	border: 1px solid #ffffff;
-	float: left;
-	margin-left: 2px;
-	width: 48px;
-}
-.menuPercentInner {
-	background-color: #ffffff;
-	height: 5px;
 }
 
 /*
@@ -1002,16 +659,19 @@ Info dialogs for Empire and Alliance
 * Star Map
 */
 #starMap, #planetMap {
-	margin: 0 auto;
-	position:relative;
-	/*height:700px;
-	width:700px;*/
 	border:0 none;
 	clear:both;
 	cursor: move;
 	cursor: grab;
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
+}
+
+#planetMap, #starMap {
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
 }
 
 #starMap:active, #planetMap:active {
@@ -1022,11 +682,7 @@ Info dialogs for Empire and Alliance
 
 #planetMap .tile:hover {
 	border: 1px dashed #fff;
-	margin: -1px;
 }
-/*#planetMap {
-	background: brown url('//d16cbq0l6kkf21.cloudfront.net/assets/planet_side/ground.png');
-}*/
 .tile {
 	word-wrap: break-word;
 }
@@ -1147,44 +803,6 @@ Info dialogs for Empire and Alliance
 	background: transparent url('//d16cbq0l6kkf21.cloudfront.net/assets/ui/s/build-no.png');
 }
 
-.mapiator_nav {
-	background: url(//d16cbq0l6kkf21.cloudfront.net/assets/ui/zoom.png);
-	position:absolute;
-	z-index:30;
-	width:60px;
-	height:60px;
-	left:40px;
-	top:40px;
-}
-.mapiator_nav_up,
-.mapiator_nav_down,
-.mapiator_nav_left,
-.mapiator_nav_right {
-	position: absolute;
-	cursor: pointer;
-	width: 20px;
-	height: 20px;
-}
-.mapiator_nav_up {
-	top: 2px;
-}
-.mapiator_nav_up,
-.mapiator_nav_down {
-	left: 21px;
-}
-.mapiator_nav_down {
-	top: 38px;
-}
-.mapiator_nav_left,
-.mapiator_nav_right {
-	top: 20px;
-}
-.mapiator_nav_left {
-	left: 2px;
-}
-.mapiator_nav_right {
-	left: 38px;
-}
 .mapiator_zoom {
 	background: url(//d16cbq0l6kkf21.cloudfront.net/assets/ui/zoom.png);
 	background-position: -20px -60px;
@@ -1192,7 +810,7 @@ Info dialogs for Empire and Alliance
 	z-index:30;
 	width:20px;
 	height:255px;
-	left:60px;
+	left:15px;
 	top:100px;
 }
 .mapiator_zoom_slider {
@@ -1219,60 +837,6 @@ Info dialogs for Empire and Alliance
 }
 .mapiator_zoom_out {
 	top: 209px;
-}
-.coordTop {
-	position: absolute;
-	top: 0;
-	width: 5px;
-	height: 30px;
-	overflow: visible;
-}
-.coordLeft {
-	position: absolute;
-	left: 0;
-	width: 30px;
-	height: 5px;
-	overflow: visible;
-}
-.coordX {
-	text-align: center;
-	vertical-align: bottom;
-	line-height:25px;
-	background: transparent;
-	color: white;
-	border: 1px solid white;
-	height: 25px;
-	padding-top: 5px;
-	position: absolute;
-	top: 0;
-}
-.coordY {
-	text-align: center;
-	vertical-align: middle;
-	background: transparent;
-	color: white;
-	border: 1px solid white;
-	width: 30px;
-	position: absolute;
-	left: 0;
-}
-.coordX.out-of-bounds {
-	border-left: none;
-	border-right: none;
-}
-.coordY.out-of-bounds {
-	border-top: none;
-	border-bottom: none;
-}
-
-.coordX50, .coordY50 {
-	font-size:85%;
-}
-.coordX35, .coordY35 {
-	font-size:75%;
-}
-.coordX20, .coordY20 {
-	font-size:65%;
 }
 
 .tile .planetMapTileActionContainer {
@@ -1524,38 +1088,26 @@ planet details
 .smallFood {
 	width:22px; /*38px;*/
 	height:22px;
-	padding-left: 1px;
-	padding-right: 1px;
 }
 .smallOre{
 	width:19px; /*21px;*/
 	height:22px;
-	padding-left: 3px;
-	padding-right: 2px;
 }
 .smallWater{
 	width:18px; /*15px;*/
 	height:22px;
-	padding-left: 3px;
-	padding-right: 3px;
 }
 .smallEnergy{
 	width:10px; /*11px;*/
 	height:22px;
-	padding-left: 7px;
-	padding-right: 7px;
 }
 .smallWaste{
 	width:15px; /*16px;*/
 	height:22px;
-	padding-left: 5px;
-	padding-right: 4px;
 }
 .smallHappy{
 	width:19px; /*22px;*/
 	height:22px;
-	padding-left: 3px;
-	padding-right: 2px;
 }
 .smallEssentia{
 	width:24px; /*28px;*/
@@ -1564,14 +1116,10 @@ planet details
 .smallTime {
 	width:21px;
 	height:22px;
-	padding-left: 2px;
-	padding-right: 1px;
 }
 .smallStorage {
 	width:22px;
 	height:22px;
-	padding-left: 1px;
-	padding-right: 1px;
 }
 
 
@@ -2430,6 +1978,46 @@ TextboxList
 	top: 0;
 	position: absolute;
 }
+
+/* Semantic UI */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css');
+
+/* Stuff related to the Chat bar */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css');
+
+/* The fact that we're using US1 *might* be bad here. */
+@import url('https://us1.lacunaexpanse.com/chiselchat/chiselchat.min.css');
+
+
+/* Semantic overrides everything in this file and manages to not make a mess. Except for this... */
+body {
+	color: #ffffff;
+}
+
+/* Don't make the color of text input white, though. */
+input, textarea, select, option {
+	color: black;
+}
+
+/* Fix incoming ships position. */
+#notify_c {
+	position: absolute;
+	right: 15px;
+	top: 100px;
+	z-index: 2000;
+}
+
+/* Custom RPCCount stuff */
+
+#RPCCount {
+	opacity: 0.3;
+}
+
+#RPCCount:hover {
+	opacity: 1;
+}
+
+
 /*
  * vim: noet:ts=4:sw=4
  */

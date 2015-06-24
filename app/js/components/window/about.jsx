@@ -4,26 +4,24 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var Game = YAHOO.lacuna.Game;
+var AboutActions = require('js/actions/window/about');
 
-var AboutActions = require('js/actions/menu/about');
+var ServerRPCStore = require('js/stores/rpc/server');
+var AboutWindowStore = require('js/stores/window/about');
 
-var ServerStore = require('js/stores/server');
-var AboutStore = require('js/stores/menu/about');
-var CreditsStore = require('js/stores/menu/credits');
+var CreditsRPCStore = require('js/stores/rpc/stats/credits');
 
 var Panel = require('js/components/panel');
 
 var About = React.createClass({
-    mixins: [Reflux.connect(ServerStore, 'server')],
-    propTypes: {
-        date: React.PropTypes.instanceOf(Date).isRequired
-    },
+    mixins: [
+        Reflux.connect(ServerRPCStore, 'server')
+    ],
     render: function() {
         return (
             <div>
                 <p>
-                    Copyright 2010, {this.props.date.getFullYear()} Lacuna Expanse Corp.
+                    Copyright 2010, {(new Date()).getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
                     Server Version: {this.state.server.version}.
@@ -53,11 +51,13 @@ var NamesList = React.createClass({
 });
 
 var Credits = React.createClass({
-    mixins: [Reflux.connect(CreditsStore, 'credits')],
-    getInitialState: function() {
-        return {
-            credits: []
-        };
+    mixins: [
+        Reflux.connect(CreditsRPCStore, 'credits')
+    ],
+    componentDidUpdate: function() {
+        if (this.state.credits.length === 0) {
+            AboutActions.load();
+        }
     },
     render: function() {
         var credits = [];
@@ -79,26 +79,21 @@ var Credits = React.createClass({
 });
 
 var AboutWindow = React.createClass({
-    mixins: [Reflux.connect(AboutStore, 'display')],
-    getInitialState: function() {
-        return {
-            display: 'none'
-        }
-    },
-    handleClose: function() {
-        AboutActions.close();
-    },
+    mixins: [
+        Reflux.connect(AboutWindowStore, 'show')
+    ],
     render: function() {
         return (
-            <Panel title="About" height={400} onClose={this.handleClose}
-                display={this.state.display}>
+            <Panel title="About" height={400} onClose={AboutActions.hide} show={this.state.show}>
+
                 <h2>The Lacuna Expanse</h2>
-                <About date={this.props.date} serverVersion={Game.ServerData.version} />
+                <About />
 
                 <br />
 
                 <h2>Credits</h2>
                 <Credits credits={this.state.credits} />
+
             </Panel>
         );
     }
