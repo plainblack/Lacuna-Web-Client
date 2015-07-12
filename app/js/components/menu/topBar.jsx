@@ -24,14 +24,16 @@ var TopBar = React.createClass({
     ],
     componentDidUpdate: function() {
         // Now set it up.
-        $('a', this.refs.bar.getDOMNode()).popup({
+        $('a', this.refs.bar.getDOMNode()).popup('destroy').popup({
             variation: 'inverted'
         });
 
-        $(this.refs.toggleMapButton.getDOMNode()).popup({
+        var label = this.state.mapMode === MapModeStore.PLANET_MAP_MODE ?
+            'To Star Map' : 'To Planet Map';
+
+        $(this.refs.toggleMapButton.getDOMNode()).popup('destroy').popup({
             variation: 'inverted',
-            content: this.state.mapMode === MapModeStore.PLANET_MAP_MODE ?
-                'To Star Map' : 'To Planet Map'
+            content: label
         });
     },
     componentWillUnmount: function() {
