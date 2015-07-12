@@ -1,8 +1,6 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
 var $ = require('js/hacks/jquery');
 
 var Draggable = require('react-draggable');
@@ -15,19 +13,32 @@ var Panel = React.createClass({
         onClose: React.PropTypes.func.isRequired,
         show: React.PropTypes.bool.isRequired
     },
+
     getDefaultProps: function() {
         return {
             height: 400,
             width: 450
         };
     },
+
+    componentDidMount: function() {
+        $(this.refs.container.getDOMNode()).hide();
+    },
+
+    componentDidUpdate: function() {
+        if (this.props.show) {
+            $(this.refs.container.getDOMNode()).fadeIn(500);
+        } else {
+            $(this.refs.container.getDOMNode()).fadeOut(500);
+        }
+    },
+
     render: function() {
         return (
             <Draggable handle='.drag-handle' zIndex={999999999}>
-                <div style={{
+                <div ref="container" style={{
                     position: 'absolute',
                     zIndex: '999999999',
-                    display: this.props.show ? '' : 'none',
                     left: (($(window.document).width() - this.props.width) / 2) + 'px'
                 }}>
                     <div className="drag-handle" style={{
