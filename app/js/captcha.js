@@ -38,7 +38,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                 modal:true,
                 close:true,
                 width:"390px",
-                zIndex:9999
+                zIndex:999999
             });
             this.Dialog.renderEvent.subscribe(function(){
                 this.captchaImage = Dom.get("captchaImage");
