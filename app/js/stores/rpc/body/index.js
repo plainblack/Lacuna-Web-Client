@@ -132,6 +132,7 @@ var BodyRPCStore = Reflux.createStore({
             ship.arrival_ms =
             util.serverDateToMs(ship.date_arrives) - util.serverDateToMs(status.server.time);
         };
+
         _.map(this.data.incoming_own_ships, updateShip);
         _.map(this.data.incoming_ally_ships, updateShip);
         _.map(this.data.incoming_enemy_ships, updateShip);
@@ -163,13 +164,6 @@ var BodyRPCStore = Reflux.createStore({
         this.data.happiness_hour = int(this.data.happiness_hour);
         this.data.happiness = int(this.data.happiness);
 
-
-        this.data.food_percent_full = (this.data.food_stored / this.data.food_capacity) * 100;
-        this.data.ore_percent_full = (this.data.ore_stored / this.data.ore_capacity) * 100;
-        this.data.water_percent_full = (this.data.water_stored / this.data.water_capacity) * 100;
-        this.data.energy_percent_full = (this.data.energy_stored / this.data.energy_capacity) * 100;
-        this.data.waste_percent_full = (this.data.waste_stored / this.data.waste_capacity) * 100;
-
         this.trigger(this.data);
     },
 
@@ -187,6 +181,43 @@ var BodyRPCStore = Reflux.createStore({
         _.map(this.data.incoming_own_ships, tickIncoming);
         _.map(this.data.incoming_ally_ships, tickIncoming);
         _.map(this.data.incoming_enemy_ships, tickIncoming);
+
+        var tickResource = function(production, capacity, stored) {
+            var amount = production / 60 / 60;
+            var rv = stored + amount;
+
+            if (capacity && rv > capacity) {
+                return int(capacity);
+            } else {
+                return int(rv);
+            }
+        };
+
+        this.data.food_stored = tickResource(
+            this.data.food_hour, this.data.food_capacity, this.data.food_stored);
+        this.data.ore_stored = tickResource(
+            this.data.ore_hour, this.data.ore_capacity, this.data.ore_stored);
+        this.data.water_stored = tickResource(
+            this.data.water_hour, this.data.water_capacity, this.data.water_stored);
+        this.data.energy_stored = tickResource(
+            this.data.energy_hour, this.data.energy_capacity, this.data.energy_stored);
+        this.data.waste_stored = tickResource(
+            this.data.waste_hour, this.data.waste_capacity, this.data.waste_stored);
+        this.data.happiness = tickResource(
+            this.data.happiness_hour, undefined, this.data.happiness);
+
+        this.data.food_percent_full = (this.data.food_stored / this.data.food_capacity) * 100;
+        this.data.ore_percent_full = (this.data.ore_stored / this.data.ore_capacity) * 100;
+        this.data.water_percent_full = (this.data.water_stored / this.data.water_capacity) * 100;
+        this.data.energy_percent_full = (this.data.energy_stored / this.data.energy_capacity) * 100;
+        this.data.waste_percent_full = (this.data.waste_stored / this.data.waste_capacity) * 100;
+
+        // Do this to reduce updating of the progres bars.
+        this.data.food_percent_full = int(this.data.food_percent_full);
+        this.data.ore_percent_full = int(this.data.ore_percent_full);
+        this.data.water_percent_full = int(this.data.water_percent_full);
+        this.data.energy_percent_full = int(this.data.energy_percent_full);
+        this.data.waste_percent_full = int(this.data.waste_percent_full);
 
         this.trigger(this.data);
     }
