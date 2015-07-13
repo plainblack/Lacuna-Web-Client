@@ -43,14 +43,17 @@ var BottomBar = React.createClass({
                     {util.reduceNumber(this.state.body.happiness_hour)} / hr
                 </div>
 
-                <div className="item" id="foodItem">
+                <div className="item">
                     <Progress
                         percent={this.state.body.food_percent_full}
                         style={storageProgressStyle} />
                     <i className="food big icon"></i>
                     <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.food_stored)} /
-                        {util.reduceNumber(this.state.body.food_capacity)}
+                        {
+                            util.reduceNumber(this.state.body.food_stored)
+                        } / {
+                            util.reduceNumber(this.state.body.food_capacity)
+                        }
                     </p>
                     {util.reduceNumber(this.state.body.food_hour)} / hr
                 </div>
@@ -61,8 +64,11 @@ var BottomBar = React.createClass({
                         style={storageProgressStyle} />
                     <i className="diamond big icon"></i>
                     <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.ore_stored)} /
-                        {util.reduceNumber(this.state.body.ore_capacity)}
+                        {
+                            util.reduceNumber(this.state.body.ore_stored)
+                        } / {
+                            util.reduceNumber(this.state.body.ore_capacity)
+                        }
                     </p>
                     {util.reduceNumber(this.state.body.ore_hour)} / hr
                 </div>
@@ -73,8 +79,11 @@ var BottomBar = React.createClass({
                         style={storageProgressStyle} />
                     <i className="theme big icon"></i>
                     <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.water_stored)} /
-                        {util.reduceNumber(this.state.body.water_capacity)}
+                        {
+                            util.reduceNumber(this.state.body.water_stored)
+                        } / {
+                            util.reduceNumber(this.state.body.water_capacity)
+                        }
                     </p>
                     {util.reduceNumber(this.state.body.water_hour)} / hr
                 </div>
@@ -85,8 +94,11 @@ var BottomBar = React.createClass({
                         style={storageProgressStyle} />
                     <i className="lightning big icon"></i>
                     <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.energy_stored)} /
-                        {util.reduceNumber(this.state.body.energy_capacity)}
+                        {
+                            util.reduceNumber(this.state.body.energy_stored)
+                        } / {
+                            util.reduceNumber(this.state.body.energy_capacity)
+                        }
                     </p>
                     {util.reduceNumber(this.state.body.energy_hour)} / hr
                 </div>
@@ -97,8 +109,11 @@ var BottomBar = React.createClass({
                         style={storageProgressStyle} />
                     <i className="trash big icon"></i>
                     <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.waste_stored)} /
-                        {util.reduceNumber(this.state.body.waste_capacity)}
+                        {
+                            util.reduceNumber(this.state.body.waste_stored)
+                        } / {
+                            util.reduceNumber(this.state.body.waste_capacity)
+                        }
                     </p>
                     {util.reduceNumber(this.state.body.waste_hour)} / hr
                 </div>
@@ -106,15 +121,14 @@ var BottomBar = React.createClass({
                 <div className="item">
                     <i className="block layout big icon"></i>
                     <p style={storageStyle}>
-                        {this.state.body.building_count} /
-                        {this.state.body.building_count + this.state.body.plots_available} Buildings
+                        {
+                            this.state.body.building_count
+                        } / {
+                            this.state.body.building_count + this.state.body.plots_available
+                        } Buildings
                         <br />
                         {this.state.body.plots_available} Plots Available
                     </p>
-                    {
-                        // TODO: this bit can't be implemented until get_status has the data needed.
-                        // {number under construction} / {developmentmMinistry level} Building
-                    }
                 </div>
             </div>
         );
