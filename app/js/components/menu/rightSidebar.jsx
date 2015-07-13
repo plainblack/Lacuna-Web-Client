@@ -3,8 +3,10 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
+var $ = require('js/hacks/jquery');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
+var BodyRPCStore = require('js/stores/rpc/body');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions = require('js/actions/menu/map');
@@ -37,7 +39,7 @@ var PlanetListItem = React.createClass({
     }
 });
 
-var PlanetList = React.createClass({
+var BodyList = React.createClass({
     getInitialProps: function() {
         return {
             list: []
@@ -61,16 +63,38 @@ var PlanetList = React.createClass({
 
 var RightSidebar = React.createClass({
     mixins: [
-        Reflux.connect(EmpireRPCStore, 'empire')
+        Reflux.connect(EmpireRPCStore, 'empire'),
+        Reflux.connect(BodyRPCStore, 'body')
     ],
+
+    getInitialState: function() {
+        return {
+            scrollY: 0
+        };
+    },
+
+    handleScroll: function(event) {
+        this.setState({
+            scrollY: $(event.target).scrollTop()
+        });
+    },
+
     render: function() {
         return (
-            <div className="ui right vertical inverted sidebar menu">
+            <div className="ui right vertical inverted sidebar menu" onScroll={this.handleScroll}>
+
+                <div className="ui large teal label" ref="planetLabel" style={{
+                    position: 'relative',
+                    zIndex: 1,
+                    top: this.state.scrollY + 'px'
+                }}>
+                    On <strong>{this.state.body.name}</strong>
+                </div>
 
                 <div className="ui horizontal inverted divider">
                     My Colonies
                 </div>
-                <PlanetList list={this.state.empire.colonies} />
+                <BodyList list={this.state.empire.colonies} />
 
                 {
                     this.state.empire.stations.length > 0 ?
@@ -78,7 +102,7 @@ var RightSidebar = React.createClass({
                             <div className="ui horizontal inverted divider">
                                 My Stations
                             </div>
-                            <PlanetList list={this.state.empire.stations} />
+                            <BodyList list={this.state.empire.stations} />
                         </div>
                     :
                         ''
