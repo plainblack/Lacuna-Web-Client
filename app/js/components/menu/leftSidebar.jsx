@@ -23,13 +23,9 @@ var LeftSidebar = React.createClass({
             <div className="ui left vertical inverted sidebar menu">
 
                 <div className="ui horizontal inverted divider">
-                  Links
+                    Links
                 </div>
 
-                <a className="item" onClick={toggle(AboutActions.show)}>
-                    <i className="rocket icon"></i>
-                    About
-                </a>
                 <a className="item" target="_blank" href="/starmap/"
                     onClick={LeftSidebarActions.toggle}>
                     <i className="map icon"></i>
@@ -50,14 +46,6 @@ var LeftSidebar = React.createClass({
                     onClick={LeftSidebarActions.toggle}>
                     <i className="student icon"></i>
                     Help
-                </a>
-                <a className="item" onClick={toggle(InviteActions.show)}>
-                    <i className="add user icon"></i>
-                    Invite a Friend
-                </a>
-                <a className="item" onClick={toggle(OptionsActions.show)}>
-                    <i className="options icon"></i>
-                    Options
                 </a>
                 <a className="item" onClick={toggle(ServerClockActions.show)}>
                     <i className="wait icon"></i>
@@ -80,12 +68,30 @@ var LeftSidebar = React.createClass({
                 </a>
 
                 <div className="ui horizontal inverted divider">
-                  Actions
+                    Actions
                 </div>
 
+                <a className="item" onClick={toggle(AboutActions.show)}>
+                    <i className="rocket icon"></i>
+                    About
+                </a>
+                <a className="item" onClick={toggle(InviteActions.show)}>
+                    <i className="add user icon"></i>
+                    Invite a Friend
+                </a>
                 <a className="item" onClick={toggle(NotesActions.show)}>
                     <i className="edit icon"></i>
                     Notes
+                </a>
+                <a className="item" onClick={toggle(OptionsActions.show)}>
+                    <i className="options icon"></i>
+                    Options
+                </a>
+                <a className="item" onClick={toggle(function() {
+                    YAHOO.lacuna.MapPlanet.Refresh();
+                })}>
+                    <i className="refresh icon"></i>
+                    Refresh
                 </a>
 
             </div>
