@@ -5,6 +5,8 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var $ = require('js/hacks/jquery');
 
+var classNames = require('classnames');
+
 var EmpireRPCStore = require('js/stores/rpc/empire');
 var BodyRPCStore = require('js/stores/rpc/body');
 
@@ -29,9 +31,13 @@ var PlanetListItem = React.createClass({
         MapActions.changePlanet(this.props.id);
     },
     render: function() {
-        var Class = this.props.current == this.props.id ? "ui large teal label" : "item";
+        var classStr = classNames({
+            'ui large teal label': this.props.current === this.props.id,
+            'item': this.props.current !== this.props.id
+        });
+
         return (
-                <a className={Class} onClick={this.handleClick} style={{
+                <a className={classStr} onClick={this.handleClick} style={{
                 // For some reason this doesn't get set on the items (by Semantic) when it should.
                 cursor: 'pointer'
             }}>
@@ -53,13 +59,15 @@ var BodyList = React.createClass({
     },
     render: function() {
         var list = [];
-        var bl = this;
 
         _.each(this.props.list, function(planet) {
             list.push(
-                <PlanetListItem name={planet.name} id={planet.id} key={planet.id} current={bl.props.current} />
+                <PlanetListItem key={planet.id}
+                    name={planet.name}
+                    id={planet.id}
+                    current={this.props.current} />
             );
-        });
+        }, this);
 
         return <div>{list}</div>;
     }
@@ -71,21 +79,9 @@ var RightSidebar = React.createClass({
         Reflux.connect(BodyRPCStore, 'body')
     ],
 
-    getInitialState: function() {
-        return {
-            scrollY: 0
-        };
-    },
-
-    handleScroll: function(event) {
-        this.setState({
-            scrollY: $(event.target).scrollTop()
-        });
-    },
-
     render: function() {
         return (
-            <div className="ui right vertical inverted sidebar menu" onScroll={this.handleScroll}>
+            <div className="ui right vertical inverted sidebar menu">
 
                 <div className="ui horizontal inverted divider">
                     My Colonies
