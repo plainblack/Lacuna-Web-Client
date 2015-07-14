@@ -194,7 +194,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                 close:true,
                 underlay:false,
                 width:"575px",
-                zIndex:10000
+                zIndex:1000
             });
             this.attachmentPanel.renderEvent.subscribe(function(){
                 this.map = Dom.get("attachmentMap");
@@ -230,6 +230,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
                     this.map.innerHTML = tbody.join('');
 
                     this.show();
+                    this.bringToTop();
                 }
             };
 
