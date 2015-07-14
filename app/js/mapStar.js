@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna");
 
+var _ = require('lodash');
+
 if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 (function(){
@@ -24,7 +26,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
         this._excavLabel = "Excavators";
     };
     MapStar.prototype = {
-        _buildDetailsPanel : function() {
+        _buildDetailsPanel : _.once(function() {
             var panelId = "starDetails";
 
             var panel = document.createElement("div");
@@ -148,8 +150,8 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
             this.starDetails.render();
             Game.OverlayManager.register(this.starDetails);
-        },
-        _buildPlanetDetailsPanel : function() {
+        }),
+        _buildPlanetDetailsPanel : _.once(function() {
             var panelId = "planetDetails";
             var panel = document.createElement("div");
             panel.id = panelId;
@@ -442,14 +444,9 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             });
             this.planetDetails.render();
             Game.OverlayManager.register(this.planetDetails);
-        },
-        _buildFindPanel : function() {
+        }),
+        _buildFindPanel : _.once(function() {
             var panelId = "starFind";
-
-            // Deon't create twice.
-            if (this.starFind) {
-                return;
-            }
 
             var panel = document.createElement("div");
             panel.id = panelId;
@@ -538,7 +535,7 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             },this,true);
 
             this.starFind.render();
-        },
+        }),
 
         IsVisible : function() {
             return this._isVisible;

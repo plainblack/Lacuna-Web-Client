@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna");
 
+var _ = require('lodash');
+
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
 (function(){
@@ -63,7 +65,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         this.createEvent("onMapRpc");
     };
     MapPlanet.prototype = {
-        _buildDetailsPanel : function() {
+        _buildDetailsPanel : _.once(function() {
             var panelId = "buildingDetails";
             var panel = document.createElement("div");
             panel.id = panelId;
@@ -181,8 +183,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
             this.buildingDetails.render();
             Game.OverlayManager.register(this.buildingDetails);
-        },
-        _buildBuilderPanel : function() {
+        }),
+        _buildBuilderPanel : _.once(function() {
             var panelId = "buildingBuilder";
 
             var panel = document.createElement("div");
@@ -487,7 +489,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
             this.buildingBuilder.render();
             Game.OverlayManager.register(this.buildingBuilder);
-        },
+        }),
 
         _fireRpcSuccess : function(result){
             this.fireEvent("onMapRpc", result);
@@ -736,9 +738,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         BuilderView : function(tile) {
             //YAHOO.log(tile, "info", "BuilderView");
 
-            if (!this.buildingBuilder) {
-                this._buildBuilderPanel();
-            }
+            this._buildBuilderPanel();
 
             Game.OverlayManager.hideAllBut(this.buildingBuilder.id);
             this.buildingBuilder.resetDisplay(this);
@@ -868,9 +868,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
             require('js/actions/menu/loader').show();
 
-            if (!this.buildingDetails) {
-                this._buildDetailsPanel();
-            }
+            this._buildDetailsPanel();
 
             var panel = this.buildingDetails;
             Game.OverlayManager.hideAllBut(panel.id);
