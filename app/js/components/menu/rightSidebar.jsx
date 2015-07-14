@@ -15,7 +15,8 @@ var PlanetListItem = React.createClass({
     getInitialProps: function() {
         return {
             name: '',
-            id: ''
+            id: '',
+            current: '',
         };
     },
     propTypes: {
@@ -28,8 +29,9 @@ var PlanetListItem = React.createClass({
         MapActions.changePlanet(this.props.id);
     },
     render: function() {
+        var Class = this.props.current == this.props.id ? "ui large teal label" : "item";
         return (
-            <a className="item" onClick={this.handleClick} style={{
+                <a className={Class} onClick={this.handleClick} style={{
                 // For some reason this doesn't get set on the items (by Semantic) when it should.
                 cursor: 'pointer'
             }}>
@@ -42,7 +44,8 @@ var PlanetListItem = React.createClass({
 var BodyList = React.createClass({
     getInitialProps: function() {
         return {
-            list: []
+            list: [],
+            current: '',
         };
     },
     propTypes: {
@@ -50,10 +53,11 @@ var BodyList = React.createClass({
     },
     render: function() {
         var list = [];
+        var bl = this;
 
         _.each(this.props.list, function(planet) {
             list.push(
-                <PlanetListItem name={planet.name} id={planet.id} key={planet.id} />
+                <PlanetListItem name={planet.name} id={planet.id} key={planet.id} current={bl.props.current} />
             );
         });
 
@@ -83,18 +87,10 @@ var RightSidebar = React.createClass({
         return (
             <div className="ui right vertical inverted sidebar menu" onScroll={this.handleScroll}>
 
-                <div className="ui large teal label" ref="planetLabel" style={{
-                    position: 'relative',
-                    zIndex: 1,
-                    top: this.state.scrollY + 'px'
-                }}>
-                    On <strong>{this.state.body.name}</strong>
-                </div>
-
                 <div className="ui horizontal inverted divider">
                     My Colonies
                 </div>
-                <BodyList list={this.state.empire.colonies} />
+                <BodyList list={this.state.empire.colonies} current={this.state.body.id} />
 
                 {
                     this.state.empire.stations.length > 0 ?
@@ -102,7 +98,7 @@ var RightSidebar = React.createClass({
                             <div className="ui horizontal inverted divider">
                                 My Stations
                             </div>
-                            <BodyList list={this.state.empire.stations} />
+                            <BodyList list={this.state.empire.stations} current={this.state.body.id}/>
                         </div>
                     :
                         ''
