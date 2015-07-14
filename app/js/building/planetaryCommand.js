@@ -2,6 +2,10 @@ YAHOO.namespace("lacuna.buildings");
 
 var $ = require('js/hacks/jquery');
 
+var MapActions = require('js/actions/menu/map');
+
+var EmpireRPCStore = require('js/stores/rpc/empire');
+
 if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacuna.buildings.PlanetaryCommand) {
 
 (function(){
@@ -229,7 +233,10 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     }
 
                     this.fireEvent("onHide");
-                    Game.PlanetJump(); //jumps to home planet if nothing passed in
+
+                    // Go to home planet.
+                    var home = EmpireRPCStore.getData().home_planet_id;
+                    MapActions.changePlanet(home);
 
                     require('js/actions/menu/loader').hide();
                 },
