@@ -386,7 +386,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
         ProcessStatus : function(status) {
             if(status) {
-                var doMenuUpdate;
 
                 if(status.server) {
                     //add everything from status empire to game empire
@@ -455,7 +454,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                                 Lacuna.Game.EmpireData.planets[pKey].name = status.empire.planets[pKey];
                             }
                             Lacuna.Game.EmpireData.planetsByName[status.empire.planets[pKey]] = Lacuna.Game.EmpireData.planets[pKey];
-                            doMenuUpdate = true;
                         }
                     }
                     delete status.empire.planets; //delete this so it doesn't overwrite the desired structure
@@ -487,11 +485,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                         p.water_capacity *= 1;
                         p.water_hour *= 1;
                         p.water_stored *= 1;
-
-                        doMenuUpdate = true;
                     }
-
-                    Lacuna.Notify.Load(planet);
                 }
             }
         },
@@ -531,9 +525,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             }
         },
         GetCurrentPlanet : function() {
-            var ED = Game.EmpireData,
-                brpc = BodyRPCStore;
-            return brpc.getData();
+            return BodyRPCStore.getData();
         },
         GetSize : function() {
             var content = document.getElementById("content"),
