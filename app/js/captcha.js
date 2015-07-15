@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
@@ -13,7 +15,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
 
     var Captcha = function() {};
     Captcha.prototype = {
-        build: function() {
+        build: _.once(function() {
             this.id = "captcha";
 
             var container = document.createElement("div");
@@ -38,7 +40,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                 modal:true,
                 close:true,
                 width:"390px",
-                zIndex:999999
+                zIndex:9999
             });
             this.Dialog.renderEvent.subscribe(function(){
                 this.captchaImage = Dom.get("captchaImage");
@@ -55,7 +57,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
             }, this, true);
             this.Dialog.render();
             Game.OverlayManager.register(this.Dialog);
-        },
+        }),
         _getHtml : function() {
             return [
                 '<div class="hd">Verify Your Humanity</div>',
