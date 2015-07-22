@@ -2391,7 +2391,7 @@ _getWasteChainTab : function() {
             if (details) {
                 var show_equalize_button;
                 
-                if ( Game.GetCurrentPlanet().waste_hour > 0
+                if ( Game.GetCurrentPlanet().waste_hour != 0
                     && this.waste_chain.percent_transferred >= 100 )
                 {
                     show_equalize_button = 1;
@@ -2435,15 +2435,14 @@ _getWasteChainTab : function() {
             });
         },
         WasteChainEqualize : function() {
-            var waste_chain_id = this.Self.waste_chain.id,
-                waste_hour = Dom.get("chainWasteHourInput").value,
+            var waste_hour = 1*this.Self.waste_chain.waste_hour,
                 body_waste_hour = Game.GetCurrentPlanet().waste_hour;
             
-            if ( body_waste_hour <= 0 )
-                return;
-            
             waste_hour = parseInt(waste_hour) + parseInt(body_waste_hour);
-            
+
+            if ( waste_hour <= 0 )
+                waste_hour = 0;
+
             Dom.get("chainWasteHourInput").value = waste_hour;
         },
         WasteChainShipsView : function() {
