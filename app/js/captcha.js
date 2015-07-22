@@ -37,7 +37,6 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                 draggable:true,
                 effect:Game.GetContainerEffect(),
                 underlay:false,
-                modal:true,
                 close:true,
                 width:"390px",
                 zIndex:9999
@@ -48,6 +47,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                 this.captchaMessage = Dom.get("captchaMessage");
                 Event.on('captchaRefresh', 'click', this.refreshCaptcha, this, true);
                 Dom.removeClass(this.id, Lib.Styles.HIDDEN);
+                this.bringToTop();
             }, this, true);
             this.Dialog.hideEvent.subscribe(function(){
                 this._fail();
@@ -81,6 +81,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
             this._retry = retry;
             this._fail = fail;
             this.refreshCaptcha();
+            this.Dialog.bringToTop();
         },
         solveCaptcha : function() {
             require('js/actions/menu/loader').show();
