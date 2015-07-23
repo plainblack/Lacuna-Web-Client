@@ -278,7 +278,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     
                     nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',shipName,'.png" style="width:100px;height:100px;" class="shipImage" />',
+                    '        <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" style="width:100px;height:100px;" class="shipImage" />',
                     '    </div>',
                     '    <div class="yui-u" style="width:63%">',
                     '        <span class="shipName">',ship.type_human,'</span>: ',

@@ -415,7 +415,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
                     '<div class="yui-g first">',
                     '    <div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:105px;height:105px;" />',
+                    '        <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" title="',ship.type_human,'" style="width:105px;height:105px;" />',
                     '    </div>',
                     '    <div class="yui-u">',
                     '        <span class="shipName">',ship.name,'</span>: ',
@@ -576,7 +576,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     nLi.innerHTML = ['<div class="yui-g" style="margin-bottom:2px;">',
                     '<div class="yui-g first">',
                     '    <div class="yui-u first" style="background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:115px;height:115px;" />',
+                    '        <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" title="',ship.type_human,'" style="width:115px;height:115px;" />',
                     '    </div>',
                     '    <div class="yui-u">',
                     '        <span class="shipName">',ship.name,'</span>: ',
@@ -775,7 +775,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     Dom.addClass(nLi,"shipTypeImage");
                     Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
                     Dom.setStyle(nLi, "text-align", "center");
-                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
+                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.image,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
@@ -1015,7 +1015,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     Dom.addClass(nLi,"shipTypeImage");
                     Dom.setStyle(nLi, "background", ['transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center'].join(''));
                     Dom.setStyle(nLi, "text-align", "center");
-                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.type,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
+                    nLi.innerHTML = ['<img src="',Lib.AssetUrl,'ships/',ship.image,'.png" title="',ship.type_human,'" style="width:50px;height:50px;" />'].join('');
                     nUl.appendChild(nLi);
 
                     nLi = li.cloneNode(false);
@@ -1238,7 +1238,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     nLi.Ship = ship;
                     nLi.innerHTML = ['<div class="yui-gd" style="margin-bottom:2px;">',
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '        <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
+                    '        <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" style="width:60px;height:60px;" />',
                     '    </div>',
                     '    <div class="yui-u" style="width:67%">',
                     '        <div class="buildingName">[',ship.type_human,'] ',ship.name,'</div>',
@@ -1369,7 +1369,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '<div class="yui-ge" style="margin-bottom:2px;">',
                     '    <div class="yui-g first">',
                     '        <div class="yui-u first" style="width:64px;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
-                    '            <img src="',Lib.AssetUrl,'ships/',ship.type,'.png" style="width:60px;height:60px;" />',
+                    '            <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" style="width:60px;height:60px;" />',
                     '        </div>',
                     '        <div class="yui-u-7-8">',
                     '                <div>',
