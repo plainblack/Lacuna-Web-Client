@@ -207,7 +207,6 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
         redeemClick : function (e) {
             Event.stopEvent(e);
             var code = this.elCode.value;
-            var currentEssentia = Game.EmpireData.essentia;
             require('js/actions/menu/loader').show();
             Game.Services.Empire.redeem_essentia_code({
                 session_id:Game.GetSession(""),
@@ -216,7 +215,7 @@ if (typeof YAHOO.lacuna.Essentia == "undefined" || !YAHOO.lacuna.Essentia) {
                 success : function(o){
                     YAHOO.log(o, "info", "EssentiaRedeem.show.success");
                     require('js/actions/menu/loader').hide();
-                    var addedEssentia = o.result.status.empire.essentia - currentEssentia;
+                    var addedEssentia = o.result.amount;
                     alert('Redeemed code for '+addedEssentia+' essentia.');
                     this.elCode.value = '';
                     this.fireEvent('onRpc', o.result);
