@@ -409,7 +409,7 @@ dialogs
 	font-weight:bold;
 }
 .messageDate, .messageFrom, .messageSubject {
-	font-size: 100%;
+	font-size: 13px;
 	padding: 2px 0;
 }
 
