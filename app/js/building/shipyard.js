@@ -352,8 +352,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     require('js/actions/menu/loader').hide();
                     this.Self.rpcSuccess(o);
 
-                    this.Self.ship_build_queue = o.result;
-                    this.Self.ShipyardDisplay();
+                    //this.Self.ship_build_queue = o.result;
+                    //this.Self.ShipyardDisplay();
+                    YAHOO.lacuna.MapPlanet.RefreshWithData(o);
                     
                     this.Self.ships.docks_available-=qty.value;
                     if(this.Self.ships.docks_available < 0) {

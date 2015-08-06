@@ -658,6 +658,13 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             this.locationId = planetId;
             this.ReLoad(silent);
         },
+        RefreshWithData : function(o) {
+            this.fireEvent("onMapRpc", o.result);
+            var planet = Game.GetCurrentPlanet();
+            this._map.setPlotsAvailable(planet.plots_available*1);
+            this._map.addTileData(o.result.buildings, true);
+            this._map.refresh();
+        },
         Refresh : function() {
             if(this.locationId) {
                 var BodyServ = Game.Services.Body,
@@ -669,11 +676,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 BodyServ.get_buildings(data,{
                     success : function(o){
                         //YAHOO.log(o, "info", "MapPlanet.Refresh");
-                        this.fireEvent("onMapRpc", o.result);
-                        var planet = Game.GetCurrentPlanet();
-                        this._map.setPlotsAvailable(planet.plots_available*1);
-                        this._map.addTileData(o.result.buildings, true);
-                        this._map.refresh();
+                        this.RefreshWithData(o);
                     },
                     scope:this
                 });
