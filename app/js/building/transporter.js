@@ -19,9 +19,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
         this.transport = result.transport;
         this.service = Game.Services.Buildings.Transporter;
         
-        this.availableAcceptText = "Accept For 1 Essentia";
-        this.addTradeText = "Add Trade For 1 Essentia";
-        this.pushTradeText = "Send For 2 Essentia";
+        this.addTradeText = ['Add Trade For 1<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia smallImg" />'].join('');
+        this.pushTradeText = ['Send For 2<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia smallImg" />'].join('');
         
         
         // defaults.  Values are updated to server numbers during get_* calls
@@ -593,7 +592,7 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
                     Dom.addClass(nLi,"tradeAction");
                     bbtn = document.createElement("button");
                     bbtn.setAttribute("type", "button");
-                    bbtn.innerHTML = this.availableAcceptText;
+                    bbtn.innerHTML = ["Accept For ", trade.ask*1+1,'<img src="',Lib.AssetUrl,'ui/s/essentia.png" class="smallEssentia" /> Total'].join('');
                     bbtn = nLi.appendChild(bbtn);
                     Event.on(bbtn, "click", this.AvailableAccept, {Self:this,Trade:trade,Line:nUl}, true);
                     nUl.appendChild(nLi);
