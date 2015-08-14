@@ -1392,7 +1392,7 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     '    <div class="yui-g">',
                     '        <div class="yui-u-1">',
                     '            <input type="text"',
-                    '            id="FS'+skey+'" value=0 style="width:32px" />',
+                    '            id="FS'+skey+'" value="1" style="width:32px" />',
                     '            <button type="button">Send</button>',
                     '        </div>',
                     '    </div>',
