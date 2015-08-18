@@ -52,6 +52,7 @@ var BodyList = React.createClass({
         return {
             list: [],
             current: '',
+            title: '',
         };
     },
     propTypes: {
@@ -69,7 +70,8 @@ var BodyList = React.createClass({
             );
         }, this);
 
-        return <div>{list}</div>;
+        return <div><div className="ui horizontal inverted divider">{this.props.title}</div>
+            <div>{list}</div></div>;
     }
 });
 
@@ -83,18 +85,12 @@ var RightSidebar = React.createClass({
         return (
             <div className="ui right vertical inverted sidebar menu">
 
-                <div className="ui horizontal inverted divider">
-                    My Colonies
-                </div>
-                <BodyList list={this.state.empire.colonies} current={this.state.body.id} />
+                <BodyList title="My Colonies" list={this.state.empire.colonies} current={this.state.body.id} />
 
                 {
                     this.state.empire.stations.length > 0 ?
                         <div>
-                            <div className="ui horizontal inverted divider">
-                                My Stations
-                            </div>
-                            <BodyList list={this.state.empire.stations} current={this.state.body.id}/>
+                            <BodyList title="My Stations" list={this.state.empire.stations} current={this.state.body.id}/>
                         </div>
                     :
                         ''
