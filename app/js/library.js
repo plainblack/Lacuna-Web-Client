@@ -318,6 +318,10 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             }
         },
 
+        capitalizeFirstLetter : function(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
         getSelectedOption : function(select) {
             //just making sure
             select = Dom.get(select);

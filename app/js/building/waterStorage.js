@@ -92,7 +92,7 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
                                 Event.purgeElement(ce);
                                 ce.innerHTML = "";
                                 ce.appendChild(this.DumpGetDisplay(o.result.dump));
-                                Dom.get("dumpMessage").innerHTML = "Successfully converted " + amount + " " + type + " to waste.";
+                                Dom.get("dumpMessage").innerHTML = "Successfully converted " + Lib.formatNumber(amount) + " " + type + " to waste.";
                                 Lib.fadeOutElm("dumpMessage");
                             }
                         },

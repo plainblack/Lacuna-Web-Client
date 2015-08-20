@@ -444,7 +444,7 @@ if (typeof YAHOO.lacuna.buildings.Archaeology == "undefined" || !YAHOO.lacuna.bu
           if(this.ore.hasOwnProperty(oKey)) {
             var nOpt = opt.cloneNode(false);
             nOpt.value = oKey;
-            nOpt.innerHTML = [oKey, ' (', this.ore[oKey], ')'].join('');
+            nOpt.innerHTML = [oKey, ' (', Lib.formatNumber(this.ore[oKey]), ')'].join('');
             sel.appendChild(nOpt);
           }
         }

@@ -1209,8 +1209,11 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 	overflow: auto;
 }
 
+.buildQueue .buildQueueRank {
+	width:30px;
+}
 .buildQueue .buildQueueName {
-	width:200px;
+	width:170px;
 }
 .buildQueue .buildQueueLevel {
 	width:50px;

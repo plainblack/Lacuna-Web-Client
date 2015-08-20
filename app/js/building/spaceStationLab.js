@@ -105,18 +105,25 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
         buildLevels : function(levelCosts) {
             var frag = ['<table id="stationLabLevels" class="buildingStats" cellpadding="0" cellspacing="0"><col width="53" /><colgroup span="6" width="110" />'],
                 planet = Game.GetCurrentPlanet();
-                
+            var buildfield = function(costs,type) {
+                return [
+                        '<td class="',
+                        costs[type] > planet[type+"_stored"] ? 'low-resource' : '',
+                        '" title="', Lib.formatNumber(costs[type]),'">',
+                        Lib.convertNumDisplay(costs[type]),
+                        '</td>'
+                       ].join('');
+            };
             for(var n=0; n<levelCosts.length; n++) {
                 var costs = levelCosts[n];
                 frag[frag.length] = [
                     '<tr><th>', costs.level, ':</th>',
-                    '    <td class=',costs.food > planet.food_stored ? 'low-resource' : '','>',costs.food,'</td>',
-                    '    <td class=',costs.ore > planet.ore_stored ? 'low-resource' : '','>',costs.ore,'</td>',
-                    '    <td class=',costs.water > planet.water_stored ? 'low-resource' : '','>',costs.water,'</td>',
-                    '    <td class=',costs.energy > planet.energy_stored ? 'low-resource' : '','>',costs.energy,'</td>',
-                    '    <td>',costs.waste,'</td>',
+                    buildfield(costs,'food'),
+                    buildfield(costs,'ore'),
+                    buildfield(costs,'water'),
+                    buildfield(costs,'energy'),
+                    buildfield(costs,'waste'),
                     '    <td>',Lib.formatTime(costs.time),'</td>',
-                    //'    <td><input type="radio" name="stationLabSelectLevel" value="',costs.level,'" /></td>',
                     '    <td><button type="button" value="',costs.level,'">Make</button></td>',
                     '</tr>'
                 ].join('');

@@ -34,23 +34,37 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             return [this._getPlanTab(), this._getResourcesTab()];
         },
         _getPlanetTab : function() {
-            var planet = this.result.planet,
-                tab = new YAHOO.widget.Tab({ label: "Planet", content: [
+            var planet = this.result.planet;
+            var details = function(type,imgclass) {
+                var Type = Lib.capitalizeFirstLetter(type);
+                var stored   = planet[type+"_stored"] || planet[type];
+                var capacity = planet[type+"_capacity"];
+                var perhour  = planet[type+"_hour"];
+                if (!imgclass) {
+                    imgclass = Type;
+                }
+                return [
+                        '<li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/',type,'.png" title="',Type,'" class="small',imgclass,'" /></span>',
+                        '    <span class="pcStored" title="',Lib.formatNumber(stored),'">',Lib.convertNumDisplay(stored),'</span>',
+                        capacity ? [
+                        '    <span class="pcSlash">/</span>',
+                        '    <span class="pcCapacity" title="',Lib.formatNumber(capacity),'">',Lib.convertNumDisplay(capacity),'</span>'].join('') :
+                        [
+                         '<span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span>'
+                        ].join(''),
+                        '  @ <span class="pcPerHour" title="',Lib.formatNumber(perhour),'">',Lib.convertNumDisplay(perhour),'/hr</span></li>',
+                       ].join('');
+            };
+            var tab = new YAHOO.widget.Tab({ label: "Planet", content: [
                     '<div class="yui-g buildingDetailsExtra">',
                     '    <div class="yui-u first">',
                     '        <ul>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/food.png" title="Food" class="smallFood" /></span>',
-                    '                <span class="pcStored">',planet.food_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.food_capacity, '</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.food_hour),'</span>/hr</li>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/ore.png" title="Ore" class="smallOre" /></span>',
-                    '                <span class="pcStored">',planet.ore_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.ore_capacity, '</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.ore_hour),'</span>/hr</li>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/water.png" title="Water" class="smallWater" /></span>',
-                    '                <span class="pcStored">',planet.water_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.water_capacity, '</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.water_hour),'</span>/hr</li>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/energy.png" title="Energy" class="smallEnergy" /></span>',
-                    '                <span class="pcStored">',planet.energy_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.energy_capacity, '</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.energy_hour),'</span>/hr</li>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/waste.png" title="Waste" class="smallWaste" /></span>',
-                    '                <span class="pcStored">',planet.waste_stored, '</span><span class="pcSlash">/</span><span class="pcCapacity">', planet.waste_capacity, '</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.waste_hour),'</span>/hr</li>',
-                    '            <li><span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" title="Happiness" class="smallHappy" /></span>',
-                    '                <span class="pcStored">',planet.happiness, '</span><span class="pcSlash">&nbsp;</span><span class="pcCapacity">&nbsp;</span> @ <span class="pcPerHour">', Lib.convertNumDisplay(planet.happiness_hour),'</span>/hr</li>',
+                    details('food'),
+                    details('ore'),
+                    details('water'),
+                    details('energy'),
+                    details('waste'),
+                    details('happiness','Happy'),
                     '        </ul>',
                     '    </div>',
                     '    <div class="yui-u first">',
@@ -59,8 +73,8 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     '            <li><label>Planet Size:</label>',planet.size,'</li>',
                     '            <li><label>Plots Available:</label>',(planet.plots_available || 0)*1,'</li>',
                     '            <li><label>Population:</label>',Lib.formatNumber(planet.population),'</li>',
-                    '            <li><label>Next Colony Cost:</label>',Lib.formatNumber(this.result.next_colony_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>',
-                    this.result.next_station_cost ? ['<li><label>Next Station Cost:</label>',Lib.formatNumber(this.result.next_station_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>'].join('') : '',
+                    '            <li title="',Lib.formatNumber(this.result.next_colony_cost),'"><label>Next Colony Cost:</label>',Lib.convertNumDisplay(this.result.next_colony_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>',
+                    this.result.next_station_cost ? ['<li title="',Lib.formatNumber(this.result.next_station_cost),'"><label>Next Station Cost:</label>',Lib.convertNumDisplay(this.result.next_station_cost),'<span class="smallImg"><img src="',Lib.AssetUrl,'ui/s/happiness.png" /></span></li>'].join('') : '',
                     '            <li><label>Location:</label>',planet.x,'x : ',planet.y,'y</li>',
                     '            <li><label>Zone:</label>',planet.zone,'</li>',
                     '            <li><label>Star:</label>',planet.star_name,' (Star ID: ',planet.star_id,')</li>',
@@ -139,9 +153,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                 food_items += [
                     '<li><label>',
                     food.titleCaps(),
-                    '</label><span class="pcStored">',
-                    this.result.food[food+"_stored"],
-                    '</span> @ <span class="pcPerHour">',
+                    '</label><span class="pcStored" title="', Lib.formatNumber(this.result.food[food+"_stored"]),'">',
+                    Lib.convertNumDisplay(this.result.food[food+"_stored"]),
+                    '</span> @ <span class="pcPerHour" title="',Lib.formatNumber(this.result.food[food+"_hour"]),'">',
                     Lib.convertNumDisplay(this.result.food[food+"_hour"]),
                     '</span>/hr</li>',
                 ].join('');
@@ -156,24 +170,24 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                 ore_items += [
                     '<li><label>',
                     ore.titleCaps(),
-                    '</label><span class="pcStored">',
-                    this.result.ore[ore+"_stored"],
-                    '</span> @ <span class="pcPerHour">',
+                    '</label><span class="pcStored" title="', Lib.formatNumber(this.result.ore[ore+"_stored"]),'">',
+                    Lib.convertNumDisplay(this.result.ore[ore+"_stored"]),
+                    '</span> @ <span class="pcPerHour" title="',Lib.formatNumber(this.result.ore[ore+"_hour"]),'">',
                     Lib.convertNumDisplay(this.result.ore[ore+"_hour"]),
                     '</span>/hr</li>',
                 ].join('');
             }
             ore_items += [
-                    '<li><label>Water</label><span class="pcStored">',
-                    this.result.planet.water_stored,
-                    '</span> @ <span class="pcPerHour">',
+                    '<li><label>Water</label><span class="pcStored" title="', Lib.formatNumber(this.result.planet.water_stored),'">',
+                    Lib.convertNumDisplay(this.result.planet.water_stored),
+                    '</span> @ <span class="pcPerHour" title="',Lib.formatNumber(this.result.planet.water_hour),'">',
                     Lib.convertNumDisplay(this.result.planet.water_hour),
                     '</span>/hr</li>',
                 ].join('');
             ore_items += [
-                    '<li><label>Energy</label><span class="pcStored">',
-                    this.result.planet.energy_stored,
-                    '</span> @ <span class="pcPerHour">',
+                    '<li><label>Energy</label><span class="pcStored" title="', Lib.formatNumber(this.result.planet.energy_stored),'">',
+                    Lib.convertNumDisplay(this.result.planet.energy_stored),
+                    '</span> @ <span class="pcPerHour" title="',Lib.formatNumber(this.result.planet.energy_hour),'">',
                     Lib.convertNumDisplay(this.result.planet.energy_hour),
                     '</span>/hr</li>',
                 ].join('');
