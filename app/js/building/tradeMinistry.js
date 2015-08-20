@@ -2275,7 +2275,7 @@ _getWasteChainTab : function() {
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"shipHold");
-                    nLi.innerHTML = ship.hold_size;
+                    nLi.innerHTML = Lib.formatNumber(ship.hold_size);
                     nUl.appendChild(nLi);
                     
                     nLi = li.cloneNode(false);
@@ -2516,7 +2516,7 @@ _getWasteChainTab : function() {
 
                     nLi = li.cloneNode(false);
                     Dom.addClass(nLi,"shipHold");
-                    nLi.innerHTML = ship.hold_size;
+                    nLi.innerHTML = Lib.formatNumber(ship.hold_size);
                     nUl.appendChild(nLi);
                     
                     nLi = li.cloneNode(false);

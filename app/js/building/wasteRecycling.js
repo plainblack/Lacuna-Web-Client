@@ -76,7 +76,7 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
                                 }
                                 else {
                                     ce.appendChild(this.RecycleGetDisplay(o.result.recycle));
-                                    this.recycleMessageEl.innerHTML = "Successfully recycled " + total + " waste.";
+                                    this.recycleMessageEl.innerHTML = "Successfully recycled " + Lib.formatNumber(total) + " waste.";
                                 }
                             }
                         },

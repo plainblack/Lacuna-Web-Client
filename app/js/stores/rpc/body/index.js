@@ -212,7 +212,7 @@ var BodyRPCStore = Reflux.createStore({
         this.data.energy_percent_full = (this.data.energy_stored / this.data.energy_capacity) * 100;
         this.data.waste_percent_full = (this.data.waste_stored / this.data.waste_capacity) * 100;
 
-        // Do this to reduce updating of the progres bars.
+        // Do this to reduce updating of the progress bars.
         this.data.food_percent_full = int(this.data.food_percent_full);
         this.data.ore_percent_full = int(this.data.ore_percent_full);
         this.data.water_percent_full = int(this.data.water_percent_full);
