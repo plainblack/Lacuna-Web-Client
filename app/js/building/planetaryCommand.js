@@ -317,7 +317,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                         Dom.addClass(nUl, "clearafter");
 
                         Dom.addClass(nLi,"planQuan");
-                        nLi.innerHTML = plan.quantity;
+                        nLi.innerHTML = Lib.formatNumber(plan.quantity);
                         nUl.appendChild(nLi);
 
                         nLi = li.cloneNode(false);
