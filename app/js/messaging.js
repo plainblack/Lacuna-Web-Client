@@ -1126,11 +1126,14 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
         isVisible : function() {
             return this.messagingPanel.cfg.getProperty("visible");
         },
+        _load : _.once(function() {
+            this._buildPanel();
+            this._buildAttachmentPanel();
+        }),
         show : function() {
             Game.OverlayManager.hideAll();
 
-            this._buildPanel();
-            this._buildAttachmentPanel();
+            this._load();
 
             this.messagingPanel.show();
             this.currentTab = this.inbox.id;

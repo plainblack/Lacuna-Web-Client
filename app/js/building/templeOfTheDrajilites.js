@@ -155,6 +155,7 @@ if (typeof YAHOO.lacuna.buildings.TempleOfTheDrajilites == "undefined" || !YAHOO
                             require('js/actions/menu/loader').hide();
                             this.rpcSuccess(o);
                             this.maps[nLi.Planet.id] = o.result.map;
+                            Lacuna.Messaging._load();
                             Lacuna.Messaging.attachmentPanel.load(o.result.map);
                         },
                         scope:this
