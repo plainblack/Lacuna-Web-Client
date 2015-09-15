@@ -31,7 +31,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
             return tabs;
         },
         getChildTabs : function() {
-            return [this._getPlanTab(), this._getResourcesTab()];
+            return [this._getPlanTab(), this._getResourcesTab(), this._getNotesTab()];
         },
         _getPlanetTab : function() {
             var planet = this.result.planet;
@@ -209,6 +209,19 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
             return this.resourcesTab;
         },
+        _getNotesTab : function() {
+            var notes = Game.GetCurrentPlanet().notes;
+            this.notesTab = new YAHOO.widget.Tab({ label: "Notes", content: [
+            '<div id="pccNotes">',
+            '    <textarea id="pccNotesText" title="Write down anything you would like to store with this body.">', $('<div/>').text(notes ? notes : '').html(), '</textarea>',
+            '    <button type="button" id="saveColonyNotes">Save</button>',
+            '</div>'
+            ].join('')});
+
+            Event.on("saveColonyNotes","click",this.SaveColonyNotes, this, true);
+
+            return this.notesTab;
+        },
         Abandon : function() {
             var cp = Game.GetCurrentPlanet();
             if(confirm(['Are you sure you want to abandon ',cp.name,'?'].join(''))) {
@@ -295,6 +308,20 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                     scope:this
                 }
             );
+        },
+        SaveColonyNotes : function(){
+            var cp = Game.GetCurrentPlanet();
+            var notes = Dom.get("pccNotesText").value;
+            require('js/actions/menu/loader').show();
+            Game.Services.Body.set_colony_notes({
+                session_id: Game.GetSession(""),
+                body_id: cp.id,
+                options: { notes: notes }
+            }, {
+                success : function(o) {
+                    require('js/actions/menu/loader').hide();
+                }
+            });
         },
         PlanPopulate : function(){
             var div = Dom.get("planDetails");
