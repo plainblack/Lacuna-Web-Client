@@ -13,6 +13,13 @@ var BodyRPCStore = require('js/stores/rpc/body');
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions = require('js/actions/menu/map');
 
+var toggle = function(callback) {
+    return function() {
+        RightSidebarActions.toggle();
+        callback();
+    };
+}
+
 var PlanetListItem = React.createClass({
     getInitialProps: function() {
         return {
@@ -26,23 +33,26 @@ var PlanetListItem = React.createClass({
         id: React.PropTypes.string.isRequired
     },
     handleClick: function() {
-        console.log('Chaning to planet (#' + this.props.id + ').');
+        console.log('Changing to planet (#' + this.props.id + ').');
         RightSidebarActions.toggle();
         MapActions.changePlanet(this.props.id);
     },
     render: function() {
+        var current_world = this.props.current === this.props.id;
         var classStr = classNames({
-            'ui large teal label': this.props.current === this.props.id,
-            'item': this.props.current !== this.props.id
+            'ui large teal label': current_world,
+            'item': !current_world
         });
+        var refresh = current_world ? toggle(function() { YAHOO.lacuna.MapPlanet.Refresh() }) :
+                this.handleClick;
 
         return (
-                <a className={classStr} onClick={this.handleClick} style={{
+                <a className={classStr} onClick={refresh} style={{
                 // For some reason this doesn't get set on the items (by Semantic) when it should.
                 cursor: 'pointer'
             }}>
                 {this.props.name}
-            </a>
+                </a>
         );
     }
 });
