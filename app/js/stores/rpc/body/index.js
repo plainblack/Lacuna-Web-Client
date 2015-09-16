@@ -4,8 +4,8 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var StatusActions = require('js/actions/status');
-
 var TickerActions = require('js/actions/ticker');
+var UserActions   = require('js/actions/user');
 
 var util = require('js/util');
 var int = util.int;
@@ -13,7 +13,8 @@ var int = util.int;
 var BodyRPCStore = Reflux.createStore({
     listenables: [
         StatusActions,
-        TickerActions
+        TickerActions,
+        UserActions
     ],
 
     data: {},
@@ -102,6 +103,10 @@ var BodyRPCStore = Reflux.createStore({
 
     getData: function() {
         return this.data;
+    },
+
+    onSignOut : function() {
+        this.getInitialState();
     },
 
     onUpdate: function(status) {

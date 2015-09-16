@@ -35,6 +35,7 @@ var Map = React.createClass({
             // Reset these values because we're *probably* logged out.
             this.previousMapMode = MapModeStore.PLANET_MAP_MODE;
             this.previousPlanetId = '';
+            this.state.planet = '';
 
             return <div></div>;
         }

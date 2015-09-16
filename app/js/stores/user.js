@@ -8,6 +8,7 @@ var SessionActions = require('js/actions/session');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 var UserActions = require('js/actions/user');
+var SessionStore = require('js/stores/session');
 
 var server = require('js/server');
 
@@ -24,10 +25,11 @@ var UserStore = Reflux.createStore({
         server.call({
             module: 'empire',
             method: 'logout',
-            params: [],
+            params: [SessionStore.getData()],
             success: function() {
                 // Here be the traditional code to reset the game...
                 YAHOO.lacuna.Game.Reset();
+                YAHOO.lacuna.MapPlanet.Reset();
                 YAHOO.lacuna.Game.DoLogin();
 
                 // Let the React stuff know what happened.
