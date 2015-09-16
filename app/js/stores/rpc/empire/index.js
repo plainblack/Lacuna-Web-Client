@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var StatusActions = require('js/actions/status');
+var UserActions   = require('js/actions/user');
 
 function bodyObjectToArray(bodyObj) {
     var arr = [];
@@ -19,7 +20,7 @@ function bodyObjectToArray(bodyObj) {
 }
 
 var EmpireRPCStore = Reflux.createStore({
-    listenables: StatusActions,
+    listenables: [ StatusActions, UserActions ],
 
     data: {},
 
@@ -51,6 +52,10 @@ var EmpireRPCStore = Reflux.createStore({
 
     getData: function() {
         return this.data;
+    },
+
+    onSignOut : function() {
+        this.getInitialState();
     },
 
     onUpdate: function(status) {
