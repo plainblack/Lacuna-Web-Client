@@ -26,6 +26,10 @@ body {
 select, input, button, textarea, button {
 	font-family:verdana;
 }
+a:link, a:visited {
+  	text-decoration: underline;
+	color:#fff;
+},
 a, a:link, a:visited {
 	color:#fff;
 }
