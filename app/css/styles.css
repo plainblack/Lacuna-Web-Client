@@ -1040,7 +1040,7 @@ planet details
 }
 #builderMenu .builderMenuGroup a {
 	width: 200px;
-	height: 20px;
+	/*height: 20px;*/
 }
 #builderMenu .builderMenuGroup em {
 	font-weight: bold;
