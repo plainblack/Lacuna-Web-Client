@@ -79,10 +79,6 @@ var LeftSidebar = React.createClass({
                     <i className="add user icon"></i>
                     Invite a Friend
                 </a>
-                /*<a className="item" onClick={toggle(NotesActions.show)}>
-                    <i className="edit icon"></i>
-                    Notes
-                </a>*/
                 <a className="item" onClick={toggle(OptionsActions.show)}>
                     <i className="options icon"></i>
                     Options
@@ -98,5 +94,11 @@ var LeftSidebar = React.createClass({
         );
     }
 });
+
+//                <a className="item" onClick={toggle(NotesActions.show)}>
+//                    <i className="edit icon"></i>
+//                    Notes
+//                </a>
+
 
 module.exports = LeftSidebar;

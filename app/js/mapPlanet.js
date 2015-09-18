@@ -844,7 +844,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     newB.url = callback.url;
                     newB.x = x;
                     newB.y = y;
-                    newB.updated = (newB.level != this.buildings[newB.id].level);
+                    newB.updated = !this.buildings[newB.id] || (newB.level != this.buildings[newB.id].level);
                     this.ReloadBuilding(newB);
                     /*newB = this.CleanBuilding(newB);
                     this.buildings[newB.id] = newB;
