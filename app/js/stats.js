@@ -36,7 +36,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
                 effect:Game.GetContainerEffect(),
                 underlay:false,
                 close:true,
-                width:"750px",
+                width:"800px",
                 zIndex:9999
             });
             this.Panel.renderEvent.subscribe(function(){
@@ -468,7 +468,7 @@ EmpireStats : function(){
                       {key:"population", label:"Pop", formatter:"number"},
                       {key:"empire_size", label:"Empire Size", formatter:"number", sortable:true},
                       {key:"building_count", label:"Buildings", formatter:"number"},
-                      {key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
+                      {key:"average_building_level", label:"Avg Bld", formatter:"number"},
                       {key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
                       {key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
                       {key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
@@ -710,10 +710,10 @@ initialRequest: Lang.JSON.stringify({
                     {key:"colony_count", label:"Colonies", formatter:"number"},
                     {key:"population", label:"Pop", formatter:"number", sortable:true},
                     {key:"influence", label:"Influence", formatter:"number", sortable:true},
-                    {key:"space_station_count", label:"Space Stations", formatter:"number", sortable:true},
-                    {key:"average_empire_size", label:"Avg. Empire Size", formatter:"number", sortable:true},
+                    {key:"space_station_count", label:"Stations", formatter:"number", sortable:true},
+                    {key:"average_empire_size", label:"Avg Emp", formatter:"number", sortable:true},
                     {key:"building_count", label:"Buildings", formatter:"number"},
-                    {key:"average_building_level", label:"Avg. Building Lvl", formatter:"number"},
+                    {key:"average_building_level", label:"Avg Bld", formatter:"number"},
                     {key:"offense_success_rate", label:"Offense", formatter:this.formatPercent, sortable:true},
                     {key:"defense_success_rate", label:"Defense", formatter:this.formatPercent, sortable:true},
                     {key:"dirtiest", label:"Dirtiest", formatter:"number", sortable:true}
@@ -948,8 +948,8 @@ initialRequest: Lang.JSON.stringify({
                     {key:"planet_name", label:"Colony"},
                     {key:"population", label:"Pop", sortable:true},
                     {key:"building_count", label:"Buildings"},
-                    {key:"average_building_level", label:"Avg. Building Lvl"},
-                    {key:"highest_building_level", label:"High Building Lvl"}
+                    {key:"average_building_level", label:"Avg Bld Lvl"},
+                    {key:"highest_building_level", label:"High Bld Lvl"}
                 ];
 
                 this.ColonyData = new Util.XHRDataSource("/stats");
