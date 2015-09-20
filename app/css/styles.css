@@ -113,6 +113,11 @@ button[disabled], input[type="submit"][disabled], input[type="button"][disabled]
 /*
 YUI dialog skin
 */
+body{
+    font:13px/1.231 arial,helvetica,clean,sans-serif;
+    *font-size:small;
+    *font:x-small;
+}
 body.yui-skin-sam .yui-panel {
 	border-width:0;
 }

@@ -431,9 +431,8 @@ _getStarsHtml : function() {
                                ].join('');
                 },
 _getGlyphsHtml : function() {
-                    var data = this._serverOverview.glyphs;
-
-                    output = ['<ul class="statsList">'];
+                    var data = this._serverOverview.glyphs,
+                        output = ['<ul class="statsList">'];
                     var glyphs = new Array;
                     var i = 0;
                     for (var bt in data.types) {
