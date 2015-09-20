@@ -1852,6 +1852,7 @@ ul.statsSubList, ul.statsSubList ul {
 }
 #statsTabs .yui-dt {
 	color:black;
+        column-width: auto;
 }
 /*#statsEmpireTable, #statsColonyTable, #statsSpyTable {
 	color:black;
