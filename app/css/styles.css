@@ -8,6 +8,7 @@ html {
 	background: black url('//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png');
 	color:#fff;
 	overflow: hidden;
+	box-sizing: content-box;
 }
 body {
 	font-family:verdana;
