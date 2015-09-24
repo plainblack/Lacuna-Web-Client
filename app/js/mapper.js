@@ -1277,8 +1277,8 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
             this.maxZoom = 2;
             this.minZoom = -2;
 
-            this.bounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
-            this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-5};
+            this.bounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-6};
+            this.maxBounds = {x1Left:-5,x2Right:5,y1Top:5,y2Bottom:-6};
 
             this.Tile = Mapper.PlanetTile;
             this.TileLayer = Mapper.PlanetTileLayer;
