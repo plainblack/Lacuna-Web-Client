@@ -47,7 +47,7 @@ var Chat = React.createClass({
         //window.PNotify = require('pnotify');
         if (!window.PNotify) {
             $.getScript('//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js', _.bind(function(data, textStatus, jqXHR) {
-                if (textStatus === 'success' && jsXHR.status === 200) {
+                if (textStatus === 'success' && jqXHR.status === 200) {
                 }
             }, this));
         }
