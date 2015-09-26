@@ -38,7 +38,6 @@ var EmpireRPCStore = Reflux.createStore({
             next_colony_cost: 0,
             next_colony_srcs: 0,
             next_station_cost: 0,
-            insurrect_value:  0,
             planets: [],
             primary_embassy_id: 0,
             rpc_count: 0,
