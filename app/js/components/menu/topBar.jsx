@@ -35,14 +35,6 @@ var TopBar = React.createClass({
             variation: 'inverted',
             content: label
         });
-
-        var sdal = this.state.empire.self_destruct_active === 1 ?
-            'Self Destruct at '.Lib.formatServerDate(this.state.empire.self_destruct_date) : 'Activate Self Destruct';
-
-        $(this.refs.toggleBombButton.getDOMNode()).popup('destroy').popup({
-            variation: 'inverted',
-            content: sdal
-        });
     },
     componentWillUnmount: function() {
         // Destroy!
@@ -59,15 +51,6 @@ var TopBar = React.createClass({
                 display: 'inline-block',
                 top: '15px'
             }}>
-                <a className="item" ref="toggleBombButton" onClick={DestructActions.toggleBombMode}>
-                {
-                    this.state.empire.self_destruct_active === 1
-                        ?
-                        <i className="red bomb big icon"></i>
-                        :
-                        <i className="bomb big icon"></i>
-                }
-                </a>
                 <a className="item" ref="toggleMapButton" onClick={MapActions.toggleMapMode}>
                     <i className="map big icon"></i>
                 </a>
