@@ -96,6 +96,7 @@ if (typeof YAHOO.lacuna.Captcha == "undefined" || !YAHOO.lacuna.Captcha) {
                     this._retry();
                 },
                 failure : function(o) {
+                    this.refreshCaptcha();
                     this.setError(o.error.message);
                     return true;
                 },
