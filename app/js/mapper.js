@@ -601,6 +601,9 @@ if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
         _createActionIcon : function() {
             if(this.actionIcon) {
                 if(this.data) {
+                    if (Game.GetCookieSettings("showLevels","0") == "1") {
+                        Dom.setStyle(this.actionIcon, "visibility", "visible");
+                    }
                     this.actionIcon.innerHTML = ['<div class="planetMapTileActionLevel">',this.data.level,'</div>'].join('');
                 }
                 else {
