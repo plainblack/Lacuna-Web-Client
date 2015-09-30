@@ -54,12 +54,6 @@ var BottomBar = React.createClass({
             ].join('');
 
     },
-    componentDidUpdate: function() {
-        // Now set it up.
-        //$('div', this.refs.bottombar.getDOMNode()).popup('destroy').popup();
-        //$('#happybar').popup({html:this.calcToolTip('Happiness','happiness','smallHappy',this.state.body.happiness_hour,this.state.body.happiness)});
-
-    },
     componentWillUnmount: function() {
         // Destroy!
         $('div', this.refs.bottombar.getDOMNode()).popup('destroy');
@@ -169,7 +163,8 @@ var BottomBar = React.createClass({
                     {util.reduceNumber(this.state.body.waste_hour)} / hr
                 </div>
 
-                <div className="item">
+                <div id="buildingcountbar" className="item"
+                onMouseEnter={function(){$('#buildingcountbar').popup({html:"How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plots</a> you have available.",hoverable:true,delay:{hide:800}})}}>
                     <i className="block layout big icon"></i>
                     <p style={storageStyle}>
                         {
@@ -179,6 +174,15 @@ var BottomBar = React.createClass({
                         } Buildings
                         <br />
                         {this.state.body.plots_available} Plots Available
+                    </p>
+                </div>
+
+                <div id="buildqueuebar" className="item"
+                onMouseEnter={function(){$('#buildqueuebar').popup({html:"How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.",hoverable:true,delay:{hide:800}})}}>
+                    <i className="list big icon" />
+                    <p style={storageStyle}>
+                        { this.state.body.build_queue_length || 0 } / {this.state.body.build_queue_size }
+                    <br />Constructing
                     </p>
                 </div>
             </div>
