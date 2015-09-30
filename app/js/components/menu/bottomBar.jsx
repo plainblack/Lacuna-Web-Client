@@ -181,7 +181,7 @@ var BottomBar = React.createClass({
                 onMouseEnter={function(){$('#buildqueuebar').popup({html:"How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.",hoverable:true,delay:{hide:800}})}}>
                     <i className="list big icon" />
                     <p style={storageStyle}>
-                        { this.state.body.build_queue_length || 0 } / {this.state.body.build_queue_size }
+                        { this.state.body.build_queue_len } / {this.state.body.build_queue_size }
                     <br />Constructing
                     </p>
                 </div>
