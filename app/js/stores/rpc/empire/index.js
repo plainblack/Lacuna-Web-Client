@@ -6,6 +6,9 @@ var _ = require('lodash');
 var StatusActions = require('js/actions/status');
 var UserActions   = require('js/actions/user');
 
+var util = require('js/util');
+var int = util.int;
+
 function bodyObjectToArray(bodyObj) {
     var arr = [];
     _.each(bodyObj, function(value, key) {
@@ -68,6 +71,7 @@ var EmpireRPCStore = Reflux.createStore({
             // Possible things to do here:
             //  ~ Turn self_destruct_date into a Date object.
             //  ~ See also: Game.ProcessStatus.
+            this.data.self_destruct_active = int(this.data.self_destruct_active);
 
             // Fix up all the planet lists.
             this.data.colonies = bodyObjectToArray(this.data.colonies);

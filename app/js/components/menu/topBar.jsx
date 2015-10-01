@@ -8,6 +8,7 @@ var EmpireRPCStore = require('js/stores/rpc/empire');
 var MapModeStore = require('js/stores/menu/mapMode');
 
 var centerBar = require('js/components/mixin/centerBar');
+var classNames = require('classnames');
 
 var UserActions = require('js/actions/user');
 var MapActions = require('js/actions/menu/map');
@@ -41,8 +42,9 @@ var TopBar = React.createClass({
         $('a', this.refs.bar.getDOMNode()).popup('destroy');
     },
     render: function() {
+        var barStyle = classNames('ui',{red:this.state.empire.self_destruct_active,blue:!this.state.empire.self_destruct_active},'inverted','menu');
         return (
-            <div className="ui blue inverted menu" ref="bar" style={{
+            <div className={barStyle} ref="bar" style={{
                 position: 'fixed',
                 margin: 0,
                 zIndex: 2000,
