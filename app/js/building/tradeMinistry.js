@@ -470,7 +470,7 @@ _getWasteChainTab : function() {
             }
         },
         getStoredResources : function(force) {
-            if(force || !this.resources) {
+            if(this.result.building.efficiency >= 100 && ( force || !this.resources) ) {
                 require('js/actions/menu/loader').show();
                 this.service.get_stored_resources({
                         session_id: Game.GetSession(""),
