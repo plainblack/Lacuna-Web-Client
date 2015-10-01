@@ -132,10 +132,12 @@ var BodyRPCStore = Reflux.createStore({
         this.data.plots_available = int(this.data.plots_available);
         this.data.building_count = int(this.data.building_count);
 
+        // no point recalcing for each ship.
+        var server_time_ms = util.serverDateToMs(status.server.time);
 
         var updateShip = function(ship) {
             ship.arrival_ms =
-            util.serverDateToMs(ship.date_arrives) - util.serverDateToMs(status.server.time);
+            util.serverDateToMs(ship.date_arrives) - server_time_ms;
         };
 
         _.map(this.data.incoming_own_ships, updateShip);
