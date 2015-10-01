@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var util = require('js/util');
 
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
@@ -95,9 +96,22 @@ var LeftSidebar = React.createClass({
                     <i className="refresh icon"></i>
                     Refresh
                 </a>
+
+                <div className="ui horizontal inverted divider">
+                    Self Destruct
+                </div>
+
                 <a className="item" onClick={this.onClickSelfDestruct} style={ this.state.empire.self_destruct_active === 1 ? {"color":"red"} : {} }>
-                    <i className="bomb icon"></i>
-                { this.state.empire.self_destruct_active === 1 ? "Disable" : "Enable" } Self Destruct
+                     <i className="bomb icon"></i>
+                { this.state.empire.self_destruct_active ? "Disable" : "Enable" } Self Destruct
+                {
+                    this.state.empire.self_destruct_active ?
+                        <p style={{margin:0}}>SELF DESTRUCT ACTIVE</p> : ''
+                }
+                {
+                        this.state.empire.self_destruct_active && this.state.empire.self_destruct_ms > 0 ?
+                         <p style={{"text-align":"right !important"}}> { util.formatMillisecondTime(this.state.empire.self_destruct_ms) } </p> : ''
+                }
                 </a>
 
             </div>

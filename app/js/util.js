@@ -1,5 +1,16 @@
 'use strict';
 
+var xPad=function (x, pad, r) {
+    if(typeof r === 'undefined') {
+        r=10;
+    }
+    for( ; parseInt(x, 10)<r && r>1; r/=10) {
+        x = pad.toString() + x;
+    }
+    return x.toString();
+};
+
+
 module.exports.reduceNumber = function(number, always) {
     if(number >= 100000000000000000 || number <= -100000000000000000) {
         //101Q
@@ -62,4 +73,33 @@ module.exports.serverDateToMs = function(serverDate) {
 
 module.exports.int = function(number) {
     return parseInt(number, 10);
+};
+
+module.exports.formatTime = function(totalSeconds) {
+    if(totalSeconds < 0) {
+        return "";
+    }
+
+    var secondsInDay = 60 * 60 * 24,
+    secondsInHour = 60 * 60,
+    day = Math.floor(totalSeconds / secondsInDay),
+    hleft = totalSeconds % secondsInDay,
+    hour = Math.floor(hleft / secondsInHour),
+    sleft = hleft % secondsInHour,
+    min = Math.floor(sleft / 60),
+    seconds = Math.floor(sleft % 60);
+
+    if(day > 0) {
+        return [day,xPad(hour,'0'),xPad(min,'0'),xPad(seconds,'0')].join(':');
+    }
+    else if(hour > 0) {
+        return [hour,xPad(min,'0'),xPad(seconds,'0')].join(':');
+    }
+    else {
+        return [min,xPad(seconds,'0')].join(':');
+    }
+};
+
+module.exports.formatMillisecondTime = function(ms) {
+    return this.formatTime(ms / 1000);
 };

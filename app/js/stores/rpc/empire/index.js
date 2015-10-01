@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var StatusActions = require('js/actions/status');
+var TickerActions = require('js/actions/ticker');
 var UserActions   = require('js/actions/user');
 
 var util = require('js/util');
@@ -23,7 +24,11 @@ function bodyObjectToArray(bodyObj) {
 }
 
 var EmpireRPCStore = Reflux.createStore({
-    listenables: [ StatusActions, UserActions ],
+    listenables: [
+        StatusActions,
+        TickerActions,
+        UserActions
+    ],
 
     data: {},
 
@@ -62,6 +67,22 @@ var EmpireRPCStore = Reflux.createStore({
         this.getInitialState();
     },
 
+    onTick: function() {
+        if (!this.data) {
+            return;
+        }
+
+        var updated = 0;
+        if (this.data.self_destruct_active) {
+            this.data.self_destruct_ms -= 1000;
+            updated = 1;
+        }
+
+        if (updated) {
+            this.trigger(this.data);
+        }
+    },
+
     onUpdate: function(status) {
         if (!status.empire) {
             return;
@@ -72,6 +93,13 @@ var EmpireRPCStore = Reflux.createStore({
             //  ~ Turn self_destruct_date into a Date object.
             //  ~ See also: Game.ProcessStatus.
             this.data.self_destruct_active = int(this.data.self_destruct_active);
+
+            if (this.data.self_destruct_active)
+            {
+                this.data.self_destruct_ms =
+                    util.serverDateToMs(this.data.self_destruct_date) -
+                    util.serverDateToMs(status.server.time);
+            }
 
             // Fix up all the planet lists.
             this.data.colonies = bodyObjectToArray(this.data.colonies);
