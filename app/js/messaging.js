@@ -1085,7 +1085,8 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             var res = el.href.match(/\#(-?\d+)$/);
             this.hide();
             var planet = Game.EmpireData.planets[res[1]];
-            Game.PlanetJump(planet);
+            require('js/actions/menu/map').changePlanet(res[1]);
+            //Game.PlanetJump(planet);
         },
         handleAllianceLink : function(e, el) {
             Event.stopEvent(e);
