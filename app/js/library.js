@@ -167,7 +167,7 @@ if (typeof YAHOO.lacuna.Library == "undefined" || !YAHOO.lacuna.Library) {
             return x.toString();
         },
         formatTime : function(totalSeconds) {
-            util.formatTime(totalSeconds);
+            return util.formatTime(totalSeconds);
         },
         formatNumber : function(num) {
             return Util.Number.format(num,{thousandsSeparator:","});

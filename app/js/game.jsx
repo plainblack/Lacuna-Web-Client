@@ -544,8 +544,9 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         StarJump : function(star) {
             YAHOO.log(star, "debug", "StarJump");
             Game.OverlayManager.hideAll();
-            Lacuna.MapPlanet.MapVisible(false);
-            Lacuna.MapStar.MapVisible(true);
+            require('js/stores/menu/mapMode').setMapMode('starMap');
+            //Lacuna.MapPlanet.MapVisible(false);
+            //Lacuna.MapStar.MapVisible(true);
             Lacuna.MapStar.Jump(star.x*1, star.y*1);
         },
         GetBuildingDesc : function(url) {
