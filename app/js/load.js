@@ -84,6 +84,7 @@
         require('js/building/embassy');
         require('js/building/energyReserve');
         require('js/building/entertainment');
+        require('js/building/essentiaVein');
         require('js/building/foodReserve');
         require('js/building/geneticsLab');
         require('js/building/intelligence');
