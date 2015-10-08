@@ -72,15 +72,11 @@ var EmpireRPCStore = Reflux.createStore({
             return;
         }
 
-        var updated = 0;
         if (this.data.self_destruct_active) {
             this.data.self_destruct_ms -= 1000;
-            updated = 1;
         }
 
-        if (updated) {
-            this.trigger(this.data);
-        }
+        this.trigger(this.data);
     },
 
     onUpdate: function(status) {
@@ -93,6 +89,7 @@ var EmpireRPCStore = Reflux.createStore({
             //  ~ Turn self_destruct_date into a Date object.
             //  ~ See also: Game.ProcessStatus.
             this.data.self_destruct_active = int(this.data.self_destruct_active);
+            this.data.essentia = int(this.data.essentia);
 
             if (this.data.self_destruct_active)
             {

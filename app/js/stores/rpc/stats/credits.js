@@ -17,7 +17,6 @@ var CreditsRPCStore = Reflux.createStore({
         server.call({
             module: 'stats',
             method: 'credits',
-            trigger: false,
             params: [],
             addSession: false,
             scope: this,

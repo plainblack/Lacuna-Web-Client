@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var $ = require('js/hacks/jquery');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 var MapModeStore = require('js/stores/menu/mapMode');
@@ -17,34 +16,31 @@ var MailActions = require('js/actions/window/mail');
 var EssentiaActions = require('js/actions/window/essentia');
 var StatsActions = require('js/actions/window/stats');
 
+var ReactTooltip = require('react-tooltip');
+
 var TopBar = React.createClass({
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(MapModeStore, 'mapMode'),
         centerBar('bar')
     ],
-    componentDidUpdate: function() {
-        // Now set it up.
-        $('a', this.refs.bar.getDOMNode()).popup('destroy').popup({
-            variation: 'inverted'
-        });
 
-        var label = this.state.mapMode === MapModeStore.PLANET_MAP_MODE ?
-            'To Star Map' : 'To Planet Map';
+    mapButtonTip: function() {
+        if (this.state.mapMode === MapModeStore.PLANET_MAP_MODE) {
+            return 'To Star Map';
+        } else {
+            return 'To Planet Map';
+        }
+    },
 
-        $(this.refs.toggleMapButton.getDOMNode()).popup('destroy').popup({
-            variation: 'inverted',
-            content: label
-        });
-    },
-    componentWillUnmount: function() {
-        // Destroy!
-        $('a', this.refs.bar.getDOMNode()).popup('destroy');
-    },
     render: function() {
-        var barStyle = classNames('ui',{red:this.state.empire.self_destruct_active,blue:!this.state.empire.self_destruct_active},'inverted','menu');
+        var barClass = classNames('ui inverted menu', {
+            red: this.state.empire.self_destruct_active,
+            blue: !this.state.empire.self_destruct_active
+        });
+
         return (
-            <div className={barStyle} ref="bar" style={{
+            <div className={barClass} ref="bar" style={{
                 position: 'fixed',
                 margin: 0,
                 zIndex: 2000,
@@ -53,10 +49,19 @@ var TopBar = React.createClass({
                 display: 'inline-block',
                 top: '15px'
             }}>
-                <a className="item" ref="toggleMapButton" onClick={MapActions.toggleMapMode}>
+
+                <ReactTooltip
+                    effect="solid"
+                    place="bottom"
+                    type="dark"
+                />
+
+                <a className="item" data-tip={this.mapButtonTip()}
+                    onClick={MapActions.toggleMapMode}>
                     <i className="map big icon"></i>
                 </a>
-                <a className="item" data-content="Mail" onClick={MailActions.show}>
+
+                <a className="item" data-tip="Mail" onClick={MailActions.show}>
                     <i className="mail big icon"></i>
                     {
                         this.state.empire.has_new_messages > 0
@@ -68,16 +73,19 @@ var TopBar = React.createClass({
                                 ''
                     }
                 </a>
-                <a className="item" data-content="Essentia" onClick={EssentiaActions.show}>
+
+                <a className="item" data-tip="Essentia" onClick={EssentiaActions.show}>
                     <i className="money big icon"></i>
                     <div className="ui teal floated right circular label">
-                        {parseInt(this.state.empire.essentia, 10)}
+                        {this.state.empire.essentia}
                     </div>
                 </a>
-                <a className="item" data-content="Universe Rankings" onClick={StatsActions.show}>
+
+                <a className="item" data-tip="Universe Rankings" onClick={StatsActions.show}>
                     <i className="find big icon"></i>
                 </a>
-                <a className="item" data-content="Sign Out" onClick={UserActions.signOut}>
+
+                <a className="item" data-tip="Sign Out" onClick={UserActions.signOut}>
                     <i className="power big icon"></i>
                 </a>
             </div>
