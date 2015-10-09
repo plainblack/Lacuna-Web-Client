@@ -22,7 +22,7 @@ var RPCCount = React.createClass({
                 zIndex: '10000',
                 padding: '5px',
                 borderRadius: '2px'
-            }} title="Number of clicks you've made this 24 hour period.">
+            }}>
                 Actions (RPCs): {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
             </div>
         );

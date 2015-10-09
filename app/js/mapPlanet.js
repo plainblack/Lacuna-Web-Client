@@ -939,7 +939,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 panel.img.src = [Lib.AssetUrl, "planet_side/100/", building.image, ".png"].join('');
                 panel.desc.innerHTML = Game.GetBuildingDesc(building.url);
                 if(building.pending_build) {
-                    panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(building.pending_build.seconds_remaining);
+                    panel.timeLeftLi.innerHTML = "<label>Build Time Remaining:</label> " + Lib.formatTime(building.pending_build.seconds_remaining);
                     if(building.pending_build.seconds_remaining > 0) {
                         panel.addQueue(building.pending_build.seconds_remaining,
                             function(remaining, elm){
@@ -950,7 +950,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                                     this.DetailsView({data:{id:building.id,url:building.url},x:building.x,y:building.y});
                                 }
                                 else {
-                                    elm.innerHTML = "<label>Build Time Remaining:</label>" + Lib.formatTime(rf);
+                                    elm.innerHTML = "<label>Build Time Remaining:</label> " + Lib.formatTime(rf);
                                 }
                             },
                             panel.timeLeftLi,
