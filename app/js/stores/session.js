@@ -7,11 +7,12 @@ var SessionActions = require('js/actions/session');
 var SessionStore = Reflux.createStore({
     listenables: SessionActions,
 
-    data: '',
+    init: function() {
+        this.data = this.getInitialState();
+    },
 
     getInitialState: function() {
-        this.data = '';
-        return this.data;
+        return '';
     },
 
     getData: function() {

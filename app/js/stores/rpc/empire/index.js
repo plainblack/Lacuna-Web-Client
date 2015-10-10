@@ -30,10 +30,12 @@ var EmpireRPCStore = Reflux.createStore({
         UserActions
     ],
 
-    data: {},
+    init: function() {
+        this.data = this.getInitialState();
+    },
 
     getInitialState: function() {
-        this.data = {
+        return {
             colonies : [],
             essentia: 0,
             has_new_messages: 0,
@@ -55,8 +57,6 @@ var EmpireRPCStore = Reflux.createStore({
             status_message: '',
             tech_level: 0
         };
-
-        return this.data;
     },
 
     getData: function() {
