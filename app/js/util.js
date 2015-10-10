@@ -76,7 +76,7 @@ module.exports.int = function(number) {
 };
 
 module.exports.formatTime = function(totalSeconds) {
-    if(totalSeconds < 0) {
+    if (totalSeconds < 0) {
         return "";
     }
 

@@ -84,7 +84,7 @@ var AboutWindow = React.createClass({
     ],
     render: function() {
         return (
-            <Panel title="About" height={400} onClose={AboutActions.hide} show={this.state.show}>
+            <Panel title="About" onClose={AboutActions.hide} show={this.state.show}>
 
                 <h2>The Lacuna Expanse</h2>
                 <About />
