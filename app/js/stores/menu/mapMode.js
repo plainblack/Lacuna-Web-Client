@@ -10,11 +10,12 @@ var STAR_MAP_MODE = 'starMap';
 var MapModeStore = Reflux.createStore({
     listenables: MapActions,
 
-    mapMode: undefined,
+    init: function() {
+        this.mapMode = this.getInitialState();
+    },
 
     getInitialState: function() {
-        this.mapMode = PLANET_MAP_MODE;
-        return this.mapMode;
+        return PLANET_MAP_MODE;
     },
 
     setMapMode: function(mapMode) {

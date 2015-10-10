@@ -2,7 +2,7 @@
 
 module.exports = {
     init: function() {
-        this.data = undefined;
+        this.data = this.getInitialState ? this.getInitialState() : false;
     },
 
     getData: function() {
@@ -12,12 +12,12 @@ module.exports = {
     onShow: function() {
         console.log('Window show triggered.');
         this.data = true;
-        this.trigger(true);
+        this.trigger(this.data);
     },
 
     onHide: function() {
         console.log('Window hide triggered.');
         this.data = false;
-        this.trigger(false);
+        this.trigger(this.data);
     }
 };
