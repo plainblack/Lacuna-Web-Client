@@ -821,7 +821,7 @@ Info dialogs for Empire and Alliance
 	z-index:30;
 	width:20px;
 	height:255px;
-	left:15px;
+	right:15px;
 	top:100px;
 }
 .mapiator_zoom_slider {
@@ -2020,16 +2020,6 @@ input, textarea, select, option {
 	right: 15px;
 	top: 100px;
 	z-index: 2000;
-}
-
-/* Custom RPCCount stuff */
-
-#RPCCount {
-	opacity: 0.3;
-}
-
-#RPCCount:hover {
-	opacity: 1;
 }
 
 

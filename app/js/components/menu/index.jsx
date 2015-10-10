@@ -37,11 +37,8 @@ var Menu = React.createClass({
                     <div id="oldYUIPanelContainer"></div>
 
                     <Loader />
-                    <RPCCount />
-
                     <BottomBar />
-
-                    { /* Chat, yay! */ }
+                    <RPCCount />
                     <Chat />
                 </div>
             );
