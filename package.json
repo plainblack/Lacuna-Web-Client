@@ -30,9 +30,11 @@
     "react": "0.13.3",
     "react-draggable": "0.8.0",
     "react-progress": "0.0.3",
+    "react-tabs": "0.4.1",
     "react-tooltip": "0.6.4",
     "reactify": "1.1.0",
     "reflux": "0.2.7",
+    "validator": "4.1.0",
     "vinyl-source-stream": "1.1.0",
     "fingerprintjs2": "0.8.0"
   }

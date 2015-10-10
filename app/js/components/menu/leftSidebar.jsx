@@ -73,7 +73,6 @@ var SelfDestruct = React.createClass({
         server.call({
             module: 'empire',
             method: method,
-            trigger: false,
             params: [],
             scope: this,
             success: function() {

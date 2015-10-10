@@ -16,8 +16,6 @@ var MailActions = require('js/actions/window/mail');
 var EssentiaActions = require('js/actions/window/essentia');
 var StatsActions = require('js/actions/window/stats');
 
-var ReactTooltip = require('react-tooltip');
-
 var TopBar = React.createClass({
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
@@ -49,12 +47,6 @@ var TopBar = React.createClass({
                 display: 'inline-block',
                 top: '15px'
             }}>
-
-                <ReactTooltip
-                    effect="solid"
-                    place="bottom"
-                    type="dark"
-                />
 
                 <a className="item" data-tip={this.mapButtonTip()}
                     onClick={MapActions.toggleMapMode}>
