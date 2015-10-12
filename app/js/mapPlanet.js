@@ -814,6 +814,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     b.id = o.result.building.id;
                     b.level = o.result.building.level;
                     b.pending_build = o.result.building.pending_build;
+                    b.work = o.result.building.work;
                     b.x = x;
                     b.y = y;
                     //YAHOO.log(b, "info", "MapPlanet.Build.success.building");
