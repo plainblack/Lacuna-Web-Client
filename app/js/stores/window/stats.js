@@ -8,12 +8,7 @@ var StatsActions = require('js/actions/window/stats');
 
 var StatsWindowStore = Reflux.createStore({
     mixins: [Window],
-    listenables: StatsActions,
-
-    getInitialState: function() {
-        this.data = false;
-        return this.data;
-    }
+    listenables: StatsActions
 });
 
 module.exports = StatsWindowStore;

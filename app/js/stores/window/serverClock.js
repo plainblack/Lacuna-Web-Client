@@ -8,12 +8,7 @@ var ServerClockActions = require('js/actions/window/serverClock');
 
 var ServerClockWindowStore = Reflux.createStore({
     mixins: [Window],
-    listenables: ServerClockActions,
-
-    getInitialState: function() {
-        this.data = false;
-        return this.data;
-    }
+    listenables: ServerClockActions
 });
 
 module.exports = ServerClockWindowStore;

@@ -17,10 +17,12 @@ var BodyRPCStore = Reflux.createStore({
         UserActions
     ],
 
-    data: {},
+    init: function() {
+        this.data = this.getInitialState();
+    },
 
     getInitialState: function() {
-        this.data = {
+        return {
             "id" : '',
             "x" : 0,
             "y" : 0,
@@ -97,8 +99,6 @@ var BodyRPCStore = Reflux.createStore({
                 "spent" : 0
             }
         };
-
-        return this.data;
     },
 
     getData: function() {
