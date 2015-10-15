@@ -7,6 +7,8 @@ var $ = require('js/hacks/jquery');
 var Progress = require('react-progress');
 
 var BodyRPCStore = require('js/stores/rpc/body');
+var ServerRPCStore = require('js/stores/rpc/server');
+var EmpireRPCStore = require('js/stores/rpc/empire');
 
 var centerBar = require('js/components/mixin/centerBar');
 
@@ -26,6 +28,8 @@ var storageProgressStyle = {
 var BottomBar = React.createClass({
     mixins: [
         Reflux.connect(BodyRPCStore, 'body'),
+        Reflux.connect(ServerRPCStore, 'server'),
+        Reflux.connect(EmpireRPCStore, 'empire'),
         centerBar('bottombar')
     ],
     calcToolTip : function(info) {
@@ -183,6 +187,15 @@ var BottomBar = React.createClass({
                     <p style={storageStyle}>
                         { this.state.body.build_queue_len } / {this.state.body.build_queue_size }
                     <br />Constructing
+                    </p>
+                </div>
+
+                <div id="rpcusagebar" className="item"
+                onMouseEnter={function(){$('#rpcusagebar').popup({html:"The <a target='_new' href='http://community.lacunaexpanse.com/wiki/rpc-limit'>RPC limit</a> is the number of requests you can send to the server in a 24 hour period.",hoverable:true,delay:{hide:800}})}}>
+                    <i className="exchange big icon" />
+                    <p style={storageStyle}>
+                        {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
+                    <br />Actions (RPCs)
                     </p>
                 </div>
             </div>
