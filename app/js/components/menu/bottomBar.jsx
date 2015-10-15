@@ -72,16 +72,6 @@ var BottomBar = React.createClass({
                 margin: 0
             }}>
 
-                <div id="happybar" className="item"
-                onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy"})})}}
-                >
-                    <i className="smile big icon"></i>
-                    <p style={storageStyle}>
-                        {util.reduceNumber(this.state.body.happiness)}
-                    </p>
-                    {util.reduceNumber(this.state.body.happiness_hour)} / hr
-                </div>
-
                 <div id="foodbar" className="item"
                 onMouseEnter={function(){$('#foodbar').popup({html:This.calcToolTip({type:'food'})})}}
                 >
@@ -165,6 +155,16 @@ var BottomBar = React.createClass({
                         }
                     </p>
                     {util.reduceNumber(this.state.body.waste_hour)} / hr
+                </div>
+
+                <div id="happybar" className="item"
+                onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy"})})}}
+                >
+                    <i className="smile big icon"></i>
+                    <p style={storageStyle}>
+                        {util.reduceNumber(this.state.body.happiness)}
+                    </p>
+                    {util.reduceNumber(this.state.body.happiness_hour)} / hr
                 </div>
 
                 <div id="buildingcountbar" className="item"
