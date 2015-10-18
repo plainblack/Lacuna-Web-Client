@@ -30,6 +30,10 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       for (var i=0; i<zones.length; i++) {
         zoneOptions += '<option value="' + zones[i] + '">' + zones[i] + '</option>';
       }
+      var orbits = [];
+      for (var o=1; i<8; ++i) {
+          orbits.push('<option value="' + i + '">' + i + '</option>');
+      }
       
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
         '<div id="bhgContainer">',
@@ -42,6 +46,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '    <option value="zone">Zone (X|Y)</option>',
         '  </select>',
         '  <span id="bhgTargetSelectText"><input type="text" id="bhgTargetText" /></span>',
+        '  <span id="bhgTargetSelectOrbit" style="display:none;">Orbit: <select id="bhgTargetOrbit"><option value="">None (target the star)</option>',orbits,'</select></span>',
         '  <span id="bhgTargetSelectXY" style="display:none;">',
         '    X:<input size="5" type="text" id="bhgTargetX" />',
         '    Y:<input size="5" type="text" id="bhgTargetY" />',
@@ -79,20 +84,29 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       }, this, true);
 
       Event.on("bhgTargetType", "change", function(){
-        if(Lib.getSelectedOptionValue(this) == "xy") {
+        var selected = Lib.getSelectedOptionValue(this);
+        if(selected == "xy") {
           Dom.setStyle("bhgTargetSelectText", "display", "none");
           Dom.setStyle("bhgTargetSelectXY", "display", "");
           Dom.setStyle("bhgTargetSelectZone", "display", "none");
+          Dom.setStyle("bhgTargetSelectOrbit", "display", "none");
         }
-        else if(Lib.getSelectedOptionValue(this) == "zone") {
+        else if(selected == "zone") {
           Dom.setStyle("bhgTargetSelectText", "display", "none");
           Dom.setStyle("bhgTargetSelectXY", "display", "none");
           Dom.setStyle("bhgTargetSelectZone", "display", "");
+          Dom.setStyle("bhgTargetSelectOrbit", "display", "none");
         }
         else {
           Dom.setStyle("bhgTargetSelectText", "display", "");
           Dom.setStyle("bhgTargetSelectXY", "display", "none");
           Dom.setStyle("bhgTargetSelectZone", "display", "none");
+          if (selected == "star_name" || selected == "star_id") {
+              Dom.setStyle("bhgTargetSelectOrbit", "display", "");
+          }
+          else {
+              Dom.setStyle("bhgTargetSelectOrbit", "display", "none");
+          }
         }
       });
       Event.on("bhgGetActions", "click", this.bhgGetActions, this, true);
@@ -119,6 +133,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       }
       else {
         target[type] = Dom.get("bhgTargetText").value;
+        target.orbit = Dom.get("bhgTargetOrbit").value;
         Dom.get("bhgTargetNote").innerHTML = target[type];
       }
       
