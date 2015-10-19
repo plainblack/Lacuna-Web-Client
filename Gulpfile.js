@@ -1,16 +1,16 @@
 'use strict';
 
-var browserify = require('browserify');
+var browserifyInc = require('browserify-incremental');
 var reactify = require('reactify');
-var source     = require('vinyl-source-stream');
+var source = require('vinyl-source-stream');
 
 var cssConcat = require('gulp-concat-css');
-var cssMin    = require('gulp-minify-css');
-var gulp      = require('gulp');
-var rename    = require('gulp-rename');
-var uglify    = require('gulp-uglify');
+var cssMin = require('gulp-minify-css');
+var gulp = require('gulp');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 
-var path    = require('path');
+var path = require('path');
 var express = require('express');
 
 gulp.task('dev', ['browserify', 'cssify', 'serve'], function() {
@@ -29,17 +29,10 @@ gulp.task('dev', ['browserify', 'cssify', 'serve'], function() {
 });
 
 gulp.task('browserify', function() {
-    var b = browserify(['./app/js/load.js'], {
-        noParse: [
-            'jquery'
-        ],
-        extensions: [
-            // Include React files in the bundle.
-            '.jsx'
-        ],
-        paths: [
-            path.join(__dirname, 'app')
-        ]
+    var b = browserifyInc(['./app/js/load.js'], {
+        extensions: ['.jsx'],
+        paths: [path.join(__dirname, 'app')],
+        cachefile: path.join(__dirname, 'browserify-cache.json')
     });
 
     // This transforms all the .jsx files into JavaScript.
