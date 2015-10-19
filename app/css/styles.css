@@ -821,7 +821,7 @@ Info dialogs for Empire and Alliance
 	z-index:30;
 	width:20px;
 	height:255px;
-	right:15px;
+	left:15px;
 	top:100px;
 }
 .mapiator_zoom_slider {
