@@ -17,7 +17,7 @@
     "browserify": "11.2.0",
     "browserify-incremental": "3.0.1",
     "classnames": "2.1.2",
-    "del": "^2.0.2",
+    "del": "2.0.2",
     "express": "4.12.4",
     "firebase": "2.2.7",
     "gulp": "3.9.0",
@@ -33,7 +33,6 @@
     "react-tooltip": "0.6.4",
     "reactify": "1.1.0",
     "reflux": "0.2.7",
-    "trash": "^3.1.1",
     "vinyl-source-stream": "1.1.0"
   }
 }
