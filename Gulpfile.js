@@ -13,6 +13,8 @@ var uglify = require('gulp-uglify');
 var path = require('path');
 var express = require('express');
 
+var del = require('del');
+
 gulp.task('dev', ['browserify', 'cssify', 'serve'], function() {
 
     var watcher = gulp.watch('./app/**/*', ['browserify', 'cssify']);
@@ -85,6 +87,16 @@ gulp.task('serve', ['browserify', 'cssify'], function(done) {
       console.log('Listening on http://localhost:' + port + ' for requests.');
       done();
     });
+});
+
+gulp.task('clean', function() {
+    var files = [
+        'browserify-cache.json',
+        'lacuna/*.js',
+        'lacuna/*.css'
+    ];
+
+    del.sync(files);
 });
 
 // The default task is a build of everything.
