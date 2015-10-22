@@ -209,7 +209,7 @@ In this project, Gulp is used to manage building the code. All the tasks that ca
 
 > `gulp build`
 
-Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them. This is also the default task, meaning that running just `gulp` in the command line will run this task.
+Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them. This is the default task, meaning that running just `gulp` in the command line will run this task.
 
 ## dev
 
@@ -222,3 +222,9 @@ This puts all the JavaScript and CSS together and starts a web server to run the
 > `gulp serve`
 
 This just runs the server for running the client in a browser.
+
+## clear
+
+> `gulp clear`
+
+This deletes temporary files and files from the build.

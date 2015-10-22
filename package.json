@@ -14,8 +14,10 @@
   },
   "homepage": "https://lacunaexpanse.com/",
   "dependencies": {
-    "browserify": "10.2.3",
+    "browserify": "11.2.0",
+    "browserify-incremental": "3.0.1",
     "classnames": "2.1.2",
+    "del": "2.0.2",
     "express": "4.12.4",
     "firebase": "2.2.7",
     "gulp": "3.9.0",
