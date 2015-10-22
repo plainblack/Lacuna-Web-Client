@@ -13,6 +13,7 @@ var EmpireRPCStore = require('js/stores/rpc/empire');
 var centerBar = require('js/components/mixin/centerBar');
 
 var util = require('js/util');
+var int  = util.int;
 var Lib = window.YAHOO.lacuna.Library;
 
 var storageStyle = {
@@ -44,8 +45,8 @@ var BottomBar = React.createClass({
 
             return [
                 '<div><strong>',name,'</strong></div>',
-                '<div><img alt="" class="small',iconClass,'" src="',Lib.AssetUrl,'ui/s/',icon,'.png" /> ',Lib.formatNumber(hour),'/hr</div>',
-                '<div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(store)), (wantCap ? '/'+Lib.formatNumber(cap) : ''),'</div>',
+                '<div><img alt="" class="smallStorage" src="',Lib.AssetUrl,'ui/s/storage.png" />',Lib.formatNumber(Math.round(store)), (wantCap ? ' / '+Lib.formatNumber(cap) : ''),'</div>',
+                '<div><img alt="" class="small',iconClass,'" src="',Lib.AssetUrl,'ui/s/',icon,'.png" /> ',Lib.formatNumber(hour),' / hr</div>',
                 (wantCap ? '<div><img alt="" class="smallTime" src="'+Lib.AssetUrl+'ui/s/time.png" />' + (
                     hour < 0 && store > 0 ?
                         'Empty In '+Lib.formatTime(-3600 * store / hour) :
@@ -54,7 +55,8 @@ var BottomBar = React.createClass({
                     hour > 0 ?
                         'Full In '+Lib.formatTime(3600 * (cap - store) / hour) :
                     'Will Never Fill'
-                ) + '</div>' : '')
+                ) + '</div>' : ''),
+                info.happy_boost
             ].join('');
 
     },
@@ -64,6 +66,17 @@ var BottomBar = React.createClass({
     },
     render: function() {
         var This = this;
+        var happy_boost = 0;
+        // These numbers could be retrieved from the server, but for now, server changes
+        // must be duplicated here so that the formulas match.
+        if (this.state.body.happiness < 0) {
+            happy_boost = '<i class="caret down small icon" />-' + int(150*Math.log(-this.state.body.happiness)/Math.log(1000)*10)/10;
+        }
+        else if (this.state.body.happiness > 0) {
+            happy_boost = '<i class="caret up small icon" />' + int(4*Math.log(this.state.body.happiness)/Math.log(1000)*10)/10;
+        }
+        happy_boost = ['<div><img alt="" class="smallHappy" src="' + Lib.AssetUrl + 'ui/s/build.png"/ > '+happy_boost+'%</div>'];
+
         return (
             <div className="ui blue inverted icon menu" ref="bottombar" style={{
                 bottom: '40px',
@@ -158,7 +171,7 @@ var BottomBar = React.createClass({
                 </div>
 
                 <div id="happybar" className="item"
-                onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy"})})}}
+                onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy",happy_boost:happy_boost})})}}
                 >
                     <i className="smile big icon"></i>
                     <p style={storageStyle}>
