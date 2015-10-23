@@ -21,7 +21,7 @@ var BOOST_METHOD_MAP = {
     happiness: 'boost_happiness',
     storage: 'boost_storage',
     building: 'boost_building',
-    spy_training_boost: 'boost_spy_training'
+    spy_training: 'boost_spy_training'
 };
 
 var BoostsRPCStore = Reflux.createStore({
@@ -43,7 +43,7 @@ var BoostsRPCStore = Reflux.createStore({
             happiness: {ms: 0, display: ''},
             storage: {ms: 0, display: ''},
             building: {ms: 0, display: ''},
-            spy_training_boost: {ms: 0, display: ''}
+            spy_training: {ms: 0, display: ''}
         };
     },
 
@@ -101,7 +101,7 @@ var BoostsRPCStore = Reflux.createStore({
             alert('Number of weeks must be an integer between 1 and 100.');
             return;
         } else if (weeks * 5 > essentia) {
-            alert('Insifficient Essentia.');
+            alert('Insufficient Essentia.');
             return;
         }
 
@@ -126,7 +126,7 @@ var BoostsRPCStore = Reflux.createStore({
                 } else if (result.building_boost) { // Building Speed
                     this.addNewBoost(result.building_boost, 'building');
                 } else if (result.spy_training_boost) { // Spy Training Speed
-                    this.addNewBoost(result.spy_training_boost, 'spy_training_boost');
+                    this.addNewBoost(result.spy_training_boost, 'spy_training');
                 }
 
                 this.trigger(this.data);
