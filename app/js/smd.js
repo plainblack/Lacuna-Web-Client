@@ -3071,7 +3071,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "parameters": [
                         {"name":"name", "type":"string", "optional":false},
                         {"name":"password", "type":"string", "optional":false},
-                        {"name":"api_key", "type":"string", "optional":false}
+                        {"name":"api_key", "type":"string", "optional":false},
+                        {"name":"browser", "type":"string", "optional":false}
                     ],
                     "returns":{"type":"object"}
                 },
