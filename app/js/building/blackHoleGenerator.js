@@ -31,7 +31,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         zoneOptions += '<option value="' + zones[i] + '">' + zones[i] + '</option>';
       }
       var orbits = [];
-      for (var o=1; i<8; ++i) {
+      for (var i=1; i<=8; ++i) {
           orbits.push('<option value="' + i + '">' + i + '</option>');
       }
       
