@@ -3,6 +3,8 @@
 var UserActions = require('js/actions/user');
 var Fingerprint2 = require('fingerprintjs2');
 
+var _ = require('lodash');
+
 YAHOO.namespace("lacuna");
 
 if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {

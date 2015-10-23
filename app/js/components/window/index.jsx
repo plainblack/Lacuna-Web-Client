@@ -3,6 +3,8 @@
 var React = require('react');
 var $ = require('js/hacks/jquery');
 
+var ReactTooltip = require('react-tooltip');
+
 var TopBar = require('js/components/menu/topBar');
 var BottomBar = require('js/components/menu/bottomBar');
 
@@ -33,6 +35,16 @@ var Window = React.createClass({
                  */ }
                 <LeftSidebar />
                 <RightSidebar />
+
+                { /*
+                    This sets all the tooltips in the entire client.
+                    See http://npmjs.org/package/react-tooltip for usage.
+                */ }
+                <ReactTooltip
+                    effect="solid"
+                    place="bottom"
+                    type="dark"
+                />
 
                 { /* One container to rule them all... */ }
                 <div className="pusher">

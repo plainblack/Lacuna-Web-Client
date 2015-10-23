@@ -124,9 +124,7 @@
         require('js/mapPlanet');
         require('js/messaging');
 
-        // invite has to come before essentia for some reason.
         require('js/invite');
-        require('js/essentia');
         require('js/profile');
         require('js/stats');
         require('js/info');

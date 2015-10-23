@@ -76,6 +76,7 @@ var Panel = React.createClass({
                     }}>
                         <div style={{
                             overflow: 'auto',
+                            overflowX: 'hidden',
                             height: this.props.height + 'px',
                             padding: '5px'
                         }}>
