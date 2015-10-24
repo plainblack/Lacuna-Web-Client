@@ -11,11 +11,6 @@ var Loader = React.createClass({
     mixins: [
         Reflux.connect(LoaderStore, 'show')
     ],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
     render: function() {
         return (
             <div className={classNames(

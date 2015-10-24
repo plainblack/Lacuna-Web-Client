@@ -8,9 +8,11 @@ var TickerActions = require('js/actions/ticker');
 var TickerStore = Reflux.createStore({
     listenables: TickerActions,
 
-    ticking: false,
-    interval: _.noop,
-    intervalTime: 1000,
+    init: function() {
+        this.ticking = false;
+        this.interval = _.noop;
+        this.intervalTime = 1000;
+    },
 
     reset: function() {
         this.ticking = false;

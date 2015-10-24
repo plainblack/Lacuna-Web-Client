@@ -2,7 +2,11 @@
 
 module.exports = {
     init: function() {
-        this.data = this.getInitialState ? this.getInitialState() : false;
+        this.data = this.getInitialState();
+    },
+
+    getInitialState: function() {
+        return false;
     },
 
     getData: function() {
@@ -19,5 +23,12 @@ module.exports = {
         console.log('Window hide triggered.');
         this.data = false;
         this.trigger(this.data);
+    },
+
+    onEscKey: function() {
+        if (this.data === true) {
+            console.log('Escape key hit.');
+            this.onHide();
+        }
     }
 };
