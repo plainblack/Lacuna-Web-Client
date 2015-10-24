@@ -19,11 +19,6 @@ var Menu = React.createClass({
     mixins: [
         Reflux.connect(MenuStore, 'show')
     ],
-    getInitialState: function() {
-        return {
-            show: false
-        };
-    },
     render: function() {
         if (this.state.show) {
             return (

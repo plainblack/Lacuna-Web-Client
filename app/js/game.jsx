@@ -4,12 +4,18 @@ YAHOO.namespace("lacuna");
 
 var React = require('react');
 var _ = require('lodash');
+var $ = require('js/hacks/jquery');
+
+var ReactTooltip = require('react-tooltip');
 
 var Window = require('js/components/window');
 
+var KeyboardActions = require('js/actions/keyboard');
 var MapActions = require('js/actions/menu/map');
 var MenuActions = require('js/actions/menu');
 var SessionActions = require('js/actions/session');
+var TickerActions = require('js/actions/ticker');
+
 var UserActions = require('js/actions/user');
 var BodyRPCStore = require('js/stores/rpc/body');
 
@@ -94,13 +100,28 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     }
                 }
             };
-            Game.escListener = new Util.KeyListener(document, { keys:27 }, { fn:Game.OverlayManager.hideAll, scope:Game.OverlayManager, correctScope:true } );
+            Game.escListener = new Util.KeyListener(document, { keys:27 }, {
+                fn: function() {
+                    Game.OverlayManager.hideAll();
+                    KeyboardActions.escKey();
+                },
+                scope: Game.OverlayManager,
+                correctScope: true
+            });
 
             //get resources right away since they don't depend on anything.
             Game.Resources = require('js/resources');
             Game.PreloadUI();
 
             Game.Services = Game.InitServices(YAHOO.lacuna.SMD.Services);
+
+            // The tooltips can often disappear because their parent elements are removed from the
+            // DOM and then replaced later. For example, switching between tabs that each have
+            // tooltips in them. Calling this every tick ensures that the tooltips are rebuilt if
+            // they disappear.
+            TickerActions.tick.listen(function() {
+                ReactTooltip.rebuild();
+            });
 
             var session = Game.GetSession();
             if (query.referral) {
@@ -135,6 +156,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                 Game.DoLogin();
                 return;
             }
+
             //Run rest of UI since we're logged in
             Game.GetStatus({
                 success:Game.Run,

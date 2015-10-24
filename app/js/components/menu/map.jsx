@@ -19,8 +19,7 @@ var Map = React.createClass({
     ],
     getInitialState: function() {
         return {
-            planet: '',
-            menuVisible: false
+            planet: ''
         };
     },
     previousMapMode: '',
