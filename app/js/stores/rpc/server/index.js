@@ -22,8 +22,10 @@ var ServerRPCStore = Reflux.createStore({
     getInitialState: function() {
         return {
             time : '01 31 2010 13:09:05 +0600',
-            timeMoment: util.serverDateToMoment('01 31 2010 13:09:05 +0600'),
-            displayTime: '',
+            serverMoment: moment(),
+            clientMoment: moment(),
+            serverFormattedTime: '',
+            clientFormattedTime: '',
             version : 123456789,
             announcement : 0,
             rpc_limit : 10000,
@@ -45,9 +47,10 @@ var ServerRPCStore = Reflux.createStore({
         } else {
             this.data = status.server;
 
-            // TODO: show announcement window if there is one.
+            // TODO: show announcement window if needed.
 
-            this.data.timeMoment = util.serverDateToMoment(this.data.time).zone(0);
+            this.data.serverMoment = util.serverDateToMoment(this.data.time).zone(0);
+            this.data.clientMoment = util.serverDateToMoment(this.data.time);
 
             this.trigger(this.data);
         }
@@ -59,8 +62,12 @@ var ServerRPCStore = Reflux.createStore({
     },
 
     onTick: function() {
-        this.data.timeMoment = this.data.timeMoment.add(1, 'second');
-        this.data.displayTime = util.formatMomentLong(this.data.timeMoment);
+        this.data.serverMoment = this.data.serverMoment.add(1, 'second');
+        this.data.serverFormattedTime = util.formatMomentLong(this.data.serverMoment);
+
+        this.data.clientMoment = this.data.clientMoment.add(1, 'second');
+        this.data.clientFormattedTime = util.formatMomentLong(this.data.clientMoment);
+
         this.trigger(this.data);
     }
 });

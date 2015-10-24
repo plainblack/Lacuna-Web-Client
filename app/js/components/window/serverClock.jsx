@@ -3,8 +3,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var moment = require('moment');
-
 var ServerClockActions = require('js/actions/window/serverClock');
 
 var ServerClockWindowStore = require('js/stores/window/serverClock');
@@ -29,8 +27,8 @@ var ServerClockWindow = React.createClass({
                 width={320}
                 height={50}
             >
-                <p><strong>Server:</strong> {this.state.server.displayTime}</p>
-                <p><strong>Here:</strong> {util.formatMomentLong(moment())}</p>
+                <p><strong>Server:</strong> {this.state.server.serverFormattedTime}</p>
+                <p><strong>Here:</strong> {this.state.server.clientFormattedTime}</p>
             </Panel>
         );
     }
