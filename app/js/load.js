@@ -124,7 +124,6 @@
         require('js/mapPlanet');
         require('js/messaging');
 
-        require('js/invite');
         require('js/profile');
         require('js/stats');
         require('js/info');
