@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var Progress = require('react-progress');
 

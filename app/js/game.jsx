@@ -4,7 +4,7 @@ YAHOO.namespace("lacuna");
 
 var React = require('react');
 var _ = require('lodash');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var ReactTooltip = require('react-tooltip');
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 var _ = require('lodash');
 
 var LoaderActions = require('js/actions/menu/loader');
