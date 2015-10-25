@@ -3,9 +3,17 @@
 var Reflux = require('reflux');
 
 var StatusActions = require('js/actions/status');
+var TickerActions = require('js/actions/ticker');
+
+var util = require('js/util');
+
+var moment = require('moment');
 
 var ServerRPCStore = Reflux.createStore({
-    listenables: StatusActions,
+    listenables: [
+        StatusActions,
+        TickerActions
+    ],
 
     init: function() {
         this.data = this.getInitialState();
@@ -14,6 +22,10 @@ var ServerRPCStore = Reflux.createStore({
     getInitialState: function() {
         return {
             time : '01 31 2010 13:09:05 +0600',
+            serverMoment: moment(),
+            clientMoment: moment(),
+            serverFormattedTime: '',
+            clientFormattedTime: '',
             version : 123456789,
             announcement : 0,
             rpc_limit : 10000,
@@ -35,8 +47,10 @@ var ServerRPCStore = Reflux.createStore({
         } else {
             this.data = status.server;
 
-            // Possible things to do here:
-            //  ~ Change the time into a Date object.
+            // TODO: show announcement window if needed.
+
+            this.data.serverMoment = util.serverDateToMoment(this.data.time).zone(0);
+            this.data.clientMoment = util.serverDateToMoment(this.data.time);
 
             this.trigger(this.data);
         }
@@ -44,6 +58,16 @@ var ServerRPCStore = Reflux.createStore({
 
     onClear: function() {
         this.data = this.getInitialState();
+        this.trigger(this.data);
+    },
+
+    onTick: function() {
+        this.data.serverMoment = this.data.serverMoment.add(1, 'second');
+        this.data.serverFormattedTime = util.formatMomentLong(this.data.serverMoment);
+
+        this.data.clientMoment = this.data.clientMoment.add(1, 'second');
+        this.data.clientFormattedTime = util.formatMomentLong(this.data.clientMoment);
+
         this.trigger(this.data);
     }
 });

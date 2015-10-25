@@ -294,73 +294,10 @@ if (typeof YAHOO.lacuna.Info == "undefined" || !YAHOO.lacuna.Info) {
         }
     };
 
-    var Clock = function(){
-        this.id = "infoClock";
-    };
-    Clock.prototype = {
-        build: _.once(function() {
-            var container = document.createElement("div");
-            container.id = "clock";
-            Dom.addClass(container, Lib.Styles.HIDDEN);
-            Dom.addClass(container, "nofooter");
-            container.innerHTML = this._getHtml();
-            document.getElementById('oldYUIPanelContainer').appendChild(container);
-
-            this.Display = new YAHOO.widget.Panel("clock", {
-                constraintoviewport:true,
-                visible:false,
-                draggable:true,
-                effect:Game.GetContainerEffect(),
-                close:true,
-                underlay:false,
-                modal:false,
-                width:"300px",
-                context:["footer","bl","tl", ["beforeShow"], [0,-40]],
-                zIndex: 10000
-            });
-            this.Display.renderEvent.subscribe(function(){
-                Dom.removeClass("clock", Lib.Styles.HIDDEN);
-                this.clock = Dom.get("clockDisplay");
-            });
-            this.Display.showEvent.subscribe(function(){
-                this.Display.bringToTop();
-                Game.onTick.subscribe(this._updating, this.Display, true);
-            }, this, true);
-            this.Display.hideEvent.subscribe(function(){
-                Game.onTick.unsubscribe(this._updating);
-
-                // Let the React stuff know that we're going away now. :D
-                ServerClockActions.hide();
-            }, this, true);
-            this.Display.render();
-        }),
-        _getHtml : function() {
-            return [
-            '    <div class="hd">Server Clock</div>',
-            '    <div class="bd">',
-            '        <div id="clockDisplay"></div>',
-            '    </div>'
-            ].join('');
-        },
-        _updating : function() {
-            this.clock.innerHTML = Lacuna.Game.ServerData.time.toUTCString(); //Lib.formatUTC(Lacuna.Game.ServerData.time);
-        },
-        Show : function() {
-            this.build();
-            this.Display.show();
-        },
-        Hide : function() {
-            if(this.Display) {
-                this.Display.hide();
-            }
-        }
-    };
-
 
     YAHOO.lacuna.Info = {
         Alliance: new Alliance(),
-        Empire: new Empire(),
-        Clock: new Clock()
+        Empire: new Empire()
     };
 
 })();
