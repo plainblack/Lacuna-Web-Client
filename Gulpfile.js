@@ -1,6 +1,7 @@
 'use strict';
 
 var browserifyInc = require('browserify-incremental');
+var debowerify = require('debowerify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 
@@ -11,8 +12,8 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
 var path = require('path');
-var express = require('express');
 
+var express = require('express');
 var del = require('del');
 
 gulp.task('dev', ['browserify', 'cssify', 'serve'], function() {
@@ -39,6 +40,9 @@ gulp.task('browserify', function() {
 
     // This transforms all the .jsx files into JavaScript.
     b.transform(reactify);
+
+    // This brings Bower-installed libraries into the bundle.
+    b.transform(debowerify);
 
     var stream = b
         .bundle()

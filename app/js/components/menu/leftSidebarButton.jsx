@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');

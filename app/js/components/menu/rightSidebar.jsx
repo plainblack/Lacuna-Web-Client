@@ -3,7 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var classNames = require('classnames');
 

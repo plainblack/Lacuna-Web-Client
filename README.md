@@ -199,7 +199,7 @@ var SomeStore = Reflux.createStore({
 
 ## Extra Notes
 
-- Do **not** `require('jquery')`! Instead `require('js/hacks/jquery')`. We have to do this because we need to manually attach the Semantic UI JS code to the jQuery object. The details aren't really important, just remember to require the right one. :grinning:
+- Do **not** `require('jquery')`! Instead `require('js/shims/jquery')`. `js/shims/jquery` is used to attach the jQuery plugins we use to the one jQuery object.
 
 # Gulp Tasks
 

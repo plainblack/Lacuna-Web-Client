@@ -1,0 +1,15 @@
+{
+  "name": "lacuna-web-client",
+  "description": "The pure javascript client for The Lacuna Expanse.",
+  "main": "app/js/load.js",
+  "authors": [
+    "Nathan McCallum <onevasari@gmail.com> (https://github.com/1vasari)"
+  ],
+  "homepage": "https://github.com/plainblack/Lacuna-Web-Client",
+  "moduleType": [],
+  "private": true,
+  "dependencies": {
+    "jquery": "2.1.4",
+    "semantic": "1.12.2"
+  }
+}

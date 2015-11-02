@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var ReactTooltip = require('react-tooltip');
 

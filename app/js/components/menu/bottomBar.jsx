@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var Progress = require('react-progress');
 
@@ -91,7 +91,7 @@ var BottomBar = React.createClass({
                     <Progress
                         percent={this.state.body.food_percent_full}
                         style={storageProgressStyle} />
-                    <i className="food big icon"></i>
+                    <i className="food large icon"></i>
                     <p style={storageStyle} >
                         {
                             util.reduceNumber(this.state.body.food_stored)
@@ -108,7 +108,7 @@ var BottomBar = React.createClass({
                     <Progress
                         percent={this.state.body.ore_percent_full}
                         style={storageProgressStyle} />
-                    <i className="diamond big icon"></i>
+                    <i className="diamond large icon"></i>
                     <p style={storageStyle}>
                         {
                             util.reduceNumber(this.state.body.ore_stored)
@@ -125,7 +125,7 @@ var BottomBar = React.createClass({
                     <Progress
                         percent={this.state.body.water_percent_full}
                         style={storageProgressStyle} />
-                    <i className="theme big icon"></i>
+                    <i className="theme large icon"></i>
                     <p style={storageStyle}>
                         {
                             util.reduceNumber(this.state.body.water_stored)
@@ -142,7 +142,7 @@ var BottomBar = React.createClass({
                     <Progress
                         percent={this.state.body.energy_percent_full}
                         style={storageProgressStyle} />
-                    <i className="lightning big icon"></i>
+                    <i className="lightning large icon"></i>
                     <p style={storageStyle}>
                         {
                             util.reduceNumber(this.state.body.energy_stored)
@@ -159,7 +159,7 @@ var BottomBar = React.createClass({
                     <Progress
                         percent={this.state.body.waste_percent_full}
                         style={storageProgressStyle} />
-                    <i className="trash big icon"></i>
+                    <i className="trash large icon"></i>
                     <p style={storageStyle}>
                         {
                             util.reduceNumber(this.state.body.waste_stored)
@@ -173,7 +173,7 @@ var BottomBar = React.createClass({
                 <div id="happybar" className="item"
                 onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy",happy_boost:happy_boost})})}}
                 >
-                    <i className="smile big icon"></i>
+                    <i className="smile large icon"></i>
                     <p style={storageStyle}>
                         {util.reduceNumber(this.state.body.happiness)}
                     </p>
@@ -181,34 +181,34 @@ var BottomBar = React.createClass({
                 </div>
 
                 <div id="buildingcountbar" className="item"
-                onMouseEnter={function(){$('#buildingcountbar').popup({html:"How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plots</a> you have available.",hoverable:true,delay:{hide:800}})}}>
-                    <i className="block layout big icon"></i>
+                onMouseEnter={function(){$('#buildingcountbar').popup({html:"Your current <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plot-using</a> building count, and how many <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plots</a> you have available.",hoverable:true,delay:{hide:800}})}}>
+                    <i className="block layout large icon"></i>
                     <p style={storageStyle}>
                         {
                             this.state.body.building_count
                         } / {
                             this.state.body.building_count + this.state.body.plots_available
-                        } Buildings
+                        }
                         <br />
-                        {this.state.body.plots_available} Plots Available
+                        {this.state.body.plots_available} Available
                     </p>
                 </div>
 
                 <div id="buildqueuebar" className="item"
-                onMouseEnter={function(){$('#buildqueuebar').popup({html:"How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.",hoverable:true,delay:{hide:800}})}}>
-                    <i className="list big icon" />
+                onMouseEnter={function(){$('#buildqueuebar').popup({html:"Build Queue: How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.",hoverable:true,delay:{hide:800}})}}>
+                    <i className="list large icon" />
                     <p style={storageStyle}>
                         { this.state.body.build_queue_len } / {this.state.body.build_queue_size }
-                    <br />Constructing
+                    <br />Build Q
                     </p>
                 </div>
 
                 <div id="rpcusagebar" className="item"
                 onMouseEnter={function(){$('#rpcusagebar').popup({html:"The <a target='_new' href='http://community.lacunaexpanse.com/wiki/rpc-limit'>RPC limit</a> is the number of requests you can send to the server in a 24 hour period.",hoverable:true,delay:{hide:800}})}}>
-                    <i className="exchange big icon" />
+                    <i className="exchange large icon" />
                     <p style={storageStyle}>
-                        {this.state.empire.rpc_count} / {this.state.server.rpc_limit}
-                    <br />Actions (RPCs)
+                        {this.state.empire.rpc_count} / {util.reduceNumber(this.state.server.rpc_limit)}
+                    <br />Actions
                     </p>
                 </div>
             </div>

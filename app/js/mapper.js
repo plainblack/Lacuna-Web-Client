@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna");
 
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 if (typeof YAHOO.lacuna.Mapper == "undefined" || !YAHOO.lacuna.Mapper) {
 

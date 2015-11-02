@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna.buildings");
 
-var $ = require('js/hacks/jquery');
+var $ = require('js/shims/jquery');
 
 var MapActions = require('js/actions/menu/map');
 
