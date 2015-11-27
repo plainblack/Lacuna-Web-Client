@@ -78,7 +78,7 @@ var Chat = React.createClass({
         try {
 
             var config = {
-                numMaxMessages: 100
+                numMaxMessages: window.cc_max_messages || 100
             };
 
             // Make sure we go to the right server's Firebase.
