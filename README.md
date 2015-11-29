@@ -24,7 +24,7 @@ cd Lacuna-Web-Client
 #
 # Gulp is a task runner; it handles building and running the code.
 # Bower is a package manager; it handles downloading JS modules that can't
-# be downloaded off of npm like everythinge else should.
+# be downloaded off of npm like everything else should.
 npm install gulp -g
 npm install bower -g
 
