@@ -18,9 +18,22 @@ Setting up and running everything should look something like this:
 ```bash
 git clone https://github.com/<your-username>/Lacuna-Web-Client
 cd Lacuna-Web-Client
-npm install gulp -g # installs the build tool, gulp. This should be a once-off.
-npm install # installs the dependencies for building and running the code.
-gulp dev # compiles js/css and launches dev server.
+
+# These should be on-offs. These commands install gulp and bower into the
+# global namespace so they can be used on the command line.
+#
+# Gulp is a task runner; it handles building and running the code.
+# Bower is a package manager; it handles downloading JS modules that can't
+# be downloaded off of npm like everythinge else should.
+npm install gulp -g
+npm install bower -g
+
+# Installs the dependencies for building and running the code.
+# This should be done every time `package.son` file changes.
+npm install
+
+# Compiles js/css and launches dev server.
+gulp dev
 ```
 
 # Development
