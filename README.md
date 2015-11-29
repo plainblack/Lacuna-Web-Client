@@ -23,10 +23,6 @@ npm install # installs the dependencies for building and running the code.
 gulp dev # compiles js/css and launches dev server.
 ```
 
-## Note
-
-I ([1vasari](https://github.com/1vasari)) have a personal list which I'm working from at the moment. This is because issues are not switched on for this repo. It can be found [here](https://www.wunderlist.com/list/158378421). If you have any requests for the client it would most likely be best to send them to me via Lacuna Expanse's mail system - my empire name is `1vasari`.
-
 # Development
 
 The following are some notes and conventions about the changes that are happening here. The client is slowly being transitioned over to some new libraries and a new structure. They are as follows:
