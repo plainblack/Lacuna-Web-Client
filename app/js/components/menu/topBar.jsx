@@ -2,8 +2,10 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var _ = require('lodash');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
+var BodyRPCStore = require('js/stores/rpc/body');
 var MapModeStore = require('js/stores/menu/mapMode');
 
 var centerBar = require('js/components/mixin/centerBar');
@@ -16,10 +18,115 @@ var MailActions = require('js/actions/window/mail');
 var EssentiaActions = require('js/actions/window/essentia');
 var StatsActions = require('js/actions/window/stats');
 
+var BodiesDropdown = React.createClass({
+    propTypes: {
+        name: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.bool
+        ]),
+        bodies: React.PropTypes.array
+    },
+
+    handleClick: function(event) {
+        MapActions.changePlanet(event.target.getAttribute('value'))
+    },
+
+    handleBodies: function(body) {
+        return (
+            <a
+                className="item"
+                key={body.id}
+                value={body.id}
+                onClick={this.handleClick}
+                style={{
+                    marginRight: 10,
+                    backgroundColor: '#3b83c0',
+                    color: '#ffffff !important',
+                    fontWeight: body.name === BodyRPCStore.getData().name
+                        ? 'bold'
+                        : 'normal'
+                }}
+            >
+                {body.name}
+            </a>
+        );
+    },
+
+    render: function() {
+        var list = _.map(this.props.bodies, this.handleBodies)
+
+        var listStyle = {
+            maxHeight: '300px',
+            overflow: 'auto',
+            overflowX: 'hidden',
+            backgroundColor: '#3b83c0',
+            color: '#ffffff !important'
+        };
+
+        if (this.props.name) {
+            return (
+                <div className="item">
+                    <span style={{
+                        color: '#ffffff !important'
+                    }}>
+                        {this.props.name}
+                    </span> <i className="dropdown icon" style={{
+                        opacity: 0.75,
+                        color: '#ffffff'
+                    }}></i>
+                    <div className="menu" style={listStyle}>
+                        {list}
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div className="menu" style={listStyle}>
+                    {list}
+                </div>
+            );
+        }
+    }
+})
+
+var ColonyDropdown = React.createClass({
+    propTypes: {
+        colonies: React.PropTypes.array,
+        stations: React.PropTypes.array
+    },
+
+    render: function() {
+        if (this.props.colonies.length && this.props.stations.length) {
+            return (
+                <div className="menu" style={{
+                    backgroundColor: '#3b83c0'
+                }}>
+                    <BodiesDropdown
+                        name="Colonies"
+                        bodies={this.props.colonies}
+                    />
+                    <BodiesDropdown
+                        name="Stations"
+                        bodies={this.props.stations}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <BodiesDropdown
+                    name={false}
+                    bodies={this.props.colonies}
+                />
+            );
+        }
+    },
+});
+
 var TopBar = React.createClass({
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(MapModeStore, 'mapMode'),
+        Reflux.connect(BodyRPCStore, 'body'),
         centerBar('bar')
     ],
 
@@ -76,6 +183,17 @@ var TopBar = React.createClass({
                 <a className="item" data-tip="Universe Rankings" onClick={StatsActions.show}>
                     <i className="find big icon"></i>
                 </a>
+
+                <div className="ui item simple dropdown" ref="planetDropdown">
+                    <div className="ui circular teal label">
+                        {this.state.body.name}
+                    </div> <i className="dropdown icon"></i>
+
+                    <ColonyDropdown
+                        colonies={this.state.empire.colonies}
+                        stations={this.state.empire.stations}
+                    />
+                </div>
 
                 <a className="item" data-tip="Sign Out" onClick={UserActions.signOut}>
                     <i className="power big icon"></i>

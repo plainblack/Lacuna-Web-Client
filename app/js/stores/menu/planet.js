@@ -4,11 +4,14 @@ var Reflux = require('reflux');
 
 var MapActions = require('js/actions/menu/map');
 
-var MapModeStore = Reflux.createStore({
+var PlanetStore = Reflux.createStore({
     listenables: MapActions,
+    getInitialState: function() {
+        return '';
+    },
     onChangePlanet: function(id) {
         this.trigger(id);
     }
 });
 
-module.exports = MapModeStore;
+module.exports = PlanetStore;

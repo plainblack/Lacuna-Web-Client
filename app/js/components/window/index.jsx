@@ -9,7 +9,6 @@ var TopBar = require('js/components/menu/topBar');
 var BottomBar = require('js/components/menu/bottomBar');
 
 var LeftSidebar = require('js/components/menu/leftSidebar');
-var RightSidebar = require('js/components/menu/rightSidebar');
 var Map = require('js/components/menu/map');
 
 var Menu = require('js/components/menu');
@@ -34,7 +33,6 @@ var Window = React.createClass({
                     See: http://semantic-ui.com/modules/sidebar.html#/usage
                  */ }
                 <LeftSidebar />
-                <RightSidebar />
 
                 { /*
                     This sets all the tooltips in the entire client.
