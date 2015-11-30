@@ -11,9 +11,9 @@ The files contained herein are the front end code that make up the game called "
 # Hacking
 
 Lacuna-Web-Client requires [Node.js](https://nodejs.org) to hack on. For
-installing, see [their installation guide](https://github.com/joyent/node/wiki/Installation).
+installing, see [their downloads page](https://nodejs.org/en/download/). If you've installed Node.js in the past, please ensure you have Node.js version `4.x.x` or `5.x.x` and npm version `3.x.x`.
 
-Setting up and running everything should look something like this:
+Once you've got that, setting up and running everything should look something like this:
 
 ```bash
 git clone https://github.com/<your-username>/Lacuna-Web-Client
