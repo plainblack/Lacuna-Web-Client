@@ -7,7 +7,6 @@ var TopBar = require('js/components/menu/topBar');
 var BottomBar = require('js/components/menu/bottomBar');
 
 var LeftSidebarButton = require('js/components/menu/leftSidebarButton');
-var RightSidebarButton = require('js/components/menu/rightSidebarButton');
 
 var Chat = require('js/components/menu/chat');
 
@@ -24,7 +23,6 @@ var Menu = React.createClass({
             return (
                 <div>
                     <LeftSidebarButton />
-                    <RightSidebarButton />
                     <TopBar />
 
                     { /* More stuff for integrating with React */ }

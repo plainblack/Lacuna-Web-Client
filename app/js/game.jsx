@@ -74,7 +74,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             require('js/stores/user').listen(_.noop);
             require('js/stores/ticker').listen(_.noop);
             require('js/stores/menu/leftSidebar').listen(_.noop);
-            require('js/stores/menu/rightSidebar').listen(_.noop);
 
             // Scrap anything that might be in <body> just do the render!
             React.render(
