@@ -77,6 +77,12 @@ var BottomBar = React.createClass({
         }
         happy_boost = ['<div><img alt="" class="smallHappy" src="' + Lib.AssetUrl + 'ui/s/build.png"/ > '+happy_boost+'%</div>'];
 
+        var build_queue_help =
+            this.state.body.type === "space station" ?
+            "Build Queue: How many modules are queued to be built. Space stations do not have a build queue limit." :
+            "Build Queue: How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.";
+
+
         return (
             <div className="ui blue inverted icon menu" ref="bottombar" style={{
                 bottom: '40px',
@@ -195,10 +201,12 @@ var BottomBar = React.createClass({
                 </div>
 
                 <div id="buildqueuebar" className="item"
-                onMouseEnter={function(){$('#buildqueuebar').popup({html:"Build Queue: How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.",hoverable:true,delay:{hide:800}})}}>
+                onMouseEnter={function(){$('#buildqueuebar').popup({html:build_queue_help,hoverable:true,delay:{hide:800}})}}>
                     <i className="list large icon" />
                     <p style={storageStyle}>
-                        { this.state.body.build_queue_len } / {this.state.body.build_queue_size }
+                        {
+                            this.state.body.build_queue_len
+                        } { this.state.body.type === "space station" ? "" : " / " + this.state.body.build_queue_size }
                     <br />Build Q
                     </p>
                 </div>
