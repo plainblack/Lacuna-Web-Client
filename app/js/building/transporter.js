@@ -246,20 +246,18 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
             this.subscribe("onLoadPlans", this.populatePushPlanName, this, true);
             this.subscribe("onLoadShips", this.populatePushShipName, this, true);
             this.subscribe("onLoadPrisoners", this.populatePushPrisonerName, this, true);
-            
+            var This = this;
+
             Event.onAvailable("tradePushColony", function(){
                 var opt = document.createElement("option"),
-                    planets = Lib.planetarySort(Game.EmpireData.planets),
-                    cp = Game.GetCurrentPlanet(),
-                    nOpt;
+                    planets = This.transport.pushable;
 
                 for(var p=0; p<planets.length; p++) {
-                    if(planets[p].id != cp.id){
-                        nOpt = opt.cloneNode(false);
-                        nOpt.value = planets[p].id;
-                        nOpt.innerHTML = planets[p].name;
-                        this.appendChild(nOpt);
-                    }
+                    var nOpt = opt.cloneNode(false);
+                    var b = planets[p];
+                    nOpt.value = b.id;
+                    nOpt.innerHTML = b.name + " (" + b.x + "," + b.y + "): " + b.zone;
+                    this.appendChild(nOpt);
                 }
             });
             

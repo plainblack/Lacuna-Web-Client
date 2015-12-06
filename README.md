@@ -11,21 +11,30 @@ The files contained herein are the front end code that make up the game called "
 # Hacking
 
 Lacuna-Web-Client requires [Node.js](https://nodejs.org) to hack on. For
-installing, see [their installation guide](https://github.com/joyent/node/wiki/Installation).
+installing, see [their downloads page](https://nodejs.org/en/download/). If you've installed Node.js in the past, please ensure you have Node.js version `4.x.x` or `5.x.x` and npm version `3.x.x`.
 
-Setting up and running everything should look something like this:
+Once you've got that, setting up and running everything should look something like this:
 
 ```bash
 git clone https://github.com/<your-username>/Lacuna-Web-Client
 cd Lacuna-Web-Client
-npm install gulp -g # installs the build tool, gulp. This should be a once-off.
-npm install # installs the dependencies for building and running the code.
-gulp dev # compiles js/css and launches dev server.
+
+# These should be one-offs. These commands install gulp and bower into the
+# global namespace so they can be used on the command line.
+#
+# Gulp is a task runner; it handles building and running the code.
+# Bower is a package manager; it handles downloading JS modules that can't
+# be downloaded off npm the way everything else should.
+npm install gulp -g
+npm install bower -g
+
+# Installs the dependencies for building and running the code.
+# This should be done every time the `package.son` file changes.
+npm install
+
+# Compiles js/css and launches dev server.
+gulp dev
 ```
-
-## Note
-
-I ([1vasari](https://github.com/1vasari)) have a personal list which I'm working from at the moment. This is because issues are not switched on for this repo. It can be found [here](https://www.wunderlist.com/list/158378421). If you have any requests for the client it would most likely be best to send them to me via Lacuna Expanse's mail system - my empire name is `1vasari`.
 
 # Development
 
