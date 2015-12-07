@@ -80,7 +80,7 @@ var InviteWindow = React.createClass({
                 <div className="ui divider"></div>
 
                 <div className="ui fluid action input" ref="referralContainer">
-                    <input type="text" readonly="readonly" placeholder="Referal link" ref="referral">
+                    <input type="text" readOnly placeholder="Referal link" ref="referral">
                         <button className="ui blue button" onClick={this.genLink}>Generate</button>
                     </input>
                 </div>

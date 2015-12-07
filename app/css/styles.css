@@ -1061,6 +1061,11 @@ planet details
 /*#buildingDetailsExtra, #buildingDetailsProduction {
 	border-top: 2px solid #52acff;
 }*/
+#buildingDetailsExtra, .buildingDetailsExtra {
+    min-height: 200px;
+    max-height: 300px;
+    overflow: auto;
+}
 .buildingDetailsExtra label {
 	display:inline-block; /*mozilla 3.0, ie 8*/
     zoom:1; /*force ie layout so we can use the display:inline below*/
@@ -1244,7 +1249,7 @@ div.archaeologyGlyphContainer div.archaeologyGlyphHeader {
 }
 .buildQueue .buildQueueAction {
 	text-align:right;
-	width:200px;
+	width:115px;
 }
 .buildQueueHeader .buildQueueLevel , .buildQueueHeader .buildQueueTime  {
 	text-align:center;

@@ -107,7 +107,7 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
                     this.rpcSuccess(o);
                     this.result.ducks_quacked++;
                     this.SetQuacks();
-                    Dom.get("entertainmentDuckMessage").innerHTML = o.result;
+                    Dom.get("entertainmentDuckMessage").innerHTML = o.result.quack;
                 },
                 scope:this
             });
