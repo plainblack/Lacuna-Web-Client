@@ -82,6 +82,25 @@ var BodyList = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        var $el = $(this.refs.list.getDOMNode());
+        $el.hide();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevState.open === this.state.open) {
+            return;
+        }
+
+        var $el = $(this.refs.list.getDOMNode());
+
+        if (!$el.is(":visible") && this.state.open) {
+            $el.slideDown(500);
+        } else {
+            $el.slideUp(500);
+        }
+    },
+
     toggleList: function() {
         this.setState({
             open: !this.state.open
@@ -118,18 +137,7 @@ var BodyList = React.createClass({
                 >
                     {this.props.title}
                 </div>
-                <div
-                    style={{
-                        height: this.state.open ? window.innerHeight * 0.70 : 0,
-                        overflow: 'scroll',
-                        overflowX: 'hidden',
-
-                        // Taken from: https://davidwalsh.name/demo/css-slide.php
-                        transitionProperty: 'all',
-                        transitionDuration: '.5s',
-                        transitionTimingFunction: 'cubic-bezier(0, 1, 0.5, 1)'
-                    }}
-                >
+                <div ref="list">
                     {list}
                 </div>
             </div>
