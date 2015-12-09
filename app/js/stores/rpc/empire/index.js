@@ -34,6 +34,11 @@ var EmpireRPCStore = Reflux.createStore({
 
     getInitialState: function() {
         return {
+            bodies: {
+                colonies: [],
+                mystations: [],
+                ourstations: []
+            },
             colonies : [],
             essentia: 0,
             exactEssentia: 0,
