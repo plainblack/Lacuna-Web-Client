@@ -1231,14 +1231,14 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
                 }
                 
                 if(newTotal == 0) {
-                    this.updateAddCargo(li.Object.quantity * -1);
+                    this.updateAddCargo(li.Object.quantity * -1 * li.Object.size);
                     Event.purgeElement(li);
                     li.parentNode.removeChild(li);
                 }
                 else {
                     lq.innerHTML = newTotal;
                     li.Object.quantity = newTotal;
-                    this.updateAddCargo(diff);
+                    this.updateAddCargo(diff * li.Object.size);
                     var a = new Util.ColorAnim(lq, {color:{from:'#f00',to:'#fff'}}, 1.5);
                     a.animate();
                 }
