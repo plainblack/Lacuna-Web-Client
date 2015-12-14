@@ -75,7 +75,10 @@ var BottomBar = React.createClass({
         else if (this.state.body.happiness > 0) {
             happy_boost = '<i class="caret up small icon" />' + int(4*Math.log(this.state.body.happiness)/Math.log(1000)*10)/10;
         }
-        happy_boost = ['<div><img alt="" class="smallHappy" src="' + Lib.AssetUrl + 'ui/s/build.png"/ > '+happy_boost+'%</div>'];
+        happy_boost = [
+                       '<div><img alt="" class="smallHappy" src="', Lib.AssetUrl, 'ui/s/build.png"/ > ',happy_boost,'%</div>',
+                       '<div><i class="spy icon" /> +',this.state.body.propaganda_boost,'%</div>'
+                      ].join('');
 
         var build_queue_help =
             this.state.body.type === "space station" ?
