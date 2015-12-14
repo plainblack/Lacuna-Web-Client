@@ -56,7 +56,7 @@ var PlanetListItem = React.createClass({
                 // For some reason this doesn't get set on the items (by Semantic) when it should.
                 cursor: 'pointer'
             }}>
-                {this.props.name}
+                {this.props.name} ({this.props.zone})
             </a>
         );
     }
@@ -116,6 +116,9 @@ var BodyList = React.createClass({
                     key={planet.id}
                     name={planet.name}
                     id={planet.id}
+                    x={planet.x}
+                    y={planet.y}
+                    zone={planet.zone}
                     current={this.props.current}
                 />
             );
