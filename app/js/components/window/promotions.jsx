@@ -68,7 +68,7 @@ var PromotionsWindow = React.createClass({
             <Panel
                 show={this.state.show}
                 onClose={PromotionsActions.hide}
-                height={300}
+                height="auto"
                 width={300}
                 title="Promotions"
             >

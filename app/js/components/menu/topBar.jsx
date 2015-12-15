@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var _ = require('lodash');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 var MapModeStore = require('js/stores/menu/mapMode');
@@ -39,6 +40,8 @@ var TopBar = React.createClass({
             red: this.state.empire.self_destruct_active,
             blue: !this.state.empire.self_destruct_active
         });
+        var promotion_tip = "Currently Active Event"+
+            (this.state.server.promotions && this.state.server.promotions.length == 1 ? '' : 's');
 
         return (
             <div className={barClass} ref="bar" style={{
@@ -81,12 +84,13 @@ var TopBar = React.createClass({
                 </a>
 
                 {
+                    this.state.server.promotions &&
                     this.state.server.promotions.length > 0
                     ?
-                        <a className="item" data-tip="Promotions" onClick={PromotionsActions.show}>
+                        <a className="item" data-tip={promotion_tip} onClick={PromotionsActions.show}>
                             <i className="announcement big icon"></i>
                             <div className="ui orange floated right circular label">
-                                New!
+                                Event!
                             </div>
                         </a>
                     :
