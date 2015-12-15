@@ -40,8 +40,8 @@ var SelfDestruct = React.createClass({
         var dms = this.state.empire.self_destruct_ms;
         var fdms = dactive ? util.formatMillisecondTime(dms) : '';
 
-        var itemStyle = dactive ? {"color":"red"} : {};
-        var verb = dactive ? "Disable" : "Enable";
+        var itemStyle = dactive ? {'color':'red'} : {};
+        var verb = dactive ? 'Disable' : 'Enable';
 
         return (
             <a className="item" onClick={toggle(this.onClickSelfDestruct)} style={itemStyle}>
@@ -51,7 +51,7 @@ var SelfDestruct = React.createClass({
                     dactive ?
                         <span>
                             <p style={{margin:0}}>SELF DESTRUCT ACTIVE</p>
-                            <p style={{"text-align": "right !important"}}>{fdms}</p>
+                            <p style={{textAlign: 'right !important'}}>{fdms}</p>
                         </span>
                     :
                         ''
@@ -99,6 +99,23 @@ var LeftSidebar = React.createClass({
             <div className="ui left vertical inverted sidebar menu">
 
                 <div className="ui horizontal inverted divider">
+                    Actions
+                </div>
+
+                <a className="item" onClick={toggle(InviteActions.show)}>
+                    <i className="add user icon"></i>
+                    Invite a Friend
+                </a>
+                <a className="item" onClick={toggle(function() {
+                    YAHOO.lacuna.MapPlanet.Refresh();
+                })}>
+                    <i className="refresh icon"></i>
+                    Refresh
+                </a>
+
+
+
+                <div className="ui horizontal inverted divider">
                     Links
                 </div>
 
@@ -123,10 +140,6 @@ var LeftSidebar = React.createClass({
                     <i className="student icon"></i>
                     Help
                 </a>
-                <a className="item" onClick={toggle(ServerClockActions.show)}>
-                    <i className="wait icon"></i>
-                    Server Clock
-                </a>
                 <a className="item" target="_blank" href="http://www.lacunaexpanse.com/terms/"
                     onClick={LeftSidebarActions.toggle}>
                     <i className="info circle icon"></i>
@@ -143,28 +156,26 @@ var LeftSidebar = React.createClass({
                     Wiki
                 </a>
 
+
+
                 <div className="ui horizontal inverted divider">
-                    Actions
+                    Extras
                 </div>
 
                 <a className="item" onClick={toggle(AboutActions.show)}>
                     <i className="rocket icon"></i>
                     About
                 </a>
-                <a className="item" onClick={toggle(InviteActions.show)}>
-                    <i className="add user icon"></i>
-                    Invite a Friend
-                </a>
                 <a className="item" onClick={toggle(OptionsActions.show)}>
                     <i className="options icon"></i>
                     Options
                 </a>
-                <a className="item" onClick={toggle(function() {
-                    YAHOO.lacuna.MapPlanet.Refresh();
-                })}>
-                    <i className="refresh icon"></i>
-                    Refresh
+                <a className="item" onClick={toggle(ServerClockActions.show)}>
+                    <i className="wait icon"></i>
+                    Server Clock
                 </a>
+
+
 
                 <div className="ui horizontal inverted divider">
                     Self Destruct
