@@ -3,7 +3,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
-var $ = require('js/shims/jquery');
 
 var classNames = require('classnames');
 
@@ -65,7 +64,10 @@ var PlanetListItem = React.createClass({
 var BodyList = React.createClass({
 
     propTypes: {
-        list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+        list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        current: React.PropTypes.string.isRequired,
+        title: React.PropTypes.string.isRequired,
+        open: React.PropTypes.bool.isRequired,
     },
 
     getInitialProps: function() {
@@ -81,25 +83,6 @@ var BodyList = React.createClass({
         return {
             open: this.props.open
         };
-    },
-
-    componentDidMount: function() {
-        var $el = $(this.refs.list.getDOMNode());
-        $el.hide();
-    },
-
-    componentDidUpdate: function(prevProps, prevState) {
-        var $el = $(this.refs.list.getDOMNode());
-        if (prevState.open === this.state.open) {
-            if (this.state.open) { $el.show() } else { $el.hide() }
-            return;
-        }
-
-        if (!$el.is(":visible") && this.state.open) {
-            $el.slideDown(500);
-        } else {
-            $el.slideUp(500);
-        }
     },
 
     toggleList: function() {
@@ -136,12 +119,14 @@ var BodyList = React.createClass({
                     }
                     onClick={this.toggleList}
                     style={{
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }}
                 >
                     {this.props.title}
                 </div>
-                <div ref="list">
+                <div style={{
+                    display: this.state.open ? '' : 'none'
+                }}>
                     {list}
                 </div>
             </div>
