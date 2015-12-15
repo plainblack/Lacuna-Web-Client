@@ -73,12 +73,13 @@ var BodyList = React.createClass({
             list: [],
             current: '',
             title: '',
+            open: false
         };
     },
 
     getInitialState: function() {
         return {
-            open: false
+            open: this.props.open
         };
     },
 
@@ -88,11 +89,11 @@ var BodyList = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
+        var $el = $(this.refs.list.getDOMNode());
         if (prevState.open === this.state.open) {
+            if (this.state.open) { $el.show() } else { $el.hide() }
             return;
         }
-
-        var $el = $(this.refs.list.getDOMNode());
 
         if (!$el.is(":visible") && this.state.open) {
             $el.slideDown(500);
@@ -135,7 +136,7 @@ var BodyList = React.createClass({
                     }
                     onClick={this.toggleList}
                     style={{
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}
                 >
                     {this.props.title}
@@ -156,9 +157,9 @@ var RightSidebar = React.createClass({
 
     render: function() {
         var items = [
-            ['My Colonies', 'colonies'],
-            ['My Stations', 'mystations'],
-            ['Our Stations', 'ourstations']
+            ['My Colonies', 'colonies', 1],
+            ['My Stations', 'mystations', 0],
+            ['Our Stations', 'ourstations', 0]
         ];
 
         var bodiesList = _.map(items, function(item) {
@@ -170,6 +171,7 @@ var RightSidebar = React.createClass({
                         title={item[0]}
                         list={list}
                         current={this.state.body.id}
+                        open={item[2]}
                     />
                 );
             }
