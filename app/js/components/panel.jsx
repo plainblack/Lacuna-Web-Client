@@ -42,17 +42,19 @@ var Panel = React.createClass({
                     left: (($(window.document).width() - this.props.width) / 2) + 'px'
                 }}>
                     <div className="drag-handle" style={{
-                        cursor: 'move',
-                        width: '250px',
-                        color: '#FFD800',
-                        fontSize: '1.3em',
-                        marginLeft: '15px',
-                        paddingLeft: '10px',
+                        backgroundColor: '#184F82',
                         border: '1px solid black',
-                        borderBottom: '0', // Avoid the border appearing thicker on the bottom edge.
-                        borderTopLeftRadius: '7px',
-                        borderTopRightRadius: '7px',
-                        backgroundColor: '#184F82'
+                        borderBottom: 0, // Avoid the border appearing thicker on the bottom edge.
+                        borderTopLeftRadius: 7,
+                        borderTopRightRadius: 7,
+                        color: '#FFD800',
+                        cursor: 'move',
+                        fontSize: '110%',
+                        fontWeight: 'bold',
+                        lineHeight: '1.75',
+                        marginLeft: 10,
+                        paddingLeft: 10,
+                        width: 250
                     }}>
                         {this.props.title}
                     </div>

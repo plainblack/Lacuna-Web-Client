@@ -177,18 +177,6 @@ body.yui-skin-sam .yui-panel hr {
 	border-top: 1px solid rgb(82, 172, 255);
 }
 
-/*#pulsing_c {
-	width:99%;
-}*/
-#pulsing .bd {
-	border-width:0px;
-	text-align:center;
-}
-.yui-skin-sam #pulsing .bd, .yui-skin-sam #pulsing.ft {
-	background:transparent;
-	border-width:0px;
-}
-
 .tleTable {
 	width:100%;
 	border: 1px solid white;
@@ -530,32 +518,6 @@ body.yui-skin-sam .yui-pg-container .yui-pg-current-page {
 }
 
 /*
- * Invite a Friend
- */
-
-#invite li label {
-	display: inline-block; /*mozilla 3.0, ie 8*/
-    zoom:1; /*force ie layout so we can use the display:inline below*/
-    *display:inline; /*ie hack to make it think this is an inline-block*/
-	width: 70px;
-	padding-right: 5px;
-	text-align: right;
-}
-#invite li input {
-	width: 347px;
-}
-#invite li textarea {
-	width: 425px;
-	height: 150px;
-}
-#inviteMessage {
-	margin-top: 3px;
-}
-#inviteGenerateLink {
-	width: 425px;
-}
-
-/*
 * Species creator
 */
 .speciesSlider_bg {
@@ -692,6 +654,7 @@ Info dialogs for Empire and Alliance
 }
 
 #planetMap .tile:hover {
+    margin: -1px;
 	border: 1px dashed #fff;
 }
 .tile {
@@ -1804,47 +1767,6 @@ PROFILE
 	width: 200px
 }
 
-/*
-Essentia Dialog
-*/
-#essentiaTabBoost table {
-	width: 100%;
-}
-.essentiaAmount {
-	margin-bottom: 5px;
-}
-#essentiaTabBoost .essentiaDetailsImg {
-	width: 25px;
-}
-#essentiaTabBoost .essentiaDetailsText {
-	width: 180px;
-}
-#essentiaTabBoost .essentiaDetailsCost {
-	width: 45px;
-}
-#essentiaTabBoost .essentiaDetailsBoost {
-	width: 65px;
-}
-#essentiaTabBoost .essentiaDetailsTime {
-	padding-right: 10px;
-	text-align: right;
-}
-#essentiaTabBoost th {
-	text-align: center;
-}
-#essentiaTabBoost img {
-	vertical-align:middle;
-}
-
-#essentiaGetMore {
-	text-align: center;
-	margin: 10px 0;
-}
-
-#essentiaRedeemCode {
-	width: 290px;
-}
-
 ul.statsList label{
 	font-weight:bold;
 	padding-right:5px;
@@ -1993,11 +1915,6 @@ TextboxList
     color: yellow;
 }
 
-#reactWindowContainer {
-	top: 0;
-	position: absolute;
-}
-
 /* Semantic UI */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css');
 
@@ -2035,6 +1952,11 @@ input, textarea, select, option {
 /* Fix tooltips hiding behind things. */
 .__react_component_tooltip {
 	z-index: 2147483647 !important;
+}
+
+/* Make sure the old loading indicator is hidden */
+#pulsing {
+    display: none;
 }
 
 
