@@ -17,20 +17,20 @@ var PlanetListItem = React.createClass({
     propTypes: {
         name: React.PropTypes.string.isRequired,
         id: React.PropTypes.string.isRequired,
-        current: React.PropTypes.string.isRequired
+        currentBody: React.PropTypes.string.isRequired
     },
 
     getInitialProps: function() {
         return {
             name: '',
             id: '',
-            current: '',
+            currentBody: '',
         };
     },
 
     // Returns true if this list item is the the currently selected planet.
     isCurrentWorld: function() {
-        return this.props.current === this.props.id
+        return this.props.currentBody === this.props.id
     },
 
     handleClick: function() {
@@ -72,7 +72,7 @@ var AccordionItem = React.createClass({
     getInitialProps: function() {
         return {
             list: [],
-            current: '',
+            currentBody: '',
             title: '',
             open: false
         };
@@ -108,22 +108,6 @@ var AccordionItem = React.createClass({
     },
 
     render: function() {
-        var list = [];
-
-        _.each(this.props.list, function(planet) {
-            list.push(
-                <PlanetListItem
-                    key={planet.id}
-                    name={planet.name}
-                    id={planet.id}
-                    x={planet.x}
-                    y={planet.y}
-                    zone={planet.zone}
-                    current={this.props.current}
-                />
-            );
-        }, this);
-
         return (
             <div>
                 <div
@@ -140,10 +124,22 @@ var AccordionItem = React.createClass({
                 >
                     {this.props.title}
                 </div>
-                <div style={{
-                    display: this.state.open ? '' : 'none'
-                }}>
-                    {list}
+
+                    {
+                        _.map(this.props.list, function(planet) {
+                            return (
+                                <PlanetListItem
+                                    key={planet.id}
+                                    name={planet.name}
+                                    id={planet.id}
+                                    x={planet.x}
+                                    y={planet.y}
+                                    zone={planet.zone}
+                                    currentBody={this.props.currentBody}
+                                />
+                            );
+                        }, this)
+                    }
                 </div>
             </div>
         );
@@ -170,7 +166,7 @@ var BodiesAccordion = React.createClass({
                                 <AccordionItem
                                     title={item[0]}
                                     list={list}
-                                    current={this.props.currentBody}
+                                    currentBody={this.props.currentBody}
                                 />
                             );
                         }
