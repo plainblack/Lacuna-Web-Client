@@ -28,6 +28,7 @@ var ServerRPCStore = Reflux.createStore({
             clientFormattedTime: '',
             version : 123456789,
             announcement : 0,
+            promotions: [],
             rpc_limit : 10000,
             star_map_size : {
                 x : [ -15, 15 ],
