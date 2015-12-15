@@ -13,4 +13,4 @@ This motley collection of markdown files attempts to document how a brave indivi
 - [Gulp tasks](gulp-tasks.md)
 - Modules
     - [Server](modules/server.md)
-    - Util (**TODO**)
+    - Util
