@@ -8,7 +8,15 @@ var EmpireRPCStore = require('js/stores/rpc/empire');
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
 var LeftSidebarButton = React.createClass({
-    mixins: [Reflux.connect(EmpireRPCStore, 'empire')],
+
+    mixins: [
+        Reflux.connect(EmpireRPCStore, 'empire')
+    ],
+
+    click: function() {
+        LeftSidebarActions.toggle();
+    },
+
     render: function() {
         return (
             <div style={{
@@ -17,10 +25,8 @@ var LeftSidebarButton = React.createClass({
                 left: '15px',
                 top: '15px'
             }}>
-                <div className="ui blue big icon button" onClick={LeftSidebarActions.toggle}>
-                    <i className="content icon"></i>
-                </div>
-                <div className="ui pointing left large teal label">
+                <div className="ui left labeled icon blue button" onClick={this.click}>
+                    <i className="content icon" />
                     {this.state.empire.name}
                 </div>
             </div>
