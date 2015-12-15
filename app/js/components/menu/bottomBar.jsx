@@ -77,7 +77,7 @@ var BottomBar = React.createClass({
         }
         happy_boost = [
                        '<div><img alt="" class="smallHappy" src="', Lib.AssetUrl, 'ui/s/build.png"/ > ',happy_boost,'%</div>',
-                       '<div><i class="spy icon" /> +',this.state.body.propaganda_boost,'%</div>'
+                       '<div><i class="spy large icon" /> +',this.state.body.propaganda_boost,'%</div>'
                       ].join('');
 
         var build_queue_help =
