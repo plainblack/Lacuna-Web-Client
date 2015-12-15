@@ -7,6 +7,14 @@ This repository contains the web client for the [open source](http://www.lacunae
 [![devDependency Status](https://david-dm.org/plainblack/Lacuna-Web-Client/dev-status.svg)](https://david-dm.org/plainblack/Lacuna-Web-Client#info=devDependencies)
 ![Lacuna-Web-Client size](https://reposs.herokuapp.com/?path=plainblack/Lacuna-Web-Client)
 
+![Screenshot](docs/img/screenshot.png)
+
+# Ideas
+
+Got an idea? [Let us know!](https://github.com/plainblack/Lacuna-Web-Client/issues)
+
+![Yoda and feature requests](docs/img/feature-request.jpg)
+
 # License
 
 See the [license file](LICENSE).
