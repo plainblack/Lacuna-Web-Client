@@ -39,7 +39,6 @@ var PlanetListItem = React.createClass({
         if (this.isCurrentWorld()) {
             YAHOO.lacuna.MapPlanet.Refresh()
         } else {
-            console.log('Changing to planet (#' + this.props.id + ').');
             MapActions.changePlanet(this.props.id);
         }
     },
@@ -61,7 +60,7 @@ var PlanetListItem = React.createClass({
     }
 });
 
-var BodyList = React.createClass({
+var AccordionItem = React.createClass({
 
     propTypes: {
         list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
@@ -83,6 +82,23 @@ var BodyList = React.createClass({
         return {
             open: this.props.open
         };
+    },
+
+    componentDidMount: function() {
+        RightSidebarActions.collapseAccordion.listen(this.hideList);
+        RightSidebarActions.expandAccordion.listen(this.showList);
+    },
+
+    showList: function() {
+        this.setState({
+            open: true
+        });
+    },
+
+    hideList: function() {
+        this.setState({
+            open: false
+        });
     },
 
     toggleList: function() {
@@ -134,37 +150,93 @@ var BodyList = React.createClass({
     }
 });
 
+var BodiesAccordion = React.createClass({
+
+    items: [
+        ['My Colonies', 'colonies'],
+        ['My Stations', 'mystations'],
+        ['Our Stations', 'ourstations']
+    ],
+
+    render: function() {
+        return (
+            <div>
+                {
+                    _.map(this.items, function(item) {
+                        var list = this.props.bodies[item[1]] || [];
+
+                        if (list.length > 0) {
+                            return (
+                                <AccordionItem
+                                    title={item[0]}
+                                    list={list}
+                                    current={this.props.currentBody}
+                                />
+                            );
+                        }
+                    }, this)
+                }
+            </div>
+        );
+    }
+})
+
 var RightSidebar = React.createClass({
+
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(BodyRPCStore, 'body')
     ],
 
+    componentDidUpdate: function() {
+        var $header = $(this.refs.header.getDOMNode());
+        var $content = $(this.refs.content.getDOMNode());
+
+        $content.css({
+            height: window.innerHeight - $header.height()
+        });
+    },
+
+    homePlanet: function() {
+        RightSidebarActions.toggle();
+        MapActions.changePlanet(this.state.empire.home_planet_id);
+    },
+
+    expand: function() {
+        RightSidebarActions.expandAccordion();
+    },
+
+    collapse: function() {
+        RightSidebarActions.collapseAccordion();
+    },
+
     render: function() {
-        var items = [
-            ['My Colonies', 'colonies', 1],
-            ['My Stations', 'mystations', 0],
-            ['Our Stations', 'ourstations', 0]
-        ];
-
-        var bodiesList = _.map(items, function(item) {
-            var list = this.state.empire.bodies[item[1]] || []
-
-            if (list.length > 0) {
-                return (
-                    <BodyList
-                        title={item[0]}
-                        list={list}
-                        current={this.state.body.id}
-                        open={item[2]}
-                    />
-                );
-            }
-        }, this)
-
         return (
             <div className="ui right vertical inverted sidebar menu">
-                {bodiesList}
+
+                <div ref="header">
+                    <a className="item" onClick={this.homePlanet}>
+                        Go to home planet
+                    </a>
+
+                    <a className="item" onClick={this.expand}>
+                        Expand all
+                    </a>
+
+                    <a className="item" onClick={this.collapse}>
+                        Collapse all
+                    </a>
+                </div>
+
+                <div ref="content" style={{
+                    overflow: 'auto',
+                    overflowX: 'hidden'
+                }}>
+                    <BodiesAccordion
+                        bodies={this.state.empire.bodies}
+                        currentBody={this.state.body.id}
+                    />
+                </div>
             </div>
         );
     }
