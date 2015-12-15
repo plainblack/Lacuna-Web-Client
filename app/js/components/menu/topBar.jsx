@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 var MapModeStore = require('js/stores/menu/mapMode');
+var ServerRPCStore = require('js/stores/rpc/server');
 
 var centerBar = require('js/components/mixin/centerBar');
 var classNames = require('classnames');
@@ -14,11 +15,13 @@ var MapActions = require('js/actions/menu/map');
 
 var MailActions = require('js/actions/window/mail');
 var EssentiaActions = require('js/actions/window/essentia');
+var PromotionsActions = require('js/actions/window/promotions');
 var StatsActions = require('js/actions/window/stats');
 
 var TopBar = React.createClass({
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
+        Reflux.connect(ServerRPCStore, 'server'),
         Reflux.connect(MapModeStore, 'mapMode'),
         centerBar('bar')
     ],
@@ -76,6 +79,19 @@ var TopBar = React.createClass({
                 <a className="item" data-tip="Universe Rankings" onClick={StatsActions.show}>
                     <i className="find big icon"></i>
                 </a>
+
+                {
+                    this.state.server.promotions.length > 0
+                    ?
+                        <a className="item" data-tip="Promotions" onClick={PromotionsActions.show}>
+                            <i className="announcement big icon"></i>
+                            <div className="ui orange floated right circular label">
+                                New!
+                            </div>
+                        </a>
+                    :
+                        ''
+                }
 
                 <a className="item" data-tip="Sign Out" onClick={UserActions.signOut}>
                     <i className="power big icon"></i>

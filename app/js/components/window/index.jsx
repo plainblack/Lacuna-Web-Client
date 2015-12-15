@@ -20,6 +20,7 @@ var InviteWindow = require('js/components/window/invite');
 var MailWindow = require('js/components/window/mail');
 var NotesWindow = require('js/components/window/notes');
 var OptionsWindow = require('js/components/window/options');
+var PromotionsWindow = require('js/components/window/promotions');
 var ServerClockWindow = require('js/components/window/serverClock');
 var StatsWindow = require('js/components/window/stats');
 
@@ -63,6 +64,7 @@ var Window = React.createClass({
                     <MailWindow />
                     <NotesWindow />
                     <OptionsWindow />
+                    <PromotionsWindow />
                     <ServerClockWindow />
                     <StatsWindow />
 
