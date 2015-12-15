@@ -8,7 +8,15 @@ var BodyRPCStore = require('js/stores/rpc/body');
 var RightSidebarActions = require('js/actions/menu/rightSidebar')
 
 var RightSidebarButton = React.createClass({
-    mixins: [Reflux.connect(BodyRPCStore, 'body')],
+
+    mixins: [
+        Reflux.connect(BodyRPCStore, 'body')
+    ],
+
+    click: function() {
+        RightSidebarActions.toggle();
+    },
+
     render: function() {
         return (
             <div style={{
@@ -17,11 +25,9 @@ var RightSidebarButton = React.createClass({
                 right: '15px',
                 top: '15px'
             }}>
-                <div className="ui pointing right large teal label">
+                <div className="ui right labeled icon blue button" onClick={this.click}>
+                    <i className="world icon" />
                     {this.state.body.name}
-                </div>
-                <div className="ui blue big icon button" onClick={RightSidebarActions.toggle}>
-                    <i className="world icon"></i>
                 </div>
             </div>
         );
