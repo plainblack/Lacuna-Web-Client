@@ -26,22 +26,10 @@ var Promotion = React.createClass({
         };
     },
 
-    promotionTypes: {
-        Bonus50: '50% Bonus'
-    },
-
-    getHeader: function() {
-        return this.promotionTypes[this.props.promotion.type] || 'Awesome Promotion';
-    },
-
-    getEnd: function() {
-        return moment().to(util.serverDateToMoment(this.props.promotion.end_date));
-    },
-
     render: function() {
         return (
             <div className="text item">
-                <h2>{this.getHeader()}</h2>
+                <h2>{this.props.promotion.header}</h2>
 
                 {this.props.promotion.description}
 
@@ -50,7 +38,7 @@ var Promotion = React.createClass({
                 <span style={{
                     textDecoration: 'underline'
                 }}>
-                    Ends {this.getEnd()}
+                    Ends {this.props.promotion.ends}
                 </span>
             </div>
         );
