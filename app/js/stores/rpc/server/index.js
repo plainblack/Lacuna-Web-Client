@@ -10,6 +10,10 @@ var util = require('js/util');
 
 var moment = require('moment');
 
+var PROMOTION_TYPES = {
+    Bonus50: '50% Bonus'
+};
+
 var ServerRPCStore = Reflux.createStore({
     listenables: [
         StatusActions,
@@ -54,6 +58,13 @@ var ServerRPCStore = Reflux.createStore({
             this.data.serverMoment = util.serverDateToMoment(this.data.time).utcOffset(0);
             this.data.clientMoment = util.serverDateToMoment(this.data.time);
 
+            // The server won't return the promotions block if there aren't any.
+            if (!this.data.promotions) {
+                this.data.promotions = [];
+            }
+
+            this.data.promotions = _.map(this.data.promotions, this.handlePromotion);
+
             this.trigger(this.data);
         }
     },
@@ -63,6 +74,13 @@ var ServerRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
+    handlePromotion: function(promotion) {
+        promotion.header = PROMOTION_TYPES[promotion.type] || 'Awesome Promotion';
+        promotion.ends = moment().to(util.serverDateToMoment(promotion.end_date));
+
+        return promotion;
+    },
+
     onTick: function() {
         this.data.serverMoment = this.data.serverMoment.add(1, 'second');
         this.data.serverFormattedTime = util.formatMomentLong(this.data.serverMoment);
@@ -70,20 +88,14 @@ var ServerRPCStore = Reflux.createStore({
         this.data.clientMoment = this.data.clientMoment.add(1, 'second');
         this.data.clientFormattedTime = util.formatMomentLong(this.data.clientMoment);
 
-        // if the promotion has ended, clear it so it can be removed from the user's
-        // notice.
-        if (this.data.promotions &&
-            this.data.promotions.length)
-        {
-            var dt = new Date();
-            if (_.findIndex(this.data.promotions,
-                            function(promo) {
-                                return dt < util.serverDateToDateObj(promo.end_date)
-                            }) < 0)
-            {
-                delete this.data.promotions;
-            }
-        }
+        var now = Date.now();
+        this.data.promotions = _.filter(this.data.promotions, function(promotion) {
+            // Note: date objects can be compared numeracally,
+            // see: http://stackoverflow.com/a/493018/1978973
+            return now < util.serverDateToDateObj(promotion.end_date);
+        }, this);
+
+        this.data.promotions = _.map(this.data.promotions, this.handlePromotion);
 
         this.trigger(this.data);
     }
