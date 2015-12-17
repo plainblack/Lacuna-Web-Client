@@ -1954,6 +1954,11 @@ input, textarea, select, option {
 	z-index: 2147483647 !important;
 }
 
+/* Make sure the old loading indicator is hidden */
+#pulsing {
+    display: none;
+}
+
 /* Planet list items should have pointy cursors. ;) */
 a.item {
     cursor: pointer;

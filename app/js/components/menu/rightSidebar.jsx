@@ -64,9 +64,9 @@ var AccordionItem = React.createClass({
 
     propTypes: {
         list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        current: React.PropTypes.string.isRequired,
+        currentBody: React.PropTypes.string.isRequired,
         title: React.PropTypes.string.isRequired,
-        open: React.PropTypes.bool.isRequired,
+        initiallyOpen: React.PropTypes.bool.isRequired,
     },
 
     getInitialProps: function() {
@@ -74,13 +74,13 @@ var AccordionItem = React.createClass({
             list: [],
             currentBody: '',
             title: '',
-            open: false
+            initiallyOpen: false
         };
     },
 
     getInitialState: function() {
         return {
-            open: this.props.open
+            open: this.props.initiallyOpen
         };
     },
 
@@ -124,7 +124,9 @@ var AccordionItem = React.createClass({
                 >
                     {this.props.title}
                 </div>
-
+                <div style={{
+                    display: this.state.open ? '' : 'none'
+                }}>
                     {
                         _.map(this.props.list, function(planet) {
                             return (
@@ -149,9 +151,21 @@ var AccordionItem = React.createClass({
 var BodiesAccordion = React.createClass({
 
     items: [
-        ['My Colonies', 'colonies'],
-        ['My Stations', 'mystations'],
-        ['Our Stations', 'ourstations']
+        {
+            title: 'My Colonies',
+            key: 'colonies',
+            initiallyOpen: true
+        },
+        {
+            title: 'My Stations',
+            key: 'mystations',
+            initiallyOpen: false
+        },
+        {
+            title: 'Our Stations',
+            key: 'ourstations',
+            initiallyOpen: false
+        }
     ],
 
     render: function() {
@@ -159,13 +173,14 @@ var BodiesAccordion = React.createClass({
             <div>
                 {
                     _.map(this.items, function(item) {
-                        var list = this.props.bodies[item[1]] || [];
+                        var list = this.props.bodies[item.key] || [];
 
                         if (list.length > 0) {
                             return (
                                 <AccordionItem
-                                    title={item[0]}
+                                    title={item.title}
                                     list={list}
+                                    initiallyOpen={item.initiallyOpen}
                                     currentBody={this.props.currentBody}
                                 />
                             );
