@@ -199,7 +199,7 @@ var BoostsPanel = React.createClass({
                     <div className="seven wide column">
                         <Boost
                             type="storage"
-                            description="+25% Storage / hr"
+                            description="+25% Storage"
                             iconName="archive"
                         />
                     </div>
