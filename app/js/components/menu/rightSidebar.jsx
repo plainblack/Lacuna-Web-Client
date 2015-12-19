@@ -122,7 +122,11 @@ var AccordionItem = React.createClass({
                         cursor: 'pointer',
                     }}
                 >
-                    {this.props.title}
+                    {this.props.title} {
+                        this.state.open
+                        ? <i className="angle down icon"></i>
+                        : <i className="angle right icon"></i>
+                    }
                 </div>
                 <div style={{
                     display: this.state.open ? '' : 'none'
