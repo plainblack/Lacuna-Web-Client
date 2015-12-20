@@ -14,11 +14,11 @@ var CreditsRPCStore = Reflux.createStore({
     },
 
     getInitialState: function() {
-        return [];
+        return {};
     },
 
     hasData: function() {
-        return _.keys(this.data) > 0;
+        return _.keys(this.data).length > 0;
     },
 
     // INPUT:
