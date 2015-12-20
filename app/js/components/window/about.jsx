@@ -49,30 +49,28 @@ var CreditsSection = React.createClass({
 
     render: function() {
         return (
-            <li
-                style={{
-                    listStyle: 'decimal outside none'
-                }}
-            >
-                {this.props.header}
+            <div>
+                <strong>{this.props.header}</strong>
 
-                <ul style={{paddingLeft: 20}}>
+                <ul>
                     {
                         _.map(this.props.names, function(name) {
                             return (
                                 <li
                                     key={name}
                                     style={{
-                                        listStyle: 'disc outside none'
-                                    }}
-                                >
+                                        listStyleType: 'disc',
+                                        marginLeft: 40
+                                    }}>
                                     {name}
                                 </li>
                             );
                         })
                     }
                 </ul>
-            </li>
+
+                <br />
+            </div>
         );
     }
 });
@@ -85,7 +83,7 @@ var Credits = React.createClass({
 
     render: function() {
         return (
-            <ol style={{paddingLeft: 40}}>
+            <div>
                 {
                     _.map(this.state.credits, function(names, header) {
                         return (
@@ -97,7 +95,7 @@ var Credits = React.createClass({
                         );
                     })
                 }
-            </ol>
+            </div>
         );
     }
 });
