@@ -229,18 +229,20 @@ var RightSidebar = React.createClass({
         return (
             <div className="ui right vertical inverted sidebar menu">
 
-                <div ref="header">
-                    <a className="item" onClick={this.homePlanet}>
-                        Go to home planet
+                <div ref="header" style={{paddingTop:"7px"}}>
+                    <a title="Go to home planet" className="item" onClick={this.homePlanet} style={{display: "inline"}}>
+                        Home
                     </a>
 
-                    <a className="item" onClick={this.expand}>
-                        Expand all
+                    <div style={{float:'right'}}>
+                    <a title="Expand all" className="item" onClick={this.expand} style={{display: "inline"}}>
+                        [+]
                     </a>
 
-                    <a className="item" onClick={this.collapse}>
-                        Collapse all
+                    <a title="Collapse all" className="item" onClick={this.collapse} style={{display: "inline"}}>
+                        [-]
                     </a>
+                    </div>
                 </div>
 
                 <div ref="content" style={{
