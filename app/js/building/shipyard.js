@@ -1,7 +1,9 @@
 YAHOO.namespace("lacuna.buildings");
 
+var MapActions = require('js/actions/menu/map');
+
 if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.buildings.Shipyard) {
-    
+
 (function(){
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
@@ -14,10 +16,10 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 
     var Shipyard = function(result){
         Shipyard.superclass.constructor.call(this, result);
-        
+
         this.service = Game.Services.Buildings.Shipyard;
     };
-    
+
     Lang.extend(Shipyard, Lacuna.buildings.Building, {
         getChildTabs : function() {
             return [this._getQueueTab(), this._getBuildTab()];
@@ -28,7 +30,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 '<ul class="shipQueue shipQueueHeader clearafter"><li class="shipQueueType">Type</li><li class="shipQueueEach">Time To Complete</li></ul>',
                 '<div id="qHt" style="overflow:auto;"><div id="shipsBuilding"></div></div>'].join('');
             Event.on(Sel.query(".shipQueueSubsidize",div,true), "click", this.SubsidizeBuildQueue, this, true);
-        
+
             var queueTab = new YAHOO.widget.Tab({ label: "Build Queue", contentEl:div });
             queueTab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
@@ -38,9 +40,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     Dom.setStyle(Dom.get('qHt'),'height',Ht + 'px');
                     }
             }, this, true);
-                    
+
             this.queueTab = queueTab;
-            
+
             return queueTab;
         },
         _getBuildTab : function() {
@@ -69,11 +71,11 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     Dom.setStyle(Dom.get('bHt'),'height',Ht + 'px');
                 }
             }, this, true);
-            
+
             Event.on("shipBuildView", "change", this.ShipPopulate, this, true);
 
             this.buildTab = buildTab;
-            
+
             return buildTab;
         },
         getBuild : function() {
@@ -131,7 +133,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 this.resetQueue();
                 div = divParent.removeChild(div);
                 div.innerHTML = "";
-                
+
                 /*= {
                     number_of_ships_building: o.result.number_of_ships_building,
                     ships_building: o.result.ships_building
@@ -142,16 +144,16 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                             nUl = ul.cloneNode(false),
                             nLi = li.cloneNode(false),
                             ncs = (Lib.getTime(bqo.date_completed) - serverTime) / 1000;
-                        
+
                         nUl.Build = bqo;
-                        
+
                         Dom.addClass(nUl, "shipQueue");
                         Dom.addClass(nUl, "clearafter");
 
                         Dom.addClass(nLi,"shipQueueType");
                         nLi.innerHTML = bqo.type_human;
                         nUl.appendChild(nLi);
-                        
+
                         nLi = li.cloneNode(false);
                         Dom.addClass(nLi,"shipQueueEach");
                         nLi.innerHTML = Lib.formatTime(ncs);
@@ -187,7 +189,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         SubsidizeBuildQueue : function() {
             require('js/actions/menu/loader').show();
-            
+
             this.service.subsidize_build_queue({
                 session_id:Game.GetSession(),
                 building_id:this.building.id
@@ -203,7 +205,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 scope:this
             });
         },
-        
+
         SetBuildMessage : function(message) {
             var msg = Dom.get("shipBuildMessage");
             if(msg) {
@@ -231,17 +233,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
         },
         ShipPopulate : function() {
             var details = Dom.get("shipDetails");
-            
+
             if(details) {
                 var ships = this.ships.buildable,
                     li = document.createElement("li"),
                     shipNames = [],
                     filter = Lib.getSelectedOptionValue("shipBuildView"),
                     defReason = !this.ships.docks_available ? "No docks available at Space Port." : undefined;
-                    
+
                 Event.purgeElement(details);
                 details.innerHTML = "";
-                        
+
                 for(var shipType in ships) {
                     if(ships.hasOwnProperty(shipType)) {
                         if(filter == "All") {
@@ -256,18 +258,18 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     }
                 }
                 shipNames.sort();
-                
+
                 for(var i=0; i<shipNames.length; i++) {
                     var shipName = shipNames[i],
                         ship = ships[shipName],
                         nLi = li.cloneNode(false),
                         reason="", attributes = [];
-                    
+
                     if(ship.reason) {
                         reason = '<div style="font-style:italic;">'+ship.reason[1]+'</div>';
                         //reason = '<div style="font-style:italic;">'+Lib.parseReason(ship.reason, defReason)+'</div>';
                     }
-                    
+
                     for(var a in ship.attributes) {
                         attributes[attributes.length] = '<span style="white-space:nowrap;margin-left:5px;"><label style="font-style:italic">';
                         attributes[attributes.length] = a.titleCaps('_',' ');
@@ -275,7 +277,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                         attributes[attributes.length] = Lib.formatNumber(ship.attributes[a]);
                         attributes[attributes.length] = '</span> ';
                     }
-                    
+
                     nLi.innerHTML = ['<div class="yui-gb" style="margin-bottom:2px;">',
                     '    <div class="yui-u first" style="width:15%;background:transparent url(',Lib.AssetUrl,'star_system/field.png) no-repeat center;text-align:center;">',
                     '        <img src="',Lib.AssetUrl,'ships/',ship.image,'.png" style="width:100px;height:100px;" class="shipImage" />',
@@ -295,17 +297,17 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     !ship.can ? reason : '',
                     '    </div>',
                     '    <div class="yui-u" style="width:18%">',
-                    ship.can ? ' <input type="text" style="width:25px;" id="ship_'+shipName+'" value="1"> <button type="button">Build</button>' : 
+                    ship.can ? ' <input type="text" style="width:25px;" id="ship_'+shipName+'" value="1"> <button type="button">Build</button>' :
                     '    </div>',
                     '</div>'].join('');
                     if(ship.can) {
                         Event.on(Sel.query("button", nLi, true), "click", this.ShipBuild, {Self:this,Type:shipName,Ship:ship}, true);
                     }
-                    
+
                     details.appendChild(nLi);
-                    
+
                 }
-                
+
                 Event.delegate(details, "click", this.ShipExpandDesc, ".shipName");
                 Event.delegate(details, "click", this.ShipExpandDesc, ".shipImage");
             }
@@ -328,7 +330,7 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
 						require('js/actions/menu/loader').hide();
 						this.Self.rpcSuccess(o);
 						this.Item.parentNode.removeChild(this.Item);
-						
+
 					}, scope: this
 				});
 		},
@@ -353,9 +355,9 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                     this.Self.rpcSuccess(o);
 
                     //this.Self.ship_build_queue = o.result;
-                    //this.Self.ShipyardDisplay();
-                    YAHOO.lacuna.MapPlanet.RefreshWithData(o);
-                    
+                    //this.Self.ShipyardDisplay();s
+                    MapActions.updateBuildings(o.result.buildings);
+
                     this.Self.ships.docks_available-=qty.value;
                     if(this.Self.ships.docks_available < 0) {
                         this.Self.ships.docks_available = 0;
@@ -369,13 +371,13 @@ if (typeof YAHOO.lacuna.buildings.Shipyard == "undefined" || !YAHOO.lacuna.build
                 scope:this
             });
         }
-        
+
     });
-    
+
     YAHOO.lacuna.buildings.Shipyard = Shipyard;
 
 })();
-YAHOO.register("shipyard", YAHOO.lacuna.buildings.Shipyard, {version: "1", build: "0"}); 
+YAHOO.register("shipyard", YAHOO.lacuna.buildings.Shipyard, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

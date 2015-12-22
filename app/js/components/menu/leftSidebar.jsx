@@ -7,6 +7,7 @@ var util = require('js/util');
 var server = require('js/server');
 
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
+var MapActions = require('js/actions/menu/map');
 
 var AboutActions = require('js/actions/window/about');
 var InviteActions = require('js/actions/window/invite');
@@ -106,9 +107,7 @@ var LeftSidebar = React.createClass({
                     <i className="add user icon"></i>
                     Invite a Friend
                 </a>
-                <a className="item" onClick={toggle(function() {
-                    YAHOO.lacuna.MapPlanet.Refresh();
-                })}>
+                <a className="item" onClick={toggle(MapActions.refresh)}>
                     <i className="refresh icon"></i>
                     Refresh
                 </a>

@@ -1,7 +1,9 @@
 YAHOO.namespace("lacuna.buildings");
 
+var BuildingsRPCStore = require('js/stores/rpc/body/buildings');
+
 if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.lacuna.buildings.SubspaceSupplyDepot) {
-    
+
 (function(){
     var Util = YAHOO.util,
         Dom = Util.Dom,
@@ -12,10 +14,10 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
 
     var SubspaceSupplyDepot = function(result){
         SubspaceSupplyDepot.superclass.constructor.call(this, result);
-        
+
         this.service = Game.Services.Buildings.SubspaceSupplyDepot;
     };
-    
+
     YAHOO.lang.extend(SubspaceSupplyDepot, Lacuna.buildings.Building, {
         getChildTabs : function() {
             return [this._getTransmitTab()];
@@ -48,7 +50,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
             tab.subscribe("activeChange", function(e) {
                 if(e.newValue) {
                     var buildQueueTotal = 0;
-                    var buildings = Lacuna.MapPlanet.buildings;
+                    var buildings = BuildingsRPCStore.getData();
                     for (var building in buildings) {
                         if( buildings.hasOwnProperty(building) ) {
                             var b = buildings[building];
@@ -64,7 +66,7 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
                     this.UpdateQueueTime( buildQueueTotal );
                 }
             }, this, true);
-            
+
             return tab;
         },
         UpdateQueueTime : function(remaining) {
@@ -113,11 +115,11 @@ if (typeof YAHOO.lacuna.buildings.SubspaceSupplyDepot == "undefined" || !YAHOO.l
             });
         }
     });
-    
+
     Lacuna.buildings.SubspaceSupplyDepot = SubspaceSupplyDepot;
 
 })();
-YAHOO.register("SubspaceSupplyDepot", YAHOO.lacuna.buildings.SubspaceSupplyDepot, {version: "1", build: "0"}); 
+YAHOO.register("SubspaceSupplyDepot", YAHOO.lacuna.buildings.SubspaceSupplyDepot, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4
