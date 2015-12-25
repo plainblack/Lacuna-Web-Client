@@ -10,10 +10,6 @@ var util = require('js/util');
 
 var moment = require('moment');
 
-var PROMOTION_TYPES = {
-    Bonus50: '50% Bonus'
-};
-
 var ServerRPCStore = Reflux.createStore({
     listenables: [
         StatusActions,
@@ -75,7 +71,7 @@ var ServerRPCStore = Reflux.createStore({
     },
 
     handlePromotion: function(promotion) {
-        promotion.header = PROMOTION_TYPES[promotion.type] || 'Awesome Promotion';
+        promotion.header = promotion.title || 'Awesome Promotion';
         promotion.ends = moment().to(util.serverDateToMoment(promotion.end_date));
 
         return promotion;

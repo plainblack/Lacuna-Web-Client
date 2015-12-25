@@ -235,6 +235,7 @@ var GetEssentiaPanel = React.createClass({
 
     redeem: function() {
         EssentiaActions.redeemCode(this.refs.code.getDOMNode().value);
+        this.refs.code.getDOMNode().value = '';
     },
 
     invite: function() {
