@@ -969,8 +969,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
         },
         updateAddCargo : function(byVal) {
             var c = Dom.get("tradeAddCargo"),
-                cv = c.innerHTML*1;
-            c.innerHTML = cv + byVal;
+                cv = c.innerHTML.replace(/,/g,"")*1;
+            c.innerHTML = Lib.formatNumber(cv + byVal);
         },
         AddResource : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
@@ -1464,8 +1464,8 @@ if (typeof YAHOO.lacuna.buildings.Transporter == "undefined" || !YAHOO.lacuna.bu
         },
         updatePushCargo : function(byVal) {
             var c = Dom.get("tradePushCargo"),
-                cv = c.innerHTML*1;
-            c.innerHTML = cv + byVal;
+                cv = c.innerHTML.replace(/,/g,"")*1;
+            c.innerHTML = Lib.formatNumber(cv + byVal);
         },
         PushAddResource : function(e, matchedEl, container){
             var quantity = matchedEl.previousSibling.value*1,
