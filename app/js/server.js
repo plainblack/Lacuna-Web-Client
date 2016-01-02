@@ -63,10 +63,13 @@ var createData = function(options) {
 };
 
 var createUrl = function(options) {
+    // Remove leading '/' if any.
+    var module = options.module.replace(/^\//, '');
+
     if (window.lacuna_rpc_base_url) {
-        return window.lacuna_rpc_base_url + options.module;
+        return window.lacuna_rpc_base_url + module;
     } else {
-        return window.location.protocol + '//' + window.location.host + '/' + options.module;
+        return window.location.protocol + '//' + window.location.host + '/' + module;
     }
 };
 

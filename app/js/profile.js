@@ -307,7 +307,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             '                    <div id="detailsBrowser">',
             '                        <ul>',
             '                            <li><input id="profileDisableDialogAnim" type="checkbox" /> Stop Dialog Animation</li>',
-            '                            <li><input id="profileShowBuildingLevels" type="checkbox" /> Always Show Building Levels</li>',
+            '                            <li><input id="profileShowBuildingLevels" type="checkbox" /> Always Show Building Levels (refresh required)</li>',
             '                            <li><input id="profileHidePlanets" type="checkbox" /> Hide Planet Images in Star Map</li>',
             '                        </ul>',
             '                    </div>',
@@ -379,10 +379,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
                 }
                 else {
                     Game.RemoveCookieSettings("showLevels");
-                }
-                var levels = Sel.query("#planetMap .tileContainer .planetMapTileActionLevel");
-                for(var n=0; n<levels.length; n++) {
-                    Dom.setStyle(levels[n].parentNode, "visibility", this.showLevels.checked ? "visible" : "");
                 }
             }
             if(Game.GetCookieSettings("hidePlanets","0") != (this.hidePlanets.checked ? "1" : "0")) {

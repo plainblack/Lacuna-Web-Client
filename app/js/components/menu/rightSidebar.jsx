@@ -37,7 +37,7 @@ var PlanetListItem = React.createClass({
         RightSidebarActions.toggle();
 
         if (this.isCurrentWorld()) {
-            YAHOO.lacuna.MapPlanet.Refresh()
+            MapActions.refresh()
         } else {
             MapActions.changePlanet(this.props.id);
         }

@@ -1964,6 +1964,14 @@ a.item {
     cursor: pointer;
 }
 
+/* React doesn't support duplicate keys on inline CSS so it's ended up here */
+.planetSurfaceCursor {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
 
 /*
  * vim: noet:ts=4:sw=4

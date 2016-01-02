@@ -1,5 +1,7 @@
 YAHOO.namespace("lacuna.buildings");
 
+var MapActions = require('js/actions/menu/map');
+
 var BodyRPCStore = require('js/stores/rpc/body');
 
 if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.buildings.Building) {
@@ -88,9 +90,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                     (this.building.work && o.result.building.work && this.building.work.end != o.result.building.work.end)
                 );
                 if(workChanged) {
-                    this.building.work = o.result.building.work;
-                    this.work = this.building.work;
-                    this.updateBuildingTile(this.building);
+                    // this.building.work = o.result.building.work;
+                    // this.work = this.building.work;
+                    // this.updateBuildingTile(this.building);
                 }
             }
         },
@@ -159,6 +161,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                     YAHOO.log(o, "info", "Building.Repair.repair.success");
                     require('js/actions/menu/loader').hide();
                     this.rpcSuccess(o);
+                    MapActions.updateBuilding(o.result.building.id, o.result.building);
                     if(this.repairTab) {
                         Event.removeListener("repair", "click");
                         this.removeTab(this.repairTab);
@@ -263,7 +266,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                         YAHOO.log(o, "info", "Building.Demolish.success");
                         require('js/actions/menu/loader').hide();
                         this.rpcSuccess(o);
-                        this.removeBuildingTile(building);
+                        MapActions.removeBuilding(building.id);
                         this.fireEvent("onHide");
                     },
                     scope:this,
@@ -284,13 +287,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                         require('js/actions/menu/loader').hide();
                         this.fireEvent("onMapRpc", o.result);
 
-                        var b = building; //originally passed in building data from currentBuilding
-                        b.id = o.result.building.id;
-                        b.level = o.result.building.level;
-                        b.pending_build = o.result.building.pending_build;
-                        YAHOO.log(b, "info", "Building.Upgrade.success.building");
-
-                        this.updateBuildingTile(b);
+                        MapActions.updateBuilding(o.result.building.id, o.result.building);
 
                         this.fireEvent("onHide");
                     },
@@ -315,12 +312,9 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
                     require('js/actions/menu/loader').hide();
                     this.fireEvent("onMapRpc", o.result);
 
-                    var b = building; //originally passed in building data from currentBuilding
-                    b.id = o.result.building.id;
-                    b.level = o.result.building.level;
-                    b.pending_build = o.result.building.pending_build;
-                    YAHOO.log(b, "info", "Building.Upgrade.success.building");
-                    this.updateBuildingTile(b);
+                    console.log(o)
+                    MapActions.updateBuilding(o.result.building.id, o.result.building);
+
                     this.fireEvent("onHide");
                 },
                 scope:this,

@@ -558,16 +558,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             if(Lacuna.MapStar.IsVisible()) {
                 Lacuna.MapStar.Resize();
             }
-            else if(Lacuna.MapPlanet.IsVisible()) {
-                Lacuna.MapPlanet.Resize();
-            }
         },
         StarJump : function(star) {
             YAHOO.log(star, "debug", "StarJump");
             Game.OverlayManager.hideAll();
             require('js/stores/menu/mapMode').setMapMode('starMap');
-            //Lacuna.MapPlanet.MapVisible(false);
-            //Lacuna.MapStar.MapVisible(true);
             Lacuna.MapStar.Jump(star.x*1, star.y*1);
         },
         GetBuildingDesc : function(url) {
@@ -806,9 +801,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         },
         QueueTick : function(type, id, ms) {
             switch(type) {
-                case Lib.QueueTypes.PLANET:
-                    Lacuna.MapPlanet.QueueTick(id, ms);
-                    break;
                 case Lib.QueueTypes.STAR:
                     break;
                 case Lib.QueueTypes.SYSTEM:
@@ -820,9 +812,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
         QueueFire : function(type, id) {
             YAHOO.log(arguments, "debug", "Game.QueueFire");
             switch(type) {
-                case Lib.QueueTypes.PLANET:
-                    Lacuna.MapPlanet.ReLoadTile(id);
-                    break;
                 case Lib.QueueTypes.STAR:
                     break;
                 case Lib.QueueTypes.SYSTEM:

@@ -6,7 +6,17 @@ var MapActions = Reflux.createActions([
     'showPlanetMap',
     'showStarMap',
     'toggleMapMode',
-    'changePlanet'
+    'changePlanet',
+    'refresh',
+
+    'addBuilding',
+    'clearBuildings',
+    'removeBuilding',
+    'updateBuilding',
+    'updateBuildings',
+
+    'zoomPlanetIn',
+    'zoomPlanetOut'
 ]);
 
 module.exports = MapActions;

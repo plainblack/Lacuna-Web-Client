@@ -3,6 +3,7 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 
+var MapActions = require('js/actions/menu/map');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 var UserActions   = require('js/actions/user');
@@ -132,12 +133,10 @@ var BodyRPCStore = Reflux.createStore({
         this.data.plots_available = int(this.data.plots_available);
         this.data.building_count = int(this.data.building_count);
 
-        // no point recalcing for each ship.
-        var server_time_ms = util.serverDateToMs(status.server.time);
-
+        var serverTimeMs = util.serverDateToMs(status.server.time);
         var updateShip = function(ship) {
             ship.arrival_ms =
-            util.serverDateToMs(ship.date_arrives) - server_time_ms;
+            util.serverDateToMs(ship.date_arrives) - serverTimeMs;
         };
 
         _.map(this.data.incoming_own_ships, updateShip);
@@ -171,6 +170,16 @@ var BodyRPCStore = Reflux.createStore({
         this.data.happiness_hour = int(this.data.happiness_hour);
         this.data.happiness = int(this.data.happiness);
 
+        // The server only returns these if there are ships incoming.
+        this.data.incoming_own_ships = this.data.incoming_own_ships || [];
+        this.data.incoming_ally_ships = this.data.incoming_ally_ships || [];
+        this.data.incoming_enemy_ships = this.data.incoming_enemy_ships || [];
+
+        // Handle refreshing the buildings when needed.
+        if (this.data.needs_surface_refresh === '1') {
+            MapActions.refresh();
+        }
+
         this.trigger(this.data);
     },
 
@@ -189,13 +198,13 @@ var BodyRPCStore = Reflux.createStore({
         _.map(this.data.incoming_ally_ships, tickIncoming);
         _.map(this.data.incoming_enemy_ships, tickIncoming);
 
-        var tickResource = function(production, capacity, stored, stop_at_zero) {
+        var tickResource = function(production, capacity, stored, stopAtZero) {
             var amount = production / 60 / 60;
             var rv = stored + amount;
 
             if (typeof capacity !== 'undefined' && rv > capacity) {
                 return int(capacity);
-            } else if (rv < 0 && stop_at_zero) {
+            } else if (rv < 0 && stopAtZero) {
                 return 0;
             } else {
                 return int(rv);
@@ -203,17 +212,17 @@ var BodyRPCStore = Reflux.createStore({
         };
 
         this.data.food_stored = tickResource(
-            this.data.food_hour, this.data.food_capacity, this.data.food_stored, 1);
+            this.data.food_hour, this.data.food_capacity, this.data.food_stored, true);
         this.data.ore_stored = tickResource(
-            this.data.ore_hour, this.data.ore_capacity, this.data.ore_stored, 1);
+            this.data.ore_hour, this.data.ore_capacity, this.data.ore_stored, true);
         this.data.water_stored = tickResource(
-            this.data.water_hour, this.data.water_capacity, this.data.water_stored, 1);
+            this.data.water_hour, this.data.water_capacity, this.data.water_stored, true);
         this.data.energy_stored = tickResource(
-            this.data.energy_hour, this.data.energy_capacity, this.data.energy_stored, 1);
+            this.data.energy_hour, this.data.energy_capacity, this.data.energy_stored, true);
         this.data.waste_stored = tickResource(
-            this.data.waste_hour, this.data.waste_capacity, this.data.waste_stored, 1);
+            this.data.waste_hour, this.data.waste_capacity, this.data.waste_stored, true);
         this.data.happiness = tickResource(
-            this.data.happiness_hour, undefined, this.data.happiness, undefined);
+            this.data.happiness_hour, undefined, this.data.happiness, false);
 
         this.data.food_percent_full = (this.data.food_stored / this.data.food_capacity) * 100;
         this.data.ore_percent_full = (this.data.ore_stored / this.data.ore_capacity) * 100;
