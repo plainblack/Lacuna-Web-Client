@@ -40,6 +40,11 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
             btn.innerHTML = "Subsidize";
             btn = subDiv.appendChild(btn);
             Event.on(btn, "click", this.DevSubsidize, this, true);
+            var cancelAllBtn = document.createElement("button");
+            cancelAllBtn.setAttribute("type","button");
+            cancelAllBtn.innerHTML = "Cancel All";
+            cancelAllBtn = subDiv.appendChild(cancelAllBtn);
+            Event.on(cancelAllBtn, "click", this.DevCancelAll, this, true);
             div.appendChild(subDiv);
 
             Dom.addClass(hUl, "buildQueue buildQueueHeader clearafter");
@@ -118,6 +123,32 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
             else {
                 el.innerHTML = Lib.formatTime(Math.round(remaining));
             }
+        },
+
+        DevCancelAll : function(e) {
+            require('js/actions/menu/loader').show();
+            this.service.cancel_build(
+                                      {
+                                      args: {
+                                      session_id:Game.GetSession(),
+                                          building_id:this.building.id,
+                                          cancel_all:1
+                                      }}, {
+                success : function(o) {
+                    YAHOO.log(o, "info", "Development.DevCancelAll.success");
+                    require('js/actions/menu/loader').hide();
+                    this.rpcSuccess(o);
+                    if(this.queueTab) {
+                        Event.purgeElement(this.queueTab.get("contentEl"));
+                        this.removeTab(this.queueTab);
+                    }
+                    this.fireEvent("onHide");
+                    this.fireEvent("onUpdateMap");
+                },
+                scope:this
+            });
+
+
         },
 
         DevCancelOneBuild : function(e) {
