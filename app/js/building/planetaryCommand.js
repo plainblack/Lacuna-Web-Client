@@ -5,6 +5,7 @@ var $ = require('js/shims/jquery');
 var MapActions = require('js/actions/menu/map');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
+var BodyRPCStore = require('js/stores/rpc/body');
 
 if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacuna.buildings.PlanetaryCommand) {
 
@@ -291,6 +292,9 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
                             Dom.get("commandPlanetNewName").value = "";
                             Dom.get("commandPlanetCurrentName").innerHTML = newName;
                             Game.EmpireData.planets[planetId].name = newName;
+                            var data = BodyRPCStore.getData();
+                            data.name = newName;
+                            BodyRPCStore.setState(data);
 
                             if(Lacuna.MapStar._map) {
                                 Lacuna.MapStar._map.tileCache[cp.x][cp.y].name = newName; // Change the name in the cache
