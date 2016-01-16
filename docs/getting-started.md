@@ -1,5 +1,14 @@
 # Getting Started
 
+You have two ways of working with this code.
+- [Use Docker](using-docker.md) and download a pre-built image
+- Installing node and building it yourself
+
+Docker is of use if all you are doing is hacking the existing Javascript and you want a quick
+and easy installation.
+
+Otherwise you will have to set up your own node development environment as follows.
+
 1. [Download and install](https://nodejs.org/en/download/) [Node.js](https://nodejs.org) version `4.x.x` or `5.x.x`
 2. Install [Gulp](http://gulpjs.com/) and [Bower](http://bower.io) globally: `[sudo] npm install -g gulp bower`
 3. Fork this repository

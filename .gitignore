@@ -3,15 +3,12 @@
 
 # Modules downloaded by npm.
 node_modules/
-!node_modules/readme.txt
 
 # Modules downloaded by Bower
 bower_components/
-!bower_components/readme.txt
 
 # Built JS and CSS files.
 lacuna/
-!lacuna/readme.txt
 
 # Cache to speed up the build process.
 browserify-cache.json
