@@ -23,7 +23,7 @@ if (typeof YAHOO.lacuna.modules.PoliceStation == "undefined" || !YAHOO.lacuna.mo
     
     Lang.extend(PoliceStation, Lacuna.buildings.Security, {
         getChildTabs : function() {
-            return [this._getForeignTab()];
+            return [this._getPrisonersTab(), this._getSpiesTab(), this._getForeignTab()];
         },
         _getForeignTab : function() {
             this.foreignShipsTab = new YAHOO.widget.Tab({ label: "Incoming", content: [
