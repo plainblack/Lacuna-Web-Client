@@ -1018,6 +1018,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
+                    "name_spies" : {
+                        "description": "Set the name of all spies",
+                        "parameters": [
+                            {"name":"options", "type":"object", "optional":false},
+                        ],
+                        "returns":{"type":"object"}
+                    },
                     "subsidize_training" : {
                         "description": "Will spend 1 essentia per spy to complete the training of all spies immediately.",
                         "parameters": [

@@ -27,7 +27,7 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
             Intelligence.superclass.destroy.call(this);
         },
         getChildTabs : function() {
-            return [this._getTrainTab(), this._getSpiesTab()];
+            return [this._getTrainTab(), this._getSpiesTab(), this._getRenameSpiesTab()];
         },
         _getTrainTab : function() {
             var spies = this.result.spies;
@@ -77,7 +77,21 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
                     
             return this.spiesTab;
         },
-        
+        _getRenameSpiesTab : function () {
+            this.renameTab = new YAHOO.widget.Tab({ label: "Rename All", content: [
+                '<div>',
+                '  <p>Prefix: <input id="spiesRenamePrefix" type="text" /> Suffix: <input id="spiesRenameSuffix" type="text" /> Rename Agent Null only: <input id="spiesNullOnly" type="checkbox" /> <button id="spiesRename" type="button">Rename All</button></p>',
+                '  <p>This will rename all spies managed by this planet at once to have the prefix and/or suffix you specify. A two-digit number, from 01 to the number of spies you have, will be placed after the prefix / before the suffix.</p>',
+                '  <p>If you specify Agent Null only, then only those spies will be renamed, even if the name does not otherwise fit your prefix and suffix, otherwise all spies will be normalised to this naming scheme.</p>',
+                '  <p>Spies that already follow the requested naming scheme will not be renamed, new spies will fill holes in naming created by retiring or killed spies.</p>',
+                '</div>',
+            ].join('')});
+
+            Event.on("spiesRename", "click", this.RenameAll, this, true);
+
+            return this.renameTab;
+        },
+
         trainView : function(e) {
             var spies = this.result.spies;
             var canTrain = spies.maximum - spies.current;
@@ -569,8 +583,35 @@ if (typeof YAHOO.lacuna.buildings.Intelligence == "undefined" || !YAHOO.lacuna.b
                 },
                 scope:this
             });
+        },
+        RenameAll : function(e) {
+            require('js/actions/menu/loader').show();
+            Dom.get("spiesRename").disabled = true;
+
+            var prefix = Dom.get('spiesRenamePrefix').value,
+                suffix = Dom.get('spiesRenameSuffix').value,
+                nullOnly = Dom.get('spiesNullOnly').checked;
+
+            this.service.name_spies({
+                options: {
+                session_id: Game.GetSession(),
+                building_id:this.building.id,
+                prefix: prefix,
+                suffix: suffix,
+                rename_null_only: nullOnly ? 1 : 0
+                }
+            }, {
+                success : function(o) {
+                    require('js/actions/menu/loader').hide();
+                    this.rpcSuccess(o);
+                    Dom.get("spiesRename").disabled = false;
+                },
+                failure : function(o) {
+                    Dom.get("spiesRename").disabled = false;
+                },
+                scope: this,
+            });
         }
-        
     });
     
     YAHOO.lacuna.buildings.Intelligence = Intelligence;
