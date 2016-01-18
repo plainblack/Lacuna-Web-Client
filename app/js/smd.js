@@ -3971,6 +3971,39 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "target":"/policestation",
 
                 "services": {
+                    "view_foreign_ships" : {
+                        "description": "Shows you all the foreign ships that are incoming. However, the list is filtered by the stealth of the ship vs the level of the PoliceStation.",
+                        "parameters": [
+                            {"name":"session_id", "type":"string", "optional":false},
+                            {"name":"building_id", "type":"string", "optional":false},
+                            {"name":"page_number", "type":"number", "optional":true}
+                        ],
+                        "returns":{"type":"object"}
+                        /*
+                             {
+                                "ships" : [
+                                    {
+                                        "id" : "id-goes-here",
+                                        "name" : "CS3",
+                                        "type_human" : "Cargo Ship",
+                                        "type" : "cargo_ship",
+                                        "date_arrives" : "02 01 2010 10:08:33 +0600",
+                                        "from" : {
+                                            "id" : "id-goes-here",
+                                            "name" : "Earth",
+                                            "empire" : {
+                                                "id" : "id-goes-here",
+                                                "name" : "Earthlings"
+                                            }
+                                        }
+                                    },
+                                    ...
+                                ],
+                                "number_of_ships" : 13,
+                                "status" : { ... }
+                             }
+                        */
+                    },
                     "view_prisoners" : {
                         "description": "",
                         "parameters": [
