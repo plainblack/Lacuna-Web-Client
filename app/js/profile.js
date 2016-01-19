@@ -3,6 +3,7 @@
 YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
+var util = require('js/util');
 
 var OptionsActions = require('js/actions/window/options');
 
@@ -115,8 +116,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
                     }
                 });
 
-                this.rpc = Dom.get("profileRpc");
-
+                this.iso_status = Dom.get("isolationistStatus");
                 this.medals = Dom.get("profileMedalsList");
                 this.species = Dom.get("profileSpecies");
                 this.notes = Dom.get("profileNotes");
@@ -247,6 +247,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             '                            <li><label>City:<input id="profileCity" /></label></li>',
             '                            <li><label>Country:<input id="profileCountry" /></label></li>',
             '                            <li><label>Skype:<input id="profileSkype" /></label></li>',
+            '                            <li><hr />Isolationist status: <span id="isolationistStatus" /></li>',
             '                            <li><hr /><div class="yui-g">',
             '                                <div class="yui-u first">',
             '                                    <ul><li><input id="profileSkipFacebookWallPosts" type="checkbox" /> Stop Facebook Wall posts</li>',
@@ -272,7 +273,6 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             '                                    <li><input id="profileDontReplaceExcavator" type="checkbox" /> Do not replace Excavator automatically</li>',
       '               </ul></div>',
             '                            </div></li>',
-            '                            <li><hr />Today\'s RPC Usage:<span id="profileRpc" style="margin-left:5px;"></span></li>',
             '                        </ul>',
             '                    </div>',
             '                    <div id="detailsMedals">',
@@ -503,7 +503,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
             this.showLevels.checked = Game.GetCookieSettings("showLevels","0") == "1";
             this.hidePlanets.checked = Game.GetCookieSettings("hidePlanets","0") == "1";
 
-            this.rpc.innerHTML = [(Game.EmpireData.rpc_count || 0), ' / ', (Game.ServerData.rpc_limit || 0)].join('');
+            this.iso_status.innerHTML = util.int(Game.EmpireData.is_isolationist) == 1 ? "Isolationist" : "Not Isolationist";
 
             this.notes.value = p.notes;
             this.sitter_password.value = p.sitter_password;
