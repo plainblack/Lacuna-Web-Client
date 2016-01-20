@@ -990,7 +990,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         },
 
         CleanBuilding : function(building) {
-            building.efficiency = (building.efficiency || 100)*1;
+            building.efficiency = building.efficiency*1;
             if(building.repair_costs && building.efficiency == 100) {
                 delete building.repair_costs;
             }
