@@ -12,6 +12,7 @@ This motley collection of markdown files attempts to document how a brave indivi
 # Table of Contents
 
 - [Getting Started](getting-started.md)
+- [Using Docker](using-docker.md)
 - [Concepts](concepts.md)
 - [Conventions](conventions.md)
 - [Important Notes](important-notes.md)
