@@ -162,6 +162,8 @@ var BottomBar = React.createClass({
                     {util.reduceNumber(this.state.body.energy_hour)} / hr
                 </div>
 
+                {
+                    this.state.body.type === "space station" ? '' :
                 <div id="wastebar" className="item"
                 onMouseEnter={function(){$('#wastebar').popup({html:This.calcToolTip({type:'waste'})})}}
                 >
@@ -178,6 +180,10 @@ var BottomBar = React.createClass({
                     </p>
                     {util.reduceNumber(this.state.body.waste_hour)} / hr
                 </div>
+                }
+
+                {
+                    this.state.body.type === "space station" ? '' :
 
                 <div id="happybar" className="item"
                 onMouseEnter={function(){$('#happybar').popup({html:This.calcToolTip({type:'happiness',iconClass:"Happy",happy_boost:happy_boost})})}}
@@ -188,6 +194,7 @@ var BottomBar = React.createClass({
                     </p>
                     {util.reduceNumber(this.state.body.happiness_hour)} / hr
                 </div>
+                }
 
                 <div id="buildingcountbar" className="item"
                 onMouseEnter={function(){$('#buildingcountbar').popup({html:"Your current <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plot-using</a> building count, and how many <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plots</a> you have available.",hoverable:true,delay:{hide:800}})}}>
