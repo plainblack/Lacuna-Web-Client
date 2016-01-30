@@ -9,6 +9,10 @@ var ServerStatusActions = require('js/actions/serverStatus');
 var BodyStatusActions   = require('js/actions/bodyStatus');
 var EmpireStatusActions = require('js/actions/empireStatus');
 
+var util = require('js/util')
+
+var Lacuna = YAHOO.lacuna
+
 var defaults = {
     module:     '',
     method:     '',
@@ -87,24 +91,21 @@ var handleSuccess = function(options, result) {
         }
     }
 
-    LoaderActions.hide();
-    options.success.call(options.scope, result);
+    if (typeof options.success === 'function') {
+        options.success.call(options.scope, result);
+    }
 };
 
 var handleError = function(options, error) {
-
-    // TODO: implement a smarter way of handling this!
     alert(error.message + ' (' + error.code + ')');
     console.error('Request error: ', error);
 
     if (typeof options.error === 'function') {
-        options.error.call(options.scope || window, error);
+        options.error.call(options.scope, error)
     }
-
-    LoaderActions.hide();
 };
 
-var sendRequest = function(url, data, options) {
+var sendRequest = function(url, data, options, retry) {
     console.log('Calling', options.module + '/' + options.method, options.params);
 
     $.ajax({
@@ -114,13 +115,26 @@ var sendRequest = function(url, data, options) {
         url:        url,
 
         success: function(data, textStatus, jqXHR) {
+            LoaderActions.hide();
+
             if (textStatus === 'success' && jqXHR.status === 200) {
                 handleSuccess(options, data.result);
             }
         },
 
         error: function(jqXHR, textStatus, errorThrown) {
-            handleError(options, jqXHR.responseJSON.error);
+            LoaderActions.hide();
+            var error = jqXHR.responseJSON.error;
+
+            var fail = function() {
+                handleError(options, error);
+            };
+
+            if (error.code === 1016) {
+                Lacuna.Captcha.show(retry, fail);
+            } else {
+                fail();
+            }
         }
     });
 };
@@ -133,7 +147,11 @@ var call = function(obj) {
     var data = createData(options);
     var url = createUrl(options);
 
-    sendRequest(url, data, options);
+    var retry = function() {
+        call(obj);
+    };
+
+    sendRequest(url, data, options, retry);
 };
 
 // Split the status message into server, body, empire
