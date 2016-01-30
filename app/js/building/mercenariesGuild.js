@@ -25,15 +25,6 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         //defaults.  Values are updated to server numbers during get_* calls
         this.spySize = 350;
         this.createEvent("onLoadSpies");
-        
-        if(this.building.level > 0) {
-            this.subscribe("onLoad", function() {
-                this.getSpies();
-                this.mine.subscribe("activeChange", this.getMine, this, true);
-                this.avail.subscribe("activeChange", this.getAvailable, this, true);
-                this.add.subscribe("activeChange", this.getAddShips, this, true);
-            }, this, true);
-        }
     };
 
     Lang.extend(MercenariesGuild, Lacuna.buildings.Building, {
@@ -48,7 +39,16 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
         },
         getChildTabs : function() {
             this.mineTabIndex = 2; //array location plus 1 since Production tab is always first
-            return [this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+            var tabs = [this._getAvailTab(), this._getMineTab(), this._getAddTab()];
+
+            if(this.building.level > 0) {
+                    this.getSpies();
+                    this.mine.subscribe("activeChange", this.getMine, this, true);
+                    this.avail.subscribe("activeChange", this.getAvailable, this, true);
+                    this.add.subscribe("activeChange", this.getAddShips, this, true);
+            }
+
+            return tabs;
         },
         _getAvailTab : function() {
             this.avail = new YAHOO.widget.Tab({ label: "Available Mercs", content: [

@@ -47,7 +47,7 @@ if (typeof YAHOO.lacuna.buildings.Building == "undefined" || !YAHOO.lacuna.build
         },
         getTabs : function() {
             if(this.building.efficiency*1 < 100 && this.building.repair_costs) {
-                return [this._getProductionTab(), this._getRepairTab()];
+                return [this._getRepairTab(), this._getProductionTab()];
             }
             else {
                 var tabs = [this._getProductionTab()],
