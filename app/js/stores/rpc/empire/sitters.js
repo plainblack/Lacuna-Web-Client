@@ -17,7 +17,7 @@ var SittersRPCStore = Reflux.createStore({
     },
 
     getInitialState: function() {
-        return {};
+        return [];
     },
 
     onShow: function() {
@@ -30,8 +30,8 @@ var SittersRPCStore = Reflux.createStore({
             method: 'view_authorized_sitters',
             params: [],
             success: function(result) {
-                console.log(result);
-                this.trigger(result);
+                this.data = result.sitters;
+                this.trigger(this.data);
             },
             scope: this
         });
