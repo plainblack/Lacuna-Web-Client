@@ -114,6 +114,23 @@ var SittersRPCStore = Reflux.createStore({
             },
             scope: this
         });
+    },
+
+    onDeauthorizeAll: function() {
+        var authorizedIds = _.pluck()
+
+        server.call({
+            module: 'empire',
+            method: 'authorize_sitters',
+            params: [{
+                revalidate_all: true
+            }],
+            success: function(result) {
+                this.data = result.auths;
+                this.trigger(this.data);
+            },
+            scope: this
+        });
     }
 });
 

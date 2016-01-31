@@ -13,7 +13,8 @@ var SittersActions = Reflux.createActions([
     'authorizeEmpire',
     'deauthorizeEmpire',
 
-    'reauthorizeAll'
+    'reauthorizeAll',
+    'deauthorizeAll'
 ]);
 
 module.exports = SittersActions;
