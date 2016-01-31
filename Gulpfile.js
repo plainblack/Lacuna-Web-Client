@@ -8,6 +8,7 @@ var source = require('vinyl-source-stream');
 var cssConcat = require('gulp-concat-css');
 var cssMin = require('gulp-minify-css');
 var gulp = require('gulp');
+var gulpUtil = require('gulp-util')
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
@@ -77,7 +78,7 @@ gulp.task('cssify', ['browserify'], function() {
 
 gulp.task('minify-js', ['browserify', 'cssify'], function() {
     var stream =  gulp.src('./lacuna/load.js')
-        .pipe(uglify())
+        .pipe(uglify().on('error', gulpUtil.log))
         .pipe(rename({
             extname: '.min.js'
         }))

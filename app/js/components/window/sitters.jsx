@@ -28,7 +28,7 @@ var AuthorizeEmpires = React.createClass({
     },
 
     authorizeAlliance: function() {
-        let value = this.refs.alliance.getDOMNode().value;
+        var value = this.refs.alliance.getDOMNode().value;
 
         if (confirm('Are you sure you want to authorize all members of ' + value + '?')) {
             SittersActions.authorizeAlliance(value);
@@ -36,7 +36,7 @@ var AuthorizeEmpires = React.createClass({
     },
 
     authorizeEmpire: function() {
-        let value = this.refs.empire.getDOMNode().value;
+        var value = this.refs.empire.getDOMNode().value;
 
         if (confirm('Are you sure you want to authorize ' + value + '?')) {
             SittersActions.authorizeEmpire(value);
