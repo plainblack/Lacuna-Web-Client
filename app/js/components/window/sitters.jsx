@@ -45,55 +45,30 @@ var AuthorizeEmpires = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <div>
-                    <h2 className="ui yellow header">
-                        <div className="content">
-                            Authorized empires
-                            <div className="sub header" style={{color: '#ffffff'}}>
-                                can do anything in your empire except for:
-                            </div>
-                        </div>
-                    </h2>
-
-                    <ul
-                        style={{
-                            fontSize: '1.2em',
-                            padding: '0 40px'
-                        }}
+            <div style={{textAlign: 'center'}}>
+                <div
+                    className="ui green large labeled icon button"
+                    onClick={this.authorizeAllies}
                     >
-                        <li style={{listStyle: 'disc'}}>reading your mail</li>
-                        <li style={{listStyle: 'disc'}}>colonizing or abandoning planets</li>
-                    </ul>
+                    <i className="warning sign icon"></i>
+                    Authorize all Empires in current alliance
                 </div>
 
-                <br />
+                <h3>OR</h3>
 
-                <div style={{textAlign: 'center'}}>
-                    <div
-                        className="ui green large labeled icon button"
-                        onClick={this.authorizeAllies}
-                        >
-                        <i className="warning sign icon"></i>
-                        Authorize all Empires in current alliance
+                <div className="ui large fluid action input">
+                    <input type="text" placeholder="Alliance name" ref="alliance" />
+                    <div className="ui green button" onClick={this.authorizeAlliance}>
+                        Authorize
                     </div>
+                </div>
 
-                    <h3>OR</h3>
+                <h3>OR</h3>
 
-                    <div className="ui large fluid action input">
-                        <input type="text" placeholder="Alliance name" ref="alliance" />
-                        <div className="ui green button" onClick={this.authorizeAlliance}>
-                            Authorize
-                        </div>
-                    </div>
-
-                    <h3>OR</h3>
-
-                    <div className="ui large fluid action input">
-                        <input type="text" placeholder="Empire name" ref="empire" />
-                        <div className="ui green button" onClick={this.authorizeEmpire}>
-                            Authorize
-                        </div>
+                <div className="ui large fluid action input">
+                    <input type="text" placeholder="Empire name" ref="empire" />
+                    <div className="ui green button" onClick={this.authorizeEmpire}>
+                        Authorize
                     </div>
                 </div>
             </div>
