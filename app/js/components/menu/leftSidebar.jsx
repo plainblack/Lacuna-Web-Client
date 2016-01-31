@@ -210,6 +210,10 @@ var LeftSidebar = React.createClass({
                     <i className="rocket icon"></i>
                     About
                 </a>
+                <a className="item" onClick={toggle(SittersActions.show)}>
+                    <i className="sitemap icon"></i>
+                    Manage Sitters
+                </a>
                 <a className="item" onClick={function() {
                         LeftSidebarActions.hide();
                         OptionsActions.show();
@@ -224,10 +228,6 @@ var LeftSidebar = React.createClass({
                 }}>
                     <i className="wait icon"></i>
                     Server Clock
-                </a>
-                <a className="item" onClick={toggle(SittersActions.show)}>
-                    <i className="sitemap icon"></i>
-                    Manage Sitters
                 </a>
 
                 <div className="ui horizontal inverted divider">
