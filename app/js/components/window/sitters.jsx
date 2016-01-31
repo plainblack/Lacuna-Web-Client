@@ -88,6 +88,10 @@ var SitterListItem = React.createClass({
         };
     },
 
+    reauthorize: function() {
+        SittersActions.authorizeEmpire(this.props.sitter.name)
+    },
+
     deauthorize: function() {
         var s = this.props.sitter;
         var msg = 'Are you sure you want to remove ' + s.name + "'s access to your empire?";
@@ -100,8 +104,13 @@ var SitterListItem = React.createClass({
     render: function() {
         return (
             <div className="item">
-                <div className="right floated compact ui red button" onClick={this.deauthorize}>
-                    Deauthorize
+                <div className="ui right floated compact buttons">
+                    <div className="ui green button" onClick={this.reauthorize}>
+                        Renew
+                    </div>
+                    <div className="ui red button" onClick={this.deauthorize}>
+                        Revoke
+                    </div>
                 </div>
 
                 <div className="content aligned">
@@ -125,18 +134,27 @@ var CurrentSitters = React.createClass({
         SittersActions.reauthorizeAll();
     },
 
+    deauthorizeAll: function() {
+        if (confirm("Are you sure you want to remove everyones access to your empire?")) {
+            SittersActions.deauthorizeAll();
+        }
+    },
+
     render: function() {
         return (
             <div>
 
                 <div className="ui grid">
                     <div className="centered row">
-                        <div
-                            className="ui large green compact icon button"
-                            onClick={this.reauthorizeAll}
-                        >
-                            <i className="refresh icon"></i>
-                            Reauthorize all Empires
+                        <div className="ui large icon buttons">
+                            <div className="ui green button" onClick={this.reauthorizeAll}>
+                                <i className="refresh icon"></i>
+                                Renew all
+                            </div>
+                            <div className="ui red button" onClick={this.deauthorizeAll}>
+                                <i className="warning sign icon"></i>
+                                Revoke all
+                            </div>
                         </div>
                     </div>
                 </div>
