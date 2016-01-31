@@ -19,28 +19,45 @@ var Tabs = ReactTabs.Tabs;
 var TabList = ReactTabs.TabList;
 var TabPanel = ReactTabs.TabPanel;
 
+var vex = require('js/vex');
+
 var AuthorizeEmpires = React.createClass({
 
     authorizeAllies: function() {
-        if (confirm('Are you sure you want to authorize all members of your alliance?')) {
-            SittersActions.authorizeAllies();
-        }
+        vex.confirm({
+            message: 'Are you sure you want to authorize all members of your alliance?',
+            callback: function(value) {
+                if (value) {
+                    SittersActions.authorizeAllies();
+                }
+            }
+        });
     },
 
     authorizeAlliance: function() {
-        var value = this.refs.alliance.getDOMNode().value;
+        var name = this.refs.alliance.getDOMNode().value;
 
-        if (confirm('Are you sure you want to authorize all members of ' + value + '?')) {
-            SittersActions.authorizeAlliance(value);
-        }
+        vex.confirm({
+            message: 'Are you sure you want to authorize all members of ' + name + '?',
+            callback: function(value) {
+                if (value) {
+                    SittersActions.authorizeAlliance(name);
+                }
+            }
+        });
     },
 
     authorizeEmpire: function() {
-        var value = this.refs.empire.getDOMNode().value;
+        var name = this.refs.empire.getDOMNode().value;
 
-        if (confirm('Are you sure you want to authorize ' + value + '?')) {
-            SittersActions.authorizeEmpire(value);
-        }
+        vex.confirm({
+            message: 'Are you sure you want to authorize ' + name + '?',
+            callback: function(value) {
+                if (value) {
+                    SittersActions.authorizeEmpire(name);
+                }
+            }
+        });
     },
 
     render: function() {
@@ -94,11 +111,15 @@ var SitterListItem = React.createClass({
 
     deauthorize: function() {
         var s = this.props.sitter;
-        var msg = 'Are you sure you want to remove ' + s.name + "'s access to your empire?";
 
-        if (confirm(msg)) {
-            SittersActions.deauthorizeEmpire(s.id);
-        }
+        vex.confirm({
+            message: 'Are you sure you want to remove ' + s.name + "'s access to your empire?",
+            callback: function(value) {
+                if (value) {
+                    SittersActions.deauthorizeEmpire(s.id);
+                }
+            }
+        });
     },
 
     render: function() {
@@ -135,9 +156,14 @@ var CurrentSitters = React.createClass({
     },
 
     deauthorizeAll: function() {
-        if (confirm("Are you sure you want to remove everyones access to your empire?")) {
-            SittersActions.deauthorizeAll();
-        }
+        vex.confirm({
+            message: "Are you sure you want to revoke everyone's access to your empire?",
+            callback: function(value) {
+                if (value) {
+                    SittersActions.deauthorizeAll()
+                }
+            }
+        });
     },
 
     render: function() {
