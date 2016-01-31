@@ -2,7 +2,7 @@
 * Code taken from inputEx's  (http://javascript.neyric.com/inputex/) rpc library and slightly modified
 */
 
-var StatusActions = require('js/actions/status');
+var server              = require('js/server');
 
 YAHOO.namespace("rpc");
 
@@ -60,7 +60,7 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
                         // Send the status block off to relevant stores to update UI.
                         if (results.result && results.result.status) {
                             YAHOO.lacuna.Game.ProcessStatus(results.result.status);
-                            StatusActions.update(results.result.status);
+                            server.splitStatus(results.result.status);
                         }
 
                         opts.success.call(opts.scope || self, results);

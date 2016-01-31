@@ -1,22 +1,33 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var $ = require('js/shims/jquery');
+var React               = require('react');
+var Reflux              = require('reflux');
+var util                = require('js/util');
+var server              = require('js/server');
+var $                   = require('js/shims/jquery');
+var windowTypes         = require('js/windowTypes');
 
-var util = require('js/util');
-var server = require('js/server');
-
-var LeftSidebarActions = require('js/actions/menu/leftSidebar');
-
-var LeftSidebarStore = require('js/stores/menu/leftSidebar');
-
+var LeftSidebarActions  = require('js/actions/menu/leftSidebar');
+var AboutActions        = require('js/actions/window/about');
+var NotesActions        = require('js/actions/window/notes');
+var OptionsActions      = require('js/actions/window/options');
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var windowTypes = require('js/windowTypes');
 
-var OptionsActions = require('js/actions/window/options');
+var windowTypes         = require('js/windowTypes');
+var RpcBodyActions      = require('js/actions/rpc/body');
 
-var EmpireRPCStore = require('js/stores/rpc/empire');
+var EmpireRPCStore      = require('js/stores/rpc/empire');
+var LeftSidebarStore    = require('js/stores/menu/leftSidebar');
+
+var LeftSidebarStore 	= require('js/stores/menu/leftSidebar');
+var windowTypes         = require('js/windowTypes');
+
+var getBuildings = function() {
+    console.log("getBuildings:");
+    LeftSidebarActions.leftSidebarToggle();
+    // TODO must get the correct body ID
+    RpcBodyActions.rpcBodyGetBuildings( { bodyId: 16412 } );
+}
 
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
@@ -26,17 +37,13 @@ var SelfDestruct = React.createClass({
     ],
 
     render: function() {
-        // Reduce long variable names.
-        // dactive = Destruct Active
-        // dms = Destruct Milliseconds
-        // fdms = Formatted Destruct Milliseconds
-        var dactive = this.state.empire.self_destruct_active &&
-            this.state.empire.self_destruct_ms > 0;
-        var dms = this.state.empire.self_destruct_ms;
-        var fdms = dactive ? util.formatMillisecondTime(dms) : '';
+        var destructActive      = this.state.empire.self_destruct_active
+            && this.state.empire.self_destruct_ms > 0;
+        var destructMs          = this.state.empire.self_destruct_ms;
+        var formattedDestructMs = destructActive ? util.formatMillisecondTime(destructMs) : '';
 
-        var itemStyle = dactive ? {'color':'red'} : {};
-        var verb = dactive ? 'Disable' : 'Enable';
+        var itemStyle   = destructActive ? {'color':'red'} : {};
+        var verb        = destructActive ? 'Disable' : 'Enable';
 
         return (
             <a
@@ -48,12 +55,11 @@ var SelfDestruct = React.createClass({
                 }}
             >
                 <i className="bomb icon"></i>
-                {verb} Self Destruct
-                {
-                    dactive ?
+                {verb} Self Destruct {
+                    destructActive ?
                         <span>
                             <p style={{margin:0}}>SELF DESTRUCT ACTIVE</p>
-                            <p style={{textAlign: 'right !important'}}>{fdms}</p>
+                            <p style={{textAlign: 'right !important'}}>{ formattedDestructMs }</p>
                         </span>
                     :
                         ''
@@ -95,7 +101,7 @@ var SelfDestruct = React.createClass({
 var LeftSidebar = React.createClass({
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
-        Reflux.connect(LeftSidebarStore, 'showSidebar')
+        Reflux.connect(LeftSidebarStore, 'leftSidebar')
     ],
 
     componentDidMount: function() {
@@ -112,7 +118,7 @@ var LeftSidebar = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        if (prevState.showSidebar !== this.state.showSidebar) {
+        if (prevState.leftSidebar !== this.state.leftSidebar) {
             this.handleSidebarShowing();
         }
     },
@@ -121,10 +127,11 @@ var LeftSidebar = React.createClass({
         var el = this.refs.sidebar.getDOMNode();
 
         $(el)
-            .sidebar(this.state.showSidebar ? 'show' : 'hide');
+            .sidebar(this.state.leftSidebar ? 'show' : 'hide');
     },
 
     render: function() {
+
         return (
             <div className="ui left vertical inverted sidebar menu" ref="sidebar">
 
@@ -226,16 +233,10 @@ var LeftSidebar = React.createClass({
                     Server Clock
                 </a>
 
-                {
-                    // The notes window has been disabled due to instabilities.
-                    // TODO: fix this!
-                    //
-                    // <a className="item" onClick={toggle(NotesActions.show)}>
-                    //     <i className="edit icon"></i>
-                    //     Notes
-                    // </a>
-                }
-
+                <a className="item" onClick={ getBuildings }>
+                    <i className="edit icon"></i>
+                    Test Get Buildings
+                </a>
 
                 <div className="ui horizontal inverted divider">
                     Self Destruct
