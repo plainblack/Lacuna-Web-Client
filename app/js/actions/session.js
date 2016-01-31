@@ -3,8 +3,8 @@
 var Reflux = require('reflux');
 
 var SessionActions = Reflux.createActions([
-    'set',
-    'clear'
+    'sessionSet',
+    'sessionClear'
 ]);
 
 module.exports = SessionActions;
