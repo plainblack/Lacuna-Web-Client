@@ -1,19 +1,18 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var $ = require('js/shims/jquery');
+var React               = require('react');
+var Reflux              = require('reflux');
+var $                   = require('js/shims/jquery');
 
-var EmpireRPCStore = require('js/stores/rpc/empire');
-var LeftSidebarActions = require('js/actions/menu/leftSidebar');
+var EmpireRPCStore      = require('js/stores/rpc/empire');
+var LeftSidebarActions  = require('js/actions/menu/leftSidebar');
 
 var LeftSidebarButton = React.createClass({
-
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
-    click: function() {
+    clickLeftSidebarButton: function() {
         LeftSidebarActions.show();
     },
 
@@ -25,7 +24,7 @@ var LeftSidebarButton = React.createClass({
                 left: '15px',
                 top: '15px'
             }}>
-                <div className="ui left labeled icon blue button" onClick={this.click}>
+                <div className="ui left labeled icon blue button" onClick={this.clickLeftSidebarButton}>
                     <i className="content icon" />
                     {this.state.empire.name}
                 </div>

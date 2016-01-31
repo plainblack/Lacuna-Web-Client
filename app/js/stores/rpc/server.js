@@ -1,18 +1,17 @@
 'use strict';
 
-var Reflux = require('reflux');
-var _ = require('lodash');
+var Reflux              = require('reflux');
+var _                   = require('lodash');
+var util                = require('js/util');
+var moment              = require('moment');
 
-var StatusActions = require('js/actions/status');
-var TickerActions = require('js/actions/ticker');
+var ServerStatusActions = require('js/actions/serverStatus');
+var TickerActions       = require('js/actions/ticker');
 
-var util = require('js/util');
-
-var moment = require('moment');
 
 var ServerRPCStore = Reflux.createStore({
     listenables: [
-        StatusActions,
+        ServerStatusActions,
         TickerActions
     ],
 
@@ -43,29 +42,25 @@ var ServerRPCStore = Reflux.createStore({
         return this.data;
     },
 
-    onUpdate: function(status) {
-        if (!status.server) {
-            return;
-        } else {
-            this.data = status.server;
+    onServerStatusUpdate: function(serverStatus) {
+        this.data = serverStatus;
 
-            // TODO: show announcement window if needed.
+        // TODO: show announcement window if needed.
 
-            this.data.serverMoment = util.serverDateToMoment(this.data.time).utcOffset(0);
-            this.data.clientMoment = util.serverDateToMoment(this.data.time);
+        this.data.serverMoment = util.serverDateToMoment(this.data.time).utcOffset(0);
+        this.data.clientMoment = util.serverDateToMoment(this.data.time);
 
-            // The server won't return the promotions block if there aren't any.
-            if (!this.data.promotions) {
-                this.data.promotions = [];
-            }
-
-            this.data.promotions = _.map(this.data.promotions, this.handlePromotion);
-
-            this.trigger(this.data);
+        // The server won't return the promotions block if there aren't any.
+        if (!this.data.promotions) {
+            this.data.promotions = [];
         }
+
+        this.data.promotions = _.map(this.data.promotions, this.handlePromotion);
+
+        this.trigger(this.data);
     },
 
-    onClear: function() {
+    onServerStatusClear: function() {
         this.data = this.getInitialState();
         this.trigger(this.data);
     },
@@ -77,7 +72,7 @@ var ServerRPCStore = Reflux.createStore({
         return promotion;
     },
 
-    onTick: function() {
+    onTickerTick: function() {
         this.data.serverMoment = this.data.serverMoment.add(1, 'second');
         this.data.serverFormattedTime = util.formatMomentLong(this.data.serverMoment);
 
@@ -86,7 +81,7 @@ var ServerRPCStore = Reflux.createStore({
 
         var now = Date.now();
         this.data.promotions = _.filter(this.data.promotions, function(promotion) {
-            // Note: date objects can be compared numeracally,
+            // Note: date objects can be compared numerically,
             // see: http://stackoverflow.com/a/493018/1978973
             return now < util.serverDateToDateObj(promotion.end_date);
         }, this);

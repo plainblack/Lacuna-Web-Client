@@ -3,16 +3,18 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var StatusActions = require('js/actions/status');
-var TickerActions = require('js/actions/ticker');
-var UserActions   = require('js/actions/user');
+var BodyStatusActions   = require('js/actions/bodyStatus');
+var TickerActions       = require('js/actions/ticker');
+var UserActions         = require('js/actions/user');
+
+var ServerTimeRPCStore  = require('js/stores/rpc/server/time');
 
 var util = require('js/util');
 var int = util.int;
 
 var BodyRPCStore = Reflux.createStore({
     listenables: [
-        StatusActions,
+        BodyStatusActions,
         TickerActions,
         UserActions
     ],
@@ -105,16 +107,13 @@ var BodyRPCStore = Reflux.createStore({
         return this.data;
     },
 
-    onSignOut : function() {
+    onUserSignOut : function() {
         this.getInitialState();
     },
 
-    onUpdate: function(status) {
-        if (!status.body) {
-            return;
-        }
+    onBodyStatusUpdate: function(bodyStatus) {
 
-        this.data = status.body;
+        this.data = bodyStatus;
 
         //////////////
         // CLEAN UP //
@@ -133,11 +132,13 @@ var BodyRPCStore = Reflux.createStore({
         this.data.building_count = int(this.data.building_count);
 
         // no point recalcing for each ship.
-        var server_time_ms = util.serverDateToMs(status.server.time);
+        var currentServerTime = ServerTimeRPCStore.getCurrentServerTimeFormatted();
+
+        var serverTimeMs = util.serverDateToMs(currentServerTime);
 
         var updateShip = function(ship) {
             ship.arrival_ms =
-            util.serverDateToMs(ship.date_arrives) - server_time_ms;
+            util.serverDateToMs(ship.date_arrives) - serverTimeMs;
         };
 
         _.map(this.data.incoming_own_ships, updateShip);
@@ -174,7 +175,7 @@ var BodyRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onClear: function() {
+    onBodyStatusClear: function() {
         this.data = this.getInitialState();
         this.trigger(this.data);
     },

@@ -122,7 +122,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
                     }
 
                     this.fireEvent("onLoginSuccessful",o);
-                    UserActions.signIn({
+                    UserActions.userSignIn({
                         name: this.elName.value,
                         password: this.elPass.value
                     });

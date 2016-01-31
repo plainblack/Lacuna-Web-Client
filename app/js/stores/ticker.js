@@ -3,15 +3,17 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var TickerActions = require('js/actions/ticker');
+var TickerActions       = require('js/actions/ticker');
+var ServerStatusActions = require('js/actions/serverStatus');
 
 var TickerStore = Reflux.createStore({
     listenables: TickerActions,
 
     init: function() {
-        this.ticking = false;
-        this.interval = _.noop;
-        this.intervalTime = 1000;
+        this.ticking        = false;
+        this.interval       = _.noop;
+        this.intervalTime   = 1000;
+        this.serverTime     = 0;
     },
 
     reset: function() {
@@ -19,14 +21,22 @@ var TickerStore = Reflux.createStore({
         this.interval = _.noop;
     },
 
-    onStart: function() {
+    tick: function() {
+        TickerActions.tickerTick();
+    },
+
+    onServerStatusTime: function(serverTime) {
+        this.serverTime = serverTime;
+    },
+
+    onTickerStart: function() {
         if (!this.ticking) {
-            this.interval = setInterval(TickerActions.tick, this.intervalTime);
+            this.interval = setInterval(this.tick, this.intervalTime);
             this.ticking = true;
         }
     },
 
-    onStop: function() {
+    onTickerStop: function() {
         if (this.ticking) {
             clearInterval(this.interval);
             this.reset();
