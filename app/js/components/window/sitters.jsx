@@ -139,7 +139,7 @@ var SitterListItem = React.createClass({
                         {this.props.sitter.name}
                     </div>
 
-                    Expires: {this.props.sitter.expiry}
+                    Expires {this.props.sitter.ends}
                 </div>
             </div>
         );
@@ -160,7 +160,7 @@ var CurrentSitters = React.createClass({
             message: "Are you sure you want to revoke everyone's access to your empire?",
             callback: function(value) {
                 if (value) {
-                    SittersActions.deauthorizeAll()
+                    SittersActions.deauthorizeAll();
                 }
             }
         });
