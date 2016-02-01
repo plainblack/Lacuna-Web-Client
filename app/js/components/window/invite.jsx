@@ -1,22 +1,11 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
 var $ = require('js/shims/jquery');
-
-var InviteActions = require('js/actions/window/invite');
-
-var InviteWindowStore = require('js/stores/window/invite');
-
-var Panel = require('js/components/panel');
 
 var server = require('js/server');
 
 var InviteWindow = React.createClass({
-    mixins: [
-        Reflux.connect(InviteWindowStore, 'show')
-    ],
-
     invite: function() {
         var email = this.refs.email.getDOMNode().value;
         var message = this.refs.message.getDOMNode().value;
@@ -51,18 +40,20 @@ var InviteWindow = React.createClass({
         });
     },
 
+    statics: {
+        windowOptions: {
+            title: 'Invite A Friend'
+        }
+    },
+
     render: function() {
         var defaultMessage = [
             "I'm having a great time with this new game called 'Lacuna Expanse'.",
-            "Come play with me!"
+            'Come play with me!'
         ].join(' ');
 
         return (
-            <Panel
-                title="Invite A Friend"
-                onClose={InviteActions.hide}
-                show={this.state.show}
-            >
+            <div>
                 <div className="ui form">
                     <div className="field">
                         <label style={{color: '#ffffff'}}>Email</label>
@@ -84,7 +75,7 @@ var InviteWindow = React.createClass({
                         <button className="ui blue button" onClick={this.genLink}>Generate</button>
                     </input>
                 </div>
-            </Panel>
+            </div>
         );
     }
 });

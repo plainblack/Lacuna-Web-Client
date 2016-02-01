@@ -8,11 +8,10 @@ var server = require('js/server');
 
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
 
-var AboutActions = require('js/actions/window/about');
-var InviteActions = require('js/actions/window/invite');
-var NotesActions = require('js/actions/window/notes');
+var WindowManagerActions = require('js/actions/menu/windowManager');
+var windowTypes = require('js/windowTypes');
+
 var OptionsActions = require('js/actions/window/options');
-var ServerClockActions = require('js/actions/window/serverClock');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 
@@ -102,7 +101,9 @@ var LeftSidebar = React.createClass({
                     Actions
                 </div>
 
-                <a className="item" onClick={toggle(InviteActions.show)}>
+                <a className="item" onClick={toggle(function() {
+                    WindowManagerActions.addWindow(windowTypes.invite);
+                })}>
                     <i className="add user icon"></i>
                     Invite a Friend
                 </a>
@@ -120,38 +121,45 @@ var LeftSidebar = React.createClass({
                 </div>
 
                 <a className="item" target="_blank" href="/starmap/"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="map icon"></i>
                     Alliance Map
                 </a>
                 <a className="item" target="_blank" href="/changes.txt"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="code icon"></i>
                     Changes Log
                 </a>
                 <a className="item" target="_blank"
                     href="http://community.lacunaexpanse.com/forums"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="comments layout icon"></i>
                     Forums
                 </a>
                 <a className="item" target="_blank" href="http://www.lacunaexpanse.com/help/"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="student icon"></i>
                     Help
                 </a>
                 <a className="item" target="_blank" href="http://www.lacunaexpanse.com/terms/"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="info circle icon"></i>
                     Terms of Service
                 </a>
                 <a className="item" target="_blank" href="http://lacunaexpanse.com/tutorial/"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="marker icon"></i>
                     Tutorial
                 </a>
                 <a className="item" target="_blank" href="http://community.lacunaexpanse.com/wiki"
-                    onClick={LeftSidebarActions.toggle}>
+                    onClick={LeftSidebarActions.toggle}
+                >
                     <i className="share alternate icon"></i>
                     Wiki
                 </a>
@@ -159,10 +167,12 @@ var LeftSidebar = React.createClass({
 
 
                 <div className="ui horizontal inverted divider">
-                    Extras
+                    Windows
                 </div>
 
-                <a className="item" onClick={toggle(AboutActions.show)}>
+                <a className="item" onClick={toggle(function() {
+                    WindowManagerActions.addWindow(windowTypes.about);
+                })}>
                     <i className="rocket icon"></i>
                     About
                 </a>
@@ -170,11 +180,22 @@ var LeftSidebar = React.createClass({
                     <i className="options icon"></i>
                     Options
                 </a>
-                <a className="item" onClick={toggle(ServerClockActions.show)}>
+                <a className="item" onClick={toggle(function() {
+                    WindowManagerActions.addWindow(windowTypes.serverClock);
+                })}>
                     <i className="wait icon"></i>
                     Server Clock
                 </a>
 
+                {
+                    // The notes window has been disabled due to instabilities.
+                    // TODO: fix this!
+                    //
+                    // <a className="item" onClick={toggle(NotesActions.show)}>
+                    //     <i className="edit icon"></i>
+                    //     Notes
+                    // </a>
+                }
 
 
                 <div className="ui horizontal inverted divider">
@@ -209,11 +230,6 @@ var LeftSidebar = React.createClass({
         LeftSidebarActions.toggle();
     },
 });
-
-//                <a className="item" onClick={toggle(NotesActions.show)}>
-//                    <i className="edit icon"></i>
-//                    Notes
-//                </a>
 
 
 module.exports = LeftSidebar;
