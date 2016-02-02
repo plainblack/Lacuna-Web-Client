@@ -105,10 +105,10 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
         buildLevels : function(levelCosts) {
             var frag = ['<table id="stationLabLevels" class="buildingStats" cellpadding="0" cellspacing="0"><col width="53" /><colgroup span="6" width="110" />'],
                 planet = Game.GetCurrentPlanet();
-            var buildfield = function(costs,type) {
+            var buildfield = function(costs,type,low) {
                 return [
                         '<td class="',
-                        costs[type] > planet[type+"_stored"] ? 'low-resource' : '',
+                        low && costs[type] > planet[type+"_stored"] ? 'low-resource' : '',
                         '" title="', Lib.formatNumber(costs[type]),'">',
                         Lib.convertNumDisplay(costs[type]),
                         '</td>'
@@ -118,11 +118,11 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
                 var costs = levelCosts[n];
                 frag[frag.length] = [
                     '<tr><th>', costs.level, ':</th>',
-                    buildfield(costs,'food'),
-                    buildfield(costs,'ore'),
-                    buildfield(costs,'water'),
-                    buildfield(costs,'energy'),
-                    buildfield(costs,'waste'),
+                    buildfield(costs,'food', 1),
+                    buildfield(costs,'ore', 1),
+                    buildfield(costs,'water', 1),
+                    buildfield(costs,'energy', 1),
+                    buildfield(costs,'waste', 0),
                     '    <td>',Lib.formatTime(costs.time),'</td>',
                     '    <td><button type="button" value="',costs.level,'">Make</button></td>',
                     '</tr>'
