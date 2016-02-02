@@ -3,6 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
+var $ = require('js/shims/jquery');
 
 var classNames = require('classnames');
 
@@ -11,6 +12,8 @@ var BodyRPCStore = require('js/stores/rpc/body');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions = require('js/actions/menu/map');
+
+var RightSidebarStore = require('js/stores/menu/rightSidebar');
 
 var PlanetListItem = React.createClass({
 
@@ -34,7 +37,7 @@ var PlanetListItem = React.createClass({
     },
 
     handleClick: function() {
-        RightSidebarActions.toggle();
+        RightSidebarActions.hide();
 
         if (this.isCurrentWorld()) {
             YAHOO.lacuna.MapPlanet.Refresh()
@@ -200,10 +203,28 @@ var RightSidebar = React.createClass({
 
     mixins: [
         Reflux.connect(EmpireRPCStore, 'empire'),
-        Reflux.connect(BodyRPCStore, 'body')
+        Reflux.connect(BodyRPCStore, 'body'),
+        Reflux.connect(RightSidebarStore, 'showSidebar')
     ],
 
-    componentDidUpdate: function() {
+    componentDidMount: function() {
+        var el = this.refs.sidebar.getDOMNode();
+
+        $(el)
+            .sidebar({
+                context: $('#sidebarContainer'),
+                duration: 300,
+                transition: 'overlay',
+                onHidden: RightSidebarActions.hide,
+                onVisible: RightSidebarActions.show
+            });
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevState.showSidebar !== this.state.showSidebar) {
+            this.handleSidebarShowing();
+        }
+
         var $header = $(this.refs.header.getDOMNode());
         var $content = $(this.refs.content.getDOMNode());
 
@@ -212,8 +233,15 @@ var RightSidebar = React.createClass({
         });
     },
 
+    handleSidebarShowing: function() {
+        var el = this.refs.sidebar.getDOMNode();
+
+        $(el)
+            .sidebar(this.state.showSidebar ? 'show' : 'hide');
+    },
+
     homePlanet: function() {
-        RightSidebarActions.toggle();
+        RightSidebarActions.hide();
         MapActions.changePlanet(this.state.empire.home_planet_id);
     },
 
@@ -227,7 +255,7 @@ var RightSidebar = React.createClass({
 
     render: function() {
         return (
-            <div className="ui right vertical inverted sidebar menu">
+            <div className="ui right vertical inverted sidebar menu" ref="sidebar">
 
                 <div ref="header" style={{paddingTop:"7px"}}>
                     <a title="Go to home planet" className="item" onClick={this.homePlanet} style={{display: "inline"}}>

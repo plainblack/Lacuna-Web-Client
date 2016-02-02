@@ -14,7 +14,7 @@ var LeftSidebarButton = React.createClass({
     ],
 
     click: function() {
-        LeftSidebarActions.toggle();
+        LeftSidebarActions.show();
     },
 
     render: function() {

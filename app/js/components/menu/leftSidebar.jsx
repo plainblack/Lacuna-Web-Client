@@ -2,11 +2,14 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var $ = require('js/shims/jquery');
 
 var util = require('js/util');
 var server = require('js/server');
 
 var LeftSidebarActions = require('js/actions/menu/leftSidebar');
+
+var LeftSidebarStore = require('js/stores/menu/leftSidebar');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
 var windowTypes = require('js/windowTypes');
@@ -14,13 +17,6 @@ var windowTypes = require('js/windowTypes');
 var OptionsActions = require('js/actions/window/options');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
-
-var toggle = function(callback) {
-    return function() {
-        LeftSidebarActions.toggle();
-        callback();
-    };
-}
 
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
@@ -43,7 +39,14 @@ var SelfDestruct = React.createClass({
         var verb = dactive ? 'Disable' : 'Enable';
 
         return (
-            <a className="item" onClick={toggle(this.onClickSelfDestruct)} style={itemStyle}>
+            <a
+                className="item"
+                style={itemStyle}
+                onClick={function() {
+                    LeftSidebarActions.hide();
+                    this.onClickSelfDestruct();
+                }}
+            >
                 <i className="bomb icon"></i>
                 {verb} Self Destruct
                 {
@@ -91,25 +94,55 @@ var SelfDestruct = React.createClass({
 
 var LeftSidebar = React.createClass({
     mixins: [
-        Reflux.connect(EmpireRPCStore, 'empire')
+        Reflux.connect(EmpireRPCStore, 'empire'),
+        Reflux.connect(LeftSidebarStore, 'showSidebar')
     ],
+
+    componentDidMount: function() {
+        var el = this.refs.sidebar.getDOMNode();
+
+        $(el)
+            .sidebar({
+                context: $('#sidebarContainer'),
+                duration: 300,
+                transition: 'overlay',
+                onHidden: LeftSidebarActions.hide,
+                onVisible: LeftSidebarActions.show
+            });
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevState.showSidebar !== this.state.showSidebar) {
+            this.handleSidebarShowing();
+        }
+    },
+
+    handleSidebarShowing: function() {
+        var el = this.refs.sidebar.getDOMNode();
+
+        $(el)
+            .sidebar(this.state.showSidebar ? 'show' : 'hide');
+    },
+
     render: function() {
         return (
-            <div className="ui left vertical inverted sidebar menu">
+            <div className="ui left vertical inverted sidebar menu" ref="sidebar">
 
                 <div className="ui horizontal inverted divider">
                     Actions
                 </div>
 
-                <a className="item" onClick={toggle(function() {
+                <a className="item" onClick={function() {
+                    LeftSidebarActions.hide();
                     WindowManagerActions.addWindow(windowTypes.invite);
-                })}>
+                }}>
                     <i className="add user icon"></i>
                     Invite a Friend
                 </a>
-                <a className="item" onClick={toggle(function() {
+                <a className="item" onClick={function() {
+                    LeftSidebarActions.hide();
                     YAHOO.lacuna.MapPlanet.Refresh();
-                })}>
+                }}>
                     <i className="refresh icon"></i>
                     Refresh
                 </a>
@@ -121,44 +154,44 @@ var LeftSidebar = React.createClass({
                 </div>
 
                 <a className="item" target="_blank" href="/starmap/"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="map icon"></i>
                     Alliance Map
                 </a>
                 <a className="item" target="_blank" href="/changes.txt"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="code icon"></i>
                     Changes Log
                 </a>
                 <a className="item" target="_blank"
                     href="http://community.lacunaexpanse.com/forums"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="comments layout icon"></i>
                     Forums
                 </a>
                 <a className="item" target="_blank" href="http://www.lacunaexpanse.com/help/"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="student icon"></i>
                     Help
                 </a>
                 <a className="item" target="_blank" href="http://www.lacunaexpanse.com/terms/"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="info circle icon"></i>
                     Terms of Service
                 </a>
                 <a className="item" target="_blank" href="http://lacunaexpanse.com/tutorial/"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="marker icon"></i>
                     Tutorial
                 </a>
                 <a className="item" target="_blank" href="http://community.lacunaexpanse.com/wiki"
-                    onClick={LeftSidebarActions.toggle}
+                    onClick={LeftSidebarActions.hide}
                 >
                     <i className="share alternate icon"></i>
                     Wiki
@@ -170,19 +203,25 @@ var LeftSidebar = React.createClass({
                     Windows
                 </div>
 
-                <a className="item" onClick={toggle(function() {
+                <a className="item" onClick={function() {
+                        LeftSidebarActions.hide();
                     WindowManagerActions.addWindow(windowTypes.about);
-                })}>
+                }}>
                     <i className="rocket icon"></i>
                     About
                 </a>
-                <a className="item" onClick={toggle(OptionsActions.show)}>
+                <a className="item" onClick={function() {
+                        LeftSidebarActions.hide();
+                        OptionsActions.show
+                    }}
+                >
                     <i className="options icon"></i>
                     Options
                 </a>
-                <a className="item" onClick={toggle(function() {
+                <a className="item" onClick={function() {
+                    LeftSidebarActions.hide();
                     WindowManagerActions.addWindow(windowTypes.serverClock);
-                })}>
+                }}>
                     <i className="wait icon"></i>
                     Server Clock
                 </a>
@@ -206,6 +245,7 @@ var LeftSidebar = React.createClass({
             </div>
         );
     },
+
     onClickSelfDestruct : function() {
         var Game = YAHOO.lacuna.Game;
         var EmpireServ = Game.Services.Empire;
@@ -227,7 +267,7 @@ var LeftSidebar = React.createClass({
             }
         });
 
-        LeftSidebarActions.toggle();
+        LeftSidebarActions.hide();
     },
 });
 

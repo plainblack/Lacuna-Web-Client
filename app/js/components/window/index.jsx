@@ -25,40 +25,43 @@ var StatsWindow = require('js/components/window/stats');
 var Window = React.createClass({
     render: function() {
         return (
-            <div>
-                { /*
-                    Semantic UI requires this structure for Sidebars to work.
-                    See: http://semantic-ui.com/modules/sidebar.html#/usage
-                 */ }
+            <div
+                id="sidebarContainer"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%'
+                }}
+            >
+
                 <LeftSidebar />
                 <RightSidebar />
-
-                { /*
-                    This sets all the tooltips in the entire client.
-                    See http://npmjs.org/package/react-tooltip for usage.
-                */ }
-                <ReactTooltip
-                    effect="solid"
-                    place="bottom"
-                    type="dark"
-                />
 
                 { /* One container to rule them all... */ }
                 <div className="pusher">
 
-                    <Menu />
+                    { /*
+                        This sets all the tooltips in the entire client.
+                        See http://npmjs.org/package/react-tooltip for usage.
+                    */ }
+                    <ReactTooltip
+                        effect="solid"
+                        place="bottom"
+                        type="dark"
+                    />
 
+                    <Menu />
 
                     <Map />
                     <div id="content"></div> { /* This div is used by map. */ }
-
 
                     <WindowManager />
 
                     <MailWindow />
                     <OptionsWindow />
                     <StatsWindow />
-
                 </div>
             </div>
         );

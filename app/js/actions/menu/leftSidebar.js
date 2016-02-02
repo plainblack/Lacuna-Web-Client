@@ -3,7 +3,8 @@
 var Reflux = require('reflux');
 
 var LeftSidebarActions = Reflux.createActions([
-    'toggle'
+    'show',
+    'hide'
 ]);
 
 module.exports = LeftSidebarActions;
