@@ -212,7 +212,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                         LeftSidebarActions.hide();
-                        OptionsActions.show
+                        OptionsActions.show();
                     }}
                 >
                     <i className="options icon"></i>
