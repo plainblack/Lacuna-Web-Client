@@ -128,7 +128,6 @@
         require('js/stats');
         require('js/info');
         require('js/notify');
-        require('js/captcha');
         require('js/components/menu');
 
         // Start everything!
