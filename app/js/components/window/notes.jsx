@@ -1,14 +1,15 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React               = require('react');
+var Reflux              = require('reflux');
 
-var NotesActions = require('js/actions/window/notes');
+var NotesActions        = require('js/actions/window/notes');
+var BodyActions         = require('js/actions/rpc/body');
 
-var NotesWindowStore = require('js/stores/window/notes');
-var NotesRPCStore = require('js/stores/rpc/body/notes');
+var NotesWindowStore    = require('js/stores/window/notes');
+var NotesRPCStore       = require('js/stores/rpc/body/notes');
 
-var Panel = require('js/components/panel');
+var Panel               = require('js/components/panel');
 
 var NotesWindow = React.createClass({
     mixins: [
@@ -16,11 +17,12 @@ var NotesWindow = React.createClass({
         Reflux.connect(NotesRPCStore, 'notes')
     ],
     handleClose: function() {
-        NotesActions.save();
+        // TODO We need to get the body ID from the NotesWindowStore
+        BodyActions.rpcBodySetColonyNotes( { bodyId: 16412, notes: this.state.notes } );
         NotesActions.hide();
     },
     handleChange: function(e) {
-        NotesActions.set(e.target.value);
+        NotesActions.notesSet(e.target.value);
     },
     render: function() {
         return (
