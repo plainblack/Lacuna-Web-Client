@@ -156,31 +156,57 @@ var AccordionItem = React.createClass({
 });
 
 var BodiesAccordion = React.createClass({
-
-    items: [
-        {
-            title: 'My Colonies',
-            key: 'colonies',
-            initiallyOpen: true
-        },
-        {
-            title: 'My Stations',
-            key: 'mystations',
-            initiallyOpen: false
-        },
-        {
-            title: 'Our Stations',
-            key: 'ourstations',
-            initiallyOpen: false
-        }
-    ],
+    propTypes: {
+        bodies: React.PropTypes.array.isRequired
+    },
 
     render: function() {
+        var items = [
+            {
+                title: 'My Colonies',
+                key: 'colonies',
+                initiallyOpen: true,
+                isBaby: false
+            },
+            {
+                title: 'My Stations',
+                key: 'mystations',
+                initiallyOpen: false,
+                isBaby: false
+            },
+            {
+                title: 'Our Stations',
+                key: 'ourstations',
+                initiallyOpen: false,
+                isBaby: false
+            }
+        ];
+
+        // Handle all the babies.
+        _.chain(this.props.bodies.babies || {})
+            .keys()
+            .sortBy()
+            .each(function(babyName) {
+                items.push({
+                    title: babyName + "'s Colonies",
+                    key: babyName,
+                    initiallyOpen: false,
+                    isBaby: true
+                });
+            })
+            .value();
+
         return (
             <div>
                 {
-                    _.map(this.items, function(item) {
-                        var list = this.props.bodies[item.key] || [];
+                    _.map(items, function(item) {
+                        var list = [];
+
+                        if (item.isBaby) {
+                            list = this.props.bodies.babies[item.key].planets;
+                        } else {
+                            list = this.props.bodies[item.key] || [];
+                        }
 
                         if (list.length > 0) {
                             return (
@@ -230,7 +256,7 @@ var RightSidebar = React.createClass({
         var $content = $(this.refs.content.getDOMNode());
 
         $content.css({
-            height: window.innerHeight - $header.height()
+            height: window.innerHeight - $header.outerHeight()
         });
     },
 
@@ -258,19 +284,40 @@ var RightSidebar = React.createClass({
         return (
             <div className="ui right vertical inverted sidebar menu" ref="sidebar">
 
-                <div ref="header" style={{paddingTop:"7px"}}>
-                    <a title="Go to home planet" className="item" onClick={this.homePlanet} style={{display: "inline"}}>
+                <div ref="header" style={{paddingTop: 7}}>
+                    <a
+                        title="Go to home planet"
+                        className="item"
+                        onClick={this.homePlanet}
+                        style={{
+                            display: 'inline'
+                        }}
+                    >
                         Home
                     </a>
 
-                    <div style={{float:'right'}}>
-                    <a title="Expand all" className="item" onClick={this.expand} style={{display: "inline"}}>
-                        [+]
-                    </a>
+                    <div style={{float: 'right'}}>
+                        <a
+                            title="Expand all"
+                            className="item"
+                            onClick={this.expand}
+                            style={{
+                                display: 'inline'
+                            }}
+                        >
+                            [+]
+                        </a>
 
-                    <a title="Collapse all" className="item" onClick={this.collapse} style={{display: "inline"}}>
-                        [-]
-                    </a>
+                        <a
+                            title="Collapse all"
+                            className="item"
+                            onClick={this.collapse}
+                            style={{
+                                display: 'inline'
+                            }}
+                        >
+                            [-]
+                        </a>
                     </div>
                 </div>
 
