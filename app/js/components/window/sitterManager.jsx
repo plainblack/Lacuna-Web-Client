@@ -5,9 +5,8 @@ var Reflux = require('reflux');
 var _ = require('lodash')
 var $ = require('js/shims/jquery');
 
-var SittersActions = require('js/actions/window/sitters');
+var SitterManagerActions = require('js/actions/window/sitterManager');
 
-var SittersWindowStore = require('js/stores/window/sitters');
 var SittersRPCStore = require('js/stores/rpc/empire/sitters');
 
 var Panel = require('js/components/panel');
@@ -28,7 +27,7 @@ var AuthorizeEmpires = React.createClass({
             message: 'Are you sure you want to authorize all members of your alliance?',
             callback: function(value) {
                 if (value) {
-                    SittersActions.authorizeAllies();
+                    SitterManagerActions.authorizeAllies();
                 }
             }
         });
@@ -41,7 +40,7 @@ var AuthorizeEmpires = React.createClass({
             message: 'Are you sure you want to authorize all members of ' + name + '?',
             callback: function(value) {
                 if (value) {
-                    SittersActions.authorizeAlliance(name);
+                    SitterManagerActions.authorizeAlliance(name);
                 }
             }
         });
@@ -54,7 +53,7 @@ var AuthorizeEmpires = React.createClass({
             message: 'Are you sure you want to authorize ' + name + '?',
             callback: function(value) {
                 if (value) {
-                    SittersActions.authorizeEmpire(name);
+                    SitterManagerActions.authorizeEmpire(name);
                 }
             }
         });
@@ -106,7 +105,7 @@ var SitterListItem = React.createClass({
     },
 
     reauthorize: function() {
-        SittersActions.authorizeEmpire(this.props.sitter.name)
+        SitterManagerActions.authorizeEmpire(this.props.sitter.name)
     },
 
     deauthorize: function() {
@@ -116,7 +115,7 @@ var SitterListItem = React.createClass({
             message: 'Are you sure you want to remove ' + s.name + "'s access to your empire?",
             callback: function(value) {
                 if (value) {
-                    SittersActions.deauthorizeEmpire(s.id);
+                    SitterManagerActions.deauthorizeEmpire(s.id);
                 }
             }
         });
@@ -152,7 +151,7 @@ var CurrentSitters = React.createClass({
     ],
 
     reauthorizeAll: function() {
-        SittersActions.reauthorizeAll();
+        SitterManagerActions.reauthorizeAll();
     },
 
     deauthorizeAll: function() {
@@ -160,7 +159,7 @@ var CurrentSitters = React.createClass({
             message: "Are you sure you want to revoke everyone's access to your empire?",
             callback: function(value) {
                 if (value) {
-                    SittersActions.deauthorizeAll();
+                    SitterManagerActions.deauthorizeAll();
                 }
             }
         });
@@ -202,11 +201,13 @@ var CurrentSitters = React.createClass({
     }
 });
 
-var SittersWindow = React.createClass({
+var SitterManagerWindow = React.createClass({
 
-    mixins: [
-        Reflux.connect(SittersWindowStore, 'show')
-    ],
+    statics: {
+        windowOptions: {
+            title: 'Manager Sitters'
+        }
+    },
 
     getInitialState: function() {
         return {
@@ -222,31 +223,25 @@ var SittersWindow = React.createClass({
 
     render: function() {
         return (
-            <Panel
-                title="Manage Sitters"
-                onClose={SittersActions.hide}
-                show={this.state.show}
+            <Tabs
+                selectedIndex={this.state.selectedIndex}
+                onSelect={this.handleSelect}
             >
-                <Tabs
-                    selectedIndex={this.state.selectedIndex}
-                    onSelect={this.handleSelect}
-                >
-                    <TabList>
-                        <Tab>Current Sitters</Tab>
-                        <Tab>Authorize Empires</Tab>
-                    </TabList>
+                <TabList>
+                    <Tab>Current Sitters</Tab>
+                    <Tab>Authorize Empires</Tab>
+                </TabList>
 
-                    <TabPanel>
-                        <CurrentSitters />
-                    </TabPanel>
+                <TabPanel>
+                    <CurrentSitters />
+                </TabPanel>
 
-                    <TabPanel>
-                        <AuthorizeEmpires />
-                    </TabPanel>
-                </Tabs>
-            </Panel>
+                <TabPanel>
+                    <AuthorizeEmpires />
+                </TabPanel>
+            </Tabs>
         );
     }
 });
 
-module.exports = SittersWindow;
+module.exports = SitterManagerWindow;

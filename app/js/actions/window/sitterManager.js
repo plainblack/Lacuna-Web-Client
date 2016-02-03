@@ -2,10 +2,8 @@
 
 var Reflux = require('reflux');
 
-var SittersActions = Reflux.createActions([
+var SitterManagerActions = Reflux.createActions([
     'load',
-    'show',
-    'hide',
 
     'authorizeAllies',
     'authorizeAlliance',
@@ -17,4 +15,4 @@ var SittersActions = Reflux.createActions([
     'deauthorizeAll'
 ]);
 
-module.exports = SittersActions;
+module.exports = SitterManagerActions;

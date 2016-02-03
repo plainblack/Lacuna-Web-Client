@@ -20,7 +20,8 @@ var WINDOWS = {
   OPTIONS:      require('js/components/window/options'),
   PROMOTIONS:   require('js/components/window/promotions'),
   SERVER_CLOCK: require('js/components/window/serverClock'),
-  STATS:        require('js/components/window/stats')
+  SITTER_MANAGER: require('js/components/window/sitterManager'),
+  STATS: require('js/components/window/stats')
 };
 
 var BASE_Z_INDEX = 1000000;

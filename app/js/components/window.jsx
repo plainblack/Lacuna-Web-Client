@@ -62,8 +62,6 @@ var Window = React.createClass({
 
                     <MailWindow />
                     <OptionsWindow />
-
-                    <SittersWindow />
                     <StatsWindow />
                 </div>
             </div>

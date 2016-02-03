@@ -10,6 +10,7 @@ var windowTypes = {
     options: 'OPTIONS',
     promotions: 'PROMOTIONS',
     serverClock: 'SERVER_CLOCK',
+    sitterManager: 'SITTER_MANAGER',
     stats: 'STATS'
 };
 
