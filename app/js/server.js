@@ -96,6 +96,10 @@ var handleError = function(options, error) {
     alert(error.message + ' (' + error.code + ')');
     console.error('Request error: ', error);
 
+    if (typeof options.error === 'function') {
+        options.error.call(options.scope || window, error);
+    }
+
     LoaderActions.hide();
 };
 
