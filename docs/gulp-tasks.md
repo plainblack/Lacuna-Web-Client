@@ -6,11 +6,21 @@ In this project, [Gulp](http://gulpjs.com/) is used to manage building the code.
 
 > `gulp build` **OR** `gulp`
 
-Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them. This is the default task, meaning that running just `gulp` in the command line will run this task.
+Runs the entire process of pulling all the JavaScript/CSS together and creates minified versions of them.
+
+*Note:* This is the default task, meaning that running just `gulp` in the command line will run this task.
 
 ## dev
 
 > `gulp dev`
+
+This puts all the JavaScript and CSS together and watches for changes to the code.
+
+*Note:* This task is for those who have their own Apache (or similar) server to use. If you don't have one, use `gulp dev-with-server` (documented below), instead.
+
+## dev-with-server
+
+> `gulp dev-with-server`
 
 This puts all the JavaScript and CSS together and starts a web server to run the web client. It also watches for changes to the code and restarts when required.
 
