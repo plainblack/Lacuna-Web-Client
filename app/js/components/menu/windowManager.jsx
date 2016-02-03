@@ -12,6 +12,7 @@ var Panel = require('js/components/panel');
 
 var WINDOWS = {
   ABOUT: require('js/components/window/about'),
+  CAPTCHA: require('js/components/window/captcha'),
   ESSENTIA: require('js/components/window/essentia'),
   INVITE: require('js/components/window/invite'),
   MAIL: require('js/components/window/mail'),
@@ -81,7 +82,10 @@ var Window = React.createClass({
         }, this.getWindowOptions());
 
         var windowOptions = {
-            ref: 'window'
+            ref: 'window',
+            options: _.merge({
+                id: this.props.window.id
+            }, this.props.window.options)
         };
 
         return (

@@ -43,14 +43,15 @@ var WindowManagerStore = Reflux.createStore({
         }
     },
 
-    onAddWindow: function(type, customId) {
-        var id = 'window_' + (customId || type);
+    onAddWindow: function(type, options) {
+        var id = 'window_' + type;
         var windows = _.cloneDeep(this.windows);
 
         windows[id] = {
             id: id,
             type: type,
             show: true,
+            options: options,
             layer: this.getNextLayerNumber(windows)
         };
 
