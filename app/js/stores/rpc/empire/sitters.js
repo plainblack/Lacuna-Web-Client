@@ -8,14 +8,14 @@ var moment = require('moment')
 
 var util = require('js/util')
 
-var SittersActions = require('js/actions/window/sitters');
+var SitterManagerActions = require('js/actions/window/sitterManager');
 var TickerActions = require('js/actions/ticker');
 
 var server = require('js/server');
 
 var SittersRPCStore = Reflux.createStore({
     listenables: [
-        SittersActions,
+        SitterManagerActions,
         TickerActions
     ],
 
@@ -59,7 +59,7 @@ var SittersRPCStore = Reflux.createStore({
     },
 
     onShow: function() {
-        SittersActions.load();
+        SitterManagerActions.load();
     },
 
     onLoad: function() {

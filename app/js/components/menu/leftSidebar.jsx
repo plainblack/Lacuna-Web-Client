@@ -210,7 +210,11 @@ var LeftSidebar = React.createClass({
                     <i className="rocket icon"></i>
                     About
                 </a>
-                <a className="item" onClick={toggle(SittersActions.show)}>
+                <a className="item" onClick={function() {
+                        LeftSidebarActions.hide();
+                        WindowManagerActions.addWindow(windowTypes.sitterManager);
+                    }}
+                >
                     <i className="sitemap icon"></i>
                     Manage Sitters
                 </a>
