@@ -1966,6 +1966,29 @@ a.item {
     cursor: pointer;
 }
 
+/* This little chunk of css is for animating panels fading in and out. */
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-enter, .fade-enter.fade-enter-active, .fade-leave, .fade-leave.fade-leave-active {
+    z-index: 1000000000;
+    position: absolute;
+}
 
 /*
  * vim: noet:ts=4:sw=4

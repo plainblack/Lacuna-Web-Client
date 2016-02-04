@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 var _ = require('lodash');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
@@ -51,9 +52,7 @@ var Window = React.createClass({
     },
 
     handleBringingToTop: function(event) {
-        if (!WindowManagerStore.isOnTop(this.props.window.id)) {
-            WindowManagerActions.bringWindowToTop(this.props.window.id);
-        }
+        WindowManagerActions.bringWindowToTop(this.props.window.id);
     },
 
     getWindowComponent: function() {
@@ -108,14 +107,24 @@ var WindowManager = React.createClass({
     ],
 
     render: function() {
+        var keys = _.keys(this.state.windows);
+
+        var windows = _.map(keys, function(key) {
+            var theWindow = this.state.windows[key];
+            return <Window window={theWindow} key={key} />;
+        }, this);
+
+        console.log(this.state.windows);
+
         return (
-            <div>
-                {
-                    _.mapValues(this.state.windows, function(theWindow) {
-                        return <Window window={theWindow} />;
-                    })
-                }
-            </div>
+            <ReactCSSTransitionGroup
+                transitionName="fade"
+                transitionEnterTimeout={500}
+                transitionLeaveTimeout={500}
+                transitionAppear={true}
+            >
+                {windows}
+            </ReactCSSTransitionGroup>
         );
     }
 });

@@ -30,6 +30,7 @@
     "lodash": "3.6.0",
     "moment": "2.10.6",
     "react": "0.13.3",
+    "react-addons-css-transition-group": "^0.14.7",
     "react-draggable": "0.8.0",
     "react-progress": "0.0.3",
     "react-tabs": "0.4.1",

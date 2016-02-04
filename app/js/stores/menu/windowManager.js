@@ -50,7 +50,6 @@ var WindowManagerStore = Reflux.createStore({
         windows[id] = {
             id: id,
             type: type,
-            show: true,
             options: options,
             layer: this.getNextLayerNumber(windows)
         };
@@ -60,29 +59,24 @@ var WindowManagerStore = Reflux.createStore({
     },
 
     onHideWindow: function(id) {
-        var windows = _.cloneDeep(this.windows);
+        var windows = _.clone(this.windows);
 
-        if (windows[id]) {
-            windows[id].show = false;
-        }
+        delete windows[id];
 
         this.windows = windows;
         this.trigger(this.windows);
     },
 
     onHideAllWindows: function() {
-        var windows = _.cloneDeep(this.windows);
-
-        windows = _.mapValues(windows, function(win) {
-            win.show = false;
-            return win;
-        });
-
-        this.windows = windows;
+        this.windows = {};
         this.trigger(this.windows);
     },
 
     onBringWindowToTop: function(id) {
+        if (this.isOnTop(id)) {
+            return;
+        }
+
         var windows = _.cloneDeep(this.windows);
 
         if (windows[id]) {
