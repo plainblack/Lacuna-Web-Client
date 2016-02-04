@@ -10,6 +10,12 @@ var ServerRPCStore = require('js/stores/rpc/server');
 
 var CreditsRPCStore = require('js/stores/rpc/stats/credits');
 
+var Tabber = require('js/components/tabber');
+var Tab = Tabber.Tab;
+var TabList = Tabber.TabList;
+var TabPanel = Tabber.TabPanel;
+var Tabs = Tabber.Tabs;
+
 var About = React.createClass({
 
     mixins: [
@@ -19,6 +25,10 @@ var About = React.createClass({
     render: function() {
         return (
             <div>
+                <h1>
+                    The Lacuna Expanse
+                </h1>
+
                 <p>
                     Copyright 2010, {(new Date()).getFullYear()} Lacuna Expanse Corp.
                 </p>
@@ -81,6 +91,10 @@ var Credits = React.createClass({
     render: function() {
         return (
             <div>
+                <h1>
+                    Credits
+                </h1>
+
                 {
                     _.map(this.state.credits, function(names, header) {
                         return (
@@ -104,19 +118,26 @@ var AboutWindow = React.createClass({
         }
     },
 
-    onWindowShow: function() {
-        AboutActions.load();
-    },
-
     render: function() {
         return (
-            <div>
-                <h2>The Lacuna Expanse</h2>
-                <About />
+            <Tabs
+                onSelect={{
+                    1: AboutActions.load
+                }}
+            >
+                <TabList>
+                    <Tab>About</Tab>
+                    <Tab>Credits</Tab>
+                </TabList>
 
-                <h2>Credits</h2>
-                <Credits />
-            </div>
+                <TabPanel>
+                    <About />
+                </TabPanel>
+
+                <TabPanel>
+                    <Credits />
+                </TabPanel>
+            </Tabs>
         );
     }
 });
