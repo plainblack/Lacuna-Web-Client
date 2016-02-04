@@ -209,6 +209,10 @@ var SitterManagerWindow = React.createClass({
         }
     },
 
+    onWindowShow: function() {
+        SitterManagerActions.load();
+    },
+
     getInitialState: function() {
         return {
             selectedIndex: 0
