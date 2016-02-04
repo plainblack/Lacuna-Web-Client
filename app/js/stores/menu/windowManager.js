@@ -94,7 +94,17 @@ var WindowManagerStore = Reflux.createStore({
     },
 
     onEscKey: function() {
-        WindowManagerActions.hideAllWindows();
+        var window = _.chain(_.clone(this.windows))
+            .values()
+            .filter({show: true})
+            .sortBy('layer')
+            .reverse()
+            .first()
+            .value();
+
+        if (window) {
+            WindowManagerActions.hideWindow(window.id);
+        }
     }
 });
 
