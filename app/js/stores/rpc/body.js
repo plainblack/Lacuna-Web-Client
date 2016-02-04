@@ -180,7 +180,7 @@ var BodyRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onTick: function() {
+    onTickerTick: function() {
 
         var tickIncoming = function(ship) {
             ship.arrival_ms -= 1000;
