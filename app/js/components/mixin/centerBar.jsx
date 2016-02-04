@@ -2,6 +2,8 @@
 
 var _ = require('lodash');
 
+var util = require('js/util');
+
 var centerBar = function(refName) {
     if (!refName) {
         // Not really sure what to do here.
@@ -11,7 +13,7 @@ var centerBar = function(refName) {
     var bar = this.refs[refName].getDOMNode();
     var barWidth = bar.offsetWidth;
     var windowWidth = window.innerWidth;
-    var left = (windowWidth - barWidth) / 2;
+    var left = util.int((windowWidth - barWidth) / 2);
     bar.style.left = left + 'px';
 };
 
