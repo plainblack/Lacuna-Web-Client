@@ -2,13 +2,15 @@
 
 var Reflux = require('reflux');
 
+var ReactTooltip = require('react-tooltip');
+
 var ChatActions = require('js/actions/menu/chat');
 var MenuActions = require('js/actions/menu');
 var SessionActions = require('js/actions/session');
 var StatusActions = require('js/actions/status');
 var TickerActions = require('js/actions/ticker');
 var UserActions = require('js/actions/user');
-var SessionStore = require('js/stores/session');
+var WindowManagerActions = require('js/actions/menu/windowManager');
 
 var server = require('js/server');
 
@@ -25,7 +27,7 @@ var UserStore = Reflux.createStore({
         server.call({
             module: 'empire',
             method: 'logout',
-            params: [SessionStore.getData()],
+            params: [],
             success: function() {
                 // Here be the traditional code to reset the game...
                 YAHOO.lacuna.Game.Reset();
@@ -38,6 +40,10 @@ var UserStore = Reflux.createStore({
                 MenuActions.hide();
                 TickerActions.stop();
                 ChatActions.hide();
+                WindowManagerActions.hideAllWindows();
+
+                // Hide all our tooltips
+                ReactTooltip.hide();
             }
         });
     }
