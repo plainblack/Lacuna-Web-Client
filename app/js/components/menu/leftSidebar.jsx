@@ -22,13 +22,6 @@ var LeftSidebarStore    = require('js/stores/menu/leftSidebar');
 var LeftSidebarStore 	= require('js/stores/menu/leftSidebar');
 var windowTypes         = require('js/windowTypes');
 
-var getBuildings = function() {
-    console.log("getBuildings:");
-    LeftSidebarActions.leftSidebarToggle();
-    // TODO must get the correct body ID
-    RpcBodyActions.rpcBodyGetBuildings( { bodyId: 16412 } );
-}
-
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
 
@@ -231,11 +224,6 @@ var LeftSidebar = React.createClass({
                 }}>
                     <i className="wait icon"></i>
                     Server Clock
-                </a>
-
-                <a className="item" onClick={ getBuildings }>
-                    <i className="edit icon"></i>
-                    Test Get Buildings
                 </a>
 
                 <div className="ui horizontal inverted divider">
