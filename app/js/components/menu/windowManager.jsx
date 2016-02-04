@@ -113,8 +113,6 @@ var WindowManager = React.createClass({
             return <Window window={theWindow} key={key} />;
         }, this);
 
-        console.log(this.state.windows);
-
         return (
             <ReactCSSTransitionGroup
                 transitionName="fade"
