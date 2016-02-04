@@ -1,16 +1,18 @@
 'use strict';
 
-var React               = require('react');
-var Reflux              = require('reflux');
-var ReactTabs           = require('react-tabs');
-var ReactTooltip        = require('react-tooltip');
-var $                   = require('js/shims/jquery');
-var _                   = require('lodash');
-var classnames          = require('classnames');
-var util                = require('js/util');
-var windowTypes         = require('js/windowTypes');
 
-var EssentiaActions     = require('js/actions/window/essentia');
+var BoostsRPCStore = require('js/stores/rpc/empire/boosts');
+var EmpireRPCStore = require('js/stores/rpc/empire');
+var EssentiaRPCStore = require('js/stores/rpc/empire/essentia').listen(_.noop);
+var SessionStore = require('js/stores/session');
+
+var ReactTooltip = require('react-tooltip');
+var Tabber = require('js/components/tabber');
+var Tab = Tabber.Tab;
+var Tabs = Tabber.Tabs;
+var TabList = Tabber.TabList;
+var TabPanel = Tabber.TabPanel;
+
 var WindowManagerActions = require('js/actions/menu/windowManager');
 
 var BoostsRPCStore      = require('js/stores/rpc/empire/boosts');
@@ -284,27 +286,12 @@ var EssentiaWindow = React.createClass({
         }
     },
 
-    onWindowShow: function() {
-        EssentiaActions.loadBoosts();
-    },
-
-    getInitialState: function() {
-        return {
-            selectedIndex: 0
-        };
-    },
-
-    handleSelect: function(index) {
-        this.setState({
-            selectedIndex: index
-        });
-    },
-
     render: function() {
         return (
             <Tabs
-                selectedIndex={this.state.selectedIndex}
-                onSelect={this.handleSelect}
+                onSelect={{
+                    0: EssentiaActions.loadBoosts
+                }}
             >
                 <TabList>
                     <Tab>Boosts</Tab>
