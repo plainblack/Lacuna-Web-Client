@@ -48,36 +48,12 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             Game.RPCBase = window.lacuna_rpc_base_url || l.protocol + '//' + l.host + '/';
             Game.domain = l.hostname || "lacunaexpanse.com";
 
-            var ie = YAHOO.env.ua.ie, // 7 or later
-                opera = YAHOO.env.ua.opera, // 9.65 or later
-                firefox = YAHOO.env.ua.gecko, // 1.9 = 3.0
-                webkit = YAHOO.env.ua.webkit, // 523 = Safari 3
-                oldBrowserOkay = Game.GetCookieSettings("oldBrowserOkay","0");
-            if(oldBrowserOkay == 0 && (
-                    (ie > 0 && ie < 7) ||
-                    (opera > 0 && opera < 9.65) ||
-                    (firefox > 0 && firefox < 1.9) ||
-                    (webkit > 0 && webkit < 523)
-                )) {
-                if (confirm("Your browser is quite old and some game functions may not work properly. Are you certain you want to continue?")) {
-                    Game.SetCookieSettings("oldBrowserOkay", "1");
-                }
-                else {
-                    window.location = 'http://www.lacunaexpanse.com';
-                }
-            }
-
             // This is some glue code to make the server, body and empire stores listen for changes.
             // Normally, React Components should do this automatically, but since we need these
             // stores operating immeadiatly we do it here.
             // TODO: remove this!
-            require('js/stores/rpc/server').listen(_.noop);
-            require('js/stores/rpc/body').listen(_.noop);
-            require('js/stores/rpc/empire').listen(_.noop);
             require('js/stores/user').listen(_.noop);
             require('js/stores/ticker').listen(_.noop);
-            require('js/stores/menu/leftSidebar').listen(_.noop);
-            require('js/stores/menu/rightSidebar').listen(_.noop);
 
             // Scrap anything that might be in <body> just do the render!
             React.render(
@@ -87,9 +63,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
 
             require('js/actions/menu/loader').show();
-            if (!query) {
-                query = {};
-            }
 
             //add overlay manager functionality
             Game.OverlayManager.hideAllBut = function(id) {
@@ -125,6 +98,10 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             TickerActions.tick.listen(function() {
                 ReactTooltip.rebuild();
             });
+
+            if (!query) {
+                query = {};
+            }
 
             var session = Game.GetSession();
             if (query.referral) {
@@ -260,15 +237,6 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                     setTimeout(GameLoop, 1000);
                 }
             })();
-            Game.planetRefreshInterval = setInterval(function(){
-                var BodyServ = Game.Services.Body,
-                    session = Game.GetSession(),
-                    body = Game.GetCurrentPlanet();
-                BodyServ.get_status({session_id: session, body_id: body.id},{
-                    success:Game.onRpc,
-                    failure:function(o){return true;}
-                });
-            }, 10 * 60 * 1000);
 
             //init event subscribtions if we need to
             Game.InitEvents();
@@ -277,13 +245,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
             document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
 
-            UserActions.signIn();
             SessionActions.set(Game.GetSession(''));
-
-            setTimeout(function() {
-                console.log('Firing up the planet view');
-                MapActions.changePlanet(Game.EmpireData.home_planet_id);
-            }, 500);
+            UserActions.signIn();
         },
         InitEvents : function() {
             //make sure we only subscribe once
@@ -604,27 +567,11 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             }
         },
 
-        Logout : function() {
-            require('js/actions/menu/loader').show();
 
-            var EmpireServ = Game.Services.Empire,
-                session = Game.GetSession();
-
-            EmpireServ.logout({session_id:session},{
-                success : function(o){
-                    YAHOO.log(o, 'info', 'Game.Logout.success');
-                    //Dom.setStyle(Game._envolveContainer, "display", "none");
-                    Game.Reset();
-                    Game.DoLogin();
-                    require('js/actions/menu/loader').hide();
-                }
-            });
-        },
         Reset : function() {
 
             delete Game.isRunning;
-            clearInterval(Game.planetRefreshInterval);
-            delete Game.planetRefreshInterval;
+
             //disable esc handler
             Game.escListener.disable();
 
@@ -848,6 +795,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
                 }
             }
         },
+
+
         onScroll : (function(){
             var evName;
             var func;

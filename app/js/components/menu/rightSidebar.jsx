@@ -189,6 +189,7 @@ var BodiesAccordion = React.createClass({
                                     list={list}
                                     initiallyOpen={item.initiallyOpen}
                                     currentBody={this.props.currentBody}
+                                    key={item.title}
                                 />
                             );
                         }

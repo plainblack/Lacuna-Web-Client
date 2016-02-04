@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var ReactTooltip = require('react-tooltip');
 
 var ChatActions = require('js/actions/menu/chat');
+var MapActions = require('js/actions/menu/map');
 var MenuActions = require('js/actions/menu');
 var SessionActions = require('js/actions/session');
 var StatusActions = require('js/actions/status');
@@ -21,6 +22,9 @@ var UserStore = Reflux.createStore({
         MenuActions.show();
         TickerActions.start();
         ChatActions.show();
+
+        console.log('Firing up the planet view');
+        MapActions.changePlanet(YAHOO.lacuna.Game.EmpireData.home_planet_id);
     },
 
     onSignOut: function() {
