@@ -146,8 +146,10 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
             }
         },
         Destroy: function() {
-            this.Display.destroy();
-            delete this.Display;
+            if (this.Display) {
+                this.Display.destroy();
+                delete this.Display;
+            }
         }
     };
 
