@@ -71,7 +71,7 @@ var Panel = React.createClass({
                         // Prevent anyone from selecting the text.
                         MozUserSelect: 'none',
                         WebkitUserSelect: 'none',
-                        MsUserSelect: 'none'
+                        msUserSelect: 'none'
                     }}>
                         <span className="drag-handle">
                             {this.props.title}
