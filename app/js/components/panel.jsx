@@ -66,9 +66,16 @@ var Panel = React.createClass({
                         lineHeight: '1.75',
                         marginLeft: 10,
                         paddingLeft: 10,
-                        width: this.props.width - 20
+                        width: this.props.width - 20,
+
+                        // Prevent anyone from selecting the text.
+                        MozUserSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        MsUserSelect: 'none'
                     }}>
-                        {this.props.title}
+                        <span className="drag-handle">
+                            {this.props.title}
+                        </span>
 
                         <span
                             onClick={this.props.onClose}
