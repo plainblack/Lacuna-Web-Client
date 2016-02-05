@@ -3,9 +3,9 @@
 var Reflux = require('reflux');
 
 var TickerActions = Reflux.createActions([
-    'tickerStart',
-    'tickerStop',
-    'tickerTick'
+    'start',
+    'stop',
+    'tick'
 ]);
 
 module.exports = TickerActions;

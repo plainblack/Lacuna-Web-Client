@@ -1,22 +1,21 @@
 'use strict';
 
-var $                   = require('js/shims/jquery');
-var _                   = require('lodash');
+var $ = require('js/shims/jquery');
+var _ = require('lodash');
 
-var LoaderActions       = require('js/actions/menu/loader');
-var SessionStore        = require('js/stores/session');
-var ServerStatusActions = require('js/actions/serverStatus');
-var BodyStatusActions   = require('js/actions/bodyStatus');
-var EmpireStatusActions = require('js/actions/empireStatus');
+var LoaderActions = require('js/actions/menu/loader');
+
+var SessionStore = require('js/stores/session');
+var StatusActions = require('js/actions/status');
 
 var defaults = {
-    module:     '',
-    method:     '',
-    params:     [],
+    module: '',
+    method: '',
+    params: [],
     addSession: true,
-    success:    _.noop,
-    error:      _.noop,
-    scope:      window
+    success: _.noop,
+    error: _.noop,
+    scope: window
 };
 
 var handleDefaults = function(options) {
@@ -74,13 +73,13 @@ var createUrl = function(options) {
 var handleSuccess = function(options, result) {
     if (result) {
         if (result.status) {
-            splitStatus(result.status);
+            StatusActions.update(result.status);
 
             // Handle the legacy Status stuff...
             YAHOO.lacuna.Game.ProcessStatus(result.status);
 
         } else if (options.method === 'get_status') {
-            splitStatus(result);
+            StatusActions.update(result);
 
             // Handle the legacy Status stuff...
             YAHOO.lacuna.Game.ProcessStatus(result.status);
@@ -108,10 +107,10 @@ var sendRequest = function(url, data, options) {
     console.log('Calling', options.module + '/' + options.method, options.params);
 
     $.ajax({
-        data:       data,
-        dataType:   'json',
-        type:       'POST',
-        url:        url,
+        data: data,
+        dataType: 'json',
+        type: 'POST',
+        url: url,
 
         success: function(data, textStatus, jqXHR) {
             if (textStatus === 'success' && jqXHR.status === 200) {
@@ -136,26 +135,4 @@ var call = function(obj) {
     sendRequest(url, data, options);
 };
 
-// Split the status message into server, body, empire
-// and call the corresponding actions
-//
-var splitStatus = function(status) {
-    if (status.server) {
-        var serverStatus = _.cloneDeep(status.server);
-        ServerStatusActions.serverStatusUpdate(serverStatus);
-    }
-    if (status.empire) {
-        var empireStatus = _.cloneDeep(status.empire);
-        EmpireStatusActions.empireStatusUpdate(empireStatus);
-    }
-    if (status.body) {
-        var bodyStatus = _.cloneDeep(status.body);
-        BodyStatusActions.bodyStatusUpdate(bodyStatus);
-    }
-    
-};
-
-
 module.exports.call = call;
-module.exports.splitStatus = splitStatus;
-

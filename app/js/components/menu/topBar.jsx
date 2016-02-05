@@ -107,7 +107,7 @@ var TopBar = React.createClass({
                         ''
                 }
 
-                <a className="item" data-tip="Sign Out" onClick={UserActions.userSignOut}>
+                <a className="item" data-tip="Sign Out" onClick={UserActions.signOut}>
                     <i className="power big icon"></i>
                 </a>
             </div>

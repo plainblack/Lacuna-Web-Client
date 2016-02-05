@@ -1,30 +1,29 @@
 'use strict';
 
-var React               = require('react');
-var Reflux              = require('reflux');
-var ReactTabs           = require('react-tabs');
-var ReactTooltip        = require('react-tooltip');
-var $                   = require('js/shims/jquery');
-var _                   = require('lodash');
-var classnames          = require('classnames');
-var util                = require('js/util');
-var windowTypes         = require('js/windowTypes');
+var React = require('react');
+var Reflux = require('reflux');
+var $ = require('js/shims/jquery');
+var _ = require('lodash');
+var classnames = require('classnames');
 
-var EssentiaActions     = require('js/actions/window/essentia');
+var EssentiaActions = require('js/actions/window/essentia');
+
+var BoostsRPCStore = require('js/stores/rpc/empire/boosts');
+var EmpireRPCStore = require('js/stores/rpc/empire');
+var EssentiaRPCStore = require('js/stores/rpc/empire/essentia').listen(_.noop);
+var SessionStore = require('js/stores/session');
+
+var ReactTabs = require('react-tabs');
+var ReactTooltip = require('react-tooltip');
+var Tab = ReactTabs.Tab;
+var Tabs = ReactTabs.Tabs;
+var TabList = ReactTabs.TabList;
+var TabPanel = ReactTabs.TabPanel;
+
 var WindowManagerActions = require('js/actions/menu/windowManager');
+var windowTypes = require('js/windowTypes');
 
-var BoostsRPCStore      = require('js/stores/rpc/empire/boosts');
-var EmpireRPCStore      = require('js/stores/rpc/empire');
-var EssentiaRPCStore    = require('js/stores/rpc/empire/essentia').listen(_.noop);
-var SessionStore        = require('js/stores/session');
-
-var Panel               = require('js/components/panel');
-
-var Tab         = ReactTabs.Tab;
-var Tabs        = ReactTabs.Tabs;
-var TabList     = ReactTabs.TabList;
-var TabPanel    = ReactTabs.TabPanel;
-
+var util = require('js/util');
 
 var BoostCountdown = React.createClass({
     propTypes: {

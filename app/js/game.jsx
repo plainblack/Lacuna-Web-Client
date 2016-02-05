@@ -2,21 +2,22 @@
 
 YAHOO.namespace("lacuna");
 
-var React           = require('react');
-var _               = require('lodash');
-var $               = require('js/shims/jquery');
-var ReactTooltip    = require('react-tooltip');
+var React = require('react');
+var _ = require('lodash');
+var $ = require('js/shims/jquery');
 
-var Window          = require('js/components/window');
+var ReactTooltip = require('react-tooltip');
+
+var Window = require('js/components/window');
 
 var KeyboardActions = require('js/actions/keyboard');
-var MapActions      = require('js/actions/menu/map');
-var MenuActions     = require('js/actions/menu');
-var SessionActions  = require('js/actions/session');
-var TickerActions   = require('js/actions/ticker');
-var UserActions     = require('js/actions/user');
+var MapActions = require('js/actions/menu/map');
+var MenuActions = require('js/actions/menu');
+var SessionActions = require('js/actions/session');
+var TickerActions = require('js/actions/ticker');
 
-var BodyRPCStore    = require('js/stores/rpc/body');
+var UserActions = require('js/actions/user');
+var BodyRPCStore = require('js/stores/rpc/body');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
 var windowTypes = require('js/windowTypes');
@@ -94,7 +95,7 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             // DOM and then replaced later. For example, switching between tabs that each have
             // tooltips in them. Calling this every tick ensures that the tooltips are rebuilt if
             // they disappear.
-            TickerActions.tickerTick.listen(function() {
+            TickerActions.tick.listen(function() {
                 ReactTooltip.rebuild();
             });
 
@@ -244,9 +245,8 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 
             document.title = 'Lacuna Expanse - ' + Game.EmpireData.name;
 
-            SessionActions.sessionSet(Game.GetSession(''));
-            UserActions.userSignIn();
-
+            SessionActions.set(Game.GetSession(''));
+            UserActions.signIn();
         },
         InitEvents : function() {
             //make sure we only subscribe once
@@ -876,3 +876,4 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
 YAHOO.register("game", YAHOO.lacuna.Game, {version: "1", build: "0"});
 
 }
+// vim: noet:ts=4:sw=4

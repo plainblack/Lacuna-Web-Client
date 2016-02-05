@@ -11,16 +11,16 @@ var WindowManagerStore = require('js/stores/menu/windowManager');
 var Panel = require('js/components/panel');
 
 var WINDOWS = {
-  ABOUT:        require('js/components/window/about'),
-  CAPTCHA: 	require('js/components/window/captcha'),
-  ESSENTIA:     require('js/components/window/essentia'),
-  INVITE:       require('js/components/window/invite'),
-  MAIL:         require('js/components/window/mail'),
-  NOTES:        require('js/components/window/notes'),
-  OPTIONS:      require('js/components/window/options'),
-  PROMOTIONS:   require('js/components/window/promotions'),
+  ABOUT: require('js/components/window/about'),
+  CAPTCHA: require('js/components/window/captcha'),
+  ESSENTIA: require('js/components/window/essentia'),
+  INVITE: require('js/components/window/invite'),
+  MAIL: require('js/components/window/mail'),
+  NOTES: require('js/components/window/notes'),
+  OPTIONS: require('js/components/window/options'),
+  PROMOTIONS: require('js/components/window/promotions'),
   SERVER_CLOCK: require('js/components/window/serverClock'),
-  STATS:        require('js/components/window/stats')
+  STATS: require('js/components/window/stats')
 };
 
 var BASE_Z_INDEX = 1000000;

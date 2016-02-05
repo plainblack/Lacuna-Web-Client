@@ -19,12 +19,12 @@ var SessionStore = Reflux.createStore({
         return this.data;
     },
 
-    onSessionSet: function(session) {
+    onSet: function(session) {
         this.data = session;
         this.trigger(this.data);
     },
 
-    onSessionClear: function() {
+    onClear: function() {
         this.trigger(this.getInitialState());
     }
 });

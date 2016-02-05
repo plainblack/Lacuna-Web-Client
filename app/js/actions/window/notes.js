@@ -5,9 +5,11 @@ var Reflux = require('reflux');
 var NotesActions = Reflux.createActions([
     'show',
     'hide',
-    'notesLoad',
-    'notesClear',
-    'notesSet'
+
+    'load',
+    'clear',
+    'set',
+    'save'
 ]);
 
 module.exports = NotesActions;

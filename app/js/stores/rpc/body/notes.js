@@ -1,14 +1,14 @@
 'use strict';
 
-var Reflux              = require('reflux');
+var Reflux = require('reflux');
 
-var NotesActions        = require('js/actions/window/notes');
-var MapActions          = require('js/actions/menu/map');
+var NotesActions = require('js/actions/window/notes');
+var MapActions = require('js/actions/menu/map');
 
-var BodyRPCStore        = require('js/stores/rpc/body');
-var NotesWindowStore    = require('js/stores/window/notes');
+var BodyRPCStore = require('js/stores/rpc/body');
+var NotesWindowStore = require('js/stores/window/notes');
 
-var server              = require('js/server');
+var server = require('js/server');
 
 var NotesDataStore = Reflux.createStore({
     listenables: [
@@ -27,7 +27,7 @@ var NotesDataStore = Reflux.createStore({
                 // We changed planet. The save automagically happened below.
                 // We just need to bring the new data in.
                 this.planetId = body.id;
-                NotesActions.notesSet(body.notes);
+                NotesActions.set(body.notes);
             }
         }, this);
     },
@@ -37,34 +37,49 @@ var NotesDataStore = Reflux.createStore({
         return this.data;
     },
 
-    onNotesPanelShow: function() {
-        NotesActions.notesLoad();
+    onShow: function() {
+        NotesActions.load();
     },
 
-    onNotesPanelHide: function() {
-        NotesActions.notesClear();
+    onHide: function() {
+        NotesActions.clear();
     },
 
-    onNotesLoad: function() {
+    onLoad: function() {
         var data = BodyRPCStore.getData();
         this.planetId = data.id;
         this.trigger(data.notes);
     },
 
-    onNotesClear: function() {
+    onClear: function() {
         this.trigger(this.getInitialState());
     },
 
-    onNotesSet: function(value) {
+    onSet: function(value) {
         this.data = value;
         this.trigger(this.data);
+    },
+
+    onSave: function() {
+        server.call({
+            module: 'body',
+            method: 'set_colony_notes',
+            trigger: false,
+            params: [
+                this.planetId,
+                {
+                    notes: this.data
+                }
+            ],
+            scope: this
+        });
     },
 
     onChangePlanet: function() {
         // Only do this while the window is open.
         if (NotesWindowStore.getData()) {
-    //        NotesActions.notesSave();
-            NotesActions.notesClear();
+            NotesActions.save();
+            NotesActions.clear();
         }
     }
 });

@@ -21,7 +21,6 @@ var LeftSidebarStore = Reflux.createStore({
         console.log('Hiding left sidebar');
         this.trigger(false);
     }
-
 });
 
 module.exports = LeftSidebarStore;
