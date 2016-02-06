@@ -132,9 +132,7 @@ var BodyRPCStore = Reflux.createStore({
         this.data.building_count = int(this.data.building_count);
 
         // no point recalcing for each ship.
-        var currentServerTime = ServerTimeRPCStore.getCurrentServerTimeFormatted();
-
-        var serverTimeMs = util.serverDateToMs(currentServerTime);
+        var serverTimeMs = +ServerTimeRPCStore.getCurrentServerTimeMoment();
 
         var updateShip = function(ship) {
             ship.arrival_ms =
