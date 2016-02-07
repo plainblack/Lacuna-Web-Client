@@ -108,7 +108,8 @@ var BodyRPCStore = Reflux.createStore({
     },
 
     onUserSignOut : function() {
-        this.getInitialState();
+        this.data = this.getInitialState();
+        this.trigger(this.data);
     },
 
     onBodyStatusUpdate: function(bodyStatus) {
