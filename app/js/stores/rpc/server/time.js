@@ -52,6 +52,10 @@ var ServerTimeRPCStore = Reflux.createStore({
         return util.formatMomentLong(thisMoment);
     },
 
+    getCurrentClientTimeFormatted: function() {
+        return util.formatMomentLong(moment());
+    },
+
     onServerStatusUpdate: function(serverStatus) {
         var serverTime = serverStatus.time;
 
