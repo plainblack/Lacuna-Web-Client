@@ -1,16 +1,17 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
+var React                = require('react');
+var Reflux               = require('reflux');
+var _                    = require('lodash');
 
-var EssentiaActions = require('js/actions/window/essentia');
+var EssentiaActions      = require('js/actions/window/essentia');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var windowTypes = require('js/windowTypes');
+var windowTypes          = require('js/windowTypes');
 
-var SessionStore = require('js/stores/session');
-var EssentiaRPCStore = require('js/stores/rpc/empire/essentia').listen(_.noop);
+var SessionStore         = require('js/stores/session');
+var EssentiaRPCStore     = require('js/stores/rpc/empire/essentia').listen(_.noop);
+
 
 var GetEssentiaTab = React.createClass({
 

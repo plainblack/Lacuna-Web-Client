@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var _ = require('lodash');
+var _     = require('lodash');
 
 var CreditsSection = React.createClass({
 

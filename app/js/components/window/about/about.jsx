@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React          = require('react');
+var Reflux         = require('reflux');
 
 var ServerRPCStore = require('js/stores/rpc/server');
 

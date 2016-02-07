@@ -1,12 +1,12 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
+var React           = require('react');
+var Reflux          = require('reflux');
+var _               = require('lodash');
 
 var CreditsRPCStore = require('js/stores/rpc/stats/credits');
 
-var CreditsSection = require('js/components/window/about/creditsSection');
+var CreditsSection  = require('js/components/window/about/creditsSection');
 
 
 var CreditsTab = React.createClass({

@@ -9,7 +9,7 @@ var EssentiaActions = require('js/actions/window/essentia');
 var BoostsRPCStore  = require('js/stores/rpc/empire/boosts');
 var EmpireRPCStore  = require('js/stores/rpc/empire');
 
-var BoostCountdown = require('js/components/window/essentia/boostCountdown');
+var BoostCountdown  = require('js/components/window/essentia/boostCountdown');
 
 
 var Boost = React.createClass({
