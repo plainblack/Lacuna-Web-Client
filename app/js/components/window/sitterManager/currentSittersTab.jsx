@@ -1,16 +1,17 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
+var React                = require('react');
+var Reflux               = require('reflux');
+var _                    = require('lodash');
 
 var SitterManagerActions = require('js/actions/window/sitterManager');
 
-var SittersRPCStore = require('js/stores/rpc/empire/sitters');
+var SittersRPCStore      = require('js/stores/rpc/empire/sitters');
 
-var SitterListItem = require('js/components/window/sitterManager/sitterListItem');
+var SitterListItem       = require('js/components/window/sitterManager/sitterListItem');
 
-var vex = require('js/vex');
+var vex                  = require('js/vex');
+
 
 var CurrentSittersTab = React.createClass({
     mixins: [

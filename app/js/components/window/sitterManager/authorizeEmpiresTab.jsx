@@ -1,10 +1,11 @@
 'use strict';
 
-var React = require('react');
+var React                = require('react');
 
 var SitterManagerActions = require('js/actions/window/sitterManager');
 
-var vex = require('js/vex');
+var vex                  = require('js/vex');
+
 
 var AuthorizeEmpiresTab = React.createClass({
 
