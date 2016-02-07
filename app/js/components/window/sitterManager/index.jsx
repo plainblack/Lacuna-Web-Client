@@ -1,18 +1,19 @@
 'use strict';
 
-var React = require('react');
+var React                = require('react');
 
 var SitterManagerActions = require('js/actions/window/sitterManager');
 
-var ReactTabs = require('react-tabs');
-var ReactTooltip = require('react-tooltip');
-var Tab = ReactTabs.Tab;
-var Tabs = ReactTabs.Tabs;
-var TabList = ReactTabs.TabList;
-var TabPanel = ReactTabs.TabPanel;
+var ReactTabs            = require('react-tabs');
+var ReactTooltip         = require('react-tooltip');
+var Tab                  = ReactTabs.Tab;
+var Tabs                 = ReactTabs.Tabs;
+var TabList              = ReactTabs.TabList;
+var TabPanel             = ReactTabs.TabPanel;
 
-var AuthorizeEmpiresTab = require('js/components/window/sitterManager/authorizeEmpiresTab');
-var CurrentSittersTab = require('js/components/window/sitterManager/currentSittersTab');
+var AuthorizeEmpiresTab  = require('js/components/window/sitterManager/authorizeEmpiresTab');
+var CurrentSittersTab    = require('js/components/window/sitterManager/currentSittersTab');
+
 
 var SitterManagerWindow = React.createClass({
 
