@@ -1,6 +1,6 @@
 FROM node:latest
 
-RUN echo "1.1"
+RUN echo "1.2"
 COPY ${PWD}/package.json /src/package.json
 COPY ${PWD}/Gulpfile.js /src/Gulpfile.js
 COPY ${PWD}/bower.json /src/bower.json

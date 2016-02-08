@@ -1,10 +1,11 @@
 'use strict';
 
-var Reflux = require('reflux');
+var Reflux          = require('reflux');
+var _               = require('lodash');
 
-var AboutActions = require('js/actions/window/about');
+var AboutActions    = require('js/actions/window/about');
 
-var server = require('js/server');
+var server          = require('js/server');
 
 var CreditsRPCStore = Reflux.createStore({
     listenables: AboutActions,
