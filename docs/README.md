@@ -19,3 +19,9 @@ This motley collection of markdown files attempts to document how a brave indivi
 - Modules
     - [Server](modules/server.md)
     - Util
+    - Vex
+- Components
+    - [Tabber](components/tabber.md)
+    - Panel
+- Guides
+    - Adding a Window

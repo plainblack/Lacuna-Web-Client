@@ -18,7 +18,7 @@ var RpcBodyActions = Reflux.createActions([
     'rpcBodyGetBuildings',
     'bodyGetBuildings_success',
     'bodyGetBuildings_error',
-    
+
     'rpcBodySetColonyNotes',
     'bodySetColonyNotes_success',
     'bodySetColonyNotes_error'
@@ -33,7 +33,7 @@ function rpcBodyCall(options) {
         error:      'noop'
     };
     options = _.merge({}, defaults, options || {});
-    
+
     Server.call({
         module:     options.module,
         method:     options.method,

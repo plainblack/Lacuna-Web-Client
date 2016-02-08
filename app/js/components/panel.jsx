@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var $ = require('js/shims/jquery');
 
 var Draggable = require('react-draggable');
 
@@ -17,7 +16,6 @@ var Panel = React.createClass({
             React.PropTypes.string
         ]),
         onClose: React.PropTypes.func.isRequired,
-        show: React.PropTypes.bool.isRequired,
         zIndex: React.PropTypes.number
     },
 
@@ -26,23 +24,6 @@ var Panel = React.createClass({
             height: 400,
             width: 450
         };
-    },
-
-    componentDidMount: function() {
-        $(this.refs.container.getDOMNode()).hide();
-        this.handleShowing();
-    },
-
-    componentDidUpdate: function() {
-        this.handleShowing();
-    },
-
-    handleShowing: function() {
-        if (this.props.show) {
-            $(this.refs.container.getDOMNode()).fadeIn(500);
-        } else {
-            $(this.refs.container.getDOMNode()).fadeOut(500);
-        }
     },
 
     render: function() {
