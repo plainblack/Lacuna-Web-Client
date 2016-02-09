@@ -1,4 +1,4 @@
-docker run -it --rm -p ${TLE_CLIENT_LISTEN:-127.0.0.1}:${TLE_CLIENT_PORT:-8080}:8080  \
+docker run -it --rm -p ${TLE_CLIENT_LISTEN:-0.0.0.0}:${TLE_CLIENT_PORT:-8080}:8080  \
     -v ${PWD}/app:/src/app \
     -v ${PWD}/index.html:/src/index.html \
     -v ${PWD}/lacuna/assets:/src/lacuna/assets \
