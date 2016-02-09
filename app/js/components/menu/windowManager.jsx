@@ -117,6 +117,7 @@ var WindowManager = React.createClass({
         return (
             <ReactCSSTransitionGroup
                 transitionName="fade"
+                transitionAppearTimeout={500}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}
                 transitionAppear={true}

@@ -33,7 +33,7 @@ var Boost = React.createClass({
     },
 
     handleBoost: function() {
-        EssentiaActions.boost(this.props.type, this.refs.weeks.getDOMNode().value);
+        EssentiaActions.boost(this.props.type, this.refs.weeks.value);
     },
 
     renderButton: function() {

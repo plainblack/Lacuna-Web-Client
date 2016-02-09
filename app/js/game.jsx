@@ -3,6 +3,7 @@
 YAHOO.namespace("lacuna");
 
 var React           = require('react');
+var ReactDom        = require('react-dom');
 var _               = require('lodash');
 var $               = require('js/shims/jquery');
 var ReactTooltip    = require('react-tooltip');
@@ -54,12 +55,23 @@ if (typeof YAHOO.lacuna.Game == "undefined" || !YAHOO.lacuna.Game) {
             require('js/stores/user').listen(_.noop);
             require('js/stores/ticker').listen(_.noop);
 
-            // Scrap anything that might be in <body> just do the render!
-            React.render(
-                <Window />,
-                document.getElementById('body')
-            );
+            var body = document.getElementById('body');
 
+            // Blow out YUI-related HTML that is created by the React stuff.
+            body.removeChild(document.getElementById('footer'));
+            body.removeChild(document.getElementById('header'));
+            body.removeChild(document.getElementById('content'));
+            body.removeChild(document.getElementById('pulsing'));
+
+            // Give the React stuff somewhere to go.
+            var container = document.createElement('div');
+            container.id = 'mailGameContainer';
+            body.appendChild(container);
+
+            ReactDom.render(
+                <Window />,
+                document.getElementById('mailGameContainer')
+            );
 
             require('js/actions/menu/loader').show();
 

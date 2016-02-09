@@ -10,7 +10,7 @@ var centerBar = function(refName) {
         throw new Error('No refName defined for centerBar()');
     }
 
-    var bar = this.refs[refName].getDOMNode();
+    var bar = this.refs[refName];
     var barWidth = bar.offsetWidth;
     var windowWidth = window.innerWidth;
     var left = util.int((windowWidth - barWidth) / 2);

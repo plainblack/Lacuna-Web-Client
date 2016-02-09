@@ -93,7 +93,7 @@ var Chat = React.createClass({
             console.log('Connecting to Firebase: ' + url);
 
             this.chatRef = new Firebase(url);
-            this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper.getDOMNode(), config);
+            this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper, config);
 
             this.chat.addCommand({
                 match : /^\/wiki/,

@@ -21,7 +21,7 @@ var AuthorizeEmpiresTab = React.createClass({
     },
 
     authorizeAlliance: function() {
-        var name = this.refs.alliance.getDOMNode().value;
+        var name = this.refs.alliance.value;
 
         vex.confirm({
             message: 'Are you sure you want to authorize all members of ' + name + '?',
@@ -34,7 +34,7 @@ var AuthorizeEmpiresTab = React.createClass({
     },
 
     authorizeEmpire: function() {
-        var name = this.refs.empire.getDOMNode().value;
+        var name = this.refs.empire.value;
 
         vex.confirm({
             message: 'Are you sure you want to authorize ' + name + '?',

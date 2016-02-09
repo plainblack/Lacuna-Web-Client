@@ -62,7 +62,7 @@ var BottomBar = React.createClass({
     },
     componentWillUnmount: function() {
         // Destroy!
-        $('div', this.refs.bottombar.getDOMNode()).popup('destroy');
+        $('div', this.refs.bottombar).popup('destroy');
     },
     render: function() {
         var This = this;

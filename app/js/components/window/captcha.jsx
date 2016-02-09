@@ -49,7 +49,7 @@ var Captcha = React.createClass({
     },
 
     onSolveClick: function() {
-        var solution = this.refs.solution.getDOMNode().value;
+        var solution = this.refs.solution.value;
         var success = this.props.options.success;
 
         CaptchaActions.solve(solution, _.bind(function() {
@@ -71,7 +71,7 @@ var Captcha = React.createClass({
     },
 
     clearSolutionField: function() {
-        this.refs.solution.getDOMNode().value = '';
+        this.refs.solution.value = '';
     },
 
     render: function() {

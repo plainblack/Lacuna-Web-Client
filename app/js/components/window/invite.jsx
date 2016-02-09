@@ -7,8 +7,8 @@ var server = require('js/server');
 
 var InviteWindow = React.createClass({
     invite: function() {
-        var email = this.refs.email.getDOMNode().value;
-        var message = this.refs.message.getDOMNode().value;
+        var email = this.refs.email.value;
+        var message = this.refs.message.value;
 
         server.call({
             module: 'empire',
@@ -26,14 +26,14 @@ var InviteWindow = React.createClass({
             method: 'get_invite_friend_url',
             params: [],
             success: function(result) {
-                $(this.refs.referral.getDOMNode()).val(result.referral_url);
+                $(this.refs.referral).val(result.referral_url);
             },
             scope: this
         });
     },
 
     componentDidUpdate: function() {
-        var $el = $(this.refs.referral.getDOMNode());
+        var $el = $(this.refs.referral);
 
         $el.off().click(function() {
             $(this).select();

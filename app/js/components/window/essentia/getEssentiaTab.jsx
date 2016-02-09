@@ -21,7 +21,7 @@ var GetEssentiaTab = React.createClass({
     },
 
     redeem: function() {
-        var node = this.refs.code.getDOMNode();
+        var node = this.refs.code;
         EssentiaActions.redeemCode(node.value);
         node.value = '';
     },

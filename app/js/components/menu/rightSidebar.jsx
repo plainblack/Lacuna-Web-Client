@@ -157,7 +157,7 @@ var AccordionItem = React.createClass({
 
 var BodiesAccordion = React.createClass({
     propTypes: {
-        bodies: React.PropTypes.array.isRequired
+        bodies: React.PropTypes.object.isRequired
     },
 
     render: function() {
@@ -235,7 +235,7 @@ var RightSidebar = React.createClass({
     ],
 
     componentDidMount: function() {
-        var el = this.refs.sidebar.getDOMNode();
+        var el = this.refs.sidebar;
 
         $(el)
             .sidebar({
@@ -252,8 +252,8 @@ var RightSidebar = React.createClass({
             this.handleSidebarShowing();
         }
 
-        var $header = $(this.refs.header.getDOMNode());
-        var $content = $(this.refs.content.getDOMNode());
+        var $header = $(this.refs.header);
+        var $content = $(this.refs.content);
 
         $content.css({
             height: window.innerHeight - $header.outerHeight()
@@ -261,7 +261,7 @@ var RightSidebar = React.createClass({
     },
 
     handleSidebarShowing: function() {
-        var el = this.refs.sidebar.getDOMNode();
+        var el = this.refs.sidebar;
 
         $(el)
             .sidebar(this.state.showSidebar ? 'show' : 'hide');

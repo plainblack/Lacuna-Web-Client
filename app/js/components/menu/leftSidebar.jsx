@@ -98,7 +98,7 @@ var LeftSidebar = React.createClass({
     ],
 
     componentDidMount: function() {
-        var el = this.refs.sidebar.getDOMNode();
+        var el = this.refs.sidebar;
 
         $(el)
             .sidebar({
@@ -117,7 +117,7 @@ var LeftSidebar = React.createClass({
     },
 
     handleSidebarShowing: function() {
-        var el = this.refs.sidebar.getDOMNode();
+        var el = this.refs.sidebar;
 
         $(el)
             .sidebar(this.state.leftSidebar ? 'show' : 'hide');
