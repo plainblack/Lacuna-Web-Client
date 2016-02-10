@@ -1,0 +1,30 @@
+{
+    "extends": [
+        "eslint-config-standard",
+        "eslint-config-standard-react"
+    ],
+
+    "rules": {
+        "semi": [2, "always"],
+        "indent": [2, 4, {
+            "SwitchCase": 1
+        }],
+        "react/jsx-indent": [2, 4],
+        "key-spacing": [2, {
+            "beforeColon": true,
+            "align": "colon"
+        }],
+        "jsx-quotes": [2, "prefer-double"],
+        "no-multi-spaces": [2, {
+            "exceptions": {
+                "VariableDeclarator": true
+            }
+        }],
+        "space-before-function-paren": [2, "never"],
+        "padded-blocks": [0]
+    },
+
+    "globals": {
+        "YAHOO": true
+    }
+}

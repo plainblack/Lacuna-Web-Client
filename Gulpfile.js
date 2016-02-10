@@ -1,21 +1,22 @@
 'use strict';
 
 var browserifyInc = require('browserify-incremental');
-var debowerify = require('debowerify');
-var reactify = require('reactify');
-var source = require('vinyl-source-stream');
+var debowerify    = require('debowerify');
+var reactify      = require('reactify');
+var source        = require('vinyl-source-stream');
 
-var cssConcat = require('gulp-concat-css');
-var cssMin = require('gulp-minify-css');
-var gulp = require('gulp');
-var gulpUtil = require('gulp-util')
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
+var cssConcat     = require('gulp-concat-css');
+var cssMin        = require('gulp-minify-css');
+var gulp          = require('gulp');
+var gulpUtil      = require('gulp-util');
+var rename        = require('gulp-rename');
+var shell         = require('gulp-shell');
+var uglify        = require('gulp-uglify');
 
-var path = require('path');
+var path          = require('path');
 
-var express = require('express');
-var del = require('del');
+var express       = require('express');
+var del           = require('del');
 
 gulp.task('dev', ['browserify', 'cssify'], function() {
 
@@ -49,9 +50,9 @@ gulp.task('dev-with-server', ['browserify', 'cssify', 'serve'], function() {
 
 gulp.task('browserify', function() {
     var b = browserifyInc(['./app/js/load.js'], {
-        extensions: ['.jsx'],
-        paths: [path.join(__dirname, 'app')],
-        cachefile: path.join(__dirname, 'browserify-cache.json')
+        extensions : ['.jsx'],
+        paths      : [path.join(__dirname, 'app')],
+        cachefile  : path.join(__dirname, 'browserify-cache.json')
     });
 
     // This transforms all the .jsx files into JavaScript.
@@ -80,7 +81,7 @@ gulp.task('minify-js', ['browserify', 'cssify'], function() {
     var stream =  gulp.src('./lacuna/load.js')
         .pipe(uglify().on('error', gulpUtil.log))
         .pipe(rename({
-            extname: '.min.js'
+            extname : '.min.js'
         }))
         .pipe(gulp.dest('./lacuna'));
 
@@ -91,7 +92,7 @@ gulp.task('minify-css', ['browserify', 'cssify', 'minify-js'], function() {
     var stream = gulp.src('./lacuna/styles.css')
     .pipe(cssMin())
     .pipe(rename({
-        extname: '.min.css'
+        extname : '.min.css'
     }))
     .pipe(gulp.dest('./lacuna'));
 
@@ -104,8 +105,8 @@ gulp.task('serve', ['browserify', 'cssify'], function(done) {
     app.use(express.static(path.join(__dirname)));
 
     app.listen(port, function() {
-      console.log('Listening on http://localhost:' + port + ' for requests.');
-      done();
+        console.log('Listening on http://localhost:' + port + ' for requests.');
+        done();
     });
 });
 
@@ -118,6 +119,12 @@ gulp.task('clean', function() {
 
     del.sync(files);
 });
+
+gulp.task('lint', shell.task([
+    './node_modules/eslint/bin/eslint.js . --ext .js --ext .jsx'
+], {
+    errorMessage : 'Linting failed'
+}));
 
 // The default task is a build of everything.
 gulp.task('default', ['browserify', 'cssify', 'minify-js', 'minify-css']);
