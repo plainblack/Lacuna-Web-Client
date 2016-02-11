@@ -59,75 +59,75 @@
 
 
         // RPC and core stuff
-        require('js/library');
-        require('js/textboxList');
-        require('js/smd');
-        require('js/rpc');
+        require('js-yui/library');
+        require('js-yui/textboxList');
+        require('js-yui/smd');
+        require('js-yui/rpc');
         require('js/game');
 
         // Empire management and star map
-        require('js/announce');
-        require('js/speciesDesigner');
-        require('js/createSpecies');
-        require('js/createEmpire');
-        require('js/login');
-        require('js/mapper');
-        require('js/mapStar');
+        require('js-yui/announce');
+        require('js-yui/speciesDesigner');
+        require('js-yui/createSpecies');
+        require('js-yui/createEmpire');
+        require('js-yui/login');
+        require('js-yui/mapper');
+        require('js-yui/mapStar');
 
         // Buildings
-        require('js/building');
-        require('js/building/archaeology');
-        require('js/building/blackHoleGenerator');
-        require('js/building/capitol');
-        require('js/building/development');
-        require('js/building/distributionCenter');
-        require('js/building/embassy');
-        require('js/building/energyReserve');
-        require('js/building/entertainment');
-        require('js/building/essentiaVein');
-        require('js/building/foodReserve');
-        require('js/building/geneticsLab');
-        require('js/building/intelligence');
-        require('js/building/intelTraining');
-        require('js/building/libraryOfJith');
-        require('js/building/mayhemTraining');
-        require('js/building/mercenariesGuild');
-        require('js/building/miningMinistry');
-        require('js/building/missionCommand');
-        require('js/building/network19');
-        require('js/building/observatory');
-        require('js/building/oracleOfAnid');
-        require('js/building/oreStorage');
-        require('js/building/park');
-        require('js/building/planetaryCommand');
-        require('js/building/politicsTraining');
-        require('js/building/security');
-        require('js/building/shipyard');
-        require('js/building/spacePort');
-        require('js/building/spaceStationLab');
-        require('js/building/subspaceSupplyDepot');
-        require('js/building/templeOfTheDrajilites');
-        require('js/building/theftTraining');
-        require('js/building/themePark');
-        require('js/building/theDillonForge');
-        require('js/building/tradeMinistry');
-        require('js/building/transporter');
-        require('js/building/wasteExchanger');
-        require('js/building/wasteRecycling');
-        require('js/building/waterStorage');
-        require('js/module/parliament');
-        require('js/module/policeStation');
-        require('js/module/stationCommand');
+        require('js-yui/building');
+        require('js-yui/building/archaeology');
+        require('js-yui/building/blackHoleGenerator');
+        require('js-yui/building/capitol');
+        require('js-yui/building/development');
+        require('js-yui/building/distributionCenter');
+        require('js-yui/building/embassy');
+        require('js-yui/building/energyReserve');
+        require('js-yui/building/entertainment');
+        require('js-yui/building/essentiaVein');
+        require('js-yui/building/foodReserve');
+        require('js-yui/building/geneticsLab');
+        require('js-yui/building/intelligence');
+        require('js-yui/building/intelTraining');
+        require('js-yui/building/libraryOfJith');
+        require('js-yui/building/mayhemTraining');
+        require('js-yui/building/mercenariesGuild');
+        require('js-yui/building/miningMinistry');
+        require('js-yui/building/missionCommand');
+        require('js-yui/building/network19');
+        require('js-yui/building/observatory');
+        require('js-yui/building/oracleOfAnid');
+        require('js-yui/building/oreStorage');
+        require('js-yui/building/park');
+        require('js-yui/building/planetaryCommand');
+        require('js-yui/building/politicsTraining');
+        require('js-yui/building/security');
+        require('js-yui/building/shipyard');
+        require('js-yui/building/spacePort');
+        require('js-yui/building/spaceStationLab');
+        require('js-yui/building/subspaceSupplyDepot');
+        require('js-yui/building/templeOfTheDrajilites');
+        require('js-yui/building/theftTraining');
+        require('js-yui/building/themePark');
+        require('js-yui/building/theDillonForge');
+        require('js-yui/building/tradeMinistry');
+        require('js-yui/building/transporter');
+        require('js-yui/building/wasteExchanger');
+        require('js-yui/building/wasteRecycling');
+        require('js-yui/building/waterStorage');
+        require('js-yui/module/parliament');
+        require('js-yui/module/policeStation');
+        require('js-yui/module/stationCommand');
 
 
         // Menu stuff
-        require('js/mapPlanet');
-        require('js/messaging');
+        require('js-yui/mapPlanet');
+        require('js-yui/messaging');
 
-        require('js/profile');
-        require('js/stats');
-        require('js/info');
-        require('js/notify');
+        require('js-yui/profile');
+        require('js-yui/stats');
+        require('js-yui/info');
+        require('js-yui/notify');
         require('js/components/menu');
 
         // Start everything!
