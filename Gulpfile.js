@@ -10,31 +10,33 @@ var cssMin        = require('gulp-minify-css');
 var gulp          = require('gulp');
 var gulpUtil      = require('gulp-util');
 var rename        = require('gulp-rename');
-var shell         = require('gulp-shell');
 var uglify        = require('gulp-uglify');
 
 var path          = require('path');
+var exec          = require('child_process').exec;
 
 var express       = require('express');
 var del           = require('del');
+var runSequence   = require('run-sequence');
 
-gulp.task('dev', ['browserify', 'cssify'], function() {
-
-    var watcher = gulp.watch('./app/**/*', ['browserify', 'cssify']);
-
-    watcher.on('ready', function() {
-        console.log('Watching for changes.');
-    });
-
-    watcher.on('change', function(event) {
-        console.log('File ' + event.path + ' was ' + event.type + ', running tasks.');
-    });
-
-    return watcher;
+gulp.task('dev', function(done) {
+    runSequence(
+        'browserify',
+        'cssify',
+        'watch',
+    done);
 });
 
-gulp.task('dev-with-server', ['browserify', 'cssify', 'serve'], function() {
+gulp.task('dev-with-server', function(done) {
+    runSequence(
+        'browserify',
+        'cssify',
+        'serve',
+        'watch',
+    done);
+});
 
+gulp.task('watch', function() {
     var watcher = gulp.watch('./app/**/*', ['browserify', 'cssify']);
 
     watcher.on('ready', function() {
@@ -69,7 +71,7 @@ gulp.task('browserify', function() {
     return stream;
 });
 
-gulp.task('cssify', ['browserify'], function() {
+gulp.task('cssify', function() {
     var stream = gulp.src('app/css/styles.css')
         .pipe(cssConcat(''))
         .pipe(gulp.dest('lacuna/styles.css'));
@@ -77,7 +79,7 @@ gulp.task('cssify', ['browserify'], function() {
     return stream;
 });
 
-gulp.task('minify-js', ['browserify', 'cssify'], function() {
+gulp.task('minify-js', function() {
     var stream =  gulp.src('./lacuna/load.js')
         .pipe(uglify().on('error', gulpUtil.log))
         .pipe(rename({
@@ -88,18 +90,18 @@ gulp.task('minify-js', ['browserify', 'cssify'], function() {
     return stream;
 });
 
-gulp.task('minify-css', ['browserify', 'cssify', 'minify-js'], function() {
+gulp.task('minify-css', function() {
     var stream = gulp.src('./lacuna/styles.css')
-    .pipe(cssMin())
-    .pipe(rename({
-        extname : '.min.css'
-    }))
-    .pipe(gulp.dest('./lacuna'));
+        .pipe(cssMin())
+        .pipe(rename({
+            extname : '.min.css'
+        }))
+        .pipe(gulp.dest('./lacuna'));
 
     return stream;
 });
 
-gulp.task('serve', ['browserify', 'cssify'], function(done) {
+gulp.task('serve', function(done) {
     var app = express();
     var port = process.env.PORT || 8080;
     app.use(express.static(path.join(__dirname)));
@@ -117,14 +119,27 @@ gulp.task('clean', function() {
         'lacuna/*.css'
     ];
 
-    del.sync(files);
+    return del(files);
 });
 
-gulp.task('lint', shell.task([
-    './node_modules/eslint/bin/eslint.js . --ext .js --ext .jsx'
-], {
-    errorMessage : 'Linting failed'
-}));
+gulp.task('lint', function(done) {
+    var command = './node_modules/eslint/bin/eslint.js . --ext .js --ext .jsx';
+
+    exec(command, function(error, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+
+        done(error);
+    });
+});
 
 // The default task is a build of everything.
-gulp.task('default', ['browserify', 'cssify', 'minify-js', 'minify-css']);
+gulp.task('build', function(done) {
+    runSequence(
+        'lint',
+        ['browserify', 'cssify'],
+        ['minify-js', 'minify-css'],
+    done);
+});
+
+gulp.task('default', ['build']);
