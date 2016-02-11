@@ -112,7 +112,7 @@ var Captcha = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 });
 

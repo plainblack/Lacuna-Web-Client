@@ -16,8 +16,8 @@ var EssentiaRPCStore     = require('js/stores/rpc/empire/essentia').listen(_.noo
 var GetEssentiaTab = React.createClass({
 
     purchase: function() {
-        var url = "/pay?session_id=" + SessionStore.getData();
-        window.open(url, "essentiaPayment", "status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0");
+        var url = '/pay?session_id=' + SessionStore.getData();
+        window.open(url, 'essentiaPayment', 'status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0');
     },
 
     redeem: function() {

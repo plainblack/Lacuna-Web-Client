@@ -20,7 +20,7 @@ var SitterListItem = React.createClass({
     },
 
     reauthorize: function() {
-        SitterManagerActions.authorizeEmpire(this.props.sitter.name)
+        SitterManagerActions.authorizeEmpire(this.props.sitter.name);
     },
 
     deauthorize: function() {

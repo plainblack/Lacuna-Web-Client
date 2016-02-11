@@ -4,9 +4,9 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var moment = require('moment')
+var moment = require('moment');
 
-var util = require('js/util')
+var util = require('js/util');
 
 var SitterManagerActions = require('js/actions/window/sitterManager');
 var TickerActions = require('js/actions/ticker');

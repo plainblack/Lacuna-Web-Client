@@ -39,9 +39,9 @@ function rpcBodyCall(options) {
         method:     options.method,
         params:     options.params,
         success:    function(result) {
-            console.log("RpcBodyActions: "+options.method+"_success");
+            console.log('RpcBodyActions: ' + options.method + '_success');
             // TODO save the status in a common store
-            if (typeof result.status != "undefined") {
+            if (typeof result.status != 'undefined') {
                 var status = _.cloneDeep(result.status);
             }
 
@@ -50,7 +50,7 @@ function rpcBodyCall(options) {
             RpcBodyActions[options.success](result);
         },
         error:      function(error) {
-            console.log("RpcBodyActions: "+options.method+"_error");
+            console.log('RpcBodyActions: ' + options.method + '_error');
             RpcBodyActions[options.error](error);
         }
     });

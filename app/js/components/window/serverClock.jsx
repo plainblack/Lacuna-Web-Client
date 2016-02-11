@@ -24,9 +24,9 @@ var ServerClockWindow = React.createClass({
     render: function() {
         return (
             <div>
-                <p><strong>Server:</strong> { ServerTimeRPCStore.getCurrentServerTimeFormatted() }</p>
-                <p><strong>Here:</strong> { ServerTimeRPCStore.getCurrentClientTimeFormatted() }</p>
-                <p>{ this.state.ticker.time }</p>
+                <p><strong>Server:</strong> {ServerTimeRPCStore.getCurrentServerTimeFormatted()}</p>
+                <p><strong>Here:</strong> {ServerTimeRPCStore.getCurrentClientTimeFormatted()}</p>
+                <p>{this.state.ticker.time}</p>
             </div>
         );
     }

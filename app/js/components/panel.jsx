@@ -28,7 +28,7 @@ var Panel = React.createClass({
 
     render: function() {
         return (
-            <Draggable handle='.drag-handle' zIndex={this.props.zIndex}>
+            <Draggable handle=".drag-handle" zIndex={this.props.zIndex}>
                 <div ref="container" style={{
                     position: 'absolute',
                     zIndex: this.props.zIndex,

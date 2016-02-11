@@ -18,7 +18,7 @@ var NotesWindow = React.createClass({
     ],
     handleClose: function() {
         // TODO We need to get the body ID from the NotesWindowStore
-        BodyActions.rpcBodySetColonyNotes( { bodyId: 16412, notes: this.state.notes } );
+        BodyActions.rpcBodySetColonyNotes({ bodyId: 16412, notes: this.state.notes });
         NotesActions.hide();
     },
     handleChange: function(e) {

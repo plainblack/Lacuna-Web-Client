@@ -34,7 +34,7 @@ var Chat = React.createClass({
             this.chat.unsetUser();
             this.hasRenderedChat = false;
         }
-        catch(err) {
+        catch (err) {
             console.error('Cannot unsetuser ' + err);
         }
     },
@@ -44,7 +44,7 @@ var Chat = React.createClass({
         // ChiselChat needs these.
         window.Firebase = require('firebase');
         window.$ = window.jQuery = require('jquery');
-        //window.PNotify = require('pnotify');
+        // window.PNotify = require('pnotify');
         if (!window.PNotify) {
             $.getScript('//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js', _.bind(function(data, textStatus, jqXHR) {
                 if (textStatus === 'success' && jqXHR.status === 200) {
@@ -98,18 +98,18 @@ var Chat = React.createClass({
             this.chat.addCommand({
                 match : /^\/wiki/,
                 func : function(e) {
-                    var msg = e.content.replace(/^\/wiki/, "");
+                    var msg = e.content.replace(/^\/wiki/, '');
                     msg = msg.trim();
                     if (msg.length) {
-                        msg = msg.replace(/ /g,"+");
-                        e.content = "http://community.lacunaexpanse.com/wiki?func=search&query="+msg;
+                        msg = msg.replace(/ /g, '+');
+                        e.content = 'http://community.lacunaexpanse.com/wiki?func=search&query=' + msg;
                     }
                     else {
-                        e.content = "http://community.lacunaexpanse.com/wiki";
+                        e.content = 'http://community.lacunaexpanse.com/wiki';
                     }
                 },
-                name : "/wiki",
-                help : "Quick link to the Lacuna Expanse wiki.",
+                name : '/wiki',
+                help : 'Quick link to the Lacuna Expanse wiki.',
                 moderatorOnly : false
             });
 
@@ -119,10 +119,10 @@ var Chat = React.createClass({
                     var body = BodyRPCStore.getData();
 
                     message.content = message.content.replace(/^\/planet/,
-                        "My current planet is '"+body.name+"' at '"+body.x+"|"+body.y+"' in zone '"+body.zone+"'\n");
+                        "My current planet is '" + body.name + "' at '" + body.x + '|' + body.y + "' in zone '" + body.zone + "'\n");
                 },
-                name : "/planet",
-                help : "Show everyone where your current planet is.",
+                name : '/planet',
+                help : 'Show everyone where your current planet is.',
                 moderatorOnly : false
             });
 
@@ -165,10 +165,10 @@ var Chat = React.createClass({
 
                 this.chatRef.authWithCustomToken(this.chat_auth, _.bind(function(error) {
                     if (error) {
-                        console.log("Chisel Chat login failed!", error);
+                        console.log('Chisel Chat login failed!', error);
                     }
                     else {
-                        console.log("Chisel Chat login successful!");
+                        console.log('Chisel Chat login successful!');
 
                         try {
                             this.chat.setUser({
@@ -182,7 +182,7 @@ var Chat = React.createClass({
                             });
                         }
                         catch (err) {
-                            console.log("cannot setUser " + err);
+                            console.log('cannot setUser ' + err);
                         }
                         if (this.private_room) {
                             this.chat._chat.enterRoom(this.private_room.id, this.private_room.name);
@@ -194,7 +194,7 @@ var Chat = React.createClass({
                 }, this));
             }, this),
             failure : function(o) {
-                console.log("Chisel Chat init_chat failure.");
+                console.log('Chisel Chat init_chat failure.');
                 return true;
             }
         });

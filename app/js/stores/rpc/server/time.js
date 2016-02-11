@@ -32,7 +32,7 @@ var ServerTimeRPCStore = Reflux.createStore({
         return {
             lastServerTimeMoment    : moment(),
             lastClientTimeMoment    : moment(),
-        }
+        };
     },
 
     getData: function() {

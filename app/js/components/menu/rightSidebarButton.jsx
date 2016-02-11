@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 var $ = require('js/shims/jquery');
 
 var BodyRPCStore = require('js/stores/rpc/body');
-var RightSidebarActions = require('js/actions/menu/rightSidebar')
+var RightSidebarActions = require('js/actions/menu/rightSidebar');
 
 var RightSidebarButton = React.createClass({
 

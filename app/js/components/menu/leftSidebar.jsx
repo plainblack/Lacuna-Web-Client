@@ -52,7 +52,7 @@ var SelfDestruct = React.createClass({
                     destructActive ?
                         <span>
                             <p style={{margin:0}}>SELF DESTRUCT ACTIVE</p>
-                            <p style={{textAlign: 'right !important'}}>{ formattedDestructMs }</p>
+                            <p style={{textAlign: 'right !important'}}>{formattedDestructMs}</p>
                         </span>
                     :
                         ''
@@ -204,24 +204,24 @@ var LeftSidebar = React.createClass({
                 </div>
 
                 <a className="item" onClick={function() {
-                        LeftSidebarActions.hide();
+                    LeftSidebarActions.hide();
                     WindowManagerActions.addWindow(windowTypes.about);
                 }}>
                     <i className="rocket icon"></i>
                     About
                 </a>
                 <a className="item" onClick={function() {
-                        LeftSidebarActions.hide();
-                        WindowManagerActions.addWindow(windowTypes.sitterManager);
-                    }}
+                    LeftSidebarActions.hide();
+                    WindowManagerActions.addWindow(windowTypes.sitterManager);
+                }}
                 >
                     <i className="sitemap icon"></i>
                     Manage Sitters
                 </a>
                 <a className="item" onClick={function() {
-                        LeftSidebarActions.hide();
-                        OptionsActions.show();
-                    }}
+                    LeftSidebarActions.hide();
+                    OptionsActions.show();
+                }}
                 >
                     <i className="options icon"></i>
                     Options
@@ -247,10 +247,10 @@ var LeftSidebar = React.createClass({
         var Game = YAHOO.lacuna.Game;
         var EmpireServ = Game.Services.Empire;
         var func;
-        if(this.state.empire.self_destruct_active === 1) {
+        if (this.state.empire.self_destruct_active === 1) {
             func = EmpireServ.disable_self_destruct;
         }
-        else if (confirm("Are you certain you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.")) {
+        else if (confirm('Are you certain you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.')) {
             func = EmpireServ.enable_self_destruct;
         }
         else {

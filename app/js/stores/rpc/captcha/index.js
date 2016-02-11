@@ -22,7 +22,7 @@ var CaptchaRPCStore = Reflux.createStore({
             return {
                 guid: '',
                 url: ''
-            }
+            };
         }
     },
 

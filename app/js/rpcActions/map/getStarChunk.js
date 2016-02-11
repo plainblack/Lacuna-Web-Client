@@ -8,14 +8,14 @@ var server          = require('js/server');
 // on success, create a getStarChunk event
 //
 StarmapActions.rpcGetStarChunk.listen(function(o) {
-    console.log("Starmap Action: rpcStarChunk ["+o.xChunk+"]["+o.yChunk+"]");
+    console.log('Starmap Action: rpcStarChunk [' + o.xChunk + '][' + o.yChunk + ']');
 
     server.call({
         module:     'map',
         method:     'get_star_chunk',
         params:     [{x_chunk: o.xChunk, y_chunk: o.yChunk}],
         success:    function() {
-            console.log("Starmap Action: rpcStarChunk REPLY");
+            console.log('Starmap Action: rpcStarChunk REPLY');
             StarmapActions.getStarChunk();
         }
     });

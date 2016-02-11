@@ -75,7 +75,7 @@ var AuthorizeEmpiresTab = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 });
 

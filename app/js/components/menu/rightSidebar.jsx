@@ -33,14 +33,14 @@ var PlanetListItem = React.createClass({
 
     // Returns true if this list item is the the currently selected planet.
     isCurrentWorld: function() {
-        return this.props.currentBody === this.props.id
+        return this.props.currentBody === this.props.id;
     },
 
     handleClick: function() {
         RightSidebarActions.hide();
 
         if (this.isCurrentWorld()) {
-            YAHOO.lacuna.MapPlanet.Refresh()
+            YAHOO.lacuna.MapPlanet.Refresh();
         } else {
             MapActions.changePlanet(this.props.id);
         }
@@ -224,7 +224,7 @@ var BodiesAccordion = React.createClass({
             </div>
         );
     }
-})
+});
 
 var RightSidebar = React.createClass({
 

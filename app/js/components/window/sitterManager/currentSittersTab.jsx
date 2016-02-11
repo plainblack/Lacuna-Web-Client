@@ -65,7 +65,7 @@ var CurrentSittersTab = React.createClass({
                     }
                 </div>
             </div>
-        )
+        );
     }
 });
 

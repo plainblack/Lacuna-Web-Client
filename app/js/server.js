@@ -12,9 +12,9 @@ var EmpireStatusActions = require('js/actions/empireStatus');
 var WindowManagerActions = require('js/actions/menu/windowManager');
 var windowTypes = require('js/windowTypes');
 
-var util = require('js/util')
+var util = require('js/util');
 
-var Lacuna = YAHOO.lacuna
+var Lacuna = YAHOO.lacuna;
 
 var defaults = {
     module:     '',
@@ -50,7 +50,7 @@ var handleParams = function(options) {
     // If there was only one parameter passed and it's an object, it's fine. Otherwise make it into
     // an array to be sent off.
     if (!_.isObject(options.params) || !_.isArray(options.params)) {
-      options.params = [options.params];
+        options.params = [options.params];
     }
 
     return addSession(options);
@@ -104,7 +104,7 @@ var handleError = function(options, error) {
     console.error('Request error: ', error);
 
     if (typeof options.error === 'function') {
-        options.error.call(options.scope, error)
+        options.error.call(options.scope, error);
     }
 };
 
@@ -175,7 +175,7 @@ var splitStatus = function(status) {
         var bodyStatus = _.cloneDeep(status.body);
         BodyStatusActions.bodyStatusUpdate(bodyStatus);
     }
-    
+
 };
 
 

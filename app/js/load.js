@@ -1,19 +1,19 @@
 'use strict';
 
-(function(){
+(function() {
 
     // TODO this code can be improved.
     var l = window.location;
     var query = {};
     var vars = l.hash.substring(1).split('&');
     if (vars.length > 0) {
-        for (var i=0; i<vars.length; i++) {
+        for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split('=');
             query[pair[0]] = decodeURIComponent(pair[1]);
         }
     }
     if (window.history.replaceState) {
-        window.history.replaceState({}, document.title, l.protocol+'//'+l.host+l.pathname+l.search);
+        window.history.replaceState({}, document.title, l.protocol + '//' + l.host + l.pathname + l.search);
     }
     else if (l.hash != '') {
         l.hash = '';
@@ -21,7 +21,7 @@
 
     var loader = new YAHOO.util.YUILoader({
         base: '//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/',
-        //filter: 'MIN',
+        // filter: 'MIN',
         allowRollup: true,
         combine: false
     });
@@ -53,9 +53,9 @@
     loader.onSuccess = function(o) {
 
 
-        ///////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////////////////////////////////////////////////////
         // WARNING: IF YOU CHANGE THE ORDER OF THESE, THINGS WILL NOT LOAD PROPERLY! //
-        ///////////////////////////////////////////////////////////////////////////////
+        // /////////////////////////////////////////////////////////////////////////////
 
 
         // RPC and core stuff
