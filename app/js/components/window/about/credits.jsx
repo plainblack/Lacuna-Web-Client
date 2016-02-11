@@ -8,14 +8,13 @@ var CreditsRPCStore = require('js/stores/rpc/stats/credits');
 
 var CreditsSection  = require('js/components/window/about/creditsSection');
 
-
 var CreditsTab = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(CreditsRPCStore, 'credits')
     ],
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <h1>

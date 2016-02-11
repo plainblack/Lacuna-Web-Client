@@ -12,20 +12,19 @@ var SitterListItem       = require('js/components/window/sitterManager/sitterLis
 
 var vex                  = require('js/vex');
 
-
 var CurrentSittersTab = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(SittersRPCStore, 'sitters')
     ],
 
-    reauthorizeAll: function() {
+    reauthorizeAll : function() {
         SitterManagerActions.reauthorizeAll();
     },
 
-    deauthorizeAll: function() {
+    deauthorizeAll : function() {
         vex.confirm({
-            message: "Are you sure you want to revoke everyone's access to your empire?",
-            callback: function(value) {
+            message  : "Are you sure you want to revoke everyone's access to your empire?",
+            callback : function(value) {
                 if (value) {
                     SitterManagerActions.deauthorizeAll();
                 }
@@ -33,7 +32,7 @@ var CurrentSittersTab = React.createClass({
         });
     },
 
-    render: function() {
+    render : function() {
         return (
             <div>
 
@@ -55,7 +54,7 @@ var CurrentSittersTab = React.createClass({
                 <div
                     className="ui divided list"
                     style={{
-                        marginTop: 20
+                        marginTop : 20
                     }}
                 >
                     {

@@ -1,39 +1,39 @@
 'use strict';
 
-var Reflux = require('reflux');
+var Reflux          = require('reflux');
 
-var MapActions = require('js/actions/menu/map');
+var MapActions      = require('js/actions/menu/map');
 
 var PLANET_MAP_MODE = 'planetMap';
-var STAR_MAP_MODE = 'starMap';
+var STAR_MAP_MODE   = 'starMap';
 
 var MapModeStore = Reflux.createStore({
-    listenables: MapActions,
+    listenables : MapActions,
 
-    init: function() {
+    init : function() {
         this.mapMode = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return PLANET_MAP_MODE;
     },
 
-    setMapMode: function(mapMode) {
+    setMapMode : function(mapMode) {
         if (mapMode !== this.mapMode) {
             this.mapMode = mapMode;
             this.trigger(this.mapMode);
         }
     },
 
-    onShowPlanetMap: function() {
+    onShowPlanetMap : function() {
         this.setMapMode(PLANET_MAP_MODE);
     },
 
-    onShowStarMap: function() {
+    onShowStarMap : function() {
         this.setMapMode(STAR_MAP_MODE);
     },
 
-    onToggleMapMode: function() {
+    onToggleMapMode : function() {
         this.setMapMode(this.mapMode === PLANET_MAP_MODE ? STAR_MAP_MODE : PLANET_MAP_MODE);
     }
 });

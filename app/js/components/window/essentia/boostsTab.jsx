@@ -7,13 +7,12 @@ var EmpireRPCStore = require('js/stores/rpc/empire');
 
 var Boost          = require('js/components/window/essentia/boost');
 
-
 var BoostsTab = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
-    render: function() {
+    render : function() {
         return (
             <div className="ui grid">
 

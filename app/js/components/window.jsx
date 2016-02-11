@@ -1,39 +1,31 @@
 'use strict';
 
-var React               = require('react');
-var $                   = require('js/shims/jquery');
-var ReactTooltip        = require('react-tooltip');
+var React         = require('react');
+var ReactTooltip  = require('react-tooltip');
 
-var TopBar              = require('js/components/menu/topBar');
-var BottomBar           = require('js/components/menu/bottomBar');
-var LeftSidebar         = require('js/components/menu/leftSidebar');
-var RightSidebar        = require('js/components/menu/rightSidebar');
-var Map                 = require('js/components/menu/map');
-var Menu                = require('js/components/menu');
-var WindowManager       = require('js/components/menu/windowManager');
+var LeftSidebar   = require('js/components/menu/leftSidebar');
+var RightSidebar  = require('js/components/menu/rightSidebar');
+var Map           = require('js/components/menu/map');
+var Menu          = require('js/components/menu');
+var WindowManager = require('js/components/menu/windowManager');
 
-var AboutWindow         = require('js/components/window/about');
-var EssentiaWindow      = require('js/components/window/essentia');
-var InviteWindow        = require('js/components/window/invite');
-var MailWindow          = require('js/components/window/mail');
-var NotesWindow         = require('js/components/window/notes');
-var OptionsWindow       = require('js/components/window/options');
-var PromotionsWindow    = require('js/components/window/promotions');
-var StatsWindow         = require('js/components/window/stats');
+var MailWindow    = require('js/components/window/mail');
+var OptionsWindow = require('js/components/window/options');
+var StatsWindow   = require('js/components/window/stats');
 
 // This React component will be the main container of everything that appears on the screen.
 
 var Window = React.createClass({
-    render: function() {
+    render : function() {
         return (
             <div
                 id="sidebarContainer"
                 style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%'
+                    position : 'fixed',
+                    top      : 0,
+                    left     : 0,
+                    width    : '100%',
+                    height   : '100%'
                 }}
             >
 

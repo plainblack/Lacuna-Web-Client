@@ -1,68 +1,35 @@
 'use strict';
 
-var React               = require('react');
-var Reflux              = require('reflux');
-var util                = require('js/util');
-var server              = require('js/server');
-var $                   = require('js/shims/jquery');
-var windowTypes         = require('js/windowTypes');
+var React                = require('react');
+var Reflux               = require('reflux');
+var util                 = require('js/util');
+var server               = require('js/server');
+var $                    = require('js/shims/jquery');
 
-var LeftSidebarActions  = require('js/actions/menu/leftSidebar');
-var AboutActions        = require('js/actions/window/about');
-var NotesActions        = require('js/actions/window/notes');
-var OptionsActions      = require('js/actions/window/options');
+var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
+var OptionsActions       = require('js/actions/window/options');
 var WindowManagerActions = require('js/actions/menu/windowManager');
 
-var windowTypes         = require('js/windowTypes');
-var RpcBodyActions      = require('js/actions/rpc/body');
+var windowTypes          = require('js/windowTypes');
 
-var EmpireRPCStore      = require('js/stores/rpc/empire');
-var LeftSidebarStore    = require('js/stores/menu/leftSidebar');
-
-var LeftSidebarStore 	= require('js/stores/menu/leftSidebar');
-var windowTypes         = require('js/windowTypes');
+var EmpireRPCStore       = require('js/stores/rpc/empire');
+var LeftSidebarStore     = require('js/stores/menu/leftSidebar');
 
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
-    render: function() {
-        var destructActive      = this.state.empire.self_destruct_active
-            && this.state.empire.self_destruct_ms > 0;
-        var destructMs          = this.state.empire.self_destruct_ms;
-        var formattedDestructMs = destructActive ? util.formatMillisecondTime(destructMs) : '';
-
-        var itemStyle   = destructActive ? {'color':'red'} : {};
-        var verb        = destructActive ? 'Disable' : 'Enable';
-
-        return (
-            <a
-                className="item"
-                style={itemStyle}
-                onClick={function() {
-                    LeftSidebarActions.hide();
-                    this.onClickSelfDestruct();
-                }}
-            >
-                <i className="bomb icon"></i>
-                {verb} Self Destruct {
-                    destructActive ?
-                        <span>
-                            <p style={{margin:0}}>SELF DESTRUCT ACTIVE</p>
-                            <p style={{textAlign: 'right !important'}}>{formattedDestructMs}</p>
-                        </span>
-                    :
-                        ''
-                }
-            </a>
-        );
+    handleDestructClick : function() {
+        LeftSidebarActions.hide();
+        this.onClickSelfDestruct();
     },
 
     onClickSelfDestruct : function() {
         var method = '';
+
         if (this.state.empire.self_destruct_active === 1) {
             method = 'disable_self_destruct';
         } else if (this.confirmSelfDestruct()) {
@@ -72,58 +39,103 @@ var SelfDestruct = React.createClass({
         }
 
         server.call({
-            module: 'empire',
-            method: method,
-            params: [],
-            scope: this,
-            success: function() {
+            module  : 'empire',
+            method  : method,
+            params  : [],
+            scope   : this,
+            success : function() {
                 if (method === 'enable_self_destruct') {
-                    alert('Success - your empire will be deleted in 24 hours.');
+                    window.alert('Success - your empire will be deleted in 24 hours.');
                 } else {
-                    alert('Success - your empire will not be deleted. Phew!');
+                    window.alert('Success - your empire will not be deleted. Phew!');
                 }
             }
         });
     },
 
-    confirmSelfDestruct: function() {
-        return confirm('Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.');
+    confirmSelfDestruct : function() {
+        return window.confirm('Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.');
+    },
+
+    render : function() {
+        var destructActive      = this.state.empire.self_destruct_active &&
+            this.state.empire.self_destruct_ms > 0;
+        var destructMs          = this.state.empire.self_destruct_ms;
+        var formattedDestructMs = destructActive ? util.formatMillisecondTime(destructMs) : '';
+
+        var itemStyle = destructActive
+            ? {
+                color : 'red'
+            }
+            : {};
+
+        var verb = destructActive
+            ? 'Disable'
+            : 'Enable';
+
+        return (
+            <a
+                className="item"
+                style={itemStyle}
+                onClick={this.handleDestructClick}
+            >
+                <i className="bomb icon"></i>
+                {verb} Self Destruct {
+                    destructActive
+                    ? (
+                        <span>
+                            <p style={{
+                                margin : 0
+                            }}>
+                                SELF DESTRUCT ACTIVE
+                            </p>
+                            <p style={{
+                                textAlign : 'right !important'
+                            }}>
+                                {formattedDestructMs}
+                            </p>
+                        </span>
+                    )
+                    : ''
+                }
+            </a>
+        );
     }
 });
 
 var LeftSidebar = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(LeftSidebarStore, 'leftSidebar')
     ],
 
-    componentDidMount: function() {
+    componentDidMount : function() {
         var el = this.refs.sidebar;
 
         $(el)
             .sidebar({
-                context: $('#sidebarContainer'),
-                duration: 300,
-                transition: 'overlay',
-                onHidden: LeftSidebarActions.hide,
-                onVisible: LeftSidebarActions.show
+                context    : $('#sidebarContainer'),
+                duration   : 300,
+                transition : 'overlay',
+                onHidden   : LeftSidebarActions.hide,
+                onVisible  : LeftSidebarActions.show
             });
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate : function(prevProps, prevState) {
         if (prevState.leftSidebar !== this.state.leftSidebar) {
             this.handleSidebarShowing();
         }
     },
 
-    handleSidebarShowing: function() {
+    handleSidebarShowing : function() {
         var el = this.refs.sidebar;
 
         $(el)
             .sidebar(this.state.leftSidebar ? 'show' : 'hide');
     },
 
-    render: function() {
+    render : function() {
 
         return (
             <div className="ui left vertical inverted sidebar menu" ref="sidebar">
@@ -146,8 +158,6 @@ var LeftSidebar = React.createClass({
                     <i className="refresh icon"></i>
                     Refresh
                 </a>
-
-
 
                 <div className="ui horizontal inverted divider">
                     Links
@@ -197,8 +207,6 @@ var LeftSidebar = React.createClass({
                     Wiki
                 </a>
 
-
-
                 <div className="ui horizontal inverted divider">
                     Windows
                 </div>
@@ -241,32 +249,7 @@ var LeftSidebar = React.createClass({
                 <SelfDestruct />
             </div>
         );
-    },
-
-    onClickSelfDestruct : function() {
-        var Game = YAHOO.lacuna.Game;
-        var EmpireServ = Game.Services.Empire;
-        var func;
-        if (this.state.empire.self_destruct_active === 1) {
-            func = EmpireServ.disable_self_destruct;
-        }
-        else if (confirm('Are you certain you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.')) {
-            func = EmpireServ.enable_self_destruct;
-        }
-        else {
-            return;
-        }
-        require('js/actions/menu/loader').show();
-        func({session_id:Game.GetSession()}, {
-            success : function(o) {
-                Game.ProcessStatus(o.result.status);
-                require('js/actions/menu/loader').hide();
-            }
-        });
-
-        LeftSidebarActions.hide();
-    },
+    }
 });
-
 
 module.exports = LeftSidebar;

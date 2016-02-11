@@ -1,54 +1,55 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React                = require('react');
+var Reflux               = require('reflux');
+var _                    = require('lodash');
 
-var CaptchaActions = require('js/actions/window/captcha');
+var CaptchaActions       = require('js/actions/window/captcha');
 var WindowManagerActions = require('js/actions/menu/windowManager');
 
-var CaptchaRPCStore = require('js/stores/rpc/captcha');
+var CaptchaRPCStore      = require('js/stores/rpc/captcha');
 
 var Captcha = React.createClass({
-    propTypes: {
-        options: React.PropTypes.object.isRequired
+    propTypes : {
+        options : React.PropTypes.object.isRequired
     },
 
-    mixins: [
+    mixins : [
         Reflux.connect(CaptchaRPCStore, 'captcha')
     ],
 
-    statics: {
-        windowOptions: {
-            title: 'Verify Your Humanity',
-            width: 320,
-            height: 'auto'
+    statics : {
+        windowOptions : {
+            title  : 'Verify Your Humanity',
+            width  : 320,
+            height : 'auto'
         }
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate : function(prevProps, prevState) {
         if (prevState.captcha.url !== this.state.captcha.url) {
             this.clearSolutionField();
         }
     },
 
-    onWindowShow: function() {
+    onWindowShow : function() {
         this.clearSolutionField();
         CaptchaActions.fetch();
     },
 
-    onWindowHide: function() {
+    onWindowHide : function() {
         this.clearSolutionField();
         CaptchaActions.clear();
     },
 
-    handleEnterKey: function(event) {
+    handleEnterKey : function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
             this.onSolveClick();
         }
     },
 
-    onSolveClick: function() {
+    onSolveClick : function() {
         var solution = this.refs.solution.value;
         var success = this.props.options.success;
 
@@ -60,28 +61,28 @@ var Captcha = React.createClass({
         }, this));
     },
 
-    onRefreshClick: function() {
+    onRefreshClick : function() {
         this.clearSolutionField();
         CaptchaActions.refresh();
     },
 
-    onCloseClick: function() {
+    onCloseClick : function() {
         this.clearSolutionField();
         WindowManagerActions.hideWindow(this.props.options.id);
     },
 
-    clearSolutionField: function() {
+    clearSolutionField : function() {
         this.refs.solution.value = '';
     },
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <div
                     style={{
-                        backgroundImage: 'url(' + this.state.captcha.url + ')',
-                        width: 300,
-                        height: 80
+                        backgroundImage : 'url(' + this.state.captcha.url + ')',
+                        width           : 300,
+                        height          : 80
                     }}
                 />
 
@@ -95,7 +96,7 @@ var Captcha = React.createClass({
                         placeholder="Captcha Solution"
                         style={{
                             // Magic number to make it the same width as the image.
-                            width: 140
+                            width : 140
                         }}
                     />
 

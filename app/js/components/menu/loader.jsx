@@ -1,22 +1,29 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React       = require('react');
+var Reflux      = require('reflux');
 
-var classNames = require('classnames');
+var classNames  = require('classnames');
 
 var LoaderStore = require('js/stores/menu/loader');
 
 var Loader = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(LoaderStore, 'show')
     ],
-    render: function() {
+    render : function() {
         return (
-            <div className={classNames(
-                'ui large loader',
-                {active: this.state.show}
-            )} style={{zIndex: 9999999999, top: '40vh'}}>
+            <div
+                className={classNames(
+                    'ui large loader',
+                    {
+                        active : this.state.show
+                    }
+                )}
+                style={{
+                    zIndex : 9999999999,
+                    top    : '40vh'
+                }}>
             </div>
         );
     }

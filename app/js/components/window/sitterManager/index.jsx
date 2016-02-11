@@ -5,7 +5,6 @@ var React                = require('react');
 var SitterManagerActions = require('js/actions/window/sitterManager');
 
 var ReactTabs            = require('react-tabs');
-var ReactTooltip         = require('react-tooltip');
 var Tab                  = ReactTabs.Tab;
 var Tabs                 = ReactTabs.Tabs;
 var TabList              = ReactTabs.TabList;
@@ -14,32 +13,31 @@ var TabPanel             = ReactTabs.TabPanel;
 var AuthorizeEmpiresTab  = require('js/components/window/sitterManager/authorizeEmpiresTab');
 var CurrentSittersTab    = require('js/components/window/sitterManager/currentSittersTab');
 
-
 var SitterManagerWindow = React.createClass({
 
-    statics: {
-        windowOptions: {
-            title: 'Manager Sitters'
+    statics : {
+        windowOptions : {
+            title : 'Manager Sitters'
         }
     },
 
-    onWindowShow: function() {
+    onWindowShow : function() {
         SitterManagerActions.load();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            selectedIndex: 0
+            selectedIndex : 0
         };
     },
 
-    handleSelect: function(index) {
+    handleSelect : function(index) {
         this.setState({
-            selectedIndex: index
+            selectedIndex : index
         });
     },
 
-    render: function() {
+    render : function() {
         return (
             <Tabs
                 selectedIndex={this.state.selectedIndex}

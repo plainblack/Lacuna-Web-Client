@@ -13,19 +13,18 @@ var Tabs         = Tabber.Tabs;
 var AboutTab     = require('js/components/window/about/about');
 var CreditsTab   = require('js/components/window/about/credits');
 
-
 var AboutWindow = React.createClass({
-    statics: {
-        windowOptions: {
-            title: 'About'
+    statics : {
+        windowOptions : {
+            title : 'About'
         }
     },
 
-    render: function() {
+    render : function() {
         return (
             <Tabs
                 onSelect={{
-                    1: AboutActions.load
+                    1 : AboutActions.load
                 }}
             >
                 <TabList>

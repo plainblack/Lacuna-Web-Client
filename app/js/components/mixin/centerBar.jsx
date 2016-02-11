@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+var _    = require('lodash');
 
 var util = require('js/util');
 
@@ -19,7 +19,7 @@ var centerBar = function(refName) {
 
 module.exports = function(refName) {
     return {
-        componentDidMount: _.partial(centerBar, refName),
-        componentDidUpdate: _.partial(centerBar, refName)
+        componentDidMount  : _.partial(centerBar, refName),
+        componentDidUpdate : _.partial(centerBar, refName)
     };
 };

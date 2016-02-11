@@ -8,15 +8,13 @@ var MapActions          = require('js/actions/menu/map');
 var BodyRPCStore        = require('js/stores/rpc/body');
 var NotesWindowStore    = require('js/stores/window/notes');
 
-var server              = require('js/server');
-
 var NotesDataStore = Reflux.createStore({
-    listenables: [
+    listenables : [
         NotesActions,
         MapActions
     ],
 
-    init: function() {
+    init : function() {
         // Use this to store the notes before they get saved.
         this.data = '';
 
@@ -32,35 +30,35 @@ var NotesDataStore = Reflux.createStore({
         }, this);
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         this.data = 'Write some notes here.';
         return this.data;
     },
 
-    onNotesPanelShow: function() {
+    onNotesPanelShow : function() {
         NotesActions.notesLoad();
     },
 
-    onNotesPanelHide: function() {
+    onNotesPanelHide : function() {
         NotesActions.notesClear();
     },
 
-    onNotesLoad: function() {
+    onNotesLoad : function() {
         var data = BodyRPCStore.getData();
         this.planetId = data.id;
         this.trigger(data.notes);
     },
 
-    onNotesClear: function() {
+    onNotesClear : function() {
         this.trigger(this.getInitialState());
     },
 
-    onNotesSet: function(value) {
+    onNotesSet : function(value) {
         this.data = value;
         this.trigger(this.data);
     },
 
-    onChangePlanet: function() {
+    onChangePlanet : function() {
         // Only do this while the window is open.
         if (NotesWindowStore.getData()) {
     //        NotesActions.notesSave();

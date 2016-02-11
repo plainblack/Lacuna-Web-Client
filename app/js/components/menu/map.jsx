@@ -1,30 +1,30 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React        = require('react');
+var Reflux       = require('reflux');
 
 var BodyRPCStore = require('js/stores/rpc/body');
 var MapModeStore = require('js/stores/menu/mapMode');
-var PlanetStore = require('js/stores/menu/planet');
-var MenuStore = require('js/stores/menu');
+var PlanetStore  = require('js/stores/menu/planet');
+var MenuStore    = require('js/stores/menu');
 
 // TODO: factor out all this glue code
 
 var Map = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(MapModeStore, 'mapMode'),
         Reflux.connect(BodyRPCStore, 'body'),
         Reflux.connect(PlanetStore, 'planet'),
         Reflux.connect(MenuStore, 'menuVisible')
     ],
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            planet: ''
+            planet : ''
         };
     },
-    previousMapMode: '',
-    previousPlanetId: '',
-    render: function() {
+    previousMapMode  : '',
+    previousPlanetId : '',
+    render           : function() {
 
         // console.log(this.state);
 
@@ -48,8 +48,6 @@ var Map = React.createClass({
         // console.log('planet = ' + this.state.planet + '(' + this.previousPlanetId + ')');
 
         var Lacuna = YAHOO.lacuna;
-        var Game = Lacuna.Game;
-
 
         if (
             // Render if the planet id has changed... OR...

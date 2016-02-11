@@ -1,27 +1,27 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React              = require('react');
+var Reflux             = require('reflux');
 
-var ServerTimeRPCStore  = require('js/stores/rpc/server/time');
-var ServerRPCStore      = require('js/stores/rpc/server');
-var TickerStore         = require('js/stores/ticker');
+var ServerTimeRPCStore = require('js/stores/rpc/server/time');
+var ServerRPCStore     = require('js/stores/rpc/server');
+var TickerStore        = require('js/stores/ticker');
 
 var ServerClockWindow = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(TickerStore, 'ticker'),
         Reflux.connect(ServerRPCStore, 'server')
     ],
 
-    statics: {
-        windowOptions: {
-            title:  'Server Clock',
-            width:  320,
-            height: 50
+    statics : {
+        windowOptions : {
+            title  : 'Server Clock',
+            width  : 320,
+            height : 50
         }
     },
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <p><strong>Server:</strong> {ServerTimeRPCStore.getCurrentServerTimeFormatted()}</p>

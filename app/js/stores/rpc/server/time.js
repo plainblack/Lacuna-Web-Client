@@ -5,7 +5,6 @@ var moment              = require('moment');
 var util                = require('js/util');
 
 var ServerStatusActions = require('js/actions/serverStatus');
-var TickerActions       = require('js/actions/ticker');
 
 // ServerTimeRPCStore holds the last recorded time at which the server
 // sent a status update (containing a 'time' attribute).
@@ -20,43 +19,43 @@ var TickerActions       = require('js/actions/ticker');
 //
 
 var ServerTimeRPCStore = Reflux.createStore({
-    listenables: [
-        ServerStatusActions,
+    listenables : [
+        ServerStatusActions
     ],
 
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            lastServerTimeMoment    : moment(),
-            lastClientTimeMoment    : moment(),
+            lastServerTimeMoment : moment(),
+            lastClientTimeMoment : moment()
         };
     },
 
-    getData: function() {
+    getData : function() {
         return this.data;
     },
 
     // Helper methods to get the current server time
     //
-    getCurrentServerTimeMoment: function() {
+    getCurrentServerTimeMoment : function() {
         var elapsedInSeconds = moment().diff(moment(this.data.lastClientTimeMoment), 'seconds');
         var thisMoment = moment(this.data.lastServerTimeMoment).add(elapsedInSeconds, 'seconds');
         return thisMoment;
     },
 
-    getCurrentServerTimeFormatted: function() {
+    getCurrentServerTimeFormatted : function() {
         var thisMoment = this.getCurrentServerTimeMoment();
         return util.formatMomentLong(thisMoment);
     },
 
-    getCurrentClientTimeFormatted: function() {
+    getCurrentClientTimeFormatted : function() {
         return util.formatMomentLong(moment());
     },
 
-    onServerStatusUpdate: function(serverStatus) {
+    onServerStatusUpdate : function(serverStatus) {
         var serverTime = serverStatus.time;
 
         this.data.lastServerTimeMoment = util.serverDateToMoment(serverTime).utcOffset(0);
@@ -65,10 +64,10 @@ var ServerTimeRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onServerStatusClear: function() {
+    onServerStatusClear : function() {
         this.data = this.getInitialState();
         this.trigger(this.data);
-    },
+    }
 });
 
 module.exports = ServerTimeRPCStore;

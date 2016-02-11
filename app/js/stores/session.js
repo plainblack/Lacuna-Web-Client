@@ -1,30 +1,30 @@
 'use strict';
 
-var Reflux = require('reflux');
+var Reflux         = require('reflux');
 
 var SessionActions = require('js/actions/session');
 
 var SessionStore = Reflux.createStore({
-    listenables: SessionActions,
+    listenables : SessionActions,
 
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return '';
     },
 
-    getData: function() {
+    getData : function() {
         return this.data;
     },
 
-    onSessionSet: function(session) {
+    onSessionSet : function(session) {
         this.data = session;
         this.trigger(this.data);
     },
 
-    onSessionClear: function() {
+    onSessionClear : function() {
         this.data = this.getInitialState();
         this.trigger(this.data);
     }

@@ -5,14 +5,13 @@ var Reflux         = require('reflux');
 
 var ServerRPCStore = require('js/stores/rpc/server');
 
-
 var AboutTab = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(ServerRPCStore, 'server')
     ],
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <h1>

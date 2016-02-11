@@ -1,17 +1,17 @@
 'use strict';
 
-var Reflux = require('reflux');
+var Reflux      = require('reflux');
 
 var ChatActions = require('js/actions/menu/chat');
 
 var ChatStore = Reflux.createStore({
-    listenables: ChatActions,
+    listenables : ChatActions,
 
-    onShow: function() {
+    onShow : function() {
         this.trigger(true);
     },
 
-    onHide: function() {
+    onHide : function() {
         this.trigger(false);
     }
 });

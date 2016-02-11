@@ -1,29 +1,28 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var $ = require('js/shims/jquery');
+var React               = require('react');
+var Reflux              = require('reflux');
 
-var BodyRPCStore = require('js/stores/rpc/body');
+var BodyRPCStore        = require('js/stores/rpc/body');
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 
 var RightSidebarButton = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(BodyRPCStore, 'body')
     ],
 
-    click: function() {
+    click : function() {
         RightSidebarActions.show();
     },
 
-    render: function() {
+    render : function() {
         return (
             <div style={{
-                position: 'absolute',
-                zIndex: 2500,
-                right: '15px',
-                top: '15px'
+                position : 'absolute',
+                zIndex   : 2500,
+                right    : '15px',
+                top      : '15px'
             }}>
                 <div className="ui right labeled icon blue button" onClick={this.click}>
                     <i className="world icon" />

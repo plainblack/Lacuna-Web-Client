@@ -8,24 +8,23 @@ var moment              = require('moment');
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
 
-
 var ServerRPCStore = Reflux.createStore({
-    listenables: [
+    listenables : [
         ServerStatusActions,
         TickerActions
     ],
 
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            time            : '01 31 2010 13:09:05 +0600',
-            version         : 123456789,
-            announcement    : 0,
-            promotions      : [],
-            rpc_limit       : 10000,
+            time          : '01 31 2010 13:09:05 +0600',
+            version       : 123456789,
+            announcement  : 0,
+            promotions    : [],
+            rpc_limit     : 10000,
             star_map_size : {
                 x : [ -15, 15 ],
                 y : [ -15, 15 ],
@@ -34,11 +33,11 @@ var ServerRPCStore = Reflux.createStore({
         };
     },
 
-    getData: function() {
+    getData : function() {
         return this.data;
     },
 
-    onServerStatusUpdate: function(serverStatus) {
+    onServerStatusUpdate : function(serverStatus) {
         this.data = serverStatus;
 
         // TODO: show announcement window if needed.
@@ -56,12 +55,12 @@ var ServerRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onServerStatusClear: function() {
+    onServerStatusClear : function() {
         this.data = this.getInitialState();
         this.trigger(this.data);
     },
 
-    handlePromotion: function(promotion) {
+    handlePromotion : function(promotion) {
         promotion.header = promotion.title || 'Awesome Promotion';
         promotion.ends = moment().to(util.serverDateToMoment(promotion.end_date));
 

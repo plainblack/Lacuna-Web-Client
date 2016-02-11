@@ -1,31 +1,31 @@
 'use strict';
 
 module.exports = {
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return false;
     },
 
-    getData: function() {
+    getData : function() {
         return this.data;
     },
 
-    onShow: function() {
+    onShow : function() {
         console.log('Window show triggered.');
         this.data = true;
         this.trigger(this.data);
     },
 
-    onHide: function() {
+    onHide : function() {
         console.log('Window hide triggered.');
         this.data = false;
         this.trigger(this.data);
     },
 
-    onEscKey: function() {
+    onEscKey : function() {
         if (this.data === true) {
             console.log('Escape key hit.');
             this.onHide();

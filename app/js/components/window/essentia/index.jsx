@@ -1,7 +1,6 @@
 'use strict';
 
 var React           = require('react');
-var Reflux          = require('reflux');
 
 var Tabber          = require('js/components/tabber');
 var Tab             = Tabber.Tab;
@@ -14,20 +13,19 @@ var EssentiaActions = require('js/actions/window/essentia');
 var BoostsTab       = require('js/components/window/essentia/boostsTab');
 var GetEssentiaTab  = require('js/components/window/essentia/getEssentiaTab');
 
-
 var EssentiaWindow = React.createClass({
-    statics: {
-        windowOptions: {
-            title: 'Essentia',
-            width: 600
+    statics : {
+        windowOptions : {
+            title : 'Essentia',
+            width : 600
         }
     },
 
-    render: function() {
+    render : function() {
         return (
             <Tabs
                 onSelect={{
-                    0: EssentiaActions.loadBoosts
+                    0 : EssentiaActions.loadBoosts
                 }}
             >
                 <TabList>

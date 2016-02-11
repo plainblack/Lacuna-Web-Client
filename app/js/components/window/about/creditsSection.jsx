@@ -5,19 +5,19 @@ var _     = require('lodash');
 
 var CreditsSection = React.createClass({
 
-    propTypes: {
-        header: React.PropTypes.string.isRequired,
-        names: React.PropTypes.arrayOf(React.PropTypes.string)
+    propTypes : {
+        header : React.PropTypes.string.isRequired,
+        names  : React.PropTypes.arrayOf(React.PropTypes.string)
     },
 
-    getDefaultProps: function() {
+    getDefaultProps : function() {
         return {
-            header: '',
-            names: []
+            header : '',
+            names  : []
         };
     },
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <strong>{this.props.header}</strong>
@@ -29,8 +29,8 @@ var CreditsSection = React.createClass({
                                 <li
                                     key={name}
                                     style={{
-                                        listStyleType: 'disc',
-                                        marginLeft: 40
+                                        listStyleType : 'disc',
+                                        marginLeft    : 40
                                     }}
                                 >
                                     {name}

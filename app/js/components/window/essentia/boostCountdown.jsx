@@ -3,22 +3,21 @@
 var React      = require('react');
 var classnames = require('classnames');
 
-
 var BoostCountdown = React.createClass({
-    propTypes: {
-        boost: React.PropTypes.object.isRequired
+    propTypes : {
+        boost : React.PropTypes.object.isRequired
     },
 
-    getDefaultProps: function() {
+    getDefaultProps : function() {
         return {
-            boost: {
-                ms: 0,
-                display: ''
+            boost : {
+                ms      : 0,
+                display : ''
             }
         };
     },
 
-    render: function() {
+    render : function() {
         if (this.props.boost && this.props.boost.ms > 0) {
             var day = 1000 * 60 * 60 * 24; // Milliseconds per day
             var ms = this.props.boost.ms;

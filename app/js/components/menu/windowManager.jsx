@@ -1,49 +1,49 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-var _ = require('lodash');
+var _                       = require('lodash');
 
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var WindowManagerActions    = require('js/actions/menu/windowManager');
 
-var WindowManagerStore = require('js/stores/menu/windowManager');
+var WindowManagerStore      = require('js/stores/menu/windowManager');
 
-var Panel = require('js/components/panel');
+var Panel                   = require('js/components/panel');
 
 var WINDOWS = {
-    ABOUT:        require('js/components/window/about'),
-    CAPTCHA: 	require('js/components/window/captcha'),
-    ESSENTIA:     require('js/components/window/essentia'),
-    INVITE:       require('js/components/window/invite'),
-    MAIL:         require('js/components/window/mail'),
-    NOTES:        require('js/components/window/notes'),
-    OPTIONS:      require('js/components/window/options'),
-    PROMOTIONS:   require('js/components/window/promotions'),
-    SERVER_CLOCK: require('js/components/window/serverClock'),
-    SITTER_MANAGER: require('js/components/window/sitterManager'),
-    STATS: require('js/components/window/stats')
+    ABOUT          : require('js/components/window/about'),
+    CAPTCHA        : require('js/components/window/captcha'),
+    ESSENTIA       : require('js/components/window/essentia'),
+    INVITE         : require('js/components/window/invite'),
+    MAIL           : require('js/components/window/mail'),
+    NOTES          : require('js/components/window/notes'),
+    OPTIONS        : require('js/components/window/options'),
+    PROMOTIONS     : require('js/components/window/promotions'),
+    SERVER_CLOCK   : require('js/components/window/serverClock'),
+    SITTER_MANAGER : require('js/components/window/sitterManager'),
+    STATS          : require('js/components/window/stats')
 };
 
 var BASE_Z_INDEX = 1000000;
 
 var Window = React.createClass({
 
-    propTypes: {
-        window: React.PropTypes.object.isRequired
+    propTypes : {
+        window : React.PropTypes.object.isRequired
     },
 
-    componentDidMount: function() {
+    componentDidMount : function() {
         this.handleDisplayCallbacks();
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate : function(prevProps, prevState) {
         if (prevProps.window.show !== this.props.window.show) {
             this.handleDisplayCallbacks();
         }
     },
 
-    handleDisplayCallbacks: function() {
+    handleDisplayCallbacks : function() {
         if (this.props.window.show && typeof this.refs.window.onWindowShow === 'function') {
             this.refs.window.onWindowShow();
         } else if (!this.props.window.show && typeof this.refs.window.onWindowHide === 'function') {
@@ -51,15 +51,15 @@ var Window = React.createClass({
         }
     },
 
-    handleBringingToTop: function(event) {
+    handleBringingToTop : function(event) {
         WindowManagerActions.bringWindowToTop(this.props.window.id);
     },
 
-    getWindowComponent: function() {
+    getWindowComponent : function() {
         return WINDOWS[this.props.window.type];
     },
 
-    getWindowOptions: function() {
+    getWindowOptions : function() {
         var component = this.getWindowComponent();
 
         if (component && typeof component.windowOptions === 'object') {
@@ -69,22 +69,22 @@ var Window = React.createClass({
         }
     },
 
-    render: function() {
+    render : function() {
         var onClose = function(id) {
             WindowManagerActions.hideWindow(id);
         };
 
         var panelOptions = _.merge({}, {
-            show: this.props.window.show,
-            zIndex: BASE_Z_INDEX + this.props.window.layer,
-            onClose: _.partial(onClose, this.props.window.id),
-            ref: 'panel'
+            show    : this.props.window.show,
+            zIndex  : BASE_Z_INDEX + this.props.window.layer,
+            onClose : _.partial(onClose, this.props.window.id),
+            ref     : 'panel'
         }, this.getWindowOptions());
 
         var windowOptions = {
-            ref: 'window',
-            options: _.merge({
-                id: this.props.window.id
+            ref     : 'window',
+            options : _.merge({
+                id : this.props.window.id
             }, this.props.window.options)
         };
 
@@ -102,11 +102,11 @@ var Window = React.createClass({
 
 var WindowManager = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(WindowManagerStore, 'windows')
     ],
 
-    render: function() {
+    render : function() {
         var keys = _.keys(this.state.windows);
 
         var windows = _.map(keys, function(key) {

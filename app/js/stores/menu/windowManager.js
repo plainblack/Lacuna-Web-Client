@@ -1,27 +1,27 @@
 'use strict';
 
-var Reflux = require('reflux');
-var _ = require('lodash');
+var Reflux               = require('reflux');
+var _                    = require('lodash');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var KeyboardActions = require('js/actions/keyboard');
+var KeyboardActions      = require('js/actions/keyboard');
 
 var WindowManagerStore = Reflux.createStore({
-    listenables: [
+    listenables : [
         WindowManagerActions,
         KeyboardActions
     ],
 
-    init: function() {
+    init : function() {
         this.windows = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         // TODO: should we persist this state via localStorage?
         return {};
     },
 
-    getTopLayerNumber: function(windows) {
+    getTopLayerNumber : function(windows) {
         if (_.keys(windows).length) {
             return _.max(_.pluck(windows, 'layer'));
         } else {
@@ -29,11 +29,11 @@ var WindowManagerStore = Reflux.createStore({
         }
     },
 
-    getNextLayerNumber: function(windows) {
+    getNextLayerNumber : function(windows) {
         return this.getTopLayerNumber(windows) + 1;
     },
 
-    isOnTop: function(id) {
+    isOnTop : function(id) {
         var top = this.getTopLayerNumber(this.windows);
 
         if (this.windows[id]) {
@@ -43,22 +43,22 @@ var WindowManagerStore = Reflux.createStore({
         }
     },
 
-    onAddWindow: function(type, options) {
+    onAddWindow : function(type, options) {
         var id = 'window_' + type;
         var windows = _.cloneDeep(this.windows);
 
         windows[id] = {
-            id: id,
-            type: type,
-            options: options,
-            layer: this.getNextLayerNumber(windows)
+            id      : id,
+            type    : type,
+            options : options,
+            layer   : this.getNextLayerNumber(windows)
         };
 
         this.windows = windows;
         this.trigger(this.windows);
     },
 
-    onHideWindow: function(id) {
+    onHideWindow : function(id) {
         var windows = _.clone(this.windows);
 
         delete windows[id];
@@ -67,12 +67,12 @@ var WindowManagerStore = Reflux.createStore({
         this.trigger(this.windows);
     },
 
-    onHideAllWindows: function() {
+    onHideAllWindows : function() {
         this.windows = {};
         this.trigger(this.windows);
     },
 
-    onBringWindowToTop: function(id) {
+    onBringWindowToTop : function(id) {
         if (this.isOnTop(id)) {
             return;
         }
@@ -87,10 +87,12 @@ var WindowManagerStore = Reflux.createStore({
         this.trigger(this.windows);
     },
 
-    onEscKey: function() {
+    onEscKey : function() {
         var window = _.chain(_.clone(this.windows))
             .values()
-            .filter({show: true})
+            .filter({
+                show : true
+            })
             .sortBy('layer')
             .reverse()
             .first()

@@ -1,38 +1,38 @@
 'use strict';
 
-var React = require('react');
-var $ = require('js/shims/jquery');
+var React  = require('react');
+var $      = require('js/shims/jquery');
 
 var server = require('js/server');
 
 var InviteWindow = React.createClass({
-    invite: function() {
+    invite : function() {
         var email = this.refs.email.value;
         var message = this.refs.message.value;
 
         server.call({
-            module: 'empire',
-            method: 'invite_friend',
-            params: [email, message],
-            success: function() {
-                alert('Sent!');
+            module  : 'empire',
+            method  : 'invite_friend',
+            params  : [email, message],
+            success : function() {
+                window.alert('Sent!');
             }
         });
     },
 
-    genLink: function() {
+    genLink : function() {
         server.call({
-            module: 'empire',
-            method: 'get_invite_friend_url',
-            params: [],
-            success: function(result) {
+            module  : 'empire',
+            method  : 'get_invite_friend_url',
+            params  : [],
+            success : function(result) {
                 $(this.refs.referral).val(result.referral_url);
             },
-            scope: this
+            scope : this
         });
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate : function() {
         var $el = $(this.refs.referral);
 
         $el.off().click(function() {
@@ -40,13 +40,13 @@ var InviteWindow = React.createClass({
         });
     },
 
-    statics: {
-        windowOptions: {
-            title: 'Invite A Friend'
+    statics : {
+        windowOptions : {
+            title : 'Invite A Friend'
         }
     },
 
-    render: function() {
+    render : function() {
         var defaultMessage = [
             "I'm having a great time with this new game called 'Lacuna Expanse'.",
             'Come play with me!'
@@ -56,12 +56,12 @@ var InviteWindow = React.createClass({
             <div>
                 <div className="ui form">
                     <div className="field">
-                        <label style={{color: '#ffffff'}}>Email</label>
+                        <label style={{color : '#ffffff'}}>Email</label>
                         <input type="text" placeholder="someone@example.com" ref="email"></input>
                     </div>
 
                     <div className="field">
-                        <label style={{color: '#ffffff'}}>Message</label>
+                        <label style={{color : '#ffffff'}}>Message</label>
                         <textarea ref="message" defaultValue={defaultMessage}></textarea>
                     </div>
 

@@ -6,13 +6,12 @@ var SitterManagerActions = require('js/actions/window/sitterManager');
 
 var vex                  = require('js/vex');
 
-
 var AuthorizeEmpiresTab = React.createClass({
 
-    authorizeAllies: function() {
+    authorizeAllies : function() {
         vex.confirm({
-            message: 'Are you sure you want to authorize all members of your alliance?',
-            callback: function(value) {
+            message  : 'Are you sure you want to authorize all members of your alliance?',
+            callback : function(value) {
                 if (value) {
                     SitterManagerActions.authorizeAllies();
                 }
@@ -20,12 +19,12 @@ var AuthorizeEmpiresTab = React.createClass({
         });
     },
 
-    authorizeAlliance: function() {
+    authorizeAlliance : function() {
         var name = this.refs.alliance.value;
 
         vex.confirm({
-            message: 'Are you sure you want to authorize all members of ' + name + '?',
-            callback: function(value) {
+            message  : 'Are you sure you want to authorize all members of ' + name + '?',
+            callback : function(value) {
                 if (value) {
                     SitterManagerActions.authorizeAlliance(name);
                 }
@@ -33,12 +32,12 @@ var AuthorizeEmpiresTab = React.createClass({
         });
     },
 
-    authorizeEmpire: function() {
+    authorizeEmpire : function() {
         var name = this.refs.empire.value;
 
         vex.confirm({
-            message: 'Are you sure you want to authorize ' + name + '?',
-            callback: function(value) {
+            message  : 'Are you sure you want to authorize ' + name + '?',
+            callback : function(value) {
                 if (value) {
                     SitterManagerActions.authorizeEmpire(name);
                 }
@@ -46,9 +45,9 @@ var AuthorizeEmpiresTab = React.createClass({
         });
     },
 
-    render: function() {
+    render : function() {
         return (
-            <div style={{textAlign: 'center'}}>
+            <div style={{textAlign : 'center'}}>
                 <div
                     className="ui green large labeled icon button"
                     onClick={this.authorizeAllies}

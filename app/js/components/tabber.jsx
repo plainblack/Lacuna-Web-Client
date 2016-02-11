@@ -1,46 +1,47 @@
 'use strict';
 
-var React = require('react');
+var React     = require('react');
 
 var ReactTabs = require('react-tabs');
 
 var Tabs = React.createClass({
 
-    propTypes: {
-        initialTab: React.PropTypes.number,
-        onSelect: React.PropTypes.object
+    propTypes : {
+        initialTab : React.PropTypes.number,
+        onSelect   : React.PropTypes.object,
+        children   : React.PropTypes.element
     },
 
-    getDefaultProps: function() {
+    getDefaultProps : function() {
         return {
-            initialTab: 0
+            initialTab : 0
         };
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            selectedTab: this.props.initialTab
+            selectedTab : this.props.initialTab
         };
     },
 
-    componentDidMount: function() {
+    componentDidMount : function() {
         this.handleCallbacks(this.state.selectedTab);
     },
 
-    handleSelect: function(index) {
+    handleSelect : function(index) {
         this.handleCallbacks(index);
         this.setState({
-            selectedTab: index
+            selectedTab : index
         });
     },
 
-    handleCallbacks: function(index) {
+    handleCallbacks : function(index) {
         if (this.props.onSelect && typeof this.props.onSelect[index] === 'function') {
             this.props.onSelect[index]();
         }
     },
 
-    render: function() {
+    render : function() {
         return (
             <ReactTabs.Tabs
                 selectedIndex={this.state.selectedTab}
@@ -53,8 +54,8 @@ var Tabs = React.createClass({
 });
 
 module.exports = {
-    Tab: ReactTabs.Tab,
-    TabList: ReactTabs.TabList,
-    TabPanel: ReactTabs.TabPanel,
-    Tabs: Tabs
+    Tab      : ReactTabs.Tab,
+    TabList  : ReactTabs.TabList,
+    TabPanel : ReactTabs.TabPanel,
+    Tabs     : Tabs
 };

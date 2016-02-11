@@ -1,42 +1,44 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
-var $ = require('js/shims/jquery');
+var React               = require('react');
+var Reflux              = require('reflux');
+var _                   = require('lodash');
+var $                   = require('js/shims/jquery');
 
-var classNames = require('classnames');
+var classNames          = require('classnames');
 
-var EmpireRPCStore = require('js/stores/rpc/empire');
-var BodyRPCStore = require('js/stores/rpc/body');
+var EmpireRPCStore      = require('js/stores/rpc/empire');
+var BodyRPCStore        = require('js/stores/rpc/body');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
-var MapActions = require('js/actions/menu/map');
+var MapActions          = require('js/actions/menu/map');
 
-var RightSidebarStore = require('js/stores/menu/rightSidebar');
+var RightSidebarStore   = require('js/stores/menu/rightSidebar');
 
 var PlanetListItem = React.createClass({
 
-    propTypes: {
-        name: React.PropTypes.string.isRequired,
-        id: React.PropTypes.string.isRequired,
-        currentBody: React.PropTypes.string.isRequired
+    propTypes : {
+        name        : React.PropTypes.string.isRequired,
+        id          : React.PropTypes.string.isRequired,
+        currentBody : React.PropTypes.string.isRequired,
+        zone        : React.PropTypes.string.isRequired
     },
 
-    getInitialProps: function() {
+    getInitialProps : function() {
         return {
-            name: '',
-            id: '',
-            currentBody: '',
+            name        : '',
+            id          : '',
+            currentBody : '',
+            zone        : ''
         };
     },
 
     // Returns true if this list item is the the currently selected planet.
-    isCurrentWorld: function() {
+    isCurrentWorld : function() {
         return this.props.currentBody === this.props.id;
     },
 
-    handleClick: function() {
+    handleClick : function() {
         RightSidebarActions.hide();
 
         if (this.isCurrentWorld()) {
@@ -46,16 +48,16 @@ var PlanetListItem = React.createClass({
         }
     },
 
-    render: function() {
+    render : function() {
         var classStr = classNames({
-            'ui large teal label': this.isCurrentWorld(),
-            'item': !this.isCurrentWorld()
+            'ui large teal label' : this.isCurrentWorld(),
+            'item'                : !this.isCurrentWorld()
         });
 
         return (
             <a className={classStr} onClick={this.handleClick} style={{
                 // For some reason this doesn't get set on the items (by Semantic) when it should.
-                cursor: 'pointer'
+                cursor : 'pointer'
             }}>
                 {this.props.name} ({this.props.zone})
             </a>
@@ -65,52 +67,52 @@ var PlanetListItem = React.createClass({
 
 var AccordionItem = React.createClass({
 
-    propTypes: {
-        list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        currentBody: React.PropTypes.string.isRequired,
-        title: React.PropTypes.string.isRequired,
-        initiallyOpen: React.PropTypes.bool.isRequired,
+    propTypes : {
+        list          : React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        currentBody   : React.PropTypes.string.isRequired,
+        title         : React.PropTypes.string.isRequired,
+        initiallyOpen : React.PropTypes.bool.isRequired
     },
 
-    getInitialProps: function() {
+    getInitialProps : function() {
         return {
-            list: [],
-            currentBody: '',
-            title: '',
-            initiallyOpen: false
+            list          : [],
+            currentBody   : '',
+            title         : '',
+            initiallyOpen : false
         };
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            open: this.props.initiallyOpen
+            open : this.props.initiallyOpen
         };
     },
 
-    componentDidMount: function() {
+    componentDidMount : function() {
         RightSidebarActions.collapseAccordion.listen(this.hideList);
         RightSidebarActions.expandAccordion.listen(this.showList);
     },
 
-    showList: function() {
+    showList : function() {
         this.setState({
-            open: true
+            open : true
         });
     },
 
-    hideList: function() {
+    hideList : function() {
         this.setState({
-            open: false
+            open : false
         });
     },
 
-    toggleList: function() {
+    toggleList : function() {
         this.setState({
-            open: !this.state.open
+            open : !this.state.open
         });
     },
 
-    render: function() {
+    render : function() {
         return (
             <div>
                 <div
@@ -122,17 +124,17 @@ var AccordionItem = React.createClass({
                     }
                     onClick={this.toggleList}
                     style={{
-                        cursor: 'pointer',
+                        cursor : 'pointer'
                     }}
                 >
                     {
                         this.state.open
-                        ? <i className="angle down icon"></i>
-                        : <i className="angle right icon"></i>
+                            ? <i className="angle down icon"></i>
+                            : <i className="angle right icon"></i>
                     } {this.props.title}
                 </div>
                 <div style={{
-                    display: this.state.open ? '' : 'none'
+                    display : this.state.open ? '' : 'none'
                 }}>
                     {
                         _.map(this.props.list, function(planet) {
@@ -156,29 +158,30 @@ var AccordionItem = React.createClass({
 });
 
 var BodiesAccordion = React.createClass({
-    propTypes: {
-        bodies: React.PropTypes.object.isRequired
+    propTypes : {
+        bodies      : React.PropTypes.object.isRequired,
+        currentBody : React.PropTypes.string.isRequired
     },
 
-    render: function() {
+    render : function() {
         var items = [
             {
-                title: 'My Colonies',
-                key: 'colonies',
-                initiallyOpen: true,
-                isBaby: false
+                title         : 'My Colonies',
+                key           : 'colonies',
+                initiallyOpen : true,
+                isBaby        : false
             },
             {
-                title: 'My Stations',
-                key: 'mystations',
-                initiallyOpen: false,
-                isBaby: false
+                title         : 'My Stations',
+                key           : 'mystations',
+                initiallyOpen : false,
+                isBaby        : false
             },
             {
-                title: 'Our Stations',
-                key: 'ourstations',
-                initiallyOpen: false,
-                isBaby: false
+                title         : 'Our Stations',
+                key           : 'ourstations',
+                initiallyOpen : false,
+                isBaby        : false
             }
         ];
 
@@ -188,10 +191,10 @@ var BodiesAccordion = React.createClass({
             .sortBy()
             .each(function(babyName) {
                 items.push({
-                    title: babyName + "'s Colonies",
-                    key: babyName,
-                    initiallyOpen: false,
-                    isBaby: true
+                    title         : babyName + "'s Colonies",
+                    key           : babyName,
+                    initiallyOpen : false,
+                    isBaby        : true
                 });
             })
             .value();
@@ -228,26 +231,26 @@ var BodiesAccordion = React.createClass({
 
 var RightSidebar = React.createClass({
 
-    mixins: [
+    mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(BodyRPCStore, 'body'),
         Reflux.connect(RightSidebarStore, 'showSidebar')
     ],
 
-    componentDidMount: function() {
+    componentDidMount : function() {
         var el = this.refs.sidebar;
 
         $(el)
             .sidebar({
-                context: $('#sidebarContainer'),
-                duration: 300,
-                transition: 'overlay',
-                onHidden: RightSidebarActions.hide,
-                onVisible: RightSidebarActions.show
+                context    : $('#sidebarContainer'),
+                duration   : 300,
+                transition : 'overlay',
+                onHidden   : RightSidebarActions.hide,
+                onVisible  : RightSidebarActions.show
             });
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate : function(prevProps, prevState) {
         if (prevState.showSidebar !== this.state.showSidebar) {
             this.handleSidebarShowing();
         }
@@ -256,53 +259,53 @@ var RightSidebar = React.createClass({
         var $content = $(this.refs.content);
 
         $content.css({
-            height: window.innerHeight - $header.outerHeight()
+            height : window.innerHeight - $header.outerHeight()
         });
     },
 
-    handleSidebarShowing: function() {
+    handleSidebarShowing : function() {
         var el = this.refs.sidebar;
 
         $(el)
             .sidebar(this.state.showSidebar ? 'show' : 'hide');
     },
 
-    homePlanet: function() {
+    homePlanet : function() {
         RightSidebarActions.hide();
         MapActions.changePlanet(this.state.empire.home_planet_id);
     },
 
-    expand: function() {
+    expand : function() {
         RightSidebarActions.expandAccordion();
     },
 
-    collapse: function() {
+    collapse : function() {
         RightSidebarActions.collapseAccordion();
     },
 
-    render: function() {
+    render : function() {
         return (
             <div className="ui right vertical inverted sidebar menu" ref="sidebar">
 
-                <div ref="header" style={{paddingTop: 7}}>
+                <div ref="header" style={{paddingTop : 7}}>
                     <a
                         title="Go to home planet"
                         className="item"
                         onClick={this.homePlanet}
                         style={{
-                            display: 'inline'
+                            display : 'inline'
                         }}
                     >
                         Home
                     </a>
 
-                    <div style={{float: 'right'}}>
+                    <div style={{float : 'right'}}>
                         <a
                             title="Expand all"
                             className="item"
                             onClick={this.expand}
                             style={{
-                                display: 'inline'
+                                display : 'inline'
                             }}
                         >
                             [+]
@@ -313,7 +316,7 @@ var RightSidebar = React.createClass({
                             className="item"
                             onClick={this.collapse}
                             style={{
-                                display: 'inline'
+                                display : 'inline'
                             }}
                         >
                             [-]
@@ -322,8 +325,8 @@ var RightSidebar = React.createClass({
                 </div>
 
                 <div ref="content" style={{
-                    overflow: 'auto',
-                    overflowX: 'hidden'
+                    overflow  : 'auto',
+                    overflowX : 'hidden'
                 }}>
                     <BodiesAccordion
                         bodies={this.state.empire.bodies}

@@ -14,16 +14,14 @@
     }
     if (window.history.replaceState) {
         window.history.replaceState({}, document.title, l.protocol + '//' + l.host + l.pathname + l.search);
-    }
-    else if (l.hash != '') {
+    } else if (l.hash !== '') {
         l.hash = '';
     }
 
     var loader = new YAHOO.util.YUILoader({
-        base: '//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/',
-        // filter: 'MIN',
-        allowRollup: true,
-        combine: false
+        base        : '//ajax.googleapis.com/ajax/libs/yui/2.8.2r1/build/',
+        allowRollup : true,
+        combine     : false
     });
 
     // List of YUI2 components that need to be loaded.
@@ -52,11 +50,9 @@
 
     loader.onSuccess = function(o) {
 
-
         // /////////////////////////////////////////////////////////////////////////////
         // WARNING: IF YOU CHANGE THE ORDER OF THESE, THINGS WILL NOT LOAD PROPERLY! //
         // /////////////////////////////////////////////////////////////////////////////
-
 
         // RPC and core stuff
         require('js-yui/library');
@@ -118,7 +114,6 @@
         require('js-yui/module/parliament');
         require('js-yui/module/policeStation');
         require('js-yui/module/stationCommand');
-
 
         // Menu stuff
         require('js-yui/mapPlanet');

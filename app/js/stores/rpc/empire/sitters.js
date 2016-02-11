@@ -1,29 +1,29 @@
 
 'use strict';
 
-var Reflux = require('reflux');
-var _ = require('lodash');
+var Reflux               = require('reflux');
+var _                    = require('lodash');
 
-var moment = require('moment');
+var moment               = require('moment');
 
-var util = require('js/util');
+var util                 = require('js/util');
 
 var SitterManagerActions = require('js/actions/window/sitterManager');
-var TickerActions = require('js/actions/ticker');
+var TickerActions        = require('js/actions/ticker');
 
-var server = require('js/server');
+var server               = require('js/server');
 
 var SittersRPCStore = Reflux.createStore({
-    listenables: [
+    listenables : [
         SitterManagerActions,
         TickerActions
     ],
 
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         if (this.data) {
             return this.data;
         } else {
@@ -31,7 +31,7 @@ var SittersRPCStore = Reflux.createStore({
         }
     },
 
-    handleNewData: function(sitters) {
+    handleNewData : function(sitters) {
         var now = Date.now();
 
         return _.chain(sitters)
@@ -47,7 +47,7 @@ var SittersRPCStore = Reflux.createStore({
             .value();
     },
 
-    onTick: function() {
+    onTick : function() {
         var now = Date.now();
         this.data = _.filter(this.data, function(sitter) {
             // Note: date objects can be compared numeracally,
@@ -58,110 +58,110 @@ var SittersRPCStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onShow: function() {
+    onShow : function() {
         SitterManagerActions.load();
     },
 
-    onLoad: function() {
+    onLoad : function() {
         server.call({
-            module: 'empire',
-            method: 'view_authorized_sitters',
-            params: [],
-            success: function(result) {
+            module  : 'empire',
+            method  : 'view_authorized_sitters',
+            params  : [],
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onAuthorizeAllies: function() {
+    onAuthorizeAllies : function() {
         server.call({
-            module: 'empire',
-            method: 'authorize_sitters',
-            params: [{
-                allied: true
+            module : 'empire',
+            method : 'authorize_sitters',
+            params : [{
+                allied : true
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onAuthorizeAlliance: function(allianceName) {
+    onAuthorizeAlliance : function(allianceName) {
         server.call({
-            module: 'empire',
-            method: 'authorize_sitters',
-            params: [{
-                alliance: allianceName
+            module : 'empire',
+            method : 'authorize_sitters',
+            params : [{
+                alliance : allianceName
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onAuthorizeEmpire: function(empireName) {
+    onAuthorizeEmpire : function(empireName) {
         server.call({
-            module: 'empire',
-            method: 'authorize_sitters',
-            params: [{
-                empires: [empireName]
+            module : 'empire',
+            method : 'authorize_sitters',
+            params : [{
+                empires : [empireName]
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onDeauthorizeEmpire: function(empireId) {
+    onDeauthorizeEmpire : function(empireId) {
         server.call({
-            module: 'empire',
-            method: 'deauthorize_sitters',
-            params: [{
-                empires: [empireId]
+            module : 'empire',
+            method : 'deauthorize_sitters',
+            params : [{
+                empires : [empireId]
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onReauthorizeAll: function() {
+    onReauthorizeAll : function() {
         server.call({
-            module: 'empire',
-            method: 'authorize_sitters',
-            params: [{
-                revalidate_all: true
+            module : 'empire',
+            method : 'authorize_sitters',
+            params : [{
+                revalidate_all : true
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onDeauthorizeAll: function() {
+    onDeauthorizeAll : function() {
         server.call({
-            module: 'empire',
-            method: 'deauthorize_sitters',
-            params: [{
-                empires: _.pluck(this.data, 'id')
+            module : 'empire',
+            method : 'deauthorize_sitters',
+            params : [{
+                empires : _.pluck(this.data, 'id')
             }],
-            success: function(result) {
+            success : function(result) {
                 this.data = this.handleNewData(result.sitters);
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     }
 });

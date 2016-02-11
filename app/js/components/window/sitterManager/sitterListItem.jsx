@@ -6,29 +6,28 @@ var SitterManagerActions = require('js/actions/window/sitterManager');
 
 var vex                  = require('js/vex');
 
-
 var SitterListItem = React.createClass({
 
-    propTypes: {
-        sitter: React.PropTypes.object
+    propTypes : {
+        sitter : React.PropTypes.object
     },
 
-    getDefaultProps: function() {
+    getDefaultProps : function() {
         return {
-            sitter: {}
+            sitter : {}
         };
     },
 
-    reauthorize: function() {
+    reauthorize : function() {
         SitterManagerActions.authorizeEmpire(this.props.sitter.name);
     },
 
-    deauthorize: function() {
+    deauthorize : function() {
         var s = this.props.sitter;
 
         vex.confirm({
-            message: 'Are you sure you want to remove ' + s.name + "'s access to your empire?",
-            callback: function(value) {
+            message  : 'Are you sure you want to remove ' + s.name + "'s access to your empire?",
+            callback : function(value) {
                 if (value) {
                     SitterManagerActions.deauthorizeEmpire(s.id);
                 }
@@ -36,7 +35,7 @@ var SitterListItem = React.createClass({
         });
     },
 
-    render: function() {
+    render : function() {
         return (
             <div className="item">
                 <div className="ui right floated compact buttons">
@@ -49,7 +48,7 @@ var SitterListItem = React.createClass({
                 </div>
 
                 <div className="content aligned">
-                    <div className="header" style={{color: '#ffffff'}}>
+                    <div className="header" style={{color : '#ffffff'}}>
                         {this.props.sitter.name}
                     </div>
 

@@ -2,23 +2,23 @@
 
 YAHOO.namespace('lacuna');
 
-var React           = require('react');
-var ReactDom        = require('react-dom');
-var _               = require('lodash');
-var ReactTooltip    = require('react-tooltip');
+var React                = require('react');
+var ReactDom             = require('react-dom');
+var _                    = require('lodash');
+var ReactTooltip         = require('react-tooltip');
 
-var KeyboardActions = require('js/actions/keyboard');
-var MenuActions     = require('js/actions/menu');
-var SessionActions  = require('js/actions/session');
-var TickerActions   = require('js/actions/ticker');
-var UserActions     = require('js/actions/user');
+var KeyboardActions      = require('js/actions/keyboard');
+var MenuActions          = require('js/actions/menu');
+var SessionActions       = require('js/actions/session');
+var TickerActions        = require('js/actions/ticker');
+var UserActions          = require('js/actions/user');
 
-var Window = require('js/components/window');
+var Window               = require('js/components/window');
 
-var BodyRPCStore    = require('js/stores/rpc/body');
+var BodyRPCStore         = require('js/stores/rpc/body');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var windowTypes = require('js/windowTypes');
+var windowTypes          = require('js/windowTypes');
 
 if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 

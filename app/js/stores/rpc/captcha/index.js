@@ -1,68 +1,68 @@
 'use strict';
 
-var Reflux = require('reflux');
+var Reflux         = require('reflux');
 
 var CaptchaActions = require('js/actions/window/captcha');
 
-var server = require('js/server');
+var server         = require('js/server');
 
 var CaptchaRPCStore = Reflux.createStore({
-    listenables: [
+    listenables : [
         CaptchaActions
     ],
 
-    init: function() {
+    init : function() {
         this.data = this.getInitialState();
     },
 
-    getInitialState: function() {
+    getInitialState : function() {
         if (this.data) {
             return this.data;
         } else {
             return {
-                guid: '',
-                url: ''
+                guid : '',
+                url  : ''
             };
         }
     },
 
-    onClear: function() {
+    onClear : function() {
         this.data = undefined;
         this.data = this.getInitialState();
         this.trigger(this.data);
     },
 
-    onFetch: function() {
+    onFetch : function() {
         server.call({
-            module: 'captcha',
-            method: 'fetch',
-            params: [],
-            success: function(result) {
+            module  : 'captcha',
+            method  : 'fetch',
+            params  : [],
+            success : function(result) {
                 this.data = result;
                 this.trigger(this.data);
             },
-            scope: this
+            scope : this
         });
     },
 
-    onSolve: function(solution, success) {
+    onSolve : function(solution, success) {
         server.call({
-            module: 'captcha',
-            method: 'solve',
-            params: [this.data.guid, solution],
-            success: function(result) {
+            module  : 'captcha',
+            method  : 'solve',
+            params  : [this.data.guid, solution],
+            success : function(result) {
                 if (typeof success === 'function') {
                     success();
                 }
             },
-            error: function() {
+            error : function() {
                 CaptchaActions.refresh();
             },
-            scope: this
+            scope : this
         });
     },
 
-    onRefresh: function() {
+    onRefresh : function() {
         CaptchaActions.clear();
         CaptchaActions.fetch();
     }

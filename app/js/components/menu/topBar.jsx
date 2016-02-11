@@ -1,34 +1,33 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
+var React                = require('react');
+var Reflux               = require('reflux');
 
-var EmpireRPCStore = require('js/stores/rpc/empire');
-var MapModeStore = require('js/stores/menu/mapMode');
-var ServerRPCStore = require('js/stores/rpc/server');
+var EmpireRPCStore       = require('js/stores/rpc/empire');
+var MapModeStore         = require('js/stores/menu/mapMode');
+var ServerRPCStore       = require('js/stores/rpc/server');
 
-var centerBar = require('js/components/mixin/centerBar');
-var classNames = require('classnames');
+var centerBar            = require('js/components/mixin/centerBar');
+var classNames           = require('classnames');
 
-var UserActions = require('js/actions/user');
-var MapActions = require('js/actions/menu/map');
+var UserActions          = require('js/actions/user');
+var MapActions           = require('js/actions/menu/map');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var windowTypes = require('js/windowTypes');
+var windowTypes          = require('js/windowTypes');
 
-var MailActions = require('js/actions/window/mail');
-var StatsActions = require('js/actions/window/stats');
+var MailActions          = require('js/actions/window/mail');
+var StatsActions         = require('js/actions/window/stats');
 
 var TopBar = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(ServerRPCStore, 'server'),
         Reflux.connect(MapModeStore, 'mapMode'),
         centerBar('bar')
     ],
 
-    mapButtonTip: function() {
+    mapButtonTip : function() {
         if (this.state.mapMode === MapModeStore.PLANET_MAP_MODE) {
             return 'To Star Map';
         } else {
@@ -36,21 +35,21 @@ var TopBar = React.createClass({
         }
     },
 
-    render: function() {
+    render : function() {
         var barClass = classNames('ui inverted menu', {
-            red: this.state.empire.self_destruct_active,
-            blue: !this.state.empire.self_destruct_active
+            red  : this.state.empire.self_destruct_active,
+            blue : !this.state.empire.self_destruct_active
         });
 
         return (
             <div className={barClass} ref="bar" style={{
-                position: 'fixed',
-                margin: 0,
-                zIndex: 2000,
-                width: 'auto',
-                height: 'auto',
-                display: 'inline-block',
-                top: '15px'
+                position : 'fixed',
+                margin   : 0,
+                zIndex   : 2000,
+                width    : 'auto',
+                height   : 'auto',
+                display  : 'inline-block',
+                top      : '15px'
             }}>
 
                 <a className="item" data-tip={this.mapButtonTip()}
@@ -62,12 +61,11 @@ var TopBar = React.createClass({
                     <i className="mail big icon"></i>
                     {
                         this.state.empire.has_new_messages > 0
-                            ?
-                                <div className="ui yellow circular label">
-                                    {this.state.empire.has_new_messages}
-                                </div>
-                            :
-                                ''
+                        ? (
+                            <div className="ui yellow circular label">
+                                {this.state.empire.has_new_messages}
+                            </div>
+                        ) : ''
                     }
                 </a>
 
@@ -86,7 +84,7 @@ var TopBar = React.createClass({
 
                 {
                     this.state.server.promotions.length > 0
-                    ?
+                    ? (
                         <a
                             className="item"
                             data-tip={
@@ -97,14 +95,13 @@ var TopBar = React.createClass({
                             onClick={function() {
                                 WindowManagerActions.addWindow(windowTypes.promotions);
                             }}
-                        >
+                            >
                             <i className="announcement big icon"></i>
                             <div className="ui orange floated right circular label">
                                 Event!
                             </div>
                         </a>
-                    :
-                        ''
+                    ) : ''
                 }
 
                 <a className="item" data-tip="Sign Out" onClick={UserActions.userSignOut}>

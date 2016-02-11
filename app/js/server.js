@@ -1,29 +1,25 @@
 'use strict';
 
-var $                   = require('js/shims/jquery');
-var _                   = require('lodash');
+var $                    = require('js/shims/jquery');
+var _                    = require('lodash');
 
-var LoaderActions       = require('js/actions/menu/loader');
-var SessionStore        = require('js/stores/session');
-var ServerStatusActions = require('js/actions/serverStatus');
-var BodyStatusActions   = require('js/actions/bodyStatus');
-var EmpireStatusActions = require('js/actions/empireStatus');
+var LoaderActions        = require('js/actions/menu/loader');
+var SessionStore         = require('js/stores/session');
+var ServerStatusActions  = require('js/actions/serverStatus');
+var BodyStatusActions    = require('js/actions/bodyStatus');
+var EmpireStatusActions  = require('js/actions/empireStatus');
 
 var WindowManagerActions = require('js/actions/menu/windowManager');
-var windowTypes = require('js/windowTypes');
-
-var util = require('js/util');
-
-var Lacuna = YAHOO.lacuna;
+var windowTypes          = require('js/windowTypes');
 
 var defaults = {
-    module:     '',
-    method:     '',
-    params:     [],
-    addSession: true,
-    success:    _.noop,
-    error:      _.noop,
-    scope:      window
+    module     : '',
+    method     : '',
+    params     : [],
+    addSession : true,
+    success    : _.noop,
+    error      : _.noop,
+    scope      : window
 };
 
 var handleDefaults = function(options) {
@@ -63,10 +59,10 @@ var handleConfig = function(options) {
 
 var createData = function(options) {
     return JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: options.method,
-        params: options.params
+        jsonrpc : '2.0',
+        id      : 1,
+        method  : options.method,
+        params  : options.params
     });
 };
 
@@ -100,7 +96,7 @@ var handleSuccess = function(options, result) {
 };
 
 var handleError = function(options, error) {
-    alert(error.message + ' (' + error.code + ')');
+    window.alert(error.message + ' (' + error.code + ')');
     console.error('Request error: ', error);
 
     if (typeof options.error === 'function') {
@@ -112,12 +108,12 @@ var sendRequest = function(url, data, options, retry) {
     console.log('Calling', options.module + '/' + options.method, options.params);
 
     $.ajax({
-        data:       data,
-        dataType:   'json',
-        type:       'POST',
-        url:        url,
+        data     : data,
+        dataType : 'json',
+        type     : 'POST',
+        url      : url,
 
-        success: function(data, textStatus, jqXHR) {
+        success : function(data, textStatus, jqXHR) {
             LoaderActions.hide();
 
             if (textStatus === 'success' && jqXHR.status === 200) {
@@ -125,7 +121,7 @@ var sendRequest = function(url, data, options, retry) {
             }
         },
 
-        error: function(jqXHR, textStatus, errorThrown) {
+        error : function(jqXHR, textStatus, errorThrown) {
             LoaderActions.hide();
             var error = jqXHR.responseJSON.error;
 
@@ -135,7 +131,7 @@ var sendRequest = function(url, data, options, retry) {
 
             if (error.code === 1016) {
                 WindowManagerActions.addWindow(windowTypes.captcha, {
-                    success: retry
+                    success : retry
                 });
             } else {
                 fail();
@@ -178,7 +174,5 @@ var splitStatus = function(status) {
 
 };
 
-
 module.exports.call = call;
 module.exports.splitStatus = splitStatus;
-

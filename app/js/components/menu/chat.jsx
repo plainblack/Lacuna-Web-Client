@@ -1,62 +1,66 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
+var React        = require('react');
+var Reflux       = require('reflux');
+var _            = require('lodash');
+var $            = require('js/shims/jquery');
+var Firebase     = require('firebase');
 
-var ChatStore = require('js/stores/menu/chat');
+var ChatStore    = require('js/stores/menu/chat');
 var BodyRPCStore = require('js/stores/rpc/body');
 
 var Chat = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(ChatStore, 'show')
     ],
-    getInitialState: function() {
+    getInitialState : function() {
         return {
-            show: false
+            show : false
         };
     },
-    hasRenderedChat: false,
-    componentDidUpdate: function() {
+    hasRenderedChat    : false,
+    componentDidUpdate : function() {
 
         if (this.state.show !== this.hasRenderedChat) {
-            if (this.state.show === true && this.hasRenderedChat == false) {
+            if (this.state.show === true && this.hasRenderedChat === false) {
                 this.loadChat();
-            } else if (this.state.show === false && this.hasRenderedChat == true) {
+            } else if (this.state.show === false && this.hasRenderedChat === true) {
                 this.logoutChat();
             } else {
                 return;
             }
         }
     },
-    logoutChat: function() {
+    logoutChat : function() {
         try {
             this.chat.unsetUser();
             this.hasRenderedChat = false;
-        }
-        catch (err) {
+        } catch (err) {
             console.error('Cannot unsetuser ' + err);
         }
     },
-    loadChat: function() {
+    loadChat : function() {
         console.log('Loading chat!');
 
         // ChiselChat needs these.
         window.Firebase = require('firebase');
         window.$ = window.jQuery = require('jquery');
         // window.PNotify = require('pnotify');
+
         if (!window.PNotify) {
-            $.getScript('//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js', _.bind(function(data, textStatus, jqXHR) {
-                if (textStatus === 'success' && jqXHR.status === 200) {
-                }
-            }, this));
+            $.getScript(
+                '//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js',
+                _.bind(function(data, textStatus, jqXHR) {
+                    // Do nothing?
+                }, this)
+            );
         }
 
         if (!window.ChiselChat) {
             // ChiselChat is not on mpn so we need to pull some tricks to get it into the app.
             $.getScript('chiselchat/chiselchat.min.js', _.bind(function(data, textStatus, jqXHR) {
                 if (textStatus === 'success' && jqXHR.status === 200) {
-                    this.renderChat.call(self);
+                    this.renderChat.call();
                 } else {
                     console.error('Loading ChiselChat failed.');
                 }
@@ -65,7 +69,7 @@ var Chat = React.createClass({
             this.renderChat();
         }
     },
-    renderChat: function() {
+    renderChat : function() {
 
         // Only do this process once.
         // NOTE: it's checked before but we're just making sure. (nice rhyming)
@@ -78,7 +82,7 @@ var Chat = React.createClass({
         try {
 
             var config = {
-                numMaxMessages: window.cc_max_messages || 100
+                numMaxMessages : window.cc_max_messages || 100
             };
 
             // Make sure we go to the right server's Firebase.
@@ -93,36 +97,35 @@ var Chat = React.createClass({
             console.log('Connecting to Firebase: ' + url);
 
             this.chatRef = new Firebase(url);
-            this.chat = new ChiselchatUI(this.chatRef, this.refs.chatWrapper, config);
+            this.chat = new window.ChiselchatUI(this.chatRef, this.refs.chatWrapper, config);
 
             this.chat.addCommand({
                 match : /^\/wiki/,
-                func : function(e) {
+                func  : function(e) {
                     var msg = e.content.replace(/^\/wiki/, '');
                     msg = msg.trim();
                     if (msg.length) {
                         msg = msg.replace(/ /g, '+');
                         e.content = 'http://community.lacunaexpanse.com/wiki?func=search&query=' + msg;
-                    }
-                    else {
+                    } else {
                         e.content = 'http://community.lacunaexpanse.com/wiki';
                     }
                 },
-                name : '/wiki',
-                help : 'Quick link to the Lacuna Expanse wiki.',
+                name          : '/wiki',
+                help          : 'Quick link to the Lacuna Expanse wiki.',
                 moderatorOnly : false
             });
 
             this.chat.addCommand({
                 match : /^\/planet/,
-                func : function(message, chatui) {
+                func  : function(message, chatui) {
                     var body = BodyRPCStore.getData();
 
                     message.content = message.content.replace(/^\/planet/,
                         "My current planet is '" + body.name + "' at '" + body.x + '|' + body.y + "' in zone '" + body.zone + "'\n");
                 },
-                name : '/planet',
-                help : 'Show everyone where your current planet is.',
+                name          : '/planet',
+                help          : 'Show everyone where your current planet is.',
                 moderatorOnly : false
             });
 
@@ -134,7 +137,7 @@ var Chat = React.createClass({
         }
 
     },
-    authenticateChat: function() {
+    authenticateChat : function() {
 
         // Only do this process once.
         // NOTE: it's checked before but we're just making sure. (nice rhyming)
@@ -145,7 +148,7 @@ var Chat = React.createClass({
         var Game = YAHOO.lacuna.Game;
 
         Game.Services.Chat.init_chat({
-            session_id: Game.GetSession()
+            session_id : Game.GetSession()
         }, {
             success : _.bind(function(o) {
 
@@ -166,22 +169,20 @@ var Chat = React.createClass({
                 this.chatRef.authWithCustomToken(this.chat_auth, _.bind(function(error) {
                     if (error) {
                         console.log('Chisel Chat login failed!', error);
-                    }
-                    else {
+                    } else {
                         console.log('Chisel Chat login successful!');
 
                         try {
                             this.chat.setUser({
-                                userId: result.status.empire.id,
-                                userName: result.chat_name,
-                                isGuest: false, // for now
-                                isModerator: result.isModerator,
-                                isStaff: result.isStaff,
-                                avatarUri: this.gravatar_url,
-                                profileUri: this.gravatar_url
+                                userId      : result.status.empire.id,
+                                userName    : result.chat_name,
+                                isGuest     : false, // for now
+                                isModerator : result.isModerator,
+                                isStaff     : result.isStaff,
+                                avatarUri   : this.gravatar_url,
+                                profileUri  : this.gravatar_url
                             });
-                        }
-                        catch (err) {
+                        } catch (err) {
                             console.log('cannot setUser ' + err);
                         }
                         if (this.private_room) {
@@ -199,14 +200,14 @@ var Chat = React.createClass({
             }
         });
     },
-    render: function() {
+    render : function() {
         return (
             <div id="chiselchat-wrapper" ref="chatWrapper" style={{
-                position: 'absolute',
-                bottom: 0,
-                width: '100vw',
-                height: '25px',
-                zIndex: 5000
+                position : 'absolute',
+                bottom   : 0,
+                width    : '100vw',
+                height   : '25px',
+                zIndex   : 5000
             }}></div>
         );
     }

@@ -12,19 +12,22 @@ var NotesRPCStore       = require('js/stores/rpc/body/notes');
 var Panel               = require('js/components/panel');
 
 var NotesWindow = React.createClass({
-    mixins: [
+    mixins : [
         Reflux.connect(NotesWindowStore, 'show'),
         Reflux.connect(NotesRPCStore, 'notes')
     ],
-    handleClose: function() {
+    handleClose : function() {
         // TODO We need to get the body ID from the NotesWindowStore
-        BodyActions.rpcBodySetColonyNotes({ bodyId: 16412, notes: this.state.notes });
+        BodyActions.rpcBodySetColonyNotes({
+            bodyId : 16412,
+            notes  : this.state.notes
+        });
         NotesActions.hide();
     },
-    handleChange: function(e) {
+    handleChange : function(e) {
         NotesActions.notesSet(e.target.value);
     },
-    render: function() {
+    render : function() {
         return (
             <Panel show={this.state.show} onClose={this.handleClose} title="Notes">
                 <div className="ui attached info message">
@@ -37,7 +40,7 @@ var NotesWindow = React.createClass({
                             value={this.state.notes}
                             onChange={this.handleChange}
                             style={{
-                                height: '450px'
+                                height : '450px'
                             }}>
                         </textarea>
                     </div>

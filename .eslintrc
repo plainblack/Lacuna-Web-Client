@@ -10,6 +10,7 @@
             "SwitchCase": 1
         }],
         "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4],
         "key-spacing": [2, {
             "beforeColon": true,
             "align": "colon"
