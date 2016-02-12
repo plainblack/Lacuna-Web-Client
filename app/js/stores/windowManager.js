@@ -88,18 +88,15 @@ var WindowManagerStore = Reflux.createStore({
     },
 
     onEscKey : function() {
-        var window = _.chain(_.clone(this.windows))
+        var topWindow = _.chain(_.clone(this.windows))
             .values()
-            .filter({
-                show : true
-            })
             .sortBy('layer')
             .reverse()
             .first()
             .value();
 
-        if (window) {
-            WindowManagerActions.hideWindow(window.id);
+        if (topWindow) {
+            WindowManagerActions.hideWindow(topWindow.id);
         }
     }
 });
