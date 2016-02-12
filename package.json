@@ -9,10 +9,10 @@
     "url": "https://github.com/plainblack/Lacuna-Web-Client"
   },
   "author": [
-      "Nathan McCallum <me@1vasari.xyz> (1vasari.xyz)"
+    "Nathan McCallum <me@1vasari.xyz> (1vasari.xyz)"
   ],
   "bugs": {
-    "url": "https://github.com/plainblack/Lacuna-Server-Open/issues"
+    "url": "https://github.com/plainblack/Lacuna-Web-Client/issues"
   },
   "homepage": "https://lacunaexpanse.com/",
   "dependencies": {
