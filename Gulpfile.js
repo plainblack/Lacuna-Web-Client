@@ -6,11 +6,7 @@ var reactify      = require('reactify');
 var source        = require('vinyl-source-stream');
 
 var cssConcat     = require('gulp-concat-css');
-var cssMin        = require('gulp-minify-css');
 var gulp          = require('gulp');
-var gulpUtil      = require('gulp-util');
-var rename        = require('gulp-rename');
-var uglify        = require('gulp-uglify');
 
 var path          = require('path');
 var exec          = require('child_process').exec;
@@ -79,28 +75,6 @@ gulp.task('cssify', function() {
     return stream;
 });
 
-gulp.task('minify-js', function() {
-    var stream =  gulp.src('./lacuna/load.js')
-        .pipe(uglify().on('error', gulpUtil.log))
-        .pipe(rename({
-            extname : '.min.js'
-        }))
-        .pipe(gulp.dest('./lacuna'));
-
-    return stream;
-});
-
-gulp.task('minify-css', function() {
-    var stream = gulp.src('./lacuna/styles.css')
-        .pipe(cssMin())
-        .pipe(rename({
-            extname : '.min.css'
-        }))
-        .pipe(gulp.dest('./lacuna'));
-
-    return stream;
-});
-
 gulp.task('serve', function(done) {
     var app = express();
     var port = process.env.PORT || 8080;
@@ -138,7 +112,6 @@ gulp.task('build', function(done) {
     runSequence(
         'lint',
         ['browserify', 'cssify'],
-        ['minify-js', 'minify-css'],
     done);
 });
 
