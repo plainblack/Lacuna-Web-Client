@@ -2,7 +2,7 @@
 
 var Reflux          = require('reflux');
 
-var EssentiaActions = require('js/actions/window/essentia');
+var EssentiaActions = require('js/actions/windows/essentia');
 
 var server          = require('js/server');
 

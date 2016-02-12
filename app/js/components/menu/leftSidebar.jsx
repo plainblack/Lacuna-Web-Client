@@ -7,8 +7,8 @@ var server               = require('js/server');
 var $                    = require('js/shims/jquery');
 
 var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
-var OptionsActions       = require('js/actions/window/options');
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var OptionsActions       = require('js/actions/windows/options');
+var WindowManagerActions = require('js/actions/windowManager');
 
 var windowTypes          = require('js/windowTypes');
 

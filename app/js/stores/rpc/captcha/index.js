@@ -2,7 +2,7 @@
 
 var Reflux         = require('reflux');
 
-var CaptchaActions = require('js/actions/window/captcha');
+var CaptchaActions = require('js/actions/windows/captcha');
 
 var server         = require('js/server');
 

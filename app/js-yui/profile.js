@@ -5,7 +5,7 @@ YAHOO.namespace("lacuna");
 var _ = require('lodash');
 var util = require('js/util');
 
-var OptionsActions = require('js/actions/window/options');
+var OptionsActions = require('js/actions/windows/options');
 
 if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 

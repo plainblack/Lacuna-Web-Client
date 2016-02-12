@@ -13,11 +13,11 @@ var classNames           = require('classnames');
 var UserActions          = require('js/actions/user');
 var MapActions           = require('js/actions/menu/map');
 
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
-var MailActions          = require('js/actions/window/mail');
-var StatsActions         = require('js/actions/window/stats');
+var MailActions          = require('js/actions/windows/mail');
+var StatsActions         = require('js/actions/windows/stats');
 
 var TopBar = React.createClass({
     mixins : [

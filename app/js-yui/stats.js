@@ -1,6 +1,6 @@
 'use strict';
 
-var StatsActions = require('js/actions/window/stats');
+var StatsActions = require('js/actions/windows/stats');
 
 var _ = require('lodash');
 

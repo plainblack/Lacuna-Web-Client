@@ -8,7 +8,7 @@ var moment               = require('moment');
 
 var util                 = require('js/util');
 
-var SitterManagerActions = require('js/actions/window/sitterManager');
+var SitterManagerActions = require('js/actions/windows/sitterManager');
 var TickerActions        = require('js/actions/ticker');
 
 var server               = require('js/server');

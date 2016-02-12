@@ -10,7 +10,7 @@ var SessionActions       = require('js/actions/session');
 var ServerStatusActions  = require('js/actions/serverStatus');
 var TickerActions        = require('js/actions/ticker');
 var UserActions          = require('js/actions/user');
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var WindowManagerActions = require('js/actions/windowManager');
 
 var server               = require('js/server');
 

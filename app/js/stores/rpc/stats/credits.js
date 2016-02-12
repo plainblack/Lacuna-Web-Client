@@ -3,7 +3,7 @@
 var Reflux          = require('reflux');
 var _               = require('lodash');
 
-var AboutActions    = require('js/actions/window/about');
+var AboutActions    = require('js/actions/windows/about');
 
 var server          = require('js/server');
 

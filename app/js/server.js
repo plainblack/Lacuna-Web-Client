@@ -9,7 +9,7 @@ var ServerStatusActions  = require('js/actions/serverStatus');
 var BodyStatusActions    = require('js/actions/bodyStatus');
 var EmpireStatusActions  = require('js/actions/empireStatus');
 
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
 var defaults = {

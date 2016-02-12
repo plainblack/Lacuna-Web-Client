@@ -4,7 +4,7 @@ var Reflux          = require('reflux');
 var _               = require('lodash');
 var validator       = require('validator');
 
-var EssentiaActions = require('js/actions/window/essentia');
+var EssentiaActions = require('js/actions/windows/essentia');
 var TickerActions   = require('js/actions/ticker');
 
 var EmpireRPCStore  = require('js/stores/rpc/empire');

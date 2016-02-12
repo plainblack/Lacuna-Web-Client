@@ -13,11 +13,11 @@ var SessionActions       = require('js/actions/session');
 var TickerActions        = require('js/actions/ticker');
 var UserActions          = require('js/actions/user');
 
-var Window               = require('js/components/window');
+var GameWindow           = require('js/components/gameWindow');
 
 var BodyRPCStore         = require('js/stores/rpc/body');
 
-var WindowManagerActions = require('js/actions/menu/windowManager');
+var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
 if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
@@ -67,7 +67,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                 body.appendChild(container);
 
                 ReactDom.render(
-                    <Window />,
+                    <GameWindow />,
                     document.getElementById('mailGameContainer')
                 );
 

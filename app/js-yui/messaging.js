@@ -1,6 +1,6 @@
 'use strict';
 
-var MailActions = require('js/actions/window/mail');
+var MailActions = require('js/actions/windows/mail');
 
 var _ = require('lodash');
 
