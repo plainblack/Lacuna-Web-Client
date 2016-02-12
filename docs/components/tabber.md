@@ -11,37 +11,24 @@ Using `Tabber` is exactly the same as using `react-tabs` except for:
 
 ```javascript
 var Tabber = require('js/components/tabber');
-
-var Tab = Tabber.Tab;
-var TabList = Tabber.TabList;
-var TabPanel = Tabber.TabPanel;
-var Tabs = Tabber.Tabs;
+var Tabs   = Tabber.Tabs;
+var Tab    = Tabber.Tab;
 
 var TabberExample = React.createClass({
     render: function() {
         return (
-            <Tabs
-                onSelect={{
-                    0: function() {
-                        alert('You selected Tab 1');
-                    },
-                    1: function() {
-                        alert('You selected Tab 2');
-                    }
-                }}
-            >
-                <TabList>
-                    <Tab>Tab 1</Tab>
-                    <Tab>Tab 2</Tab>
-                </TabList>
-
-                <TabPanel>
+            <Tabs>
+                <Tab title="Tab 1" onSelect={function() {
+                    alert('You selected Tab 1');
+                }}>
                     This is the content for Tab 1.
-                </TabPanel>
+                </Tab>
 
-                <TabPanel>
+                <Tab title="Tab 2" onSelect={function() {
+                    alert('You selected Tab 2');
+                }}>
                     This is the content for Tab 2.
-                </TabPanel>
+                </Tab>
             </Tabs>
         );
     }

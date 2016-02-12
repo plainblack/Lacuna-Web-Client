@@ -3,10 +3,8 @@
 var React           = require('react');
 
 var Tabber          = require('js/components/tabber');
-var Tab             = Tabber.Tab;
-var TabList         = Tabber.TabList;
-var TabPanel        = Tabber.TabPanel;
 var Tabs            = Tabber.Tabs;
+var Tab             = Tabber.Tab;
 
 var EssentiaActions = require('js/actions/windows/essentia');
 
@@ -23,23 +21,14 @@ var EssentiaWindow = React.createClass({
 
     render : function() {
         return (
-            <Tabs
-                onSelect={{
-                    0 : EssentiaActions.loadBoosts
-                }}
-            >
-                <TabList>
-                    <Tab>Boosts</Tab>
-                    <Tab>Get More Essentia</Tab>
-                </TabList>
-
-                <TabPanel>
+            <Tabs>
+                <Tab title="Boosts" onSelect={EssentiaActions.loadBoosts}>
                     <BoostsTab />
-                </TabPanel>
+                </Tab>
 
-                <TabPanel>
+                <Tab title="Get More Essentia">
                     <GetEssentiaTab />
-                </TabPanel>
+                </Tab>
             </Tabs>
         );
     }

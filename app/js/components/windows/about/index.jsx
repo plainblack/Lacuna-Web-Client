@@ -5,10 +5,8 @@ var React        = require('react');
 var AboutActions = require('js/actions/windows/about');
 
 var Tabber       = require('js/components/tabber');
-var Tab          = Tabber.Tab;
-var TabList      = Tabber.TabList;
-var TabPanel     = Tabber.TabPanel;
 var Tabs         = Tabber.Tabs;
+var Tab          = Tabber.Tab;
 
 var AboutTab     = require('js/components/windows/about/about');
 var CreditsTab   = require('js/components/windows/about/credits');
@@ -22,23 +20,14 @@ var AboutWindow = React.createClass({
 
     render : function() {
         return (
-            <Tabs
-                onSelect={{
-                    1 : AboutActions.load
-                }}
-            >
-                <TabList>
-                    <Tab>About</Tab>
-                    <Tab>Credits</Tab>
-                </TabList>
-
-                <TabPanel>
+            <Tabs>
+                <Tab title="About">
                     <AboutTab />
-                </TabPanel>
+                </Tab>
 
-                <TabPanel>
+                <Tab title="Credits" onSelect={AboutActions.load}>
                     <CreditsTab />
-                </TabPanel>
+                </Tab>
             </Tabs>
         );
     }
