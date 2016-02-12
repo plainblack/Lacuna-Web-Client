@@ -34,19 +34,13 @@ var Window = React.createClass({
     },
 
     componentDidMount : function() {
-        this.handleDisplayCallbacks();
-    },
-
-    componentDidUpdate : function(prevProps, prevState) {
-        if (prevProps.window.show !== this.props.window.show) {
-            this.handleDisplayCallbacks();
+        if (typeof this.refs.window.onWindowShow === 'function') {
+            this.refs.window.onWindowShow();
         }
     },
 
-    handleDisplayCallbacks : function() {
-        if (this.props.window.show && typeof this.refs.window.onWindowShow === 'function') {
-            this.refs.window.onWindowShow();
-        } else if (!this.props.window.show && typeof this.refs.window.onWindowHide === 'function') {
+    componentWillUnmount : function() {
+        if (typeof this.refs.window.onWindowHide === 'function') {
             this.refs.window.onWindowHide();
         }
     },
