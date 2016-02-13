@@ -1,2 +1,16 @@
 # Ignore npm-debug.log.
 *.log
+
+# Modules downloaded by npm.
+node_modules/
+
+# Modules downloaded by Bower
+bower_components/
+
+# Built JS and CSS files.
+lacuna/
+
+# Cache to speed up the build process.
+browserify-cache.json
+
+index.html
