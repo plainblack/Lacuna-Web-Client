@@ -17,4 +17,3 @@ If you're interested in hacking on the client, hit up the [developer's documenta
 # License
 
 See the [license file](LICENSE).
-
