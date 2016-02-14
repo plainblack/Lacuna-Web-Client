@@ -102,7 +102,7 @@ var BoostsRPCStore = Reflux.createStore({
         });
     },
 
-    onTick : function() {
+    onTickerTick : function() {
         var tickBoost = function(boost) {
             boost.ms -= 1000;
             boost.display = util.formatMillisecondTime(boost.ms);

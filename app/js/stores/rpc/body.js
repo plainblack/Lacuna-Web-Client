@@ -7,7 +7,7 @@ var BodyStatusActions  = require('js/actions/bodyStatus');
 var TickerActions      = require('js/actions/ticker');
 var UserActions        = require('js/actions/user');
 
-var ServerTimeRPCStore = require('js/stores/rpc/server/time');
+var ServerRPCStore     = require('js/stores/rpc/server');
 
 var util               = require('js/util');
 var int                = util.int;
@@ -128,11 +128,10 @@ var BodyRPCStore = Reflux.createStore({
         this.data.building_count = int(this.data.building_count);
 
         // no point recalcing for each ship.
-        var serverTimeMs = +ServerTimeRPCStore.getCurrentServerTimeMoment();
+        var serverTimeMs = ServerRPCStore.getData().serverMoment.valueOf();
 
         var updateShip = function(ship) {
-            ship.arrival_ms =
-            util.serverDateToMs(ship.date_arrives) - serverTimeMs;
+            ship.arrival_ms = util.serverDateToMs(ship.date_arrives) - serverTimeMs;
         };
 
         _.map(this.data.incoming_own_ships, updateShip);

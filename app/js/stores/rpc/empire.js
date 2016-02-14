@@ -6,7 +6,7 @@ var _                   = require('lodash');
 var EmpireStatusActions = require('js/actions/empireStatus');
 var TickerActions       = require('js/actions/ticker');
 
-var ServerTimeRPCStore  = require('js/stores/rpc/server/time');
+var ServerRPCStore  = require('js/stores/rpc/server');
 
 var util                = require('js/util');
 var int                 = util.int;
@@ -96,7 +96,7 @@ var EmpireRPCStore = Reflux.createStore({
         if (this.data.self_destruct_active) {
             this.data.self_destruct_ms =
                 util.serverDateToMs(this.data.self_destruct_date) -
-                ServerTimeRPCStore.getCurrentServerTimeMoment().valueOf();
+                ServerRPCStore.getData().serverMoment.valueOf();
         }
 
         // Fix up all the planet lists.
