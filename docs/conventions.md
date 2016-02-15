@@ -1,5 +1,7 @@
 # Window Conventions
 
+**Warning**: a lot of this is out of date. Try and follow the example of existing windows to if you're trying to implement a window.
+
 Every single window in the game (Stats or Mail, for example) are implemented in a certain way. We'll use the 'About' window as an example.
 
 ## Actions

@@ -13,11 +13,12 @@ This motley collection of markdown files attempts to document how a brave indivi
 
 - [Getting Started](getting-started.md)
 - [Concepts](concepts.md)
-- [Conventions](conventions.md)
+- [Guidelines](guidelines.md)
 - [Important Notes](important-notes.md)
 - [Gulp tasks](gulp-tasks.md)
 - Modules
     - [Server](modules/server.md)
+    - [StatefulStore](modules/stateful-store.md)
     - Util
     - Vex
 - Components
