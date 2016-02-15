@@ -1,6 +1,7 @@
 'use strict';
 
 var Reflux         = require('reflux');
+var StatefulStore  = require('js/stores/mixins/stateful');
 
 var CaptchaActions = require('js/actions/windows/captcha');
 
@@ -11,25 +12,19 @@ var CaptchaRPCStore = Reflux.createStore({
         CaptchaActions
     ],
 
-    init : function() {
-        this.data = this.getInitialState();
-    },
+    mixins : [
+        StatefulStore
+    ],
 
-    getInitialState : function() {
-        if (this.data) {
-            return this.data;
-        } else {
-            return {
-                guid : '',
-                url  : ''
-            };
-        }
+    getDefaultData : function() {
+        return {
+            guid : '',
+            url  : ''
+        };
     },
 
     onClear : function() {
-        this.data = undefined;
-        this.data = this.getInitialState();
-        this.trigger(this.data);
+        this.emit(this.getDefaultData());
     },
 
     onFetch : function() {
@@ -38,8 +33,7 @@ var CaptchaRPCStore = Reflux.createStore({
             method  : 'fetch',
             params  : [],
             success : function(result) {
-                this.data = result;
-                this.trigger(this.data);
+                this.emit(result);
             },
             scope : this
         });
@@ -47,9 +41,12 @@ var CaptchaRPCStore = Reflux.createStore({
 
     onSolve : function(solution, success) {
         server.call({
-            module  : 'captcha',
-            method  : 'solve',
-            params  : [this.data.guid, solution],
+            module : 'captcha',
+            method : 'solve',
+            params : [
+                this.state.guid,
+                solution
+            ],
             success : function(result) {
                 if (typeof success === 'function') {
                     success();

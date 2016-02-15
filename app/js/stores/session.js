@@ -4,29 +4,28 @@ var Reflux         = require('reflux');
 
 var SessionActions = require('js/actions/session');
 
+var StatefulStore  = require('js/stores/mixins/stateful');
+
 var SessionStore = Reflux.createStore({
-    listenables : SessionActions,
 
-    init : function() {
-        this.data = this.getInitialState();
-    },
+    listenables : [
+        SessionActions
+    ],
 
-    getInitialState : function() {
+    mixins : [
+        StatefulStore
+    ],
+
+    getDefaultData : function() {
         return '';
     },
 
-    getData : function() {
-        return this.data;
-    },
-
     onSessionSet : function(session) {
-        this.data = session;
-        this.trigger(this.data);
+        this.emit(session);
     },
 
     onSessionClear : function() {
-        this.data = this.getInitialState();
-        this.trigger(this.data);
+        this.emit(this.getDefaultData());
     }
 });
 

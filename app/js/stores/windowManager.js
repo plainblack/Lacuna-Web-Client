@@ -6,18 +6,22 @@ var _                    = require('lodash');
 var WindowManagerActions = require('js/actions/windowManager');
 var KeyboardActions      = require('js/actions/keyboard');
 
+var StatefulStore        = require('js/stores/mixins/stateful');
+var clone                = require('js/util').clone;
+
 var WindowManagerStore = Reflux.createStore({
     listenables : [
         WindowManagerActions,
         KeyboardActions
     ],
 
-    init : function() {
-        this.windows = this.getInitialState();
-    },
+    mixins : [
+        StatefulStore
+    ],
 
-    getInitialState : function() {
+    getDefaultData : function() {
         // TODO: should we persist this state via localStorage?
+
         return {};
     },
 
@@ -33,11 +37,11 @@ var WindowManagerStore = Reflux.createStore({
         return this.getTopLayerNumber(windows) + 1;
     },
 
-    isOnTop : function(id) {
-        var top = this.getTopLayerNumber(this.windows);
+    isOnTop : function(id, windows) {
+        var top = this.getTopLayerNumber(windows);
 
-        if (this.windows[id]) {
-            return this.windows[id] === top;
+        if (this.state[id]) {
+            return this.state[id] === top;
         } else {
             return false;
         }
@@ -45,7 +49,7 @@ var WindowManagerStore = Reflux.createStore({
 
     onAddWindow : function(type, options) {
         var id = 'window_' + type;
-        var windows = _.cloneDeep(this.windows);
+        var windows = clone(this.state);
 
         windows[id] = {
             id      : id,
@@ -54,41 +58,35 @@ var WindowManagerStore = Reflux.createStore({
             layer   : this.getNextLayerNumber(windows)
         };
 
-        this.windows = windows;
-        this.trigger(this.windows);
+        this.emit(windows);
     },
 
     onHideWindow : function(id) {
-        var windows = _.clone(this.windows);
-
+        var windows = clone(this.state);
         delete windows[id];
-
-        this.windows = windows;
-        this.trigger(this.windows);
+        this.emit(windows);
     },
 
     onHideAllWindows : function() {
-        this.windows = {};
-        this.trigger(this.windows);
+        this.emit({});
     },
 
     onBringWindowToTop : function(id) {
-        if (this.isOnTop(id)) {
+        if (this.isOnTop(id, this.state)) {
             return;
         }
 
-        var windows = _.cloneDeep(this.windows);
+        var windows = clone(this.state);
 
         if (windows[id]) {
             windows[id].layer = this.getNextLayerNumber(windows);
         }
 
-        this.windows = windows;
-        this.trigger(this.windows);
+        this.emit(windows);
     },
 
     onEscKey : function() {
-        var topWindow = _.chain(_.clone(this.windows))
+        var topWindow = _.chain(clone(this.state))
             .values()
             .sortBy('layer')
             .reverse()

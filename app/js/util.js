@@ -1,6 +1,7 @@
 'use strict';
 
 var moment = require('moment');
+var $      = require('js/shims/jquery');
 
 var xPad = function(x, pad, r) {
     if (typeof r === 'undefined') {
@@ -105,4 +106,8 @@ module.exports.serverDateToMoment = function(str) {
 
 module.exports.formatMomentLong = function(theMoment) {
     return theMoment.format('dddd, Do MMMM HH:mm:ss ZZ');
+};
+
+module.exports.clone = function(obj) {
+    return $.extend(true, {}, obj);
 };

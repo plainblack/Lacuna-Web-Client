@@ -3,10 +3,12 @@
 
 var Reflux               = require('reflux');
 var _                    = require('lodash');
+var StatefulStore        = require('js/stores/mixins/stateful');
 
 var moment               = require('moment');
 
 var util                 = require('js/util');
+var clone                = util.clone;
 
 var SitterManagerActions = require('js/actions/windows/sitterManager');
 var TickerActions        = require('js/actions/ticker');
@@ -19,22 +21,18 @@ var SittersRPCStore = Reflux.createStore({
         TickerActions
     ],
 
-    init : function() {
-        this.data = this.getInitialState();
+    mixins : [
+        StatefulStore
+    ],
+
+    getDefaultData : function() {
+        return [];
     },
 
-    getInitialState : function() {
-        if (this.data) {
-            return this.data;
-        } else {
-            return [];
-        }
-    },
-
-    handleNewData : function(sitters) {
+    handleNewSitters : function(result) {
         var now = Date.now();
 
-        return _.chain(sitters)
+        var sitters = _.chain(result.sitters)
             .filter(function(sitter) {
                 // Note: date objects can be compared numeracally,
                 // see: http://stackoverflow.com/a/493018/1978973
@@ -45,21 +43,21 @@ var SittersRPCStore = Reflux.createStore({
                 return sitter;
             })
             .value();
+
+        this.emit(sitters);
     },
 
     onTick : function() {
+        var sitters = clone(this.state);
         var now = Date.now();
-        this.data = _.filter(this.data, function(sitter) {
+
+        sitters = _.filter(sitters, function(sitter) {
             // Note: date objects can be compared numeracally,
             // see: http://stackoverflow.com/a/493018/1978973
             return now < util.serverDateToDateObj(sitter.expiry);
         });
 
-        this.trigger(this.data);
-    },
-
-    onShow : function() {
-        SitterManagerActions.load();
+        this.emit(sitters);
     },
 
     onLoad : function() {
@@ -67,11 +65,8 @@ var SittersRPCStore = Reflux.createStore({
             module  : 'empire',
             method  : 'view_authorized_sitters',
             params  : [],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -82,11 +77,8 @@ var SittersRPCStore = Reflux.createStore({
             params : [{
                 allied : true
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -97,11 +89,8 @@ var SittersRPCStore = Reflux.createStore({
             params : [{
                 alliance : allianceName
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -112,11 +101,8 @@ var SittersRPCStore = Reflux.createStore({
             params : [{
                 empires : [empireName]
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -127,11 +113,8 @@ var SittersRPCStore = Reflux.createStore({
             params : [{
                 empires : [empireId]
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -142,11 +125,8 @@ var SittersRPCStore = Reflux.createStore({
             params : [{
                 revalidate_all : true
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     },
 
@@ -155,13 +135,10 @@ var SittersRPCStore = Reflux.createStore({
             module : 'empire',
             method : 'deauthorize_sitters',
             params : [{
-                empires : _.pluck(this.data, 'id')
+                empires : _.pluck(this.state, 'id')
             }],
-            success : function(result) {
-                this.data = this.handleNewData(result.sitters);
-                this.trigger(this.data);
-            },
-            scope : this
+            success : this.handleNewSitters,
+            scope   : this
         });
     }
 });

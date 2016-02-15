@@ -16,11 +16,7 @@
             "align": "colon"
         }],
         "jsx-quotes": [2, "prefer-double"],
-        "no-multi-spaces": [2, {
-            "exceptions": {
-                "VariableDeclarator": true
-            }
-        }],
+        "no-multi-spaces": [0],
         "space-before-function-paren": [2, "never"],
         "padded-blocks": [0]
     },

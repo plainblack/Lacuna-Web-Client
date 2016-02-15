@@ -59,7 +59,7 @@ var CurrentSittersTab = React.createClass({
                 >
                     {
                         _.map(this.state.sitters, function(sitter) {
-                            return <SitterListItem sitter={sitter} />;
+                            return <SitterListItem key={sitter.id} sitter={sitter} />;
                         })
                     }
                 </div>
