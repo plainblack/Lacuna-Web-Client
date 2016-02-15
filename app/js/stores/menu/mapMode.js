@@ -32,7 +32,7 @@ var MapModeStore = Reflux.createStore({
     },
 
     onToggleMapMode : function() {
-        this.emit(this.mapMode === PLANET_MAP_MODE
+        this.emit(this.getData() === PLANET_MAP_MODE
             ? STAR_MAP_MODE
             : PLANET_MAP_MODE
         );
