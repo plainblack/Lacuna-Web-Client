@@ -12,6 +12,7 @@ Do **not** `require('jquery')` - instead `require('js/shims/jquery')`. `js/shims
 
 - Follow ESLint.
 - camelCase for file names. (`longFileName.js`)
+- No `index.js` or `index.jsx` files.
 - As always: **when in Rome, do as the Romans do.**
 
 You can run `gulp lint` to make sure everything passes. However, it would be much more effective to get ESLint integrated with your editor so that you get live feedback. [Here are some options](http://eslint.org/docs/user-guide/integrations).

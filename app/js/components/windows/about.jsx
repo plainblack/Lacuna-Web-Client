@@ -8,8 +8,8 @@ var Tabber       = require('js/components/tabber');
 var Tabs         = Tabber.Tabs;
 var Tab          = Tabber.Tab;
 
-var AboutTab     = require('js/components/windows/about/about');
-var CreditsTab   = require('js/components/windows/about/credits');
+var AboutTab     = require('js/components/windows/about/aboutTab');
+var CreditsTab   = require('js/components/windows/about/creditsTab');
 
 var AboutWindow = React.createClass({
     statics : {
