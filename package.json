@@ -26,7 +26,6 @@
     "react-addons-css-transition-group": "0.14.7",
     "react-dom": "0.14.7",
     "react-draggable": "1.2.0",
-    "react-progress": "0.0.12",
     "react-tabs": "0.5.3",
     "react-tooltip": "1.0.4",
     "reflux": "0.2.7",

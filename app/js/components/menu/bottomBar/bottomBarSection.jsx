@@ -3,7 +3,7 @@
 var React = require('react');
 var classnames = require('classnames');
 
-var Progress = require('react-progress');
+var ProgressBar = require('js/components/menu/bottomBar/progressBar');
 
 var BottomBarSection = React.createClass({
     propTypes : {
@@ -25,14 +25,7 @@ var BottomBarSection = React.createClass({
             <div className="item" onMouseEnter={this.handleToolTip}>
                 {
                     this.props.progressPercent
-                    ? (
-                        <Progress
-                            percent={this.props.progressPercent}
-                            style={{
-                                position : 'absolute'
-                            }}
-                        />
-                    )
+                    ? <ProgressBar percent={this.props.progressPercent} />
                     : ''
                 }
 
