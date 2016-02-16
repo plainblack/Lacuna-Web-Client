@@ -111,3 +111,7 @@ module.exports.formatMomentLong = function(theMoment) {
 module.exports.clone = function(obj) {
     return $.extend(true, {}, obj);
 };
+
+module.exports.commify = function(num) {
+    return num.toLocaleString();
+};
