@@ -177,6 +177,8 @@ var BodyRPCStore = Reflux.createStore({
         body.happiness_hour = int(body.happiness_hour);
         body.happiness = int(body.happiness);
 
+        body = this.handleResourcesPercentages(body);
+
         this.emit(body);
     },
 
@@ -222,6 +224,12 @@ var BodyRPCStore = Reflux.createStore({
         body.happiness = tickResource(
             body.happiness_hour, undefined, body.happiness, undefined);
 
+        body = this.handleResourcesPercentages(body);
+
+        this.emit(body);
+    },
+
+    handleResourcesPercentages : function(body) {
         body.food_percent_full = (body.food_stored / body.food_capacity) * 100;
         body.ore_percent_full = (body.ore_stored / body.ore_capacity) * 100;
         body.water_percent_full = (body.water_stored / body.water_capacity) * 100;
@@ -235,7 +243,7 @@ var BodyRPCStore = Reflux.createStore({
         body.energy_percent_full = int(body.energy_percent_full);
         body.waste_percent_full = int(body.waste_percent_full);
 
-        this.emit(body);
+        return body;
     }
 });
 
