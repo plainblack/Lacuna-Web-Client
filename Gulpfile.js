@@ -107,6 +107,13 @@ gulp.task('lint', function(done) {
     });
 });
 
+gulp.task('build-no-lint', function(done) {
+    runSequence(
+        'browserify', 
+        'cssify',
+    done);
+});
+
 // The default task is a build of everything.
 gulp.task('build', function(done) {
     runSequence(
