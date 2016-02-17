@@ -2,6 +2,7 @@
 
 var windowTypes = {
     about         : 'ABOUT',
+    building      : 'BUILDING',
     captcha       : 'CAPTCHA',
     essentia      : 'ESSENTIA',
     invite        : 'INVITE',

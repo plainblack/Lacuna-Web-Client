@@ -113,5 +113,9 @@ module.exports.clone = function(obj) {
 };
 
 module.exports.commify = function(num) {
-    return num.toLocaleString();
+    if (!num) {
+        return '';
+    }
+
+    return Number(num).toLocaleString();
 };

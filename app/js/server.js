@@ -123,7 +123,16 @@ var sendRequest = function(url, data, options, retry) {
 
         error : function(jqXHR, textStatus, errorThrown) {
             LoaderActions.hide();
-            var error = jqXHR.responseJSON.error;
+            var error = {};
+
+            if (typeof jqXHR.responseJSON === 'undefined') {
+                error = {
+                    code    : -1,
+                    message : jqXHR.responseText
+                };
+            } else {
+                error = jqXHR.responseJSON.error;
+            }
 
             var fail = function() {
                 handleError(options, error);

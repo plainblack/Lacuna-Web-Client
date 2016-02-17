@@ -2,6 +2,9 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
+var WindowManagerActions = require('js/actions/windowManager');
+var windowTypes = require('js/windowTypes');
+
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
 (function(){
@@ -869,6 +872,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         },
         DetailsView : function(tile) {
             //YAHOO.log(tile, "info", "DetailsView");
+
+            if (!FactoryMap[tile.data.url]) {
+                // Pass this off to the new React stuff.
+
+                WindowManagerActions.addWindow(windowTypes.building, tile.data);
+
+                return;
+            }
 
             require('js/actions/menu/loader').show();
 
