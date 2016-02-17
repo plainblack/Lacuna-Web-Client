@@ -19,16 +19,16 @@ var PlanetListItem = React.createClass({
 
     propTypes : {
         name        : React.PropTypes.string.isRequired,
-        id          : React.PropTypes.string.isRequired,
-        currentBody : React.PropTypes.string.isRequired,
+        id          : React.PropTypes.number.isRequired,
+        currentBody : React.PropTypes.number.isRequired,
         zone        : React.PropTypes.string.isRequired
     },
 
     getInitialProps : function() {
         return {
             name        : '',
-            id          : '',
-            currentBody : '',
+            id          : 0,
+            currentBody : 0,
             zone        : ''
         };
     },
@@ -69,7 +69,7 @@ var AccordionItem = React.createClass({
 
     propTypes : {
         list          : React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        currentBody   : React.PropTypes.string.isRequired,
+        currentBody   : React.PropTypes.number.isRequired,
         title         : React.PropTypes.string.isRequired,
         initiallyOpen : React.PropTypes.bool.isRequired
     },
@@ -77,7 +77,7 @@ var AccordionItem = React.createClass({
     getInitialProps : function() {
         return {
             list          : [],
-            currentBody   : '',
+            currentBody   : 0,
             title         : '',
             initiallyOpen : false
         };
@@ -160,7 +160,7 @@ var AccordionItem = React.createClass({
 var BodiesAccordion = React.createClass({
     propTypes : {
         bodies      : React.PropTypes.object.isRequired,
-        currentBody : React.PropTypes.string.isRequired
+        currentBody : React.PropTypes.number.isRequired
     },
 
     render : function() {

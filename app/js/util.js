@@ -2,6 +2,7 @@
 
 var moment = require('moment');
 var $      = require('js/shims/jquery');
+var _      = require('lodash');
 
 var xPad = function(x, pad, r) {
     if (typeof r === 'undefined') {
@@ -118,4 +119,26 @@ module.exports.commify = function(num) {
     }
 
     return Number(num).toLocaleString();
+};
+
+var handleString = function(string) {
+    if (window.isNaN(string)) {
+        return string;
+    } else {
+        return string * 1;
+    }
+};
+
+var handleObj = function(obj) {
+    if (_.isString(obj)) {
+        return handleString(obj);
+    } else if (_.isObject(obj)) { // NOTE: isObject returns true for arrays.
+        return _.mapValues(obj, handleObj);
+    } else {
+        return obj;
+    }
+};
+
+module.exports.fixNumbers = function(data) {
+    return _.mapValues(data, handleObj);
 };

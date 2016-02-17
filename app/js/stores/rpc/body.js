@@ -27,7 +27,7 @@ var BodyRPCStore = Reflux.createStore({
 
     getDefaultData : function() {
         return {
-            id        : '',
+            id        : 0,
             x         : 0,
             y         : 0,
             star_id   : '',
@@ -150,32 +150,6 @@ var BodyRPCStore = Reflux.createStore({
         _.map(body.incoming_own_ships, updateShip);
         _.map(body.incoming_ally_ships, updateShip);
         _.map(body.incoming_enemy_ships, updateShip);
-
-        body.size = int(body.size);
-        body.orbit = int(body.orbit);
-
-        body.food_hour = int(body.food_hour);
-        body.food_stored = int(body.food_stored);
-        body.food_capacity = int(body.food_capacity);
-
-        body.ore_hour = int(body.ore_hour);
-        body.ore_stored = int(body.ore_stored);
-        body.ore_capacity = int(body.ore_capacity);
-
-        body.water_hour = int(body.water_hour);
-        body.water_stored = int(body.water_stored);
-        body.water_capacity = int(body.water_capacity);
-
-        body.energy_hour = int(body.energy_hour);
-        body.energy_stored = int(body.energy_stored);
-        body.energy_capacity = int(body.energy_capacity);
-
-        body.waste_hour = int(body.waste_hour);
-        body.waste_stored = int(body.waste_stored);
-        body.waste_capacity = int(body.waste_capacity);
-
-        body.happiness_hour = int(body.happiness_hour);
-        body.happiness = int(body.happiness);
 
         body = this.handleResourcesPercentages(body);
 

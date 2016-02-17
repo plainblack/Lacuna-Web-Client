@@ -12,6 +12,8 @@ var EmpireStatusActions  = require('js/actions/empireStatus');
 var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
+var util                 = require('js/util');
+
 var defaults = {
     module     : '',
     method     : '',
@@ -116,8 +118,10 @@ var sendRequest = function(url, data, options, retry) {
         success : function(data, textStatus, jqXHR) {
             LoaderActions.hide();
 
+            var dataToEmit = util.fixNumbers(data.result);
+
             if (textStatus === 'success' && jqXHR.status === 200) {
-                handleSuccess(options, data.result);
+                handleSuccess(options, dataToEmit);
             }
         },
 
@@ -169,15 +173,15 @@ var call = function(obj) {
 //
 var splitStatus = function(status) {
     if (status.server) {
-        var serverStatus = _.cloneDeep(status.server);
+        var serverStatus = util.fixNumbers(_.cloneDeep(status.server));
         ServerStatusActions.serverStatusUpdate(serverStatus);
     }
     if (status.empire) {
-        var empireStatus = _.cloneDeep(status.empire);
+        var empireStatus = util.fixNumbers(_.cloneDeep(status.empire));
         EmpireStatusActions.empireStatusUpdate(empireStatus);
     }
     if (status.body) {
-        var bodyStatus = _.cloneDeep(status.body);
+        var bodyStatus = util.fixNumbers(_.cloneDeep(status.body));
         BodyStatusActions.bodyStatusUpdate(bodyStatus);
     }
 
