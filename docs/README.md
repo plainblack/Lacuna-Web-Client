@@ -20,7 +20,7 @@ This motley collection of markdown files attempts to document how a brave indivi
     - [Server](modules/server.md)
     - [StatefulStore](modules/stateful-store.md)
     - Util
-    - Vex
+    - [Vex](modules/vex.md)
 - Components
     - [Tabber](components/tabber.md)
     - Panel
