@@ -21,21 +21,24 @@ var BuildingInformation = React.createClass({
 
     render : function() {
         return (
-            <div>
+            <div style={{
+                paddingBottom : 5,
+                display       : 'inline-block'
+            }}>
                 <div
                     style={{
                         width           : 100,
                         height          : 100,
                         backgroundImage : 'url(' + this.getImageUrl() + ')',
-                        display         : 'inline-block',
-                        verticalAlign   : 'top'
+                        float           : 'left'
                     }}
                 />
 
                 <div style={{
                     display    : 'inline-block',
                     marginLeft : 10,
-                    maxWidth   : 480
+                    width      : 'calc(100% - 125px)',
+                    float      : 'right'
                 }}>
                     <strong style={{fontSize : '1.2em'}}>
                         {this.props.name} {this.props.level} (ID: {this.props.id})

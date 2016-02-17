@@ -14,8 +14,8 @@ var Building = React.createClass({
     statics : {
         windowOptions : {
             title  : 'Building Details',
-            width  : 600,
-            height : 350
+            width  : 700,
+            height : 420
         }
     },
 

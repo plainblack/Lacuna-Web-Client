@@ -8,18 +8,22 @@ var ResourceLine = React.createClass({
     propTypes : {
         icon    : React.PropTypes.string.isRequired,
         title   : React.PropTypes.string.isRequired,
-        content : React.PropTypes.string.isRequired
+        content : React.PropTypes.string.isRequired,
+        red     : React.PropTypes.bool
     },
 
     render : function() {
+        var iconClass = classnames(this.props.icon, 'large icon', {red : this.props.red});
+
         return (
             <div style={{
                 marginTop : 5
             }}>
-                <i className={classnames(this.props.icon, 'large icon')}></i>
+                <i className={iconClass}></i>
                 <span
                     style={{
-                        float : 'right'
+                        float : 'right',
+                        color : this.props.red ? 'red' : 'white'
                     }}
                     title={this.props.title}
                 >
