@@ -1,6 +1,7 @@
 'use strict';
 
 var React                = require('react');
+var _                    = require('lodash');
 
 var SitterManagerActions = require('js/actions/windows/sitterManager');
 
@@ -25,14 +26,10 @@ var SitterListItem = React.createClass({
     deauthorize : function() {
         var s = this.props.sitter;
 
-        vex.confirm({
-            message  : 'Are you sure you want to remove ' + s.name + "'s access to your empire?",
-            callback : function(value) {
-                if (value) {
-                    SitterManagerActions.deauthorizeEmpire(s.id);
-                }
-            }
-        });
+        vex.confirm(
+            'Are you sure you want to remove ' + s.name + "'s access to your empire?",
+            _.partial(SitterManagerActions.deauthorizeEmpire, s.id)
+        );
     },
 
     render : function() {

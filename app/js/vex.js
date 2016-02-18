@@ -33,7 +33,7 @@ var vexPrompt = function(message, placeholder, callback) {
     });
 };
 
-window.vexy = {
+module.exports = {
     alert   : vexAlert,
     confirm : vexConfirm,
     prompt  : vexPrompt

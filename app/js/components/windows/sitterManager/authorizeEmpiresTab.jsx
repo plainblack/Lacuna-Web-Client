@@ -1,6 +1,7 @@
 'use strict';
 
 var React                = require('react');
+var _                    = require('lodash');
 
 var SitterManagerActions = require('js/actions/windows/sitterManager');
 
@@ -9,40 +10,28 @@ var vex                  = require('js/vex');
 var AuthorizeEmpiresTab = React.createClass({
 
     authorizeAllies : function() {
-        vex.confirm({
-            message  : 'Are you sure you want to authorize all members of your alliance?',
-            callback : function(value) {
-                if (value) {
-                    SitterManagerActions.authorizeAllies();
-                }
-            }
-        });
+        vex.confirm(
+            'Are you sure you want to authorize all members of your alliance?',
+            SitterManagerActions.authorizeAllies
+        );
     },
 
     authorizeAlliance : function() {
         var name = this.refs.alliance.value;
 
-        vex.confirm({
-            message  : 'Are you sure you want to authorize all members of ' + name + '?',
-            callback : function(value) {
-                if (value) {
-                    SitterManagerActions.authorizeAlliance(name);
-                }
-            }
-        });
+        vex.confirm(
+            'Are you sure you want to authorize all members of ' + name + '?',
+            _.partial(SitterManagerActions.authorizeAlliance, name)
+        );
     },
 
     authorizeEmpire : function() {
         var name = this.refs.empire.value;
 
-        vex.confirm({
-            message  : 'Are you sure you want to authorize ' + name + '?',
-            callback : function(value) {
-                if (value) {
-                    SitterManagerActions.authorizeEmpire(name);
-                }
-            }
-        });
+        vex.confirm(
+            'Are you sure you want to authorize ' + name + '?',
+            _.partial(SitterManagerActions.authorizeEmpire, name)
+        );
     },
 
     render : function() {
