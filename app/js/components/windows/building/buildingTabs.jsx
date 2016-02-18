@@ -6,7 +6,7 @@ var Tabber          = require('js/components/tabber');
 var Tabs            = Tabber.Tabs;
 var Tab             = Tabber.Tab;
 
-var BuildingActions = require('js/actions/building');
+var BuildingActions = require('js/actions/windows/building');
 
 var ProductionTab   = require('js/components/windows/building/productionTab');
 

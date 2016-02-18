@@ -1,11 +1,14 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var StatefulStore   = require('js/stores/mixins/stateful');
+var Reflux               = require('reflux');
+var StatefulStore        = require('js/stores/mixins/stateful');
+var _                    = require('lodash');
 
-var BuildingActions = require('js/actions/building');
+var BuildingActions      = require('js/actions/windows/building');
+var WindowManagerActions = require('js/actions/windowManager');
 
-var server = require('js/server');
+var server               = require('js/server');
+var clone                = require('js/util').clone;
 
 var BuildingRPCStore = Reflux.createStore({
 
@@ -80,7 +83,8 @@ var BuildingRPCStore = Reflux.createStore({
     },
 
     handleNewData : function(result) {
-        var building = result.building;
+        // Carry previous state over incase the new data is missing fields we need.
+        var building = _.assign(clone(this.state), result.building);
 
         // Glyph buildings will return a halls cost in the upgrade cost but normal buildings will
         // will only return the standard resources. Make sure they all exist so as to prevent
@@ -89,10 +93,12 @@ var BuildingRPCStore = Reflux.createStore({
         building.upgrade.cost.ore    = building.upgrade.cost.ore || 0;
         building.upgrade.cost.water  = building.upgrade.cost.water || 0;
         building.upgrade.cost.energy = building.upgrade.cost.energy || 0;
+        building.upgrade.cost.waste  = building.upgrade.cost.waste || 0;
         building.upgrade.cost.time   = building.upgrade.cost.time || 0;
         building.upgrade.cost.halls  = building.upgrade.cost.halls || 0;
 
-        console.log(building);
+        // Manually update the old planet map with the new data we got.
+        YAHOO.lacuna.MapPlanet.ReloadBuilding(building);
 
         this.emit(building);
     },
@@ -107,7 +113,56 @@ var BuildingRPCStore = Reflux.createStore({
             method  : 'view',
             params  : [id],
             scope   : this,
-            success : this.handleNewData
+            success : function(result) {
+
+                // `view` doesn't return the building url.
+                result.building.url = url;
+
+                this.handleNewData(result);
+            }
+        });
+    },
+
+    onDemolishBuilding : function(url, id) {
+        server.call({
+            module  : url.replace(/^\//, ''), // Cull leading '/' from url
+            method  : 'demolish',
+            params  : [id],
+            scope   : this,
+            success : function() {
+                // Handle the old planet map code.
+                YAHOO.lacuna.MapPlanet._fireRemoveTile(this.state);
+
+                BuildingActions.clear();
+
+                WindowManagerActions.hideTopWindow();
+            }
+        });
+    },
+
+    onDowngradeBuilding : function(url, id) {
+        server.call({
+            module  : url.replace(/^\//, ''), // Cull leading '/' from url
+            method  : 'downgrade',
+            params  : [id],
+            scope   : this,
+            success : function(result) {
+                this.handleNewData(result);
+                WindowManagerActions.hideTopWindow();
+            }
+        });
+    },
+
+    onUpgradeBuilding : function(url, id) {
+        server.call({
+            module  : url.replace(/^\//, ''), // Cull leading '/' from url
+            method  : 'upgrade',
+            params  : [id],
+            scope   : this,
+            success : function(result) {
+                this.handleNewData(result);
+                WindowManagerActions.hideTopWindow();
+            }
         });
     }
 });

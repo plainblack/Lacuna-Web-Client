@@ -2,15 +2,20 @@
 
 var React              = require('react');
 var Reflux             = require('reflux');
+var _                  = require('lodash');
 
 var BuildingRPCStore   = require('js/stores/rpc/building');
 var BodyRPCStore       = require('js/stores/rpc/body');
 
+var BuildingActions    = require('js/actions/windows/building');
+
+var ActionButton       = require('js/components/windows/building/actionButton');
 var ResourceProduction = require('js/components/windows/building/resourceProduction');
 var ResourceCost       = require('js/components/windows/building/resourceCost');
 var ResourceLine       = require('js/components/windows/building/resourceLine');
 
 var util               = require('js/util');
+var vex                = require('js/vex');
 
 var ProductionTab = React.createClass({
 
@@ -18,6 +23,32 @@ var ProductionTab = React.createClass({
         Reflux.connect(BuildingRPCStore, 'building'),
         Reflux.connect(BodyRPCStore, 'body')
     ],
+
+    onDemolishClick : function() {
+        var name = this.state.building.name + ' ' + this.state.building.level;
+
+        vex.confirm(
+            'Are you sure you want to demolish your ' + name + '?',
+            _.bind(function() {
+                BuildingActions.demolishBuilding(this.state.building.url, this.state.building.id);
+            }, this)
+        );
+    },
+
+    onDowngradeClick : function() {
+        var name = this.state.building.name + ' ' + this.state.building.level;
+
+        vex.confirm(
+            'Are you sure you want to downgrade your ' + name + '?',
+            _.bind(function() {
+                BuildingActions.downgradeBuilding(this.state.building.url, this.state.building.id);
+            }, this)
+        );
+    },
+
+    onUpgradeClick : function() {
+        BuildingActions.upgradeBuilding(this.state.building.url, this.state.building.id);
+    },
 
     render : function() {
         var b    = this.state.building;
@@ -157,15 +188,25 @@ var ProductionTab = React.createClass({
                 <div className="ui centered row">
                     <div className="fifteen wide column">
                         <div className="3 ui medium fluid buttons">
-                            <div className="ui red button">
-                                Demolish
-                            </div>
-                            <div className="ui blue button">
-                                Downgrade
-                            </div>
-                            <div className="ui green button">
-                                Upgrade
-                            </div>
+                            <ActionButton
+                                color="red"
+                                actionName="Demolish"
+                                onClick={this.onDemolishClick}
+                            />
+
+                            <ActionButton
+                                color="blue"
+                                actionName="Downgrade"
+                                error={b.downgrade.can ? '' : b.downgrade.reason}
+                                onClick={this.onDowngradeClick}
+                            />
+
+                            <ActionButton
+                                color="green"
+                                actionName="Upgrade"
+                                error={b.upgrade.can ? '' : b.upgrade.reason[1]}
+                                onClick={this.onUpgradeClick}
+                            />
                         </div>
                     </div>
                 </div>

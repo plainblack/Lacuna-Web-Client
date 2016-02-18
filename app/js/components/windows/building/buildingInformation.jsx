@@ -37,7 +37,7 @@ var BuildingInformation = React.createClass({
                 <div style={{
                     display    : 'inline-block',
                     marginLeft : 10,
-                    width      : 'calc(100% - 125px)',
+                    width      : 550,
                     float      : 'right'
                 }}>
                     <strong style={{fontSize : '1.2em'}}>
