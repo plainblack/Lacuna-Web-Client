@@ -1,6 +1,8 @@
 'use strict';
 
-var React = require('react');
+var React               = require('react');
+
+var BuildingActions     = require('js/actions/windows/building');
 
 var BuildingInformation = require('js/components/windows/building/buildingInformation');
 var BuildingTabs        = require('js/components/windows/building/buildingTabs');
@@ -17,6 +19,14 @@ var Building = React.createClass({
             width  : 700,
             height : 420
         }
+    },
+
+    onWindowShow : function() {
+        BuildingActions.clear();
+    },
+
+    onWindowHide : function() {
+        BuildingActions.clear();
     },
 
     render : function() {

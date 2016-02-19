@@ -3,7 +3,8 @@
 var Reflux = require('reflux');
 
 var BuildingActions = Reflux.createActions([
-    'loadBuildingProduction',
+    'loadBuilding',
+    'updateBuilding',
     'clear',
     'upgradeBuilding',
     'downgradeBuilding',

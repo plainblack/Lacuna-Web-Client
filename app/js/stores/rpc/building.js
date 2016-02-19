@@ -107,7 +107,13 @@ var BuildingRPCStore = Reflux.createStore({
         this.emit(this.getDefaultData());
     },
 
-    onLoadBuildingProduction : function(url, id) {
+    onUpdateBuilding : function(newBuilding) {
+        if (newBuilding) {
+            this.handleNewData({building : newBuilding});
+        }
+    },
+
+    onLoadBuilding : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'view',

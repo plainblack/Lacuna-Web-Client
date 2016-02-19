@@ -1,15 +1,22 @@
 'use strict';
 
-var React           = require('react');
+var React            = require('react');
+var Reflux           = require('reflux');
 
-var Tabber          = require('js/components/tabber');
-var Tabs            = Tabber.Tabs;
-var Tab             = Tabber.Tab;
+var Tabber           = require('js/components/tabber');
+var Tabs             = Tabber.Tabs;
+var Tab              = Tabber.Tab;
 
-var BuildingActions = require('js/actions/windows/building');
+var BuildingActions  = require('js/actions/windows/building');
 
-var ProductionTab   = require('js/components/windows/building/productionTab');
-var RepairTab       = require('js/components/windows/building/repairTab');
+var BuildingRPCStore = require('js/stores/rpc/building');
+
+var ProductionTab    = require('js/components/windows/building/productionTab');
+var RepairTab        = require('js/components/windows/building/repairTab');
+
+var BUILDINGS = {
+    '/essentiavein' : require('js/components/buildings/essentiaVein')
+};
 
 var BuildingTabs = React.createClass({
 
@@ -19,28 +26,45 @@ var BuildingTabs = React.createClass({
         efficiency : React.PropTypes.number.isRequired
     },
 
+    mixins : [
+        Reflux.connect(BuildingRPCStore, 'building')
+    ],
+
     loadProduction : function() {
-        BuildingActions.clear();
-        BuildingActions.loadBuildingProduction(this.props.url, this.props.id);
+        BuildingActions.loadBuilding(this.props.url, this.props.id);
     },
 
     render : function() {
+        var tabs = [];
+
+        if (this.props.efficiency !== 100) {
+            tabs.push(
+                <Tab title="Repair" key="Repair" onSelect={this.loadProduction}>
+                    <RepairTab />
+                </Tab>
+            );
+        }
+
+        tabs.push(
+            <Tab title="Production" key="Production" onSelect={this.loadProduction}>
+                <ProductionTab />
+            </Tab>
+        );
+
+        var getTabs = BUILDINGS[this.props.url];
+
+        if (typeof getTabs === 'function') {
+            var buildingSpecificTabs = getTabs(this.state.building);
+
+            if (buildingSpecificTabs) {
+                tabs = tabs.concat(buildingSpecificTabs);
+            }
+        }
+
         return (
             <div>
                 <Tabs>
-                    {
-                        this.props.efficiency !== 100
-                        ? (
-                            <Tab title="Repair" onSelect={this.loadProduction}>
-                                <RepairTab />
-                            </Tab>
-                        )
-                        : ''
-                    }
-
-                    <Tab title="Production" onSelect={this.loadProduction}>
-                        <ProductionTab />
-                    </Tab>
+                    {tabs}
                 </Tabs>
             </div>
         );

@@ -197,7 +197,7 @@ var ProductionTab = React.createClass({
                             <ActionButton
                                 color="blue"
                                 actionName="Downgrade"
-                                error={b.downgrade.can ? '' : b.downgrade.reason}
+                                error={b.downgrade.can ? '' : b.downgrade.reason[1]}
                                 onClick={this.onDowngradeClick}
                             />
 
