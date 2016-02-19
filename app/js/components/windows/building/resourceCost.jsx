@@ -17,7 +17,7 @@ var ResourceCost = React.createClass({
     render : function() {
         var red = false;
 
-        if (this.props.stored && this.props.number > this.props.stored) {
+        if (typeof this.props.stored === 'number' && this.props.number > this.props.stored) {
             red = true;
         }
 

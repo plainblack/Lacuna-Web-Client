@@ -98,7 +98,7 @@ var BuildingRPCStore = Reflux.createStore({
         building.upgrade.cost.halls  = building.upgrade.cost.halls || 0;
 
         // Manually update the old planet map with the new data we got.
-        YAHOO.lacuna.MapPlanet.ReloadBuilding(building);
+        YAHOO.lacuna.MapPlanet.ReloadBuilding(_.cloneDeep(building));
 
         this.emit(building);
     },
@@ -160,6 +160,21 @@ var BuildingRPCStore = Reflux.createStore({
             params  : [id],
             scope   : this,
             success : function(result) {
+                this.handleNewData(result);
+                WindowManagerActions.hideTopWindow();
+            }
+        });
+    },
+
+    onRepairBuilding : function(url, id) {
+        server.call({
+            module  : url.replace(/^\//, ''), // Cull leading '/' from url
+            method  : 'repair',
+            params  : [id],
+            scope   : this,
+            success : function(result) {
+                console.log(result);
+
                 this.handleNewData(result);
                 WindowManagerActions.hideTopWindow();
             }

@@ -7,7 +7,8 @@ var BuildingActions = Reflux.createActions([
     'clear',
     'upgradeBuilding',
     'downgradeBuilding',
-    'demolishBuilding'
+    'demolishBuilding',
+    'repairBuilding'
 ]);
 
 module.exports = BuildingActions;
