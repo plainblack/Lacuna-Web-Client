@@ -54,6 +54,16 @@ var ProductionTab = React.createClass({
         var b    = this.state.building;
         var body = this.state.body;
 
+        // Don't let the user downgrade a level 1 building. They shoulod demolish it instead.
+        if (b.level === 1) {
+            b.downgrade.can = 0;
+            b.downgrade.reason = [
+                1009,
+                'You cannot downgrade a level 1 building.',
+                undefined
+            ];
+        }
+
         return (
             <div className="ui grid">
 
