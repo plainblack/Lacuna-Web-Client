@@ -80,7 +80,6 @@
         require('js-yui/building/embassy');
         require('js-yui/building/energyReserve');
         require('js-yui/building/entertainment');
-        require('js-yui/building/essentiaVein');
         require('js-yui/building/foodReserve');
         require('js-yui/building/geneticsLab');
         require('js-yui/building/intelligence');
