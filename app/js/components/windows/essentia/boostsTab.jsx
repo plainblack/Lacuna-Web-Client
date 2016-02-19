@@ -33,66 +33,46 @@ var BoostsTab = React.createClass({
                     </div>
                 </div>
 
-                <div className="centered row">
-                    <div className="seven wide column">
+                <div className="ui centered row">
+                    <div className="eight wide column">
                         <Boost
                             type="food"
                             description="+25% Food / hr"
                             iconName="food"
                         />
-                    </div>
-                    <div className="seven wide column">
-                        <Boost
-                            type="ore"
-                            description="+25% Ore / hr"
-                            iconName="diamond"
-                        />
-                    </div>
-                </div>
-
-                <div className="centered row">
-                    <div className="seven wide column">
                         <Boost
                             type="water"
                             description="+25% Water / hr"
                             iconName="theme"
                         />
-                    </div>
-                    <div className="seven wide column">
-                        <Boost
-                            type="energy"
-                            description="+25% Energy / hr"
-                            iconName="lightning"
-                        />
-                    </div>
-                </div>
-
-                <div className="centered row">
-                    <div className="seven wide column">
                         <Boost
                             type="happiness"
                             description="+25% Happiness / hr"
                             iconName="smile"
                         />
-                    </div>
-                    <div className="seven wide column">
-                        <Boost
-                            type="storage"
-                            description="+25% Storage"
-                            iconName="archive"
-                        />
-                    </div>
-                </div>
-
-                <div className="centered row">
-                    <div className="seven wide column">
                         <Boost
                             type="building"
                             description="+25% Building Construction Speed"
                             iconName="building outline"
                         />
                     </div>
-                    <div className="seven wide column">
+
+                    <div className="eight wide column">
+                        <Boost
+                            type="ore"
+                            description="+25% Ore / hr"
+                            iconName="diamond"
+                        />
+                        <Boost
+                            type="energy"
+                            description="+25% Energy / hr"
+                            iconName="lightning"
+                        />
+                        <Boost
+                            type="storage"
+                            description="+25% Storage"
+                            iconName="archive"
+                        />
                         <Boost
                             type="spy_training"
                             description="+50% Spy Training Speed"

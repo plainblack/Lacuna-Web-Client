@@ -53,7 +53,9 @@ var Boost = React.createClass({
 
     render : function() {
         return (
-            <div>
+            <div style={{
+                marginTop : 5
+            }}>
                 <div className="ui action input">
                     <input
                         type="text"
@@ -62,15 +64,15 @@ var Boost = React.createClass({
                         title="Weeks to boost for"
                         disabled={this.state.empire.essentia < 35}
                         style={{
-                            width : 30
+                            width : 45
                         }}
-                    ></input>
+                    />
+
                     {
                         this.renderButton()
                     }
                 </div>
                 <BoostCountdown boost={this.state.boosts[this.props.type]} />
-
             </div>
         );
     }
