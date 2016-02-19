@@ -17,11 +17,6 @@ var Map = React.createClass({
         Reflux.connect(PlanetStore, 'planet'),
         Reflux.connect(MenuStore, 'menuVisible')
     ],
-    getInitialState : function() {
-        return {
-            planet : ''
-        };
-    },
     previousMapMode  : '',
     previousPlanetId : '',
     render           : function() {

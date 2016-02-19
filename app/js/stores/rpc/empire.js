@@ -73,13 +73,13 @@ var EmpireRPCStore = Reflux.createStore({
             return;
         }
 
-        var empire = clone(this.state);
+        if (this.state.self_destruct_active) {
+            var empire = clone(this.state);
 
-        if (empire.self_destruct_active) {
             empire.self_destruct_ms -= 1000;
-        }
 
-        this.emit(empire);
+            this.emit(empire);
+        }
     },
 
     onEmpireStatusUpdate : function(empire) {

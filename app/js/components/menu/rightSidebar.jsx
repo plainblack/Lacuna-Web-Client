@@ -1,6 +1,7 @@
 'use strict';
 
 var React               = require('react');
+var PureRenderMixin     = require('react-addons-pure-render-mixin');
 var Reflux              = require('reflux');
 var _                   = require('lodash');
 var $                   = require('js/shims/jquery');
@@ -8,7 +9,7 @@ var $                   = require('js/shims/jquery');
 var classNames          = require('classnames');
 
 var EmpireRPCStore      = require('js/stores/rpc/empire');
-var BodyRPCStore        = require('js/stores/rpc/body');
+var PlanetStore         = require('js/stores/menu/planet');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions          = require('js/actions/menu/map');
@@ -206,9 +207,9 @@ var BodiesAccordion = React.createClass({
                         var list = [];
 
                         if (item.isBaby) {
-                            list = this.props.bodies.babies[item.key].planets;
+                            list = _.values(this.props.bodies.babies[item.key].planets) || [];
                         } else {
-                            list = this.props.bodies[item.key] || [];
+                            list = _.values(this.props.bodies[item.key]) || [];
                         }
 
                         if (list.length > 0) {
@@ -233,8 +234,9 @@ var RightSidebar = React.createClass({
 
     mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
-        Reflux.connect(BodyRPCStore, 'body'),
-        Reflux.connect(RightSidebarStore, 'showSidebar')
+        Reflux.connect(PlanetStore, 'planet'),
+        Reflux.connect(RightSidebarStore, 'showSidebar'),
+        PureRenderMixin
     ],
 
     componentDidMount : function() {
@@ -330,7 +332,7 @@ var RightSidebar = React.createClass({
                 }}>
                     <BodiesAccordion
                         bodies={this.state.empire.bodies}
-                        currentBody={this.state.body.id}
+                        currentBody={this.state.planet}
                     />
                 </div>
             </div>
