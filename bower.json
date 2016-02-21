@@ -10,6 +10,6 @@
   "private": true,
   "dependencies": {
     "jquery": "2.1.4",
-    "semantic": "1.12.2"
+    "semantic": "semantic-ui#~2.1.8"
   }
 }

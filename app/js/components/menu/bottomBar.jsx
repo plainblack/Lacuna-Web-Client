@@ -156,12 +156,16 @@ var BottomBar = React.createClass({
         var server = this.state.server;
 
         return (
-            <div className="ui blue inverted icon menu" ref="bottombar" style={{
-                bottom   : 40,
-                zIndex   : 2000,
-                position : 'fixed',
-                margin   : 0
-            }}>
+            <div
+                className="ui blue inverted compact labeled icon menu small"
+                ref="bottombar"
+                style={{
+                    bottom   : 40,
+                    zIndex   : 2000,
+                    position : 'fixed',
+                    margin   : 0
+                }}
+            >
 
                 <BottomBarSection
                     ref="foodSection"

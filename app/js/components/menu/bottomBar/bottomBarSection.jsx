@@ -32,8 +32,7 @@ var BottomBarSection = React.createClass({
                 <i className={classnames(this.props.iconName, 'large icon')}></i>
 
                 <p style={{
-                    margin    : 0,
-                    marginTop : 5
+                    margin : 0
                 }}>
                     {this.props.topText}
                 </p>

@@ -36,21 +36,24 @@ var TopBar = React.createClass({
     },
 
     render : function() {
-        var barClass = classNames('ui inverted menu', {
+        var barClass = classNames('ui inverted compact small menu', {
             red  : this.state.empire.self_destruct_active,
             blue : !this.state.empire.self_destruct_active
         });
 
         return (
-            <div className={barClass} ref="bar" style={{
-                position : 'fixed',
-                margin   : 0,
-                zIndex   : 2000,
-                width    : 'auto',
-                height   : 'auto',
-                display  : 'inline-block',
-                top      : '15px'
-            }}>
+            <div
+                className={barClass}
+                ref="bar"
+                style={{
+                    position : 'fixed',
+                    margin   : 0,
+                    zIndex   : 2000,
+                    width    : 'auto',
+                    height   : 'auto',
+                    top      : 15
+                }}
+            >
 
                 <a className="item" data-tip={this.mapButtonTip()}
                     onClick={MapActions.toggleMapMode}>
@@ -62,7 +65,7 @@ var TopBar = React.createClass({
                     {
                         this.state.empire.has_new_messages > 0
                         ? (
-                            <div className="ui yellow circular label">
+                            <div className="ui yellow label">
                                 {this.state.empire.has_new_messages}
                             </div>
                         ) : ''
@@ -73,7 +76,7 @@ var TopBar = React.createClass({
                     WindowManagerActions.addWindow(windowTypes.essentia);
                 }}>
                     <i className="money big icon"></i>
-                    <div className="ui teal floated right circular label">
+                    <div className="ui teal label">
                         {this.state.empire.essentia}
                     </div>
                 </a>
