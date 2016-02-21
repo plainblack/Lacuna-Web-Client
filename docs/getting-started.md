@@ -14,6 +14,5 @@ If you...
 
 - haven't worked with React and Reflux before, try [Concepts](concepts.md)
 - haven't used Gulp before, try [Gulp Tasks](gulp-tasks.md)
-- haven't looked at any code yet, try [Conventions](conventions.md)
-- are experiencing difficulties, try [Important Notes](important-notes.md)
-- have no idea what to do now, [file an issue](https://github.com/plainblack/Lacuna-Web-Client/issues)
+- are ready to dive into the code, try [Important Notes](important-notes.md)
+- have no idea what to do now, [ask us!](https://github.com/plainblack/Lacuna-Web-Client/issues)

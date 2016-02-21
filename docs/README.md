@@ -23,6 +23,6 @@ This motley collection of markdown files attempts to document how a brave indivi
     - [Vex](modules/vex.md)
 - Components
     - [Tabber](components/tabber.md)
-    - Panel
 - Guides
     - Adding a Window
+    - Implementing a building
