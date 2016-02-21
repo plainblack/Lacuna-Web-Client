@@ -25,4 +25,4 @@ This motley collection of markdown files attempts to document how a brave indivi
     - [Tabber](components/tabber.md)
 - Guides
     - Adding a Window
-    - Implementing a building
+    - [Implementing a building](guides/implementing-a-building.md)
