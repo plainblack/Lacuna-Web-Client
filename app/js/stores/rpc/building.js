@@ -179,8 +179,6 @@ var BuildingRPCStore = Reflux.createStore({
             params  : [id],
             scope   : this,
             success : function(result) {
-                console.log(result);
-
                 this.handleNewData(result);
                 WindowManagerActions.hideTopWindow();
             }
