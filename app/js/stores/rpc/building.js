@@ -40,6 +40,7 @@ var BuildingRPCStore = Reflux.createStore({
             waste_capacity  : 0,
             happiness_hour  : 0,
             efficiency      : 0,
+            extraViewData   : {},
 
             repair_costs : {
                 food   : 0,
@@ -96,6 +97,20 @@ var BuildingRPCStore = Reflux.createStore({
         building.upgrade.cost.waste  = building.upgrade.cost.waste || 0;
         building.upgrade.cost.time   = building.upgrade.cost.time || 0;
         building.upgrade.cost.halls  = building.upgrade.cost.halls || 0;
+
+        // Any 'view' call that returns extra data (say, the Planetary Command Center) has that
+        // data put into 'building.extraViewData' so that it is accessible from the store.
+        var extraViewData = {};
+
+        _.each(result, function(value, key) {
+            if (key === 'status' || key === 'building') {
+                return;
+            }
+
+            extraViewData[key] = _.cloneDeep(value);
+        });
+
+        building.extraViewData = extraViewData;
 
         // Manually update the old planet map with the new data we got.
         YAHOO.lacuna.MapPlanet.ReloadBuilding(_.cloneDeep(building));

@@ -83,9 +83,7 @@
         require('js-yui/building/foodReserve');
         require('js-yui/building/geneticsLab');
         require('js-yui/building/intelligence');
-        require('js-yui/building/intelTraining');
         require('js-yui/building/libraryOfJith');
-        require('js-yui/building/mayhemTraining');
         require('js-yui/building/mercenariesGuild');
         require('js-yui/building/miningMinistry');
         require('js-yui/building/missionCommand');
@@ -94,14 +92,12 @@
         require('js-yui/building/oreStorage');
         require('js-yui/building/park');
         require('js-yui/building/planetaryCommand');
-        require('js-yui/building/politicsTraining');
         require('js-yui/building/security');
         require('js-yui/building/shipyard');
         require('js-yui/building/spacePort');
         require('js-yui/building/spaceStationLab');
         require('js-yui/building/subspaceSupplyDepot');
         require('js-yui/building/templeOfTheDrajilites');
-        require('js-yui/building/theftTraining');
         require('js-yui/building/themePark');
         require('js-yui/building/theDillonForge');
         require('js-yui/building/tradeMinistry');

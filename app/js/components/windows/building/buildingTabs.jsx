@@ -15,7 +15,11 @@ var ProductionTab    = require('js/components/windows/building/productionTab');
 var RepairTab        = require('js/components/windows/building/repairTab');
 
 var BUILDINGS = {
-    '/essentiavein' : require('js/components/buildings/essentiaVein')
+    '/essentiavein'     : require('js/components/buildings/essentiaVein'),
+    '/inteltraining'    : require('js/components/buildings/intelTraining'),
+    '/mayhemtraining'   : require('js/components/buildings/mayhemTraining'),
+    '/politicstraining' : require('js/components/buildings/politicsTraining'),
+    '/thefttraining'    : require('js/components/buildings/theftTraining')
 };
 
 var BuildingTabs = React.createClass({

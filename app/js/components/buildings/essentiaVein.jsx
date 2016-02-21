@@ -14,8 +14,6 @@ var essentiaVein = function(building) {
                 <DrainTab building={building} />
             </Tab>
         )];
-    } else {
-        return [];
     }
 };
 
