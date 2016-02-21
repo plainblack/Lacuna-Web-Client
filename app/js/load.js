@@ -91,7 +91,6 @@
         require('js-yui/building/missionCommand');
         require('js-yui/building/network19');
         require('js-yui/building/observatory');
-        require('js-yui/building/oracleOfAnid');
         require('js-yui/building/oreStorage');
         require('js-yui/building/park');
         require('js-yui/building/planetaryCommand');

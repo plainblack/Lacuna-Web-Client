@@ -38,7 +38,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/missioncommand": Lacuna.buildings.MissionCommand,
         "/network19": Lacuna.buildings.Network19,
         "/observatory": Lacuna.buildings.Observatory,
-        "/oracleofanid": Lacuna.buildings.OracleOfAnid,
         "/orestorage": Lacuna.buildings.OreStorage,
         "/park": Lacuna.buildings.Park,
         "/planetarycommand": Lacuna.buildings.PlanetaryCommand,

@@ -1425,42 +1425,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     }
                 }
             },
-            OracleOfAnid : {
-                "SMDVersion":"2.0",
-                "description": "Oracle of Anid",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/oracleofanid",
-
-                "services": {
-                    "get_star" : {
-                        "description": "Retrieves a single star",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"star_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         {
-                            "star" : {
-                                "name"          : "Sol",
-                                "color"         : "yellow",
-                                "x"             : -41,
-                                "y"             : 27,
-                                "bodies"        : [     # only added if a probe is present
-                                    {
-                                        same data as get_status() on /body
-                                    },
-                                    ...
-                                ]
-                            }
-                            "status" : { ... }
-                         }
-                        */
-                    }
-                }
-            },
             OreStorage : {
                 "SMDVersion":"2.0",
                 "description": "Ore Storage",
