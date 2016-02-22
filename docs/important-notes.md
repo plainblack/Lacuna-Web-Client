@@ -11,9 +11,8 @@ You can run `gulp lint` to make sure everything passes. However, it would be muc
 
 ## Dependency Versions
 
-The client here has a fair few dependencies. Usually, we're using the latest version of each dependency. However, there are two exceptions to this rule. The reasons for this are mostly "they put out breaking changes and we haven't adapted yet". The two dependencies in question are:
+The client here has a fair few dependencies. Usually, we're using the latest version of each dependency. However, there are a few exceptions to this rule. The reasons for this are pretty much "they put out breaking changes and we haven't adapted yet". The dependencies in question are:
 
-- Semantic UI version `1.12.x` - [docs](http://1.semantic-ui.com/)
 - Lodash version `3.x.x` - [docs](https://github.com/lodash/lodash/tree/3.10.1/doc)
 
 If you're looking for docs for those libraries, make sure to use the ones above rather than whatever Googling "xyz library docs" gets you.
