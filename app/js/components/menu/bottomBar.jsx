@@ -37,7 +37,8 @@ var BottomBar = React.createClass({
 
     showFoodToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.foodSection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="food"
@@ -50,7 +51,8 @@ var BottomBar = React.createClass({
 
     showOreToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.oreSection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="diamond"
@@ -63,7 +65,8 @@ var BottomBar = React.createClass({
 
     showWaterToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.waterSection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="theme"
@@ -76,7 +79,8 @@ var BottomBar = React.createClass({
 
     showEnergyToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.energySection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="lightning"
@@ -89,7 +93,8 @@ var BottomBar = React.createClass({
 
     showWasteToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.wasteSection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="trash"
@@ -102,7 +107,8 @@ var BottomBar = React.createClass({
 
     showHappinessToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.happinessSection)).popup({
-            html : ReactDOMServer.renderToStaticMarkup(
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
                 <ResourceToolTip
                     body={this.state.body}
                     icon="smile"
@@ -122,6 +128,7 @@ var BottomBar = React.createClass({
         $(ReactDOM.findDOMNode(this.refs.buildingCountSection)).popup({
             html      : ReactDOMServer.renderToStaticMarkup(<BuildingCountToolTip />),
             hoverable : true,
+            position  : 'top center',
             delay     : {
                 hide : 800
             }
@@ -134,6 +141,7 @@ var BottomBar = React.createClass({
         $(ReactDOM.findDOMNode(this.refs.buildQueueSection)).popup({
             html      : ReactDOMServer.renderToStaticMarkup(<BuildQueueToolTip body={body} />),
             hoverable : true,
+            position  : 'top center',
             delay     : {
                 hide : 800
             }
@@ -144,6 +152,7 @@ var BottomBar = React.createClass({
         $(ReactDOM.findDOMNode(this.refs.rpcCountSection)).popup({
             html      : ReactDOMServer.renderToStaticMarkup(<RpcCountToolTip />),
             hoverable : true,
+            position  : 'top center',
             delay     : {
                 hide : 800
             }
