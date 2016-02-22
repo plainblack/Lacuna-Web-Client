@@ -135,7 +135,7 @@ var SittersRPCStore = Reflux.createStore({
             module : 'empire',
             method : 'deauthorize_sitters',
             params : [{
-                empires : _.pluck(this.state, 'id')
+                empires : _.map(this.state, 'id')
             }],
             success : this.handleNewSitters,
             scope   : this

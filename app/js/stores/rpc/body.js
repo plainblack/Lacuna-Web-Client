@@ -145,6 +145,7 @@ var BodyRPCStore = Reflux.createStore({
 
         var updateShip = function(ship) {
             ship.arrival_ms = util.serverDateToMs(ship.date_arrives) - serverTimeMs;
+            return ship;
         };
 
         _.map(body.incoming_own_ships, updateShip);
@@ -166,6 +167,7 @@ var BodyRPCStore = Reflux.createStore({
 
         var tickIncoming = function(ship) {
             ship.arrival_ms -= 1000;
+            return ship;
         };
 
         _.map(body.incoming_own_ships, tickIncoming);

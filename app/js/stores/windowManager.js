@@ -27,7 +27,7 @@ var WindowManagerStore = Reflux.createStore({
 
     getTopLayerNumber : function(windows) {
         if (_.keys(windows).length) {
-            return _.max(_.pluck(windows, 'layer'));
+            return _.max(_.map(windows, 'layer'));
         } else {
             return 0;
         }

@@ -138,7 +138,7 @@ var AccordionItem = React.createClass({
                     display : this.state.open ? '' : 'none'
                 }}>
                     {
-                        _.map(this.props.list, function(planet) {
+                        _.map(this.props.list, _.bind(function(planet) {
                             return (
                                 <PlanetListItem
                                     key={planet.id}
@@ -150,7 +150,7 @@ var AccordionItem = React.createClass({
                                     currentBody={this.props.currentBody}
                                 />
                             );
-                        }, this)
+                        }, this))
                     }
                 </div>
             </div>
@@ -203,7 +203,7 @@ var BodiesAccordion = React.createClass({
         return (
             <div>
                 {
-                    _.map(items, function(item) {
+                    _.map(items, _.bind(function(item) {
                         var list = [];
 
                         if (item.isBaby) {
@@ -223,7 +223,7 @@ var BodiesAccordion = React.createClass({
                                 />
                             );
                         }
-                    }, this)
+                    }, this))
                 }
             </div>
         );

@@ -71,9 +71,9 @@ var BoostsRPCStore = Reflux.createStore({
     handleNewBoosts : function(result) {
         var boosts = clone(this.state);
 
-        _.each(BOOST_TYPES, function(type) {
+        _.each(BOOST_TYPES, _.bind(function(type) {
             boosts[type] = this.handleNewBoost(result.boosts[type]);
-        }, this);
+        }, this));
 
         this.emit(boosts);
     },
