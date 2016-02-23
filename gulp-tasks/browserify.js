@@ -19,7 +19,7 @@ function handleBundle(b, options) {
             );
             this.emit('end');
         })
-        .pipe(fs.createWriteStream(path.join(options.rootDir, 'lacuna/lacuna.js')));
+        .pipe(fs.createWriteStream(path.join(options.rootDir, 'lacuna/load.js')));
 };
 
 module.exports = function(options) {
