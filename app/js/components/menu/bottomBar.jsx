@@ -10,8 +10,6 @@ var BodyRPCStore         = require('js/stores/rpc/body');
 var ServerRPCStore       = require('js/stores/rpc/server');
 var EmpireRPCStore       = require('js/stores/rpc/empire');
 
-var centerBar            = require('js/components/mixin/centerBar');
-
 var BottomBarSection     = require('js/components/menu/bottomBar/bottomBarSection');
 
 var BuildingCountToolTip = require('js/components/menu/bottomBar/buildingCountToolTip');
@@ -26,8 +24,7 @@ var BottomBar = React.createClass({
     mixins : [
         Reflux.connect(BodyRPCStore, 'body'),
         Reflux.connect(ServerRPCStore, 'server'),
-        Reflux.connect(EmpireRPCStore, 'empire'),
-        centerBar('bottombar')
+        Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
     componentWillUnmount : function() {
@@ -166,112 +163,117 @@ var BottomBar = React.createClass({
 
         return (
             <div
-                className="ui blue inverted compact labeled icon menu small"
-                ref="bottombar"
+                className="ui centered grid"
                 style={{
-                    bottom   : 40,
                     zIndex   : 2000,
-                    position : 'fixed',
-                    margin   : 0
+                    position : 'relative',
+                    top      : 'calc(100vh - 175px)'
                 }}
             >
+                <div className="center aligned column">
+                    <div
+                        className="ui blue inverted compact labeled icon menu small"
+                        ref="bottombar"
+                    >
 
-                <BottomBarSection
-                    ref="foodSection"
-                    progressPercent={body.food_percent_full}
-                    iconName="food"
-                    topText={rn(body.food_stored) + ' / ' + rn(body.food_capacity)}
-                    bottomText={rn(body.food_hour) + ' / hr'}
-                    toolTipShow={this.showFoodToolTip}
-                />
-
-                <BottomBarSection
-                    ref="oreSection"
-                    progressPercent={body.ore_percent_full}
-                    iconName="diamond"
-                    topText={rn(body.ore_stored) + ' / ' + rn(body.ore_capacity)}
-                    bottomText={rn(body.ore_hour) + ' / hr'}
-                    toolTipShow={this.showOreToolTip}
-                />
-
-                <BottomBarSection
-                    ref="waterSection"
-                    progressPercent={body.water_percent_full}
-                    iconName="theme"
-                    topText={rn(body.water_stored) + ' / ' + rn(body.water_capacity)}
-                    bottomText={rn(body.water_hour) + ' / hr'}
-                    toolTipShow={this.showWaterToolTip}
-                />
-
-                <BottomBarSection
-                    ref="energySection"
-                    progressPercent={body.energy_percent_full}
-                    iconName="lightning"
-                    topText={rn(body.energy_stored) + ' / ' + rn(body.energy_capacity)}
-                    bottomText={rn(body.energy_hour) + ' / hr'}
-                    toolTipShow={this.showEnergyToolTip}
-                />
-
-                {
-                    this.state.body.type !== 'space station'
-                    ? (
                         <BottomBarSection
-                            ref="wasteSection"
-                            progressPercent={body.waste_percent_full}
-                            iconName="trash"
-                            topText={rn(body.waste_stored) + ' / ' + rn(body.waste_capacity)}
-                            bottomText={rn(body.waste_hour) + ' / hr'}
-                            toolTipShow={this.showWasteToolTip}
+                            ref="foodSection"
+                            progressPercent={body.food_percent_full}
+                            iconName="food"
+                            topText={rn(body.food_stored) + ' / ' + rn(body.food_capacity)}
+                            bottomText={rn(body.food_hour) + ' / hr'}
+                            toolTipShow={this.showFoodToolTip}
                         />
-                    )
-                    : ''
-                }
 
-                {
-                    this.state.body.type !== 'space station'
-                    ? (
                         <BottomBarSection
-                            ref="happinessSection"
-                            iconName="smile"
-                            topText={rn(body.happiness)}
-                            bottomText={rn(body.happiness_hour) + ' / hr'}
-                            toolTipShow={this.showHappinessToolTip}
+                            ref="oreSection"
+                            progressPercent={body.ore_percent_full}
+                            iconName="diamond"
+                            topText={rn(body.ore_stored) + ' / ' + rn(body.ore_capacity)}
+                            bottomText={rn(body.ore_hour) + ' / hr'}
+                            toolTipShow={this.showOreToolTip}
                         />
-                    )
-                    : ''
-                }
 
-                <BottomBarSection
-                    ref="buildingCountSection"
-                    iconName="block layout"
-                    topText={
-                        body.building_count + ' / ' + (body.building_count + body.plots_available)
-                    }
-                    bottomText={body.plots_available + ' Available'}
-                    toolTipShow={this.showBuildingCountToolTip}
-                />
+                        <BottomBarSection
+                            ref="waterSection"
+                            progressPercent={body.water_percent_full}
+                            iconName="theme"
+                            topText={rn(body.water_stored) + ' / ' + rn(body.water_capacity)}
+                            bottomText={rn(body.water_hour) + ' / hr'}
+                            toolTipShow={this.showWaterToolTip}
+                        />
 
-                <BottomBarSection
-                    ref="buildQueueSection"
-                    iconName="list"
-                    topText={
-                        body.build_queue_len + (
-                            body.type !== 'space station'
-                                ? ' / ' + body.build_queue_size
-                                : ''
-                        )
-                    }
-                    bottomText="Build Q"
-                    toolTipShow={this.showBuildQueueToolTip}
-                />
+                        <BottomBarSection
+                            ref="energySection"
+                            progressPercent={body.energy_percent_full}
+                            iconName="lightning"
+                            topText={rn(body.energy_stored) + ' / ' + rn(body.energy_capacity)}
+                            bottomText={rn(body.energy_hour) + ' / hr'}
+                            toolTipShow={this.showEnergyToolTip}
+                        />
 
-                <BottomBarSection
-                    ref="rpcCountSection"
-                    iconName="exchange"
-                    topText={empire.rpc_count + ' / ' + rn(server.rpc_limit)}
-                    bottomText="Actions"
-                    toolTipShow={this.showRpcCountToolTip}
-                />
+                        {
+                            this.state.body.type !== 'space station'
+                            ? (
+                                <BottomBarSection
+                                    ref="wasteSection"
+                                    progressPercent={body.waste_percent_full}
+                                    iconName="trash"
+                                    topText={rn(body.waste_stored) + ' / ' + rn(body.waste_capacity)}
+                                    bottomText={rn(body.waste_hour) + ' / hr'}
+                                    toolTipShow={this.showWasteToolTip}
+                                />
+                            )
+                            : ''
+                        }
+
+                        {
+                            this.state.body.type !== 'space station'
+                            ? (
+                                <BottomBarSection
+                                    ref="happinessSection"
+                                    iconName="smile"
+                                    topText={rn(body.happiness)}
+                                    bottomText={rn(body.happiness_hour) + ' / hr'}
+                                    toolTipShow={this.showHappinessToolTip}
+                                />
+                            )
+                            : ''
+                        }
+
+                        <BottomBarSection
+                            ref="buildingCountSection"
+                            iconName="block layout"
+                            topText={
+                                body.building_count + ' / ' + (body.building_count + body.plots_available)
+                            }
+                            bottomText={body.plots_available + ' Available'}
+                            toolTipShow={this.showBuildingCountToolTip}
+                        />
+
+                        <BottomBarSection
+                            ref="buildQueueSection"
+                            iconName="list"
+                            topText={
+                                body.build_queue_len + (
+                                    body.type !== 'space station'
+                                        ? ' / ' + body.build_queue_size
+                                        : ''
+                                )
+                            }
+                            bottomText="Build Q"
+                            toolTipShow={this.showBuildQueueToolTip}
+                        />
+
+                        <BottomBarSection
+                            ref="rpcCountSection"
+                            iconName="exchange"
+                            topText={empire.rpc_count + ' / ' + rn(server.rpc_limit)}
+                            bottomText="Actions"
+                            toolTipShow={this.showRpcCountToolTip}
+                        />
+                    </div>
+                </div>
             </div>
         );
     }
