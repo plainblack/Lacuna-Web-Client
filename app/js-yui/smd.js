@@ -2916,12 +2916,12 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "login" : {
                     "description": "login empire",
-                    "parameters": [
-                        {"name":"name", "type":"string", "optional":false},
-                        {"name":"password", "type":"string", "optional":false},
-                        {"name":"api_key", "type":"string", "optional":false},
-                        {"name":"browser", "type":"string", "optional":false}
-                    ],
+					"parameters": {
+						name:       {"type":"string", "optional":false},
+						password:   {"type":"string", "optional":false},
+						api_key:    {"type":"string", "optional":false},
+						browser:    {"type":"string", "optional":false}
+					},
                     "returns":{"type":"object"}
                 },
                 "fetch_captcha" : {

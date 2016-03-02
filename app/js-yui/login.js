@@ -104,7 +104,7 @@ if (typeof YAHOO.lacuna.Login == "undefined" || !YAHOO.lacuna.Login) {
             var EmpireServ = Game.Services.Empire;
             new Fingerprint2().get(_.bind(function(result){
             console.log("browser: "+result);
-            EmpireServ.login({name:this.elName.value, password:this.elPass.value, api_key:Lib.ApiKey, browser:result},{
+            EmpireServ.login( { name:this.elName.value, password:this.elPass.value, api_key:Lib.ApiKey, browser:result },{
                 success : function(o){
                     YAHOO.log(o, "info", "Login.handleLogin.success");
                     //clear the session just in case
