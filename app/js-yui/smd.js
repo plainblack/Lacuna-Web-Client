@@ -47,10 +47,10 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "get_buildings" : {
                     "description": "Retrieves a list of the buildings on a planet.",
-                    "parameters": [
-                        {"name":"session_id", "type":"string", "optional":false},
-                        {"name":"body_id", "type":"string", "optional":false}
-                    ],
+                    "parameters": {
+						session_id	: {"type":"string", "optional":false},
+						body_id		: {"type":"string", "optional":false}
+                    },
                     "returns":{"type":"object"}
                 },
                 "get_buildable" : {
