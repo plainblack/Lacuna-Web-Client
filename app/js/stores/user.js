@@ -30,7 +30,7 @@ var UserStore = Reflux.createStore({
         server.call({
             module  : 'empire',
             method  : 'logout',
-            params  : [],
+            params  : {},
             success : function() {
                 // Here be the traditional code to reset the game...
                 YAHOO.lacuna.Game.Reset();
