@@ -48,8 +48,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "get_buildings" : {
                     "description": "Retrieves a list of the buildings on a planet.",
                     "parameters": {
-						session_id	: {"type":"string", "optional":false},
-						body_id		: {"type":"string", "optional":false}
+                        session_id    : {"type":"string", "optional":false},
+                        body_id        : {"type":"string", "optional":false}
                     },
                     "returns":{"type":"object"}
                 },
@@ -2916,12 +2916,12 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "login" : {
                     "description": "login empire",
-					"parameters": {
-						name:       {"type":"string", "optional":false},
-						password:   {"type":"string", "optional":false},
-						api_key:    {"type":"string", "optional":false},
-						browser:    {"type":"string", "optional":false}
-					},
+                    "parameters": {
+                        name:       {"type":"string", "optional":false},
+                        password:   {"type":"string", "optional":false},
+                        api_key:    {"type":"string", "optional":false},
+                        browser:    {"type":"string", "optional":false}
+                    },
                     "returns":{"type":"object"}
                 },
                 "fetch_captcha" : {
@@ -2946,11 +2946,11 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "found" : {
                     "description": "found empire",
-                    "parameters": [
-                        {"name":"empire_id", "type":"string", "optional":false},
-                        {"name":"api_key", "type":"string", "optional":false},
-                        {"name":"invite_code", "type":"string", "optional":true}
-                    ],
+                    parameters : {
+                        empire_id   : {"type":"string", "optional":true},
+                        api_key     : {"type":"string", "optional":true},
+                        invite_code : {"type":"string", "optional":true}
+                    },
                     "returns":{"type":"object"}
                 },
                 "get_status" : {
@@ -3213,10 +3213,24 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "update_species" : {
                     "description": "Updates the empire's species.",
-                    "parameters": [
-                        {"name":"empire_id", "type":"string", "optional":false},
-                        {"name":"params", "type":"object", "optional":false}
-                    ],
+                    parameters : {
+                        empire_id               : {"type":"string", "optional":false},
+                        deception_affinity      : {"type":"string", "optional":false},
+                        description             : {"type":"string", "optional":false},
+                        environmental_affinity  : {"type":"string", "optional":false},
+                        farming_affinity        : {"type":"string", "optional":false},
+                        growth_affinity         : {"type":"string", "optional":false},
+                        management_affinity     : {"type":"string", "optional":false},
+                        manufacturing_affinity  : {"type":"string", "optional":false},
+                        max_orbit               : {"type":"string", "optional":false},
+                        min_orbit               : {"type":"string", "optional":false},
+                        mining_affinity         : {"type":"string", "optional":false},
+                        name                    : {"type":"string", "optional":false},
+                        political_affinity      : {"type":"string", "optional":false},
+                        research_affinity       : {"type":"string", "optional":false},
+                        science_affinity        : {"type":"string", "optional":false},
+                        trade_affinity          : {"type":"string", "optional":false}
+                    },
                     "returns":{"type":"string"}
                 },
                 "redefine_species_limits" : {
@@ -4065,4 +4079,3 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

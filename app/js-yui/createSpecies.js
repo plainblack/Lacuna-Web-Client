@@ -61,7 +61,8 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
                 return;
             }
             delete data.affinity_total;
-            EmpireServ.update_species({empire_id: this.empireId, params: data}, {
+			data.empire_id = this.empireId;
+            EmpireServ.update_species(data, {
                 success : function(o) {
                     YAHOO.log(o, "info", "CreateSpecies");
                     this._found();
@@ -112,7 +113,7 @@ if (typeof YAHOO.lacuna.CreateSpecies == "undefined" || !YAHOO.lacuna.CreateSpec
             this.elMessage.innerHTML = str;
         },
         show : function(empire) {
-            this.empireId = empire;
+            this.empireId = empire.empire_id;
             Game.OverlayManager.hideAll();
             this.Dialog.show();
             this.Dialog.center();
