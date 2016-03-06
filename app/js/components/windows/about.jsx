@@ -1,15 +1,15 @@
 'use strict';
 
-var React        = require('react');
+var React           = require('react');
 
-var AboutActions = require('js/actions/windows/about');
+var RpcStatsActions = require('js/actions/rpc/stats');
 
-var Tabber       = require('js/components/tabber');
-var Tabs         = Tabber.Tabs;
-var Tab          = Tabber.Tab;
+var Tabber          = require('js/components/tabber');
+var Tabs            = Tabber.Tabs;
+var Tab             = Tabber.Tab;
 
-var AboutTab     = require('js/components/windows/about/aboutTab');
-var CreditsTab   = require('js/components/windows/about/creditsTab');
+var AboutTab        = require('js/components/windows/about/aboutTab');
+var CreditsTab      = require('js/components/windows/about/creditsTab');
 
 var AboutWindow = React.createClass({
     statics : {
@@ -25,7 +25,7 @@ var AboutWindow = React.createClass({
                     <AboutTab />
                 </Tab>
 
-                <Tab title="Credits" onSelect={AboutActions.aboutLoad}>
+                <Tab title="Credits" onSelect={RpcStatsActions.requestGetCredits}>
                     <CreditsTab />
                 </Tab>
             </Tabs>
