@@ -9,7 +9,8 @@ var ServerRPCStore       = require('js/stores/rpc/server');
 
 var classNames           = require('classnames');
 
-var UserActions          = require('js/actions/user');
+var RpcEmpireActions     = require('js/actions/rpc/empire');
+
 var MapActions           = require('js/actions/menu/map');
 
 var WindowManagerActions = require('js/actions/windowManager');
@@ -106,7 +107,7 @@ var TopBar = React.createClass({
                             ) : ''
                         }
 
-                        <a className="item" data-tip="Sign Out" onClick={UserActions.userSignOut}>
+                        <a className="item" data-tip="Sign Out" onClick={RpcEmpireActions.requestRpcEmpireLogout}>
                             <i className="power big icon"></i>
                         </a>
                     </div>

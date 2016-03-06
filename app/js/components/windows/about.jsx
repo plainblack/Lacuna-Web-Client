@@ -25,7 +25,7 @@ var AboutWindow = React.createClass({
                     <AboutTab />
                 </Tab>
 
-                <Tab title="Credits" onSelect={RpcStatsActions.requestGetCredits}>
+                <Tab title="Credits" onSelect={RpcStatsActions.requestStatsGetCredits}>
                     <CreditsTab />
                 </Tab>
             </Tabs>
