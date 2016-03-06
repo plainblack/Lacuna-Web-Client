@@ -34,7 +34,7 @@ function makeEmpireCall(options) {
 RpcEmpireActions.requestRpcEmpireLogout.listen(function(o) {
     makeEmpireCall({
         method  : 'logout',
-        params  : [],
+        params  : {},
         success : 'successRpcEmpireLogout',
         error   : 'failureRpcEmpireLogout' 
     });
