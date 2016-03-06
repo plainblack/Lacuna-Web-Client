@@ -1916,7 +1916,7 @@ TextboxList
 }
 
 /* Semantic UI */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.2/semantic.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css');
 
 /* Stuff related to the Chat bar */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css');
@@ -1954,6 +1954,12 @@ input, textarea, select, option {
 /* Fix tooltips hiding behind things. */
 .__react_component_tooltip {
 	z-index: 2147483647 !important;
+    opacity: 1 !important;
+}
+
+/* Disabled buttons block pointer events (eg 'hover' for tooltips). We don't want that. */
+.ui.button.disabled {
+    pointer-events: all !important;
 }
 
 /* Make sure the old loading indicator is hidden */

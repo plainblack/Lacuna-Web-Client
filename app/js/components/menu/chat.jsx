@@ -13,11 +13,6 @@ var Chat = React.createClass({
     mixins : [
         Reflux.connect(ChatStore, 'show')
     ],
-    getInitialState : function() {
-        return {
-            show : false
-        };
-    },
     hasRenderedChat    : false,
     componentDidUpdate : function() {
 

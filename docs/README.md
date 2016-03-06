@@ -13,15 +13,16 @@ This motley collection of markdown files attempts to document how a brave indivi
 
 - [Getting Started](getting-started.md)
 - [Concepts](concepts.md)
-- [Conventions](conventions.md)
+- [Guidelines](guidelines.md)
 - [Important Notes](important-notes.md)
 - [Gulp tasks](gulp-tasks.md)
 - Modules
     - [Server](modules/server.md)
+    - [StatefulStore](modules/stateful-store.md)
     - Util
-    - Vex
+    - [Vex](modules/vex.md)
 - Components
     - [Tabber](components/tabber.md)
-    - Panel
 - Guides
     - Adding a Window
+    - [Implementing a building](guides/implementing-a-building.md)

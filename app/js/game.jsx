@@ -63,12 +63,12 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
                 // Give the React stuff somewhere to go.
                 var container = document.createElement('div');
-                container.id = 'mailGameContainer';
+                container.id = 'mainGameContainer';
                 body.appendChild(container);
 
                 ReactDom.render(
                     <GameWindow />,
-                    document.getElementById('mailGameContainer')
+                    document.getElementById('mainGameContainer')
                 );
 
                 require('js/actions/menu/loader').show();

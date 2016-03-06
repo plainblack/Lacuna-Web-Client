@@ -2,8 +2,12 @@
 
 var Reflux              = require('reflux');
 var _                   = require('lodash');
-var util                = require('js/util');
+var StatefulStore       = require('js/stores/mixins/stateful');
+
 var moment              = require('moment');
+
+var util                = require('js/util');
+var clone               = util.clone;
 
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
@@ -14,18 +18,22 @@ var ServerRPCStore = Reflux.createStore({
         TickerActions
     ],
 
-    init : function() {
-        this.data = this.getInitialState();
-    },
+    mixins : [
+        StatefulStore
+    ],
 
-    getInitialState : function() {
+    getDefaultData : function() {
         return {
-            time          : '01 31 2010 13:09:05 +0600',
-            version       : 123456789,
-            announcement  : 0,
-            promotions    : [],
-            rpc_limit     : 10000,
-            star_map_size : {
+            time                : '01 31 2010 13:09:05 +0600',
+            serverMoment        : moment(),
+            clientMoment        : moment(),
+            serverFormattedTime : '',
+            clientFormattedTime : '',
+            version             : 1.0000,
+            announcement        : 0,
+            promotions          : [],
+            rpc_limit           : 10000,
+            star_map_size       : {
                 x : [ -15, 15 ],
                 y : [ -15, 15 ],
                 z : [ -15, 15 ]
@@ -33,38 +41,51 @@ var ServerRPCStore = Reflux.createStore({
         };
     },
 
-    getData : function() {
-        return this.data;
-    },
-
-    onServerStatusUpdate : function(serverStatus) {
-        this.data = serverStatus;
+    onServerStatusUpdate : function(server) {
 
         // TODO: show announcement window if needed.
 
-//        this.data.serverMoment = util.serverDateToMoment(this.data.time).utcOffset(0);
-//        this.data.clientMoment = util.serverDateToMoment(this.data.time);
+        server.serverMoment = util.serverDateToMoment(server.time).utcOffset(0);
+        server.clientMoment = util.serverDateToMoment(server.time);
 
         // The server won't return the promotions block if there aren't any.
-        if (!this.data.promotions) {
-            this.data.promotions = [];
+        if (!server.promotions) {
+            server.promotions = [];
         }
 
-        this.data.promotions = _.map(this.data.promotions, this.handlePromotion);
-
-        this.trigger(this.data);
+        this.emit(server);
     },
 
     onServerStatusClear : function() {
-        this.data = this.getInitialState();
-        this.trigger(this.data);
+        this.emit(this.getDefaultData());
     },
 
-    handlePromotion : function(promotion) {
-        promotion.header = promotion.title || 'Awesome Promotion';
-        promotion.ends = moment().to(util.serverDateToMoment(promotion.end_date));
+    onTickerTick : function() {
+        var server = clone(this.state);
 
-        return promotion;
+        server.serverMoment        = server.serverMoment.add(1, 'second');
+        server.serverFormattedTime = util.formatMomentLong(server.serverMoment);
+
+        server.clientMoment        = server.clientMoment.add(1, 'second');
+        server.clientFormattedTime = util.formatMomentLong(server.clientMoment);
+
+        var now = Date.now();
+
+        server.promotions = _.chain(server.promotions)
+            .filter(function(promotion) {
+                // Note: date objects can be compared numeracally,
+                // see: http://stackoverflow.com/a/493018/1978973
+                return now < util.serverDateToDateObj(promotion.end_date);
+            })
+            .map(function(promotion) {
+                promotion.header = promotion.title;
+                promotion.ends = moment().to(util.serverDateToMoment(promotion.end_date));
+
+                return promotion;
+            })
+            .value();
+
+        this.emit(server);
     }
 });
 

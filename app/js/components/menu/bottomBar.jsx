@@ -1,284 +1,278 @@
 'use strict';
 
-var React          = require('react');
-var Reflux         = require('reflux');
-var $              = require('js/shims/jquery');
+var React                = require('react');
+var ReactDOM             = require('react-dom');
+var ReactDOMServer       = require('react-dom/server');
+var Reflux               = require('reflux');
+var $                    = require('js/shims/jquery');
 
-var Progress       = require('react-progress');
+var BodyRPCStore         = require('js/stores/rpc/body');
+var ServerRPCStore       = require('js/stores/rpc/server');
+var EmpireRPCStore       = require('js/stores/rpc/empire');
 
-var BodyRPCStore   = require('js/stores/rpc/body');
-var ServerRPCStore = require('js/stores/rpc/server');
-var EmpireRPCStore = require('js/stores/rpc/empire');
+var BottomBarSection     = require('js/components/menu/bottomBar/bottomBarSection');
 
-var centerBar      = require('js/components/mixin/centerBar');
+var BuildingCountToolTip = require('js/components/menu/bottomBar/buildingCountToolTip');
+var BuildQueueToolTip    = require('js/components/menu/bottomBar/buildQueueToolTip');
+var ResourceToolTip      = require('js/components/menu/bottomBar/resourceToolTip');
+var RpcCountToolTip      = require('js/components/menu/bottomBar/rpcCountToolTip');
 
-var util           = require('js/util');
-var int            = util.int;
-var Lib            = window.YAHOO.lacuna.Library;
-
-var storageStyle = {
-    margin    : 0,
-    marginTop : '5px'
-};
-
-var storageProgressStyle = {
-    position : 'absolute'
-};
+var util                 = require('js/util');
+var rn                   = util.reduceNumber;
 
 var BottomBar = React.createClass({
     mixins : [
         Reflux.connect(BodyRPCStore, 'body'),
         Reflux.connect(ServerRPCStore, 'server'),
-        Reflux.connect(EmpireRPCStore, 'empire'),
-        centerBar('bottombar')
+        Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
-    calcToolTip : function(info) {
-        var name = info.title || Lib.capitalizeFirstLetter(info.type);
-        var icon = info.icon || info.type;
-        var iconClass = info.iconClass || name;
-        var hour = this.state.body[info.type + '_hour'];
-        var store = this.state.body[info.type + '_stored'] || this.state.body[info.type] || 0;
-        var cap = this.state.body[info.type + '_capacity'];
-        var wantCap = typeof cap !== 'undefined';
-
-        return [
-            '<div><strong>', name, '</strong></div>',
-            '<div><img alt="" class="smallStorage" src="', Lib.AssetUrl, 'ui/s/storage.png" />', Lib.formatNumber(Math.round(store)), (wantCap ? ' / ' + Lib.formatNumber(cap) : ''), '</div>',
-            '<div><img alt="" class="small', iconClass, '" src="', Lib.AssetUrl, 'ui/s/', icon, '.png" /> ', Lib.formatNumber(hour), ' / hr</div>',
-                (wantCap
-                    ? '<div><img alt="" class="smallTime" src="' + Lib.AssetUrl + 'ui/s/time.png" />' + (
-                        hour < 0 && store > 0
-                            ? 'Empty In ' + Lib.formatTime(-3600 * store / hour)
-                            : hour >= 0 && cap === store
-                                ? 'Full'
-                                : hour > 0
-                                    ? 'Full In ' + Lib.formatTime(3600 * (cap - store) / hour)
-                                    : 'Will Never Fill'
-                    ) +
-                '</div>' : ''),
-            info.happy_boost
-        ].join('');
-
-    },
     componentWillUnmount : function() {
         // Destroy!
         $('div', this.refs.bottombar).popup('destroy');
     },
-    render : function() {
-        var This = this;
-        var happy_boost = 0;
-        // These numbers could be retrieved from the server, but for now, server changes
-        // must be duplicated here so that the formulas match.
-        if (this.state.body.happiness < 0) {
-            happy_boost = '<i class="caret down small icon" />-' + int(150 * Math.log(-this.state.body.happiness) / Math.log(1000) * 10) / 10;
-        } else if (this.state.body.happiness > 0) {
-            happy_boost = '<i class="caret up small icon" />' + int(4 * Math.log(this.state.body.happiness) / Math.log(1000) * 10) / 10;
-        }
-        happy_boost = [
-            '<div><img alt="" class="smallHappy" src="', Lib.AssetUrl, 'ui/s/build.png"/ > ', happy_boost, '%</div>',
-            '<div><i class="spy large icon" /> +', this.state.body.propaganda_boost, '%</div>'
-        ].join('');
 
-        var build_queue_help =
-            this.state.body.type === 'space station'
-            ? 'Build Queue: How many modules are queued to be built. Space stations do not have a build queue limit.'
-            : "Build Queue: How many <a target='_new' href='http://community.lacunaexpanse.com/wiki/development-ministry'>buildings are queued or can be queued</a>.";
+    showFoodToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.foodSection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="food"
+                    type="food"
+                    title="Food"
+                />
+            )
+        });
+    },
+
+    showOreToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.oreSection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="diamond"
+                    type="ore"
+                    title="Ore"
+                />
+            )
+        });
+    },
+
+    showWaterToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.waterSection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="theme"
+                    type="water"
+                    title="Water"
+                />
+            )
+        });
+    },
+
+    showEnergyToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.energySection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="lightning"
+                    type="energy"
+                    title="Energy"
+                />
+            )
+        });
+    },
+
+    showWasteToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.wasteSection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="trash"
+                    type="waste"
+                    title="Waste"
+                />
+            )
+        });
+    },
+
+    showHappinessToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.happinessSection)).popup({
+            position : 'top center',
+            html     : ReactDOMServer.renderToStaticMarkup(
+                <ResourceToolTip
+                    body={this.state.body}
+                    icon="smile"
+                    type="happiness"
+                    title="Happiness"
+                >
+                    <div>
+                        <i className="large spy icon"></i>
+                        {this.state.body.propaganda_boost}
+                    </div>
+                </ResourceToolTip>
+            )
+        });
+    },
+
+    showBuildingCountToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.buildingCountSection)).popup({
+            html      : ReactDOMServer.renderToStaticMarkup(<BuildingCountToolTip />),
+            hoverable : true,
+            position  : 'top center',
+            delay     : {
+                hide : 800
+            }
+        });
+    },
+
+    showBuildQueueToolTip : function() {
+        var body = this.state.body;
+
+        $(ReactDOM.findDOMNode(this.refs.buildQueueSection)).popup({
+            html      : ReactDOMServer.renderToStaticMarkup(<BuildQueueToolTip body={body} />),
+            hoverable : true,
+            position  : 'top center',
+            delay     : {
+                hide : 800
+            }
+        });
+    },
+
+    showRpcCountToolTip : function() {
+        $(ReactDOM.findDOMNode(this.refs.rpcCountSection)).popup({
+            html      : ReactDOMServer.renderToStaticMarkup(<RpcCountToolTip />),
+            hoverable : true,
+            position  : 'top center',
+            delay     : {
+                hide : 800
+            }
+        });
+    },
+
+    render : function() {
+        var body   = this.state.body;
+        var empire = this.state.empire;
+        var server = this.state.server;
 
         return (
-            <div className="ui blue inverted icon menu" ref="bottombar" style={{
-                bottom   : '40px',
-                zIndex   : '2000',
-                position : 'fixed',
-                margin   : 0
-            }}>
+            <div
+                className="ui centered grid"
+                style={{
+                    zIndex   : 2000,
+                    position : 'relative',
+                    top      : 'calc(100vh - 175px)'
+                }}
+            >
+                <div className="center aligned column">
+                    <div
+                        className="ui blue inverted compact labeled icon menu small"
+                        ref="bottombar"
+                    >
 
-                <div id="foodbar" className="item" onMouseEnter={function() {
-                    $('#foodbar').popup({
-                        html : This.calcToolTip({
-                            type : 'food'
-                        })
-                    });
-                }}>
-                    <Progress
-                        percent={this.state.body.food_percent_full}
-                        style={storageProgressStyle} />
-                    <i className="food large icon"></i>
-                    <p style={storageStyle} >
+                        <BottomBarSection
+                            ref="foodSection"
+                            progressPercent={body.food_percent_full}
+                            iconName="food"
+                            topText={rn(body.food_stored) + ' / ' + rn(body.food_capacity)}
+                            bottomText={rn(body.food_hour) + ' / hr'}
+                            toolTipShow={this.showFoodToolTip}
+                        />
+
+                        <BottomBarSection
+                            ref="oreSection"
+                            progressPercent={body.ore_percent_full}
+                            iconName="diamond"
+                            topText={rn(body.ore_stored) + ' / ' + rn(body.ore_capacity)}
+                            bottomText={rn(body.ore_hour) + ' / hr'}
+                            toolTipShow={this.showOreToolTip}
+                        />
+
+                        <BottomBarSection
+                            ref="waterSection"
+                            progressPercent={body.water_percent_full}
+                            iconName="theme"
+                            topText={rn(body.water_stored) + ' / ' + rn(body.water_capacity)}
+                            bottomText={rn(body.water_hour) + ' / hr'}
+                            toolTipShow={this.showWaterToolTip}
+                        />
+
+                        <BottomBarSection
+                            ref="energySection"
+                            progressPercent={body.energy_percent_full}
+                            iconName="lightning"
+                            topText={rn(body.energy_stored) + ' / ' + rn(body.energy_capacity)}
+                            bottomText={rn(body.energy_hour) + ' / hr'}
+                            toolTipShow={this.showEnergyToolTip}
+                        />
+
                         {
-                            util.reduceNumber(this.state.body.food_stored)
-                        } / {
-                            util.reduceNumber(this.state.body.food_capacity)
+                            this.state.body.type !== 'space station'
+                            ? (
+                                <BottomBarSection
+                                    ref="wasteSection"
+                                    progressPercent={body.waste_percent_full}
+                                    iconName="trash"
+                                    topText={rn(body.waste_stored) + ' / ' + rn(body.waste_capacity)}
+                                    bottomText={rn(body.waste_hour) + ' / hr'}
+                                    toolTipShow={this.showWasteToolTip}
+                                />
+                            )
+                            : ''
                         }
-                    </p>
-                    {util.reduceNumber(this.state.body.food_hour)} / hr
-                </div>
 
-                <div id="orebar" className="item" onMouseEnter={function() {
-                    $('#orebar').popup({
-                        html : This.calcToolTip({
-                            type : 'ore'
-                        })
-                    });
-                }}>
-                    <Progress
-                        percent={this.state.body.ore_percent_full}
-                        style={storageProgressStyle} />
-                    <i className="diamond large icon"></i>
-                    <p style={storageStyle}>
                         {
-                            util.reduceNumber(this.state.body.ore_stored)
-                        } / {
-                            util.reduceNumber(this.state.body.ore_capacity)
+                            this.state.body.type !== 'space station'
+                            ? (
+                                <BottomBarSection
+                                    ref="happinessSection"
+                                    iconName="smile"
+                                    topText={rn(body.happiness)}
+                                    bottomText={rn(body.happiness_hour) + ' / hr'}
+                                    toolTipShow={this.showHappinessToolTip}
+                                />
+                            )
+                            : ''
                         }
-                    </p>
-                    {util.reduceNumber(this.state.body.ore_hour)} / hr
-                </div>
 
-                <div id="waterbar" className="item" onMouseEnter={function() {
-                    $('#waterbar').popup({
-                        html : This.calcToolTip({
-                            type : 'water'
-                        })
-                    });
-                }}>
-                    <Progress
-                        percent={this.state.body.water_percent_full}
-                        style={storageProgressStyle} />
-                    <i className="theme large icon"></i>
-                    <p style={storageStyle}>
-                        {
-                            util.reduceNumber(this.state.body.water_stored)
-                        } / {
-                            util.reduceNumber(this.state.body.water_capacity)
-                        }
-                    </p>
-                    {util.reduceNumber(this.state.body.water_hour)} / hr
-                </div>
+                        <BottomBarSection
+                            ref="buildingCountSection"
+                            iconName="block layout"
+                            topText={
+                                body.building_count + ' / ' + (body.building_count + body.plots_available)
+                            }
+                            bottomText={body.plots_available + ' Available'}
+                            toolTipShow={this.showBuildingCountToolTip}
+                        />
 
-                <div id="energybar" className="item" onMouseEnter={function() {
-                    $('#energybar').popup({
-                        html : This.calcToolTip({
-                            type : 'energy'
-                        })
-                    });
-                }}>
-                    <Progress
-                        percent={this.state.body.energy_percent_full}
-                        style={storageProgressStyle} />
-                    <i className="lightning large icon"></i>
-                    <p style={storageStyle}>
-                        {
-                            util.reduceNumber(this.state.body.energy_stored)
-                        } / {
-                            util.reduceNumber(this.state.body.energy_capacity)
-                        }
-                    </p>
-                    {util.reduceNumber(this.state.body.energy_hour)} / hr
-                </div>
+                        <BottomBarSection
+                            ref="buildQueueSection"
+                            iconName="list"
+                            topText={
+                                body.build_queue_len + (
+                                    body.type !== 'space station'
+                                        ? ' / ' + body.build_queue_size
+                                        : ''
+                                )
+                            }
+                            bottomText="Build Q"
+                            toolTipShow={this.showBuildQueueToolTip}
+                        />
 
-                {
-                    this.state.body.type === 'space station'
-                    ? ''
-                    : (
-                        <div id="wastebar" className="item" onMouseEnter={function() {
-                            $('#wastebar').popup({
-                                html : This.calcToolTip({
-                                    type : 'waste'
-                                })
-                            });
-                        }}>
-                            <Progress
-                                percent={this.state.body.waste_percent_full}
-                                style={storageProgressStyle} />
-                            <i className="trash large icon"></i>
-                            <p style={storageStyle}>
-                                {
-                                    util.reduceNumber(this.state.body.waste_stored)
-                                } / {
-                                    util.reduceNumber(this.state.body.waste_capacity)
-                                }
-                            </p>
-                            {util.reduceNumber(this.state.body.waste_hour)} / hr
-                        </div>
-                    )
-                }
-
-                {
-                    this.state.body.type === 'space station'
-                    ? ''
-                    : (
-                        <div id="happybar" className="item" onMouseEnter={function() {
-                            $('#happybar').popup({
-                                html : This.calcToolTip({
-                                    type        : 'happiness',
-                                    iconClass   : 'Happy',
-                                    happy_boost : happy_boost
-                                })
-                            });
-                        }}>
-                            <i className="smile large icon"></i>
-                            <p style={storageStyle}>
-                                {util.reduceNumber(this.state.body.happiness)}
-                            </p>
-                            {util.reduceNumber(this.state.body.happiness_hour)} / hr
-                        </div>
-                    )
-                }
-
-                <div id="buildingcountbar" className="item" onMouseEnter={function() {
-                    $('#buildingcountbar').popup({
-                        html      : "Your current <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plot-using</a> building count, and how many <a target='_new' href='http://community.lacunaexpanse.com/wiki/plots'>plots</a> you have available.",
-                        hoverable : true,
-                        delay     : {
-                            hide : 800
-                        }
-                    });
-                }}>
-                    <i className="block layout large icon"></i>
-                    <p style={storageStyle}>
-                        {
-                            this.state.body.building_count
-                        } / {
-                            this.state.body.building_count + this.state.body.plots_available
-                        }
-                        <br />
-                        {this.state.body.plots_available} Available
-                    </p>
-                </div>
-
-                <div id="buildqueuebar" className="item" onMouseEnter={function() {
-                    $('#buildqueuebar').popup({
-                        html      : build_queue_help,
-                        hoverable : true,
-                        delay     : {
-                            hide : 800
-                        }
-                    });
-                }}>
-                    <i className="list large icon" />
-                    <p style={storageStyle}>
-                        {
-                            this.state.body.build_queue_len
-                        } {this.state.body.type === 'space station' ? '' : ' / ' + this.state.body.build_queue_size}
-                        <br /> Build Q
-                    </p>
-                </div>
-
-                <div id="rpcusagebar" className="item" onMouseEnter={function() {
-                    $('#rpcusagebar').popup({
-                        html      : "The <a target='_new' href= 'http://community.lacunaexpanse.com/wiki/rpc-limit'>RPC limit</a> is the number of requests you can send to the server in a 24 hour period.",
-                        hoverable : true,
-                        delay     : {
-                            hide : 800
-                        }
-                    });
-                }}>
-                    <i className="exchange large icon" />
-                    <p style={storageStyle}>
-                        {this.state.empire.rpc_count} / {util.reduceNumber(this.state.server.rpc_limit)}
-                        <br />Actions
-                    </p>
+                        <BottomBarSection
+                            ref="rpcCountSection"
+                            iconName="exchange"
+                            topText={empire.rpc_count + ' / ' + rn(server.rpc_limit)}
+                            bottomText="Actions"
+                            toolTipShow={this.showRpcCountToolTip}
+                        />
+                    </div>
                 </div>
             </div>
         );

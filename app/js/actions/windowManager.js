@@ -8,7 +8,8 @@ var WindowManagerActions = Reflux.createActions([
     'hideAllWindows',
     'removeWindow',
     'removeAllWindows',
-    'bringWindowToTop'
+    'bringWindowToTop',
+    'hideTopWindow'
 ]);
 
 module.exports = WindowManagerActions;

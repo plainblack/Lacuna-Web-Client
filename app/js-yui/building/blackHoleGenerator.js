@@ -2,7 +2,7 @@ YAHOO.namespace("lacuna.buildings");
 
 if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
            !YAHOO.lacuna.buildings.BlackHoleGenerator) {
-  
+
 (function(){
   var Lang = YAHOO.lang,
     Util = YAHOO.util,
@@ -16,7 +16,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
 
   var BlackHoleGenerator = function(result){
     BlackHoleGenerator.superclass.constructor.call(this, result);
-    
+
     this.service = Game.Services.Buildings.BlackHoleGenerator;
   };
   
@@ -34,7 +34,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       for (var i=1; i<=8; ++i) {
           orbits.push('<option value="' + i + '">' + i + '</option>');
       }
-      
+
       this.tab = new YAHOO.widget.Tab({ label: "Singularity", content: [
         '<div id="bhgContainer">',
         '  Target <select id="bhgTargetType">',
@@ -76,7 +76,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         '  </ul>',
         '</div>'
       ].join('')});
-	  
+
 	  this.tab.subscribe("activeChange", function(e) {
         if(e.newValue) {
           this.checkIfWorking();
@@ -111,17 +111,17 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       });
       Event.on("bhgGetActions", "click", this.bhgGetActions, this, true);
 	  Event.on("bhgCooldownSubsidize", "click", this.cooldownSubsidize, this, true);
-	  
+
       return this.tab;
     },
     bhgGetActions : function() {
       require('js/actions/menu/loader').show();
-      
+
       Dom.setStyle("bhgActions", "display", "none");
-      
+
       var type = Lib.getSelectedOptionValue("bhgTargetType"),
           target = {};
-      
+
       if(type == "xy") {
         target.x = Dom.get("bhgTargetX").value;
         target.y = Dom.get("bhgTargetY").value;
@@ -136,7 +136,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
         target.orbit = Dom.get("bhgTargetOrbit").value;
         Dom.get("bhgTargetNote").innerHTML = target[type];
       }
-      
+
       this.service.get_actions_for({
         session_id: Game.GetSession(),
         building_id: this.building.id,
@@ -155,19 +155,19 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           detailsParent = details.parentNode,
           li = document.createElement("li");
 
-        
+
       Event.purgeElement(details, true); //clear any events before we remove
       details = detailsParent.removeChild(details); //remove from DOM to make this faster
       details.innerHTML = "";
-      
+
       Dom.setStyle("bhgActions", "display", "");
       Dom.setStyle(detailsParent, "display", "");
       Dom.setStyle( Dom.get("bhgResult").parentNode, "display", "none");
-      
+
       if(actions.length === 0) {
         details.innerHTML = "No available actions for singularity.";
       }
-      else {        
+      else {
         for(var i=0; i<actions.length; i++) {
           var task = actions[i],
               nLi = li.cloneNode(false);
@@ -178,31 +178,31 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           else {
             waste_out = [ Lib.formatNumber(task.waste_cost/1000000000), 'B' ].join('');
           }
-          
+
           var canGenerate = 1;
           if ( task.success === 0 ) {
             canGenerate = 0;
           }
-          
+
           var typeSelector = "";
           if ( task.name === "Change Type" ) {
             var label = task.body_type == 'asteroid' ? 'Asteroid'
                       :                                'Planet';
-            
+
             typeSelector = '<select id="bhgChangeTypeSelect"><option value="">New '+label+' Type</option>';
-            
+
             var options = task.body_type == 'asteroid' ? this.result.task_options.asteroid_types
                         :                                this.result.task_options.planet_types;
-            
+
             for (var j=0; j<options.length; j++) {
               typeSelector = typeSelector + [
                 '<option value="', options[j], '">', options[j], '</option>'
               ].join('');
             }
-            
+
             typeSelector = typeSelector + '</select>';
           }
-          
+
           nLi.Task = task;
           nLi.innerHTML = [
             '<div class="yui-gd" style="margin-bottom:2px; border: 1px white solid; padding: 2px">',
@@ -226,16 +226,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
                    : '<b>',task.reason,'</b>',
             '  </div>',
             '</div>'].join('');
-          
+
           details.appendChild(nLi);
-          
+
           if ( task.success > 0 ) {
             Event.on(Sel.query("button[name=generate]", nLi, true),
                      "click",
                      this.bhgGenerate,
                      {Self:this, Target:target, Task:task, building_id: this.building_id},
                      true);
-			
+
 			Event.on(Sel.query("button[name=subsidize]", nLi, true),
                      "click",
                      this.bhgGenerate,
@@ -259,7 +259,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       var oSelf = this.Self,
         target = this.Target,
         task = this.Task;
-	  
+
       if (target) {
         var rpcParams = {
           session_id:Game.GetSession(),
@@ -267,24 +267,24 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           target:target,
           task_name:task.name
         };
-		
+
 		if (this.subsidize) {
 			rpcParams.subsidize = 1;
 		}
-        
+
         if (task.name === "Change Type") {
           var selectValue = Lib.getSelectedOptionValue("bhgChangeTypeSelect");
-          
+
           if ( selectValue == "" ) {
             alert("Please select Type");
             return;
           }
-          
+
           rpcParams.params = {
             newtype: selectValue
           };
         }
-        
+
         this.Self.service.generate_singularity(
           {params : rpcParams },
           {success : function(o){
@@ -300,16 +300,16 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       var details = Dom.get("bhgResult"),
         detailsParent = details.parentNode,
         li = document.createElement("li");
-        
+
       Event.purgeElement(details, true); //clear any events before we remove
       details = detailsParent.removeChild(details); //remove from DOM to make this faster
       details.innerHTML = "";
-      
+
       Dom.setStyle( Dom.get("bhgActionsAvail").parentNode, "display", "none");
-      
+
       Dom.setStyle(detailsParent, "display", "");
       detailsParent.appendChild(details); //add back as child
-      
+
       if (effect.fail) {
         var nLi = li.cloneNode(false);
         nLi.innerHTML = [ '<div class="yui-gd" style="margin-bottom:2px;">',
@@ -333,7 +333,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           details.appendChild(nLi);
         }
       }
-              
+
       //wait for tab to display first
       setTimeout(function() {
         var Ht = Game.GetSize().h - 250;
@@ -348,7 +348,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
           '    <label style="font-weight:bold;">',type,'</label>',
           '    <div>'
         ].join('');
-        
+
         if ( result.message === "Swapped Places" ) {
             out = out + [
                 result.message, ' with ', result.swapname,
@@ -385,9 +385,9 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
                 result.message, ' at ', result.name
             ].join('');
         }
-        
+
         out = out + '  </div></div></div>';
-        
+
         return out;
     },
 	checkIfWorking : function() {
@@ -417,7 +417,7 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
     },
 	cooldownSubsidize : function() {
       require('js/actions/menu/loader').show();
-      
+
       this.service.subsidize_cooldown({
         session_id:Game.GetSession(),
         building_id:this.building.id
@@ -436,11 +436,11 @@ if (typeof YAHOO.lacuna.buildings.BlackHoleGenerator == "undefined" ||
       });
     }
   });
-  
+
   YAHOO.lacuna.buildings.BlackHoleGenerator = BlackHoleGenerator;
 
 })();
-YAHOO.register("blackholegenerator", YAHOO.lacuna.buildings.BlackHoleGenerator, {version: "1", build: "0"}); 
+YAHOO.register("blackholegenerator", YAHOO.lacuna.buildings.BlackHoleGenerator, {version: "1", build: "0"});
 
 }
 

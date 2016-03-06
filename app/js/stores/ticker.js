@@ -10,48 +10,55 @@ var _               = require('lodash');
 
 var TickerActions   = require('js/actions/ticker');
 
+var StatefulStore   = require('js/stores/mixins/stateful');
+var clone           = require('js/util').clone;
+
+var INTERVAL_TIME   = 1000;
+
 var TickerStore = Reflux.createStore({
-    listenables : TickerActions,
 
-    init : function() {
-        this.data = this.getInitialState();
-    },
+    listenables : [
+        TickerActions
+    ],
 
-    getInitialState : function() {
+    mixins : [
+        StatefulStore
+    ],
+
+    getDefaultData : function() {
         return {
-            ticking      : false,
-            interval     : _.noop,
-            intervalTime : 1000,
-            clockTicks   : 0
+            ticking    : false,
+            interval   : _.noop,
+            clockTicks : 0
         };
-    },
-
-    reset : function() {
-        this.data.ticking = false;
-        this.data.interval = _.noop;
-        this.trigger(this.data);
     },
 
     tick : function() {
         TickerActions.tickerTick();
-        this.data.clockTicks += 1;
-        this.trigger(this.data);
+
+        var state = clone(this.state);
+
+        state.clockTicks += 1;
+
+        this.emit(state);
     },
 
     onTickerStart : function() {
-        if (!this.data.ticking) {
-            this.data.interval = setInterval(this.tick, this.data.intervalTime);
-            this.data.ticking = true;
+        if (!this.state.ticking) {
+            var state = clone(this.state);
+
+            state.interval = setInterval(this.tick, INTERVAL_TIME);
+            state.ticking = true;
+
+            this.emit(state);
         }
-        this.trigger(this.data);
     },
 
     onTickerStop : function() {
         if (this.ticking) {
-            clearInterval(this.data.interval);
-            this.reset();
+            clearInterval(this.state.interval);
+            this.emit(this.getDefaultData());
         }
-        this.trigger(this.data);
     }
 });
 

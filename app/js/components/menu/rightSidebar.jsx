@@ -1,6 +1,7 @@
 'use strict';
 
 var React               = require('react');
+var PureRenderMixin     = require('react-addons-pure-render-mixin');
 var Reflux              = require('reflux');
 var _                   = require('lodash');
 var $                   = require('js/shims/jquery');
@@ -8,7 +9,7 @@ var $                   = require('js/shims/jquery');
 var classNames          = require('classnames');
 
 var EmpireRPCStore      = require('js/stores/rpc/empire');
-var BodyRPCStore        = require('js/stores/rpc/body');
+var PlanetStore         = require('js/stores/menu/planet');
 
 var RightSidebarActions = require('js/actions/menu/rightSidebar');
 var MapActions          = require('js/actions/menu/map');
@@ -19,16 +20,16 @@ var PlanetListItem = React.createClass({
 
     propTypes : {
         name        : React.PropTypes.string.isRequired,
-        id          : React.PropTypes.string.isRequired,
-        currentBody : React.PropTypes.string.isRequired,
+        id          : React.PropTypes.number.isRequired,
+        currentBody : React.PropTypes.number.isRequired,
         zone        : React.PropTypes.string.isRequired
     },
 
     getInitialProps : function() {
         return {
             name        : '',
-            id          : '',
-            currentBody : '',
+            id          : 0,
+            currentBody : 0,
             zone        : ''
         };
     },
@@ -69,7 +70,7 @@ var AccordionItem = React.createClass({
 
     propTypes : {
         list          : React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        currentBody   : React.PropTypes.string.isRequired,
+        currentBody   : React.PropTypes.number.isRequired,
         title         : React.PropTypes.string.isRequired,
         initiallyOpen : React.PropTypes.bool.isRequired
     },
@@ -77,7 +78,7 @@ var AccordionItem = React.createClass({
     getInitialProps : function() {
         return {
             list          : [],
-            currentBody   : '',
+            currentBody   : 0,
             title         : '',
             initiallyOpen : false
         };
@@ -137,7 +138,7 @@ var AccordionItem = React.createClass({
                     display : this.state.open ? '' : 'none'
                 }}>
                     {
-                        _.map(this.props.list, function(planet) {
+                        _.map(this.props.list, _.bind(function(planet) {
                             return (
                                 <PlanetListItem
                                     key={planet.id}
@@ -149,7 +150,7 @@ var AccordionItem = React.createClass({
                                     currentBody={this.props.currentBody}
                                 />
                             );
-                        }, this)
+                        }, this))
                     }
                 </div>
             </div>
@@ -160,7 +161,7 @@ var AccordionItem = React.createClass({
 var BodiesAccordion = React.createClass({
     propTypes : {
         bodies      : React.PropTypes.object.isRequired,
-        currentBody : React.PropTypes.string.isRequired
+        currentBody : React.PropTypes.number.isRequired
     },
 
     render : function() {
@@ -202,13 +203,13 @@ var BodiesAccordion = React.createClass({
         return (
             <div>
                 {
-                    _.map(items, function(item) {
+                    _.map(items, _.bind(function(item) {
                         var list = [];
 
                         if (item.isBaby) {
-                            list = this.props.bodies.babies[item.key].planets;
+                            list = _.values(this.props.bodies.babies[item.key].planets) || [];
                         } else {
-                            list = this.props.bodies[item.key] || [];
+                            list = _.values(this.props.bodies[item.key]) || [];
                         }
 
                         if (list.length > 0) {
@@ -222,7 +223,7 @@ var BodiesAccordion = React.createClass({
                                 />
                             );
                         }
-                    }, this)
+                    }, this))
                 }
             </div>
         );
@@ -233,8 +234,9 @@ var RightSidebar = React.createClass({
 
     mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
-        Reflux.connect(BodyRPCStore, 'body'),
-        Reflux.connect(RightSidebarStore, 'showSidebar')
+        Reflux.connect(PlanetStore, 'planet'),
+        Reflux.connect(RightSidebarStore, 'showSidebar'),
+        PureRenderMixin
     ],
 
     componentDidMount : function() {
@@ -330,7 +332,7 @@ var RightSidebar = React.createClass({
                 }}>
                     <BodiesAccordion
                         bodies={this.state.empire.bodies}
-                        currentBody={this.state.body.id}
+                        currentBody={this.state.planet}
                     />
                 </div>
             </div>

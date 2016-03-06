@@ -1,6 +1,6 @@
 YAHOO.namespace("lacuna");
 if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
-        
+
 (function(){
     var smd = {
         Alliance : {
@@ -173,7 +173,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/archaeology",
-                
+
                 "services": {
                     "search_for_glyph" : {
                         "description": "Searches through ore looking for glyphs left behind by the ancient race. Takes 10,000 of one type of ore to search.",
@@ -287,7 +287,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"} //status
                     }
-                    
+
                 }
             },
             BlackHoleGenerator : {
@@ -296,7 +296,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/blackholegenerator",
-                
+
                 "services": {
                     "get_actions_for" : {
                         "description": "Provides a list of actions that the BHG can do. Use with generate_singularity.",
@@ -330,7 +330,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/capitol",
-                
+
                 "services": {
                     "rename_empire" : {
                         "description": "Spend some essentia to rename your empire.",
@@ -349,7 +349,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/development",
-                
+
                 "services": {
                     "subsidize_one_build" : {
                         "description": "Instantly finish any one building on the build queue.",
@@ -377,7 +377,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/distributioncenter",
-                
+
                 "services": {
                     "reserve" : {
                         "description": "",
@@ -412,7 +412,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/embassy",
-                
+
                 "services": {
                     "create_alliance" : {
                         "description": "Create a new alliance. Returns the same output as get_alliance_status.",
@@ -445,7 +445,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         # dissolve_alliance ( session_id, building_id )
 
                             * session_id
-                            * building_id 
+                            * building_id
                         */
                         "returns":{"type":"object"}
                         /*
@@ -464,7 +464,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         # get_alliance_status ( session_id, building_id )
 
                             * session_id
-                            * building_id 
+                            * building_id
                         */
                         "returns":{"type":"object"}
                         /*
@@ -503,7 +503,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             * session_id
                             * building_id
                             * invitee_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -526,7 +526,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             * session_id
                             * building_id
                             * invite_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -549,7 +549,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             * session_id
                             * building_id
                             * invite_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -572,7 +572,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             * session_id
                             * building_id
                             * invite_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -591,7 +591,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         # get_pending_invites ( session_id, building_id )
 
                             * session_id
-                            * building_id 
+                            * building_id
                         */
                         "returns":{"type":"object"}
                         /*
@@ -618,7 +618,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         # get_my_invites ( session_id, building_id )
 
                             * session_id
-                            * building_id 
+                            * building_id
                         */
                         "returns":{"type":"object"}
                         /*
@@ -647,7 +647,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
                             * session_id
                             * building_id
-                            * new_leader_id 
+                            * new_leader_id
                         */
                         "returns":{"type":"object"}
                         /*
@@ -668,7 +668,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
                             * session_id
                             * building_id
-                            * params 
+                            * params
                                 - forum_uri
                                 - description
                                 - announcements
@@ -692,7 +692,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 
                             * session_id
                             * building_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -715,7 +715,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             * session_id
                             * building_id
                             * empire_id
-                            * message 
+                            * message
                         */
                         "returns":{"type":"object"}
                         /*
@@ -796,7 +796,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/entertainment",
-                
+
                 "services": {
                     "get_lottery_voting_options" : {
                         "description": "This is the starting point to a voting lottery system. The user can vote on a site once and only once per day and each vote enters him/her into a lottery. At the end of the day a lottery ticket will be drawn, and a winner will be chosen to receive 10 essentia. Every vote is equal, but the more votes you have the greater your odds of winning.",
@@ -828,32 +828,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     }
                 }
             },
-            EssentiaVein : {
-                "SMDVersion":"2.0",
-                "description": "Essentia Vein",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/essentiavein",
-
-                "services": {
-                    "drain" : {
-                        "description": "Drain the evein for an immediate, but smaller, amount of Essentia.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"times", "type":"number", "optional":true},
-                        ],
-                        "returns":{"type":"object"},
-                    }
-                }
-            },
             Exchanger : {
                 "SMDVersion":"2.0",
                 "description": "Waste Exchanger",
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/wasteexchanger",
-                
+
                 "services": {
                     "recycle" : {
                         "description": "Converts waste into water, ore, and energy. You can choose which amounts of each you want, so long as their total does not go over the amount of waste you have on hand. For each unit of waste converted, the recycling center will take 1 second to complete the recycling process. However, the amount of time is reduced a bit by the level of the Waste Exchanger.",
@@ -1035,32 +1016,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     }
                 }
             },
-            IntelTraining : {
-                "SMDVersion":"2.0",
-                "description": "Intel Training",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/inteltraining",
-
-                "services": {
-                    "train_spy" : {
-                        "description": "Allows you to train an idle spy in the ways of intelligence gathering.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"spy_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { get_status() },
-                            "trained" : 3,
-                            "not_trained" : 2
-                         }
-                        */
-                    }
-                }
-            },
             LibraryOfJith : {
                 "SMDVersion":"2.0",
                 "description": "Library Of Jith",
@@ -1076,32 +1031,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"empire_id", "type":"string", "optional":false}
                         ]
-                    }
-                }
-            },
-            MayhemTraining : {
-                "SMDVersion":"2.0",
-                "description": "Mayhem Training",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/mayhemtraining",
-
-                "services": {
-                    "train_spy" : {
-                        "description": "Allows you to train an idle spy in the art of destruction.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"spy_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { get_status() },
-                            "trained" : 3,
-                            "not_trained" : 2
-                         }
-                        */
                     }
                 }
             },
@@ -1247,7 +1176,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                     "monazite_hour" : 10,
                                     "fluorite_hour" : 10,
                                     "beryl_hour" : 10,
-                                    "magnetite_hour" : 10,  
+                                    "magnetite_hour" : 10,
                                     "production_capacity" : 100, # expressed as a percentage
                                     "shipping_capacity" : 51 # expressed as a percentage
                                 },
@@ -1438,44 +1367,8 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                             "y" : 4,
                                             "z" : -3,
                                             "alignments" : "self-hostile"
-                                    ]       
+                                    ]
                              }
-                        */
-                    }
-                }
-            },
-            OracleOfAnid : {
-                "SMDVersion":"2.0",
-                "description": "Oracle of Anid",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/oracleofanid",
-
-                "services": {
-                    "get_star" : {
-                        "description": "Retrieves a single star",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"star_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         { 
-                            "star" : {
-                                "name"          : "Sol",
-                                "color"         : "yellow",
-                                "x"             : -41,
-                                "y"             : 27,
-                                "bodies"        : [     # only added if a probe is present
-                                    {
-                                        same data as get_status() on /body
-                                    },
-                                    ...
-                                ]
-                            }    
-                            "status" : { ... }
-                         }
                         */
                     }
                 }
@@ -1566,39 +1459,13 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     }
                 }
             },
-            PoliticsTraining : {
-                "SMDVersion":"2.0",
-                "description": "Politics Training",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/politicstraining",
-
-                "services": {
-                    "train_spy" : {
-                        "description": "The Politics Training Facility is where you train your spies in the dark art of social engineering.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"spy_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { get_status() },
-                            "trained" : 3,
-                            "not_trained" : 2
-                         }
-                        */
-                    }
-                }
-            },
             Recycler : {
                 "SMDVersion":"2.0",
                 "description": "Waste Recycler",
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/wasterecycling",
-                
+
                 "services": {
                     "recycle" : {
                         "description": "Converts waste into water, ore, and energy. You can choose which amounts of each you want, so long as their total does not go over the amount of waste you have on hand. For each unit of waste converted, the recycling center will take 1 second to complete the recycling process. However, the amount of time is reduced a bit by the level of the Recycling Center.",
@@ -1935,7 +1802,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                 "spies_not_sent" : ["id-goes-here","id-goes-here","id-goes-here"],
                                 "status" : { ... }
                             }
-                         * 
+                         *
                         */
                     },
 
@@ -2025,7 +1892,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         * session_id
                         * building_id
                         * ship_id
-                        * name 
+                        * name
                         */
                     },
                     "recall_ship" : {
@@ -2045,7 +1912,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
-                    
+
                     "scuttle_ship" : {
                         "description": "Destroy a ship that you no longer need. It must be docked to scuttle it.",
                         "parameters": [
@@ -2109,7 +1976,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                    "type" : "star",
                                    "name" : "Sol"
                                 }
-                            }  
+                            }
                          }
                         */
                     },
@@ -2263,7 +2130,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 "envelope":"JSON-RPC-2.0",
                 "transport":"POST",
                 "target":"/subspacesupplydepot",
-                
+
                 "services": {
                     "transmit_food" : {
                         "description": "Convert 3600 seconds into 3600 food.",
@@ -2330,32 +2197,6 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                             {"name":"building_id", "type":"string", "optional":false},
                             {"name":"planet_id", "type":"string", "optional":false}
                         ]
-                    }
-                }
-            },
-            TheftTraining : {
-                "SMDVersion":"2.0",
-                "description": "Theft Training",
-                "envelope":"JSON-RPC-2.0",
-                "transport":"POST",
-                "target":"/thefttraining",
-
-                "services": {
-                    "train_spy" : {
-                        "description": "The Theft Training Facility is where you train your spies in the art of appropriation.",
-                        "parameters": [
-                            {"name":"session_id", "type":"string", "optional":false},
-                            {"name":"building_id", "type":"string", "optional":false},
-                            {"name":"spy_id", "type":"string", "optional":false}
-                        ],
-                        "returns":{"type":"object"}
-                        /*
-                         {
-                            "status" : { get_status() },
-                            "trained" : 3,
-                            "not_trained" : 2
-                         }
-                        */
                     }
                 }
             },
@@ -3191,7 +3032,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         {"name":"name", "type":"string", "optional":false}
                     ],
                     "returns":{"type":"object"}
-                    /* 
+                    /*
                      {
                         "empires" : {
                             "id-goes-here" : "Lacuna Expanse Corp",
@@ -3430,7 +3271,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
             "envelope":"JSON-RPC-2.0",
             "transport":"POST",
             "target":"/captcha",
-            
+
             "services": {
                 "fetch" : {
                     "description": "Retrieves a captcha that is required in order to call the solve method.",
@@ -3457,7 +3298,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
             "envelope":"JSON-RPC-2.0",
             "transport":"POST",
             "target":"/inbox",
-            
+
             "services": {
 
                 /* This is the return for all view_* functions
@@ -3593,7 +3434,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         }
                     */
                 }
-            
+
             }
         },
         Map : {
@@ -3621,7 +3462,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     ],
                     "returns":{"type":"object"}
                     /*
-                     { 
+                     {
                         "star" : {
                             "name"          : "Sol",
                             "color"         : "yellow",
@@ -3633,7 +3474,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                                 },
                                 ...
                             ]
-                        }    
+                        }
                         "status" : { ... }
                      }
                     */
@@ -3655,7 +3496,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     ],
                     "returns":{"type":"object"}
                     /*
-                     { 
+                     {
                         "stars" : [
                             {
                                 "name"          : "Sol",
@@ -3705,7 +3546,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     ],
                     "returns":{"type":"number"}
                     /*
-                     { 
+                     {
                         "stars" : [
                             {
                                 "name"          : "Sol",
@@ -3873,7 +3714,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                         ],
                         "returns":{"type":"object"}
                     },
-                    
+
                     "propose_rename_uninhabited" : {
                         "description": "",
                         "parameters": [
@@ -4077,7 +3918,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
             "envelope":"JSON-RPC-2.0",
             "transport":"POST",
             "target":"/stats",
-            
+
             "services": {
 
                 "credits" : {
@@ -4085,7 +3926,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                     "parameters": [],
                     "returns":{"type":"array"}
                 },
-                
+
                 "empire_rank" : {
                     "description": "Returns a sorted list of empires ranked according to various stats.",
                     "parameters": [
@@ -4139,7 +3980,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                      }
                     */
                 },
-                
+
                 "colony_rank" : {
                     "description": "Returns a sorted list of planets ranked according to various stats.",
                     "parameters": [
@@ -4177,7 +4018,7 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                      {
                         "status" : { ... },
                         "spies" : [
-                            {            
+                            {
                                 "empire_id" : "id-goes-here",                   # unique id
                                 "empire_name" : "Earthlings",                   # empire name
                                 "spy_id" : "id-goes-here",                      # unique id
@@ -4214,14 +4055,14 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                      }
                     */
                 }
-        
+
             }
         }
     };
 
     YAHOO.lacuna.SMD = { Services:smd };
 })();
-YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"}); 
+YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"});
 
 }
 // vim: noet:ts=4:sw=4

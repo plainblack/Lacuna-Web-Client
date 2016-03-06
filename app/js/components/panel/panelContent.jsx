@@ -30,7 +30,8 @@ var PanelContent = React.createClass({
                     overflow  : 'auto',
                     overflowX : 'hidden',
                     height    : this.props.panelHeight,
-                    padding   : '5px'
+                    padding   : '5px',
+                    boxSizing : 'border-box'
                 }}>
                     {this.props.children}
                 </div>

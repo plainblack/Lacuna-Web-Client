@@ -14,8 +14,9 @@ var GetEssentiaTab  = require('js/components/windows/essentia/getEssentiaTab');
 var EssentiaWindow = React.createClass({
     statics : {
         windowOptions : {
-            title : 'Essentia',
-            width : 600
+            title  : 'Essentia',
+            width  : 600,
+            height : 350
         }
     },
 

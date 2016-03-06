@@ -18,10 +18,10 @@ var WindowManager = React.createClass({
     render : function() {
         var keys = _.keys(this.state.windows);
 
-        var windows = _.map(keys, function(key) {
+        var windows = _.map(keys, _.bind(function(key) {
             var theWindow = this.state.windows[key];
             return <Window window={theWindow} key={key} />;
-        }, this);
+        }, this));
 
         return (
             <ReactCSSTransitionGroup

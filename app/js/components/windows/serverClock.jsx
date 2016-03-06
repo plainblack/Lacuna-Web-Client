@@ -3,7 +3,6 @@
 var React              = require('react');
 var Reflux             = require('reflux');
 
-var ServerTimeRPCStore = require('js/stores/rpc/server/time');
 var ServerRPCStore     = require('js/stores/rpc/server');
 var TickerStore        = require('js/stores/ticker');
 
@@ -16,7 +15,7 @@ var ServerClockWindow = React.createClass({
     statics : {
         windowOptions : {
             title  : 'Server Clock',
-            width  : 300,
+            width  : 330,
             height : 'auto'
         }
     },
@@ -24,9 +23,22 @@ var ServerClockWindow = React.createClass({
     render : function() {
         return (
             <div>
-                <p><strong>Server:</strong> {ServerTimeRPCStore.getCurrentServerTimeFormatted()}</p>
-                <p><strong>Here:</strong> {ServerTimeRPCStore.getCurrentClientTimeFormatted()}</p>
-                <p>{this.state.ticker.time}</p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>Server</strong></td>
+                            <td>{this.state.server.serverFormattedTime}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Client</strong></td>
+                            <td>{this.state.server.clientFormattedTime}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tick Count</strong></td>
+                            <td>{this.state.ticker.clockTicks}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         );
     }

@@ -41,9 +41,8 @@ var GetEssentiaTab = React.createClass({
                 <h3>OR</h3>
 
                 <div className="ui large fluid action input">
-                    <input type="text" placeholder="Essentia code" ref="code">
-                        <button className="ui blue button" onClick={this.redeem}>Redeem</button>
-                    </input>
+                    <input type="text" placeholder="Essentia code" ref="code" />
+                    <button className="ui blue button" onClick={this.redeem}>Redeem</button>
                 </div>
 
                 <h3>OR</h3>

@@ -10,7 +10,4 @@ bower_components/
 # Built JS and CSS files.
 lacuna/
 
-# Cache to speed up the build process.
-browserify-cache.json
-
 index.html

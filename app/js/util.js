@@ -1,6 +1,8 @@
 'use strict';
 
 var moment = require('moment');
+var $      = require('js/shims/jquery');
+var _      = require('lodash');
 
 var xPad = function(x, pad, r) {
     if (typeof r === 'undefined') {
@@ -105,4 +107,38 @@ module.exports.serverDateToMoment = function(str) {
 
 module.exports.formatMomentLong = function(theMoment) {
     return theMoment.format('dddd, Do MMMM HH:mm:ss ZZ');
+};
+
+module.exports.clone = function(obj) {
+    return $.extend(true, {}, obj);
+};
+
+module.exports.commify = function(num) {
+    if (!num) {
+        return '';
+    }
+
+    return Number(num).toLocaleString();
+};
+
+var handleString = function(string) {
+    if (window.isNaN(string)) {
+        return string;
+    } else {
+        return string * 1;
+    }
+};
+
+var handleObj = function(obj) {
+    if (_.isString(obj)) {
+        return handleString(obj);
+    } else if (_.isObject(obj)) { // NOTE: isObject returns true for arrays.
+        return _.mapValues(obj, handleObj);
+    } else {
+        return obj;
+    }
+};
+
+module.exports.fixNumbers = function(data) {
+    return _.mapValues(data, handleObj);
 };

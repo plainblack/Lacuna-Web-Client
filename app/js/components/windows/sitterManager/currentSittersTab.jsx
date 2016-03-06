@@ -22,14 +22,10 @@ var CurrentSittersTab = React.createClass({
     },
 
     deauthorizeAll : function() {
-        vex.confirm({
-            message  : "Are you sure you want to revoke everyone's access to your empire?",
-            callback : function(value) {
-                if (value) {
-                    SitterManagerActions.deauthorizeAll();
-                }
-            }
-        });
+        vex.confirm(
+            "Are you sure you want to revoke everyone's access to your empire?",
+            SitterManagerActions.deauthorizeAll
+        );
     },
 
     render : function() {
@@ -59,7 +55,7 @@ var CurrentSittersTab = React.createClass({
                 >
                     {
                         _.map(this.state.sitters, function(sitter) {
-                            return <SitterListItem sitter={sitter} />;
+                            return <SitterListItem key={sitter.id} sitter={sitter} />;
                         })
                     }
                 </div>

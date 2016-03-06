@@ -40,7 +40,12 @@ var Tabs = React.createClass({
         var i   = 0;
 
         React.Children.forEach(this.props.children, function(child) {
-            if (typeof child.props.onSelect === 'function') {
+
+            if (!child) {
+                return;
+            }
+
+            if (child.props && typeof child.props.onSelect === 'function') {
                 obj[i] = child.props.onSelect;
             }
 
@@ -63,7 +68,7 @@ var Tabs = React.createClass({
         var tabContents = [];
 
         React.Children.forEach(this.props.children, function(child) {
-            if (child.props.title && child.props.children) {
+            if (child.props && child.props.title && child.props.children) {
                 tabTitles.push(child.props.title);
                 tabContents.push(child.props.children);
             }

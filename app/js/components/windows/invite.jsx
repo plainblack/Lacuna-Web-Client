@@ -71,9 +71,8 @@ var InviteWindow = React.createClass({
                 <div className="ui divider"></div>
 
                 <div className="ui fluid action input" ref="referralContainer">
-                    <input type="text" readOnly placeholder="Referal link" ref="referral">
-                        <button className="ui blue button" onClick={this.genLink}>Generate</button>
-                    </input>
+                    <input type="text" readOnly placeholder="Referal link" ref="referral" />
+                    <button className="ui blue button" onClick={this.genLink}>Generate</button>
                 </div>
             </div>
         );

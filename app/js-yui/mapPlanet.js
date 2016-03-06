@@ -2,6 +2,9 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
+var WindowManagerActions = require('js/actions/windowManager');
+var windowTypes = require('js/windowTypes');
+
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
 (function(){
@@ -24,29 +27,23 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/embassy": Lacuna.buildings.Embassy,
         "/energyreserve": Lacuna.buildings.EnergyReserve,
         "/entertainment": Lacuna.buildings.Entertainment,
-        "/essentiavein": Lacuna.buildings.EssentiaVein,
         "/foodreserve": Lacuna.buildings.FoodReserve,
         "/geneticslab": Lacuna.buildings.GeneticsLab,
         "/intelligence": Lacuna.buildings.Intelligence,
-        "/inteltraining": Lacuna.buildings.IntelTraining,
         "/libraryofjith": Lacuna.buildings.LibraryOfJith,
-        "/mayhemtraining": Lacuna.buildings.MayhemTraining,
         "/mercenariesguild": Lacuna.buildings.MercenariesGuild,
         "/miningministry": Lacuna.buildings.MiningMinistry,
         "/missioncommand": Lacuna.buildings.MissionCommand,
         "/network19": Lacuna.buildings.Network19,
         "/observatory": Lacuna.buildings.Observatory,
-        "/oracleofanid": Lacuna.buildings.OracleOfAnid,
         "/orestorage": Lacuna.buildings.OreStorage,
         "/park": Lacuna.buildings.Park,
         "/planetarycommand": Lacuna.buildings.PlanetaryCommand,
-        "/politicstraining": Lacuna.buildings.PoliticsTraining,
         "/security": Lacuna.buildings.Security,
         "/shipyard": Lacuna.buildings.Shipyard,
         "/spaceport": Lacuna.buildings.SpacePort,
         "/ssla": Lacuna.buildings.SpaceStationLab,
         "/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
-        "/thefttraining": Lacuna.buildings.TheftTraining,
         "/themepark": Lacuna.buildings.ThemePark,
         "/thedillonforge": Lacuna.buildings.TheDillonForge,
         "/templeofthedrajilites": Lacuna.buildings.TempleOfTheDrajilites,
@@ -869,6 +866,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         },
         DetailsView : function(tile) {
             //YAHOO.log(tile, "info", "DetailsView");
+
+            if (!FactoryMap[tile.data.url]) {
+                // Pass this off to the new React stuff.
+
+                WindowManagerActions.addWindow(windowTypes.building, tile.data);
+
+                return;
+            }
 
             require('js/actions/menu/loader').show();
 

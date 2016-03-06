@@ -2,14 +2,16 @@
 
 var Reflux              = require('reflux');
 var _                   = require('lodash');
+var StatefulStore       = require('js/stores/mixins/stateful');
 
 var EmpireStatusActions = require('js/actions/empireStatus');
 var TickerActions       = require('js/actions/ticker');
 
-var ServerTimeRPCStore  = require('js/stores/rpc/server/time');
+var ServerRPCStore  = require('js/stores/rpc/server');
 
 var util                = require('js/util');
 var int                 = util.int;
+var clone               = util.clone;
 
 function bodyObjectToArray(bodyObj) {
     var arr = [];
@@ -30,11 +32,11 @@ var EmpireRPCStore = Reflux.createStore({
         TickerActions
     ],
 
-    init : function() {
-        this.data = this.getInitialState();
-    },
+    mixins : [
+        StatefulStore
+    ],
 
-    getInitialState : function() {
+    getDefaultData : function() {
         return {
             bodies : {
                 colonies    : [],
@@ -66,50 +68,46 @@ var EmpireRPCStore = Reflux.createStore({
         };
     },
 
-    getData : function() {
-        return this.data;
-    },
-
     onTickerTick : function() {
-        if (!this.data) {
+        if (!this.state) {
             return;
         }
 
-        if (this.data.self_destruct_active) {
-            this.data.self_destruct_ms -= 1000;
-        }
+        if (this.state.self_destruct_active) {
+            var empire = clone(this.state);
 
-        this.trigger(this.data);
+            empire.self_destruct_ms -= 1000;
+
+            this.emit(empire);
+        }
     },
 
-    onEmpireStatusUpdate : function(empireStatus) {
-        this.data = empireStatus;
+    onEmpireStatusUpdate : function(empire) {
 
         // Possible things to do here:
         //  ~ Turn self_destruct_date into a Date object.
         //  ~ See also: Game.ProcessStatus.
 
-        this.data.self_destruct_active = int(this.data.self_destruct_active);
-        this.data.exactEssentia = parseFloat(this.data.essentia, 10);
-        this.data.essentia = int(this.data.essentia);
+        empire.self_destruct_active = int(empire.self_destruct_active);
+        empire.exactEssentia = parseFloat(empire.essentia, 10);
+        empire.essentia = int(empire.essentia);
 
-        if (this.data.self_destruct_active) {
-            this.data.self_destruct_ms =
-                util.serverDateToMs(this.data.self_destruct_date) -
-                ServerTimeRPCStore.getCurrentServerTimeMoment().valueOf();
+        if (empire.self_destruct_active) {
+            empire.self_destruct_ms =
+                util.serverDateToMs(empire.self_destruct_date) -
+                ServerRPCStore.getData().serverMoment.valueOf();
         }
 
         // Fix up all the planet lists.
-        this.data.colonies = bodyObjectToArray(this.data.colonies);
-        this.data.planets = bodyObjectToArray(this.data.planets);
-        this.data.stations = bodyObjectToArray(this.data.stations);
+        empire.colonies = bodyObjectToArray(empire.colonies);
+        empire.planets = bodyObjectToArray(empire.planets);
+        empire.stations = bodyObjectToArray(empire.stations);
 
-        this.trigger(this.data);
+        this.emit(empire);
     },
 
     onEmpireStatusClear : function() {
-        this.data = this.getInitialState();
-        this.trigger(this.data);
+        this.emit(this.getDefaultData());
     }
 });
 

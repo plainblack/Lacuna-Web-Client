@@ -38,6 +38,6 @@ Runs the linter on the code.
 
 ## serve
 
-> `gulp serve`
+> `gulp server`
 
 This just runs the server for running the client in a browser.

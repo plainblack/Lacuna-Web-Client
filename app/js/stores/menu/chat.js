@@ -4,15 +4,27 @@ var Reflux      = require('reflux');
 
 var ChatActions = require('js/actions/menu/chat');
 
+var StatefulStore = require('js/stores/mixins/stateful');
+
 var ChatStore = Reflux.createStore({
-    listenables : ChatActions,
+    listenables : [
+        ChatActions
+    ],
+
+    mixins : [
+        StatefulStore
+    ],
+
+    getDefaultData : function() {
+        return false;
+    },
 
     onShow : function() {
-        this.trigger(true);
+        this.emit(true);
     },
 
     onHide : function() {
-        this.trigger(false);
+        this.emit(false);
     }
 });
 

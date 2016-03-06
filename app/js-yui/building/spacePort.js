@@ -1483,8 +1483,8 @@ if (typeof YAHOO.lacuna.buildings.SpacePort === "undefined" || !YAHOO.lacuna.bui
                     delete this.FleetTarget;
                     delete this.shipsView;
                     delete this.shipsTravelling;
-                    delete t_param;
-                    delete ship_arr;
+                    t_param = undefined;
+                    ship_arr = undefined;
                     this.Self.GetFleetFor();
                     Event.purgeElement(this.Line, true);
                     this.Line.innerHTML = "Successfully sent "+t_param.quantity+" of "+t_param.name+".";
