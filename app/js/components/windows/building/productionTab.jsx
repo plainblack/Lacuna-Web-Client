@@ -204,6 +204,13 @@ var ProductionTab = React.createClass({
                                 onClick={this.onDemolishClick}
                             />
 
+                           <ActionButton
+                                color="green"
+                                actionName="Upgrade"
+                                error={b.upgrade.can ? '' : b.upgrade.reason[1]}
+                                onClick={this.onUpgradeClick}
+                            />
+
                             <ActionButton
                                 color="blue"
                                 actionName="Downgrade"
@@ -211,13 +218,7 @@ var ProductionTab = React.createClass({
                                 onClick={this.onDowngradeClick}
                             />
 
-                            <ActionButton
-                                color="green"
-                                actionName="Upgrade"
-                                error={b.upgrade.can ? '' : b.upgrade.reason[1]}
-                                onClick={this.onUpgradeClick}
-                            />
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
