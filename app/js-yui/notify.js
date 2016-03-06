@@ -159,4 +159,3 @@ if (typeof YAHOO.lacuna.Notify == "undefined" || !YAHOO.lacuna.Notify) {
 YAHOO.register("notify", YAHOO.lacuna.Notify, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

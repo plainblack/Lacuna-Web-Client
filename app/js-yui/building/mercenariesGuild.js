@@ -545,4 +545,3 @@ if (typeof YAHOO.lacuna.buildings.MercenariesGuild == "undefined" || !YAHOO.lacu
 YAHOO.register("trade", YAHOO.lacuna.buildings.MercenariesGuild, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

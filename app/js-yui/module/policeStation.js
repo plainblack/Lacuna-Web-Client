@@ -203,4 +203,3 @@ if (typeof YAHOO.lacuna.modules.PoliceStation == "undefined" || !YAHOO.lacuna.mo
 YAHOO.register("policestation", YAHOO.lacuna.modules.PoliceStation, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

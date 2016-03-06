@@ -4065,4 +4065,3 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
 YAHOO.register("smd", YAHOO.lacuna.SMD, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

@@ -444,4 +444,3 @@ YAHOO.register("blackholegenerator", YAHOO.lacuna.buildings.BlackHoleGenerator, 
 
 }
 
-// vim: noet:ts=4:sw=4

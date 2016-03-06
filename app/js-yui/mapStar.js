@@ -1670,4 +1670,3 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 YAHOO.register("mapStar", YAHOO.lacuna.MapStar, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

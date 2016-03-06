@@ -717,4 +717,3 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 YAHOO.register("profile", YAHOO.lacuna.Profile, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

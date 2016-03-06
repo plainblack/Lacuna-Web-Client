@@ -25,7 +25,7 @@ var AboutWindow = React.createClass({
                     <AboutTab />
                 </Tab>
 
-                <Tab title="Credits" onSelect={AboutActions.load}>
+                <Tab title="Credits" onSelect={AboutActions.aboutLoad}>
                     <CreditsTab />
                 </Tab>
             </Tabs>

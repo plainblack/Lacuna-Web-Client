@@ -1426,4 +1426,3 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
 YAHOO.register("Parliament", YAHOO.lacuna.modules.Parliament, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

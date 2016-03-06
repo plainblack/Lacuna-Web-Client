@@ -90,13 +90,13 @@ var BuildingRPCStore = Reflux.createStore({
         // Glyph buildings will return a halls cost in the upgrade cost but normal buildings will
         // will only return the standard resources. Make sure they all exist so as to prevent
         // errors on the component level.
-        building.upgrade.cost.food   = building.upgrade.cost.food || 0;
-        building.upgrade.cost.ore    = building.upgrade.cost.ore || 0;
-        building.upgrade.cost.water  = building.upgrade.cost.water || 0;
+        building.upgrade.cost.food   = building.upgrade.cost.food   || 0;
+        building.upgrade.cost.ore    = building.upgrade.cost.ore    || 0;
+        building.upgrade.cost.water  = building.upgrade.cost.water  || 0;
         building.upgrade.cost.energy = building.upgrade.cost.energy || 0;
-        building.upgrade.cost.waste  = building.upgrade.cost.waste || 0;
-        building.upgrade.cost.time   = building.upgrade.cost.time || 0;
-        building.upgrade.cost.halls  = building.upgrade.cost.halls || 0;
+        building.upgrade.cost.waste  = building.upgrade.cost.waste  || 0;
+        building.upgrade.cost.time   = building.upgrade.cost.time   || 0;
+        building.upgrade.cost.halls  = building.upgrade.cost.halls  || 0;
 
         // Any 'view' call that returns extra data (say, the Planetary Command Center) has that
         // data put into 'building.extraViewData' so that it is accessible from the store.

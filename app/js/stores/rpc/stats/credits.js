@@ -51,7 +51,7 @@ var CreditsRPCStore = Reflux.createStore({
         this.emit(credits);
     },
 
-    onLoad : function() {
+    onAboutLoad : function() {
         // The credits change very rarely so don't waste RPC's on them.
         if (_.keys(this.state).length > 0) {
             return;
