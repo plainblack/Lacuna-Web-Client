@@ -342,4 +342,3 @@ if (typeof YAHOO.lacuna.buildings.WasteRecycling == "undefined" || !YAHOO.lacuna
 YAHOO.register("wasterecycling", YAHOO.lacuna.buildings.WasteRecycling, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

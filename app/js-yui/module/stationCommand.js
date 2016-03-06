@@ -26,4 +26,3 @@ if (typeof YAHOO.lacuna.modules.StationCommand == "undefined" || !YAHOO.lacuna.m
 YAHOO.register("StationCommand", YAHOO.lacuna.modules.StationCommand, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

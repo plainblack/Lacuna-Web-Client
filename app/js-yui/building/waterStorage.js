@@ -110,4 +110,3 @@ if (typeof YAHOO.lacuna.buildings.WaterStorage == "undefined" || !YAHOO.lacuna.b
 YAHOO.register("waterstorage", YAHOO.lacuna.buildings.WaterStorage, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

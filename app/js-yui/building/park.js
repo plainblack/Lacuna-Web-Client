@@ -134,4 +134,3 @@ if (typeof YAHOO.lacuna.buildings.Park == "undefined" || !YAHOO.lacuna.buildings
 YAHOO.register("park", YAHOO.lacuna.buildings.Park, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

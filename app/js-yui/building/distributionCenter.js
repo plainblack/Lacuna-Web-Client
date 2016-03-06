@@ -338,4 +338,3 @@ if (typeof YAHOO.lacuna.buildings.DistributionCenter == "undefined" || !YAHOO.la
 YAHOO.register("DistributionCenter", YAHOO.lacuna.buildings.DistributionCenter, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

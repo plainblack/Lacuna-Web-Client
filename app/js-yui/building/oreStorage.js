@@ -187,4 +187,3 @@ if (typeof YAHOO.lacuna.buildings.OreStorage == "undefined" || !YAHOO.lacuna.bui
 YAHOO.register("orestorage", YAHOO.lacuna.buildings.OreStorage, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

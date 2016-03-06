@@ -336,4 +336,3 @@ if (typeof YAHOO.rpc.Service == "undefined" || !YAHOO.rpc.Service) {
 YAHOO.register("rpc", YAHOO.rpc.Service, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

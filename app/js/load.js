@@ -60,6 +60,7 @@
         require('js-yui/smd');
         require('js-yui/rpc');
         require('js/game');
+        require('js/dao');
 
         // Empire management and star map
         require('js-yui/announce');
@@ -128,4 +129,3 @@
     loader.insert();
 
 })();
-// vim: noet:ts=4:sw=4

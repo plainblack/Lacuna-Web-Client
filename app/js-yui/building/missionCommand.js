@@ -196,4 +196,3 @@ if (typeof YAHOO.lacuna.buildings.MissionCommand == "undefined" || !YAHOO.lacuna
 YAHOO.register("MissionCommand", YAHOO.lacuna.buildings.MissionCommand, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4
