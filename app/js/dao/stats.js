@@ -31,12 +31,12 @@ function makeStatsCall(options) {
     });
 }
 
-RpcStatsActions.requestGetCredits.listen(function(o) {
+RpcStatsActions.requestStatsGetCredits.listen(function(o) {
     makeStatsCall({
         method  : 'credits',
         params  : [],
-        success : 'successGetCredits',
-        error   : 'failureGetCredits' 
+        success : 'successStatsGetCredits',
+        error   : 'failureStatsGetCredits' 
     });
 });
 
