@@ -74,7 +74,7 @@ var WindowManagerStore = Reflux.createStore({
     },
 
     onSuccessRpcEmpireLogout : function() {
-        this.emit({});
+        this.onHideAllWindows();
     },
 
     onBringWindowToTop : function(id) {
@@ -100,12 +100,12 @@ var WindowManagerStore = Reflux.createStore({
             .value();
 
         if (topWindow) {
-            WindowManagerActions.hideWindow(topWindow.id);
+            this.onHideWindow(topWindow.id);
         }
     },
 
     onEscKey : function() {
-        WindowManagerActions.hideTopWindow();
+        this.onHideTopWindow();
     }
 });
 

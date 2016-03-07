@@ -3,7 +3,7 @@
 var Reflux = require('reflux');
 
 var EssentiaVeinActions = Reflux.createActions([
-    'drainVein'
+    'buildingEssentiaVeinDrain'
 ]);
 
 module.exports = EssentiaVeinActions;
