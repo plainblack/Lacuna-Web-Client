@@ -3,10 +3,10 @@
 var Reflux = require('reflux');
 
 var MapActions = Reflux.createActions([
-    'showPlanetMap',
-    'showStarMap',
-    'toggleMapMode',
-    'changePlanet'
+    'mapShowPlanet',
+    'mapShowStars',
+    'mapToggleMode',
+    'mapChangePlanet'
 ]);
 
 module.exports = MapActions;

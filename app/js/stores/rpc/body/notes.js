@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO Should we be using 'storable'?
+
 var Reflux              = require('reflux');
 
 var NotesActions        = require('js/actions/windows/notes');
@@ -58,11 +60,15 @@ var NotesDataStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onChangePlanet : function() {
+    onMapChangePlanet : function() {
         // Only do this while the window is open.
         if (NotesWindowStore.getData()) {
-    //        NotesActions.notesSave();
-            NotesActions.notesClear();
+            // TODO It is debatable whether we should just clear the notes,
+            // or create an action
+            // On the one hand we should not be causing actions from within a store.
+            // On the other hand another task may want to attach to the notesClear action
+            // but if that is the case, they can attach to the mapChangePlanet event!
+            this.onNotesClear();
         }
     }
 });

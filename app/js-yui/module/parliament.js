@@ -1410,7 +1410,7 @@ if (typeof YAHOO.lacuna.modules.Parliament == "undefined" || !YAHOO.lacuna.modul
             this.hide();
             var planet = Game.EmpireData.planets[res[1]];
             //Game.PlanetJump(planet);
-            require('js/actions/menu/map').changePlanet(res[1]);
+            require('js/actions/menu/map').mapChangePlanet(res[1]);
         },
         handleAllianceLink : function(e, el) {
             Event.stopEvent(e);

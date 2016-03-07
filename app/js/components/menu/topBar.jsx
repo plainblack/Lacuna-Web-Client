@@ -56,7 +56,7 @@ var TopBar = React.createClass({
                     >
 
                         <a className="item" data-tip={this.mapButtonTip()}
-                            onClick={MapActions.toggleMapMode}>
+                            onClick={MapActions.mapToggleMode}>
                             <i className="map big icon"></i>
                         </a>
 
