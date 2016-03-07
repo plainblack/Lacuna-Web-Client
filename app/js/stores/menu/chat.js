@@ -19,13 +19,17 @@ var ChatStore = Reflux.createStore({
         return false;
     },
 
-    onShow : function() {
+    onChatShow : function() {
         this.emit(true);
     },
 
-    onHide : function() {
+    onChatHide : function() {
         this.emit(false);
-    }
+    },
+
+    onSuccessRpcEmpireLogout : function() {
+        this.emit(false);
+    },
 });
 
 module.exports = ChatStore;

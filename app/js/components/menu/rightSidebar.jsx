@@ -40,7 +40,7 @@ var PlanetListItem = React.createClass({
     },
 
     handleClick : function() {
-        RightSidebarActions.hide();
+        RightSidebarActions.rightSidebarHide();
 
         if (this.isCurrentWorld()) {
             YAHOO.lacuna.MapPlanet.Refresh();
@@ -91,8 +91,8 @@ var AccordionItem = React.createClass({
     },
 
     componentDidMount : function() {
-        RightSidebarActions.collapseAccordion.listen(this.hideList);
-        RightSidebarActions.expandAccordion.listen(this.showList);
+        RightSidebarActions.rightSidebarCollapse.listen(this.hideList);
+        RightSidebarActions.rightSidebarExpand.listen(this.showList);
     },
 
     showList : function() {
@@ -247,8 +247,8 @@ var RightSidebar = React.createClass({
                 context    : $('#sidebarContainer'),
                 duration   : 300,
                 transition : 'overlay',
-                onHidden   : RightSidebarActions.hide,
-                onVisible  : RightSidebarActions.show
+                onHidden   : RightSidebarActions.rightSidebarHide,
+                onVisible  : RightSidebarActions.rightSidebarShow
             });
     },
 
@@ -273,16 +273,16 @@ var RightSidebar = React.createClass({
     },
 
     homePlanet : function() {
-        RightSidebarActions.hide();
+        RightSidebarActions.rightSidebarHide();
         MapActions.changePlanet(this.state.empire.home_planet_id);
     },
 
     expand : function() {
-        RightSidebarActions.expandAccordion();
+        RightSidebarActions.rightSidebarExpand();
     },
 
     collapse : function() {
-        RightSidebarActions.collapseAccordion();
+        RightSidebarActions.rightSidebarCollapse();
     },
 
     render : function() {

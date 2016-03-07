@@ -3,8 +3,8 @@
 var Reflux = require('reflux');
 
 var MenuActions = Reflux.createActions([
-    'show',
-    'hide'
+    'menuShow',
+    'menuHide'
 ]);
 
 module.exports = MenuActions;

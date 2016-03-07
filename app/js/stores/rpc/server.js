@@ -11,11 +11,14 @@ var clone               = util.clone;
 
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
+var RpcEmpireActions    = require('js/actions/rpc/empire');
+
 
 var ServerRPCStore = Reflux.createStore({
     listenables : [
         ServerStatusActions,
-        TickerActions
+        TickerActions,
+        RpcEmpireActions
     ],
 
     mixins : [
@@ -57,6 +60,10 @@ var ServerRPCStore = Reflux.createStore({
     },
 
     onServerStatusClear : function() {
+        this.emit(this.getDefaultData());
+    },
+
+    onSuccessRpcEmpireLogout : function() {
         this.emit(this.getDefaultData());
     },
 

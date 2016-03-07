@@ -19,12 +19,12 @@ var RightSidebarStore = Reflux.createStore({
         return false;
     },
 
-    onShow : function() {
+    onRightSidebarShow : function() {
         console.log('Showing right sidebar');
         this.emit(true);
     },
 
-    onHide : function() {
+    onRightSidebarHide : function() {
         console.log('Hiding right sidebar');
         this.emit(false);
     }

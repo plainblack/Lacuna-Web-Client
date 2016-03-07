@@ -13,13 +13,13 @@ module.exports = {
         return this.data;
     },
 
-    onShow : function() {
+    showWindow : function() {
         console.log('Window show triggered.');
         this.data = true;
         this.trigger(this.data);
     },
 
-    onHide : function() {
+    hideWindow : function() {
         console.log('Window hide triggered.');
         this.data = false;
         this.trigger(this.data);

@@ -232,7 +232,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                 Dom.setStyle(document.body, 'background', 'url(' + Lib.AssetUrl + 'star_system/field.png) repeat scroll 0 0 black');
                 this.InitLogin();
                 Lacuna.Game.LoginDialog.show(error);
-                MenuActions.hide();
+                MenuActions.menuHide();
                 require('js/actions/menu/loader').hide();
             },
             Run : function() {

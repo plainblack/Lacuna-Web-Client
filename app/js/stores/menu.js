@@ -8,7 +8,20 @@ var MenuActions = require('js/actions/menu');
 
 var MenuStore = Reflux.createStore({
     mixins      : [Window],
-    listenables : MenuActions
+    listenables : [MenuActions],
+
+    onMenuShow : function() {
+        this.showWindow();
+    },
+
+    onMenuHide : function() {
+        this.hideWindow();
+    },
+
+    onSuccessRpcEmpireLogout : function() {
+        this.hideWindow();
+    },
 });
+
 
 module.exports = MenuStore;
