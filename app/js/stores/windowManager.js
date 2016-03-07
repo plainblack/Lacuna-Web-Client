@@ -5,6 +5,7 @@ var _                    = require('lodash');
 
 var WindowManagerActions = require('js/actions/windowManager');
 var KeyboardActions      = require('js/actions/keyboard');
+var RpcEmpireActions     = require('js/actions/rpc/empire');
 
 var StatefulStore        = require('js/stores/mixins/stateful');
 var clone                = require('js/util').clone;
@@ -12,7 +13,8 @@ var clone                = require('js/util').clone;
 var WindowManagerStore = Reflux.createStore({
     listenables : [
         WindowManagerActions,
-        KeyboardActions
+        KeyboardActions,
+        RpcEmpireActions
     ],
 
     mixins : [
@@ -68,6 +70,10 @@ var WindowManagerStore = Reflux.createStore({
     },
 
     onHideAllWindows : function() {
+        this.emit({});
+    },
+
+    onSuccessRpcEmpireLogout : function() {
         this.emit({});
     },
 
