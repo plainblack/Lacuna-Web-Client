@@ -1,29 +1,31 @@
 'use strict';
 
-var Reflux               = require('reflux');
-var ReactTooltip         = require('react-tooltip');
+var Reflux              = require('reflux');
+var ReactTooltip        = require('react-tooltip');
 
-var ChatActions          = require('js/actions/menu/chat');
-var MapActions           = require('js/actions/menu/map');
-var MenuActions          = require('js/actions/menu');
-var TickerActions        = require('js/actions/ticker');
-var UserActions          = require('js/actions/user');
-var RpcEmpireActions     = require('js/actions/rpc/empire');
+var RpcEmpireActions    = require('js/actions/rpc/empire');
+var UserActions         = require('js/actions/user');
+var MenuActions         = require('js/actions/menu');
+var TickerActions       = require('js/actions/ticker');
+var ChatActions         = require('js/actions/menu/chat');
+var MapActions          = require('js/actions/menu/map');
 
-var server               = require('js/server');
+var server              = require('js/server');
 
+// TODO What is the purpose of this store? It does not store anything!
+// (it should disappear when the yui code is replaced totally)
+//
 var UserStore = Reflux.createStore({
-    listenables : [UserActions, RpcEmpireActions],
+    listenables : [RpcEmpireActions, UserActions],
 
-    // TODO the individual stores should subscribe to the onSuccessRpcEmpireLogin
-    // action
+
     onUserSignIn : function() {
-        MenuActions.show();
-        TickerActions.tickerStart();
-        ChatActions.show();
-
+        // TODO This should be possible to be removed. BUT it is needed for 
+        // now. It is called in the map store by attaching tothe onUserSignin
+        // event (as it does here) but perhaps it requires the other stores
+        // to complete first before it works?
         console.log('Firing up the planet view');
-        MapActions.changePlanet(YAHOO.lacuna.Game.EmpireData.home_planet_id);
+        MapActions.mapChangePlanet(YAHOO.lacuna.Game.EmpireData.home_planet_id);
     },
 
     onSuccessRpcEmpireLogout : function(o) {
@@ -31,12 +33,6 @@ var UserStore = Reflux.createStore({
         YAHOO.lacuna.Game.Reset();
         YAHOO.lacuna.MapPlanet.Reset();
         YAHOO.lacuna.Game.DoLogin();
-
-        // Let the React stuff know what happened.
-        // TODO: These stores should listen to the onSuccessRpcEmpireLogout 
-        // themselves rather than have this store fire the actions!
-        //
-        MenuActions.hide();
 
         // Hide all our tooltips
         ReactTooltip.hide();

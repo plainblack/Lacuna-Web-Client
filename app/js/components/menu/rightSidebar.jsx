@@ -45,7 +45,7 @@ var PlanetListItem = React.createClass({
         if (this.isCurrentWorld()) {
             YAHOO.lacuna.MapPlanet.Refresh();
         } else {
-            MapActions.changePlanet(this.props.id);
+            MapActions.mapChangePlanet(this.props.id);
         }
     },
 
@@ -274,7 +274,7 @@ var RightSidebar = React.createClass({
 
     homePlanet : function() {
         RightSidebarActions.rightSidebarHide();
-        MapActions.changePlanet(this.state.empire.home_planet_id);
+        MapActions.mapChangePlanet(this.state.empire.home_planet_id);
     },
 
     expand : function() {

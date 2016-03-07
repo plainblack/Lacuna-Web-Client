@@ -266,7 +266,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
                     // Go to home planet.
                     var home = EmpireRPCStore.getData().home_planet_id;
-                    MapActions.changePlanet(home);
+                    MapActions.mapChangePlanet(home);
 
                     require('js/actions/menu/loader').hide();
                 },
