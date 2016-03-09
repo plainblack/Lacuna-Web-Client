@@ -2,9 +2,9 @@
 
 var Reflux = require('reflux');
 
-var LoaderActions = Reflux.createActions([
-    'show',
-    'hide'
+var LoaderMenuActions = Reflux.createActions([
+    'loaderMenuShow',
+    'loaderMenuHide'
 ]);
 
-module.exports = LoaderActions;
+module.exports = LoaderMenuActions;

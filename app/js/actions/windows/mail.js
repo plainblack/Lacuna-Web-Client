@@ -3,9 +3,9 @@
 var Reflux = require('reflux');
 
 var MailActions = Reflux.createActions([
-    'load',
-    'show',
-    'hide'
+    'mailWindowLoad',
+    'mailWindowShow',
+    'mailWindowHide'
 ]);
 
 module.exports = MailActions;

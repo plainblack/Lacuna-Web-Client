@@ -1,14 +1,13 @@
 'use strict';
 
-var Reflux          = require('reflux');
+var Reflux                  = require('reflux');
+var server                  = require('js/server');
 
-var EssentiaActions = require('js/actions/windows/essentia');
+var EssentiaWindowActions   = require('js/actions/windows/essentia');
 
-var server          = require('js/server');
-
-var EssentiaRPCStore = Reflux.createStore({
+var EssentiaEmpireRPCStore = Reflux.createStore({
     listenables : [
-        EssentiaActions
+        EssentiaWindowActions
     ],
 
     onRedeemCode : function(code) {
@@ -24,4 +23,4 @@ var EssentiaRPCStore = Reflux.createStore({
     }
 });
 
-module.exports = EssentiaRPCStore;
+module.exports = EssentiaEmpireRPCStore;

@@ -4,14 +4,14 @@ var React           = require('react');
 var Reflux          = require('reflux');
 var _               = require('lodash');
 
-var CreditsRPCStore = require('js/stores/rpc/stats/credits');
+var CreditsStatsRPCStore = require('js/stores/rpc/stats/credits');
 
 var CreditsSection  = require('js/components/windows/about/creditsSection');
 
 var CreditsTab = React.createClass({
 
     mixins : [
-        Reflux.connect(CreditsRPCStore, 'credits')
+        Reflux.connect(CreditsStatsRPCStore, 'credits')
     ],
 
     render : function() {

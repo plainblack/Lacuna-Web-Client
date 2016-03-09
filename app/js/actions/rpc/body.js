@@ -5,23 +5,23 @@ var Server  = require('js/server');
 var _       = require('lodash');
 
 var RpcBodyActions = Reflux.createActions([
-    'rpcBodyGetStatus',
+    'requestBodyRPCGetStatus',
 
-    'rpcBodyRepairList',
-    'rpcBodyRearrangeBuildings',
-    'rpcBodyGetBuildable',
-    'rpcBodyGetBuildableLocations',
-    'rpcBodyRename',
-    'rpcBodyAbandon',
-    'rpcBodyViewLaws',
+    'requestBodyRPCRepairList',
+    'requestBodyRPCRearrangeBuildings',
+    'requestBodyRPCGetBuildable',
+    'requestBodyRPCGetBuildableLocations',
+    'requestBodyRPCRename',
+    'requestBodyRPCAbandon',
+    'requestBodyRPCViewLaws',
 
-    'rpcBodyGetBuildings',
-    'bodyGetBuildings_success',
-    'bodyGetBuildings_error',
+    'requestBodyRPCGetBuildings',
+    'successBodyRPCGetBuildings',
+    'failureBodyRPCGetBuildings',
 
-    'rpcBodySetColonyNotes',
-    'bodySetColonyNotes_success',
-    'bodySetColonyNotes_error'
+    'requestBodyRPCSetColonyNotes',
+    'successBodyRPCSetColonyNotes',
+    'failureBodyRPCSetColonyNotes'
 
 ]);
 

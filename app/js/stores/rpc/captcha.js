@@ -1,19 +1,19 @@
 'use strict';
 
-var Reflux         = require('reflux');
-var StatefulStore  = require('js/stores/mixins/stateful');
+var Reflux                = require('reflux');
+var StatefulMixinStore    = require('js/stores/mixins/stateful');
 
-var CaptchaActions = require('js/actions/windows/captcha');
+var CaptchaWindowActions  = require('js/actions/windows/captcha');
 
-var server         = require('js/server');
+var server                = require('js/server');
 
 var CaptchaRPCStore = Reflux.createStore({
     listenables : [
-        CaptchaActions
+        CaptchaWindowActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -53,15 +53,15 @@ var CaptchaRPCStore = Reflux.createStore({
                 }
             },
             error : function() {
-                CaptchaActions.refresh();
+                CaptchaWindowActions.refresh();
             },
             scope : this
         });
     },
 
     onRefresh : function() {
-        CaptchaActions.clear();
-        CaptchaActions.fetch();
+        CaptchaWindowActions.clear();
+        CaptchaWindowActions.fetch();
     }
 });
 

@@ -2,12 +2,12 @@
 
 var Reflux = require('reflux');
 
-var NotesActions = Reflux.createActions([
-    'show',
-    'hide',
-    'notesLoad',
-    'notesClear',
-    'notesSet'
+var NotesWindowActions = Reflux.createActions([
+    'notesWindowShow',
+    'notesWindowHide',
+    'notesWindowLoad',
+    'notesWindowClear',
+    'notesWindowSet'
 ]);
 
-module.exports = NotesActions;
+module.exports = NotesWindowActions;

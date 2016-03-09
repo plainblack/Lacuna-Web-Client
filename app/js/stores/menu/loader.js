@@ -1,14 +1,25 @@
 'use strict';
 
-var Reflux        = require('reflux');
+var Reflux            = require('reflux');
 
-var LoaderActions = require('js/actions/menu/loader');
+var LoaderMenuActions = require('js/actions/menu/loader');
 
-var Window        = require('js/stores/mixins/window');
+var WindowMixinStore  = require('js/stores/mixins/window');
 
-var LoaderStore = Reflux.createStore({
-    listenables : LoaderActions,
-    mixins      : [Window]
+var LoaderMenuStore = Reflux.createStore({
+    listenables : LoaderMenuActions,
+    mixins      : [WindowMixinStore],
+
+    onLoaderShow : function() {
+        this.data = true;
+        this.trigger(this.data);
+    },
+
+    onLoaderHide : function() {
+        this.data = false;
+        this.trigger(this.data);
+    }
+
 });
 
-module.exports = LoaderStore;
+module.exports = LoaderMenuStore;

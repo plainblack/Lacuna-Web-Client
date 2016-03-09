@@ -1,17 +1,17 @@
 'use strict';
 
-var Reflux               = require('reflux');
+var Reflux                      = require('reflux');
 
-var BuildingActions      = require('js/actions/windows/building');
-var EssentiaVeinActions  = require('js/actions/buildings/essentiaVein');
-var WindowManagerActions = require('js/actions/windowManager');
+var BuildingWindowActions       = require('js/actions/windows/building');
+var EssentiaVeinBuildingActions = require('js/actions/buildings/essentiaVein');
+var WindowManagerActions        = require('js/actions/windowManager');
 
-var server               = require('js/server');
+var server                      = require('js/server');
 
-var EssentiaVeinStore = Reflux.createStore({
+var EssentiaVeinRPCStore = Reflux.createStore({
 
     listenables : [
-        EssentiaVeinActions
+        EssentiaVeinBuildingActions
     ],
 
     onDrainVein : function(id, times) {
@@ -24,11 +24,11 @@ var EssentiaVeinStore = Reflux.createStore({
             ],
             scope   : this,
             success : function(result) {
-                BuildingActions.updateBuilding(result.building);
+                BuildingWindowActions.updateBuilding(result.building);
                 WindowManagerActions.hideTopWindow();
             }
         });
     }
 });
 
-module.exports = EssentiaVeinStore;
+module.exports = EssentiaVeinRPCStore;
