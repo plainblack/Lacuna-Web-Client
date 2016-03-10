@@ -115,7 +115,7 @@ var sendRequest = function(url, data, options, retry) {
         url      : url,
 
         success : function(data, textStatus, jqXHR) {
-            LoaderMenuActions.loaderHide();
+            LoaderMenuActions.loaderMenuHide();
 
             var dataToEmit = util.fixNumbers(data.result);
 
@@ -125,7 +125,7 @@ var sendRequest = function(url, data, options, retry) {
         },
 
         error : function(jqXHR, textStatus, errorThrown) {
-            LoaderMenuActions.loaderHide();
+            LoaderMenuActions.loaderMenuHide();
             var error = {};
 
             if (typeof jqXHR.responseJSON === 'undefined') {
@@ -154,7 +154,7 @@ var sendRequest = function(url, data, options, retry) {
 
 var call = function(obj) {
 
-    LoaderMenuActions.loaderShow();
+    LoaderMenuActions.loaderMenuShow();
 
     var options = handleConfig(obj);
     var data = createData(options);

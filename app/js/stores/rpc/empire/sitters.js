@@ -16,7 +16,7 @@ var clone                       = util.clone;
 
 var SittersEmpireRPCStore = Reflux.createStore({
     listenables : [
-        SitterManagerActions,
+        SitterManagerWindowActions,
         TickerActions
     ],
 

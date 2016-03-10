@@ -71,7 +71,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                     document.getElementById('mainGameContainer')
                 );
 
-                require('js/actions/menu/loader').show();
+                require('js/actions/menu/loader').loaderMenuShow();
 
                 // add overlay manager functionality
                 Game.OverlayManager.hideAllBut = function(id) {
@@ -233,7 +233,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                 this.InitLogin();
                 Lacuna.Game.LoginDialog.show(error);
                 MenuActions.menuHide();
-                require('js/actions/menu/loader').hide();
+                require('js/actions/menu/loader').loaderMenuHide();
             },
             Run : function() {
                 // set our interval going for resource calcs since Logout clears it
@@ -330,7 +330,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                                 }
                             };
                             YAHOO.log(o, 'error', logNS);
-                            require('js/actions/menu/loader').hide();
+                            require('js/actions/menu/loader').loaderMenuHide();
                             Game.Failure(o, retry, failure);
                         }
                     };

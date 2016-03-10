@@ -11,6 +11,28 @@ var StatsWindowStore = Reflux.createStore({
     mixins      : [WindowMixinStore],
     listenables : [StatsWindowActions, KeyboardActions],
 
+    getDefaultData : function() {
+        return {
+            show : false
+        };
+    },
+
+    getData : function() {
+        return this.state;
+    },
+
+    getInitialState : function() {
+        if (this.state) {
+            return this.state;
+        } else {
+            return this.getDefaultData();
+        }
+    },
+
+    init : function() {
+        this.state = this.getDefaultData();
+    },
+
     onStatsWindowShow : function() {
         this.data = true;
         this.trigger(this.data);

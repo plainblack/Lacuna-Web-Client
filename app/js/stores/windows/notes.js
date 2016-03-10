@@ -11,6 +11,28 @@ var NotesWindowStore = Reflux.createStore({
     mixins      : [WindowMixinStores],
     listenables : [NotesWindowActions, KeyboardActions],
 
+    getDefaultData : function() {
+        return {
+            show : false
+        };
+    },
+
+    getData : function() {
+        return this.state;
+    },
+
+    getInitialState : function() {
+        if (this.state) {
+            return this.state;
+        } else {
+            return this.getDefaultData();
+        }
+    },
+
+    init : function() {
+        this.state = this.getDefaultData();
+    },
+
     onNotesWindowShow : function() {
         this.data = true;
         this.trigger(this.data);

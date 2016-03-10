@@ -4,19 +4,34 @@ var Reflux            = require('reflux');
 
 var LoaderMenuActions = require('js/actions/menu/loader');
 
-var WindowMixinStore  = require('js/stores/mixins/window');
-
 var LoaderMenuStore = Reflux.createStore({
     listenables : LoaderMenuActions,
-    mixins      : [WindowMixinStore],
 
-    onLoaderShow : function() {
-        this.data = true;
+    init : function() {
+        this.data = this.getInitialState();
+    },
+
+    getInitialState : function() {
+        return {
+            show :  false
+        };
+    },
+    // Deprecated
+    onShow : function() {
+        this.onLoaderMenuShow();
+    },
+    // Deprecated
+    onHide : function() {
+        this.onLoaderMenuHide();
+    },
+
+    onLoaderMenuShow : function() {
+        this.data.show = true;
         this.trigger(this.data);
     },
 
-    onLoaderHide : function() {
-        this.data = false;
+    onLoaderMenuHide : function() {
+        this.data.show = false;
         this.trigger(this.data);
     }
 

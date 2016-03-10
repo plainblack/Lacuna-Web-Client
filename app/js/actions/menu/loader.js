@@ -4,7 +4,10 @@ var Reflux = require('reflux');
 
 var LoaderMenuActions = Reflux.createActions([
     'loaderMenuShow',
-    'loaderMenuHide'
+    'loaderMenuHide',
+    // The following are deprecated...
+    'show',
+    'hide'
 ]);
 
 module.exports = LoaderMenuActions;

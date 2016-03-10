@@ -4,7 +4,7 @@ var Reflux  = require('reflux');
 var Server  = require('js/server');
 var _       = require('lodash');
 
-var RpcBodyActions = Reflux.createActions([
+var BodyRPCActions = Reflux.createActions([
     'requestBodyRPCGetStatus',
 
     'requestBodyRPCRepairList',
@@ -25,7 +25,7 @@ var RpcBodyActions = Reflux.createActions([
 
 ]);
 
-function rpcBodyCall(options) {
+function requestBodyCall(options) {
     var defaults = {
         module  : 'body',
         params  : [],
@@ -39,7 +39,7 @@ function rpcBodyCall(options) {
         method  : options.method,
         params  : options.params,
         success : function(result) {
-            console.log('RpcBodyActions: ' + options.method + '_success');
+            console.log('BodyRPCActions: ' + options.method + '_success');
             // TODO save the status in a common store
             if (typeof result.status !== 'undefined') {
                 // var status = _.cloneDeep(result.status);
@@ -47,28 +47,28 @@ function rpcBodyCall(options) {
 
             // Don't encumber the stores with multiple copies of the status
             delete result.status;
-            RpcBodyActions[options.success](result);
+            BodyRPCActions[options.success](result);
         },
         error : function(error) {
-            console.log('RpcBodyActions: ' + options.method + '_error');
-            RpcBodyActions[options.error](error);
+            console.log('BodyRPCActions: ' + options.method + '_error');
+            BodyRPCActions[options.error](error);
         }
     });
 }
 
-RpcBodyActions.rpcBodyGetBuildings.listen(function(o) {
-    rpcBodyCall({
+BodyRPCActions.requestBodyRPCGetBuildings.listen(function(o) {
+    requestBodyCall({
         method : 'get_buildings',
         params : [
             o.bodyId
         ],
-        success : 'bodyGetBuildings_success',
-        error   : 'bodyGetBuildings_error'
+        success : 'successBodyRPCGetBuildings',
+        error   : 'failureBodyRPCGetBuildings'
     });
 });
 
-RpcBodyActions.rpcBodySetColonyNotes.listen(function(o) {
-    rpcBodyCall({
+BodyRPCActions.requestBodyRPCSetColonyNotes.listen(function(o) {
+    requestBodyCall({
         method : 'set_colony_notes',
         params : [
             o.bodyId,
@@ -76,9 +76,9 @@ RpcBodyActions.rpcBodySetColonyNotes.listen(function(o) {
                 notes : o.notes
             }
         ],
-        success : 'bodySetColonyNotes_success',
-        error   : 'bodySetColonyNotes_error'
+        success : 'successBodyRPCSetColonyNotes',
+        error   : 'successBodyRPCSetColonyNotes'
     });
 });
 
-module.exports = RpcBodyActions;
+module.exports = BodyRPCActions;

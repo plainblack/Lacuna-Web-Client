@@ -15,8 +15,8 @@ var MapMenuActions       = require('js/actions/menu/map');
 var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
-var MailActions          = require('js/actions/windows/mail');
-var StatsActions         = require('js/actions/windows/stats');
+var MailWindowActions    = require('js/actions/windows/mail');
+var StatsWindowActions   = require('js/actions/windows/stats');
 
 var TopBar = React.createClass({
     mixins : [
@@ -59,7 +59,7 @@ var TopBar = React.createClass({
                             <i className="map big icon"></i>
                         </a>
 
-                        <a className="item" data-tip="Mail" onClick={MailActions.mailWindowShow}>
+                        <a className="item" data-tip="Mail" onClick={MailWindowActions.mailWindowShow}>
                             <i className="mail big icon"></i>
                             {
                                 this.state.empire.has_new_messages > 0
@@ -80,7 +80,7 @@ var TopBar = React.createClass({
                             </div>
                         </a>
 
-                        <a className="item" data-tip="Universe Rankings" onClick={StatsActions.show}>
+                        <a className="item" data-tip="Universe Rankings" onClick={StatsWindowActions.statsWindowShow}>
                             <i className="find big icon"></i>
                         </a>
 

@@ -17,10 +17,10 @@ var MenuStore          = require('js/stores/menu');
 
 var Menu = React.createClass({
     mixins : [
-        Reflux.connect(MenuStore, 'show')
+        Reflux.connect(MenuStore, 'menuStore')
     ],
     render : function() {
-        if (this.state.show) {
+        if (this.state.menuStore.show) {
             return (
                 <div>
                     <LeftSidebarButton />
