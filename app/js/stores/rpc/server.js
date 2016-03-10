@@ -2,17 +2,16 @@
 
 var Reflux              = require('reflux');
 var _                   = require('lodash');
-var StatefulStore       = require('js/stores/mixins/stateful');
-
 var moment              = require('moment');
-
 var util                = require('js/util');
-var clone               = util.clone;
+
+var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
 var RpcEmpireActions    = require('js/actions/rpc/empire');
 
+var clone               = util.clone;
 
 var ServerRPCStore = Reflux.createStore({
     listenables : [
@@ -22,7 +21,7 @@ var ServerRPCStore = Reflux.createStore({
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {

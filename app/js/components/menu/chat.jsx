@@ -1,25 +1,25 @@
 'use strict';
 
-var React        = require('react');
-var Reflux       = require('reflux');
-var _            = require('lodash');
-var $            = require('js/shims/jquery');
-var Firebase     = require('firebase');
+var React           = require('react');
+var Reflux          = require('reflux');
+var _               = require('lodash');
+var $               = require('js/shims/jquery');
+var Firebase        = require('firebase');
 
-var ChatStore    = require('js/stores/menu/chat');
-var BodyRPCStore = require('js/stores/rpc/body');
+var ChatMenuStore   = require('js/stores/menu/chat');
+var BodyRPCStore    = require('js/stores/rpc/body');
 
 var Chat = React.createClass({
     mixins : [
-        Reflux.connect(ChatStore, 'show')
+        Reflux.connect(ChatMenuStore, 'chatMenu')
     ],
     hasRenderedChat    : false,
     componentDidUpdate : function() {
 
-        if (this.state.show !== this.hasRenderedChat) {
-            if (this.state.show === true && this.hasRenderedChat === false) {
+        if (this.state.chatMenu.show !== this.hasRenderedChat) {
+            if (this.state.chatMenu.show === true && this.hasRenderedChat === false) {
                 this.loadChat();
-            } else if (this.state.show === false && this.hasRenderedChat === true) {
+            } else if (this.state.chatMenu.show === false && this.hasRenderedChat === true) {
                 this.logoutChat();
             } else {
                 return;

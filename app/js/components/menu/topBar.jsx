@@ -2,32 +2,31 @@
 
 var React                = require('react');
 var Reflux               = require('reflux');
-
-var EmpireRPCStore       = require('js/stores/rpc/empire');
-var MapModeStore         = require('js/stores/menu/mapMode');
-var ServerRPCStore       = require('js/stores/rpc/server');
-
 var classNames           = require('classnames');
 
-var RpcEmpireActions     = require('js/actions/rpc/empire');
+var EmpireRPCStore       = require('js/stores/rpc/empire');
+var MapModeMenuStore     = require('js/stores/menu/mapMode');
+var ServerRPCStore       = require('js/stores/rpc/server');
 
-var MapActions           = require('js/actions/menu/map');
+var EmpireRPCActions     = require('js/actions/rpc/empire');
+
+var MapMenuActions       = require('js/actions/menu/map');
 
 var WindowManagerActions = require('js/actions/windowManager');
 var windowTypes          = require('js/windowTypes');
 
-var MailActions          = require('js/actions/windows/mail');
-var StatsActions         = require('js/actions/windows/stats');
+var MailWindowActions    = require('js/actions/windows/mail');
+var StatsWindowActions   = require('js/actions/windows/stats');
 
 var TopBar = React.createClass({
     mixins : [
         Reflux.connect(EmpireRPCStore, 'empire'),
         Reflux.connect(ServerRPCStore, 'server'),
-        Reflux.connect(MapModeStore, 'mapMode')
+        Reflux.connect(MapModeMenuStore, 'mapMode')
     ],
 
     mapButtonTip : function() {
-        if (this.state.mapMode === MapModeStore.PLANET_MAP_MODE) {
+        if (this.state.mapMode === MapModeMenuStore.PLANET_MAP_MODE) {
             return 'To Star Map';
         } else {
             return 'To Planet Map';
@@ -56,11 +55,11 @@ var TopBar = React.createClass({
                     >
 
                         <a className="item" data-tip={this.mapButtonTip()}
-                            onClick={MapActions.mapToggleMode}>
+                            onClick={MapMenuActions.mapToggleMode}>
                             <i className="map big icon"></i>
                         </a>
 
-                        <a className="item" data-tip="Mail" onClick={MailActions.show}>
+                        <a className="item" data-tip="Mail" onClick={MailWindowActions.mailWindowShow}>
                             <i className="mail big icon"></i>
                             {
                                 this.state.empire.has_new_messages > 0
@@ -81,7 +80,7 @@ var TopBar = React.createClass({
                             </div>
                         </a>
 
-                        <a className="item" data-tip="Universe Rankings" onClick={StatsActions.show}>
+                        <a className="item" data-tip="Universe Rankings" onClick={StatsWindowActions.statsWindowShow}>
                             <i className="find big icon"></i>
                         </a>
 
@@ -107,7 +106,7 @@ var TopBar = React.createClass({
                             ) : ''
                         }
 
-                        <a className="item" data-tip="Sign Out" onClick={RpcEmpireActions.requestRpcEmpireLogout}>
+                        <a className="item" data-tip="Sign Out" onClick={EmpireRPCActions.requestRpcEmpireLogout}>
                             <i className="power big icon"></i>
                         </a>
                     </div>

@@ -3,33 +3,33 @@
 var React               = require('react');
 var Reflux              = require('reflux');
 
-var NotesActions        = require('js/actions/windows/notes');
-var BodyActions         = require('js/actions/rpc/body');
+var NotesWindowActions  = require('js/actions/windows/notes');
+var BodyRPCActions      = require('js/actions/rpc/body');
 
 var NotesWindowStore    = require('js/stores/windows/notes');
-var NotesRPCStore       = require('js/stores/rpc/body/notes');
+var NotesBodyRPCStore   = require('js/stores/rpc/body/notes');
 
 var Panel               = require('js/components/panel');
 
 var NotesWindow = React.createClass({
     mixins : [
-        Reflux.connect(NotesWindowStore, 'show'),
-        Reflux.connect(NotesRPCStore, 'notes')
+        Reflux.connect(NotesWindowStore, 'notesWindowShow'),
+        Reflux.connect(NotesBodyRPCStore, 'notes')
     ],
     handleClose : function() {
         // TODO We need to get the body ID from the NotesWindowStore
-        BodyActions.rpcBodySetColonyNotes({
-            bodyId : 16412,
+        BodyRPCActions.requestBodyRPCSetColonyNotes({
+            bodyId : 1,
             notes  : this.state.notes
         });
-        NotesActions.hide();
+        NotesWindowActions.notesHide();
     },
     handleChange : function(e) {
-        NotesActions.notesSet(e.target.value);
+        NotesWindowActions.notesSet(e.target.value);
     },
     render : function() {
         return (
-            <Panel show={this.state.show} onClose={this.handleClose} title="Notes">
+            <Panel show={this.state.notesWindowShow} onClose={this.handleClose} title="Notes">
                 <div className="ui attached info message">
                     <i className="info icon"></i>
                     Closing this window will save your notes.

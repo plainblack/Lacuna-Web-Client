@@ -1,23 +1,23 @@
 'use strict';
 
-var Reflux               = require('reflux');
-var StatefulStore        = require('js/stores/mixins/stateful');
-var _                    = require('lodash');
+var Reflux                   = require('reflux');
+var StatefulMixinStore       = require('js/stores/mixins/stateful');
+var _                        = require('lodash');
 
-var BuildingActions      = require('js/actions/windows/building');
-var WindowManagerActions = require('js/actions/windowManager');
+var BuildingWindowActions    = require('js/actions/windows/building');
+var WindowManagerActions     = require('js/actions/windowManager');
 
-var server               = require('js/server');
-var clone                = require('js/util').clone;
+var server                   = require('js/server');
+var clone                    = require('js/util').clone;
 
 var BuildingRPCStore = Reflux.createStore({
 
     listenables : [
-        BuildingActions
+        BuildingWindowActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -154,7 +154,7 @@ var BuildingRPCStore = Reflux.createStore({
                 // Handle the old planet map code.
                 YAHOO.lacuna.MapPlanet._fireRemoveTile(this.state);
 
-                BuildingActions.clear();
+                BuildingWindowActions.clear();
 
                 WindowManagerActions.hideTopWindow();
             }

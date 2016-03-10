@@ -1,20 +1,20 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var StatefulStore   = require('js/stores/mixins/stateful');
-var _               = require('lodash');
-var validator       = require('validator');
+var Reflux                  = require('reflux');
+var _                       = require('lodash');
+var validator               = require('validator');
+var util                    = require('js/util');
+var server                  = require('js/server');
 
-var EssentiaActions = require('js/actions/windows/essentia');
-var TickerActions   = require('js/actions/ticker');
+var EssentiaWindowActions   = require('js/actions/windows/essentia');
+var TickerActions           = require('js/actions/ticker');
 
-var EmpireRPCStore  = require('js/stores/rpc/empire');
-var ServerRPCStore  = require('js/stores/rpc/server');
+var StatefulMixinsStore     = require('js/stores/mixins/stateful');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var ServerRPCStore          = require('js/stores/rpc/server');
 
-var server          = require('js/server');
 
-var util            = require('js/util');
-var clone           = util.clone;
+var clone                   = util.clone;
 
 var BOOST_TYPES = [
     'food',
@@ -27,14 +27,14 @@ var BOOST_TYPES = [
     'spy_training'
 ];
 
-var BoostsRPCStore = Reflux.createStore({
+var BoostsEmpireRPCStore = Reflux.createStore({
     listenables : [
-        EssentiaActions,
+        EssentiaWindowActions,
         TickerActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinsStore
     ],
 
     getDefaultData : function() {
@@ -140,4 +140,4 @@ var BoostsRPCStore = Reflux.createStore({
     }
 });
 
-module.exports = BoostsRPCStore;
+module.exports = BoostsEmpireRPCStore;

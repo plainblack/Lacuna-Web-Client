@@ -1,6 +1,6 @@
 'use strict';
 
-var MailActions = require('js/actions/windows/mail');
+var MailWindowActions = require('js/actions/windows/mail');
 
 var _ = require('lodash');
 
@@ -164,7 +164,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             }, this, true);
             this.messagingPanel.hideEvent.subscribe(function(){
                 // Let the React component know that we are going away now.
-                MailActions.hide();
+                MailWindowActions.hideMailWindow();
 
                 this.attachmentPanel.hide();
             }, this, true);

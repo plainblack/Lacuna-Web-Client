@@ -1,21 +1,21 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var _               = require('lodash');
-var StatefulStore   = require('js/stores/mixins/stateful');
+var Reflux              = require('reflux');
+var _                   = require('lodash');
+var server              = require('js/server');
 
-var RpcStatsActions    = require('js/actions/rpc/stats');
+var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
-var server          = require('js/server');
+var StatsRPCActions     = require('js/actions/rpc/stats');
 
-var CreditsRPCStore = Reflux.createStore({
+var CreditsStatsRPCStore = Reflux.createStore({
 
     listenables : [
-        RpcStatsActions
+        StatsRPCActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -52,4 +52,4 @@ var CreditsRPCStore = Reflux.createStore({
     }
 });
 
-module.exports = CreditsRPCStore;
+module.exports = CreditsStatsRPCStore;

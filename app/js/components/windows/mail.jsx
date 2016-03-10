@@ -7,10 +7,10 @@ var MailWindowStore = require('js/stores/windows/mail');
 
 var MailWindow = React.createClass({
     mixins : [
-        Reflux.connect(MailWindowStore, 'show')
+        Reflux.connect(MailWindowStore, 'mailWindow')
     ],
     render : function() {
-        if (this.state.show) {
+        if (this.state.mailWindow.show) {
             YAHOO.lacuna.Messaging.show();
         }
 

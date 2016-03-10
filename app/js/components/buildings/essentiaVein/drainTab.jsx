@@ -6,8 +6,9 @@ var $     = require('js/shims/jquery');
 
 var EssentiaVeinActions = require('js/actions/buildings/essentiaVein');
 
-var EssentiaVeinStore = require('js/stores/rpc/essentiaVein');
-EssentiaVeinStore.listen(_.noop);
+var EssentiaVeinRPCStore = require('js/stores/rpc/essentiaVein');
+// TODO What is this all about?
+EssentiaVeinRPCStore.listen(_.noop);
 
 var DrainTab = React.createClass({
 

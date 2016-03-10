@@ -7,10 +7,10 @@ var OptionsWindowStore = require('js/stores/windows/options');
 
 var OptionsWindow = React.createClass({
     mixins : [
-        Reflux.connect(OptionsWindowStore, 'show')
+        Reflux.connect(OptionsWindowStore, 'optionsWindow')
     ],
     render : function() {
-        if (this.state.show) {
+        if (this.state.optionsWindow.show) {
             YAHOO.lacuna.Profile.show();
         }
 

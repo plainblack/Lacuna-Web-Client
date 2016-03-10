@@ -1,15 +1,47 @@
 'use strict';
 
-var Reflux          = require('reflux');
+var Reflux              = require('reflux');
 
-var Window          = require('js/stores/mixins/window');
+var WindowMixinStores   = require('js/stores/mixins/window');
 
-var NotesActions    = require('js/actions/windows/notes');
-var KeyboardActions = require('js/actions/keyboard');
+var NotesWindowActions  = require('js/actions/windows/notes');
+var KeyboardActions     = require('js/actions/keyboard');
 
 var NotesWindowStore = Reflux.createStore({
-    mixins      : [Window],
-    listenables : [NotesActions, KeyboardActions]
+    mixins      : [WindowMixinStores],
+    listenables : [NotesWindowActions, KeyboardActions],
+
+    getDefaultData : function() {
+        return {
+            show : false
+        };
+    },
+
+    getData : function() {
+        return this.state;
+    },
+
+    getInitialState : function() {
+        if (this.state) {
+            this.state = this.getDefaultData();
+        }
+        return this.state;
+    },
+
+    init : function() {
+        this.state = this.getDefaultData();
+    },
+
+    onNotesWindowShow : function() {
+        this.state = true;
+        this.trigger(this.state);
+    },
+
+    onNotesWindowHide : function() {
+        this.state = false;
+        this.trigger(this.state);
+    }
+
 });
 
 module.exports = NotesWindowStore;

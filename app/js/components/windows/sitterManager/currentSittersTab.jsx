@@ -1,30 +1,30 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
-var _                    = require('lodash');
+var React                       = require('react');
+var Reflux                      = require('reflux');
+var _                           = require('lodash');
+var vex                         = require('js/vex');
 
-var SitterManagerActions = require('js/actions/windows/sitterManager');
+var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
 
-var SittersRPCStore      = require('js/stores/rpc/empire/sitters');
+var SittersEmpireRPCStore       = require('js/stores/rpc/empire/sitters');
 
-var SitterListItem       = require('js/components/windows/sitterManager/sitterListItem');
+var SitterListItem              = require('js/components/windows/sitterManager/sitterListItem');
 
-var vex                  = require('js/vex');
 
 var CurrentSittersTab = React.createClass({
     mixins : [
-        Reflux.connect(SittersRPCStore, 'sitters')
+        Reflux.connect(SittersEmpireRPCStore, 'sitters')
     ],
 
     reauthorizeAll : function() {
-        SitterManagerActions.reauthorizeAll();
+        SitterManagerWindowActions.reauthorizeAll();
     },
 
     deauthorizeAll : function() {
         vex.confirm(
             "Are you sure you want to revoke everyone's access to your empire?",
-            SitterManagerActions.deauthorizeAll
+            SitterManagerWindowActions.deauthorizeAll
         );
     },
 

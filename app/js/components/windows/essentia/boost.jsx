@@ -1,19 +1,19 @@
 'use strict';
 
-var React           = require('react');
-var Reflux          = require('reflux');
-var classnames      = require('classnames');
+var React                   = require('react');
+var Reflux                  = require('reflux');
+var classnames              = require('classnames');
 
-var EssentiaActions = require('js/actions/windows/essentia');
+var EssentiaWindowActions   = require('js/actions/windows/essentia');
 
-var BoostsRPCStore  = require('js/stores/rpc/empire/boosts');
-var EmpireRPCStore  = require('js/stores/rpc/empire');
+var BoostsEmpireRPCStore    = require('js/stores/rpc/empire/boosts');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
 
-var BoostCountdown  = require('js/components/windows/essentia/boostCountdown');
+var BoostCountdown          = require('js/components/windows/essentia/boostCountdown');
 
 var Boost = React.createClass({
     mixins : [
-        Reflux.connect(BoostsRPCStore, 'boosts'),
+        Reflux.connect(BoostsEmpireRPCStore, 'boosts'),
         Reflux.connect(EmpireRPCStore, 'empire')
     ],
 
@@ -32,7 +32,7 @@ var Boost = React.createClass({
     },
 
     handleBoost : function() {
-        EssentiaActions.boost(this.props.type, this.refs.weeks.value);
+        EssentiaWindowActions.boost(this.props.type, this.refs.weeks.value);
     },
 
     renderButton : function() {

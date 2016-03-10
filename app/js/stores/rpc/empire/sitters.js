@@ -1,28 +1,27 @@
 
 'use strict';
 
-var Reflux               = require('reflux');
-var _                    = require('lodash');
-var StatefulStore        = require('js/stores/mixins/stateful');
+var Reflux                      = require('reflux');
+var _                           = require('lodash');
+var moment                      = require('moment');
+var util                        = require('js/util');
+var server                      = require('js/server');
 
-var moment               = require('moment');
+var StatefulMixinStore          = require('js/stores/mixins/stateful');
 
-var util                 = require('js/util');
-var clone                = util.clone;
+var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
+var TickerActions               = require('js/actions/ticker');
 
-var SitterManagerActions = require('js/actions/windows/sitterManager');
-var TickerActions        = require('js/actions/ticker');
+var clone                       = util.clone;
 
-var server               = require('js/server');
-
-var SittersRPCStore = Reflux.createStore({
+var SittersEmpireRPCStore = Reflux.createStore({
     listenables : [
-        SitterManagerActions,
+        SitterManagerWindowActions,
         TickerActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -143,4 +142,4 @@ var SittersRPCStore = Reflux.createStore({
     }
 });
 
-module.exports = SittersRPCStore;
+module.exports = SittersEmpireRPCStore;

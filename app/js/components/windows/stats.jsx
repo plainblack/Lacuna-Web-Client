@@ -7,10 +7,10 @@ var StatsWindowStore = require('js/stores/windows/stats');
 
 var StatsWindow = React.createClass({
     mixins : [
-        Reflux.connect(StatsWindowStore, 'show')
+        Reflux.connect(StatsWindowStore, 'statsWindow')
     ],
     render : function() {
-        if (this.state.show) {
+        if (this.state.statsWindow.show) {
             YAHOO.lacuna.Stats.show();
         }
 
