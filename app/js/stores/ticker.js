@@ -58,10 +58,6 @@ var TickerStore = Reflux.createStore({
         }
     },
 
-    onUserSignIn : function() {
-        this.onTickerStart();
-    },
-
     onSuccessRpcEmpireLogout : function() {
         this.onTickerStop();
     },

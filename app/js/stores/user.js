@@ -20,6 +20,9 @@ var UserStore = Reflux.createStore({
 
 
     onUserSignIn : function() {
+        MenuActions.menuActionShow();
+        TickerActions.tickerShow();
+        ChatActions.chatShow();
         // TODO This should be possible to be removed. BUT it is needed for 
         // now. It is called in the map store by attaching tothe onUserSignin
         // event (as it does here) but perhaps it requires the other stores

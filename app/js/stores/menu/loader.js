@@ -8,7 +8,7 @@ var LoaderMenuStore = Reflux.createStore({
     listenables : LoaderMenuActions,
 
     init : function() {
-        this.data = this.getInitialState();
+        this.state = this.getInitialState();
     },
 
     getInitialState : function() {
@@ -26,13 +26,13 @@ var LoaderMenuStore = Reflux.createStore({
     },
 
     onLoaderMenuShow : function() {
-        this.data.show = true;
-        this.trigger(this.data);
+        this.state.show = true;
+        this.trigger(this.state);
     },
 
     onLoaderMenuHide : function() {
-        this.data.show = false;
-        this.trigger(this.data);
+        this.state.show = false;
+        this.trigger(this.state);
     }
 
 });

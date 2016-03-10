@@ -23,10 +23,9 @@ var NotesWindowStore = Reflux.createStore({
 
     getInitialState : function() {
         if (this.state) {
-            return this.state;
-        } else {
-            return this.getDefaultData();
+            this.state = this.getDefaultData();
         }
+        return this.state;
     },
 
     init : function() {
@@ -34,13 +33,13 @@ var NotesWindowStore = Reflux.createStore({
     },
 
     onNotesWindowShow : function() {
-        this.data = true;
-        this.trigger(this.data);
+        this.state = true;
+        this.trigger(this.state);
     },
 
     onNotesWindowHide : function() {
-        this.data = false;
-        this.trigger(this.data);
+        this.state = false;
+        this.trigger(this.state);
     }
 
 });

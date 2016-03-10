@@ -23,10 +23,9 @@ var StatsWindowStore = Reflux.createStore({
 
     getInitialState : function() {
         if (this.state) {
-            return this.state;
-        } else {
-            return this.getDefaultData();
+            this.state = this.getDefaultData();
         }
+        return this.state;
     },
 
     init : function() {
@@ -34,13 +33,13 @@ var StatsWindowStore = Reflux.createStore({
     },
 
     onStatsWindowShow : function() {
-        this.data = true;
-        this.trigger(this.data);
+        this.state.show = true;
+        this.trigger(this.state);
     },
 
     onStatsWindowHide : function() {
-        this.data = false;
-        this.trigger(this.data);
+        this.state.show = false;
+        this.trigger(this.state);
     }
 
 });

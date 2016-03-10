@@ -13,7 +13,7 @@ var MenuStore    = require('js/stores/menu');
 var Map = React.createClass({
     mixins : [
         Reflux.connect(MapModeStore, 'mapMode'),
-        Reflux.connect(BodyRPCStore, 'body'),
+        Reflux.connect(BodyRPCStore, 'bodyRPC'),
         Reflux.connect(PlanetStore, 'planet'),
         Reflux.connect(MenuStore, 'menuVisible')
     ],
@@ -24,7 +24,7 @@ var Map = React.createClass({
         // console.log(this.state);
 
         // Do nothing if the menu isn't shown.
-        if (this.state.menuVisible === false) {
+        if (this.state.menuVisible.show === false) {
 
             // Reset these values because we're *probably* logged out.
             this.previousMapMode = MapModeStore.PLANET_MAP_MODE;
@@ -75,7 +75,7 @@ var Map = React.createClass({
             Lacuna.MapPlanet.MapVisible(false);
             Lacuna.MapStar.MapVisible(true);
             Lacuna.MapStar.Load();
-            Lacuna.MapStar.Jump(this.state.body.x, this.state.body.y);
+            Lacuna.MapStar.Jump(this.state.bodyRPC.x, this.state.bodyRPC.y);
 
             // Sadly, we have to pull hacky tricks like this to avoid infinite loops.
             this.previousPlanetId = this.state.planet;

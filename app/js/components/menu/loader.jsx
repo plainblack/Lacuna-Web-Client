@@ -9,7 +9,7 @@ var LoaderMenuStore = require('js/stores/menu/loader');
 
 var Loader = React.createClass({
     mixins : [
-        Reflux.connect(LoaderMenuStore, 'loader')
+        Reflux.connect(LoaderMenuStore, 'loaderMenu')
     ],
     render : function() {
         return (
@@ -17,7 +17,7 @@ var Loader = React.createClass({
                 className={classNames(
                     'ui large loader',
                     {
-                        active : this.state.loader.show
+                        active : this.state.loaderMenu.show
                     }
                 )}
                 style={{

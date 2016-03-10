@@ -41,10 +41,6 @@ var MenuStore = Reflux.createStore({
         this.show(true);
     },
 
-    onUserSignIn : function() {
-        this.show(true);
-    },
-
     onMenuHide : function() {
         this.show(false);
     },

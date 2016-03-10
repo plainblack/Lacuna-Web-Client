@@ -22,11 +22,10 @@ var MailWindowStore = Reflux.createStore({
     },
 
     getInitialState : function() {
-        if (this.state) {
-            return this.state;
-        } else {
-            return this.getDefaultData();
+        if (! this.state) {
+            this.state = this.getDefaultData();
         }
+        return this.state;
     },
 
     init : function() {
@@ -34,13 +33,13 @@ var MailWindowStore = Reflux.createStore({
     },
 
     onMailWindowShow : function() {
-        this.data = true;
-        this.trigger(this.data);
+        this.state.show = true;
+        this.trigger(this.state);
     },
 
     onMailWindowHide : function() {
-        this.data = false;
-        this.trigger(this.data);
+        this.state.show = false;
+        this.trigger(this.state);
     }
 
 });
