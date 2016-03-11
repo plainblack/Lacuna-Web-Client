@@ -3,11 +3,11 @@
 module.exports = {
 
     getData : function() {
-        return this.data;
+        return this.state;
     },
 
     onEscKey : function() {
-        if (this.data.show === true) {
+        if (this.state.show === true) {
             this.hideWindow();
         }
     }
