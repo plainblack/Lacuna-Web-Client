@@ -87,6 +87,8 @@ var BuildingRPCStore = Reflux.createStore({
         // Carry previous state over incase the new data is missing fields we need.
         var building = _.assign(clone(this.state), result.building);
 
+        building.efficiency = building.efficiency * 1;
+
         // Glyph buildings will return a halls cost in the upgrade cost but normal buildings will
         // will only return the standard resources. Make sure they all exist so as to prevent
         // errors on the component level.

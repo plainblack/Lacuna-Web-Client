@@ -43,7 +43,7 @@ var Building = React.createClass({
                 <BuildingTabs
                     id={this.props.options.id}
                     url={this.props.options.url}
-                    efficiency={this.props.options.efficiency}
+                    efficiency={this.props.options.efficiency * 1}
                 />
             </div>
         );
