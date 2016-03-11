@@ -11,30 +11,41 @@ var ChatStore = Reflux.createStore({
         ChatActions,
         UserActions
     ],
-
     mixins : [
         StatefulStore
     ],
 
+    init : function() {
+        this.state = this.getInitialState();
+    },
+
+    getInitialState : function() {
+        return {
+            show :  false
+        };
+    },
+
     getDefaultData : function() {
-        return false;
+        return this.getInitialState();
     },
 
     onChatShow : function() {
-        this.emit(true);
+        this.state.show = true;
+        this.trigger(this.state);
+    },
+
+    onChatHide : function() {
+        this.state.show = false;
+        this.trigger(this.state);
     },
 
     onUserSignIn : function() {
         this.onChatShow();
     },
 
-    onChatHide : function() {
-        this.emit(false);
-    },
-
     onSuccessRpcEmpireLogout : function() {
         this.onChatHide();
-    },
+    }
 });
 
 module.exports = ChatStore;
