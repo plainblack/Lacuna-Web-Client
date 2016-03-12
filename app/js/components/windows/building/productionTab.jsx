@@ -1,21 +1,21 @@
 'use strict';
 
-var React              = require('react');
-var Reflux             = require('reflux');
-var _                  = require('lodash');
+var React                   = require('react');
+var Reflux                  = require('reflux');
+var _                       = require('lodash');
 
-var BuildingRPCStore   = require('js/stores/rpc/building');
-var BodyRPCStore       = require('js/stores/rpc/body');
+var BuildingRPCStore        = require('js/stores/rpc/building');
+var BodyRPCStore            = require('js/stores/rpc/body');
 
-var BuildingActions    = require('js/actions/windows/building');
+var BuildingWindowActions   = require('js/actions/windows/building');
 
-var ActionButton       = require('js/components/windows/building/actionButton');
-var ResourceProduction = require('js/components/windows/building/resourceProduction');
-var ResourceCost       = require('js/components/windows/building/resourceCost');
-var ResourceLine       = require('js/components/windows/building/resourceLine');
+var ActionButton            = require('js/components/windows/building/actionButton');
+var ResourceProduction      = require('js/components/windows/building/resourceProduction');
+var ResourceCost            = require('js/components/windows/building/resourceCost');
+var ResourceLine            = require('js/components/windows/building/resourceLine');
 
-var util               = require('js/util');
-var vex                = require('js/vex');
+var util                    = require('js/util');
+var vex                     = require('js/vex');
 
 var ProductionTab = React.createClass({
 
@@ -30,7 +30,7 @@ var ProductionTab = React.createClass({
         vex.confirm(
             'Are you sure you want to demolish your ' + name + '?',
             _.bind(function() {
-                BuildingActions.demolishBuilding(this.state.building.url, this.state.building.id);
+                BuildingWindowActions.buildingWindowDemolish(this.state.building.url, this.state.building.id);
             }, this)
         );
     },
@@ -41,13 +41,13 @@ var ProductionTab = React.createClass({
         vex.confirm(
             'Are you sure you want to downgrade your ' + name + '?',
             _.bind(function() {
-                BuildingActions.downgradeBuilding(this.state.building.url, this.state.building.id);
+                BuildingWindowActions.buildingWindowDowngrade(this.state.building.url, this.state.building.id);
             }, this)
         );
     },
 
     onUpgradeClick : function() {
-        BuildingActions.upgradeBuilding(this.state.building.url, this.state.building.id);
+        BuildingWindowActions.buildingWindowUpgrade(this.state.building.url, this.state.building.id);
     },
 
     render : function() {

@@ -3,10 +3,10 @@
 var Reflux = require('reflux');
 
 var CaptchaActions = Reflux.createActions([
-    'clear',
-    'fetch',
-    'refresh',
-    'solve'
+    'captchaWindowClear',
+    'captchaWindowRefresh',
+    'captchaWindowShow',
+    'captchaWindowHide'
 ]);
 
 module.exports = CaptchaActions;

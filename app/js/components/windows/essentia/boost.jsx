@@ -5,6 +5,7 @@ var Reflux                  = require('reflux');
 var classnames              = require('classnames');
 
 var EssentiaWindowActions   = require('js/actions/windows/essentia');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
 var BoostsEmpireRPCStore    = require('js/stores/rpc/empire/boosts');
 var EmpireRPCStore          = require('js/stores/rpc/empire');
@@ -32,6 +33,7 @@ var Boost = React.createClass({
     },
 
     handleBoost : function() {
+        EmpireRPCActions.requestRPCEmpireBoost
         EssentiaWindowActions.boost(this.props.type, this.refs.weeks.value);
     },
 

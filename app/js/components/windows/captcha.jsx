@@ -1,13 +1,14 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
-var _                    = require('lodash');
+var React                   = require('react');
+var Reflux                  = require('reflux');
+var _                       = require('lodash');
 
-var CaptchaActions       = require('js/actions/windows/captcha');
-var WindowManagerActions = require('js/actions/windowManager');
+var CaptchaWindowActions    = require('js/actions/windows/captcha');
+var WindowManagerActions    = require('js/actions/windowManager');
+var CaptchaRPCActions       = require('js/actions/rpc/captcha');
 
-var CaptchaRPCStore      = require('js/stores/rpc/captcha');
+var CaptchaRPCStore         = require('js/stores/rpc/captcha');
 
 var Captcha = React.createClass({
     propTypes : {
@@ -15,7 +16,7 @@ var Captcha = React.createClass({
     },
 
     mixins : [
-        Reflux.connect(CaptchaRPCStore, 'captcha')
+        Reflux.connect(CaptchaRPCStore, 'captchaRPCStore')
     ],
 
     statics : {
@@ -27,17 +28,17 @@ var Captcha = React.createClass({
     },
 
     componentDidUpdate : function(prevProps, prevState) {
-        if (prevState.captcha.url !== this.state.captcha.url) {
+        if (prevState.captchaRPCStore.url !== this.state.captchaRPCStore.url) {
             this.clearSolutionField();
         }
     },
 
-    onWindowShow : function() {
+    onCaptchaWindowShow : function() {
         this.clearSolutionField();
         CaptchaActions.fetch();
     },
 
-    onWindowHide : function() {
+    onCaptchaWindowHide : function() {
         this.clearSolutionField();
         CaptchaActions.clear();
     },
@@ -80,7 +81,7 @@ var Captcha = React.createClass({
             <div>
                 <div
                     style={{
-                        backgroundImage : 'url(' + this.state.captcha.url + ')',
+                        backgroundImage : 'url(' + this.state.captchaRPCStore.url + ')',
                         width           : 300,
                         height          : 80
                     }}

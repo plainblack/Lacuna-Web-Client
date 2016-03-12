@@ -2,14 +2,14 @@
 
 var Reflux = require('reflux');
 
-var BuildingActions = Reflux.createActions([
-    'loadBuilding',
-    'updateBuilding',
-    'clear',
-    'upgradeBuilding',
-    'downgradeBuilding',
-    'demolishBuilding',
-    'repairBuilding'
+var BuildingWindowActions = Reflux.createActions([
+    'buildingWindowLoad',
+    'buildingWindowUpdate',
+    'buildingWindowClear',
+    'buildingWindowUpgrade',
+    'buildingWindowDowngrade',
+    'buildingWindowDemolish',
+    'buildingWindowRepair'
 ]);
 
-module.exports = BuildingActions;
+module.exports = BuildingWindowActions;

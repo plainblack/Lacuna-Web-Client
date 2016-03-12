@@ -24,7 +24,7 @@ var EssentiaVeinRPCStore = Reflux.createStore({
             ],
             scope   : this,
             success : function(result) {
-                BuildingWindowActions.updateBuilding(result.building);
+                BuildingWindowActions.buildingWindowUpdate(result.building);
                 WindowManagerActions.hideTopWindow();
             }
         });

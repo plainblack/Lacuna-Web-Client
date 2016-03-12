@@ -4,7 +4,7 @@ var Reflux          = require('reflux');
 var Server          = require('js/server');
 var _               = require('lodash');
 
-var RpcStatsActions = require('js/actions/rpc/stats');
+var StatsRPCActions = require('js/actions/rpc/stats');
 
 function makeStatsCall(options) {
     var defaults = {
@@ -21,23 +21,23 @@ function makeStatsCall(options) {
         params  : options.params,
         success : function(result) {
             console.log('makeStatsCall: ' + options.method + '_success');
-            RpcStatsActions[options.success](result);
+            StatsRPCActions[options.success](result);
         },
         error : function(error) {
             console.log('makeStatsCall: ' + options.method + '_error');
             options.error(error);
-            RpcStatsActions[options.error](error);
+            StatsRPCActions[options.error](error);
         }
     });
 }
 
-RpcStatsActions.requestStatsGetCredits.listen(function(o) {
+StatsRPCActions.requestStatsRPCGetCredits.listen(function(o) {
     makeStatsCall({
         method  : 'credits',
         params  : [],
-        success : 'successStatsGetCredits',
-        error   : 'failureStatsGetCredits' 
+        success : 'successStatsRPCGetCredits',
+        error   : 'failureStatsRPCGetCredits' 
     });
 });
 
-module.exports = RpcStatsActions;
+module.exports = StatsRPCActions;

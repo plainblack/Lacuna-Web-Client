@@ -4,7 +4,7 @@ var Reflux          = require('reflux');
 var Server          = require('js/server');
 var _               = require('lodash');
 
-var RpcEmpireActions = require('js/actions/rpc/empire');
+var RPCEmpireActions = require('js/actions/rpc/empire');
 
 function makeEmpireCall(options) {
     var defaults = {
@@ -21,23 +21,36 @@ function makeEmpireCall(options) {
         params  : options.params,
         success : function(result) {
             console.log('makeEmpireCall: ' + options.method + '_success');
-            RpcEmpireActions[options.success](result);
+            RPCEmpireActions[options.success](result);
         },
         error : function(error) {
             console.log('makeEmpireCall: ' + options.method + '_error');
             options.error(error);
-            RpcEmpireActions[options.error](error);
+            RPCEmpireActions[options.error](error);
         }
     });
 }
 
-RpcEmpireActions.requestRpcEmpireLogout.listen(function(o) {
+RPCEmpireActions.requestRPCEmpireLogout.listen(function(o) {
     makeEmpireCall({
         method  : 'logout',
-        params  : {},
-        success : 'successRpcEmpireLogout',
-        error   : 'failureRpcEmpireLogout' 
+        params  : [],
+        success : 'successRPCEmpireLogout',
+        error   : 'failureRPCEmpireLogout' 
     });
 });
 
-module.exports = RpcEmpireActions;
+RPCEmpireActions.requestRPCEmpireBoost.listen(function(o) {
+    var method = 'boost_' + o.type;
+
+    makeEmpireCall({
+        method  : method,
+        params  : [o.weeks],
+        success : 'successRPCEmpireBoost',
+        error   : 'failureRPCEmpireBoost'
+    });
+
+});
+
+module.exports = RPCEmpireActions;
+

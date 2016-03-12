@@ -87,6 +87,8 @@ var BuildingRPCStore = Reflux.createStore({
         // Carry previous state over incase the new data is missing fields we need.
         var building = _.assign(clone(this.state), result.building);
 
+        building.efficiency = building.efficiency * 1;
+
         // Glyph buildings will return a halls cost in the upgrade cost but normal buildings will
         // will only return the standard resources. Make sure they all exist so as to prevent
         // errors on the component level.
@@ -118,17 +120,17 @@ var BuildingRPCStore = Reflux.createStore({
         this.emit(building);
     },
 
-    onClear : function() {
+    onBuildingWindowClear : function() {
         this.emit(this.getDefaultData());
     },
 
-    onUpdateBuilding : function(newBuilding) {
+    onBuildingWindowUpdate: function(newBuilding) {
         if (newBuilding) {
             this.handleNewData({building : newBuilding});
         }
     },
 
-    onLoadBuilding : function(url, id) {
+    onBuildingWindowLoad : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'view',
@@ -144,7 +146,7 @@ var BuildingRPCStore = Reflux.createStore({
         });
     },
 
-    onDemolishBuilding : function(url, id) {
+    onBuildingWindowDemolish : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'demolish',
@@ -154,14 +156,14 @@ var BuildingRPCStore = Reflux.createStore({
                 // Handle the old planet map code.
                 YAHOO.lacuna.MapPlanet._fireRemoveTile(this.state);
 
-                BuildingWindowActions.clear();
+                BuildingWindowActions.buildingWindowClear();
 
                 WindowManagerActions.hideTopWindow();
             }
         });
     },
 
-    onDowngradeBuilding : function(url, id) {
+    onBuildingWindowDowngrade : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'downgrade',
@@ -174,7 +176,7 @@ var BuildingRPCStore = Reflux.createStore({
         });
     },
 
-    onUpgradeBuilding : function(url, id) {
+    onBuildingWindowUpgrade : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'upgrade',
@@ -187,7 +189,7 @@ var BuildingRPCStore = Reflux.createStore({
         });
     },
 
-    onRepairBuilding : function(url, id) {
+    onBuildingWindowRepair : function(url, id) {
         server.call({
             module  : url.replace(/^\//, ''), // Cull leading '/' from url
             method  : 'repair',

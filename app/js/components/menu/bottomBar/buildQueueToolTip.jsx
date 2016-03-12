@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var RpcCountToolTip = React.createClass({
+var RPCCountToolTip = React.createClass({
 
     propTypes : {
         body : React.PropTypes.object.isRequired
@@ -25,4 +25,4 @@ var RpcCountToolTip = React.createClass({
     }
 });
 
-module.exports = RpcCountToolTip;
+module.exports = RPCCountToolTip;
