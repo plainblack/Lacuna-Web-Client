@@ -108,7 +108,18 @@ var BoostsEmpireRPCStore = Reflux.createStore({
         this.emit(boosts);
     },
 
+
+    onSuccessRPCEmpireBoost : function(result) {
+        console.log('success Empire Boost');
+    },
+
+    onFailureRPCEmpireBoost : function(result) {
+        console.log('FAILURE Empire Boost');
+    },
+
+    
     onBoost : function(type, weeks) {
+        console.log('DEPRECATED call to onBoost');
 
         var essentia = EmpireRPCStore.getData().essentia;
 
@@ -124,19 +135,21 @@ var BoostsEmpireRPCStore = Reflux.createStore({
             window.alert('Insufficient Essentia.');
             return;
         }
+        
 
-        server.call({
-            module  : 'empire',
-            method  : 'boost_' + type,
-            params  : [weeks],
-            scope   : this,
-            success : function(result) {
-                var boosts = clone(this.state);
-                var newBoostTimestamp = result[type + '_boost'];
-                boosts[type] = this.handleNewBoost(newBoostTimestamp);
-                this.emit(boosts);
-            }
-        });
+
+//        server.call({
+//            module  : 'empire',
+//            method  : 'boost_' + type,
+//            params  : [weeks],
+//            scope   : this,
+//            success : function(result) {
+//                var boosts = clone(this.state);
+//                var newBoostTimestamp = result[type + '_boost'];
+//                boosts[type] = this.handleNewBoost(newBoostTimestamp);
+//                this.emit(boosts);
+//            }
+//        });
     }
 });
 

@@ -2,7 +2,7 @@
 
 var React           = require('react');
 
-var RpcStatsActions = require('js/actions/rpc/stats');
+var RPCStatsActions = require('js/actions/rpc/stats');
 
 var Tabber          = require('js/components/tabber');
 var Tabs            = Tabber.Tabs;
@@ -25,7 +25,7 @@ var AboutWindow = React.createClass({
                     <AboutTab />
                 </Tab>
 
-                <Tab title="Credits" onSelect={RpcStatsActions.requestStatsGetCredits}>
+                <Tab title="Credits" onSelect={RPCStatsActions.requestStatsGetCredits}>
                     <CreditsTab />
                 </Tab>
             </Tabs>

@@ -16,7 +16,7 @@ var Captcha = React.createClass({
     },
 
     mixins : [
-        Reflux.connect(CaptchaRPCStore, 'captchaRpcStore')
+        Reflux.connect(CaptchaRPCStore, 'captchaRPCStore')
     ],
 
     statics : {

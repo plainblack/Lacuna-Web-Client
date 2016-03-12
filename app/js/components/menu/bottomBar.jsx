@@ -15,7 +15,7 @@ var BottomBarSection     = require('js/components/menu/bottomBar/bottomBarSectio
 var BuildingCountToolTip = require('js/components/menu/bottomBar/buildingCountToolTip');
 var BuildQueueToolTip    = require('js/components/menu/bottomBar/buildQueueToolTip');
 var ResourceToolTip      = require('js/components/menu/bottomBar/resourceToolTip');
-var RpcCountToolTip      = require('js/components/menu/bottomBar/rpcCountToolTip');
+var RPCCountToolTip      = require('js/components/menu/bottomBar/rpcCountToolTip');
 
 var util                 = require('js/util');
 var rn                   = util.reduceNumber;
@@ -145,9 +145,9 @@ var BottomBar = React.createClass({
         });
     },
 
-    showRpcCountToolTip : function() {
+    showRPCCountToolTip : function() {
         $(ReactDOM.findDOMNode(this.refs.rpcCountSection)).popup({
-            html      : ReactDOMServer.renderToStaticMarkup(<RpcCountToolTip />),
+            html      : ReactDOMServer.renderToStaticMarkup(<RPCCountToolTip />),
             hoverable : true,
             position  : 'top center',
             delay     : {
@@ -270,7 +270,7 @@ var BottomBar = React.createClass({
                             iconName="exchange"
                             topText={empire.rpc_count + ' / ' + rn(server.rpc_limit)}
                             bottomText="Actions"
-                            toolTipShow={this.showRpcCountToolTip}
+                            toolTipShow={this.showRPCCountToolTip}
                         />
                     </div>
                 </div>
