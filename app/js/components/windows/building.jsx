@@ -1,11 +1,11 @@
 'use strict';
 
-var React               = require('react');
+var React                   = require('react');
 
-var BuildingActions     = require('js/actions/windows/building');
+var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingInformation = require('js/components/windows/building/buildingInformation');
-var BuildingTabs        = require('js/components/windows/building/buildingTabs');
+var BuildingInformation     = require('js/components/windows/building/buildingInformation');
+var BuildingTabs            = require('js/components/windows/building/buildingTabs');
 
 var Building = React.createClass({
 
@@ -22,11 +22,11 @@ var Building = React.createClass({
     },
 
     onWindowShow : function() {
-        BuildingActions.clear();
+        BuildingWindowActions.buildingWindowClear();
     },
 
     onWindowHide : function() {
-        BuildingActions.clear();
+        BuildingWindowActions.buildingWindowClear();
     },
 
     render : function() {

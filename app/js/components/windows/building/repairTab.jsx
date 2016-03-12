@@ -1,14 +1,14 @@
 'use strict';
 
-var React            = require('react');
-var Reflux           = require('reflux');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 
-var BuildingActions  = require('js/actions/windows/building');
+var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingRPCStore = require('js/stores/rpc/building');
-var BodyRPCStore     = require('js/stores/rpc/body');
+var BuildingRPCStore        = require('js/stores/rpc/building');
+var BodyRPCStore            = require('js/stores/rpc/body');
 
-var ResourceCost     = require('js/components/windows/building/resourceCost');
+var ResourceCost            = require('js/components/windows/building/resourceCost');
 
 var RepairTab = React.createClass({
 
@@ -18,7 +18,7 @@ var RepairTab = React.createClass({
     ],
 
     handleClick : function() {
-        BuildingActions.repairBuilding(this.state.building.url, this.state.building.id);
+        BuildingWindowActions.buildingWindowRepair(this.state.building.url, this.state.building.id);
     },
 
     render : function() {

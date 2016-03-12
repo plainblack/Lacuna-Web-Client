@@ -1,18 +1,18 @@
 'use strict';
 
-var React            = require('react');
-var Reflux           = require('reflux');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 
-var Tabber           = require('js/components/tabber');
-var Tabs             = Tabber.Tabs;
-var Tab              = Tabber.Tab;
+var Tabber                  = require('js/components/tabber');
+var Tabs                    = Tabber.Tabs;
+var Tab                     = Tabber.Tab;
 
-var BuildingActions  = require('js/actions/windows/building');
+var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingRPCStore = require('js/stores/rpc/building');
+var BuildingRPCStore        = require('js/stores/rpc/building');
 
-var ProductionTab    = require('js/components/windows/building/productionTab');
-var RepairTab        = require('js/components/windows/building/repairTab');
+var ProductionTab           = require('js/components/windows/building/productionTab');
+var RepairTab               = require('js/components/windows/building/repairTab');
 
 var BUILDINGS = {
     '/essentiavein'     : require('js/components/buildings/essentiaVein'),
@@ -35,7 +35,7 @@ var BuildingTabs = React.createClass({
     ],
 
     loadProduction : function() {
-        BuildingActions.loadBuilding(this.props.url, this.props.id);
+        BuildingWindowActions.buildingWindowLoad(this.props.url, this.props.id);
     },
 
     render : function() {
