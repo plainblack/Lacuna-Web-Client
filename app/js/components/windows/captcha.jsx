@@ -42,6 +42,10 @@ var Captcha = React.createClass({
     onWindowHide : function() {
         this.clearSolutionField();
         CaptchaWindowActions.captchaWindowClear();
+        var success = this.props.options.success;
+        if (typeof success === 'function') {
+            success();
+        }
     },
 
     handleEnterKey : function(event) {
