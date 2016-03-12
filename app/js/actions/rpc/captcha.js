@@ -37,7 +37,7 @@ function requestCaptchaCall(options) {
 
             // Don't encumber the stores with multiple copies of the status
             delete result.status;
-            CatchaRPCActions[options.success](result);
+            CaptchaRPCActions[options.success](result);
         },
         error : function(error) {
             console.log('CaptchaRPCActions: ' + options.method + '_error');
@@ -47,7 +47,7 @@ function requestCaptchaCall(options) {
 }
 
 CaptchaRPCActions.requestCaptchaRPCFetch.listen(function(o) {
-    requestBodyCall({
+    requestCaptchaCall({
         method : 'fetch',
         params : [],
         success : 'successCaptchaRPCFetch',
@@ -56,7 +56,7 @@ CaptchaRPCActions.requestCaptchaRPCFetch.listen(function(o) {
 });
 
 CaptchaRPCActions.requestCaptchaRPCSolve.listen(function(o) {
-    requestBodyCall({
+    requestCaptchaCall({
         method : 'solve',
         params : [
             o.guid,

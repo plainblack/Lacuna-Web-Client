@@ -33,41 +33,41 @@ var Captcha = React.createClass({
         }
     },
 
-    onCaptchaWindowShow : function() {
+    onWindowShow : function() {
         this.clearSolutionField();
-        CaptchaActions.fetch();
+        CaptchaRPCActions.requestCaptchaRPCFetch();
     },
 
-    onCaptchaWindowHide : function() {
+    onWindowHide : function() {
         this.clearSolutionField();
-        CaptchaActions.clear();
+        CaptchaWindowActions.captchaWindowClear();
     },
 
     handleEnterKey : function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            this.onSolveClick();
+            this.onClickSolve();
         }
     },
 
-    onSolveClick : function() {
+    onClickSolve : function() {
         var solution = this.refs.solution.value;
         var success = this.props.options.success;
 
-        CaptchaActions.solve(solution, _.bind(function() {
+        CaptchaRPCActions.requestCaptchaRPCSolve(solution, _.bind(function() {
             if (typeof success === 'function') {
                 success();
-                this.onCloseClick();
+                this.onClickClose();
             }
         }, this));
     },
 
-    onRefreshClick : function() {
+    onClickRefresh : function() {
         this.clearSolutionField();
-        CaptchaActions.refresh();
+        CaptchaWindowActions.captchaWindowRefresh();
     },
 
-    onCloseClick : function() {
+    onClickClose : function() {
         this.clearSolutionField();
         WindowManagerActions.hideWindow(this.props.options.id);
     },
@@ -102,13 +102,13 @@ var Captcha = React.createClass({
                     />
 
                     <div className="ui large icon buttons">
-                        <div className="ui green button" onClick={this.onSolveClick}>
+                        <div className="ui green button" onClick={this.onClickSolve}>
                             <i className="checkmark icon"></i>
                         </div>
-                        <div className="ui blue button" onClick={this.onRefreshClick}>
+                        <div className="ui blue button" onClick={this.onClickRefresh}>
                             <i className="refresh icon"></i>
                         </div>
-                        <div className="ui red button" onClick={this.onCloseClick}>
+                        <div className="ui red button" onClick={this.onClickClose}>
                             <i className="remove icon"></i>
                         </div>
                     </div>
