@@ -32,12 +32,12 @@ var OptionsWindowStore = Reflux.createStore({
         this.state = this.getDefaultData();
     },
 
-    onOptionWindowShow : function() {
+    onOptionsWindowShow : function() {
         this.state.show = true;
         this.trigger(this.state);
     },
 
-    onOptionWindowHide : function() {
+    onOptionsWindowHide : function() {
         this.state.show = false;
         this.trigger(this.state);
     }

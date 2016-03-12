@@ -2,9 +2,9 @@
 
 var Reflux = require('reflux');
 
-var OptionsActions = Reflux.createActions([
-    'show',
-    'hide'
+var OptionsWindowActions = Reflux.createActions([
+    'optionsWindowShow',
+    'optionsWindowHide'
 ]);
 
-module.exports = OptionsActions;
+module.exports = OptionsWindowActions;

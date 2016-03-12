@@ -7,7 +7,7 @@ var server               = require('js/server');
 var $                    = require('js/shims/jquery');
 
 var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
-var OptionsActions       = require('js/actions/windows/options');
+var OptionsWindowActions = require('js/actions/windows/options');
 var WindowManagerActions = require('js/actions/windowManager');
 
 var windowTypes          = require('js/windowTypes');
@@ -228,7 +228,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    OptionsActions.show();
+                    OptionsWindowActions.optionsWindowShow();
                 }}
                 >
                     <i className="options icon"></i>
