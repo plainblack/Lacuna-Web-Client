@@ -52,14 +52,8 @@ var Captcha = React.createClass({
 
     onClickSolve : function() {
         var solution = this.refs.solution.value;
-        var success = this.props.options.success;
-
-        CaptchaRPCActions.requestCaptchaRPCSolve(solution, _.bind(function() {
-            if (typeof success === 'function') {
-                success();
-                this.onClickClose();
-            }
-        }, this));
+        
+        CaptchaRPCActions.requestCaptchaRPCSolve(this.state.captchaRPCStore.guid, solution);
     },
 
     onClickRefresh : function() {
