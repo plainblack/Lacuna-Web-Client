@@ -23,7 +23,7 @@ var CaptchaRPCStore = Reflux.createStore({
         };
     },
 
-    onClear : function() {
+    onCaptchaWindowClear : function() {
         this.emit(this.getDefaultData());
     },
 
@@ -53,15 +53,15 @@ var CaptchaRPCStore = Reflux.createStore({
                 }
             },
             error : function() {
-                CaptchaWindowActions.refresh();
+                this.onCaptchaWindewRefresh();
             },
             scope : this
         });
     },
 
-    onRefresh : function() {
-        CaptchaWindowActions.clear();
-        CaptchaWindowActions.fetch();
+    onCaptchaWindowRefresh : function() {
+        this.onCaptchaWindowClear();
+        this.onFetch();
     }
 });
 
