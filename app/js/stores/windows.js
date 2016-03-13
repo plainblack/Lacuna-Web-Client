@@ -1,6 +1,8 @@
 'use strict';
 
 var Reflux              = require('reflux');
+var _                   = require('lodash');
+
 var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
 var WindowActions       = require('js/actions/window');
