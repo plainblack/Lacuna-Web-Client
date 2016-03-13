@@ -215,18 +215,10 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.about);
-                }}>
-                    <i className="rocket icon"></i>
-                    About
-                </a>
-
-                <a className="item" onClick={function() {
-                    LeftSidebarActions.hide();
                     WindowActions.windowAdd(About);
                 }}>
                     <i className="rocket icon"></i>
-                    About2
+                    About
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
