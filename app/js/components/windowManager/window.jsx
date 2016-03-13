@@ -16,7 +16,6 @@ var WINDOWS = {
     NOTES          : require('js/components/windows/notes'),
     OPTIONS        : require('js/components/windows/options'),
     PROMOTIONS     : require('js/components/windows/promotions'),
-    SERVER_CLOCK   : require('js/components/windows/serverClock'),
     SITTER_MANAGER : require('js/components/windows/sitterManager'),
     STATS          : require('js/components/windows/stats')
 };
