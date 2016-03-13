@@ -11,8 +11,8 @@ var Windows = React.createClass({
     ],
 
     render : function() {
-        var windows = _.map(this.state.windows.windows, function(window) {
-            return React.createElement(window, null);
+        var windows = _.map(this.state.windows.windows, function(window,index) {
+            return React.createElement(window, { zIndex : 1000000 + index });
         });
 
         return (

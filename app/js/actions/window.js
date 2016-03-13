@@ -3,7 +3,8 @@
 var Reflux = require('reflux');
 
 var WindowActions = Reflux.createActions([
-    'windowAdd'
+    'windowAdd',
+    'windowClose'
 ]);
 
 module.exports = WindowActions;

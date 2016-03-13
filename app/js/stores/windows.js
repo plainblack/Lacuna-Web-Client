@@ -26,6 +26,15 @@ var WindowsStore = Reflux.createStore({
         var state = _.cloneDeep(this.state);
         state.windows = _.concat(state.windows, window);
         this.emit(state);
+    },
+
+    onWindowClose : function(window) {
+        console.log('onWindowClose');
+        var state = _.cloneDeep(this.state);
+        state.windows = _.remove(state.windows, function(value) {
+            value === window;
+        });
+        this.emit(state);
     }
 
 });
