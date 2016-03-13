@@ -1,7 +1,6 @@
 'use strict';
 
 var windowTypes = {
-    about         : 'ABOUT',
     building      : 'BUILDING',
     captcha       : 'CAPTCHA',
     essentia      : 'ESSENTIA',
@@ -10,7 +9,6 @@ var windowTypes = {
     notes         : 'NOTES',
     options       : 'OPTIONS',
     promotions    : 'PROMOTIONS',
-    serverClock   : 'SERVER_CLOCK',
     sitterManager : 'SITTER_MANAGER',
     stats         : 'STATS'
 };

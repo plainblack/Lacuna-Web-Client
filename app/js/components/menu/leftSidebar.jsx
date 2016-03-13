@@ -11,6 +11,7 @@ var OptionsWindowActions    = require('js/actions/windows/options');
 var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
 var About                   = require('js/components/window/about');
+var ServerClock             = require('js/components/window/serverClock');
 
 var windowTypes             = require('js/windowTypes');
 
@@ -238,7 +239,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.serverClock);
+                    WindowActions.windowAdd(ServerClock)
                 }}>
                     <i className="wait icon"></i>
                     Server Clock
