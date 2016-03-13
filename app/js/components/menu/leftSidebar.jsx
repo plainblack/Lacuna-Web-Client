@@ -9,6 +9,8 @@ var $                    = require('js/shims/jquery');
 var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
 var OptionsWindowActions = require('js/actions/windows/options');
 var WindowManagerActions = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
+var About                   = require('js/components/window/about');
 
 var windowTypes          = require('js/windowTypes');
 
@@ -217,6 +219,14 @@ var LeftSidebar = React.createClass({
                 }}>
                     <i className="rocket icon"></i>
                     About
+                </a>
+
+                <a className="item" onClick={function() {
+                    LeftSidebarActions.hide();
+                    WindowActions.windowAdd(About);
+                }}>
+                    <i className="rocket icon"></i>
+                    About2
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
