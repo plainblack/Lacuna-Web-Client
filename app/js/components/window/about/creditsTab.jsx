@@ -6,7 +6,7 @@ var _               = require('lodash');
 
 var CreditsStatsRPCStore = require('js/stores/rpc/stats/credits');
 
-var CreditsSection  = require('js/components/windows/about/creditsSection');
+var CreditsSection  = require('js/components/window/about/creditsSection');
 
 var CreditsTab = React.createClass({
 
