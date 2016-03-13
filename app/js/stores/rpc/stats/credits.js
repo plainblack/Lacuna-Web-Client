@@ -39,7 +39,7 @@ var CreditsStatsRPCStore = Reflux.createStore({
     //     'Play Testers' : ['John Ottinger', 'Jamie Vrbsky']
     // }
 
-    onSuccessStatsGetCredits : function(result) {
+    onSuccessStatsRPCGetCredits : function(result) {
         var credits = {};
         
         _.each(result, function(foo) {

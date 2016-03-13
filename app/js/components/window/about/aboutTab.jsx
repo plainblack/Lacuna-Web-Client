@@ -8,7 +8,7 @@ var ServerRPCStore = require('js/stores/rpc/server');
 var AboutTab = React.createClass({
 
     mixins : [
-        Reflux.connect(ServerRPCStore, 'server')
+        Reflux.connect(ServerRPCStore, 'serverRPC')
     ],
 
     render : function() {
@@ -22,7 +22,7 @@ var AboutTab = React.createClass({
                     Copyright 2010, {(new Date()).getFullYear()} Lacuna Expanse Corp.
                 </p>
                 <p>
-                    Server Version: {this.state.server.version}.
+                    Server Version: {this.state.serverRPC.version}.
                 </p>
             </div>
         );

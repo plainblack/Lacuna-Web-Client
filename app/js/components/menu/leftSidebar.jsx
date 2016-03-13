@@ -1,19 +1,21 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
-var util                 = require('js/util');
-var server               = require('js/server');
-var $                    = require('js/shims/jquery');
+var React                   = require('react');
+var Reflux                  = require('reflux');
+var util                    = require('js/util');
+var server                  = require('js/server');
+var $                       = require('js/shims/jquery');
 
-var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
-var OptionsWindowActions = require('js/actions/windows/options');
-var WindowManagerActions = require('js/actions/windowManager');
+var LeftSidebarActions      = require('js/actions/menu/leftSidebar');
+var OptionsWindowActions    = require('js/actions/windows/options');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
+var About                   = require('js/components/window/about');
 
-var windowTypes          = require('js/windowTypes');
+var windowTypes             = require('js/windowTypes');
 
-var EmpireRPCStore       = require('js/stores/rpc/empire');
-var LeftSidebarStore     = require('js/stores/menu/leftSidebar');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var LeftSidebarStore        = require('js/stores/menu/leftSidebar');
 
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
@@ -213,7 +215,7 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.about);
+                    WindowActions.windowAdd(About);
                 }}>
                     <i className="rocket icon"></i>
                     About

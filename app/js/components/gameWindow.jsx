@@ -8,6 +8,7 @@ var RightSidebar  = require('js/components/menu/rightSidebar');
 var Map           = require('js/components/menu/map');
 var Menu          = require('js/components/menu');
 var WindowManager = require('js/components/windowManager');
+var WindowsManager = require('js/components/windowsManager');
 
 var MailWindow    = require('js/components/windows/mail');
 var OptionsWindow = require('js/components/windows/options');
@@ -51,6 +52,7 @@ var GameWindow = React.createClass({
                     <div id="content"></div> { /* This div is used by map. */ }
 
                     <WindowManager />
+                    <WindowsManager />
 
                     <MailWindow />
                     <OptionsWindow />

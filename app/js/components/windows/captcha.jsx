@@ -9,6 +9,7 @@ var WindowManagerActions    = require('js/actions/windowManager');
 var CaptchaRPCActions       = require('js/actions/rpc/captcha');
 
 var CaptchaRPCStore         = require('js/stores/rpc/captcha');
+var clone                   = require('js/util').clone;
 
 var Captcha = React.createClass({
     propTypes : {
@@ -41,6 +42,10 @@ var Captcha = React.createClass({
     onWindowHide : function() {
         this.clearSolutionField();
         CaptchaWindowActions.captchaWindowClear();
+        var success = this.props.options.success;
+        if (typeof success === 'function') {
+            success();
+        }
     },
 
     handleEnterKey : function(event) {
@@ -52,14 +57,11 @@ var Captcha = React.createClass({
 
     onClickSolve : function() {
         var solution = this.refs.solution.value;
-        var success = this.props.options.success;
-
-        CaptchaRPCActions.requestCaptchaRPCSolve(solution, _.bind(function() {
-            if (typeof success === 'function') {
-                success();
-                this.onClickClose();
-            }
-        }, this));
+        
+        CaptchaRPCActions.requestCaptchaRPCSolve({
+            guid        : this.state.captchaRPCStore.guid, 
+            solution    : solution
+        });
     },
 
     onClickRefresh : function() {

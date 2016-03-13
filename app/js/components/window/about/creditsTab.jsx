@@ -11,7 +11,7 @@ var CreditsSection  = require('js/components/windows/about/creditsSection');
 var CreditsTab = React.createClass({
 
     mixins : [
-        Reflux.connect(CreditsStatsRPCStore, 'credits')
+        Reflux.connect(CreditsStatsRPCStore, 'creditsStatsRPC')
     ],
 
     render : function() {
@@ -22,7 +22,7 @@ var CreditsTab = React.createClass({
                 </h1>
 
                 {
-                    _.map(this.state.credits, function(names, header) {
+                    _.map(this.state.creditsStatsRPC, function(names, header) {
                         return (
                             <CreditsSection
                                 key={header}
