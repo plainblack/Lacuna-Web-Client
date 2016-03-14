@@ -13,9 +13,12 @@ var Windows = React.createClass({
 
     render : function() {
         var windows = _.map(this.state.windows.windows, function(window,index) {
-            return (
-                <Panel window={window} zIndex={1000000+index} /> 
-            );
+            if (window) {
+                return (
+                    <Panel window={window} zIndex={1000000+index} /> 
+                );
+            }
+            return;
         });
 
         return (
