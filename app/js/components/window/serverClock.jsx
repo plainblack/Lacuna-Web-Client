@@ -37,43 +37,24 @@ var ServerClock = React.createClass({
 
     render : function() {
         return (
-            <Draggable handle=".drag-handle" zIndex={this.props.zIndex}>
-                <div ref="container" style={{
-                    position : 'absolute',
-                    zIndex   : this.props.zIndex,
-                    left     : ($(window.document).width() - ServerClock.options.width) / 2
-                }}>
-                    <PanelHeader
-                        title={ServerClock.options.title}
-                        panelWidth={ServerClock.options.width}
-                        onClose={this.closeWindow}
-                    />
-
-                    <PanelContent
-                        panelWidth={ServerClock.options.width}
-                        panelHeight={ServerClock.options.height}
-                    >
-                        <div>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Server</strong></td>
-                                        <td>{this.state.serverRPC.serverFormattedTime}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Client</strong></td>
-                                        <td>{this.state.serverRPC.clientFormattedTime}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Tick Count</strong></td>
-                                        <td>{this.state.ticker.clockTicks}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </PanelContent>
-                </div>
-            </Draggable>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>Server</strong></td>
+                            <td>{this.state.serverRPC.serverFormattedTime}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Client</strong></td>
+                            <td>{this.state.serverRPC.clientFormattedTime}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tick Count</strong></td>
+                            <td>{this.state.ticker.clockTicks}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         );
     }
 });
