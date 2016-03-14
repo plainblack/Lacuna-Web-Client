@@ -20,22 +20,24 @@ var WindowsStore = Reflux.createStore({
 
     getDefaultData : function() {
         return {
-            windows : []
+            windows : [],
+            index   : 0
         };
     },
 
     onWindowAdd : function(window) {
         var state = _.cloneDeep(this.state);
-        state.windows = _.concat(state.windows, window);
+        var index = state.index;
+        state.index = state.index + 1;
+        state.windows[index] = window;
         this.emit(state);
     },
 
     onWindowClose : function(window) {
         console.log('onWindowClose');
         var state = _.cloneDeep(this.state);
-        _.remove(state.windows, function(value) {
-            return value === window;
-        });
+        var index = _.indexOf(state.windows, window);
+        state.windows[index] = null;
         this.emit(state);
     }
 

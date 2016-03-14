@@ -30,34 +30,15 @@ var About = React.createClass({
 
     render : function() {
         return (
-            <Draggable handle=".drag-handle" zIndex={this.props.zIndex}>
-                <div ref="container" style={{
-                    position : 'absolute',
-                    zIndex   : this.props.zIndex,
-                    left     : ($(window.document).width() - About.options.width) / 2
-                }}>
-                    <PanelHeader
-                        title={'About'}
-                        panelWidth={About.options.width}
-                        onClose={this.closeWindow}
-                    />
+            <Tabs>
+                <Tab title="About">
+                    <AboutTab />
+                </Tab>
 
-                    <PanelContent
-                        panelWidth={About.options.width}
-                        panelHeight={About.options.height}
-                    >
-                        <Tabs>
-                            <Tab title="About">
-                                <AboutTab />
-                            </Tab>
-
-                            <Tab title="Credits" onSelect={StatsRPCActions.requestStatsRPCGetCredits}>
-                                <CreditsTab />
-                            </Tab>
-                        </Tabs>
-                    </PanelContent>
-                </div>
-            </Draggable>
+                <Tab title="Credits" onSelect={StatsRPCActions.requestStatsRPCGetCredits}>
+                    <CreditsTab />
+                </Tab>
+            </Tabs>
         );
     }
 });
