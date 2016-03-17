@@ -2,8 +2,10 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes = require('js/windowTypes');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
+var windowTypes             = require('js/windowTypes');
+var EssentiaVein            = require('js/components/window/essentiavein');
 
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
@@ -870,7 +872,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             if (!FactoryMap[tile.data.url]) {
                 // Pass this off to the new React stuff.
 
-                WindowManagerActions.addWindow(windowTypes.building, tile.data);
+                if (tile.data.url == '/essentiavein') {
+                    WindowActions.windowAdd(EssentiaVein, tile.data);
+                }
+                else {
+                    WindowManagerActions.addWindow(windowTypes.building, tile.data);
+                }
 
                 return;
             }

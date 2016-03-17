@@ -25,18 +25,26 @@ var WindowsStore = Reflux.createStore({
         };
     },
 
-    onWindowAdd : function(window) {
+    onWindowAdd : function(window, options) {
         var state = _.cloneDeep(this.state);
         var index = state.index;
         state.index = state.index + 1;
-        state.windows[index] = window;
+        state.windows[index] = {
+            window  : window,
+            options : options
+        };
         this.emit(state);
     },
 
     onWindowClose : function(window) {
         console.log('onWindowClose');
         var state = _.cloneDeep(this.state);
-        var index = _.indexOf(state.windows, window);
+        var index = _.findIndex(state.windows, function(o) { 
+            if (o) {
+                return o.window === window;
+            }
+            return false;
+        });
         state.windows[index] = null;
         this.emit(state);
     }

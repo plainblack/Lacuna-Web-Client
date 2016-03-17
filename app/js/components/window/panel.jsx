@@ -21,7 +21,7 @@ var Panel = React.createClass({
     },
 
     render : function() {
-        var subPanel = React.createElement(this.props.window, { zIndex : 1000000 });
+        var subPanel = React.createElement(this.props.window, { zIndex : this.props.zIndex, options : this.props.options });
 
         return (
             <Draggable handle=".drag-handle" zIndex={this.props.zIndex}>
