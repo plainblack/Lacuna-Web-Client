@@ -1,25 +1,19 @@
 'use strict';
 
-var React           = require('react');
-var Draggable       = require('react-draggable');
+var React               = require('react');
+var Reflux              = require('reflux');
 
-var PanelHeader     = require('js/components/panel/panelHeader');
-var PanelContent    = require('js/components/panel/panelContent');
-var AboutTab        = require('js/components/window/about/aboutTab');
-var CreditsTab      = require('js/components/window/about/creditsTab');
+var BuildingRPCStore    = require('js/stores/rpc/building');
 
-var StandardTabsMixin   = require('js/components/mixins/standardTabs');
+var StandardTabs        = require('js/components/window/building/standardTabs');
 
 var BuildingInformation = require('js/components/window/building/information');
-var BuildingTabs        = require('js/components/windows/building/buildingTabs');
 var DrainTab            = require('js/components/window/essentiavein/drainTab');
 
-var StatsRPCActions = require('js/actions/rpc/stats');
-var WindowActions   = require('js/actions/window');
+var WindowActions       = require('js/actions/window');
 
-var Tabber                  = require('js/components/tabber');
-var Tabs                    = Tabber.Tabs;
-var Tab                     = Tabber.Tab;
+var Tabber              = require('js/components/tabber');
+var Tabs                = Tabber.Tabs;
 
 var EssentiaVein = React.createClass({
     statics : {
@@ -29,13 +23,16 @@ var EssentiaVein = React.createClass({
             height  : 420
         }
     },
+    mixins : [
+        Reflux.connect(BuildingRPCStore, 'buildingStore')
+    ],
 
     closeWindow : function() {
-        WindowActions.windowClose(About);
+        WindowActions.windowClose(EssentiaVein);
     },
 
     render : function() {
-        var tabs = StandardTabsMixin.tabs(this.props.options);
+        var tabs = StandardTabs.tabs(this.props.options);
 
         return (
             <div>
@@ -45,7 +42,7 @@ var EssentiaVein = React.createClass({
                 <div>
                     <Tabs>
                         {tabs}
-                        <DrainTab />
+                        <DrainTab building={this.state.buildingStore} />
                     </Tabs>
                 </div>
             </div>
