@@ -8,7 +8,7 @@ var WindowManagerActions = require('js/actions/windowManager');
 var Panel                = require('js/components/panel');
 
 var WINDOWS = {
-    BUILDING       : require('js/components/windows/building'),
+//    BUILDING       : require('js/components/windows/building'),
     CAPTCHA        : require('js/components/windows/captcha'),
     ESSENTIA       : require('js/components/windows/essentia'),
     INVITE         : require('js/components/windows/invite'),

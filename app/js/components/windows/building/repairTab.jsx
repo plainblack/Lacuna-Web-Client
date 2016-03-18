@@ -5,7 +5,7 @@ var Reflux                  = require('reflux');
 
 var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingRPCStore        = require('js/stores/rpc/building');
+var BuildingRPCStore        = require('js/stores/rpc/genericBuilding');
 var BodyRPCStore            = require('js/stores/rpc/body');
 
 var ResourceCost            = require('js/components/windows/building/resourceCost');

@@ -1,14 +1,10 @@
 'use strict';
 
-var React = require('react');
-var _     = require('lodash');
-var $     = require('js/shims/jquery');
+var React                   = require('react');
+var _                       = require('lodash');
+var $                       = require('js/shims/jquery');
 
-var EssentiaVeinActions = require('js/actions/buildings/essentiaVein');
-
-var EssentiaVeinRPCStore = require('js/stores/rpc/essentiaVein');
-// TODO What is this all about?
-EssentiaVeinRPCStore.listen(_.noop);
+var EssentiaVeinRPCActions  = require('js/actions/rpc/essentiaVein');
 
 var DrainTab = React.createClass({
 
@@ -24,7 +20,7 @@ var DrainTab = React.createClass({
         var times = parseInt($(this.refs.dropdown).dropdown('get value'), 10) / 30;
         var id = this.props.building.id;
 
-        EssentiaVeinActions.drainVein(id, times);
+        EssentiaVeinRPCActions.requestEssentiaVeinDrain(id, times);
     },
 
     render : function() {

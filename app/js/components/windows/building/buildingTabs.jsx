@@ -9,13 +9,12 @@ var Tab                     = Tabber.Tab;
 
 var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingRPCStore        = require('js/stores/rpc/building');
+var BuildingRPCStore        = require('js/stores/rpc/genericBuilding');
 
 var ProductionTab           = require('js/components/windows/building/productionTab');
 var RepairTab               = require('js/components/windows/building/repairTab');
 
 var BUILDINGS = {
-    '/essentiavein'     : require('js/components/buildings/essentiaVein'),
     '/inteltraining'    : require('js/components/buildings/intelTraining'),
     '/mayhemtraining'   : require('js/components/buildings/mayhemTraining'),
     '/politicstraining' : require('js/components/buildings/politicsTraining'),

@@ -4,7 +4,7 @@ var React                   = require('react');
 var Reflux                  = require('reflux');
 var _                       = require('lodash');
 
-var BuildingRPCStore        = require('js/stores/rpc/building');
+var BuildingRPCStore        = require('js/stores/rpc/genericBuilding'); 
 var BodyRPCStore            = require('js/stores/rpc/body');
 
 var BuildingWindowActions   = require('js/actions/windows/building');
