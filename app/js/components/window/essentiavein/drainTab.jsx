@@ -20,7 +20,7 @@ var DrainTab = React.createClass({
         var times = parseInt($(this.refs.dropdown).dropdown('get value'), 10) / 30;
         var id = this.props.building.id;
 
-        EssentiaVeinRPCActions.requestEssentiaVeinDrain(id, times);
+        EssentiaVeinRPCActions.requestEssentiaVeinRPCDrain({ id : id, times : times });
     },
 
     render : function() {

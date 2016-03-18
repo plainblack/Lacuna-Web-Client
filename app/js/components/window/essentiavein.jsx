@@ -16,6 +16,7 @@ var EssentiaVeinRPCActions  = require('js/actions/rpc/essentiaVein');
 
 var Tabber                  = require('js/components/tabber');
 var Tabs                    = Tabber.Tabs;
+var Tab                     = Tabber.Tab;
 
 var EssentiaVein = React.createClass({
     statics : {
@@ -39,6 +40,11 @@ var EssentiaVein = React.createClass({
 
     render : function() {
         var tabs = StandardTabs.tabs(this.props.options);
+        tabs.push(
+            <Tab title="Drain" key="Drain">
+                <DrainTab building={this.state.buildingStore} />
+            </Tab>
+        );
 
         return (
             <div>
@@ -48,7 +54,6 @@ var EssentiaVein = React.createClass({
                 <div>
                     <Tabs>
                         {tabs}
-                        <DrainTab building={this.state.buildingStore} />
                     </Tabs>
                 </div>
             </div>

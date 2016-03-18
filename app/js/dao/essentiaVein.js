@@ -52,7 +52,7 @@ EssentiaVeinRPCActions.successEssentiaVeinRPCView.listen(function(result) {
 EssentiaVeinRPCActions.requestEssentiaVeinRPCDrain.listen(function(o) {
     makeEssentiaVeinCall({
         method  : 'drain',
-        params  : [],
+        params  : [o.id, o.times],
         success : 'successEssentiaVeinRPCDrain',
         error   : 'failureEssentiaVeinRPCDrain' 
     });
