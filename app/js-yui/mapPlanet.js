@@ -875,10 +875,10 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
                 // Do these if-else chains with a hash reference table!
                 if (tile.data.url == '/essentiavein') {
-                    WindowActions.windowAdd(EssentiaVein, tile.data);
+                    WindowActions.windowAdd(EssentiaVein, 'building', tile.data);
                 }
                 else if (tile.data.url == '/inteltraining') {
-                    WindowActions.windowAdd(IntelTraining, tile.data);
+                    WindowActions.windowAdd(IntelTraining, 'building', tile.data);
                 }
                 else {
                     WindowManagerActions.addWindow(windowTypes.building, tile.data);

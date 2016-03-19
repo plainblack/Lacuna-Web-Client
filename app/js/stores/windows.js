@@ -25,12 +25,26 @@ var WindowsStore = Reflux.createStore({
         };
     },
 
-    onWindowAdd : function(window, options) {
+    // We only allow one window of each type (e.g. 'about' or 'building')
+    onWindowAdd : function(window, type, options) {
         var state = _.cloneDeep(this.state);
-        var index = state.index;
-        state.index = state.index + 1;
+        // First see if there is an existing window type
+        var index = _.findIndex(state.windows, function(o) {
+            if (o) {
+                return o.type === type;
+            }
+            return false;
+        });
+        // If not found, then create another row
+        if (index < 0) {
+            index = state.index;
+            state.index = state.index + 1;
+        }
+        // Otherwise re-use the existing window type
+        // (e.g. 'building')
         state.windows[index] = {
             window  : window,
+            type    : type,
             options : options
         };
         this.emit(state);

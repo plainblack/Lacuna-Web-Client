@@ -216,7 +216,7 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowActions.windowAdd(About);
+                    WindowActions.windowAdd(About, 'about');
                 }}>
                     <i className="rocket icon"></i>
                     About
@@ -239,7 +239,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowActions.windowAdd(ServerClock)
+                    WindowActions.windowAdd(ServerClock, 'serverclock')
                 }}>
                     <i className="wait icon"></i>
                     Server Clock
