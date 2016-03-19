@@ -9,7 +9,7 @@ var Tab                     = Tabber.Tab;
 
 var BuildingWindowActions   = require('js/actions/windows/building');
 
-var BuildingRPCStore        = require('js/stores/rpc/genericBuilding');
+var BuildingRPCStore        = require('js/stores/genericBuilding');
 
 var ProductionTab           = require('js/components/windows/building/productionTab');
 var RepairTab               = require('js/components/windows/building/repairTab');

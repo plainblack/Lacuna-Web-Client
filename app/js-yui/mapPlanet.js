@@ -6,6 +6,7 @@ var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
 var windowTypes             = require('js/windowTypes');
 var EssentiaVein            = require('js/components/window/essentiavein');
+var IntelTraining           = require('js/components/window/inteltraining');
 
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
@@ -872,8 +873,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             if (!FactoryMap[tile.data.url]) {
                 // Pass this off to the new React stuff.
 
+                // Do these if-else chains with a hash reference table!
                 if (tile.data.url == '/essentiavein') {
                     WindowActions.windowAdd(EssentiaVein, tile.data);
+                }
+                else if (tile.data.url == '/inteltraining') {
+                    WindowActions.windowAdd(IntelTraining, tile.data);
                 }
                 else {
                     WindowManagerActions.addWindow(windowTypes.building, tile.data);

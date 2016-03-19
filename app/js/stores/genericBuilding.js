@@ -124,10 +124,8 @@ var GenericBuildingRPCStore = Reflux.createStore({
     //    this.emit(this.getDefaultData());
     },
 
-    onBuildingWindowUpdate: function(newBuilding) {
-        if (newBuilding) {
-            this.handleNewData({building : newBuilding});
-        }
+    onBuildingWindowUpdate: function(result) {
+        this.handleNewData(result);
     },
 
     onBuildingWindowLoad : function(url, id) {

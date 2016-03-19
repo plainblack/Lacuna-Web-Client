@@ -3,7 +3,7 @@
 var React                   = require('react');
 var Reflux                  = require('reflux');
 
-var BuildingRPCStore        = require('js/stores/rpc/genericBuilding.js');
+var BuildingRPCStore        = require('js/stores/genericBuilding.js');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 
