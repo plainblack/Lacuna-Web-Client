@@ -4,8 +4,10 @@ var React                   = require('react');
 var Reflux                  = require('reflux');
 
 var GenericBuildingStore    = require('js/stores/genericBuilding.js');
+var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
+var BuildingWindowActions   = require('js/actions/windows/building');
 var IntelTrainingRPCActions = require('js/actions/rpc/intelTraining');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
@@ -25,9 +27,11 @@ var IntelTraining = React.createClass({
         }
     },
     mixins : [
-        Reflux.connect(GenericBuildingStore, 'genericBuildingStore')
+        Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
+        Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
     componentWillMount : function() {
+        BuildingWindowActions.buildingWindowClear();
         IntelTrainingRPCActions.requestIntelTrainingRPCView( this.props.options.id );
     },
 
@@ -37,7 +41,7 @@ var IntelTraining = React.createClass({
 
     render : function() {
         var building = this.state.genericBuildingStore;
-        var tabs = StandardTabs.tabs(this.props.options);
+        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
         if (building.extraViewData.spies) {
             tabs.push(
                 <Tab title="Spy Training" key="Spy Training">

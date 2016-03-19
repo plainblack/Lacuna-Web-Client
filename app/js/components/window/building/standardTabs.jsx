@@ -7,25 +7,25 @@ var Tabber                  = require('js/components/tabber');
 var Tabs                    = Tabber.Tabs;
 var Tab                     = Tabber.Tab;
 
-var ProductionTab           = require('js/components/windows/building/productionTab');
+var ProductionTab           = require('js/components/window/building/productionTab');
 var RepairTab               = require('js/components/windows/building/repairTab');
 
-var StandardTabsMixin = {
+var StandardTabs = {
 
-    tabs : function(options) {
+    tabs : function(options, body, building) {
         var tabs = [];
         
         if (options.efficiency !== 100) {
             tabs.push(
                 <Tab title="Repair" key="Repair" onSelect={this.loadProduction}>
-                    <RepairTab />
+                    <RepairTab building={building} body={body} />
                 </Tab>
             );
         }
 
         tabs.push(
             <Tab title="Production" key="Production" onSelect={this.loadProduction}>
-                <ProductionTab />
+                <ProductionTab building={building} body={body} />
             </Tab>
         );
 
@@ -33,4 +33,4 @@ var StandardTabsMixin = {
     }
 };
 
-module.exports = StandardTabsMixin;
+module.exports = StandardTabs;

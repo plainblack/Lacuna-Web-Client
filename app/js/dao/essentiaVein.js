@@ -45,7 +45,7 @@ EssentiaVeinRPCActions.requestEssentiaVeinRPCView.listen(function(o) {
     });
 });
 EssentiaVeinRPCActions.successEssentiaVeinRPCView.listen(function(result) {
-    BuildingWindowActions.buildingWindowUpdate(result.building);
+    BuildingWindowActions.buildingWindowUpdate(result);
 });
 
 

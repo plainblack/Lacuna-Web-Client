@@ -85,7 +85,8 @@ var GenericBuildingRPCStore = Reflux.createStore({
 
     handleNewData : function(result) {
         // Carry previous state over incase the new data is missing fields we need.
-        var building = _.assign(clone(this.state), result.building);
+//        var building = _.assign(clone(this.state), result.building);
+        var building = _.assign(this.getDefaultData(), result.building);
 
         building.efficiency = building.efficiency * 1;
 
@@ -121,7 +122,7 @@ var GenericBuildingRPCStore = Reflux.createStore({
     },
 
     onBuildingWindowClear : function() {
-    //    this.emit(this.getDefaultData());
+        this.emit(this.getDefaultData());
     },
 
     onBuildingWindowUpdate: function(result) {
