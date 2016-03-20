@@ -9,7 +9,7 @@ var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
 
 var SittersEmpireRPCStore       = require('js/stores/rpc/empire/sitters');
 
-var SitterListItem              = require('js/components/windows/sitterManager/sitterListItem');
+var SitterListItem              = require('js/components/window/sitterManager/sitterListItem');
 
 
 var CurrentSittersTab = React.createClass({

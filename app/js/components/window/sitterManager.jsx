@@ -8,8 +8,8 @@ var Tabber               = require('js/components/tabber');
 var Tabs                 = Tabber.Tabs;
 var Tab                  = Tabber.Tab;
 
-var AuthorizeEmpiresTab  = require('js/components/windows/sitterManager/authorizeEmpiresTab');
-var CurrentSittersTab    = require('js/components/windows/sitterManager/currentSittersTab');
+var AuthorizeEmpiresTab  = require('js/components/window/sitterManager/authorizeEmpiresTab');
+var CurrentSittersTab    = require('js/components/window/sitterManager/currentSittersTab');
 
 var SitterManagerWindow = React.createClass({
 
