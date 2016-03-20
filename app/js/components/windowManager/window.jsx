@@ -12,12 +12,12 @@ var WINDOWS = {
 //    CAPTCHA        : require('js/components/windows/captcha'),
 //    ESSENTIA       : require('js/components/windows/essentia'),
 //    INVITE         : require('js/components/windows/invite'),
-    MAIL           : require('js/components/windows/mail'),
+//    MAIL           : require('js/components/windows/mail'),
     NOTES          : require('js/components/windows/notes'),
-    OPTIONS        : require('js/components/windows/options'),
+//    OPTIONS        : require('js/components/windows/options'),
     PROMOTIONS     : require('js/components/windows/promotions'),
 //    SITTER_MANAGER : require('js/components/windows/sitterManager'),
-    STATS          : require('js/components/windows/stats')
+//    STATS          : require('js/components/windows/stats')
 };
 
 var BASE_Z_INDEX = 1000000;
