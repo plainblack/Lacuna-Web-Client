@@ -14,8 +14,10 @@ var CurrentSittersTab    = require('js/components/windows/sitterManager/currentS
 var SitterManagerWindow = React.createClass({
 
     statics : {
-        windowOptions : {
-            title : 'Manager Sitters'
+        options : {
+            title   : 'Manage Sitters',
+            width   : 450,
+            height  : 400
         }
     },
 

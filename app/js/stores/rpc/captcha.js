@@ -6,6 +6,9 @@ var StatefulMixinStore      = require('js/stores/mixins/stateful');
 var CaptchaWindowActions    = require('js/actions/windows/captcha');
 var CaptchaRPCActions       = require('js/actions/rpc/captcha');
 var WindowManagerActions    = require('js/actions/windowManager');
+var WindowsActions          = require('js/actions/window');
+
+var CaptchaWindow           = require('js/components/window/captcha');
 
 var server                  = require('js/server');
 var clone                   = require('js/util').clone;
@@ -45,7 +48,7 @@ var CaptchaRPCStore = Reflux.createStore({
         update.solved = 1;
 
         this.emit(update);
-        WindowManagerActions.hideWindow('CAPTCHA');
+        WindowsActions.windowClose(CaptchaWindow);
     },
 
     onCaptchaWindowRefresh : function() {

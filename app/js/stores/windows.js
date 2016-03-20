@@ -21,7 +21,8 @@ var WindowsStore = Reflux.createStore({
     getDefaultData : function() {
         return {
             windows : [],
-            index   : 0
+            index   : 0,
+            zIndex  : 2000000
         };
     },
 
@@ -45,8 +46,10 @@ var WindowsStore = Reflux.createStore({
         state.windows[index] = {
             window  : window,
             type    : type,
+            zIndex  : state.zIndex,
             options : options
         };
+        state.zIndex = state.zIndex + 1;
         this.emit(state);
     },
 
@@ -59,7 +62,10 @@ var WindowsStore = Reflux.createStore({
             }
             return false;
         });
-        state.windows[index] = null;
+        if (index >= 0) {
+            state.windows[index] = null;
+            // If there is a success 
+        }
         this.emit(state);
     }
 

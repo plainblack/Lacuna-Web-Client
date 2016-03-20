@@ -8,12 +8,12 @@ var $                       = require('js/shims/jquery');
 
 var LeftSidebarActions      = require('js/actions/menu/leftSidebar');
 var OptionsWindowActions    = require('js/actions/windows/options');
-var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
-var About                   = require('js/components/window/about');
-var ServerClock             = require('js/components/window/serverClock');
+var AboutWindow             = require('js/components/window/about');
+var InviteWindow            = require('js/components/window/invite');
+var SitterManagerWindow     = require('js/components/window/sitterManager');
 
-var windowTypes             = require('js/windowTypes');
+var ServerClock             = require('js/components/window/serverClock');
 
 var EmpireRPCStore          = require('js/stores/rpc/empire');
 var LeftSidebarStore        = require('js/stores/menu/leftSidebar');
@@ -149,7 +149,7 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.invite);
+                    WindowActions.windowAdd(InviteWindow, 'invite');
                 }}>
                     <i className="add user icon"></i>
                     Invite a Friend
@@ -216,14 +216,14 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowActions.windowAdd(About, 'about');
+                    WindowActions.windowAdd(AboutWindow, 'about');
                 }}>
                     <i className="rocket icon"></i>
                     About
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.sitterManager);
+                    WindowActions.windowAdd(SitterManagerWindow, 'sitter');
                 }}
                 >
                     <i className="sitemap icon"></i>

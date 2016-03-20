@@ -15,7 +15,7 @@ var Windows = React.createClass({
         var windows = _.map(this.state.windows.windows, function(row,index) {
             if (row && row.window) {
                 return (
-                    <Panel window={row.window} options={row.options} zIndex={1000000+index} /> 
+                    <Panel window={row.window} options={row.options} zIndex={row.zIndex} /> 
                 );
             }
             return;

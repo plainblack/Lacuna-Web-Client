@@ -5,7 +5,7 @@ var Reflux         = require('reflux');
 
 var EmpireRPCStore = require('js/stores/rpc/empire');
 
-var Boost          = require('js/components/windows/essentia/boost');
+var Boost          = require('js/components/window/essentia/boost');
 
 var BoostsTab = React.createClass({
     mixins : [

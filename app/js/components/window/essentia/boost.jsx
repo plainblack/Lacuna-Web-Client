@@ -10,7 +10,7 @@ var EmpireRPCActions        = require('js/actions/rpc/empire');
 var BoostsEmpireRPCStore    = require('js/stores/rpc/empire/boosts');
 var EmpireRPCStore          = require('js/stores/rpc/empire');
 
-var BoostCountdown          = require('js/components/windows/essentia/boostCountdown');
+var BoostCountdown          = require('js/components/window/essentia/boostCountdown');
 
 var Boost = React.createClass({
     mixins : [

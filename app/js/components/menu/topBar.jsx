@@ -1,22 +1,21 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
-var classNames           = require('classnames');
+var React                   = require('react');
+var Reflux                  = require('reflux');
+var classNames              = require('classnames');
 
-var EmpireRPCStore       = require('js/stores/rpc/empire');
-var MapModeMenuStore     = require('js/stores/menu/mapMode');
-var ServerRPCStore       = require('js/stores/rpc/server');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var MapModeMenuStore        = require('js/stores/menu/mapMode');
+var ServerRPCStore          = require('js/stores/rpc/server');
 
-var EmpireRPCActions     = require('js/actions/rpc/empire');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
+var MapMenuActions          = require('js/actions/menu/map');
+var WindowActions           = require('js/actions/window');
+var MailWindowActions       = require('js/actions/windows/mail');
+var StatsWindowActions      = require('js/actions/windows/stats');
 
-var MapMenuActions       = require('js/actions/menu/map');
+var EssentiaWindow          = require('js/components/window/essentia');
 
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
-
-var MailWindowActions    = require('js/actions/windows/mail');
-var StatsWindowActions   = require('js/actions/windows/stats');
 
 var TopBar = React.createClass({
     mixins : [
@@ -72,7 +71,7 @@ var TopBar = React.createClass({
                         </a>
 
                         <a className="item" data-tip="Essentia" onClick={function() {
-                            WindowManagerActions.addWindow(windowTypes.essentia);
+                            WindowActions.windowAdd(EssentiaWindow, 'essentia');
                         }}>
                             <i className="money big icon"></i>
                             <div className="ui teal label">
@@ -95,7 +94,7 @@ var TopBar = React.createClass({
                                         : 'Active Promotion'
                                     }
                                     onClick={function() {
-                                        WindowManagerActions.addWindow(windowTypes.promotions);
+                                        WindowActions.windowAdd(PromotionsWindow, 'promotions');
                                     }}
                                     >
                                     <i className="announcement big icon"></i>
