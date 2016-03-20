@@ -109,11 +109,11 @@ var BoostsEmpireRPCStore = Reflux.createStore({
     },
 
 
-    onSuccessRPCEmpireBoost : function(result) {
+    onSuccessEmpireRPCBoost : function(result) {
         console.log('success Empire Boost');
     },
 
-    onFailureRPCEmpireBoost : function(result) {
+    onFailureEmpireRPCBoost : function(result) {
         console.log('FAILURE Empire Boost');
     },
 

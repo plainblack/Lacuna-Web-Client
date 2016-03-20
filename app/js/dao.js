@@ -1,5 +1,7 @@
 'use strict';
 
+var Server          = require('js/server');
+
 // TODO replace this with auto-discovery load of modules
 require('js/dao/stats');
 require('js/dao/empire');
@@ -10,4 +12,29 @@ require('js/dao/mayhemTraining');
 require('js/dao/politicsTraining');
 require('js/dao/theftTraining');
 require('js/dao/map');
+
+module.exports.makeServerCall = function (uri, options, actions) {
+    var defaults = {
+        module  : uri,
+        params  : {},
+        success : 'noop',
+        error   : 'noop'
+    };
+    options = _.merge({}, defaults, options || {});
+
+    Server.call({
+        module  : options.module,
+        method  : options.method,
+        params  : options.params,
+        success : function(result) {
+            console.log('makeServerCall: SUCCESS ' + uri + ' - ' + options.method + '_success');
+            actions[options.success](result);
+        },
+        error : function(error) {
+            console.log('makeServerCall: FAILURE ' + uri + ' - ' + options.method + '_success');
+            options.error(error);
+            actions[options.error](error);
+        }
+    });
+}
 

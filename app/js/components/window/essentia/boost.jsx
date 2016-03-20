@@ -33,7 +33,7 @@ var Boost = React.createClass({
     },
 
     handleBoost : function() {
-        EmpireRPCActions.requestRPCEmpireBoost
+        EmpireRPCActions.requestEmpireRPCBoost
         EssentiaWindowActions.boost(this.props.type, this.refs.weeks.value);
     },
 

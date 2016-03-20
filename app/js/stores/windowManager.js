@@ -73,7 +73,7 @@ var WindowManagerStore = Reflux.createStore({
         this.emit({});
     },
 
-    onSuccessRPCEmpireLogout : function() {
+    onSuccessEmpireRPCLogout : function() {
         this.onHideAllWindows();
     },
 

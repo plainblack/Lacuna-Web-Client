@@ -5,17 +5,17 @@ var Server  = require('js/server');
 var _       = require('lodash');
 
 var EmpireRPCActions = Reflux.createActions([
-    'requestRPCEmpireLogin',
-    'successRPCEmpireLogin',
-    'failureRPCEmpireLogin',
+    'requestEmpireRPCLogin',
+    'successEmpireRPCLogin',
+    'failureEmpireRPCLogin',
 
-    'requestRPCEmpireBoost',
-    'successRPCEmpireBoost',
-    'failureRPCEmpireBoost',
+    'requestEmpireRPCBoost',
+    'successEmpireRPCBoost',
+    'failureEmpireRPCBoost',
     
-    'requestRPCEmpireLogout',
-    'successRPCEmpireLogout',
-    'failureRPCEmpireLogout'
+    'requestEmpireRPCLogout',
+    'successEmpireRPCLogout',
+    'failureEmpireRPCLogout'
 ]);
 
 module.exports = EmpireRPCActions;
