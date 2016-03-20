@@ -8,7 +8,7 @@ var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
 var BuildingWindowActions   = require('js/actions/windows/building');
-var IntelTrainingRPCActions = require('js/actions/rpc/intelTraining');
+var MayhemTrainingRPCActions = require('js/actions/rpc/mayhemTraining');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
@@ -18,10 +18,10 @@ var Tabber                  = require('js/components/tabber');
 var Tabs                    = Tabber.Tabs;
 var Tab                     = Tabber.Tab;
 
-var IntelTraining = React.createClass({
+var MayhemTraining = React.createClass({
     statics : {
         options : {
-            title   : 'Intel Training',
+            title   : 'Mayhem Training',
             width   : 700,
             height  : 420
         }
@@ -32,11 +32,11 @@ var IntelTraining = React.createClass({
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
-        IntelTrainingRPCActions.requestIntelTrainingRPCView( this.props.options.id );
+        MayhemTrainingRPCActions.requestMayhemTrainingRPCView( this.props.options.id );
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(IntelTraining);
+        WindowActions.windowClose(MayhemTraining);
     },
 
     render : function() {
@@ -69,4 +69,4 @@ var IntelTraining = React.createClass({
     }
 });
 
-module.exports = IntelTraining;
+module.exports = MayhemTraining;

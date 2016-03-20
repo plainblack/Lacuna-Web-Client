@@ -7,6 +7,9 @@ var WindowActions           = require('js/actions/window');
 var windowTypes             = require('js/windowTypes');
 var EssentiaVein            = require('js/components/window/essentiavein');
 var IntelTraining           = require('js/components/window/inteltraining');
+var MayhemTraining          = require('js/components/window/mayhemtraining');
+var PoliticsTraining        = require('js/components/window/politicstraining');
+var TheftTraining           = require('js/components/window/thefttraining');
 
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
@@ -879,6 +882,15 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                 }
                 else if (tile.data.url == '/inteltraining') {
                     WindowActions.windowAdd(IntelTraining, 'building', tile.data);
+                }
+                else if (tile.data.url == '/mayhemtraining') {
+                    WindowActions.windowAdd(MayhemTraining, 'building', tile.data);
+                }
+                else if (tile.data.url == '/politicstraining') {
+                    WindowActions.windowAdd(PoliticsTraining, 'building', tile.data);
+                }
+                else if (tile.data.url == '/thefttraining') {
+                    WindowActions.windowAdd(TheftTraining, 'building', tile.data);
                 }
                 else {
                     WindowManagerActions.addWindow(windowTypes.building, tile.data);
