@@ -4,8 +4,6 @@ var React                   = require('react');
 var Reflux                  = require('reflux');
 var _                       = require('lodash');
 
-var BuildingRPCStore        = require('js/stores/rpc/genericBuilding'); 
-var BodyRPCStore            = require('js/stores/rpc/body');
 
 var BuildingWindowActions   = require('js/actions/windows/building');
 
@@ -19,40 +17,35 @@ var vex                     = require('js/vex');
 
 var ProductionTab = React.createClass({
 
-    mixins : [
-        Reflux.connect(BuildingRPCStore, 'building'),
-        Reflux.connect(BodyRPCStore, 'body')
-    ],
-
     onDemolishClick : function() {
-        var name = this.state.building.name + ' ' + this.state.building.level;
+        var name = this.props.building.name + ' ' + this.props.building.level;
 
         vex.confirm(
             'Are you sure you want to demolish your ' + name + '?',
             _.bind(function() {
-                BuildingWindowActions.buildingWindowDemolish(this.state.building.url, this.state.building.id);
+                BuildingWindowActions.buildingWindowDemolish(this.props.building.url, this.props.building.id);
             }, this)
         );
     },
 
     onDowngradeClick : function() {
-        var name = this.state.building.name + ' ' + this.state.building.level;
+        var name = this.props.building.name + ' ' + this.props.building.level;
 
         vex.confirm(
             'Are you sure you want to downgrade your ' + name + '?',
             _.bind(function() {
-                BuildingWindowActions.buildingWindowDowngrade(this.state.building.url, this.state.building.id);
+                BuildingWindowActions.buildingWindowDowngrade(this.props.building.url, this.props.building.id);
             }, this)
         );
     },
 
     onUpgradeClick : function() {
-        BuildingWindowActions.buildingWindowUpgrade(this.state.building.url, this.state.building.id);
+        BuildingWindowActions.buildingWindowUpgrade(this.props.building.url, this.props.building.id);
     },
 
     render : function() {
-        var b    = this.state.building;
-        var body = this.state.body;
+        var b    = this.props.building;
+        var body = this.props.body;
 
         // Don't let the user downgrade a level 1 building. They shoulod demolish it instead.
         if (b.level === 1) {

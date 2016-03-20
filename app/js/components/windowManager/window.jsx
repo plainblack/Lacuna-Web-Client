@@ -8,15 +8,15 @@ var WindowManagerActions = require('js/actions/windowManager');
 var Panel                = require('js/components/panel');
 
 var WINDOWS = {
-    BUILDING       : require('js/components/windows/building'),
-    CAPTCHA        : require('js/components/windows/captcha'),
-    ESSENTIA       : require('js/components/windows/essentia'),
-    INVITE         : require('js/components/windows/invite'),
+//    BUILDING       : require('js/components/windows/building'),
+//    CAPTCHA        : require('js/components/windows/captcha'),
+//    ESSENTIA       : require('js/components/windows/essentia'),
+//    INVITE         : require('js/components/windows/invite'),
     MAIL           : require('js/components/windows/mail'),
     NOTES          : require('js/components/windows/notes'),
     OPTIONS        : require('js/components/windows/options'),
     PROMOTIONS     : require('js/components/windows/promotions'),
-    SITTER_MANAGER : require('js/components/windows/sitterManager'),
+//    SITTER_MANAGER : require('js/components/windows/sitterManager'),
     STATS          : require('js/components/windows/stats')
 };
 

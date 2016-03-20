@@ -1,8 +1,8 @@
 'use strict';
 
 var windowTypes = {
-    building      : 'BUILDING',
-    captcha       : 'CAPTCHA',
+//    building      : 'BUILDING',
+//    captcha       : 'CAPTCHA',
     essentia      : 'ESSENTIA',
     invite        : 'INVITE',
     mail          : 'MAIL',

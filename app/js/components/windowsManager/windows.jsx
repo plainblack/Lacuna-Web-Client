@@ -12,10 +12,10 @@ var Windows = React.createClass({
     ],
 
     render : function() {
-        var windows = _.map(this.state.windows.windows, function(window,index) {
-            if (window) {
+        var windows = _.map(this.state.windows.windows, function(row,index) {
+            if (row && row.window) {
                 return (
-                    <Panel window={window} zIndex={1000000+index} /> 
+                    <Panel window={row.window} options={row.options} zIndex={row.zIndex} /> 
                 );
             }
             return;

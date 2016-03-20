@@ -1,17 +1,20 @@
 'use strict';
 
-var $                    = require('js/shims/jquery');
-var _                    = require('lodash');
-var util                 = require('js/util');
+var $                       = require('js/shims/jquery');
+var _                       = require('lodash');
+var util                    = require('js/util');
 
-var LoaderMenuActions    = require('js/actions/menu/loader');
-var SessionStore         = require('js/stores/session');
-var ServerStatusActions  = require('js/actions/serverStatus');
-var BodyStatusActions    = require('js/actions/bodyStatus');
-var EmpireStatusActions  = require('js/actions/empireStatus');
+var LoaderMenuActions       = require('js/actions/menu/loader');
+var SessionStore            = require('js/stores/session');
+var ServerStatusActions     = require('js/actions/serverStatus');
+var BodyStatusActions       = require('js/actions/bodyStatus');
+var EmpireStatusActions     = require('js/actions/empireStatus');
 
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
+
+var Captcha                 = require('js/components/window/captcha');
+var windowTypes             = require('js/windowTypes');
 
 var defaults = {
     module     : '',
@@ -142,9 +145,9 @@ var sendRequest = function(url, data, options, retry) {
             };
 
             if (error.code === 1016) {
-                WindowManagerActions.addWindow(windowTypes.captcha, {
-                    success : retry
-                });
+                WindowActions.windowAdd(Captcha, 'captcha', { 
+                    success : retry 
+                } );
             } else {
                 fail();
             }
