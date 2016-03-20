@@ -8,7 +8,7 @@ var Tabs                    = Tabber.Tabs;
 var Tab                     = Tabber.Tab;
 
 var ProductionTab           = require('js/components/window/building/productionTab');
-var RepairTab               = require('js/components/windows/building/repairTab');
+var RepairTab               = require('js/components/window/building/repairTab');
 
 var StandardTabs = {
 

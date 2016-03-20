@@ -8,7 +8,7 @@ var BuildingWindowActions   = require('js/actions/windows/building');
 var GenericBuildingStore        = require('js/stores/genericBuilding');
 var BodyRPCStore            = require('js/stores/rpc/body');
 
-var ResourceCost            = require('js/components/windows/building/resourceCost');
+var ResourceCost            = require('js/components/window/building/resourceCost');
 
 var RepairTab = React.createClass({
 

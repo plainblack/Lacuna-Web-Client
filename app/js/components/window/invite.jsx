@@ -8,14 +8,14 @@ var server = require('js/server');
 var InviteWindow = React.createClass({
     statics : {
         options : {
-            title   : 'About',
+            title   : 'Invite a Friend',
             width   : 450,
             height  : 400
         }
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(About);
+        WindowActions.windowClose(InviteWindow);
     },
 
 
@@ -51,12 +51,6 @@ var InviteWindow = React.createClass({
         $el.off().click(function() {
             $(this).select();
         });
-    },
-
-    statics : {
-        windowOptions : {
-            title : 'Invite A Friend'
-        }
     },
 
     render : function() {
