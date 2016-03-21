@@ -5,9 +5,6 @@ var Reflux          = require('reflux');
 
 var Draggable       = require('react-draggable');
 
-var PanelHeader     = require('js/components/panel/panelHeader');
-var PanelContent    = require('js/components/panel/panelContent');
-
 var StatsRPCActions = require('js/actions/rpc/stats');
 var WindowActions   = require('js/actions/window');
 

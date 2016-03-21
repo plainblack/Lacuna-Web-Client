@@ -3,8 +3,6 @@
 var React           = require('react');
 var Draggable       = require('react-draggable');
 
-var PanelHeader     = require('js/components/panel/panelHeader');
-var PanelContent    = require('js/components/panel/panelContent');
 var AboutTab        = require('js/components/window/about/aboutTab');
 var CreditsTab      = require('js/components/window/about/creditsTab');
 

@@ -4,8 +4,8 @@ var React           = require('react');
 var Draggable       = require('react-draggable');
 var $               = require('js/shims/jquery');
 
-var PanelHeader     = require('js/components/panel/panelHeader');
-var PanelContent    = require('js/components/panel/panelContent');
+var PanelHeader     = require('js/components/window/panel/panelHeader');
+var PanelContent    = require('js/components/window/panel/panelContent');
 
 var StatsRPCActions = require('js/actions/rpc/stats');
 var WindowActions   = require('js/actions/window');
