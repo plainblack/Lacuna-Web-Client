@@ -3,9 +3,9 @@
 var React                   = require('react');
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
-var Windows                 = require('js/components/windowsManager/windows');
+var Windows                 = require('js/components/windowManager/windows');
 
-var WindowsManager = React.createClass({
+var WindowManager = React.createClass({
 
     render : function() {
         return (
@@ -22,4 +22,4 @@ var WindowsManager = React.createClass({
     }
 });
 
-module.exports = WindowsManager;
+module.exports = WindowManager;

@@ -6,7 +6,6 @@ var _                    = require('lodash');
 var EssentiaActions      = require('js/actions/windows/essentia');
 
 var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
 
 var SessionStore         = require('js/stores/session');
 var EssentiaRPCStore     = require('js/stores/rpc/empire/essentia');
@@ -27,7 +26,7 @@ var GetEssentiaTab = React.createClass({
     },
 
     invite : function() {
-        WindowManagerActions.addWindow(windowTypes.invite);
+//        WindowManagerActions.addWindow(windowTypes.invite);
     },
 
     render : function() {

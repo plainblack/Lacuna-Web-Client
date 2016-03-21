@@ -14,7 +14,6 @@ var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
 
 var Captcha                 = require('js/components/window/captcha');
-var windowTypes             = require('js/windowTypes');
 
 var defaults = {
     module     : '',

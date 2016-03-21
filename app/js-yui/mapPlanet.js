@@ -4,7 +4,6 @@ var _ = require('lodash');
 
 var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
-var windowTypes             = require('js/windowTypes');
 var EssentiaVein            = require('js/components/window/essentiavein');
 var IntelTraining           = require('js/components/window/inteltraining');
 var MayhemTraining          = require('js/components/window/mayhemtraining');
@@ -893,7 +892,6 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
                     WindowActions.windowAdd(TheftTraining, 'building', tile.data);
                 }
                 else {
-                    WindowManagerActions.addWindow(windowTypes.building, tile.data);
                 }
 
                 return;
