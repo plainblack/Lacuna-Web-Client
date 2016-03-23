@@ -1,37 +1,19 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var Server          = require('js/server');
-var _               = require('lodash');
+var Reflux              = require('reflux');
+var Server              = require('js/server');
+var _                   = require('lodash');
 
-var CaptchaRPCActions = require('js/actions/rpc/captcha');
+var CaptchaRPCActions   = require('js/actions/rpc/captcha');
 
-function requestCaptchaCall(options) {
-    var defaults = {
-        module  : 'captcha',
-        params  : [],
-        success : 'noop',
-        error   : 'noop'
-    };
-    options = _.merge({}, defaults, options || {});
+var dao                 = require('js/dao');
 
-    Server.call({
-        module  : options.module,
-        method  : options.method,
-        params  : options.params,
-        success : function(result) {
-            console.log('CaptchaRPCActions: ' + options.method + '_success');
-            CaptchaRPCActions[options.success](result);
-        },
-        error : function(error) {
-            console.log('CaptchaRPCActions: ' + options.method + '_error');
-            CaptchaRPCActions[options.error](error);
-        }
-    });
+function makeCaptchaCall(options) {
+    dao.makeServerCall('captcha', options, CaptchaRPCActions);
 }
 
 CaptchaRPCActions.requestCaptchaRPCFetch.listen(function(o) {
-    requestCaptchaCall({
+    makeCaptchaCall({
         method : 'fetch',
         params : [],
         success : 'successCaptchaRPCFetch',
@@ -40,7 +22,7 @@ CaptchaRPCActions.requestCaptchaRPCFetch.listen(function(o) {
 });
 
 CaptchaRPCActions.requestCaptchaRPCSolve.listen(function(o) {
-    requestCaptchaCall({
+    makeCaptchaCall({
         method : 'solve',
         params : [
             o.guid,

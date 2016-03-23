@@ -4,7 +4,7 @@ var dao             = require('js/dao');
 
 var StatsRPCActions = require('js/actions/rpc/stats');
 
-function makeIntelTrainingCall(options) {
+function makeStatsCall(options) {
     dao.makeServerCall('stats', options, StatsRPCActions);
 }
 

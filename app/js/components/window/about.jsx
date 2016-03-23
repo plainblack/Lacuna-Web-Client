@@ -13,7 +13,7 @@ var Tabber          = require('js/components/tabber');
 var Tabs            = Tabber.Tabs;
 var Tab             = Tabber.Tab;
 
-var About = React.createClass({
+var AboutWindow = React.createClass({
     statics : {
         options : {
             title   : 'About',
@@ -41,4 +41,4 @@ var About = React.createClass({
     }
 });
 
-module.exports = About;
+module.exports = AboutWindow;

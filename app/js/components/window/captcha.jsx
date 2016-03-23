@@ -46,10 +46,6 @@ var Captcha = React.createClass({
 
 
 
-    closeWindow : function() {
-        WindowActions.windowClose(Captcha);
-    },
-
 
 
 
@@ -83,10 +79,6 @@ var Captcha = React.createClass({
     onClickRefresh : function() {
         this.clearSolutionField();
         CaptchaWindowActions.captchaWindowRefresh();
-    },
-
-    onSuccessCaptchaRPCSolve : function() {
-        this.onClickClose();
     },
 
     onClickClose : function() {
