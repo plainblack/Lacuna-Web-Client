@@ -36,7 +36,7 @@ var IntelTraining = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(IntelTraining);
+        WindowActions.windowCloseByType('building');
     },
 
     render : function() {

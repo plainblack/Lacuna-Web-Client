@@ -15,7 +15,7 @@ var InviteWindow = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(InviteWindow);
+        WindowActions.windowCloseByType('invite');
     },
 
 

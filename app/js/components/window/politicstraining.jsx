@@ -36,7 +36,7 @@ var PoliticsTraining = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(PoliticsTraining);
+        WindowActions.windowCloseByType('building');
     },
 
     render : function() {

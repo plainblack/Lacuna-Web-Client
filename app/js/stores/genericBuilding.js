@@ -84,12 +84,8 @@ var GenericBuildingRPCStore = Reflux.createStore({
     },
 
     handleNewData : function(result) {
-        // Carry previous state over incase the new data is missing fields we need.
-//        var building = _.assign(clone(this.state), result.building);
         var building = _.assign(this.getDefaultData(), result.building);
 
-        result.building.url = url;
-        
         building.efficiency = building.efficiency * 1;
 
         // Glyph buildings will return a halls cost in the upgrade cost but normal buildings will

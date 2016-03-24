@@ -1,56 +1,24 @@
 'use strict';
 
-var dao                     = require('js/dao');
+var dao                         = require('js/dao');
 
-var BuildingWindowActions   = require('js/actions/window/building');
+var GenericBuildingRPCActions   = require('js/actions/rpc/genericBuilding');
+var BuildingWindowActions       = require('js/actions/windows/building');
 
 function makeGenericBuildingCall(url, options) {
-    dao.makeServerCall(url.replace(/^\//, ''), options, IntelTrainingRPCActions);
+    dao.makeServerCall(url, options, GenericBuildingRPCActions);
 }
 
-BuildingWindowActions.buildingWindowView.listen(function(url, id) {
+GenericBuildingRPCActions.requestGenericBuildingRPCView.listen(function(url, o) {
+    url = url.replace(/^\//, '');
     makeGenericBuildingCall(url, {
         method  : 'view',
-        params  : [id],
-        success : 'successBuildingWindowView'
-        error   : 'failureBuildingWindowView'
+        params  : [o],
+        success : 'successGenericBuildingRPCView',
+        error   : 'failureGenericBuildingRPCView' 
     });
 });
-
-BuildingWindowActions.buildingWindowUpgrade.listen(function(url, id) {
-    makeGenericBuildingCall(url, {
-        method  : 'upgrade',
-        params  : [id],
-        success : 'successBuildingWindowUpgrade'
-        error   : 'failureBuildingWindowUpgrade'
-    });
+GenericBuildingRPCActions.successGenericBuildingRPCView.listen(function(result) {
+    BuildingWindowActions.buildingWindowUpdate(result);
 });
-
-BuildingWindowActions.buildingWindowRepair.listen(function(url, id) {
-    makeGenericBuildingCall(url, {
-        method  : 'repair',
-        params  : [id],
-        success : 'successBuildingWindowRepair'
-        error   : 'failureBuildingWindowRepair'
-    });
-});
-
-BuildingWindowActions.buildingWindowDowngrade.listen(function(url, id) {
-    makeGenericBuildingCall(url, {
-        method  : 'downgrade',
-        params  : [id],
-        success : 'successBuildingWindowDowngrade'
-        error   : 'failureBuildingWindowDowngrade'
-    });
-});
-
-BuildingWindowActions.buildingWindowDemolish.listen(function(url, id) {
-    makeGenericBuildingCall(url, {
-        method  : 'demolish',
-        params  : [id],
-        success : 'successBuildingWindowDemolish'
-        error   : 'failureBuildingWindowDemolish'
-    });
-});
-
 

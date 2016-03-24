@@ -29,7 +29,7 @@ var ServerClock = React.createClass({
     ],
 
     closeWindow : function() {
-        WindowActions.windowClose(ServerClock);
+        WindowActions.windowCloseByType('serverclock');
     },
 
     render : function() {

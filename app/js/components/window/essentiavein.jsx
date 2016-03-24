@@ -39,7 +39,7 @@ var EssentiaVein = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(EssentiaVein);
+        WindowActions.windowCloseByType('building');
     },
 
     render : function() {

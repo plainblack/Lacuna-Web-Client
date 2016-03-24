@@ -36,7 +36,7 @@ var TheftTraining = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(TheftTraining);
+        WindowActions.windowCloseByType('building');
     },
 
     render : function() {

@@ -36,7 +36,7 @@ var MayhemTraining = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(MayhemTraining);
+        WindowActions.windowCloseByType('building');
     },
 
     render : function() {

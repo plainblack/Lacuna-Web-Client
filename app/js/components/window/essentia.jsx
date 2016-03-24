@@ -23,7 +23,7 @@ var Essentia = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(Essentia);
+        WindowActions.windowCloseByType('essentia');
     },
 
     render : function() {

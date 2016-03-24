@@ -17,7 +17,7 @@ var Tab             = Tabber.Tab;
 var Panel = React.createClass({
 
     closeWindow : function() {
-        WindowActions.windowClose(this.props.window);
+        WindowActions.windowCloseByType(this.props.type);
     },
 
     render : function() {

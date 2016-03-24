@@ -23,7 +23,7 @@ var AboutWindow = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(About);
+        WindowActions.windowCloseByType('about');
     },
 
     render : function() {
