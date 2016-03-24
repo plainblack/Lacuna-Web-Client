@@ -16,6 +16,15 @@ EmpireRPCActions.requestEmpireRPCLogout.listen(function(o) {
     });
 });
 
+EmpireRPCActions.requestEmpireRPCViewBoosts.listen(function(o) {
+    makeEmpireCall({
+        method  : 'view_boosts',
+        params  : [],
+        success : 'successEmpireRPCViewBoosts',
+        error   : 'failureEmpireRPCViewBoosts' 
+    });
+});
+
 EmpireRPCActions.requestEmpireRPCBoost.listen(function(o) {
     var method = 'boost_' + o.type;
 

@@ -12,7 +12,11 @@ var EmpireRPCActions = Reflux.createActions([
     'requestEmpireRPCBoost',
     'successEmpireRPCBoost',
     'failureEmpireRPCBoost',
-    
+
+    'requestEmpireRPCViewBoosts',
+    'successEmpireRPCViewBoosts',
+    'failureEmpireRPCViewBoosts',
+
     'requestEmpireRPCLogout',
     'successEmpireRPCLogout',
     'failureEmpireRPCLogout'

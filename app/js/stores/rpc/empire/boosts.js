@@ -4,9 +4,7 @@ var Reflux                  = require('reflux');
 var _                       = require('lodash');
 var validator               = require('validator');
 var util                    = require('js/util');
-var server                  = require('js/server');
 
-var EssentiaWindowActions   = require('js/actions/windows/essentia');
 var TickerActions           = require('js/actions/ticker');
 var EmpireRPCActions        = require('js/actions/rpc/empire');
 
@@ -30,7 +28,6 @@ var BOOST_TYPES = [
 
 var BoostsEmpireRPCStore = Reflux.createStore({
     listenables : [
-        EssentiaWindowActions,
         TickerActions,
         EmpireRPCActions
     ],
@@ -80,16 +77,6 @@ var BoostsEmpireRPCStore = Reflux.createStore({
         this.emit(boosts);
     },
 
-    onLoadBoosts : function() {
-        server.call({
-            module  : 'empire',
-            method  : 'view_boosts',
-            params  : [],
-            scope   : this,
-            success : this.handleNewBoosts
-        });
-    },
-
     onTickerTick : function() {
         var boosts = clone(this.state);
 
@@ -108,6 +95,10 @@ var BoostsEmpireRPCStore = Reflux.createStore({
         });
 
         this.emit(boosts);
+    },
+
+    onSuccessEmpireRPCViewBoosts : function(result) {
+        this.handleNewBoosts(result);
     },
 
     onSuccessEmpireRPCBoost : function(result) {
