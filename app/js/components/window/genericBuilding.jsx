@@ -29,7 +29,12 @@ var GenericBuilding = React.createClass({
         Reflux.connect(GenericBuildingStore, 'buildingStore'),
         Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
+    
     componentWillMount : function() {
+        BuildingWindowActions.buildingWindowClear();
+        GenericBuildingRPCActions.requestGenericBuildingRPCView( this.props.options.url, this.props.options.id );
+    },
+    componentWillReceiveProps : function() {
         BuildingWindowActions.buildingWindowClear();
         GenericBuildingRPCActions.requestGenericBuildingRPCView( this.props.options.url, this.props.options.id );
     },
