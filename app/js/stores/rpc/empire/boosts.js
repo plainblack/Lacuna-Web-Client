@@ -8,6 +8,7 @@ var server                  = require('js/server');
 
 var EssentiaWindowActions   = require('js/actions/windows/essentia');
 var TickerActions           = require('js/actions/ticker');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
 var StatefulMixinsStore     = require('js/stores/mixins/stateful');
 var EmpireRPCStore          = require('js/stores/rpc/empire');
@@ -30,7 +31,8 @@ var BOOST_TYPES = [
 var BoostsEmpireRPCStore = Reflux.createStore({
     listenables : [
         EssentiaWindowActions,
-        TickerActions
+        TickerActions,
+        EmpireRPCActions
     ],
 
     mixins : [
@@ -108,49 +110,13 @@ var BoostsEmpireRPCStore = Reflux.createStore({
         this.emit(boosts);
     },
 
-
     onSuccessEmpireRPCBoost : function(result) {
-        console.log('success Empire Boost');
+        this.handleNewBoosts(result);
     },
 
     onFailureEmpireRPCBoost : function(result) {
         console.log('FAILURE Empire Boost');
     },
-
-    
-    onBoost : function(type, weeks) {
-        console.log('DEPRECATED call to onBoost');
-
-        var essentia = EmpireRPCStore.getData().essentia;
-
-        if (
-            !validator.isInt(weeks, {
-                min : 1,
-                max : 100 // The server has no max but this seems like a reasonable limit, to me.
-            })
-        ) {
-            window.alert('Number of weeks must be an integer between 1 and 100.');
-            return;
-        } else if (weeks * 5 > essentia) {
-            window.alert('Insufficient Essentia.');
-            return;
-        }
-        
-
-
-//        server.call({
-//            module  : 'empire',
-//            method  : 'boost_' + type,
-//            params  : [weeks],
-//            scope   : this,
-//            success : function(result) {
-//                var boosts = clone(this.state);
-//                var newBoostTimestamp = result[type + '_boost'];
-//                boosts[type] = this.handleNewBoost(newBoostTimestamp);
-//                this.emit(boosts);
-//            }
-//        });
-    }
 });
-
+    
 module.exports = BoostsEmpireRPCStore;

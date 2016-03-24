@@ -3,20 +3,15 @@
 var React                   = require('react');
 var Reflux                  = require('reflux');
 var classnames              = require('classnames');
+var validator               = require('validator');
 
 var EssentiaWindowActions   = require('js/actions/windows/essentia');
 var EmpireRPCActions        = require('js/actions/rpc/empire');
 
-var BoostsEmpireRPCStore    = require('js/stores/rpc/empire/boosts');
-var EmpireRPCStore          = require('js/stores/rpc/empire');
 
 var BoostCountdown          = require('js/components/window/essentia/boostCountdown');
 
 var Boost = React.createClass({
-    mixins : [
-        Reflux.connect(BoostsEmpireRPCStore, 'boosts'),
-        Reflux.connect(EmpireRPCStore, 'empire')
-    ],
 
     propTypes : {
         type        : React.PropTypes.string.isRequired,
@@ -33,8 +28,22 @@ var Boost = React.createClass({
     },
 
     handleBoost : function() {
-        EmpireRPCActions.requestEmpireRPCBoost
-        EssentiaWindowActions.boost(this.props.type, this.refs.weeks.value);
+        var type = this.props.type;
+        var weeks = this.refs.weeks.value;
+
+        if (
+            !validator.isInt(weeks, {
+                min : 1,
+                max : 100 // The server has no max but this seems like a reasonable limit, to me.
+            })
+        ) {
+            window.alert('Number of weeks must be an integer between 1 and 100.');
+            return;
+        } else if (weeks * 5 > this.props.essentia) {
+            window.alert('Insufficient Essentia.');
+            return;
+        }
+        EmpireRPCActions.requestEmpireRPCBoost({ type : type, weeks : weeks });
     },
 
     renderButton : function() {
@@ -64,7 +73,7 @@ var Boost = React.createClass({
                         defaultValue="1"
                         ref="weeks"
                         title="Weeks to boost for"
-                        disabled={this.state.empire.essentia < 35}
+                        disabled={this.props.essentia < 35}
                         style={{
                             width : 45
                         }}
@@ -74,7 +83,7 @@ var Boost = React.createClass({
                         this.renderButton()
                     }
                 </div>
-                <BoostCountdown boost={this.state.boosts[this.props.type]} />
+                <BoostCountdown boost={this.props.boosts[this.props.type]} />
             </div>
         );
     }
