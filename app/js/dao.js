@@ -1,6 +1,7 @@
 'use strict';
 
 var Server          = require('js/server');
+var _               = require('lodash');
 
 // TODO replace this with auto-discovery load of modules
 require('js/dao/stats');
