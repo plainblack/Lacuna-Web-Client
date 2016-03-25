@@ -18,6 +18,21 @@ GenericBuildingRPCActions.requestGenericBuildingRPCView.listen(function(url, o) 
         error   : 'failureGenericBuildingRPCView' 
     });
 });
+
+GenericBuildingRPCActions.requestGenericBuildingRPCRepair.listen(function(url, o) {
+    url = url.replace(/^\//, '');
+    makeGenericBuildingCall(url, {
+        method  : 'repair',
+        params  : [o],
+        success : 'successGenericBuildingRPCRepair',
+        error   : 'failureGenericBuildingRPCRepair' 
+    });
+});
+
+GenericBuildingRPCActions.successGenericBuildingRPCRepair.listen(function(result) {
+    BuildingWindowActions.buildingWindowUpdate(result);
+});
+
 GenericBuildingRPCActions.successGenericBuildingRPCView.listen(function(result) {
     BuildingWindowActions.buildingWindowUpdate(result);
 });

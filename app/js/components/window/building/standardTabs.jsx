@@ -15,16 +15,16 @@ var StandardTabs = {
     tabs : function(options, body, building) {
         var tabs = [];
         
-        if (options.efficiency !== 100) {
+        if (building.efficiency !== 100) {
             tabs.push(
-                <Tab title="Repair" key="Repair" onSelect={this.loadProduction}>
+                <Tab title="Repair" key="Repair">
                     <RepairTab building={building} body={body} />
                 </Tab>
             );
         }
 
         tabs.push(
-            <Tab title="Production" key="Production" onSelect={this.loadProduction}>
+            <Tab title="Production" key="Production">
                 <ProductionTab building={building} body={body} />
             </Tab>
         );
