@@ -2,7 +2,6 @@
 
 var Reflux                  = require('reflux');
 var _                       = require('lodash');
-var validator               = require('validator');
 var util                    = require('js/util');
 
 var TickerActions           = require('js/actions/ticker');
@@ -11,7 +10,6 @@ var EmpireRPCActions        = require('js/actions/rpc/empire');
 var StatefulMixinsStore     = require('js/stores/mixins/stateful');
 var EmpireRPCStore          = require('js/stores/rpc/empire');
 var ServerRPCStore          = require('js/stores/rpc/server');
-
 
 var clone                   = util.clone;
 
