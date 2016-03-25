@@ -8,7 +8,7 @@ var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
 var BuildingWindowActions   = require('js/actions/windows/building');
-var IntelTrainingRPCActions = require('js/actions/rpc/intelTraining');
+var TheftTrainingRPCActions = require('js/actions/rpc/theftTraining');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
@@ -18,10 +18,10 @@ var Tabber                  = require('js/components/tabber');
 var Tabs                    = Tabber.Tabs;
 var Tab                     = Tabber.Tab;
 
-var IntelTraining = React.createClass({
+var TheftTraining = React.createClass({
     statics : {
         options : {
-            title   : 'Intel Training',
+            title   : 'Theft Training',
             width   : 700,
             height  : 420
         }
@@ -32,7 +32,7 @@ var IntelTraining = React.createClass({
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
-        IntelTrainingRPCActions.requestIntelTrainingRPCView( this.props.options.id );
+        TheftTrainingRPCActions.requestTheftTrainingRPCView( this.props.options.id );
     },
 
     closeWindow : function() {
@@ -69,4 +69,4 @@ var IntelTraining = React.createClass({
     }
 });
 
-module.exports = IntelTraining;
+module.exports = TheftTraining;

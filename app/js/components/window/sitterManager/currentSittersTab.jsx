@@ -7,15 +7,10 @@ var vex                         = require('js/vex');
 
 var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
 
-var SittersEmpireRPCStore       = require('js/stores/rpc/empire/sitters');
-
 var SitterListItem              = require('js/components/window/sitterManager/sitterListItem');
 
 
 var CurrentSittersTab = React.createClass({
-    mixins : [
-        Reflux.connect(SittersEmpireRPCStore, 'sitters')
-    ],
 
     reauthorizeAll : function() {
         SitterManagerWindowActions.reauthorizeAll();
@@ -54,7 +49,7 @@ var CurrentSittersTab = React.createClass({
                     }}
                 >
                     {
-                        _.map(this.state.sitters, function(sitter) {
+                        _.map(this.props.sitters, function(sitter) {
                             return <SitterListItem key={sitter.id} sitter={sitter} />;
                         })
                     }

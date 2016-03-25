@@ -3,8 +3,6 @@
 var React           = require('react');
 var Draggable       = require('react-draggable');
 
-var PanelHeader     = require('js/components/panel/panelHeader');
-var PanelContent    = require('js/components/panel/panelContent');
 var AboutTab        = require('js/components/window/about/aboutTab');
 var CreditsTab      = require('js/components/window/about/creditsTab');
 
@@ -15,7 +13,7 @@ var Tabber          = require('js/components/tabber');
 var Tabs            = Tabber.Tabs;
 var Tab             = Tabber.Tab;
 
-var About = React.createClass({
+var AboutWindow = React.createClass({
     statics : {
         options : {
             title   : 'About',
@@ -25,7 +23,7 @@ var About = React.createClass({
     },
 
     closeWindow : function() {
-        WindowActions.windowClose(About);
+        WindowActions.windowCloseByType('about');
     },
 
     render : function() {
@@ -43,4 +41,4 @@ var About = React.createClass({
     }
 });
 
-module.exports = About;
+module.exports = AboutWindow;

@@ -3,7 +3,7 @@
 var Reflux              = require('reflux');
 var ReactTooltip        = require('react-tooltip');
 
-var RPCEmpireActions    = require('js/actions/rpc/empire');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 var UserActions         = require('js/actions/user');
 var MenuActions         = require('js/actions/menu');
 var TickerActions       = require('js/actions/ticker');
@@ -16,7 +16,7 @@ var server              = require('js/server');
 // (it should disappear when the yui code is replaced totally)
 //
 var UserStore = Reflux.createStore({
-    listenables : [RPCEmpireActions, UserActions],
+    listenables : [EmpireRPCActions, UserActions],
 
 
     onUserSignIn : function() {
@@ -31,7 +31,7 @@ var UserStore = Reflux.createStore({
         MapActions.mapChangePlanet(YAHOO.lacuna.Game.EmpireData.home_planet_id);
     },
 
-    onSuccessRPCEmpireLogout : function(o) {
+    onSuccessEmpireRPCLogout : function(o) {
         // Here be the traditional code to reset the game...
         YAHOO.lacuna.Game.Reset();
         YAHOO.lacuna.MapPlanet.Reset();

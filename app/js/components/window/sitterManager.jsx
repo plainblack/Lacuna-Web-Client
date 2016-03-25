@@ -1,8 +1,11 @@
 'use strict';
 
 var React                = require('react');
+var Reflux               = require('reflux');
 
 var SitterManagerActions = require('js/actions/windows/sitterManager');
+
+var SittersEmpireRPCStore   = require('js/stores/rpc/empire/sitters');
 
 var Tabber               = require('js/components/tabber');
 var Tabs                 = Tabber.Tabs;
@@ -12,6 +15,9 @@ var AuthorizeEmpiresTab  = require('js/components/window/sitterManager/authorize
 var CurrentSittersTab    = require('js/components/window/sitterManager/currentSittersTab');
 
 var SitterManagerWindow = React.createClass({
+    mixins : [
+        Reflux.connect(SittersEmpireRPCStore, 'sitters')
+    ],
 
     statics : {
         options : {
@@ -25,7 +31,7 @@ var SitterManagerWindow = React.createClass({
         return (
             <Tabs>
                 <Tab title="Current Sitters" onSelect={SitterManagerActions.load}>
-                    <CurrentSittersTab />
+                    <CurrentSittersTab sitters={this.state.sitters} />
                 </Tab>
 
                 <Tab title="Authorize Empires">

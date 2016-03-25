@@ -9,7 +9,7 @@ var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
-var RPCEmpireActions    = require('js/actions/rpc/empire');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
 var clone               = util.clone;
 
@@ -17,7 +17,7 @@ var ServerRPCStore = Reflux.createStore({
     listenables : [
         ServerStatusActions,
         TickerActions,
-        RPCEmpireActions
+        EmpireRPCActions
     ],
 
     mixins : [
@@ -62,7 +62,7 @@ var ServerRPCStore = Reflux.createStore({
         this.emit(this.getDefaultData());
     },
 
-    onSuccessRPCEmpireLogout : function() {
+    onSuccessEmpireRPCLogout : function() {
         this.emit(this.getDefaultData());
     },
 

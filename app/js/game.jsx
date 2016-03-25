@@ -18,7 +18,6 @@ var GameWindow           = require('js/components/gameWindow');
 var BodyRPCStore         = require('js/stores/rpc/body');
 
 var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
 
 if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
@@ -165,9 +164,10 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                     Game.Reset();
                     window.location = o.error.data;
                 } else if (o.error.code === 1016) { // Captcha
-                    WindowManagerActions.addWindow(windowTypes.captcha, {
-                        success : retry
-                    });
+                    console.log("ADD CAPTCHA XXXXXXXXXXXXXXXXXXXXXXXXX");
+//                    WindowManagerActions.addWindow(windowTypes.captcha, {
+//                        success : retry
+ //                   });
                 } else if (o.error.code === -32603) { // Internal error
                     Game.QuickDialog({
                         width : '500px',

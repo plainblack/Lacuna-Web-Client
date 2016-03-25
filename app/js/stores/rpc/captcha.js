@@ -27,13 +27,15 @@ var CaptchaRPCStore = Reflux.createStore({
         return {
             guid    : '',
             url     : '',
-            solved  : 0
+            solved  : 0,
+            window  : ''
         };
     },
 
     onCaptchaWindowClear : function() {
         this.emit(this.getDefaultData());
     },
+
 
     onSuccessCaptchaRPCFetch : function(result) {
         var update = clone(this.state);
@@ -48,7 +50,13 @@ var CaptchaRPCStore = Reflux.createStore({
         update.solved = 1;
 
         this.emit(update);
-        WindowsActions.windowClose(CaptchaWindow);
+        WindowsActions.windowCloseByType('captcha');
+    },
+
+    onCaptchaWindowShow : function(window) {
+        var update = clone(this.state);
+        update.window = window;
+        this.emit(update);
     },
 
     onCaptchaWindowRefresh : function() {

@@ -43,7 +43,7 @@ var ChatStore = Reflux.createStore({
         this.onChatShow();
     },
 
-    onSuccessRPCEmpireLogout : function() {
+    onSuccessEmpireRPCLogout : function() {
         this.onChatHide();
     }
 });

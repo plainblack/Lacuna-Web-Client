@@ -45,7 +45,7 @@ var MenuStore = Reflux.createStore({
         this.show(false);
     },
 
-    onSuccessRPCEmpireLogout : function() {
+    onSuccessEmpireRPCLogout : function() {
         this.show(false);
     },
 });

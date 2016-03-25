@@ -9,7 +9,7 @@ var BodyRPCActions      = require('js/actions/rpc/body');
 var NotesWindowStore    = require('js/stores/windows/notes');
 var NotesBodyRPCStore   = require('js/stores/rpc/body/notes');
 
-var Panel               = require('js/components/panel');
+var Panel               = require('js/components/window/panel');
 
 var NotesWindow = React.createClass({
     mixins : [

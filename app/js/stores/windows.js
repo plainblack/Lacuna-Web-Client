@@ -41,6 +41,10 @@ var WindowsStore = Reflux.createStore({
             index = state.index;
             state.index = state.index + 1;
         }
+        // add the window to the options
+        options = options || {};
+        options.window = window;
+        
         // Otherwise re-use the existing window type
         // (e.g. 'building')
         state.windows[index] = {
@@ -53,6 +57,26 @@ var WindowsStore = Reflux.createStore({
         this.emit(state);
     },
 
+    // Close window by type, e.g. 'captcha'
+    //
+    onWindowCloseByType : function(type) {
+        console.log('onWindowCloseByType');
+        var state = _.cloneDeep(this.state);
+        var index = _.findIndex(state.windows, function(o) {
+            if (o) {
+                return o.type === type;
+            }
+            return false;
+        });
+        if (index >= 0) {
+            // This will close the window
+            state.windows[index] = null;
+        }
+        this.emit(state);
+    },
+
+    // Close window based on the window itself
+    //
     onWindowClose : function(window) {
         console.log('onWindowClose');
         var state = _.cloneDeep(this.state);
@@ -63,8 +87,8 @@ var WindowsStore = Reflux.createStore({
             return false;
         });
         if (index >= 0) {
+            // This will close the window
             state.windows[index] = null;
-            // If there is a success 
         }
         this.emit(state);
     }

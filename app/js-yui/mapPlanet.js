@@ -4,9 +4,7 @@ var _ = require('lodash');
 
 var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
-var windowTypes             = require('js/windowTypes');
-var EssentiaVein            = require('js/components/window/essentiavein');
-var IntelTraining           = require('js/components/window/inteltraining');
+var GenericBuilding         = require('js/components/window/genericBuilding');
 
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
@@ -19,6 +17,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         Lacuna = YAHOO.lacuna,
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
+
+    var ReactFactoryMap = {
+        "/essentiavein"         : require('js/components/window/essentiavein'),
+        "/inteltraining"        : require('js/components/window/inteltraining'),
+        "/mayhemtraining"       : require('js/components/window/mayhemtraining'),
+        "/politicstraining"     : require('js/components/window/politicstraining'),
+        "/thefttraining"        : require('js/components/window/thefttraining')
+    };
 
     var FactoryMap = {
         //buildings
@@ -873,15 +879,11 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             if (!FactoryMap[tile.data.url]) {
                 // Pass this off to the new React stuff.
 
-                // Do these if-else chains with a hash reference table!
-                if (tile.data.url == '/essentiavein') {
-                    WindowActions.windowAdd(EssentiaVein, 'building', tile.data);
-                }
-                else if (tile.data.url == '/inteltraining') {
-                    WindowActions.windowAdd(IntelTraining, 'building', tile.data);
+                if (ReactFactoryMap[tile.data.url]) {
+                    WindowActions.windowAdd(ReactFactoryMap[tile.data.url], 'building', tile.data);
                 }
                 else {
-                    WindowManagerActions.addWindow(windowTypes.building, tile.data);
+                    WindowActions.windowAdd(GenericBuilding, 'building', tile.data);
                 }
 
                 return;

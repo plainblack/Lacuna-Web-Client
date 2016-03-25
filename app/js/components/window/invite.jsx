@@ -1,21 +1,29 @@
 'use strict';
 
-var React  = require('react');
-var $      = require('js/shims/jquery');
+var React               = require('react');
+var Reflux              = require('reflux');
 
-var server = require('js/server');
+var $                   = require('js/shims/jquery');
+
+var EmpireRPCActions    = require('js/actions/rpc/empire');
+
+var BodyRPCStore        = require('js/stores/rpc/body');
+var InviteRPCStore      = require('js/stores/rpc/invite');
 
 var InviteWindow = React.createClass({
     statics : {
         options : {
-            title   : 'About',
+            title   : 'Invite a Friend',
             width   : 450,
             height  : 400
         }
     },
+    mixins : [
+        Reflux.connect(InviteRPCStore,  'inviteRPCStore')
+    ],
 
     closeWindow : function() {
-        WindowActions.windowClose(About);
+        WindowActions.windowCloseByType('invite');
     },
 
 
@@ -23,26 +31,14 @@ var InviteWindow = React.createClass({
         var email = this.refs.email.value;
         var message = this.refs.message.value;
 
-        server.call({
-            module  : 'empire',
-            method  : 'invite_friend',
-            params  : [email, message],
-            success : function() {
-                window.alert('Sent!');
-            }
+        EmpireRPCActions.requestEmpireRPCInviteFriend({
+            email   : email,
+            message : message
         });
     },
 
-    genLink : function() {
-        server.call({
-            module  : 'empire',
-            method  : 'get_invite_friend_url',
-            params  : [],
-            success : function(result) {
-                $(this.refs.referral).val(result.referral_url);
-            },
-            scope : this
-        });
+    componentDidMount : function() {
+        EmpireRPCActions.requestEmpireRPCGetInviteFriendUrl();
     },
 
     componentDidUpdate : function() {
@@ -51,12 +47,6 @@ var InviteWindow = React.createClass({
         $el.off().click(function() {
             $(this).select();
         });
-    },
-
-    statics : {
-        windowOptions : {
-            title : 'Invite A Friend'
-        }
     },
 
     render : function() {
@@ -84,8 +74,7 @@ var InviteWindow = React.createClass({
                 <div className="ui divider"></div>
 
                 <div className="ui fluid action input" ref="referralContainer">
-                    <input type="text" readOnly placeholder="Referal link" ref="referral" />
-                    <button className="ui blue button" onClick={this.genLink}>Generate</button>
+                    <input type="text" readOnly placeholder="Referral link" value={this.state.inviteRPCStore.referral_url} />
                 </div>
             </div>
         );

@@ -105,7 +105,7 @@ var TopBar = React.createClass({
                             ) : ''
                         }
 
-                        <a className="item" data-tip="Sign Out" onClick={EmpireRPCActions.requestRPCEmpireLogout}>
+                        <a className="item" data-tip="Sign Out" onClick={EmpireRPCActions.requestEmpireRPCLogout}>
                             <i className="power big icon"></i>
                         </a>
                     </div>

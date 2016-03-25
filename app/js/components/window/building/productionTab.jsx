@@ -7,10 +7,10 @@ var _                       = require('lodash');
 
 var BuildingWindowActions   = require('js/actions/windows/building');
 
-var ActionButton            = require('js/components/windows/building/actionButton');
-var ResourceProduction      = require('js/components/windows/building/resourceProduction');
-var ResourceCost            = require('js/components/windows/building/resourceCost');
-var ResourceLine            = require('js/components/windows/building/resourceLine');
+var ActionButton            = require('js/components/window/building/actionButton');
+var ResourceProduction      = require('js/components/window/building/resourceProduction');
+var ResourceCost            = require('js/components/window/building/resourceCost');
+var ResourceLine            = require('js/components/window/building/resourceLine');
 
 var util                    = require('js/util');
 var vex                     = require('js/vex');

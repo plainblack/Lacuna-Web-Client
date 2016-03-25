@@ -2,7 +2,7 @@
 
 var React        = require('react');
 
-var ResourceLine = require('js/components/windows/building/resourceLine');
+var ResourceLine = require('js/components/window/building/resourceLine');
 
 var util         = require('js/util');
 

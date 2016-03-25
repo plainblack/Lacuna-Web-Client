@@ -22,8 +22,6 @@ var WindowManagerStore = Reflux.createStore({
     ],
 
     getDefaultData : function() {
-        // TODO: should we persist this state via localStorage?
-
         return {};
     },
 
@@ -73,7 +71,7 @@ var WindowManagerStore = Reflux.createStore({
         this.emit({});
     },
 
-    onSuccessRPCEmpireLogout : function() {
+    onSuccessEmpireRPCLogout : function() {
         this.onHideAllWindows();
     },
 

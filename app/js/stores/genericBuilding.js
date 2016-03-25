@@ -84,8 +84,6 @@ var GenericBuildingRPCStore = Reflux.createStore({
     },
 
     handleNewData : function(result) {
-        // Carry previous state over incase the new data is missing fields we need.
-//        var building = _.assign(clone(this.state), result.building);
         var building = _.assign(this.getDefaultData(), result.building);
 
         building.efficiency = building.efficiency * 1;
@@ -129,76 +127,24 @@ var GenericBuildingRPCStore = Reflux.createStore({
         this.handleNewData(result);
     },
 
-    onBuildingWindowLoad : function(url, id) {
-    //    server.call({
-//            module  : url.replace(/^\//, ''), // Cull leading '/' from url
-//            method  : 'view',
-//            params  : [id],
-//            scope   : this,
-//            success : function(result) {
-//
-//                // `view` doesn't return the building url.
-//                result.building.url = url;
-//
- //               this.handleNewData(result);
-//            }
-//        });
+    onSuccessBuildingWindowView : function(result) {
+        this.handleNewData(result);
     },
 
-    onBuildingWindowDemolish : function(url, id) {
-//        server.call({
-//            module  : url.replace(/^\//, ''), // Cull leading '/' from url
-//            method  : 'demolish',
-//            params  : [id],
-//            scope   : this,
-//            success : function() {
-//                // Handle the old planet map code.
-//                YAHOO.lacuna.MapPlanet._fireRemoveTile(this.state);
-//
-//                BuildingWindowActions.buildingWindowClear();
-//
-//                WindowManagerActions.hideTopWindow();
-//            }
-//        });
+    onSuccessBuildingWindowRepair : function(result) {
+        this.handleNewData(result);
     },
 
-    onBuildingWindowDowngrade : function(url, id) {
-//        server.call({
-//            module  : url.replace(/^\//, ''), // Cull leading '/' from url
-//            method  : 'downgrade',
-//            params  : [id],
-//            scope   : this,
-//            success : function(result) {
-//                this.handleNewData(result);
-//                WindowManagerActions.hideTopWindow();
-//            }
-//        });
+    onSuccessBuildingWindowUpgrade : function(result) {
+        this.handleNewData(result);
     },
 
-    onBuildingWindowUpgrade : function(url, id) {
-//        server.call({
-//            module  : url.replace(/^\//, ''), // Cull leading '/' from url
-//            method  : 'upgrade',
-//            params  : [id],
-//            scope   : this,
-//            success : function(result) {
-//                this.handleNewData(result);
-//                WindowManagerActions.hideTopWindow();
-//            }
-//        });
+    onSuccessBuildingWindowDowngrade : function(result) {
+        this.handleNewData(result);
     },
 
-    onBuildingWindowRepair : function(url, id) {
-//        server.call({
-//            module  : url.replace(/^\//, ''), // Cull leading '/' from url
-//            method  : 'repair',
-//            params  : [id],
-//            scope   : this,
-//            success : function(result) {
-//                this.handleNewData(result);
-//                WindowManagerActions.hideTopWindow();
-//            }
-//        });
+    onSuccessBuildingWindowDemolish : function(result) {
+        this.handleNewData(result);
     }
 });
 
