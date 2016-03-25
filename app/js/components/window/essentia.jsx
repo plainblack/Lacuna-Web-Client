@@ -1,19 +1,31 @@
 'use strict';
 
-var React               = require('react');
-var Draggable           = require('react-draggable');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 
-var WindowActions       = require('js/actions/window');
-var EmpireRPCActions    = require('js/actions/rpc/empire');
+var Draggable               = require('react-draggable');
 
-var BoostsTab           = require('js/components/window/essentia/boostsTab');
-var GetEssentiaTab      = require('js/components/window/essentia/getEssentiaTab');
+var WindowActions           = require('js/actions/window');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
-var Tabber              = require('js/components/tabber');
-var Tabs                = Tabber.Tabs;
-var Tab                 = Tabber.Tab;
+var SessionStore            = require('js/stores/session');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var BoostsEmpireRPCStore    = require('js/stores/rpc/empire/boosts');
+
+var BoostsTab               = require('js/components/window/essentia/boostsTab');
+var GetEssentiaTab          = require('js/components/window/essentia/getEssentiaTab');
+
+var Tabber                  = require('js/components/tabber');
+var Tabs                    = Tabber.Tabs;
+var Tab                     = Tabber.Tab;
 
 var Essentia = React.createClass({
+    mixins : [
+        Reflux.connect(EmpireRPCStore,          'empireStore'),
+        Reflux.connect(BoostsEmpireRPCStore,    'boostsStore'),
+        Reflux.connect(SessionStore,            'session')
+    ],
+
     statics : {
         options : {
             title   : 'Essentia',
@@ -30,11 +42,15 @@ var Essentia = React.createClass({
         return (
             <Tabs>
                 <Tab title="Boosts" onSelect={EmpireRPCActions.requestEmpireRPCViewBoosts}>
-                    <BoostsTab />
+                    <BoostsTab 
+                        essentia={this.state.empireStore.essentia} 
+                        exactEssentia={this.state.empireStore.exactEssentia}
+                        boosts={this.state.boostsStore}
+                    />
                 </Tab>
 
                 <Tab title="Get More Essentia">
-                    <GetEssentiaTab />
+                    <GetEssentiaTab session={this.state.session} />
                 </Tab>
             </Tabs>
         );

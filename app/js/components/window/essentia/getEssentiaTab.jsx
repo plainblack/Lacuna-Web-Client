@@ -1,21 +1,17 @@
 'use strict';
 
-var React                = require('react');
-var _                    = require('lodash');
+var React               = require('react');
+var _                   = require('lodash');
 
-var EssentiaActions      = require('js/actions/windows/essentia');
+var EssentiaActions     = require('js/actions/windows/essentia');
+var WindowActions       = require('js/actions/window');
 
-var WindowManagerActions = require('js/actions/windowManager');
-
-var SessionStore         = require('js/stores/session');
-var EssentiaRPCStore     = require('js/stores/rpc/empire/essentia');
-
-EssentiaRPCStore.listen(_.noop);
+var InviteWindow        = require('js/components/window/invite');
 
 var GetEssentiaTab = React.createClass({
 
     purchase : function() {
-        var url = '/pay?session_id=' + SessionStore.getData();
+        var url = '/pay?session_id=' + this.props.session;
         window.open(url, 'essentiaPayment', 'status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1,height=550,width=600,directories=0');
     },
 
@@ -26,7 +22,7 @@ var GetEssentiaTab = React.createClass({
     },
 
     invite : function() {
-//        WindowManagerActions.addWindow(windowTypes.invite);
+        WindowActions.windowAdd(InviteWindow, 'invite');
     },
 
     render : function() {

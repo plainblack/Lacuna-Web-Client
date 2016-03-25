@@ -34,7 +34,24 @@ EmpireRPCActions.requestEmpireRPCBoost.listen(function(o) {
         success : 'successEmpireRPCBoost',
         error   : 'failureEmpireRPCBoost'
     });
+});
 
+EmpireRPCActions.requestEmpireRPCGetInviteFriendUrl.listen(function(o) {
+    makeEmpireCall({
+        method  : 'get_invite_friend_url',
+        params  : [],
+        success : 'successEmpireRPCGetInviteFriendUrl',
+        error   : 'failureEmpireRPCGetInviteFriendUrl'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCInviteFriend.listen(function(o) {
+    makeEmpireCall({
+        method  : 'invite_friend',
+        params  : [o.email, o.message],
+        success : 'successEmpireRPCInviteFriend',
+        error   : 'failureEmpireRPCInviteFriend'
+    });
 });
 
 module.exports = EmpireRPCActions;
