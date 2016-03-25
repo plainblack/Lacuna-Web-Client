@@ -2,22 +2,22 @@
 
 YAHOO.namespace('lacuna');
 
-var React                = require('react');
-var ReactDom             = require('react-dom');
-var _                    = require('lodash');
-var ReactTooltip         = require('react-tooltip');
+var React               = require('react');
+var ReactDom            = require('react-dom');
+var _                   = require('lodash');
+var ReactTooltip        = require('react-tooltip');
 
-var KeyboardActions      = require('js/actions/keyboard');
-var MenuActions          = require('js/actions/menu');
-var SessionActions       = require('js/actions/session');
-var TickerActions        = require('js/actions/ticker');
-var UserActions          = require('js/actions/user');
+var KeyboardActions     = require('js/actions/keyboard');
+var MenuActions         = require('js/actions/menu');
+var SessionActions      = require('js/actions/session');
+var TickerActions       = require('js/actions/ticker');
+var UserActions         = require('js/actions/user');
+var WindowActions       = require('js/actions/window');
 
-var GameWindow           = require('js/components/gameWindow');
+var GameWindow          = require('js/components/gameWindow');
+var Captcha             = require('js/components/window/captcha');
 
-var BodyRPCStore         = require('js/stores/rpc/body');
-
-var WindowManagerActions = require('js/actions/windowManager');
+var BodyRPCStore        = require('js/stores/rpc/body');
 
 if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
@@ -164,10 +164,9 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                     Game.Reset();
                     window.location = o.error.data;
                 } else if (o.error.code === 1016) { // Captcha
-                    console.log("ADD CAPTCHA XXXXXXXXXXXXXXXXXXXXXXXXX");
-//                    WindowManagerActions.addWindow(windowTypes.captcha, {
-//                        success : retry
- //                   });
+                    WindowActions.windowAdd(Captcha, 'captcha', {
+                        success : retry
+                    } );
                 } else if (o.error.code === -32603) { // Internal error
                     Game.QuickDialog({
                         width : '500px',
