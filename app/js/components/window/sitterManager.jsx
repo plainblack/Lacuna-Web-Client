@@ -1,18 +1,18 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 
-var SitterManagerActions = require('js/actions/windows/sitterManager');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
 var SittersEmpireRPCStore   = require('js/stores/rpc/empire/sitters');
 
-var Tabber               = require('js/components/tabber');
-var Tabs                 = Tabber.Tabs;
-var Tab                  = Tabber.Tab;
+var Tabber                  = require('js/components/tabber');
+var Tabs                    = Tabber.Tabs;
+var Tab                     = Tabber.Tab;
 
-var AuthorizeEmpiresTab  = require('js/components/window/sitterManager/authorizeEmpiresTab');
-var CurrentSittersTab    = require('js/components/window/sitterManager/currentSittersTab');
+var AuthorizeEmpiresTab     = require('js/components/window/sitterManager/authorizeEmpiresTab');
+var CurrentSittersTab       = require('js/components/window/sitterManager/currentSittersTab');
 
 var SitterManagerWindow = React.createClass({
     mixins : [
@@ -30,7 +30,7 @@ var SitterManagerWindow = React.createClass({
     render : function() {
         return (
             <Tabs>
-                <Tab title="Current Sitters" onSelect={SitterManagerActions.load}>
+                <Tab title="Current Sitters" onSelect={ EmpireRPCActions.requestEmpireRPCViewAuthorizedSitters }>
                     <CurrentSittersTab sitters={this.state.sitters} />
                 </Tab>
 

@@ -7,6 +7,18 @@ var GenericBuildingRPCActions = Reflux.createActions([
     'successGenericBuildingRPCView',
     'failureGenericBuildingRPCView',
     
+    'requestGenericBuildingRPCUpgrade',
+    'successGenericBuildingRPCUpgrade',
+    'failureGenericBuildingRPCUpgrade',
+    
+    'requestGenericBuildingRPCDemolish',
+    'successGenericBuildingRPCDemolish',
+    'failureGenericBuildingRPCDemolish',
+    
+    'requestGenericBuildingRPCDowngrade',
+    'successGenericBuildingRPCDowngrade',
+    'failureGenericBuildingRPCDowngrade',
+    
     'requestGenericBuildingRPCRepair',
     'successGenericBuildingRPCRepair',
     'failureGenericBuildingRPCRepair'

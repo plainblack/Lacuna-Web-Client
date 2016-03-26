@@ -113,8 +113,9 @@ var GenericBuildingRPCStore = Reflux.createStore({
 
         building.extraViewData = extraViewData;
 
+ 
         // Manually update the old planet map with the new data we got.
-//        YAHOO.lacuna.MapPlanet.ReloadBuilding(_.cloneDeep(building));
+        YAHOO.lacuna.MapPlanet.ReloadBuilding(_.cloneDeep(building));
 
         this.emit(building);
     },

@@ -3,7 +3,7 @@
 var React                = require('react');
 var _                    = require('lodash');
 
-var SitterManagerActions = require('js/actions/windows/sitterManager');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
 var vex                  = require('js/vex');
 
@@ -12,7 +12,7 @@ var AuthorizeEmpiresTab = React.createClass({
     authorizeAllies : function() {
         vex.confirm(
             'Are you sure you want to authorize all members of your alliance?',
-            SitterManagerActions.authorizeAllies
+            _.partial(EmpireRPCActions.requestEmpireRPCAuthorizeSitters, { allied : true })
         );
     },
 
@@ -21,7 +21,7 @@ var AuthorizeEmpiresTab = React.createClass({
 
         vex.confirm(
             'Are you sure you want to authorize all members of ' + name + '?',
-            _.partial(SitterManagerActions.authorizeAlliance, name)
+            _.partial(EmpireRPCActions.requestEmpireRPCAuthorizeSitters, { alliance : name })
         );
     },
 
@@ -30,7 +30,7 @@ var AuthorizeEmpiresTab = React.createClass({
 
         vex.confirm(
             'Are you sure you want to authorize ' + name + '?',
-            _.partial(SitterManagerActions.authorizeEmpire, name)
+            _.partial(EmpireRPCActions.requestEmpireRPCAuthorizeSitters, { empires : [name] })
         );
     },
 

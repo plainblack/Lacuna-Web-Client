@@ -1,5 +1,7 @@
 'use strict';
 
+var vex                     = require('js/vex');
+
 var React                   = require('react');
 var Reflux                  = require('reflux');
 var classnames              = require('classnames');
@@ -37,10 +39,10 @@ var Boost = React.createClass({
                 max : 100 // The server has no max but this seems like a reasonable limit, to me.
             })
         ) {
-            window.alert('Number of weeks must be an integer between 1 and 100.');
+            vex.alert('Number of weeks must be an integer between 1 and 100.');
             return;
         } else if (weeks * 5 > this.props.essentia) {
-            window.alert('Insufficient Essentia.');
+            vex.alert('Insufficient Essentia.');
             return;
         }
         EmpireRPCActions.requestEmpireRPCBoost({ type : type, weeks : weeks });

@@ -3,7 +3,8 @@
 var React               = require('react');
 var _                   = require('lodash');
 
-var EssentiaActions     = require('js/actions/windows/essentia');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
+
 var WindowActions       = require('js/actions/window');
 
 var InviteWindow        = require('js/components/window/invite');
@@ -17,7 +18,7 @@ var GetEssentiaTab = React.createClass({
 
     redeem : function() {
         var node = this.refs.code;
-        EssentiaActions.redeemCode(node.value);
+        EmpireRPCActions.requestEmpireRPCRedeemEssentiaCode({ code : node.value });
         node.value = '';
     },
 

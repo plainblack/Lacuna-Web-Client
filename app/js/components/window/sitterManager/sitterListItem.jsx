@@ -1,11 +1,11 @@
 'use strict';
 
-var React                = require('react');
-var _                    = require('lodash');
+var React               = require('react');
+var _                   = require('lodash');
 
-var SitterManagerActions = require('js/actions/windows/sitterManager');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
-var vex                  = require('js/vex');
+var vex                 = require('js/vex');
 
 var SitterListItem = React.createClass({
 
@@ -20,7 +20,7 @@ var SitterListItem = React.createClass({
     },
 
     reauthorize : function() {
-        SitterManagerActions.authorizeEmpire(this.props.sitter.name);
+        EmpireRPCActions.requestEmpireRPCAuthorizeEmpire({ empires : [this.props.sitter.name] });
     },
 
     deauthorize : function() {
@@ -28,7 +28,7 @@ var SitterListItem = React.createClass({
 
         vex.confirm(
             'Are you sure you want to remove ' + s.name + "'s access to your empire?",
-            _.partial(SitterManagerActions.deauthorizeEmpire, s.id)
+            _.partial(EmpireRPCActions.requestEmpireRPCDeauthorizeEmpire, { empires : [s.id] })
         );
     },
 

@@ -1,25 +1,25 @@
 'use strict';
 
-var React                       = require('react');
-var Reflux                      = require('reflux');
-var _                           = require('lodash');
-var vex                         = require('js/vex');
+var React               = require('react');
+var Reflux              = require('reflux');
+var _                   = require('lodash');
+var vex                 = require('js/vex');
 
-var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
-var SitterListItem              = require('js/components/window/sitterManager/sitterListItem');
+var SitterListItem      = require('js/components/window/sitterManager/sitterListItem');
 
 
 var CurrentSittersTab = React.createClass({
 
-    reauthorizeAll : function() {
-        SitterManagerWindowActions.reauthorizeAll();
+    handleReauthorizeAll : function() {
+        EmpireRPCActions.requestEmpireRPCAuthorizeSitters({ revalidate_all : true });
     },
 
-    deauthorizeAll : function() {
+    handleDeauthorizeAll : function() {
         vex.confirm(
             "Are you sure you want to revoke everyone's access to your empire?",
-            SitterManagerWindowActions.deauthorizeAll
+            _.partial(EmpireRPCActions.requestEmpireRPCDeauthorizeSitters, { deauthorize_all : true } )
         );
     },
 
@@ -30,11 +30,11 @@ var CurrentSittersTab = React.createClass({
                 <div className="ui grid">
                     <div className="centered row">
                         <div className="ui large icon buttons">
-                            <div className="ui green button" onClick={this.reauthorizeAll}>
+                            <div className="ui green button" onClick={this.handleReauthorizeAll}>
                                 <i className="refresh icon"></i>
                                 Renew all
                             </div>
-                            <div className="ui red button" onClick={this.deauthorizeAll}>
+                            <div className="ui red button" onClick={this.handleDeauthorizeAll}>
                                 <i className="warning sign icon"></i>
                                 Revoke all
                             </div>

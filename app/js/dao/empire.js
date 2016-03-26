@@ -1,6 +1,7 @@
 'use strict';
 
 var dao                 = require('js/dao');
+var vex                 = require('js/vex');
 var EmpireRPCActions    = require('js/actions/rpc/empire');
 
 function makeEmpireCall(options) {
@@ -53,6 +54,80 @@ EmpireRPCActions.requestEmpireRPCInviteFriend.listen(function(o) {
         error   : 'failureEmpireRPCInviteFriend'
     });
 });
+
+EmpireRPCActions.requestEmpireRPCViewAuthorizedSitters.listen(function(o) {
+    makeEmpireCall({
+        method  : 'view_authorized_sitters',
+        params  : [],
+        success : 'successEmpireRPCViewAuthorizedSitters',
+        error   : 'failureEmpireRPCViewAuthorizedSitters'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCAuthorizeSitters.listen(function(o) {
+    makeEmpireCall({
+        method  : 'authorize_sitters',
+        params  : [o],
+        success : 'successEmpireRPCAuthorizeSitters',
+        error   : 'failureEmpireRPCAuthorizeSitters'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCDeauthorizeSitters.listen(function(o) {
+    makeEmpireCall({
+        method  : 'deauthorize_sitters',
+        params  : [o],
+        success : 'successEmpireRPCDeauthorizeSitters',
+        error   : 'failureEmpireRPCDeauthorizeSitters'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCRedeemEssentiaCode.listen(function(o) {
+    makeEmpireCall({
+        method  : 'redeem_essentia_code',
+        params  : [o.code],
+        success : 'successEmpireRPCRedeemEssentiaCode',
+        error   : 'failureEmpireRPCRedeemEssentiaCode'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCEnableSelfDestruct.listen(function(o) {
+    makeEmpireCall({
+        method  : 'enable_self_destruct',
+        params  : [],
+        success : 'successEmpireRPCEnableSelfDestruct',
+        error   : 'failureEmpireRPCEnableSelfDestruct'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCDisableSelfDestruct.listen(function(o) {
+    makeEmpireCall({
+        method  : 'disable_self_destruct',
+        params  : [],
+        success : 'successEmpireRPCDisableSelfDestruct',
+        error   : 'failureEmpireRPCDisableSelfDestruct'
+    });
+});
+
+// I'm not sure these belong here. but for now
+//
+
+EmpireRPCActions.successEmpireRPCRedeemEssentiaCode.listen(function(result) {
+    vex.alert('Successfully redeemed ' + result.amount + ' Essentia.');
+});
+
+EmpireRPCActions.successEmpireRPCEnableSelfDestruct.listen(function(result) {
+    vex.alert('Success - your empire will be deleted in 24 hours.');
+});
+
+EmpireRPCActions.successEmpireRPCDisableSelfDestruct.listen(function(result) {
+    vex.alert('Success - your empire will not be deleted. Phew!');
+});
+
+EmpireRPCActions.successEmpireRPCInviteFriend.listen(function(result) {
+    vex.alert('Success - your friend has been sent an invite email.');
+});
+
 
 module.exports = EmpireRPCActions;
 

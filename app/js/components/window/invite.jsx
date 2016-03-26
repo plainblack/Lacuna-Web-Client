@@ -27,7 +27,7 @@ var InviteWindow = React.createClass({
     },
 
 
-    invite : function() {
+    handleInvite : function() {
         var email = this.refs.email.value;
         var message = this.refs.message.value;
 
@@ -68,7 +68,7 @@ var InviteWindow = React.createClass({
                         <textarea ref="message" defaultValue={defaultMessage}></textarea>
                     </div>
 
-                    <div className="ui green button" onClick={this.invite}>Send Invite</div>
+                    <div className="ui green button" onClick={this.handleInvite}>Send Invite</div>
                 </div>
 
                 <div className="ui divider"></div>
