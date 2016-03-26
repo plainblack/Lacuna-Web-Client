@@ -7,7 +7,6 @@ var Reflux                  = require('reflux');
 var classnames              = require('classnames');
 var validator               = require('validator');
 
-var EssentiaWindowActions   = require('js/actions/windows/essentia');
 var EmpireRPCActions        = require('js/actions/rpc/empire');
 
 
