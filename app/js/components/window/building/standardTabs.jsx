@@ -15,7 +15,7 @@ var StandardTabs = {
     tabs : function(options, body, building) {
         var tabs = [];
         
-        if (building.efficiency !== 100) {
+        if (building.efficiency !== 100 && building.id) {
             tabs.push(
                 <Tab title="Repair" key="Repair">
                     <RepairTab building={building} body={body} />

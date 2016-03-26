@@ -1,19 +1,18 @@
 'use strict';
 
-var React                   = require('react');
-var Reflux                  = require('reflux');
-var _                       = require('lodash');
+var React                       = require('react');
+var Reflux                      = require('reflux');
+var _                           = require('lodash');
 
+var GenericBuildingRPCActions   = require('js/actions/rpc/genericBuilding');
 
-var BuildingWindowActions   = require('js/actions/windows/building');
+var ActionButton                = require('js/components/window/building/actionButton');
+var ResourceProduction          = require('js/components/window/building/resourceProduction');
+var ResourceCost                = require('js/components/window/building/resourceCost');
+var ResourceLine                = require('js/components/window/building/resourceLine');
 
-var ActionButton            = require('js/components/window/building/actionButton');
-var ResourceProduction      = require('js/components/window/building/resourceProduction');
-var ResourceCost            = require('js/components/window/building/resourceCost');
-var ResourceLine            = require('js/components/window/building/resourceLine');
-
-var util                    = require('js/util');
-var vex                     = require('js/vex');
+var util                        = require('js/util');
+var vex                         = require('js/vex');
 
 var ProductionTab = React.createClass({
 
@@ -23,7 +22,7 @@ var ProductionTab = React.createClass({
         vex.confirm(
             'Are you sure you want to demolish your ' + name + '?',
             _.bind(function() {
-                BuildingWindowActions.buildingWindowDemolish(this.props.building.url, this.props.building.id);
+                GenericBuildingRPCActions.requestGenericBuildingRPCDemolish(this.props.building.url, this.props.building.id);
             }, this)
         );
     },
@@ -34,13 +33,13 @@ var ProductionTab = React.createClass({
         vex.confirm(
             'Are you sure you want to downgrade your ' + name + '?',
             _.bind(function() {
-                BuildingWindowActions.buildingWindowDowngrade(this.props.building.url, this.props.building.id);
+                GenericBuildingRPCActions.requestGenericBuildingRPCDowngrade(this.props.building.url, this.props.building.id);
             }, this)
         );
     },
 
     onUpgradeClick : function() {
-        BuildingWindowActions.buildingWindowUpgrade(this.props.building.url, this.props.building.id);
+        GenericBuildingRPCActions.requestGenericBuildingRPCUpgrade(this.props.building.url, this.props.building.id);
     },
 
     render : function() {
