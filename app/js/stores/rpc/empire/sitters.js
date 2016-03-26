@@ -9,14 +9,12 @@ var server                      = require('js/server');
 
 var StatefulMixinStore          = require('js/stores/mixins/stateful');
 
-var SitterManagerWindowActions  = require('js/actions/windows/sitterManager');
 var TickerActions               = require('js/actions/ticker');
 
 var clone                       = util.clone;
 
 var SittersEmpireRPCStore = Reflux.createStore({
     listenables : [
-        SitterManagerWindowActions,
         TickerActions
     ],
 
@@ -59,87 +57,18 @@ var SittersEmpireRPCStore = Reflux.createStore({
         this.emit(sitters);
     },
 
-    onLoad : function() {
-        server.call({
-            module  : 'empire',
-            method  : 'view_authorized_sitters',
-            params  : [],
-            success : this.handleNewSitters,
-            scope   : this
-        });
+    onSuccessEmpireRPCViewSitters : function(result) {
+        this.handleNewSitters(result);
     },
 
-    onAuthorizeAllies : function() {
-        server.call({
-            module : 'empire',
-            method : 'authorize_sitters',
-            params : [{
-                allied : true
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
+    onSuccessEmpireRPCAuthorizeSitters : function(result) {
+        this.handleNewSitters(result);
     },
-
-    onAuthorizeAlliance : function(allianceName) {
-        server.call({
-            module : 'empire',
-            method : 'authorize_sitters',
-            params : [{
-                alliance : allianceName
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
-    },
-
-    onAuthorizeEmpire : function(empireName) {
-        server.call({
-            module : 'empire',
-            method : 'authorize_sitters',
-            params : [{
-                empires : [empireName]
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
-    },
-
-    onDeauthorizeEmpire : function(empireId) {
-        server.call({
-            module : 'empire',
-            method : 'deauthorize_sitters',
-            params : [{
-                empires : [empireId]
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
-    },
-
-    onReauthorizeAll : function() {
-        server.call({
-            module : 'empire',
-            method : 'authorize_sitters',
-            params : [{
-                revalidate_all : true
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
-    },
-
-    onDeauthorizeAll : function() {
-        server.call({
-            module : 'empire',
-            method : 'deauthorize_sitters',
-            params : [{
-                empires : _.map(this.state, 'id')
-            }],
-            success : this.handleNewSitters,
-            scope   : this
-        });
+    
+    onSuccessEmpireRPCDeathorizeSitters : function(result) {
+        this.handleNewSitters(result);
     }
+
 });
 
 module.exports = SittersEmpireRPCStore;

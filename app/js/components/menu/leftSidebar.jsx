@@ -2,6 +2,8 @@
 
 var React                   = require('react');
 var Reflux                  = require('reflux');
+
+var vex                     = require('js/vex');
 var util                    = require('js/util');
 var server                  = require('js/server');
 var $                       = require('js/shims/jquery');
@@ -9,6 +11,8 @@ var $                       = require('js/shims/jquery');
 var LeftSidebarActions      = require('js/actions/menu/leftSidebar');
 var OptionsWindowActions    = require('js/actions/windows/options');
 var WindowActions           = require('js/actions/window');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
+
 var AboutWindow             = require('js/components/window/about');
 var InviteWindow            = require('js/components/window/invite');
 var SitterManagerWindow     = require('js/components/window/sitterManager');
@@ -22,48 +26,26 @@ var LeftSidebarStore        = require('js/stores/menu/leftSidebar');
 var SelfDestruct = React.createClass({
 
     mixins : [
-        Reflux.connect(EmpireRPCStore, 'empire')
+        Reflux.connect(EmpireRPCStore, 'empireRPCStore')
     ],
 
     handleDestructClick : function() {
         LeftSidebarActions.hide();
-        this.onClickSelfDestruct();
-    },
 
-    onClickSelfDestruct : function() {
-        var method = '';
-
-        if (this.state.empire.self_destruct_active === 1) {
-            method = 'disable_self_destruct';
-        } else if (this.confirmSelfDestruct()) {
-            method = 'enable_self_destruct';
-        } else {
+        if (this.state.empireRPCStore.self_destruct_active === 1) {
+            EmpireRPCActions.requestEmpireRPCDisableSelfDestruct();
             return;
         }
-
-        server.call({
-            module  : 'empire',
-            method  : method,
-            params  : [],
-            scope   : this,
-            success : function() {
-                if (method === 'enable_self_destruct') {
-                    window.alert('Success - your empire will be deleted in 24 hours.');
-                } else {
-                    window.alert('Success - your empire will not be deleted. Phew!');
-                }
-            }
-        });
-    },
-
-    confirmSelfDestruct : function() {
-        return window.confirm('Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.');
+        
+        vex.confirm(
+            'Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.',
+            EmpireRPCActions.requestEmpireRPCEnableSelfDestruct
+        );
     },
 
     render : function() {
-        var destructActive      = this.state.empire.self_destruct_active &&
-            this.state.empire.self_destruct_ms > 0;
-        var destructMs          = this.state.empire.self_destruct_ms;
+        var destructMs          = this.state.empireRPCStore.self_destruct_ms;
+        var destructActive      = this.state.empireRPCStore.self_destruct_active && destructMs > 0;
         var formattedDestructMs = destructActive ? util.formatMillisecondTime(destructMs) : '';
 
         var itemStyle = destructActive
