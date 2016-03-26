@@ -46,6 +46,15 @@ EmpireRPCActions.requestEmpireRPCGetInviteFriendUrl.listen(function(o) {
     });
 });
 
+EmpireRPCActions.requestEmpireRPCInviteFriend.listen(function(o) {
+    makeEmpireCall({
+        method  : 'invite_friend',
+        params  : [o.email, o.message],
+        success : 'successEmpireRPCInviteFriend',
+        error   : 'failureEmpireRPCInviteFriend'
+    });
+});
+
 EmpireRPCActions.requestEmpireRPCViewAuthorizedSitters.listen(function(o) {
     makeEmpireCall({
         method  : 'view_authorized_sitters',
@@ -114,6 +123,11 @@ EmpireRPCActions.successEmpireRPCEnableSelfDestruct.listen(function(result) {
 EmpireRPCActions.successEmpireRPCDisableSelfDestruct.listen(function(result) {
     vex.alert('Success - your empire will not be deleted. Phew!');
 });
+
+EmpireRPCActions.successEmpireRPCInviteFriend.listen(function(result) {
+    vex.alert('Success - your friend has been sent an invite email.');
+});
+
 
 module.exports = EmpireRPCActions;
 
