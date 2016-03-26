@@ -1,19 +1,22 @@
 'use strict';
 
-var Reflux                   = require('reflux');
-var StatefulMixinStore       = require('js/stores/mixins/stateful');
-var _                        = require('lodash');
+var Reflux                      = require('reflux');
+var StatefulMixinStore          = require('js/stores/mixins/stateful');
+var _                           = require('lodash');
 
-var BuildingWindowActions    = require('js/actions/windows/building');
-var WindowManagerActions     = require('js/actions/windowManager');
+var BuildingWindowActions       = require('js/actions/windows/building');
+var WindowManagerActions        = require('js/actions/windowManager');
+var WindowActions               = require('js/actions/window');
+var GenericBuildingRPCActions   = require('js/actions/rpc/genericBuilding');
 
-var server                   = require('js/server');
-var clone                    = require('js/util').clone;
+var server                      = require('js/server');
+var clone                       = require('js/util').clone;
 
 var GenericBuildingRPCStore = Reflux.createStore({
 
     listenables : [
-        BuildingWindowActions
+        BuildingWindowActions,
+        GenericBuildingRPCActions
     ],
 
     mixins : [
@@ -134,18 +137,19 @@ var GenericBuildingRPCStore = Reflux.createStore({
 
     onSuccessBuildingWindowRepair : function(result) {
         this.handleNewData(result);
+        WindowActions.windowCloseByType('building');
     },
 
-    onSuccessBuildingWindowUpgrade : function(result) {
-        this.handleNewData(result);
+    onSuccessGenericBuildingRPCDowngrade : function(result) {
+        WindowActions.windowCloseByType('building');
     },
 
-    onSuccessBuildingWindowDowngrade : function(result) {
-        this.handleNewData(result);
+    onSuccessGenericBuildingRPCUpgrade : function(result) {
+        WindowActions.windowCloseByType('building');
     },
 
-    onSuccessBuildingWindowDemolish : function(result) {
-        this.handleNewData(result);
+    onSuccessGenericBuildingRPCDemolish : function(result) {
+        WindowActions.windowCloseByType('building');
     }
 });
 

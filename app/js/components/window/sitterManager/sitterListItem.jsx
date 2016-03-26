@@ -19,16 +19,16 @@ var SitterListItem = React.createClass({
         };
     },
 
-    reauthorize : function() {
-        EmpireRPCActions.requestEmpireRPCAuthorizeEmpire({ empires : [this.props.sitter.name] });
+    handleReauthorize : function() {
+        EmpireRPCActions.requestEmpireRPCAuthorizeSitters({ empires : [this.props.sitter.name] });
     },
 
-    deauthorize : function() {
+    handleDeauthorize : function() {
         var s = this.props.sitter;
 
         vex.confirm(
             'Are you sure you want to remove ' + s.name + "'s access to your empire?",
-            _.partial(EmpireRPCActions.requestEmpireRPCDeauthorizeEmpire, { empires : [s.id] })
+            _.partial(EmpireRPCActions.requestEmpireRPCDeauthorizeSitters, { empires : [s.id] })
         );
     },
 
@@ -36,10 +36,10 @@ var SitterListItem = React.createClass({
         return (
             <div className="item">
                 <div className="ui right floated compact buttons">
-                    <div className="ui green button" onClick={this.reauthorize}>
+                    <div className="ui green button" onClick={this.handleReauthorize}>
                         Renew
                     </div>
-                    <div className="ui red button" onClick={this.deauthorize}>
+                    <div className="ui red button" onClick={this.handleDeauthorize}>
                         Revoke
                     </div>
                 </div>

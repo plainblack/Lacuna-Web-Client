@@ -10,12 +10,14 @@ var server                      = require('js/server');
 var StatefulMixinStore          = require('js/stores/mixins/stateful');
 
 var TickerActions               = require('js/actions/ticker');
+var EmpireRPCActions            = require('js/actions/rpc/empire');
 
 var clone                       = util.clone;
 
 var SittersEmpireRPCStore = Reflux.createStore({
     listenables : [
-        TickerActions
+        TickerActions,
+        EmpireRPCActions
     ],
 
     mixins : [
@@ -57,7 +59,7 @@ var SittersEmpireRPCStore = Reflux.createStore({
         this.emit(sitters);
     },
 
-    onSuccessEmpireRPCViewSitters : function(result) {
+    onSuccessEmpireRPCViewAuthorizedSitters : function(result) {
         this.handleNewSitters(result);
     },
 
@@ -65,7 +67,7 @@ var SittersEmpireRPCStore = Reflux.createStore({
         this.handleNewSitters(result);
     },
     
-    onSuccessEmpireRPCDeathorizeSitters : function(result) {
+    onSuccessEmpireRPCDeauthorizeSitters : function(result) {
         this.handleNewSitters(result);
     }
 
