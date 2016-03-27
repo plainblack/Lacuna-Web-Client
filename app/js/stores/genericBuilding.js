@@ -127,8 +127,9 @@ var GenericBuildingRPCStore = Reflux.createStore({
         this.emit(this.getDefaultData());
     },
 
-    onBuildingWindowUpdate: function(result) {
-        this.handleNewData(result);
+    onBuildingWindowUpdate: function(o) {
+        this.handleNewData(o);
+        YAHOO.lacuna.MapPlanet.RefreshWithData({ result : o});
     },
 
     onSuccessBuildingWindowView : function(result) {
