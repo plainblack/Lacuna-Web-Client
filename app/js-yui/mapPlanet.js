@@ -23,7 +23,8 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/inteltraining"        : require('js/components/window/inteltraining'),
         "/mayhemtraining"       : require('js/components/window/mayhemtraining'),
         "/politicstraining"     : require('js/components/window/politicstraining'),
-        "/thefttraining"        : require('js/components/window/thefttraining')
+        "/thefttraining"        : require('js/components/window/thefttraining'),
+        "/shipyard"             : require('js/components/window/shipyard')
     };
 
     var FactoryMap = {
@@ -49,7 +50,7 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         "/park": Lacuna.buildings.Park,
         "/planetarycommand": Lacuna.buildings.PlanetaryCommand,
         "/security": Lacuna.buildings.Security,
-        "/shipyard": Lacuna.buildings.Shipyard,
+//        "/shipyard": Lacuna.buildings.Shipyard,
         "/spaceport": Lacuna.buildings.SpacePort,
         "/ssla": Lacuna.buildings.SpaceStationLab,
         "/subspacesupplydepot": Lacuna.buildings.SubspaceSupplyDepot,
