@@ -58,6 +58,10 @@ GenericBuildingRPCActions.requestGenericBuildingRPCDemolish.listen(function(url,
     });
 });
 
+GenericBuildingRPCActions.successGenericBuildingRPCDemolish.listen(function(result) {
+    BuildingWindowActions.buildingWindowUpdate(result);
+});
+
 GenericBuildingRPCActions.requestGenericBuildingRPCRepair.listen(function(url, o) {
     makeGenericBuildingCall(url, {
         method  : 'repair',
