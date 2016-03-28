@@ -13,6 +13,7 @@ require('js/dao/mayhemTraining');
 require('js/dao/politicsTraining');
 require('js/dao/theftTraining');
 require('js/dao/genericBuilding');
+require('js/dao/shipyard');
 require('js/dao/map');
 
 module.exports.makeServerCall = function (uri, options, actions) {

@@ -8,11 +8,10 @@ var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
 var BuildingWindowActions   = require('js/actions/windows/building');
-var PoliticsTrainingRPCActions = require('js/actions/rpc/politicsTraining');
+var ShipyardRPCActions      = require('js/actions/rpc/shipyard');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
-var SpyTrainingStatus       = require('js/components/window/spyTraining/spyTrainingStatus');
 var Tabber                  = require('js/components/tabber');
 
 var Tabs                    = Tabber.Tabs;
@@ -32,7 +31,7 @@ var Shipyard = React.createClass({
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
-//        PoliticsTrainingRPCActions.requestPoliticsTrainingRPCView( this.props.options.id );
+        ShipyardRPCActions.requestShipyardRPCView( this.props.options.id );
     },
 
     closeWindow : function() {
@@ -43,14 +42,20 @@ var Shipyard = React.createClass({
         var building = this.state.genericBuildingStore;
         var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
         tabs.push(
-            <Tab title="Build Queue" key="Build Queue">
+            <Tab title="Build Queue" key="Build Queue" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCViewBuildQueue, building.id ) }>
                 <p>Build Queue</p>
             </Tab>
         );
         
         tabs.push(
-            <Tab title="Build Ships" key="Build Ships">
+            <Tab title="Build Ships" key="Build Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
                 <p>Build Ships</p>
+            </Tab>
+        );
+
+        tabs.push(
+            <Tab title="Repair Ships" key="Repair Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetRepairable, building.id ) } >
+                <p>Repair Ships</p>
             </Tab>
         );
 
