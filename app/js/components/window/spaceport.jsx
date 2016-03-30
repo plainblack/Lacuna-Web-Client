@@ -8,7 +8,7 @@ var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
 var BuildingWindowActions   = require('js/actions/windows/building');
-var ShipyardRPCActions      = require('js/actions/rpc/shipyard');
+var SpacePortRPCActions      = require('js/actions/rpc/spacePort');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
@@ -17,10 +17,10 @@ var Tabber                  = require('js/components/tabber');
 var Tabs                    = Tabber.Tabs;
 var Tab                     = Tabber.Tab;
 
-var Shipyard = React.createClass({
+var SpacePort = React.createClass({
     statics : {
         options : {
-            title   : 'Shipyard',
+            title   : 'SpacePort',
             width   : 700,
             height  : 420
         }
@@ -31,7 +31,7 @@ var Shipyard = React.createClass({
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
-        ShipyardRPCActions.requestShipyardRPCView( this.props.options.id );
+        SpacePortRPCActions.requestSpacePortRPCView( this.props.options.id );
     },
 
     closeWindow : function() {
@@ -42,20 +42,31 @@ var Shipyard = React.createClass({
         var building = this.state.genericBuildingStore;
         var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
         tabs.push(
-            <Tab title="Build Queue" key="Build Queue" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCViewBuildQueue, building.id ) }>
-                <p>Not Yet Implemented!</p>
+            <Tab title="Own Fleets" key="Own Fleets" onSelect={ _.partial(SpacePortRPCActions.requestSpacePortRPCView, building.id ) }>
+                <p>Not Yet Implemented! This will show the colonies own ships.</p>
+                <p>All the colonies own fleets</p>
+                <p>All the colonies travelling fleets</p>
+                <p>All excavators (deployed)</p>
+                <p>All mining platforms (deployed)</p>
+                <p>Fleets can be filtered by tag ('Trade','War', etc.)</p>
+                <p>Fleets can be scuttled or cancelled</p>
             </Tab>
         );
         
         tabs.push(
-            <Tab title="Build Ships" key="Build Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
+            <Tab title="Foreign Orbiting" key="Foreign Orbiting" >
                 <p>Not Yet Implemented</p>
             </Tab>
         );
-
         tabs.push(
-            <Tab title="Repair Ships" key="Repair Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetRepairable, building.id ) } >
+            <Tab title="Battle Logs" key="Battle Logs" >
                 <p>Not Yet Implemented</p>
+            </Tab>
+        );
+        tabs.push(
+            <Tab title="Send Fleet" key="Send Fleet" >
+                <p>Not Yet Implemented</p>
+                <p>This will combine the current 'send' and 'fleet' tabs</p>
             </Tab>
         );
 
@@ -74,4 +85,4 @@ var Shipyard = React.createClass({
     }
 });
 
-module.exports = Shipyard;
+module.exports = SpacePort;
