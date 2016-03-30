@@ -15,6 +15,8 @@ require('js/dao/theftTraining');
 require('js/dao/genericBuilding');
 require('js/dao/shipyard');
 require('js/dao/spacePort');
+require('js/dao/trade');
+require('js/dao/transporter');
 require('js/dao/map');
 
 module.exports.makeServerCall = function (uri, options, actions) {
