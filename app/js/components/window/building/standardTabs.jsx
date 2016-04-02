@@ -12,20 +12,20 @@ var RepairTab               = require('js/components/window/building/repairTab')
 
 var StandardTabs = {
 
-    tabs : function(options, body, building) {
+    tabs : function(options, building) {
         var tabs = [];
         
         if (building.efficiency !== 100 && building.id) {
             tabs.push(
                 <Tab title="Repair" key="Repair">
-                    <RepairTab building={building} body={body} />
+                    <RepairTab building={building} />
                 </Tab>
             );
         }
 
         tabs.push(
             <Tab title="Production" key="Production">
-                <ProductionTab building={building} body={body} />
+                <ProductionTab building={building} />
             </Tab>
         );
 

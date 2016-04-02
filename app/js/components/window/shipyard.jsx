@@ -4,7 +4,6 @@ var React                   = require('react');
 var Reflux                  = require('reflux');
 
 var GenericBuildingStore    = require('js/stores/genericBuilding.js');
-var BodyRPCStore            = require('js/stores/rpc/body');
 
 var WindowActions           = require('js/actions/window');
 var BuildingWindowActions   = require('js/actions/windows/building');
@@ -29,7 +28,6 @@ var Shipyard = React.createClass({
     },
     mixins : [
         Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
-        Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
@@ -42,7 +40,7 @@ var Shipyard = React.createClass({
 
     render : function() {
         var building = this.state.genericBuildingStore;
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
+        var tabs = StandardTabs.tabs(this.props.options, building);
         tabs.push(
             <Tab title="Build Queue" key="Build Queue" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCViewBuildQueue, building.id ) }>
                 <p>Not Yet Implemented!</p>

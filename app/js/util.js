@@ -114,7 +114,7 @@ module.exports.clone = function(obj) {
 };
 
 module.exports.commify = function(num) {
-    if (!num) {
+    if (num === undefined) {
         return '';
     }
 

@@ -4,7 +4,6 @@ var React                       = require('react');
 var Reflux                      = require('reflux');
 
 var GenericBuildingStore        = require('js/stores/genericBuilding.js');
-var BodyRPCStore                = require('js/stores/rpc/body');
 
 var StandardTabs                = require('js/components/window/building/standardTabs');
 var BuildingInformation         = require('js/components/window/building/information');
@@ -27,7 +26,6 @@ var GenericBuilding = React.createClass({
     },
     mixins : [
         Reflux.connect(GenericBuildingStore, 'buildingStore'),
-        Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
     
     componentWillMount : function() {
@@ -44,7 +42,7 @@ var GenericBuilding = React.createClass({
     },
 
     render : function() {
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, this.state.buildingStore);
+        var tabs = StandardTabs.tabs(this.props.options, this.state.buildingStore);
 
         return (
             <div>

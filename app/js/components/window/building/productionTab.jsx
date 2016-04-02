@@ -4,6 +4,7 @@ var React                       = require('react');
 var Reflux                      = require('reflux');
 var _                           = require('lodash');
 
+var BodyRPCStore                = require('js/stores/rpc/body');
 var GenericBuildingRPCActions   = require('js/actions/rpc/genericBuilding');
 
 var ActionButton                = require('js/components/window/building/actionButton');
@@ -15,6 +16,10 @@ var util                        = require('js/util');
 var vex                         = require('js/vex');
 
 var ProductionTab = React.createClass({
+
+    mixins : [
+        Reflux.connect(BodyRPCStore, 'bodyRPCStore'),
+    ],
 
     onDemolishClick : function() {
         var name = this.props.building.name + ' ' + this.props.building.level;
@@ -44,7 +49,7 @@ var ProductionTab = React.createClass({
 
     render : function() {
         var b    = this.props.building;
-        var body = this.props.body;
+        var body = this.state.bodyRPCStore;
 
         // Don't let the user downgrade a level 1 building. They shoulod demolish it instead.
         if (b.level === 1) {
