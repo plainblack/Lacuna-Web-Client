@@ -2955,9 +2955,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "get_status" : {
                     "description": "get quick empire status",
-                    "parameters": [
-                        {"name":"session_id", "type":"string", "optional":false}
-                    ],
+                    "parameters": {
+                        session_id: {"type":"string", "optional":false}
+                    },
                     "returns":{"type":"object"}
                 },
                 "view_profile" : {

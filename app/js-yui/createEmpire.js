@@ -117,9 +117,9 @@ if (typeof YAHOO.lacuna.CreateEmpire == "undefined" || !YAHOO.lacuna.CreateEmpir
                 require('js/actions/menu/loader').show();
                 var EmpireServ = Game.Services.Empire,
                     data = {
-                        name: this.elName.value,
-                        description: this.elDesc.value,
-                        email: this.elEmail.value
+                        name:           this.elName.value,
+                        description:    this.elDesc.value,
+                        email:          this.elEmail.value
                     };
                 if (this.facebook) {
                     data.facebook_uid = this.facebook.uid;
