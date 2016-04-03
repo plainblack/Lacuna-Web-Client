@@ -15,6 +15,13 @@ var BuildFleet = React.createClass({
     propTypes : {
     },
 
+    getInitialState : function() {
+        return {
+            show:   'now',
+            filter: 'all'
+        };
+    },
+
     mixins : [
         Reflux.connect(GetBuildableShipyardRPCStore, 'getBuildableStore')
     ],
@@ -25,6 +32,10 @@ var BuildFleet = React.createClass({
 
     handleShowChange : function(e) {
         this.setState( { show: e.target.value } );
+    },
+
+    handleFilterChange : function(e) {
+        this.setState( { filter: e.target.value } );
     },
 
     render : function() {
@@ -44,6 +55,17 @@ var BuildFleet = React.createClass({
                 return !buildable[fleetType].can;
             });
         }
+        
+        // Filter based on ship type
+        if (this.state.filter != "all") {
+            var filter = this.state.filter;
+            fleetTypes = _.filter(fleetTypes, function(fleetType) {
+                return _.find(buildable[fleetType].tags, function(o) {
+                    return (o == filter);
+                });
+            });
+        }
+
 
         fleetTypes.sort();
         var fleetTypesLen = fleetTypes.length;
@@ -61,28 +83,28 @@ var BuildFleet = React.createClass({
                 <div className="six wide column">
                   Use <select className="ui dropdown" ref="useShipyard">
                     <option value="this">This Only</option>
-                    <option value="all">All</option>
+                    <option value="all" selected>All</option>
                     <option value="higher">Same or Higher Level</option>
                     <option value="same">Same Level</option>
                   </select>
                 </div>
                 <div className="five wide column">
-                  Filter <select className="ui dropdown" ref="filter">
-                    <option value="all">All</option>
-                    <option value="trade">Trade</option>
-                    <option value="mining">Mining</option>
-                    <option value="intelligence">Intelligence</option>
-                    <option value="supplychain">Supply Chain</option>
-                    <option value="wastechain">Waste Chain</option>
-                    <option value="war">War</option>
-                    <option value="colonization">Colonization</option>
-                    <option value="exploration">Exploration</option>
+                  Filter <select className="ui dropdown" ref="filter" onChange={this.handleFilterChange}>
+                    <option value="all" selected>All</option>
+                    <option value="Trade">Trade</option>
+                    <option value="Mining">Mining</option>
+                    <option value="Intelligence">Intelligence</option>
+                    <option value="SupplyChain">Supply Chain</option>
+                    <option value="WasteChain">Waste Chain</option>
+                    <option value="War">War</option>
+                    <option value="Colonization">Colonization</option>
+                    <option value="Exploration">Exploration</option>
                   </select>
                 </div>
                 <div className="five wide column">
                   Show <select className="ui dropdown" ref="show" onChange={this.handleShowChange}>
                     <option value="all">All</option>
-                    <option value="now">Can build now</option>
+                    <option value="now" selected>Can build now</option>
                     <option value="later">Can build later</option>
                   </select>
                 </div>

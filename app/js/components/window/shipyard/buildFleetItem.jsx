@@ -89,6 +89,7 @@ var BuildFleetItem = React.createClass({
               </div>
               <div className="four wide column">
                 <p>Action</p>
+                <p>NOT YET IMPLEMENTED</p>
               </div>
               <div className="sixteen wide column">
                 <span
