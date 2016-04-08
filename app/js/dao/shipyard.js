@@ -43,7 +43,7 @@ ShipyardRPCActions.requestShipyardRPCGetRepairable.listen(function(o) {
 ShipyardRPCActions.requestShipyardRPCBuildFleet.listen(function(o) {
     makeShipyardCall({
         method  : 'build_fleet',
-        params  : [o],
+        params  : o,
         success : 'successShipyardRPCBuildFleet',
         error   : 'failureShipyardRPCBuildFleet' 
     });

@@ -9,7 +9,7 @@ var ResourceAttribute = React.createClass({
 
     propTypes : {
         name    : React.PropTypes.string.isRequired,
-        attr    : React.PropTypes.string.isRequired
+        attr    : React.PropTypes.number.isRequired
     },
 
     render : function() {

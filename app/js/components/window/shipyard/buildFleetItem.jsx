@@ -5,14 +5,20 @@ var Reflux                  = require('reflux');
 
 var ResourceLine            = require('js/components/window/shipyard/resourceLine');
 var ResourceAttribute       = require('js/components/window/shipyard/resourceAttribute');
+var BuildButton             = require('js/components/window/shipyard/buildButton');
 
 var util                    = require('js/util');
 
 var BuildFleetItem = React.createClass({
 
     propTypes : {
-        fleetType : React.PropTypes.string.isRequired,
-        obj : React.PropTypes.object.isRequired
+        fleetType :     React.PropTypes.string.isRequired,
+        obj :           React.PropTypes.object.isRequired,
+        buildingId :    React.PropTypes.number.isRequired,
+        autoSelect :    React.PropTypes.string.isRequired
+    },
+
+    handleQuantity : function(o) {
     },
 
     render : function() {
@@ -24,8 +30,10 @@ var BuildFleetItem = React.createClass({
         var obj = this.props.obj
         var shipImage = "//d16cbq0l6kkf21.cloudfront.net/assets/ships/"+this.props.fleetType+".png";
         var reason = '';
+        var canBuild = 1;
         if (obj.reason) {
             reason = obj.reason[1];
+            canBuild = 0;
         }
         return (
           <div>
@@ -88,8 +96,14 @@ var BuildFleetItem = React.createClass({
 
               </div>
               <div className="four wide column">
-                <p>Action</p>
-                <p>NOT YET IMPLEMENTED</p>
+                <BuildButton 
+                  canBuild={canBuild} 
+                  obj={obj} 
+                  buildingId={this.props.buildingId} 
+                  fleetType={this.props.fleetType}
+                  autoSelect={this.props.autoSelect}
+                />
+
               </div>
               <div className="sixteen wide column">
                 <span

@@ -49,7 +49,7 @@ var Shipyard = React.createClass({
         
         tabs.push(
             <Tab title="Build Fleet" key="Build Fleet" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
-                <BuildFleet />
+                <BuildFleet buildingId={building.id} />
             </Tab>
         );
 

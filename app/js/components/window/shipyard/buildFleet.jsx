@@ -3,7 +3,6 @@
 var React                           = require('react');
 var Reflux                          = require('reflux');
 var _                               = require('lodash');
-var $                               = require('js/shims/jquery');
 
 var ShipyardRPCActions              = require('js/actions/rpc/shipyard');
 var GetBuildableShipyardRPCStore    = require('js/stores/rpc/shipyard/getBuildable');
@@ -13,12 +12,14 @@ var BuildFleetItem                  = require('js/components/window/shipyard/bui
 var BuildFleet = React.createClass({
 
     propTypes : {
+        buildingId :  React.PropTypes.number.isRequired
     },
 
     getInitialState : function() {
         return {
-            show:   'now',
-            filter: 'all'
+            show:       'now',
+            filter:     'all',
+            autoSelect: 'this'
         };
     },
 
@@ -26,16 +27,16 @@ var BuildFleet = React.createClass({
         Reflux.connect(GetBuildableShipyardRPCStore, 'getBuildableStore')
     ],
 
-    componentDidMount : function() {
-        $(this.refs.dropdown).dropdown();
-    },
-
     handleShowChange : function(e) {
         this.setState( { show: e.target.value } );
     },
 
     handleFilterChange : function(e) {
         this.setState( { filter: e.target.value } );
+    },
+
+    handleAutoSelectChange : function(e) {
+        this.setState( { autoSelect: e.target.value } );
     },
 
     render : function() {
@@ -72,7 +73,12 @@ var BuildFleet = React.createClass({
         
         for (var i = 0; i < fleetTypesLen; i++) {
             fleetItems.push(
-                <BuildFleetItem fleetType={fleetTypes[i]} obj={buildable[fleetTypes[i]] } />
+                <BuildFleetItem 
+                  fleetType =   {fleetTypes[i]} 
+                  obj =         {buildable[fleetTypes[i]] } 
+                  buildingId =  {this.props.buildingId}
+                  autoSelect =  {this.state.autoSelect}
+                />
             );
         }
 
@@ -81,11 +87,11 @@ var BuildFleet = React.createClass({
               <div>There are {this.state.getBuildableStore.docks_available} docks available for new ships. You can queue {buildQueueAvailable} ships.</div>
               <div className="ui grid">
                 <div className="six wide column">
-                  Use <select className="ui dropdown" ref="useShipyard">
+                  Use <select className="ui dropdown" ref="autoSelect" onChange={this.handleAutoSelectChange}>
                     <option value="this">This Only</option>
                     <option value="all" selected>All</option>
-                    <option value="higher">Same or Higher Level</option>
-                    <option value="same">Same Level</option>
+                    <option value="equal_or_higher">Same or Higher Level</option>
+                    <option value="equal">Same Level</option>
                   </select>
                 </div>
                 <div className="five wide column">
