@@ -9,7 +9,7 @@ var GetBuildableShipyardRPCStore    = require('js/stores/rpc/shipyard/getBuildab
 
 var BuildFleetItem                  = require('js/components/window/shipyard/buildFleetItem');
 
-var BuildFleet = React.createClass({
+var BuildFleetTab = React.createClass({
 
     propTypes : {
         buildingId :  React.PropTypes.number.isRequired
@@ -124,4 +124,4 @@ var BuildFleet = React.createClass({
     }
 });
 
-module.exports = BuildFleet;
+module.exports = BuildFleetTab;

@@ -11,7 +11,8 @@ var ShipyardRPCActions      = require('js/actions/rpc/shipyard');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
-var BuildFleet              = require('js/components/window/shipyard/buildFleet');
+var BuildFleetTab           = require('js/components/window/shipyard/buildFleetTab');
+var BuildQueueTab           = require('js/components/window/shipyard/buildQueueTab');
 
 var Tabber                  = require('js/components/tabber');
 
@@ -42,14 +43,14 @@ var Shipyard = React.createClass({
         var building = this.state.genericBuildingStore;
         var tabs = StandardTabs.tabs(this.props.options, building);
         tabs.push(
-            <Tab title="Build Queue" key="Build Queue" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCViewBuildQueue, building.id ) }>
-                <p>Not Yet Implemented!</p>
+            <Tab title="Build Queue" key="Build Queue" >
+                <BuildQueueTab buildingId={building.id} />
             </Tab>
         );
         
         tabs.push(
             <Tab title="Build Fleet" key="Build Fleet" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
-                <BuildFleet buildingId={building.id} />
+                <BuildFleetTab buildingId={building.id} />
             </Tab>
         );
 

@@ -61,7 +61,7 @@ ShipyardRPCActions.requestShipyardRPCRepairFleet.listen(function(o) {
 ShipyardRPCActions.requestShipyardRPCViewBuildQueue.listen(function(o) {
     makeShipyardCall({
         method  : 'view_build_queue',
-        params  : [o],
+        params  : o,
         success : 'successShipyardRPCViewBuildQueue',
         error   : 'failureShipyardRPCViewBuildQueue' 
     });
