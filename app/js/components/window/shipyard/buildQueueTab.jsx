@@ -1,14 +1,15 @@
 'use strict';
 
-var React                           = require('react');
-var Reflux                          = require('reflux');
-var _                               = require('lodash');
+var React                       = require('react');
+var Reflux                      = require('reflux');
+var _                           = require('lodash');
 
-var ShipyardRPCActions              = require('js/actions/rpc/shipyard');
-var BuildQueueShipyardRPCStore      = require('js/stores/rpc/shipyard/buildQueue');
+var ShipyardRPCActions          = require('js/actions/rpc/shipyard');
+var BuildQueueShipyardRPCStore  = require('js/stores/rpc/shipyard/buildQueue');
 
+var BuildQueueItem              = require('js/components/window/shipyard/buildQueueItem');
 
-var BuildQueue = React.createClass({
+var BuildQueueTab = React.createClass({
 
     propTypes : {
         buildingId :  React.PropTypes.number.isRequired
@@ -28,24 +29,38 @@ var BuildQueue = React.createClass({
     ],
 
     render : function() {
+        var fleetsBuilding = this.state.buildQueueStore.fleets_building;
+
+        var buildQueueLen = fleetsBuilding.length;
+        var fleetItems = [];
+        
+        for (var i = 0; i < buildQueueLen; i++) {
+            fleetItems.push(
+                <BuildQueueItem
+                  obj           = {fleetsBuilding[i] }
+                  buildingId    = {this.props.buildingId}
+                />
+            );
+        }
 
         return (
             <div>
               <div>You may subsidize the whole build queue for {this.state.buildQueueStore.cost_to_subsidize} Essentia</div>
-              <div className="ui four column grid">
+              <div className="ui sixteen column grid">
                 <div className="row">
-                  <div className="column">Ship Type</div>
-                  <div className="column">Number of ships</div>
-                  <div className="column">Time to complete</div>
-                  <div className="column">Subsidize cost</div>
+                  <div className="column three wide">Ship Type</div>
+                  <div className="column four wide">Number of ships</div>
+                  <div className="column four wide">Time to complete</div>
+                  <div className="column five wide">Subsidize cost</div>
                 </div>
               </div>
               <div className="ui divider"></div>
               <div>
+                {fleetItems}
               </div>
             </div>
         );
     }
 });
 
-module.exports = BuildQueue;
+module.exports = BuildQueueTab;

@@ -49,14 +49,22 @@ var Shipyard = React.createClass({
         );
         
         tabs.push(
-            <Tab title="Build Fleet" key="Build Fleet" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
+            <Tab title="Build Ships" key="Build Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetBuildable, building.id ) } >
                 <BuildFleetTab buildingId={building.id} />
             </Tab>
         );
 
         tabs.push(
-            <Tab title="Repair Ships" key="Repair Ships" onSelect={ _.partial(ShipyardRPCActions.requestShipyardRPCGetRepairable, building.id ) } >
+            <Tab title="Repair Ships" key="Repair Ships" >
                 <p>Not Yet Implemented</p>
+                <p>Fleets of ships damaged in an attack can be repaired (at less cost than building from scratch</p>
+            </Tab>
+        );
+
+        tabs.push(
+            <Tab title="Refit Ships" key="Refit Ships" >
+                <p>Not Yet Implemented</p>
+                <p>Fleets of ships will be able to be upgraded to the empires current spec.</p>
             </Tab>
         );
 
