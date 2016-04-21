@@ -30,8 +30,7 @@ var EssentiaVein = React.createClass({
         }
     },
     mixins : [
-        Reflux.connect(GenericBuildingStore, 'buildingStore'),
-        Reflux.connect(BodyRPCStore, 'bodyStore')
+        Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
@@ -43,10 +42,12 @@ var EssentiaVein = React.createClass({
     },
 
     render : function() {
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, this.state.buildingStore);
+        var building = this.state.genericBuildingStore;
+        var tabs = StandardTabs.tabs(this.props.options, building);
+
         tabs.push(
             <Tab title="Drain" key="Drain">
-                <DrainTab building={this.state.buildingStore} />
+                <DrainTab building={building} />
             </Tab>
         );
 

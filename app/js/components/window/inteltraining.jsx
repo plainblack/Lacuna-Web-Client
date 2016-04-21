@@ -28,7 +28,6 @@ var IntelTraining = React.createClass({
     },
     mixins : [
         Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
-        Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
@@ -41,7 +40,7 @@ var IntelTraining = React.createClass({
 
     render : function() {
         var building = this.state.genericBuildingStore;
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
+        var tabs = StandardTabs.tabs(this.props.options, building);
         if (building.extraViewData.spies) {
             tabs.push(
                 <Tab title="Spy Training" key="Spy Training">

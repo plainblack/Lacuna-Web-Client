@@ -25,7 +25,7 @@ var GenericBuilding = React.createClass({
         }
     },
     mixins : [
-        Reflux.connect(GenericBuildingStore, 'buildingStore'),
+        Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
     ],
     
     componentWillMount : function() {
@@ -42,7 +42,8 @@ var GenericBuilding = React.createClass({
     },
 
     render : function() {
-        var tabs = StandardTabs.tabs(this.props.options, this.state.buildingStore);
+        var building = this.state.genericBuildingStore;
+        var tabs = StandardTabs.tabs(this.props.options, building);
 
         return (
             <div>

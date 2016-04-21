@@ -27,7 +27,6 @@ var Transporter = React.createClass({
     },
     mixins : [
         Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
-        Reflux.connect(BodyRPCStore, 'bodyStore')
     ],
     componentWillMount : function() {
         BuildingWindowActions.buildingWindowClear();
@@ -40,7 +39,7 @@ var Transporter = React.createClass({
 
     render : function() {
         var building = this.state.genericBuildingStore;
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
+        var tabs = StandardTabs.tabs(this.props.options, building);
         
         tabs.push(
             <Tab title="One For One" key="One For One" >
