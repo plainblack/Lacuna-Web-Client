@@ -10,7 +10,7 @@ function makeTransporterCall(options) {
 }
 
 TransporterRPCActions.requestTransporterRPCView.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'view',
         params  : [o],
         success : 'successTransporterRPCView',
@@ -23,7 +23,7 @@ TransporterRPCActions.successTransporterRPCView.listen(function(result) {
 });
 
 TransporterRPCActions.requestTransporterRPCReportAbuse.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'report_abuse',
         params  : [o],
         success : 'successTransporterRPCReportAbuse',
@@ -32,7 +32,7 @@ TransporterRPCActions.requestTransporterRPCReportAbuse.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCViewMyMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'view_my_market',
         params  : [o],
         success : 'successTransporterRPCViewMyMarket',
@@ -41,7 +41,7 @@ TransporterRPCActions.requestTransporterRPCViewMyMarket.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCViewMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'view_market',
         params  : [o],
         success : 'successTransporterRPCViewMarket',
@@ -50,7 +50,7 @@ TransporterRPCActions.requestTransporterRPCViewMarket.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCAcceptFromMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'accept_from_market',
         params  : [o],
         success : 'successTransporterRPCAcceptFromMarket',
@@ -59,7 +59,7 @@ TransporterRPCActions.requestTransporterRPCAcceptFromMarket.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCWithdrawFromMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'withdraw_from_market',
         params  : [o],
         success : 'successTransporterRPCWithdrawFromMarket',
@@ -68,7 +68,7 @@ TransporterRPCActions.requestTransporterRPCWithdrawFromMarket.listen(function(o)
 });
 
 TransporterRPCActions.requestTransporterRPCAddToMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'add_to_market',
         params  : [o],
         success : 'successTransporterRPCAddToMarket',
@@ -77,7 +77,7 @@ TransporterRPCActions.requestTransporterRPCAddToMarket.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCPushItems.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'push_items',
         params  : [o],
         success : 'successTransporterRPCPushItems',
@@ -86,7 +86,7 @@ TransporterRPCActions.requestTransporterRPCPushItems.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCTradeOneForOne.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'trade_one_for_one',
         params  : [o],
         success : 'successTransporterRPCTradeOneForOne',
@@ -95,7 +95,7 @@ TransporterRPCActions.requestTransporterRPCTradeOneForOne.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCGetStoredResources.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_stored_procedures',
         params  : [o],
         success : 'successTransporterRPCGetStoredResources',
@@ -104,7 +104,7 @@ TransporterRPCActions.requestTransporterRPCGetStoredResources.listen(function(o)
 });
 
 TransporterRPCActions.requestTransporterRPCGetFleets.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_fleets',
         params  : [o],
         success : 'successTransporterRPCGetFleets',
@@ -113,7 +113,7 @@ TransporterRPCActions.requestTransporterRPCGetFleets.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCGetFleetSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_fleet_summary',
         params  : [o],
         success : 'successTransporterRPCGetFleetSummary',
@@ -122,7 +122,7 @@ TransporterRPCActions.requestTransporterRPCGetFleetSummary.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCGetPrisoners.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_prisoners',
         params  : [o],
         success : 'successTransporterRPCGetPrisoners',
@@ -131,7 +131,7 @@ TransporterRPCActions.requestTransporterRPCGetPrisoners.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCGetPlanSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_plan_summary',
         params  : [o],
         success : 'successTransporterRPCGetPlanSummary',
@@ -140,7 +140,7 @@ TransporterRPCActions.requestTransporterRPCGetPlanSummary.listen(function(o) {
 });
 
 TransporterRPCActions.requestTransporterRPCGetGlyphSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTransporterCall({
         method  : 'get_glyph_summary',
         params  : [o],
         success : 'successTransporterRPCGetGlyphSummary',

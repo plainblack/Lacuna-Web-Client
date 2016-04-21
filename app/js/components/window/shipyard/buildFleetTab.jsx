@@ -12,7 +12,7 @@ var BuildFleetItem                  = require('js/components/window/shipyard/bui
 var BuildFleetTab = React.createClass({
 
     propTypes : {
-        buildingId :  React.PropTypes.number.isRequired
+        //buildingId :  React.PropTypes.number.isRequired
     },
 
     getInitialState : function() {

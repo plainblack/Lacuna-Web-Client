@@ -12,7 +12,7 @@ var BuildQueueItem              = require('js/components/window/shipyard/buildQu
 var BuildQueueTab = React.createClass({
 
     propTypes : {
-        buildingId :  React.PropTypes.number.isRequired
+        //buildingId :  React.PropTypes.number.isRequired
     },
 
     getInitialState : function() {

@@ -10,7 +10,7 @@ function makeTradeCall(options) {
 }
 
 TradeRPCActions.requestTradeRPCView.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'view',
         params  : [o],
         success : 'successTradeRPCView',
@@ -23,7 +23,7 @@ TradeRPCActions.successTradeRPCView.listen(function(result) {
 });
 
 TradeRPCActions.requestTradeRPCGetSupplyFleets.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_supply_fleets',
         params  : [o],
         success : 'successTradeRPCGetSupplyFleets',
@@ -32,7 +32,7 @@ TradeRPCActions.requestTradeRPCGetSupplyFleets.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCViewSupplyChains.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'view_supply_chains',
         params  : [o],
         success : 'successTradeRPCViewSupplyChains',
@@ -41,7 +41,7 @@ TradeRPCActions.requestTradeRPCViewSupplyChains.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCAddSupplyFleet.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'add_supply_fleet',
         params  : [o],
         success : 'successTradeRPCAddSupplyFleet',
@@ -50,7 +50,7 @@ TradeRPCActions.requestTradeRPCAddSupplyFleet.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCRemoveSupplyFleet.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'remove_supply_fleet',
         params  : [o],
         success : 'successTradeRPCRemoveSupplyFleet',
@@ -59,7 +59,7 @@ TradeRPCActions.requestTradeRPCRemoveSupplyFleet.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCCreateSupplyChain.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'create_supply_chain',
         params  : [o],
         success : 'successTradeRPCCreateSupplyChain',
@@ -68,7 +68,7 @@ TradeRPCActions.requestTradeRPCCreateSupplyChain.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCDeleteSupplyChain.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'delete_supply_chain',
         params  : [o],
         success : 'successTradeRPCDeleteSupplyChain',
@@ -77,7 +77,7 @@ TradeRPCActions.requestTradeRPCDeleteSupplyChain.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCUpdateSupplyChain.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'update_supply_chain',
         params  : [o],
         success : 'successTradeRPCUpdateSupplyChain',
@@ -86,7 +86,7 @@ TradeRPCActions.requestTradeRPCUpdateSupplyChain.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetWasteFleets.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_waste_fleets',
         params  : [o],
         success : 'successTradeRPCGetWasteFleets',
@@ -95,7 +95,7 @@ TradeRPCActions.requestTradeRPCGetWasteFleets.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCViewWasteChains.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'view_waste_chains',
         params  : [o],
         success : 'successTradeRPCViewWasteChains',
@@ -104,7 +104,7 @@ TradeRPCActions.requestTradeRPCViewWasteChains.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCAddWasteFleet.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'add_waste_fleet',
         params  : [o],
         success : 'successTradeRPCAddWasteFleet',
@@ -113,7 +113,7 @@ TradeRPCActions.requestTradeRPCAddWasteFleet.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCRemoveWasteFleet.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'remove_waste_fleet',
         params  : [o],
         success : 'successTradeRPCRemoveWasteFleet',
@@ -122,7 +122,7 @@ TradeRPCActions.requestTradeRPCRemoveWasteFleet.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCUpdateWasteChain.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'update_waste_chain',
         params  : [o],
         success : 'successTradeRPCUpdateWasteChain',
@@ -131,7 +131,7 @@ TradeRPCActions.requestTradeRPCUpdateWasteChain.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCReportAbuse.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'report_abuse',
         params  : [o],
         success : 'successTradeRPCReportAbuse',
@@ -140,7 +140,7 @@ TradeRPCActions.requestTradeRPCReportAbuse.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCViewMyMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'view_my_market',
         params  : [o],
         success : 'successTradeRPCViewMyMarket',
@@ -149,7 +149,7 @@ TradeRPCActions.requestTradeRPCViewMyMarket.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCViewMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'view_market',
         params  : [o],
         success : 'successTradeRPCViewMarket',
@@ -158,7 +158,7 @@ TradeRPCActions.requestTradeRPCViewMarket.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCAcceptFromMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'accept_from_market',
         params  : [o],
         success : 'successTradeRPCAcceptFromMarket',
@@ -167,7 +167,7 @@ TradeRPCActions.requestTradeRPCAcceptFromMarket.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCWithdrawFromMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'withdraw_from_market',
         params  : [o],
         success : 'successTradeRPCWithdrawFromMarket',
@@ -176,7 +176,7 @@ TradeRPCActions.requestTradeRPCWithdrawFromMarket.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCAddToMarket.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'add_to_market',
         params  : [o],
         success : 'successTradeRPCAddToMarket',
@@ -185,7 +185,7 @@ TradeRPCActions.requestTradeRPCAddToMarket.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCPushItems.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'push_items',
         params  : [o],
         success : 'successTradeRPCPushItems',
@@ -194,7 +194,7 @@ TradeRPCActions.requestTradeRPCPushItems.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetTradeFleets.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_trade_fleets',
         params  : [o],
         success : 'successTradeRPCGetTradeFleets',
@@ -203,7 +203,7 @@ TradeRPCActions.requestTradeRPCGetTradeFleets.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetStoredResources.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_stored_resources',
         params  : [o],
         success : 'successTradeRPCGetStoredResources',
@@ -212,7 +212,7 @@ TradeRPCActions.requestTradeRPCGetStoredResources.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetFleets.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_fleets',
         params  : [o],
         success : 'successTradeRPCGetFleets',
@@ -221,7 +221,7 @@ TradeRPCActions.requestTradeRPCGetFleets.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetFleetSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_fleet_summary',
         params  : [o],
         success : 'successTradeRPCGetFleetSummary',
@@ -230,7 +230,7 @@ TradeRPCActions.requestTradeRPCGetFleetSummary.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetPrisoners.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_prisoners',
         params  : [o],
         success : 'successTradeRPCGetPrisoners',
@@ -239,7 +239,7 @@ TradeRPCActions.requestTradeRPCGetPrisoners.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetPlanSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_plan_summary',
         params  : [o],
         success : 'successTradeRPCGetPlanSummary',
@@ -248,7 +248,7 @@ TradeRPCActions.requestTradeRPCGetPlanSummary.listen(function(o) {
 });
 
 TradeRPCActions.requestTradeRPCGetGlyphSummary.listen(function(o) {
-    makeShipyardCall({
+    makeTradeCall({
         method  : 'get_glyph_summary',
         params  : [o],
         success : 'successTradeRPCGetGlyphSummary',
