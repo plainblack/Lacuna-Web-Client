@@ -7,7 +7,7 @@ var _                               = require('lodash');
 var ShipyardRPCActions              = require('js/actions/rpc/shipyard');
 var GetBuildableShipyardRPCStore    = require('js/stores/rpc/shipyard/getBuildable');
 
-var BuildFleetItem                  = require('js/components/window/shipyard/buildFleetItem');
+var BuildFleetItem                  = require('js/components/window/shipyard/buildFleet/item');
 
 var BuildFleetTab = React.createClass({
 

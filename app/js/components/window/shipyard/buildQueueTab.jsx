@@ -7,7 +7,7 @@ var _                           = require('lodash');
 var ShipyardRPCActions          = require('js/actions/rpc/shipyard');
 var BuildQueueShipyardRPCStore  = require('js/stores/rpc/shipyard/buildQueue');
 
-var BuildQueueItem              = require('js/components/window/shipyard/buildQueueItem');
+var BuildQueueItem              = require('js/components/window/shipyard/buildQueue/item');
 
 var BuildQueueTab = React.createClass({
 

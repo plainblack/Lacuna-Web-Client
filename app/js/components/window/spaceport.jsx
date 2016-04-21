@@ -40,7 +40,7 @@ var SpacePort = React.createClass({
 
     render : function() {
         var building = this.state.genericBuildingStore;
-        var tabs = StandardTabs.tabs(this.props.options, this.state.bodyStore, building);
+        var tabs = StandardTabs.tabs(this.props.options, building);
         tabs.push(
             <Tab title="Own Fleets" key="Own Fleets" onSelect={ _.partial(SpacePortRPCActions.requestSpacePortRPCView, building.id ) }>
                 <p>Not Yet Implemented! This will show the colonies own ships.</p>

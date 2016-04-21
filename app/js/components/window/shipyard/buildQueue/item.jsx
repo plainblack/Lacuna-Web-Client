@@ -5,20 +5,16 @@ var Reflux                  = require('reflux');
 
 var ResourceLine            = require('js/components/window/shipyard/resourceLine');
 var ResourceAttribute       = require('js/components/window/shipyard/resourceAttribute');
-var BuildButton             = require('js/components/window/shipyard/buildButton');
+var SubsidizeButton         = require('js/components/window/shipyard/buildQueue/subsidizeButton');
+var CountdownTimer          = require('js/components/countdownTimer');
 
 var util                    = require('js/util');
 
-var BuildFleetItem = React.createClass({
+var BuildQueueItem = React.createClass({
 
     propTypes : {
-        fleetType :     React.PropTypes.string.isRequired,
         obj :           React.PropTypes.object.isRequired,
-        buildingId :    React.PropTypes.number.isRequired,
-        autoSelect :    React.PropTypes.string.isRequired
-    },
-
-    handleQuantity : function(o) {
+        buildingId :    React.PropTypes.number.isRequired
     },
 
     render : function() {
@@ -28,47 +24,22 @@ var BuildFleetItem = React.createClass({
             background: "transparent url(//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png) no-repeat center",
         };
         var obj = this.props.obj
-        var shipImage = "//d16cbq0l6kkf21.cloudfront.net/assets/ships/"+this.props.fleetType+".png";
-        var reason = '';
-        var canBuild = 1;
-        if (obj.reason) {
-            reason = obj.reason[1];
-            canBuild = 0;
-        }
+        var shipImage = "//d16cbq0l6kkf21.cloudfront.net/assets/ships/"+this.props.obj.type+".png";
+        
         return (
           <div>
             <div className="ui grid">
-              <div className="four wide column">
+              <div className="three wide column">
                 <div>{obj.type_human}</div>
                 <div style={starfieldStyle}>
                   <img src={ shipImage } style={{ width:100, height:100 }} className="shipImage" />
                 </div>
               </div>
               <div className="four wide column">
-                <ResourceLine
-                  icon={"food"}
-                  cost={obj.cost.food}
+                <ResourceAttribute
+                  name={"Quantity"}
+                  attr={obj.quantity}
                 />
-                <ResourceLine
-                  icon={"diamond"}
-                  cost={obj.cost.ore}
-                />
-                <ResourceLine
-                  icon={"theme"}
-                  cost={obj.cost.water}
-                />
-                <ResourceLine
-                  icon={"lightning"}
-                  cost={obj.cost.energy}
-                />
-                <ResourceLine
-                  icon={"wait"}
-                  cost={obj.cost.time}
-                />
-                
-
-              </div>
-              <div className="four wide column">
                 <ResourceAttribute
                   name={"Speed"}
                   attr={obj.attributes.speed}
@@ -96,29 +67,16 @@ var BuildFleetItem = React.createClass({
 
               </div>
               <div className="four wide column">
-                <BuildButton 
-                  canBuild={canBuild} 
+                <CountdownTimer endDate={util.formatMomentLong(util.serverDateToMoment(obj.date_completed))} />
+              </div>
+              <div className="five wide column">
+                <SubsidizeButton 
                   obj={obj} 
                   buildingId={this.props.buildingId} 
-                  fleetType={this.props.fleetType}
-                  autoSelect={this.props.autoSelect}
                 />
 
               </div>
-              <div className="sixteen wide column">
-                <span
-                  style={{
-                    float : 'right',
-                    color : 'red'
-                  }}
-                  title={reason}
-                >
-                  {reason}
-                </span>
-              </div>
             </div>
-
-
 
           <div className="ui divider" />
         </div>
@@ -126,4 +84,4 @@ var BuildFleetItem = React.createClass({
     }
 });
 
-module.exports = BuildFleetItem;
+module.exports = BuildQueueItem;
