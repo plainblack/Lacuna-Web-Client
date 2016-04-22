@@ -18,6 +18,7 @@ require('js/dao/spacePort');
 require('js/dao/trade');
 require('js/dao/transporter');
 require('js/dao/map');
+require('js/dao/body');
 
 module.exports.makeServerCall = function (uri, options, actions) {
     var defaults = {

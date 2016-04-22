@@ -2,6 +2,10 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
+var WindowActions       = require('js/actions/window');
+var StarPanel           = require('js/components/window/starPanel');
+var PlanetPanel         = require('js/components/window/planetPanel');
+
 if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
 
 (function(){
@@ -634,9 +638,11 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
                 if(tile && tile.data) {
                     if(tile.data.isStar) {
                         this.ShowStar(tile);
+                        WindowActions.windowAdd(StarPanel, 'starPanel', tile);
                     }
                     else if(tile.data.isPlanet) {
                         this.ShowPlanet(tile);
+                        WindowActions.windowAdd(PlanetPanel, 'planetPanel', tile);
                     }
                 }
             }

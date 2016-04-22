@@ -2,7 +2,6 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
-var WindowManagerActions    = require('js/actions/windowManager');
 var WindowActions           = require('js/actions/window');
 var GenericBuilding         = require('js/components/window/genericBuilding');
 
