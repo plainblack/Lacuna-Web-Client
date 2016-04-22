@@ -8,7 +8,7 @@ var GetBodyStatusRPCStore   = require('js/stores/rpc/body/getBodyStatus');
 var WindowActions           = require('js/actions/window');
 var BodyRPCActions          = require('js/actions/rpc/body');
 
-var StandardTabs            = require('js/components/window/building/standardTabs');
+var PlanetDetailsTab        = require('js/components/window/planetPanel/planetDetailsTab');
 var Tabber                  = require('js/components/tabber');
 
 var Tabs                    = Tabber.Tabs;
@@ -37,7 +37,7 @@ var PlanetPanel = React.createClass({
         var tabs = [];
         tabs.push(
             <Tab title="Planet Details" key="Planet Details" >
-                <p>Not Yet Implemented!</p>
+                <PlanetDetailsTab />
             </Tab>
         );
         
