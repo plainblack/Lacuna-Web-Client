@@ -3,9 +3,10 @@
 var React                   = require('react');
 var Reflux                  = require('reflux');
 
-var BodyRPCStore            = require('js/stores/rpc/body');
+var GetBodyStatusRPCStore   = require('js/stores/rpc/body/getBodyStatus');
 
 var WindowActions           = require('js/actions/window');
+var BodyRPCActions          = require('js/actions/rpc/body');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var Tabber                  = require('js/components/tabber');
@@ -22,9 +23,10 @@ var PlanetPanel = React.createClass({
         }
     },
     mixins : [
-        //Reflux.connect(GenericBuildingStore, 'genericBuildingStore'),
+        Reflux.connect(GetBodyStatusRPCStore, 'getBodyStatusStore')
     ],
     componentWillMount : function() {
+        BodyRPCActions.requestBodyRPCGetBodyStatus( { bodyId : this.props.options.data.id } );
     },
 
     closeWindow : function() {

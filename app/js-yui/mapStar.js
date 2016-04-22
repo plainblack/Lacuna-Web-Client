@@ -1278,12 +1278,14 @@ if (typeof YAHOO.lacuna.MapStar == "undefined" || !YAHOO.lacuna.MapStar) {
             }
 			var panel = this.planetDetails;
 
-            Game.Services.Body.get_body_status({ args: {
-                    session_id: Game.GetSession(""),
-                    body_id: tile.data.id
-                }},{
-                    success : function(o){
-                        YAHOO.log(o, "info", "ShowPlanet.get_status.success");
+            var data = {
+                session_id: Game.GetSession(""),
+                body_id:    tile.data.id
+            };
+
+            Game.Services.Body.get_body_status(data, {
+                success : function(o){
+                    YAHOO.log(o, "info", "ShowPlanet.get_status.success");
 
 			var body = o.result.body,
 				tab, tabs,

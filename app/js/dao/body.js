@@ -64,7 +64,9 @@ BodyRPCActions.requestBodyRPCGetStatus.listen(function(o) {
 BodyRPCActions.requestBodyRPCGetBodyStatus.listen(function(o) {
     makeBodyCall({
         method : 'get_body_status',
-        params : [],
+        params : {
+            body_id : o.bodyId
+        },
         success : 'successBodyRPCGetBodyStatus',
         error   : 'failureBodyRPCGetBodyStatus'
     });

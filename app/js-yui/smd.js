@@ -74,7 +74,10 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "get_body_status" : {
                     "description" : "Retrieves the status of a body to display in the star map.",
-                    "parameters" : [{"name":"args", "type":"object", "optional":false}],
+                    "parameters": {
+                        session_id    : {"type":"string", "optional":false},
+                        body_id       : {"type":"string", "optional":false}
+                    },
                     "returns" : {"type" : "object"}
                 },
                 "get_status" : {
