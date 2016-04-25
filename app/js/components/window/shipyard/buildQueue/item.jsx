@@ -9,6 +9,7 @@ var SubsidizeButton         = require('js/components/window/shipyard/buildQueue/
 var CountdownTimer          = require('js/components/countdownTimer');
 
 var util                    = require('js/util');
+var constants               = require('js/constants');
 
 var BuildQueueItem = React.createClass({
 
@@ -21,10 +22,10 @@ var BuildQueueItem = React.createClass({
         var starfieldStyle = {
             width:  100,
             height: 100,
-            background: "transparent url(//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png) no-repeat center",
+            background: "transparent url("+constants.ASSETS_URL+"star_system/field.png) no-repeat center",
         };
         var obj = this.props.obj
-        var shipImage = "//d16cbq0l6kkf21.cloudfront.net/assets/ships/"+this.props.obj.type+".png";
+        var shipImage = constants.ASSETS_URL+"ships/"+this.props.obj.type+".png";
         
         return (
           <div>

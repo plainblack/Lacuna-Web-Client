@@ -19,7 +19,7 @@ var PlanetPanel = React.createClass({
         options : {
             title   : 'Planet Details',
             width   : 700,
-            height  : 420
+            height  : 450
         }
     },
     mixins : [

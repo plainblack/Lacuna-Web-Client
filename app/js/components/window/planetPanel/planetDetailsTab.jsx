@@ -25,7 +25,7 @@ var PlanetDetailsTab = React.createClass({
             <div className="ui grid">
 
                 <div className="ui centered row">
-                    <div className="eight wide column">
+                    <div className="nine wide column">
                         <div style={{
                             textAlign  : 'center',
                             fontWeight : 'bold'
@@ -33,7 +33,7 @@ var PlanetDetailsTab = React.createClass({
                             Planet Details
                         </div>
                     </div>
-                    <div className="eight wide column">
+                    <div className="seven wide column">
                         <div style={{
                             textAlign  : 'center',
                             fontWeight : 'bold'
@@ -44,10 +44,10 @@ var PlanetDetailsTab = React.createClass({
                 </div>
 
                 <div className="ui centered row">
-                    <div className="eight wide column">
+                    <div className="nine wide column">
                         <PlanetDetails />
                     </div>
-                    <div className="eight wide column">
+                    <div className="seven wide column">
                         <PlanetOre />
                     </div>
                 </div>

@@ -5,28 +5,37 @@ var Reflux                      = require('reflux');
 var _                           = require('lodash');
 
 var BodyRPCStore                = require('js/stores/rpc/body');
+var BodyRPCGetBodyStatusStore   = require('js/stores/rpc/body/getBodyStatus');
+
 var GenericBuildingRPCActions   = require('js/actions/rpc/genericBuilding');
 
-var ActionButton                = require('js/components/window/building/actionButton');
-var ResourceProduction          = require('js/components/window/building/resourceProduction');
-var ResourceCost                = require('js/components/window/building/resourceCost');
-var ResourceLine                = require('js/components/window/building/resourceLine');
+var PlanetDetailLine            = require('js/components/window/planetPanel/line');
 
 var util                        = require('js/util');
 var vex                         = require('js/vex');
+var constants                   = require('js/constants');
 
 var PlanetOre = React.createClass({
 
     mixins : [
-        Reflux.connect(BodyRPCStore, 'bodyRPCStore'),
+        Reflux.connect(BodyRPCGetBodyStatusStore, 'bodyRPCGetBodyStatusStore')
     ],
 
     render : function() {
+        var ores = constants.ORES;
+        var bodyOre = this.state.bodyRPCGetBodyStatusStore.ore;
+
+        var renderOres = [];
+        for (var prop in ores) {
+            if (ores.hasOwnProperty(prop)) {
+                renderOres.push( <PlanetDetailLine title={ores[prop]} value={bodyOre[prop]} /> );
+            }
+        }
 
         return (
             <div className="ui grid">
-              <div className="eight wide column">
-                ORE To Be Defined
+              <div className="sixteen wide column">
+                {renderOres}
               </div>
             </div>
         );

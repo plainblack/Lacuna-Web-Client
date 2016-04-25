@@ -8,6 +8,7 @@ var ResourceAttribute       = require('js/components/window/shipyard/resourceAtt
 var BuildButton             = require('js/components/window/shipyard/buildFleet/button');
 
 var util                    = require('js/util');
+var constants               = require('js/constants');
 
 var BuildFleetItem = React.createClass({
 
@@ -25,10 +26,10 @@ var BuildFleetItem = React.createClass({
         var starfieldStyle = {
             width:  100,
             height: 100,
-            background: "transparent url(//d16cbq0l6kkf21.cloudfront.net/assets/star_system/field.png) no-repeat center",
+            background: "transparent url("+constants.ASSETS_URL+"star_system/field.png) no-repeat center",
         };
         var obj = this.props.obj
-        var shipImage = "//d16cbq0l6kkf21.cloudfront.net/assets/ships/"+this.props.fleetType+".png";
+        var shipImage = constants.ASSETS_URL+"ships/"+this.props.fleetType+".png";
         var reason = '';
         var canBuild = 1;
         if (obj.reason) {
