@@ -14,7 +14,7 @@ var SurveyWindow = React.createClass({
         options : {
             title   : 'Survey',
             width   : 450,
-            height  : 400
+            height  : 500
         }
     },
 
@@ -62,6 +62,7 @@ var SurveyWindow = React.createClass({
                     <textarea rows="2"></textarea>
                   </div>
                 </div>
+                <div className="ui button"><span>Submit</span></div>
               </div>
 
             </div>
