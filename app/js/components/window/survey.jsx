@@ -25,16 +25,25 @@ var SurveyWindow = React.createClass({
     render : function() {
         return (
             <div>
-              <p>The Lacuna Expanse (TLE) has been running for five years and there are many
-              issues with the game that cannot be changed without a major change and a
-              reboot (restart) of the game</p>
+              <p>Dear player,</p>
 
-              <p>Also the current game is not generating enough revenue to pay the cost of
-              the servers</p>
+              <p>In 2010 Lacuna Expanse Corp created this addictive multiplayer game that allows people to enjoy 
+              themselves by playing cooperatively against the AI or against each other, participating in the 
+              open-source development, and chatting all day long.</p>
 
-              <p>There are only two options, either TLE is shut down totally, or we try to
-              regenerate the game by rebooting it with new features</p>
-              <p>Please help us to decide what to do by filling in this survey</p>
+              <p>TLE's design worked well in its early stages but who knew that it would run for nearly six years 
+              and gain thousands of players? This is the reason why we are facing a challenge to rework mechanics 
+              in order to scale better with large numbers of players and to introduce a better balance of power 
+              between low and high level empires. After careful planning we came to the conclusion that this 
+              undertaking requires a reboot to wipe the current state of game. This gives us the opportunity to 
+              improve the game by fixing persistent issues and by adding new features.</p>
+
+              <p>At this point it must be pointed out that TLE has remained a niche game that is free-to-play and must 
+              pay for itself to keep the servers running. For this purpose we gave you a means of funding the game 
+              by purchasing Essentia but the economy requires an overhaul too. Though the reboot makes sense only 
+              if a sufficient number of players wants to populate and support the new Expanse.</p>
+
+              <p>For this reason we are asking you to fill in the following survey.</p>
 
               <div className="ui form">
                 <div className="grouped fields">
