@@ -55,6 +55,24 @@ EmpireRPCActions.requestEmpireRPCInviteFriend.listen(function(o) {
     });
 });
 
+EmpireRPCActions.requestEmpireRPCGetSurvey.listen(function(o) {
+    makeEmpireCall({
+        method  : 'get_survey',
+        params  : [],
+        success : 'successEmpireRPCGetSurvey',
+        error   : 'failureEmpireRPCGetSurvey'
+    });
+});
+
+EmpireRPCActions.requestEmpireRPCSetSurvey.listen(function(o) {
+    makeEmpireCall({
+        method  : 'set_survey',
+        params  : [o.choice, o.message],
+        success : 'successEmpireRPCSetSurvey',
+        error   : 'failureEmpireRPCSetSurvey'
+    });
+});
+
 EmpireRPCActions.requestEmpireRPCViewAuthorizedSitters.listen(function(o) {
     makeEmpireCall({
         method  : 'view_authorized_sitters',
