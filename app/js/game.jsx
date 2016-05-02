@@ -13,9 +13,11 @@ var SessionActions      = require('js/actions/session');
 var TickerActions       = require('js/actions/ticker');
 var UserActions         = require('js/actions/user');
 var WindowActions       = require('js/actions/window');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
 var GameWindow          = require('js/components/gameWindow');
 var Captcha             = require('js/components/window/captcha');
+var SurveyWindow        = require('js/components/window/survey');
 
 var BodyRPCStore        = require('js/stores/rpc/body');
 
@@ -256,7 +258,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
                 SessionActions.sessionSet(Game.GetSession(''));
                 UserActions.userSignIn();
-
+                EmpireRPCActions.requestEmpireRPCGetSurvey();
             },
             InitEvents : function() {
                 // make sure we only subscribe once

@@ -1,12 +1,14 @@
 'use strict';
 
-var React           = require('react');
+var React               = require('react');
+var Reflux              = require('reflux');
 
-var AboutTab        = require('js/components/window/about/aboutTab');
-var CreditsTab      = require('js/components/window/about/creditsTab');
+var SurveyActions       = require('js/actions/survey');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
+var WindowActions       = require('js/actions/window');
 
-var StatsRPCActions = require('js/actions/rpc/stats');
-var WindowActions   = require('js/actions/window');
+var SurveyRPCStore      = require('js/stores/rpc/survey');
+
 
 var SurveyWindow = React.createClass({
     statics : {
@@ -17,7 +19,29 @@ var SurveyWindow = React.createClass({
         }
     },
 
+    mixins : [
+        Reflux.connect(SurveyRPCStore,  'surveyRPCStore')
+    ],
+
     closeWindow : function() {
+        WindowActions.windowCloseByType('survey');
+    },
+
+    handleRadioChange : function(e) {
+        var choice = e.currentTarget.value;
+        SurveyActions.surveyUpdateChoice(choice);
+    },
+
+    handleTextAreaChange : function(e) {
+        var comment = this.refs.comment.value;
+        SurveyActions.surveyUpdateComment(comment);
+    },
+
+    handleSubmitButton : function() {
+        EmpireRPCActions.requestEmpireRPCSetSurvey( {
+            choice :    this.state.surveyRPCStore.choice,
+            comment :   this.state.surveyRPCStore.comment
+        });
         WindowActions.windowCloseByType('survey');
     },
 
@@ -49,28 +73,34 @@ var SurveyWindow = React.createClass({
                   <label for="survey">Please choose:</label>
                   <div className="field">
                     <div className="ui radio checkbox">
-                      <input type="radio" name="survey" value="yes" />
+                      <input type="radio" name="survey" value="1" ref="choice" onChange={this.handleRadioChange}
+                        checked={this.state.surveyRPCStore.choice === 1}
+                      />
                       <label>Yes! I will play in the reboot.</label>
                     </div>
                   </div>
                   <div className="field">
                     <div className="ui radio checkbox">
-                      <input type="radio" name="survey" value="no" />
+                      <input type="radio" name="survey" value="2" ref="choice" onChange={this.handleRadioChange}
+                        checked={this.state.surveyRPCStore.choice === 2}
+                      />
                       <label>No. If there is a reboot I will quit.</label>
                     </div>
                   </div>
                   <div className="field">
                     <div className="ui radio checkbox">
-                      <input type="radio" name="survey" value="conditional" />
+                      <input type="radio" name="survey" value="3" ref="choice" onChange={this.handleRadioChange}
+                        checked={this.state.surveyRPCStore.choice === 3}
+                      />
                       <label>Yes. I will play in the reboot if (insert comment below)</label>
                     </div>
                   </div>
                   <div className="field">
                     <label>Comment:</label>
-                    <textarea rows="2"></textarea>
+                    <textarea rows="2" ref="comment" onChange={this.handleTextAreaChange} >{this.state.surveyRPCStore.comment}</textarea>
                   </div>
                 </div>
-                <div className="ui button"><span>Submit</span></div>
+                <div className="ui button" onClick={this.handleSubmitButton}><span>Submit</span></div>
               </div>
 
             </div>
