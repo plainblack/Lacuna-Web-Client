@@ -44,7 +44,9 @@ var SpacePort = React.createClass({
         var building = this.state.genericBuildingStore;
         var tabs = StandardTabs.tabs(this.props.options, building);
         tabs.push(
-            <Tab title="Own Fleets" key="Own Fleets" onSelect={ _.partial(SpacePortRPCActions.requestSpacePortRPCView, building.id ) }>
+            <Tab title="Own Fleets" key="Own Fleets" onSelect={ 
+              _.partial(SpacePortRPCActions.requestSpacePortRPCViewAllFleets,  building.id ) 
+            }>
               <SpacePortOwnFleetsTab />
             </Tab>
         );

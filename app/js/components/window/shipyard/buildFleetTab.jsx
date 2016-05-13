@@ -78,6 +78,7 @@ var BuildFleetTab = React.createClass({
                   obj =         {buildable[fleetTypes[i]] } 
                   buildingId =  {this.props.buildingId}
                   autoSelect =  {this.state.autoSelect}
+                  cost       =  {1}
                 />
             );
         }
