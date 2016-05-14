@@ -12,7 +12,7 @@ var SpacePortRPCActions      = require('js/actions/rpc/spacePort');
 
 var StandardTabs            = require('js/components/window/building/standardTabs');
 var BuildingInformation     = require('js/components/window/building/information');
-var SpacePortOwnFleetsTab   = require('js/components/window/spaceport/ownFleetsTab');
+var SpacePortOwnFleetsTab   = require('js/components/window/spacePort/ownFleetsTab');
 
 var Tabber                  = require('js/components/tabber');
 

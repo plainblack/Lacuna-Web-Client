@@ -3,9 +3,15 @@
 var React                           = require('react');
 var Reflux                          = require('reflux');
 var _                               = require('lodash');
+var $                               = require('js/shims/jquery');
+var clone                           = require('js/util').clone;
+
 var constants                       = require('js/constants');
 
 var SpacePortRPCActions             = require('js/actions/rpc/spacePort');
+var ViewAllFleetsSpacePortRPCStore  = require('js/stores/rpc/spacePort/viewAllFleets');
+
+var OwnFleetItem                    = require('js/components/window/spacePort/ownFleets/item');
 
 var OwnFleetsTab = React.createClass({
 
@@ -23,6 +29,7 @@ var OwnFleetsTab = React.createClass({
     },
 
     mixins : [
+        Reflux.connect(ViewAllFleetsSpacePortRPCStore, 'viewAllFleetsStore')
     ],
 
     handleTaskChange : function(e) {
@@ -30,7 +37,15 @@ var OwnFleetsTab = React.createClass({
     },
 
     handleTagChange : function(e) {
-        this.setState( { tag: e.target.value } );
+        this.setState( { tag : e.target.value } );
+    },
+
+    handleTypeChange : function(e) {
+        this.setState( { type : e.target.value } );
+    },
+
+    handleNameChange : function(e) {
+        this.setState( { name : e.target.value } );
     },
 
     render : function() {
@@ -56,48 +71,34 @@ var OwnFleetsTab = React.createClass({
             }
         }
 
+        var fleetItems = clone(this.state.viewAllFleetsStore.fleets);
 
-//        var buildQueueAvailable = this.state.getBuildableStore.build_queue_max - this.state.getBuildableStore.build_queue_used;
-//        var fleetItems = [];
-//        var buildable = this.state.getBuildableStore.buildable;
-//        var fleetTypes = Object.keys(buildable);
-//
-//        // Filter based on buildable now or later.
-//        if (this.state.show == "now") {
-//            fleetTypes = _.filter(fleetTypes, function(fleetType) {
-//                return buildable[fleetType].can;
-//            });
-//        }
-//        else if (this.state.show == "later") {
-//            fleetTypes = _.filter(fleetTypes, function(fleetType) {
-//                return !buildable[fleetType].can;
-//            });
-//        }
-//        
-//        // Filter based on ship type
-//        if (this.state.filter != "all") {
-//            var filter = this.state.filter;
-//            fleetTypes = _.filter(fleetTypes, function(fleetType) {
-//                return _.find(buildable[fleetType].tags, function(o) {
-//                    return (o == filter);
-//                });
-//            });
-//        }
-//
-//
-//        fleetTypes.sort();
-//        var fleetTypesLen = fleetTypes.length;
-//        
-//        for (var i = 0; i < fleetTypesLen; i++) {
-//            fleetItems.push(
-//                <BuildFleetItem 
-//                  fleetType =   {fleetTypes[i]} 
-//                  obj =         {buildable[fleetTypes[i]] } 
-//                  buildingId =  {this.props.buildingId}
-//                  autoSelect =  {this.state.autoSelect}
-//                />
-//            );
-//        }
+        // Filter based on Task
+        if (this.state.task !== 'all') {
+            fleetItems = $.grep(fleetItems, function(item,index) {
+                return (item.task === this.state.task);
+            });
+        }
+
+        // Filter based on Type
+        if (this.state.type !== 'all') {
+            fleetItems = $.grep(fleetItems, function(item,index) {
+                return(item.details.type === this.state.type);
+            });
+        }
+
+        // Filter based on Tag
+        if (this.state.tag != 'all') {
+            fleetItems = $.grep(fleetItems, function(item,index) {
+                return(1);
+            });
+        }
+        for (var i = 0; i < fleetItems.length; i++) {
+            <OwnFleetItem
+              obj =         {fleetItems[i]}
+              buildingId =  {this.props.buildingId}
+            />
+        }
 
         return (
             <div className="ui form">
@@ -125,7 +126,7 @@ var OwnFleetsTab = React.createClass({
                 </div>
                 <div className="field">
                   <label>Name</label>
-                  <input type="text" ref="name" />
+                  <input type="text" ref="name" onChange={this.handleNameChange} />
                 </div>
               </div>
               <div className="ui divider"></div>
