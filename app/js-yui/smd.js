@@ -2912,9 +2912,9 @@ if (typeof YAHOO.lacuna.SMD == "undefined" || !YAHOO.lacuna.SMD) {
                 },
                 "logout" : {
                     "description": "logout empire",
-                    "parameters": [
-                        {"name":"session_id", "type":"string", "optional":false}
-                    ],
+                    "parameters": {
+                        session_id: {"type":"string", "optional":false}
+                    },
                     "returns":{"type":"object"}
                 },
                 "login" : {
