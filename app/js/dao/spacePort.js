@@ -22,10 +22,10 @@ SpacePortRPCActions.successSpacePortRPCView.listen(function(result) {
     BuildingWindowActions.buildingWindowUpdate(result);
 });
 
-SpacePortRPCActions.requestSpacePortRPCViewAllFleets.listen(function(o) {
+SpacePortRPCActions.requestSpacePortRPCViewAllFleets.listen(function(building_id) {
     makeSpacePortCall({
         method  : 'view_all_fleets',
-        params  : [o],
+        params  : { building_id : building_id },
         success : 'successSpacePortRPCViewAllFleets',
         error   : 'failureSpacePortRPCViewAllFleets' 
     });

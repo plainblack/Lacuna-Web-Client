@@ -22,10 +22,10 @@ ShipyardRPCActions.successShipyardRPCView.listen(function(result) {
     BuildingWindowActions.buildingWindowUpdate(result);
 });
 
-ShipyardRPCActions.requestShipyardRPCGetBuildable.listen(function(o) {
+ShipyardRPCActions.requestShipyardRPCGetBuildable.listen(function(building_id) {
     makeShipyardCall({
         method  : 'get_buildable',
-        params  : [o],
+        params  : { building_id : building_id },
         success : 'successShipyardRPCGetBuildable',
         error   : 'failureShipyardRPCGetBuildable' 
     });

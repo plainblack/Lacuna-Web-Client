@@ -93,11 +93,13 @@ var OwnFleetsTab = React.createClass({
                 return(1);
             });
         }
+        var renderFleetItems = [];
+
         for (var i = 0; i < fleetItems.length; i++) {
-            <OwnFleetItem
+            renderFleetItems.push( <OwnFleetItem
               obj =         {fleetItems[i]}
               buildingId =  {this.props.buildingId}
-            />
+            /> );
         }
 
         return (
@@ -131,7 +133,7 @@ var OwnFleetsTab = React.createClass({
               </div>
               <div className="ui divider"></div>
               <div>
-                Fleet list goes here...
+                {renderFleetItems}
               </div>
             </div>
         );
