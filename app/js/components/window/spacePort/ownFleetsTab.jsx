@@ -71,7 +71,7 @@ var OwnFleetsTab = React.createClass({
             }
         }
 
-        var fleetItems = clone(this.state.viewAllFleetsStore.fleets);
+        var fleetItems = this.state.viewAllFleetsStore.fleets.slice(0);
 
         // Filter based on Task
         if (this.state.task !== 'all') {

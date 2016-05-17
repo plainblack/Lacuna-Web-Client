@@ -133,7 +133,11 @@ var handleObj = function(obj) {
     if (_.isString(obj)) {
         return handleString(obj);
     } else if (_.isObject(obj)) { // NOTE: isObject returns true for arrays.
-        return _.mapValues(obj, handleObj);
+        if (Array.isArray(obj)) {
+            return _.forEach(obj, handleObj);
+        } else {
+            return _.mapValues(obj, handleObj);
+        }
     } else {
         return obj;
     }
