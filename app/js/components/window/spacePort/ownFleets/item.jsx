@@ -19,8 +19,10 @@ var BuildFleetItem = React.createClass({
             height: 100,
             background: "transparent url("+constants.ASSETS_URL+"star_system/field.png) no-repeat center",
         };
-        var shipImage = constants.ASSETS_URL+"ships/hulk.png";
+        var obj = this.props.obj;
+        var shipImage = constants.ASSETS_URL+"ships/"+obj.details.type+".png";
         var reason = '';
+
         return (
           <div>
             <div className="ui grid">
