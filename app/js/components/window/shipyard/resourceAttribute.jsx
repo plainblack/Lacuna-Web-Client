@@ -13,8 +13,10 @@ var ResourceAttribute = React.createClass({
     },
 
     render : function() {
-        var title       = util.commify(this.props.attr);
-        
+        var title = this.props.attr;
+        if ( ! window.isNaN(title)) {
+            title = util.commify(title);
+        }        
         return (
             <div style={{
                 marginTop : 5

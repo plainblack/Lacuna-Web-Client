@@ -3,6 +3,8 @@
 var React                   = require('react');
 var Reflux                  = require('reflux');
 
+var ResourceAttribute       = require('js/components/window/shipyard/resourceAttribute');
+
 var util                    = require('js/util');
 var constants               = require('js/constants');
 
@@ -26,18 +28,53 @@ var BuildFleetItem = React.createClass({
         return (
           <div>
             <div className="ui grid">
-
-              <div className="four wide column">
-                <div style={starfieldStyle}>
-                  <img src={ shipImage } style={{ width:100, height:100 }} className="shipImage" />
-                </div>
+              <div style={starfieldStyle}>
+                <img src={ shipImage } style={{ width:100, height:100 }} className="shipImage" />
               </div>
 
               <div className="four wide column">
-                Resources
-              </div>
-              <div className="four wide column">
-                Resource Attributes
+                <ResourceAttribute
+                  name={"Quantity"}
+                  attr={obj.quantity}
+                />
+                <ResourceAttribute
+                  name={"Speed"}
+                  attr={obj.details.speed}
+                />
+                <ResourceAttribute
+                  name={"Berth Level"}
+                  attr={obj.details.berth_level}
+                />
+                <ResourceAttribute
+                  name={"Hold Size"}
+                  attr={obj.details.hold_size}
+                />
+                <ResourceAttribute
+                  name={"Max Occupants"}
+                  attr={obj.details.max_occupants}
+                />
+                <ResourceAttribute
+                  name={"Combat"}
+                  attr={obj.details.combat}
+                />
+                <ResourceAttribute
+                  name={"Stealth"}
+                  attr={obj.details.stealth}
+                />
+                <ResourceAttribute
+                  name={"Name"}
+                  attr={obj.details.name}
+                />
+                <ResourceAttribute
+                  name={"Type"}
+                  attr={obj.details.type}
+                />
+                <ResourceAttribute
+                  name={"Marque"}
+                  attr={obj.details.mark}
+                />
+ 
+ 
               </div>
 
               <div className="four wide column">
