@@ -21,7 +21,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/parliament"
         },
         "/policestation" : {
-            "description" : "The police station manages security on a Space Station.  It can help defend the Station against spies as well as detect incoming ships.",
+            "description" : "The police station manages security on a Space Station. It can help defend the Station against spies as well as detect incoming ships.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/police-station"
         },
         "/warehouse" : {
@@ -33,7 +33,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/interstellar-broadcast-system"
         },
         "/ssla" : {
-            "description" : "Allows the construction of Space Station Lab modules. Requires four plots, and this is the top left corner of the building.",
+            "description" : "Allows the construction of Space Station Lab module plans. Requires four plots, and this is the top left corner of the building.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/space-station-lab"
         },
         "/sslb" : {
@@ -61,15 +61,15 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/atmospheric-evaporator"
         },
         "/greatballofjunk" : {
-            "description" : "Eliminate waste and give your citizens something to be proud of at the same time.",
+            "description" : "Eliminate waste and give your citizens something to be proud of at the same time. More effective than Junk Henge Sculpture.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/great-ball-of-junk"
         },
         "/pyramidjunksculpture" : {
-            "description" : "Eliminate waste and give your citizens something to be proud of at the same time.",
+            "description" : "Eliminate waste and give your citizens something to be proud of at the same time. More effective than Great Ball of Junk.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/pyramid-junk-sculpture"
         },
         "/spacejunkpark" : {
-            "description" : "Eliminate waste and give your citizens something to be proud of at the same time.",
+            "description" : "Eliminate waste and give your citizens something to be proud of at the same time. More effective than Metal Junk Arches.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/space-junk-park"
         },
         "/junkhengesculpture" : {
@@ -77,7 +77,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/junk-henge-sculpture"
         },
         "/metaljunkarches" : {
-            "description" : "Eliminate waste and give your citizens something to be proud of at the same time.",
+            "description" : "Eliminate waste and give your citizens something to be proud of at the same time. More effective than Pyramid Junk Sculpture.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/metal-junk-arches"
         },
         "/deployedbleeder" : {
@@ -85,7 +85,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/bleeder"
         },
         "/oracleofanid" : {
-            "description" : "The all seeing Oracle can help detect enemy threats.",
+            "description" : "The all-seeing Oracle discovers nearby bodies.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/oracle-of-anid"
         },
         "/themepark" : {
@@ -101,7 +101,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/massad-s-henge"
         },
         "/gratchsgauntlet" : {
-            "description" : "The anti-espionage system of the Great Race.",
+            "description" : "The anti-espionage system of the Great Race by slowing down infiltrating spies.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/gratch-s-gauntlet"
         },
         "/kasternskeep" : {
@@ -153,27 +153,27 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/fissure"
         },
         "/amalgusmeadow" : {
-            "description" : "A wild meadow filled with wild amalgus beans.",
+            "description" : "A natural source of beans food in orbit 4.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/amalgus-meadow"
         },
         "/dentonbrambles" : {
-            "description" : "A thorny patch of brambles, who's roots happen to be the delicious denton roots.",
+            "description" : "A natural source of root food between orbit 5 and 6.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/denton-brambles"
         },
         "/malcudfield" : {
-            "description" : "A natural source of food.",
+            "description" : "A natural source of fungus food in any orbit.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/malcud-field"
         },
         "/lapisforest" : {
-            "description" : "A natural source of food.",
+            "description" : "A natural source of lapis food in orbit 2.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/lapis-forest"
         },
         "/algaepond" : {
-            "description" : "A natural source of food.",
+            "description" : "A natural source of algae food in any orbit.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/algae-pond"
         },
         "/beeldebannest" : {
-            "description" : "A natural source of food.",
+            "description" : "A natural source of beetle food between orbit 5 and 6.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/beeldeban-nest"
         },
         "/geothermalvent" : {
@@ -213,7 +213,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/essentia-vein"
         },
         "/volcano" : {
-            "description" : "A natural source of ore.",
+            "description" : "A natural source of ore according to the planet's type.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/volcano"
         },
         "/luxuryhousing" : {
@@ -237,7 +237,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/munitions-lab"
         },
         "/crater" : {
-            "description" : "Decoration for your planet.",
+            "description" : "Decoration for your planet. Also provides waste storage.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/crater"
         },
         "/rockyoutcrop" : {
@@ -250,62 +250,62 @@
         },
         "/beach1" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach2" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-2"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach3" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-3"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach4" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-4"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach5" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-5"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach6" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-6"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach7" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-7"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach8" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-8"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach9" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-9"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach10" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-10"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach11" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-11"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach12" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-12"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/beach13" : {
             "description" : "Decoration for your planet. Use with other beach tiles to create a beach front.",
-            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-13"
+            "wiki" : "http://community.lacunaexpanse.com/wiki/beach-1-13-"
         },
         "/algae" : {
-            "description" : "Produces algae to be used as food by your empire.  It also produces a small amount of energy and can be built in any orbit.  The higher the level of the cropper the more food and energy it produces.",
+            "description" : "Produces algae to be used as food by your empire. It also produces a small amount of energy and can be built in any orbit.  The higher the level of the cropper the more food and energy it produces.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/algae-cropper"
         },
         "/apple" : {
-            "description" : "Allows you to grow apples to feed your empire.  You can only grow apples in orbit 3 (its goldilox zone).  Food production increases for every level of the orchard.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",
+            "description" : "Allows you to grow apples to feed your empire. You can only grow apples in orbit 3 (its goldilox zone).  Food production increases for every level of the orchard.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/apple-orchard"
         },
         "/archaeology" : {
@@ -313,7 +313,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/archaeology-ministry"
         },
         "/bean" : {
-            "description" : "Allows you to grow beans to be used as food by your empire.  You can only grow beans in orbit 4 (its goldilox zone).  The higher the level of the plantation the more food it produces.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",
+            "description" : "Allows you to grow beans to be used as food by your empire. You can only grow beans in orbit 4 (its goldilox zone).  The higher the level of the plantation the more food it produces.  All plants need a source of phosphorus to photosynthesize their food. Therefore you need a good source of gypsum, sulfur, or monazite for plants to thrive.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/amalgus-bean-plantation"
         },
         "/beeldeban" : {
@@ -369,7 +369,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/embassy"
         },
         "/energyreserve" : {
-            "description" : "Stores your energy with a minimal amount of loss.  Increasing the level of the building raises the amount of energy stored.",
+            "description" : "Stores your energy with a minimal amount of loss. Increasing the level of the building raises the amount of energy stored.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/energy-reserve"
         },
         "/entertainment" : {
@@ -377,11 +377,11 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/entertainment-district"
         },
         "/espionage" : {
-            "description" : "Allows the construction of spy pods and spy shuttles at the shipyard.  It also allows better training of your spies.  The higher the building level, the more effective your spies will be applying their trade. ",
+            "description" : "Allows the construction of spy pods and spy shuttles at the shipyard. It also allows better training of your spies.  The higher the building level, the more effective your spies will be applying their trade. ",
             "wiki" : "http://community.lacunaexpanse.com/wiki/espionage-ministry"
         },
         "/foodreserve" : {
-            "description" : "Stores your food with a minimal amount of spoilage.  It also gives you a report of the types of food you have stored.  Increasing the level of this building increases the amount of food that can be stored.",
+            "description" : "Stores your food with a minimal amount of spoilage. It also gives you a report of the types of food you have stored.  Increasing the level of this building increases the amount of food that can be stored.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/food-reserve"
         },
         "/fission" : {
@@ -409,7 +409,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/hydrocarbon-energy-plant"
         },
         "/intelligence" : {
-            "description" : "Trains spies.  You may train 3 spies per level of this building.  You may only construct 1 Intelligence Ministry on a planet.",
+            "description" : "Trains spies. You may train 3 spies per level of this building. You may only construct 1 Intelligence Ministry on a planet.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/intelligence-ministry"
         },
         "/inteltraining" : {
@@ -509,7 +509,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/soup-cannery"
         },
         "/spaceport" : {
-            "description" : "Acts as the hangar and control tower for your ships.  Here is where you can monitor your ships that are in transit.  Be careful as the Space Port can only hold a limited number of ships, if there is no more room in the Space Port when a ship arrives or is built, it will be destroyed.  The Space Port can hold double its level in ships and queue its level in ships. ",
+            "description" : "Acts as the hangar and control tower for your ships. Here is where you can monitor your ships that are in transit.  Be careful as the Space Port can only hold a limited number of ships, if there is no more room in the Space Port when a ship arrives or is built, it will be destroyed.  The Space Port can hold double its level in ships and queue its level in ships. ",
             "wiki" : "http://community.lacunaexpanse.com/wiki/space-port"
         },
         "/stockpile" : {
@@ -517,7 +517,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/stockpile"
         },
         "/syrup" : {
-            "description" : "Takes algae from the Algae Cropper and converts it in to Syrup with a small loss to be used as food.  The higher the level of the bottler the more food is produced.",
+            "description" : "Takes algae from the Algae Cropper and converts it in to Syrup with a small loss to be used as food. The higher the level of the bottler the more food is produced.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/syrup-bottler"
         },
         "/thefttraining" : {
@@ -631,7 +631,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/stake"
         },
         "thud" : {
-            "description" : "Temporarily destroys plots on a planet's surface.",
+            "description" : "Produces craters on a remote planet.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/thud"
         },
         "sweeper" : {
@@ -683,11 +683,11 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/probe"
         },
         "colony_ship" : {
-            "description" : "Use to create a new colony for your empire.",
+            "description" : "Founds a colony on inhabitable bodies. Requires happiness to get sent.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/colony-ship"
         },
         "short_range_colony_ship" : {
-            "description" : "Use to create a new colony for your empire. Very fast, but with a limited range. Useful within your own, or very close, star systems.",
+            "description" : "Faster version of the Colony Ship which requires less happiness to get launched but has very limited range.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/short-range-colony-ship"
         },
         "spy_pod" : {
@@ -707,15 +707,15 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/smuggler-ship"
         },
         "mining_platform_ship" : {
-            "description" : "Allows the gathering of resources from asteroids.",
+            "description" : "Allows the gathering of ore from asteroids.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/mining-platform-ship"
         },
         "terraforming_platform_ship" : {
-            "description" : "Allows you to settle planets your species could not normally colonize.",
+            "description" : "Creates Terraforming Platform plans on a remote body.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/terraforming-platform-ship"
         },
         "gas_giant_settlement_ship" : {
-            "description" : "Allows you to settle gas giants.",
+            "description" : "Creates Gas Giant Settlement Platform plans on a remote body.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/gas-giant-settlement-ship"
         },
         "scow" : {
@@ -735,7 +735,7 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/scow"
         },
         "bleeder" : {
-            "description" : "Robotic war ship. Once deployed on enemy planet, starts stealing resources and converting them into waste.",
+            "description" : "Robotic war ship that deploys into a building to convert resources into waste, and to deduct happiness.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/bleeder"
         },
         "dory" : {
@@ -815,11 +815,11 @@
             "wiki" : "http://community.lacunaexpanse.com/wiki/detonator"
         },
         "surveyor" : {
-            "description" : "Robotic explorer that snaps a photograph of the surface of a remote planet, and also identifies the buildings in the photograph.",
+            "description" : "Robotic reconnaissance ship that snaps a photograph of a remote planet's surface and lists details about found buildings. One-use only.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/surveyor"
         },
         "scanner" : {
-            "description" : "Robotic explorer that snaps a photograph of the surface of a remote planet.",
+            "description" : "Robotic reconnaissance ship that snaps a photograph of a remote planet's surface. One-use only.",
             "wiki" : "http://community.lacunaexpanse.com/wiki/scanner"
         }
     },
