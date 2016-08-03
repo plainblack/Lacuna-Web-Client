@@ -80,13 +80,13 @@ var SurveyWindow = React.createClass({
                  and also so that you can gain a little closure as you complete your empires and say farewell to the friendships
                  you have formed through the game over the years.</p>
 
-              <p>All is not lost however. All of the code for The Lacuna Expanse will remain
+              <p>All is not lost however. All of the code for The Lacuna Expanse will &nbsp;
                  <a href="https://github.com/plainblack/Lacuna-Server-Open" target="_blank">remain open source</a>,
                  and I am sure some people will choose to create their own local servers. In addition, several of the volunteers
                  that have been working on The Lacuna Expanse over the past few years are continuing to make progress on a reboot
-                 of TLE under a new name. Once complete, it will have a host of new features. The name of the new game is
-                 <a href="http://kenoantigen.com">Keno Antigen</a>, visit the site and subscribe to be notified when it goes live.
-                 You can also keep track of progress by checking the code base on git at:
+                 of TLE under a new name. Once complete, it will have a host of new features. The name of the new game is&nbsp;
+                 <a href="http://kenoantigen.com" target="_blank">Keno Antigen</a>, visit the site and subscribe to be notified when it goes live.
+                 You can also keep track of progress by checking the code base on git at:&nbsp;
                  <a href="https://github.com/Kantigen" target="_blank">Kantigen</a></p>
 
               <p>Wolfsfriend Enterprises is working on several plans to keep TLE online after Oct 1st. This is going to take work,
