@@ -91,7 +91,7 @@ var SurveyWindow = React.createClass({
 
               <p>Wolfsfriend Enterprises is working on several plans to keep TLE online after Oct 1st. This is going to take work,
                  but we are willing to do it. If you are interested in helping, or you would like to see this happen then please
-                 email nottaureell@gmail.com. We will keep you posted on our progress.</p>
+                 email nottaureell@gmail.com. They will keep you posted on that progress.</p>
 
               <p>I have not changed the survey below, but answering it will keep the popup from coming up again. ;) </p>
               <div className="ui form">
