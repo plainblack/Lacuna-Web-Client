@@ -72,7 +72,7 @@ var SurveyWindow = React.createClass({
 
               <a href="http://community.lacunaexpanse.com/forums/news/all-good-things" target="_blank">All Good Things</a>
 
-              <p>The Lacuna Expanse will go offline as of October 1, 2016.<p>
+              <p>The Lacuna Expanse will go offline as of October 1, 2016.</p>
 
               <p>We are keeping Lacuna alive for thes next couple of months so that you can spend down any remaining essentia,
                  and also so that you can gain a little closure as you complete your empires and say farewell to the friendships
