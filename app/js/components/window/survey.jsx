@@ -69,6 +69,7 @@ var SurveyWindow = React.createClass({
 
               <p>For this reason we are asking you to fill in the following survey.</p>
 */}
+              <p>Dear player,</p>
               <p>We have reworked the survey page, since it is no longer that applicable.  Instead a goodbye and if you want
                  to find out about any community projects, that info is included as well.</p>
 
@@ -80,18 +81,18 @@ var SurveyWindow = React.createClass({
                  and also so that you can gain a little closure as you complete your empires and say farewell to the friendships
                  you have formed through the game over the years.</p>
 
-              <p>All is not lost however. All of the code for The Lacuna Expanse will &nbsp;
-                 <a href="https://github.com/plainblack/Lacuna-Server-Open" target="_blank">remain open source</a>,
-                 and I am sure some people will choose to create their own local servers. In addition, several of the volunteers
-                 that have been working on The Lacuna Expanse over the past few years are continuing to make progress on a reboot
-                 of TLE under a new name. Once complete, it will have a host of new features. The name of the new game is&nbsp;
-                 <a href="http://kenoantigen.com" target="_blank">Keno Antigen</a>, visit the site and subscribe to be notified when it goes live.
-                 You can also keep track of progress by checking the code base on git at:&nbsp;
+              <p>We would like to thank you for enriching this game with your presence and your participation. Eventhough The Lacuna Expanse
+                 will be shut down by October 1st, we are fortunate that this game had become a community-driven open-source project which is
+                 being developed by volunteers who are creating a spiritual successor!</p>
+
+              <p>Therefore you are invited to "sign up to the newsletter" for&nbsp;<a href="http://kenoantigen.com" target="_blank">Keno Antigen</a>&nbsp;
+                 that keeps you informed about progress of the current project called Kenó Antigen which is going to be an improved and enhanced game.
+                 In addition you are welcome to help contribute to our game and client code that makes use of perl, html/javascript as found on Github:
                  <a href="https://github.com/Kantigen" target="_blank">Kantigen</a></p>
 
-              <p>Wolfsfriend Enterprises is working on several plans to keep TLE online after Oct 1st. This is going to take work,
-                 but we are willing to do it. If you are interested in helping, or you would like to see this happen then please
-                 email nottaureell@gmail.com. They will keep you posted on that progress.</p>
+              <p>Another branch called Wolfsfriend Enterprises attempts to keep the current game alive. Contact them at nottaureell@gmail.com if you are interested.</p>
+
+              <p>We are looking forward to see TLE players in Kantigen again! Spread the message wherever you can to attract more people to populate the game.</p>
 
               <p>I have not changed the survey below, but answering it will keep the popup from coming up again. ;) </p>
               <div className="ui form">
