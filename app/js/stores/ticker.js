@@ -9,6 +9,8 @@ var Reflux          = require('reflux');
 var _               = require('lodash');
 
 var TickerActions   = require('js/actions/ticker');
+var EmpireRPCActions = require('js/actions/rpc/empire');
+var UserActions     = require('js/actions/user');
 
 var StatefulStore   = require('js/stores/mixins/stateful');
 var clone           = require('js/util').clone;
@@ -18,7 +20,9 @@ var INTERVAL_TIME   = 1000;
 var TickerStore = Reflux.createStore({
 
     listenables : [
-        TickerActions
+        TickerActions,
+        EmpireRPCActions,
+        UserActions
     ],
 
     mixins : [
@@ -52,6 +56,10 @@ var TickerStore = Reflux.createStore({
 
             this.emit(state);
         }
+    },
+
+    onSuccessEmpireRPCLogout : function() {
+        this.onTickerStop();
     },
 
     onTickerStop : function() {

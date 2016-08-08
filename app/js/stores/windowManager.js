@@ -5,6 +5,7 @@ var _                    = require('lodash');
 
 var WindowManagerActions = require('js/actions/windowManager');
 var KeyboardActions      = require('js/actions/keyboard');
+var EmpireRPCActions     = require('js/actions/rpc/empire');
 
 var StatefulStore        = require('js/stores/mixins/stateful');
 var clone                = require('js/util').clone;
@@ -12,7 +13,8 @@ var clone                = require('js/util').clone;
 var WindowManagerStore = Reflux.createStore({
     listenables : [
         WindowManagerActions,
-        KeyboardActions
+        KeyboardActions,
+        EmpireRPCActions
     ],
 
     mixins : [
@@ -20,8 +22,6 @@ var WindowManagerStore = Reflux.createStore({
     ],
 
     getDefaultData : function() {
-        // TODO: should we persist this state via localStorage?
-
         return {};
     },
 
@@ -71,6 +71,10 @@ var WindowManagerStore = Reflux.createStore({
         this.emit({});
     },
 
+    onSuccessEmpireRPCLogout : function() {
+        this.onHideAllWindows();
+    },
+
     onBringWindowToTop : function(id) {
         if (this.isOnTop(id, this.state)) {
             return;
@@ -94,12 +98,12 @@ var WindowManagerStore = Reflux.createStore({
             .value();
 
         if (topWindow) {
-            WindowManagerActions.hideWindow(topWindow.id);
+            this.onHideWindow(topWindow.id);
         }
     },
 
     onEscKey : function() {
-        WindowManagerActions.hideTopWindow();
+        this.onHideTopWindow();
     }
 });
 

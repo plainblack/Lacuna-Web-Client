@@ -1245,7 +1245,7 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
             this.hide();
             var planet = Game.EmpireData.planets[res[1]];
             //Game.PlanetJump(planet);
-            require('js/actions/menu/map').changePlanet(res[1]);
+            require('js/actions/menu/map').mapChangePlanet(res[1]);
         },
         handleAllianceLink : function(e, el) {
             Event.stopEvent(e);
@@ -1260,4 +1260,3 @@ if (typeof YAHOO.lacuna.buildings.Embassy == "undefined" || !YAHOO.lacuna.buildi
 YAHOO.register("embassy", YAHOO.lacuna.buildings.Embassy, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

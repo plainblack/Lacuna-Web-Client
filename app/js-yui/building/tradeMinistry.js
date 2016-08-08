@@ -2607,4 +2607,3 @@ _getWasteChainTab : function() {
 YAHOO.register("trade", YAHOO.lacuna.buildings.Trade, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

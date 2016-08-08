@@ -133,12 +133,11 @@ var BodyRPCStore = Reflux.createStore({
         body.x = int(body.x);
         body.y = int(body.y);
 
-        body.num_incoming_own = int(body.num_incoming_own);
-        body.num_incoming_ally = int(body.num_incoming_ally);
+        body.num_incoming_own   = int(body.num_incoming_own);
+        body.num_incoming_ally  = int(body.num_incoming_ally);
         body.num_incoming_enemy = int(body.num_incoming_enemy);
-
-        body.plots_available = int(body.plots_available);
-        body.building_count = int(body.building_count);
+        body.plots_available    = int(body.plots_available);
+        body.building_count     = int(body.building_count);
 
         // no point recalcing for each ship.
         var serverTimeMs = ServerRPCStore.getData().serverMoment.valueOf();
@@ -148,9 +147,9 @@ var BodyRPCStore = Reflux.createStore({
             return ship;
         };
 
-        _.map(body.incoming_own_ships, updateShip);
-        _.map(body.incoming_ally_ships, updateShip);
-        _.map(body.incoming_enemy_ships, updateShip);
+        _.map(body.incoming_own_ships,      updateShip);
+        _.map(body.incoming_ally_ships,     updateShip);
+        _.map(body.incoming_enemy_ships,    updateShip);
 
         body = this.handleResourcesPercentages(body);
 
@@ -187,18 +186,12 @@ var BodyRPCStore = Reflux.createStore({
             }
         };
 
-        body.food_stored = tickResource(
-            body.food_hour, body.food_capacity, body.food_stored, 1);
-        body.ore_stored = tickResource(
-            body.ore_hour, body.ore_capacity, body.ore_stored, 1);
-        body.water_stored = tickResource(
-            body.water_hour, body.water_capacity, body.water_stored, 1);
-        body.energy_stored = tickResource(
-            body.energy_hour, body.energy_capacity, body.energy_stored, 1);
-        body.waste_stored = tickResource(
-            body.waste_hour, body.waste_capacity, body.waste_stored, 1);
-        body.happiness = tickResource(
-            body.happiness_hour, undefined, body.happiness, undefined);
+        body.food_stored    = tickResource(body.food_hour,      body.food_capacity,     body.food_stored,   1);
+        body.ore_stored     = tickResource(body.ore_hour,       body.ore_capacity,      body.ore_stored,    1);
+        body.water_stored   = tickResource(body.water_hour,     body.water_capacity,    body.water_stored,  1);
+        body.energy_stored  = tickResource(body.energy_hour,    body.energy_capacity,   body.energy_stored, 1);
+        body.waste_stored   = tickResource(body.waste_hour,     body.waste_capacity,    body.waste_stored,  1);
+        body.happiness      = tickResource(body.happiness_hour, undefined,              body.happiness,     undefined);
 
         body = this.handleResourcesPercentages(body);
 
@@ -206,18 +199,11 @@ var BodyRPCStore = Reflux.createStore({
     },
 
     handleResourcesPercentages : function(body) {
-        body.food_percent_full = (body.food_stored / body.food_capacity) * 100;
-        body.ore_percent_full = (body.ore_stored / body.ore_capacity) * 100;
-        body.water_percent_full = (body.water_stored / body.water_capacity) * 100;
-        body.energy_percent_full = (body.energy_stored / body.energy_capacity) * 100;
-        body.waste_percent_full = (body.waste_stored / body.waste_capacity) * 100;
-
-        // Do this to reduce updating of the progress bars.
-        body.food_percent_full = int(body.food_percent_full);
-        body.ore_percent_full = int(body.ore_percent_full);
-        body.water_percent_full = int(body.water_percent_full);
-        body.energy_percent_full = int(body.energy_percent_full);
-        body.waste_percent_full = int(body.waste_percent_full);
+        body.food_percent_full      = int((body.food_stored / body.food_capacity) * 100);
+        body.ore_percent_full       = int((body.ore_stored / body.ore_capacity) * 100);
+        body.water_percent_full     = int((body.water_stored / body.water_capacity) * 100);
+        body.energy_percent_full    = int((body.energy_stored / body.energy_capacity) * 100);
+        body.waste_percent_full     = int((body.waste_stored / body.waste_capacity) * 100);
 
         return body;
     }

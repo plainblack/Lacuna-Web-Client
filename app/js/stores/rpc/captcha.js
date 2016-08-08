@@ -1,67 +1,66 @@
 'use strict';
 
-var Reflux         = require('reflux');
-var StatefulStore  = require('js/stores/mixins/stateful');
+var Reflux                  = require('reflux');
+var StatefulMixinStore      = require('js/stores/mixins/stateful');
 
-var CaptchaActions = require('js/actions/windows/captcha');
+var CaptchaWindowActions    = require('js/actions/windows/captcha');
+var CaptchaRPCActions       = require('js/actions/rpc/captcha');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowsActions          = require('js/actions/window');
 
-var server         = require('js/server');
+var CaptchaWindow           = require('js/components/window/captcha');
+
+var server                  = require('js/server');
+var clone                   = require('js/util').clone;
 
 var CaptchaRPCStore = Reflux.createStore({
     listenables : [
-        CaptchaActions
+        CaptchaWindowActions,
+        CaptchaRPCActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
         return {
-            guid : '',
-            url  : ''
+            guid    : '',
+            url     : '',
+            solved  : 0,
+            window  : ''
         };
     },
 
-    onClear : function() {
+    onCaptchaWindowClear : function() {
         this.emit(this.getDefaultData());
     },
 
-    onFetch : function() {
-        server.call({
-            module  : 'captcha',
-            method  : 'fetch',
-            params  : [],
-            success : function(result) {
-                this.emit(result);
-            },
-            scope : this
-        });
+
+    onSuccessCaptchaRPCFetch : function(result) {
+        var update = clone(this.state);
+        update.guid = result.guid;
+        update.url  = result.url;
+
+        this.emit(update);
     },
 
-    onSolve : function(solution, success) {
-        server.call({
-            module : 'captcha',
-            method : 'solve',
-            params : [
-                this.state.guid,
-                solution
-            ],
-            success : function(result) {
-                if (typeof success === 'function') {
-                    success();
-                }
-            },
-            error : function() {
-                CaptchaActions.refresh();
-            },
-            scope : this
-        });
+    onSuccessCaptchaRPCSolve : function(result) {
+        var update = clone(this.state);
+        update.solved = 1;
+
+        this.emit(update);
+        WindowsActions.windowCloseByType('captcha');
     },
 
-    onRefresh : function() {
-        CaptchaActions.clear();
-        CaptchaActions.fetch();
+    onCaptchaWindowShow : function(window) {
+        var update = clone(this.state);
+        update.window = window;
+        this.emit(update);
+    },
+
+    onCaptchaWindowRefresh : function() {
+        this.onCaptchaWindowClear();
     }
 });
 

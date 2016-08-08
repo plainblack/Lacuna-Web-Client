@@ -120,4 +120,3 @@ if (typeof YAHOO.lacuna.buildings.Entertainment == "undefined" || !YAHOO.lacuna.
 YAHOO.register("Entertainment", YAHOO.lacuna.buildings.Entertainment, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

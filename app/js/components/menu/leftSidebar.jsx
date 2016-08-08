@@ -1,66 +1,52 @@
 'use strict';
 
-var React                = require('react');
-var Reflux               = require('reflux');
-var util                 = require('js/util');
-var server               = require('js/server');
-var $                    = require('js/shims/jquery');
+var React                   = require('react');
+var Reflux                  = require('reflux');
 
-var LeftSidebarActions   = require('js/actions/menu/leftSidebar');
-var OptionsActions       = require('js/actions/windows/options');
-var WindowManagerActions = require('js/actions/windowManager');
+var vex                     = require('js/vex');
+var util                    = require('js/util');
+var server                  = require('js/server');
+var $                       = require('js/shims/jquery');
 
-var windowTypes          = require('js/windowTypes');
+var LeftSidebarActions      = require('js/actions/menu/leftSidebar');
+var OptionsWindowActions    = require('js/actions/windows/options');
+var WindowActions           = require('js/actions/window');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
-var EmpireRPCStore       = require('js/stores/rpc/empire');
-var LeftSidebarStore     = require('js/stores/menu/leftSidebar');
+var AboutWindow             = require('js/components/window/about');
+var SurveyWindow            = require('js/components/window/survey');
+var InviteWindow            = require('js/components/window/invite');
+var SitterManagerWindow     = require('js/components/window/sitterManager');
+
+var ServerClock             = require('js/components/window/serverClock');
+
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var LeftSidebarStore        = require('js/stores/menu/leftSidebar');
 
 // Because there's a bit of special logic going on here, this is in a separate component.
 var SelfDestruct = React.createClass({
 
     mixins : [
-        Reflux.connect(EmpireRPCStore, 'empire')
+        Reflux.connect(EmpireRPCStore, 'empireRPCStore')
     ],
 
     handleDestructClick : function() {
         LeftSidebarActions.hide();
-        this.onClickSelfDestruct();
-    },
 
-    onClickSelfDestruct : function() {
-        var method = '';
-
-        if (this.state.empire.self_destruct_active === 1) {
-            method = 'disable_self_destruct';
-        } else if (this.confirmSelfDestruct()) {
-            method = 'enable_self_destruct';
-        } else {
+        if (this.state.empireRPCStore.self_destruct_active === 1) {
+            EmpireRPCActions.requestEmpireRPCDisableSelfDestruct();
             return;
         }
-
-        server.call({
-            module  : 'empire',
-            method  : method,
-            params  : [],
-            scope   : this,
-            success : function() {
-                if (method === 'enable_self_destruct') {
-                    window.alert('Success - your empire will be deleted in 24 hours.');
-                } else {
-                    window.alert('Success - your empire will not be deleted. Phew!');
-                }
-            }
-        });
-    },
-
-    confirmSelfDestruct : function() {
-        return window.confirm('Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.');
+        
+        vex.confirm(
+            'Are you ABSOLUTELY sure you want to enable self destuct?  If enabled, your empire will be deleted after 24 hours.',
+            EmpireRPCActions.requestEmpireRPCEnableSelfDestruct
+        );
     },
 
     render : function() {
-        var destructActive      = this.state.empire.self_destruct_active &&
-            this.state.empire.self_destruct_ms > 0;
-        var destructMs          = this.state.empire.self_destruct_ms;
+        var destructMs          = this.state.empireRPCStore.self_destruct_ms;
+        var destructActive      = this.state.empireRPCStore.self_destruct_active && destructMs > 0;
         var formattedDestructMs = destructActive ? util.formatMillisecondTime(destructMs) : '';
 
         var itemStyle = destructActive
@@ -146,7 +132,7 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.invite);
+                    WindowActions.windowAdd(InviteWindow, 'invite');
                 }}>
                     <i className="add user icon"></i>
                     Invite a Friend
@@ -213,14 +199,23 @@ var LeftSidebar = React.createClass({
 
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.about);
+                    WindowActions.windowAdd(SurveyWindow, 'survey');
+                }}>
+                    <i className="newspaper icon"></i>
+                    Survey
+                </a>
+
+                <a className="item" onClick={function() {
+                    LeftSidebarActions.hide();
+                    WindowActions.windowAdd(AboutWindow, 'about');
                 }}>
                     <i className="rocket icon"></i>
                     About
                 </a>
+
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.sitterManager);
+                    WindowActions.windowAdd(SitterManagerWindow, 'sitter');
                 }}
                 >
                     <i className="sitemap icon"></i>
@@ -228,7 +223,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    OptionsActions.show();
+                    OptionsWindowActions.optionsWindowShow();
                 }}
                 >
                     <i className="options icon"></i>
@@ -236,7 +231,7 @@ var LeftSidebar = React.createClass({
                 </a>
                 <a className="item" onClick={function() {
                     LeftSidebarActions.hide();
-                    WindowManagerActions.addWindow(windowTypes.serverClock);
+                    WindowActions.windowAdd(ServerClock, 'serverclock')
                 }}>
                     <i className="wait icon"></i>
                     Server Clock

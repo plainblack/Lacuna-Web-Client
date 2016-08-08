@@ -2,10 +2,10 @@
 
 var Reflux = require('reflux');
 
-var StatsActions = Reflux.createActions([
-    'load',
-    'show',
-    'hide'
+var StatsWindowActions = Reflux.createActions([
+    'statsWindowLoad',
+    'statsWindowShow',
+    'statsWindowHide'
 ]);
 
-module.exports = StatsActions;
+module.exports = StatsWindowActions;

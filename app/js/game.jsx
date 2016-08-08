@@ -2,23 +2,24 @@
 
 YAHOO.namespace('lacuna');
 
-var React                = require('react');
-var ReactDom             = require('react-dom');
-var _                    = require('lodash');
-var ReactTooltip         = require('react-tooltip');
+var React               = require('react');
+var ReactDom            = require('react-dom');
+var _                   = require('lodash');
+var ReactTooltip        = require('react-tooltip');
 
-var KeyboardActions      = require('js/actions/keyboard');
-var MenuActions          = require('js/actions/menu');
-var SessionActions       = require('js/actions/session');
-var TickerActions        = require('js/actions/ticker');
-var UserActions          = require('js/actions/user');
+var KeyboardActions     = require('js/actions/keyboard');
+var MenuActions         = require('js/actions/menu');
+var SessionActions      = require('js/actions/session');
+var TickerActions       = require('js/actions/ticker');
+var UserActions         = require('js/actions/user');
+var WindowActions       = require('js/actions/window');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
 
-var GameWindow           = require('js/components/gameWindow');
+var GameWindow          = require('js/components/gameWindow');
+var Captcha             = require('js/components/window/captcha');
+var SurveyWindow        = require('js/components/window/survey');
 
-var BodyRPCStore         = require('js/stores/rpc/body');
-
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
+var BodyRPCStore        = require('js/stores/rpc/body');
 
 if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
@@ -71,7 +72,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                     document.getElementById('mainGameContainer')
                 );
 
-                require('js/actions/menu/loader').show();
+                require('js/actions/menu/loader').loaderMenuShow();
 
                 // add overlay manager functionality
                 Game.OverlayManager.hideAllBut = function(id) {
@@ -165,9 +166,9 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                     Game.Reset();
                     window.location = o.error.data;
                 } else if (o.error.code === 1016) { // Captcha
-                    WindowManagerActions.addWindow(windowTypes.captcha, {
+                    WindowActions.windowAdd(Captcha, 'captcha', {
                         success : retry
-                    });
+                    } );
                 } else if (o.error.code === -32603) { // Internal error
                     Game.QuickDialog({
                         width : '500px',
@@ -232,8 +233,8 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                 Dom.setStyle(document.body, 'background', 'url(' + Lib.AssetUrl + 'star_system/field.png) repeat scroll 0 0 black');
                 this.InitLogin();
                 Lacuna.Game.LoginDialog.show(error);
-                MenuActions.hide();
-                require('js/actions/menu/loader').hide();
+                MenuActions.menuHide();
+                require('js/actions/menu/loader').loaderMenuHide();
             },
             Run : function() {
                 // set our interval going for resource calcs since Logout clears it
@@ -257,7 +258,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
 
                 SessionActions.sessionSet(Game.GetSession(''));
                 UserActions.userSignIn();
-
+                EmpireRPCActions.requestEmpireRPCGetSurvey();
             },
             InitEvents : function() {
                 // make sure we only subscribe once
@@ -330,7 +331,7 @@ if (typeof YAHOO.lacuna.Game === 'undefined' || !YAHOO.lacuna.Game) {
                                 }
                             };
                             YAHOO.log(o, 'error', logNS);
-                            require('js/actions/menu/loader').hide();
+                            require('js/actions/menu/loader').loaderMenuHide();
                             Game.Failure(o, retry, failure);
                         }
                     };

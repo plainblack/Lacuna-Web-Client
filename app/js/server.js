@@ -1,18 +1,19 @@
 'use strict';
 
-var $                    = require('js/shims/jquery');
-var _                    = require('lodash');
+var $                       = require('js/shims/jquery');
+var _                       = require('lodash');
+var util                    = require('js/util');
 
-var LoaderActions        = require('js/actions/menu/loader');
-var SessionStore         = require('js/stores/session');
-var ServerStatusActions  = require('js/actions/serverStatus');
-var BodyStatusActions    = require('js/actions/bodyStatus');
-var EmpireStatusActions  = require('js/actions/empireStatus');
+var LoaderMenuActions       = require('js/actions/menu/loader');
+var SessionStore            = require('js/stores/session');
+var ServerStatusActions     = require('js/actions/serverStatus');
+var BodyStatusActions       = require('js/actions/bodyStatus');
+var EmpireStatusActions     = require('js/actions/empireStatus');
 
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes          = require('js/windowTypes');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
 
-var util                 = require('js/util');
+var Captcha                 = require('js/components/window/captcha');
 
 var defaults = {
     module     : '',
@@ -116,7 +117,7 @@ var sendRequest = function(url, data, options, retry) {
         url      : url,
 
         success : function(data, textStatus, jqXHR) {
-            LoaderActions.hide();
+            LoaderMenuActions.loaderMenuHide();
 
             var dataToEmit = util.fixNumbers(data.result);
 
@@ -126,7 +127,7 @@ var sendRequest = function(url, data, options, retry) {
         },
 
         error : function(jqXHR, textStatus, errorThrown) {
-            LoaderActions.hide();
+            LoaderMenuActions.loaderMenuHide();
             var error = {};
 
             if (typeof jqXHR.responseJSON === 'undefined') {
@@ -143,9 +144,9 @@ var sendRequest = function(url, data, options, retry) {
             };
 
             if (error.code === 1016) {
-                WindowManagerActions.addWindow(windowTypes.captcha, {
-                    success : retry
-                });
+                WindowActions.windowAdd(Captcha, 'captcha', { 
+                    success : retry 
+                } );
             } else {
                 fail();
             }
@@ -155,7 +156,7 @@ var sendRequest = function(url, data, options, retry) {
 
 var call = function(obj) {
 
-    LoaderActions.show();
+    LoaderMenuActions.loaderMenuShow();
 
     var options = handleConfig(obj);
     var data = createData(options);

@@ -237,4 +237,3 @@ if (typeof YAHOO.lacuna.buildings.Development == "undefined" || !YAHOO.lacuna.bu
 YAHOO.register("development", YAHOO.lacuna.buildings.Development, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

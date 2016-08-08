@@ -266,7 +266,7 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 
                     // Go to home planet.
                     var home = EmpireRPCStore.getData().home_planet_id;
-                    MapActions.changePlanet(home);
+                    MapActions.mapChangePlanet(home);
 
                     require('js/actions/menu/loader').hide();
                 },
@@ -395,4 +395,3 @@ if (typeof YAHOO.lacuna.buildings.PlanetaryCommand == "undefined" || !YAHOO.lacu
 YAHOO.register("planetarycommand", YAHOO.lacuna.buildings.PlanetaryCommand, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

@@ -1,6 +1,6 @@
 'use strict';
 
-var MailActions = require('js/actions/windows/mail');
+var MailWindowActions = require('js/actions/windows/mail');
 
 var _ = require('lodash');
 
@@ -164,7 +164,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             }, this, true);
             this.messagingPanel.hideEvent.subscribe(function(){
                 // Let the React component know that we are going away now.
-                MailActions.hide();
+                MailWindowActions.hideMailWindow();
 
                 this.attachmentPanel.hide();
             }, this, true);
@@ -1085,7 +1085,7 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
             var res = el.href.match(/\#(-?\d+)$/);
             this.hide();
             var planet = Game.EmpireData.planets[res[1]];
-            require('js/actions/menu/map').changePlanet(res[1]);
+            require('js/actions/menu/map').mapChangePlanet(res[1]);
             //Game.PlanetJump(planet);
         },
         handleAllianceLink : function(e, el) {
@@ -1185,4 +1185,3 @@ if (typeof YAHOO.lacuna.Messaging == "undefined" || !YAHOO.lacuna.Messaging) {
 YAHOO.register("messaging", YAHOO.lacuna.Messaging, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

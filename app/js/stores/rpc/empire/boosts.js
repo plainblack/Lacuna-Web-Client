@@ -1,20 +1,17 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var StatefulStore   = require('js/stores/mixins/stateful');
-var _               = require('lodash');
-var validator       = require('validator');
+var Reflux                  = require('reflux');
+var _                       = require('lodash');
+var util                    = require('js/util');
 
-var EssentiaActions = require('js/actions/windows/essentia');
-var TickerActions   = require('js/actions/ticker');
+var TickerActions           = require('js/actions/ticker');
+var EmpireRPCActions        = require('js/actions/rpc/empire');
 
-var EmpireRPCStore  = require('js/stores/rpc/empire');
-var ServerRPCStore  = require('js/stores/rpc/server');
+var StatefulMixinsStore     = require('js/stores/mixins/stateful');
+var EmpireRPCStore          = require('js/stores/rpc/empire');
+var ServerRPCStore          = require('js/stores/rpc/server');
 
-var server          = require('js/server');
-
-var util            = require('js/util');
-var clone           = util.clone;
+var clone                   = util.clone;
 
 var BOOST_TYPES = [
     'food',
@@ -27,14 +24,14 @@ var BOOST_TYPES = [
     'spy_training'
 ];
 
-var BoostsRPCStore = Reflux.createStore({
+var BoostsEmpireRPCStore = Reflux.createStore({
     listenables : [
-        EssentiaActions,
-        TickerActions
+        TickerActions,
+        EmpireRPCActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinsStore
     ],
 
     getDefaultData : function() {
@@ -78,16 +75,6 @@ var BoostsRPCStore = Reflux.createStore({
         this.emit(boosts);
     },
 
-    onLoadBoosts : function() {
-        server.call({
-            module  : 'empire',
-            method  : 'view_boosts',
-            params  : [],
-            scope   : this,
-            success : this.handleNewBoosts
-        });
-    },
-
     onTickerTick : function() {
         var boosts = clone(this.state);
 
@@ -108,36 +95,17 @@ var BoostsRPCStore = Reflux.createStore({
         this.emit(boosts);
     },
 
-    onBoost : function(type, weeks) {
+    onSuccessEmpireRPCViewBoosts : function(result) {
+        this.handleNewBoosts(result);
+    },
 
-        var essentia = EmpireRPCStore.getData().essentia;
+    onSuccessEmpireRPCBoost : function(result) {
+        this.handleNewBoosts(result);
+    },
 
-        if (
-            !validator.isInt(weeks, {
-                min : 1,
-                max : 100 // The server has no max but this seems like a reasonable limit, to me.
-            })
-        ) {
-            window.alert('Number of weeks must be an integer between 1 and 100.');
-            return;
-        } else if (weeks * 5 > essentia) {
-            window.alert('Insufficient Essentia.');
-            return;
-        }
-
-        server.call({
-            module  : 'empire',
-            method  : 'boost_' + type,
-            params  : [weeks],
-            scope   : this,
-            success : function(result) {
-                var boosts = clone(this.state);
-                var newBoostTimestamp = result[type + '_boost'];
-                boosts[type] = this.handleNewBoost(newBoostTimestamp);
-                this.emit(boosts);
-            }
-        });
-    }
+    onFailureEmpireRPCBoost : function(result) {
+        console.log('FAILURE Empire Boost');
+    },
 });
-
-module.exports = BoostsRPCStore;
+    
+module.exports = BoostsEmpireRPCStore;

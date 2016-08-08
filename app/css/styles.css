@@ -1938,6 +1938,16 @@ input, textarea, select, option {
     font-weight: normal;
 }
 
+.ui.form .grouped.fields > label {
+    color: white;
+}
+.ui.checkbox label, .ui.checkbox + label {
+    color: white;
+}
+.ui.form .field > label {
+    color: white;
+}
+
 /* Fix incoming ships position. */
 #notify_c {
 	position: absolute;
@@ -1996,6 +2006,3 @@ a.item {
     position: absolute;
 }
 
-/*
- * vim: noet:ts=4:sw=4
- */

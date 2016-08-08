@@ -13,7 +13,7 @@ var RightSidebarButton = React.createClass({
     ],
 
     click : function() {
-        RightSidebarActions.show();
+        RightSidebarActions.rightSidebarShow();
     },
 
     render : function() {

@@ -2,24 +2,26 @@
 
 var Reflux              = require('reflux');
 var _                   = require('lodash');
-var StatefulStore       = require('js/stores/mixins/stateful');
-
 var moment              = require('moment');
-
 var util                = require('js/util');
-var clone               = util.clone;
+
+var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
 var ServerStatusActions = require('js/actions/serverStatus');
 var TickerActions       = require('js/actions/ticker');
+var EmpireRPCActions    = require('js/actions/rpc/empire');
+
+var clone               = util.clone;
 
 var ServerRPCStore = Reflux.createStore({
     listenables : [
         ServerStatusActions,
-        TickerActions
+        TickerActions,
+        EmpireRPCActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -57,6 +59,10 @@ var ServerRPCStore = Reflux.createStore({
     },
 
     onServerStatusClear : function() {
+        this.emit(this.getDefaultData());
+    },
+
+    onSuccessEmpireRPCLogout : function() {
         this.emit(this.getDefaultData());
     },
 

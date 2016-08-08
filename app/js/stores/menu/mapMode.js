@@ -23,15 +23,15 @@ var MapModeStore = Reflux.createStore({
         return PLANET_MAP_MODE;
     },
 
-    onShowPlanetMap : function() {
+    onMapShowPlanet : function() {
         this.emit(PLANET_MAP_MODE);
     },
 
-    onShowStarMap : function() {
+    onMapShowStars : function() {
         this.emit(STAR_MAP_MODE);
     },
 
-    onToggleMapMode : function() {
+    onMapToggleMode : function() {
         this.emit(this.getData() === PLANET_MAP_MODE
             ? STAR_MAP_MODE
             : PLANET_MAP_MODE

@@ -2,8 +2,9 @@ YAHOO.namespace("lacuna");
 
 var _ = require('lodash');
 
-var WindowManagerActions = require('js/actions/windowManager');
-var windowTypes = require('js/windowTypes');
+var WindowManagerActions    = require('js/actions/windowManager');
+var WindowActions           = require('js/actions/window');
+var GenericBuilding         = require('js/components/window/genericBuilding');
 
 if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 
@@ -16,6 +17,14 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
         Lacuna = YAHOO.lacuna,
         Game = Lacuna.Game,
         Lib = Lacuna.Library;
+
+    var ReactFactoryMap = {
+        "/essentiavein"         : require('js/components/window/essentiavein'),
+        "/inteltraining"        : require('js/components/window/inteltraining'),
+        "/mayhemtraining"       : require('js/components/window/mayhemtraining'),
+        "/politicstraining"     : require('js/components/window/politicstraining'),
+        "/thefttraining"        : require('js/components/window/thefttraining')
+    };
 
     var FactoryMap = {
         //buildings
@@ -870,7 +879,12 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
             if (!FactoryMap[tile.data.url]) {
                 // Pass this off to the new React stuff.
 
-                WindowManagerActions.addWindow(windowTypes.building, tile.data);
+                if (ReactFactoryMap[tile.data.url]) {
+                    WindowActions.windowAdd(ReactFactoryMap[tile.data.url], 'building', tile.data);
+                }
+                else {
+                    WindowActions.windowAdd(GenericBuilding, 'building', tile.data);
+                }
 
                 return;
             }
@@ -1027,4 +1041,3 @@ if (typeof YAHOO.lacuna.MapPlanet == "undefined" || !YAHOO.lacuna.MapPlanet) {
 YAHOO.register("mapPlanet", YAHOO.lacuna.MapPlanet, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

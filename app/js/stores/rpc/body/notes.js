@@ -1,17 +1,19 @@
 'use strict';
 
+// TODO Should we be using 'storable'?
+
 var Reflux              = require('reflux');
 
-var NotesActions        = require('js/actions/windows/notes');
-var MapActions          = require('js/actions/menu/map');
+var NotesWindowActions  = require('js/actions/windows/notes');
+var MapMenuActions      = require('js/actions/menu/map');
 
 var BodyRPCStore        = require('js/stores/rpc/body');
 var NotesWindowStore    = require('js/stores/windows/notes');
 
-var NotesDataStore = Reflux.createStore({
+var NotesBodyRPCStore = Reflux.createStore({
     listenables : [
-        NotesActions,
-        MapActions
+        NotesWindowActions,
+        MapMenuActions
     ],
 
     init : function() {
@@ -25,7 +27,7 @@ var NotesDataStore = Reflux.createStore({
                 // We changed planet. The save automagically happened below.
                 // We just need to bring the new data in.
                 this.planetId = body.id;
-                NotesActions.notesSet(body.notes);
+                this.onNotesSet(body.notes);
             }
         }, this);
     },
@@ -35,12 +37,12 @@ var NotesDataStore = Reflux.createStore({
         return this.data;
     },
 
-    onNotesPanelShow : function() {
-        NotesActions.notesLoad();
+    onNotesShow : function() {
+        this.onNotesLoad();
     },
 
-    onNotesPanelHide : function() {
-        NotesActions.notesClear();
+    onNotesHide : function() {
+        this.onNotesClear();
     },
 
     onNotesLoad : function() {
@@ -58,13 +60,12 @@ var NotesDataStore = Reflux.createStore({
         this.trigger(this.data);
     },
 
-    onChangePlanet : function() {
+    onMapChangePlanet : function() {
         // Only do this while the window is open.
         if (NotesWindowStore.getData()) {
-    //        NotesActions.notesSave();
-            NotesActions.notesClear();
+            this.onNotesClear();
         }
     }
 });
 
-module.exports = NotesDataStore;
+module.exports = NotesBodyRPCStore;

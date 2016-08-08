@@ -1,21 +1,20 @@
 'use strict';
 
-var Reflux          = require('reflux');
-var _               = require('lodash');
-var StatefulStore   = require('js/stores/mixins/stateful');
+var Reflux              = require('reflux');
+var _                   = require('lodash');
 
-var AboutActions    = require('js/actions/windows/about');
+var StatefulMixinStore  = require('js/stores/mixins/stateful');
 
-var server          = require('js/server');
+var StatsRPCActions     = require('js/actions/rpc/stats');
 
-var CreditsRPCStore = Reflux.createStore({
+var CreditsStatsRPCStore = Reflux.createStore({
 
     listenables : [
-        AboutActions
+        StatsRPCActions
     ],
 
     mixins : [
-        StatefulStore
+        StatefulMixinStore
     ],
 
     getDefaultData : function() {
@@ -39,9 +38,9 @@ var CreditsRPCStore = Reflux.createStore({
     //     'Play Testers' : ['John Ottinger', 'Jamie Vrbsky']
     // }
 
-    handleNewCredits : function(result) {
+    onSuccessStatsRPCGetCredits : function(result) {
         var credits = {};
-
+        
         _.each(result, function(foo) {
             _.each(foo, function(names, header) {
                 credits[header] = names;
@@ -49,23 +48,7 @@ var CreditsRPCStore = Reflux.createStore({
         });
 
         this.emit(credits);
-    },
-
-    onLoad : function() {
-        // The credits change very rarely so don't waste RPC's on them.
-        if (_.keys(this.state).length > 0) {
-            return;
-        }
-
-        server.call({
-            module     : 'stats',
-            method     : 'credits',
-            params     : [],
-            addSession : false,
-            scope      : this,
-            success    : this.handleNewCredits
-        });
     }
 });
 
-module.exports = CreditsRPCStore;
+module.exports = CreditsStatsRPCStore;

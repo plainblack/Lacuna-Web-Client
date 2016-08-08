@@ -109,4 +109,3 @@ if (typeof YAHOO.lacuna.buildings.EnergyReserve == "undefined" || !YAHOO.lacuna.
 YAHOO.register("energyreserve", YAHOO.lacuna.buildings.EnergyReserve, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

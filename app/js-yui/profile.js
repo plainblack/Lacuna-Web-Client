@@ -5,7 +5,7 @@ YAHOO.namespace("lacuna");
 var _ = require('lodash');
 var util = require('js/util');
 
-var OptionsActions = require('js/actions/windows/options');
+var OptionsWindowActions = require('js/actions/windows/options');
 
 if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 
@@ -174,7 +174,7 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
                 Dom.removeClass(this.id, Lib.Styles.HIDDEN);
             }, this, true);
             // Let the React component know that we're going away now.
-            this.Dialog.hideEvent.subscribe(OptionsActions.hide);
+            this.Dialog.hideEvent.subscribe(OptionsWindowActions.optionsWindowHide);
             this.Dialog.render();
             Game.OverlayManager.register(this.Dialog);
 
@@ -717,4 +717,3 @@ if (typeof YAHOO.lacuna.Profile == "undefined" || !YAHOO.lacuna.Profile) {
 YAHOO.register("profile", YAHOO.lacuna.Profile, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

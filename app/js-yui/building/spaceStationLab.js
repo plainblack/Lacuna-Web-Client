@@ -221,4 +221,3 @@ if (typeof YAHOO.lacuna.buildings.SpaceStationLab == "undefined" || !YAHOO.lacun
 YAHOO.register("spacestationlab", YAHOO.lacuna.buildings.SpaceStationLab, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

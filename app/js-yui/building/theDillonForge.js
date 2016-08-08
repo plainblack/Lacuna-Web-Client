@@ -329,4 +329,3 @@ if (typeof YAHOO.lacuna.buildings.TheDillonForge == "undefined" || !YAHOO.lacuna
 YAHOO.register("TheDillonForge", YAHOO.lacuna.buildings.TheDillonForge, {version: "1", build: "0"}); 
 
 }
-// vim: noet:ts=4:sw=4

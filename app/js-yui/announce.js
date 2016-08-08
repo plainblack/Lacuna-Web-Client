@@ -80,4 +80,3 @@ if (typeof YAHOO.lacuna.Announce == "undefined" || !YAHOO.lacuna.Announce) {
 YAHOO.register("Announce", YAHOO.lacuna.Announce, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4

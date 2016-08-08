@@ -1,6 +1,6 @@
 'use strict';
 
-var StatsActions = require('js/actions/windows/stats');
+var StatsWindowActions = require('js/actions/windows/stats');
 
 var _ = require('lodash');
 
@@ -85,7 +85,7 @@ if (typeof YAHOO.lacuna.Stats == "undefined" || !YAHOO.lacuna.Stats) {
             }, this, true);
 
             // Let the React component know that we're going away now.
-            this.Panel.hideEvent.subscribe(StatsActions.hide);
+            this.Panel.hideEvent.subscribe(StatsWindowActions.statsWindowHide);
 
             this.Panel.render();
             Game.OverlayManager.register(this.Panel);
@@ -1337,4 +1337,3 @@ initialRequest: Lang.JSON.stringify({
 YAHOO.register("stats", YAHOO.lacuna.Stats, {version: "1", build: "0"});
 
 }
-// vim: noet:ts=4:sw=4
