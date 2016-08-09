@@ -29,6 +29,7 @@ var GetEssentiaTab = React.createClass({
     render : function() {
         return (
             <div style={{textAlign : 'center'}}>
+                <p>Note that The Lacuna Expanse will be shutting down October 1, 2016.  You may purchase Essentia for use up until then, but there will be no refunds issued.</p>
                 <div className="ui large green labeled icon button" onClick={this.purchase}>
                     <i className="payment icon"></i>
                     Purchase Essentia
