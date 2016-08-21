@@ -10,4 +10,5 @@ bower_components/
 # Built JS and CSS files.
 lacuna/
 
+index.docker.conf
 index.html
